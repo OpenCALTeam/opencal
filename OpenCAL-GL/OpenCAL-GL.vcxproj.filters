@@ -1,0 +1,111 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="calgl2D">
+      <UniqueIdentifier>{3ef013a3-e30a-4b84-9c44-e9bc314c1810}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="calgl2D\Header Files">
+      <UniqueIdentifier>{e476e822-7cda-4675-9a56-7ca36378c8f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="calgl2D\Source Files">
+      <UniqueIdentifier>{9996e9c0-d48e-44c9-9ed8-77cf5ec85263}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="calgl3D">
+      <UniqueIdentifier>{71a28424-3737-4ea3-8097-22f508f5055a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="calgl3D\Header Files">
+      <UniqueIdentifier>{2d06891e-cb8b-4883-b11e-7f1d7b8b9d7e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="calgl3D\Source Files">
+      <UniqueIdentifier>{c1ca2bcb-bfcf-4310-a60d-655c33d721a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="calglCommon">
+      <UniqueIdentifier>{c9e45946-aa35-4aa0-a97b-2845dc4531c6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\calgl2D.h">
+      <Filter>calgl2D\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\calgl3D.h">
+      <Filter>calgl3D\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\calglUtils.h">
+      <Filter>calglCommon</Filter>
+    </ClInclude>
+    <ClInclude Include="include\calglCommon.h">
+      <Filter>calglCommon</Filter>
+    </ClInclude>
+    <ClInclude Include="include\calglGlobalSettings.h">
+      <Filter>calglCommon</Filter>
+    </ClInclude>
+    <ClInclude Include="include\calglInfoBar.h">
+      <Filter>calglCommon</Filter>
+    </ClInclude>
+    <ClInclude Include="include\calglLightParameter.h">
+      <Filter>calglCommon</Filter>
+    </ClInclude>
+    <ClInclude Include="include\calglModelViewParameter.h">
+      <Filter>calglCommon</Filter>
+    </ClInclude>
+    <ClInclude Include="include\calgl2DNodeData.h">
+      <Filter>calgl2D\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\calgl2DUpdater.h">
+      <Filter>calgl2D\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\calgl2DWindow.h">
+      <Filter>calgl2D\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\calgl3DNodeData.h">
+      <Filter>calgl3D\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\calgl3DUpdater.h">
+      <Filter>calgl3D\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\calgl3DWindow.h">
+      <Filter>calgl3D\Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="source\calgl2D.c">
+      <Filter>calgl2D\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\calgl3D.c">
+      <Filter>calgl3D\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\calglUtils.c">
+      <Filter>calglCommon</Filter>
+    </ClCompile>
+    <ClCompile Include="source\calglInfoBar.c">
+      <Filter>calglCommon</Filter>
+    </ClCompile>
+    <ClCompile Include="source\calglLightParameter.c">
+      <Filter>calglCommon</Filter>
+    </ClCompile>
+    <ClCompile Include="source\calglGlobalSettings.c">
+      <Filter>calglCommon</Filter>
+    </ClCompile>
+    <ClCompile Include="source\calglModelViewParameter.c">
+      <Filter>calglCommon</Filter>
+    </ClCompile>
+    <ClCompile Include="source\calgl2DNodeData.c">
+      <Filter>calgl2D\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\calgl2DWindow.c">
+      <Filter>calgl2D\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\calgl2DUpdater.c">
+      <Filter>calgl2D\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\calgl3DNodeData.c">
+      <Filter>calgl3D\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\calgl3DUpdater.c">
+      <Filter>calgl3D\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\calgl3DWindow.c">
+      <Filter>calgl3D\Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

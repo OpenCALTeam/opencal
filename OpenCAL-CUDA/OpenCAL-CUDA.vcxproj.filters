@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="calCuda2D">
+      <UniqueIdentifier>{08390181-b960-4436-84e7-0dfe69b088b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="calCuda2D\Header Files">
+      <UniqueIdentifier>{8d58c80e-ff03-46d1-9099-b8904cc3cf21}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="calCuda2D\Source Files">
+      <UniqueIdentifier>{3a32b45a-41d0-44e7-9ebc-e8f8a9407f74}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\cal2D.cuh">
+      <Filter>calCuda2D\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\cal2DBuffer.cuh">
+      <Filter>calCuda2D\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\cal2DBufferIO.cuh">
+      <Filter>calCuda2D\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\cal2DIO.cuh">
+      <Filter>calCuda2D\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\cal2DRun.cuh">
+      <Filter>calCuda2D\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\cal2DToolkit.cuh">
+      <Filter>calCuda2D\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\calCommon.cuh">
+      <Filter>calCuda2D</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CudaCompile Include="source\cal2D.cu">
+      <Filter>calCuda2D\Source Files</Filter>
+    </CudaCompile>
+    <CudaCompile Include="source\cal2DBuffer.cu">
+      <Filter>calCuda2D\Source Files</Filter>
+    </CudaCompile>
+    <CudaCompile Include="source\cal2DBufferIO.cu">
+      <Filter>calCuda2D\Source Files</Filter>
+    </CudaCompile>
+    <CudaCompile Include="source\cal2DIO.cu">
+      <Filter>calCuda2D\Source Files</Filter>
+    </CudaCompile>
+    <CudaCompile Include="source\cal2DRun.cu">
+      <Filter>calCuda2D\Source Files</Filter>
+    </CudaCompile>
+    <CudaCompile Include="source\cal2DToolkit.cu">
+      <Filter>calCuda2D\Source Files</Filter>
+    </CudaCompile>
+    <CudaCompile Include="kernel.cu" />
+  </ItemGroup>
+</Project>

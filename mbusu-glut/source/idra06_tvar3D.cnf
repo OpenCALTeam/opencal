@@ -1,0 +1,10 @@
+160 130 80
+1
+1
+0
+0
+mpicc
+-O -DCPT_INCLUDE_FILE=\"%s\" -DNO_XDR_READ -DNO_XDR_WRITE -I/home/alfonso/camelot/si_3_6_1/ -L/home/alfonso/camelot/si_3_6_1/linux
+-lm
+mpirun -np %d
+

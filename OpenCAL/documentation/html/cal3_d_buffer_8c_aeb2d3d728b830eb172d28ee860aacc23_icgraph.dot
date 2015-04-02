@@ -1,0 +1,13 @@
+digraph "calAllocBuffer3Dr"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node1 [label="calAllocBuffer3Dr",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled" fontcolor="black"];
+  Node1 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 [label="calAllocSubstate3Dr",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$cal3_d_8c.html#aea18b23e9f02e4d783af8577c073a7cb",tooltip="Real (floating point) substates allocation function. "];
+  Node2 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node3 [label="calAddSubstate3Dr",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$cal3_d_8h.html#ace220a2005f9801234ee2d873a5130fb",tooltip="Creates and adds a new real (floating point) substate to CALModel3D::pQr_array and return a pointer t..."];
+  Node1 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node4 [label="calAddSingleLayerSubstate3Dr",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$cal3_d_8h.html#a6f77e42272ea5766c1c25f21f4f353d2",tooltip="Creates a new single-layer real (floating point) substate returns a pointer to it. Note that sinlgle-layer substates are not added to CALModel3D::pQ*_array because they do not nedd to be updated. "];
+}

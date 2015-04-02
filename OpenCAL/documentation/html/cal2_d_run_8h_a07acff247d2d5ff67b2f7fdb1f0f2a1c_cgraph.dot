@@ -1,0 +1,35 @@
+digraph "calRun2D"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node1 [label="calRun2D",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled" fontcolor="black"];
+  Node1 -> Node2 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 [label="calUpdate2D",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$cal2_d_8c.html#a6557c8220782a1f25e935a735cb691ae",tooltip="Updates all the substates registered in CALModel2D::pQb_array, CALModel2D::pQi_array and CALModel2D::..."];
+  Node2 -> Node3 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node3 [label="calUpdateActiveCells2D",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$cal2_d_8c.html#a7c2d7a5324139af1e4f3bcc15d536b04",tooltip="Puts the cells marked as actives in A.flags into the array of active cells A.cells and sets its dimen..."];
+  Node2 -> Node4 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node4 [label="calUpdateSubstate2Db",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$cal2_d_8c.html#aa0e4c32550169aac55b9d744faca2a70",tooltip="Copies the next matrix of a byte substate to the current one: current = next. If the active cells opt..."];
+  Node4 -> Node5 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node5 [label="calCopyActiveCellsBuffer2Db",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$cal2_d_buffer_8c.html#a688bafb097292c351c6dea7d2a59349e",tooltip="Active cells byte linearized matrix copy function. "];
+  Node4 -> Node6 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node6 [label="calCopyBuffer2Db",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$cal2_d_buffer_8c.html#a226f48974acf70531efd1a51265acd4a",tooltip="Byte linearized matrix copy function. "];
+  Node2 -> Node7 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node7 [label="calUpdateSubstate2Di",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$cal2_d_8c.html#a233201cf0824d39271cac62538e127c2",tooltip="Copies the next matrix of a integer substate to the current one: current = next. If the active cells ..."];
+  Node7 -> Node8 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node8 [label="calCopyActiveCellsBuffer2Di",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$cal2_d_buffer_8c.html#ac024d2a6b5f083c3509847708f7c53c0",tooltip="Active cells int linearized matrix copy function. "];
+  Node7 -> Node9 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node9 [label="calCopyBuffer2Di",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$cal2_d_buffer_8c.html#a53b114cf3d21286bf8287cebd4f47f25",tooltip="Int linearized matrix copy function. "];
+  Node2 -> Node10 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node10 [label="calUpdateSubstate2Dr",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$cal2_d_8c.html#acfc8314d798a840dd2df28e732b45cfd",tooltip="Copies the next matrix of a real (floating point) substate to the current one: current = next..."];
+  Node10 -> Node11 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node11 [label="calCopyActiveCellsBuffer2Dr",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$cal2_d_buffer_8c.html#a1f2baaeacf0ab8034e8eb61fbacbb3d8",tooltip="Active cells real (floating point) linearized matrix copy function. "];
+  Node10 -> Node12 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node12 [label="calCopyBuffer2Dr",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$cal2_d_buffer_8c.html#ae8f33debbf446493d7caecf90e46d144",tooltip="Real (floating point) linearized matrix copy function. "];
+  Node1 -> Node13 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node13 [label="calRunCAStep2D",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$cal2_d_run_8c.html#aa5a6fbd9203dbb5b584d83b37cc78318",tooltip="A single step of the cellular automaton. It execute the transition function, the steering and check f..."];
+  Node13 -> Node2 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node13 -> Node14 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node14 [label="calGlobalTransitionFunction2D",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$cal2_d_8c.html#a4bb00840eb7db23d4800c032b04bb6fb",tooltip="The cellular automaton global transition function. It applies the transition function to each cell of..."];
+  Node14 -> Node2 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+}

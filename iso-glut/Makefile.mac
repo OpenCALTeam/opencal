@@ -1,0 +1,24 @@
+include ../Makefile.inc
+
+
+#INC_PATH 	= ./include
+SRC_PATH	= ./source
+BIN_PATH	= ./bin
+OPENCAL_LIB_PATH	= ../OpenCAL/lib
+OPENCAL_INC_PATH	= ../OpenCAL/include
+#OPTFLAG		= -g
+
+all: $(BIN_PATH)/iso
+
+$(BIN_PATH)/iso: $(BIN_PATH)/iso.o $(BIN_PATH)/gui.o $(OPENCAL_LIB_PATH)/opencal.a
+	$(CC) -o $(BIN_PATH)/iso $(BIN_PATH)/iso.o $(BIN_PATH)/gui.o $(OPENCAL_LIB_PATH)/opencal.a -framework OpenGL -framework GLUT -framework Carbon
+	ln -fs $(BIN_PATH)/iso .
+
+$(BIN_PATH)/gui.o: $(SRC_PATH)/gui.c
+	$(CC) -c $(SRC_PATH)/gui.c $(CFLAGS) -I$(OPENCAL_INC_PATH) -o $(BIN_PATH)/gui.o
+
+$(BIN_PATH)/iso.o: $(SRC_PATH)/iso.c
+	$(CC) -c $(SRC_PATH)/iso.c $(CFLAGS) -I$(OPENCAL_INC_PATH) -o $(BIN_PATH)/iso.o
+
+clean:
+	@$(RM) iso $(BIN_PATH)/*.o $(BIN_PATH)/iso
