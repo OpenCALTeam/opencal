@@ -5,6 +5,8 @@
 #include <calgl2DWindow.h>
 #include <stdlib.h>
 
+#include <calSteering2D.h>
+
 //-----------------------------------------------------------------------
 //	   THE sciddicaT(oy) cellular automaton definition section
 //-----------------------------------------------------------------------
@@ -136,11 +138,16 @@ void sciddicaTSimulationInit(struct CALModel2D* sciddicaT)
 
 void sciddicaTSteering(struct CALModel2D* sciddicaT)
 {
+	CALreal value = 0;
+
 	//initializing substates to 0
 	calInitSubstate2Dr(sciddicaT, Q.f[0], 0);
 	calInitSubstate2Dr(sciddicaT, Q.f[1], 0);
 	calInitSubstate2Dr(sciddicaT, Q.f[2], 0);
 	calInitSubstate2Dr(sciddicaT, Q.f[3], 0);
+
+	value = calSteeringComputeMax2Dr(sciddicaT, Q.z);
+	printf("Max: %g\t", value);
 }
 
 CALbyte sciddicaTSimulationStopCondition(struct CALModel2D* sciddicaT)
@@ -157,9 +164,9 @@ CALbyte sciddicaTSimulationStopCondition(struct CALModel2D* sciddicaT)
 int main(int argc, char** argv)
 {
 	struct CALDrawModel2D* model1 = NULL;
-	struct CALDrawModel2D* model2;
-	struct CALDrawModel2D* model3;
-	struct CALDrawModel2D* model4;
+	//struct CALDrawModel2D* model2;
+	//struct CALDrawModel2D* model3;
+	//struct CALDrawModel2D* model4;
 	
 	
 	calglSetPathGlobalSettings("./data/dem.txt", "./data/source.txt", "./data/width_final.txt");

@@ -1,0 +1,371 @@
+﻿  cal3DUnsafe.c
+c:\users\aloisius\documents\github\opencal\opencal-omp\include\cal3d.h(67): error C2059: syntax error : ';'
+c:\users\aloisius\documents\github\opencal\opencal-omp\include\cal3d.h(70): error C2059: syntax error : '}'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dunsafe.c(9): error C2037: left of 'T' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dunsafe.c(11): error C2037: left of 'X' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dunsafe.c(11): error C2037: left of 'rows' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dunsafe.c(11): error C2037: left of 'columns' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dunsafe.c(12): error C2037: left of 'X' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dunsafe.c(12): error C2037: left of 'rows' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dunsafe.c(12): error C2037: left of 'columns' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dunsafe.c(16): error C2037: left of 'X' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dunsafe.c(16): error C2037: left of 'layers' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dunsafe.c(16): fatal error C1903: unable to recover from previous error(s); stopping compilation
+  cal3DRun.c
+c:\users\aloisius\documents\github\opencal\opencal-omp\include\cal3d.h(67): error C2059: syntax error : ';'
+c:\users\aloisius\documents\github\opencal\opencal-omp\include\cal3d.h(70): error C2059: syntax error : '}'
+  cal3DIO.c
+c:\users\aloisius\documents\github\opencal\opencal-omp\include\cal3d.h(67): error C2059: syntax error : ';'
+c:\users\aloisius\documents\github\opencal\opencal-omp\include\cal3d.h(70): error C2059: syntax error : '}'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(7): error C2037: left of 'rows' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(7): error C2037: left of 'columns' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(7): error C2037: left of 'layers' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(7): warning C4047: 'function' : 'int' differs in levels of indirection from 'FILE *'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(7): warning C4024: 'calfLoadBuffer3Db' : different types for formal and actual parameter 2
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(7): error C2198: 'calfLoadBuffer3Db' : too few arguments for call
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(9): error C2037: left of 'rows' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(9): error C2037: left of 'columns' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(9): error C2037: left of 'layers' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(9): error C2198: 'calCopyBuffer3Db' : too few arguments for call
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(12): error C2037: left of 'rows' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(12): error C2037: left of 'columns' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(12): error C2037: left of 'layers' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(12): warning C4047: 'function' : 'int' differs in levels of indirection from 'FILE *'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(12): warning C4024: 'calfLoadBuffer3Di' : different types for formal and actual parameter 2
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(12): error C2198: 'calfLoadBuffer3Di' : too few arguments for call
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(14): error C2037: left of 'rows' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(14): error C2037: left of 'columns' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(14): error C2037: left of 'layers' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(14): error C2198: 'calCopyBuffer3Di' : too few arguments for call
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(17): error C2037: left of 'rows' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(17): error C2037: left of 'columns' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(17): error C2037: left of 'layers' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(17): warning C4047: 'function' : 'int' differs in levels of indirection from 'FILE *'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(17): warning C4024: 'calfLoadBuffer3Dr' : different types for formal and actual parameter 2
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(17): error C2198: 'calfLoadBuffer3Dr' : too few arguments for call
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(19): error C2037: left of 'rows' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(19): error C2037: left of 'columns' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(19): error C2037: left of 'layers' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(19): error C2198: 'calCopyBuffer3Dr' : too few arguments for call
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(24): error C2037: left of 'rows' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(24): error C2037: left of 'columns' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(24): error C2037: left of 'layers' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(24): warning C4047: 'function' : 'int' differs in levels of indirection from 'char *'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(24): warning C4024: 'calLoadBuffer3Db' : different types for formal and actual parameter 2
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(24): error C2198: 'calLoadBuffer3Db' : too few arguments for call
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(26): error C2037: left of 'rows' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(26): error C2037: left of 'columns' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(26): error C2037: left of 'layers' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(26): error C2198: 'calCopyBuffer3Db' : too few arguments for call
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(30): error C2037: left of 'rows' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(30): error C2037: left of 'columns' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(30): error C2037: left of 'layers' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(30): warning C4047: 'function' : 'int' differs in levels of indirection from 'char *'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(30): warning C4024: 'calLoadBuffer3Di' : different types for formal and actual parameter 2
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(30): error C2198: 'calLoadBuffer3Di' : too few arguments for call
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(32): error C2037: left of 'rows' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(32): error C2037: left of 'columns' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(32): error C2037: left of 'layers' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(32): error C2198: 'calCopyBuffer3Di' : too few arguments for call
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(36): error C2037: left of 'rows' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(36): error C2037: left of 'columns' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(36): error C2037: left of 'layers' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(36): warning C4047: 'function' : 'int' differs in levels of indirection from 'char *'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(36): warning C4024: 'calLoadBuffer3Dr' : different types for formal and actual parameter 2
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(36): error C2198: 'calLoadBuffer3Dr' : too few arguments for call
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(38): error C2037: left of 'rows' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(38): error C2037: left of 'columns' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(38): error C2037: left of 'layers' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(38): error C2198: 'calCopyBuffer3Dr' : too few arguments for call
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(44): error C2037: left of 'rows' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(44): error C2037: left of 'columns' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(44): error C2037: left of 'layers' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(44): warning C4047: 'function' : 'int' differs in levels of indirection from 'FILE *'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(44): warning C4024: 'calfSaveBuffer3Db' : different types for formal and actual parameter 2
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(44): error C2198: 'calfSaveBuffer3Db' : too few arguments for call
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(47): error C2037: left of 'rows' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(47): error C2037: left of 'columns' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(47): error C2037: left of 'layers' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(47): warning C4047: 'function' : 'int' differs in levels of indirection from 'FILE *'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(47): warning C4024: 'calfSaveBuffer3Di' : different types for formal and actual parameter 2
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(47): error C2198: 'calfSaveBuffer3Di' : too few arguments for call
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(50): error C2037: left of 'rows' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(50): error C2037: left of 'columns' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(50): error C2037: left of 'layers' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(50): warning C4047: 'function' : 'int' differs in levels of indirection from 'FILE *'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(50): warning C4024: 'calfSaveBuffer3Dr' : different types for formal and actual parameter 2
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(50): error C2198: 'calfSaveBuffer3Dr' : too few arguments for call
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(55): error C2037: left of 'rows' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(55): error C2037: left of 'columns' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(55): error C2037: left of 'layers' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(55): warning C4047: 'function' : 'int' differs in levels of indirection from 'char *'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(55): warning C4024: 'calSaveBuffer3Db' : different types for formal and actual parameter 2
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(55): error C2198: 'calSaveBuffer3Db' : too few arguments for call
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(59): error C2037: left of 'rows' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(59): error C2037: left of 'columns' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(59): error C2037: left of 'layers' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(59): warning C4047: 'function' : 'int' differs in levels of indirection from 'char *'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(59): warning C4024: 'calSaveBuffer3Di' : different types for formal and actual parameter 2
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(59): error C2198: 'calSaveBuffer3Di' : too few arguments for call
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(63): error C2037: left of 'rows' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(63): error C2037: left of 'columns' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(63): error C2037: left of 'layers' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(63): warning C4047: 'function' : 'int' differs in levels of indirection from 'char *'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(63): warning C4024: 'calSaveBuffer3Dr' : different types for formal and actual parameter 2
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3dio.c(63): error C2198: 'calSaveBuffer3Dr' : too few arguments for call
+  cal3DBufferIO.c
+  cal3DBuffer.c
+  cal3D.c
+c:\users\aloisius\documents\github\opencal\opencal-omp\include\cal3d.h(67): error C2059: syntax error : ';'
+c:\users\aloisius\documents\github\opencal\opencal-omp\include\cal3d.h(70): error C2059: syntax error : '}'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(100): error C2037: left of 'rows' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(100): error C2037: left of 'columns' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(100): error C2037: left of 'layers' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(100): error C2198: 'calAllocBuffer3Db' : too few arguments for call
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(101): error C2037: left of 'rows' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(101): error C2037: left of 'columns' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(101): error C2037: left of 'layers' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(101): error C2198: 'calAllocBuffer3Db' : too few arguments for call
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(115): error C2037: left of 'rows' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(115): error C2037: left of 'columns' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(115): error C2037: left of 'layers' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(115): error C2198: 'calAllocBuffer3Di' : too few arguments for call
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(116): error C2037: left of 'rows' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(116): error C2037: left of 'columns' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(116): error C2037: left of 'layers' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(116): error C2198: 'calAllocBuffer3Di' : too few arguments for call
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(130): error C2037: left of 'rows' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(130): error C2037: left of 'columns' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(130): error C2037: left of 'layers' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(130): error C2198: 'calAllocBuffer3Dr' : too few arguments for call
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(131): error C2037: left of 'rows' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(131): error C2037: left of 'columns' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(131): error C2037: left of 'layers' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(131): error C2198: 'calAllocBuffer3Dr' : too few arguments for call
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(186): error C2027: use of undefined type 'CALModel3D'
+          c:\users\aloisius\documents\github\opencal\opencal-omp\include\cal3d.h(44) : see declaration of 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(190): error C2037: left of 'rows' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(191): error C2037: left of 'columns' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(192): error C2037: left of 'layers' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(194): error C2037: left of 'T' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(196): error C2037: left of 'OPTIMIZATION' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(197): error C2037: left of 'OPTIMIZATION' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(198): error C2037: left of 'A' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(198): error C2037: left of 'rows' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(198): error C2037: left of 'columns' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(198): error C2037: left of 'layers' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(198): error C2198: 'calAllocBuffer3Db' : too few arguments for call
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(199): error C2037: left of 'A' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(199): error C2037: left of 'rows' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(199): error C2037: left of 'columns' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(199): error C2037: left of 'layers' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(199): error C2198: 'calSetBuffer3Db' : too few arguments for call
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(202): error C2037: left of 'A' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(207): error C2037: left of 'A' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(211): error C2037: left of 'A' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(211): error C2198: 'malloc' : too few arguments for call
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(212): error C2037: left of 'A' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(213): error C2037: left of 'A' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(216): error C2037: left of 'A' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(217): error C2037: left of 'A' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(219): error C2037: left of 'X' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(220): error C2037: left of 'sizeof_X' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(222): error C2037: left of 'X_id' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(232): error C2037: left of 'pQb_array' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(233): error C2037: left of 'pQi_array' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(234): error C2037: left of 'pQr_array' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(235): error C2037: left of 'sizeof_pQb_array' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(236): error C2037: left of 'sizeof_pQi_array' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(237): error C2037: left of 'sizeof_pQr_array' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(239): error C2037: left of 'elementary_processes' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(240): error C2037: left of 'num_of_elementary_processes' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(242): error C2037: left of 'is_safe' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(252): error C2037: left of 'is_safe' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(260): error C2037: left of 'A' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(260): error C2037: left of 'rows' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(260): error C2037: left of 'columns' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(262): error C2037: left of 'A' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(262): error C2037: left of 'rows' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(262): error C2037: left of 'columns' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(264): error C2037: left of 'A' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(272): error C2037: left of 'T' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(274): error C2037: left of 'A' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(274): error C2037: left of 'X' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(274): error C2037: left of 'rows' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(274): error C2037: left of 'columns' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(276): error C2037: left of 'X' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(276): error C2198: 'calAddActiveCell3D' : too few arguments for call
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(284): error C2037: left of 'A' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(284): error C2037: left of 'X' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(284): error C2037: left of 'layers' specifies undefined struct/union 'CALModel3D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal3d.c(284): fatal error C1903: unable to recover from previous error(s); stopping compilation
+  cal2DBufferIO.c
+  cal2DBuffer.c
+  cal2DUnsafe.c
+c:\users\aloisius\documents\github\opencal\opencal-omp\include\cal2d.h(71): error C2059: syntax error : ';'
+c:\users\aloisius\documents\github\opencal\opencal-omp\include\cal2d.h(72): error C2059: syntax error : '}'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dunsafe.c(8): error C2037: left of 'X_id' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dunsafe.c(11): error C2037: left of 'T' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dunsafe.c(13): error C2037: left of 'X' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dunsafe.c(13): error C2037: left of 'columns' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dunsafe.c(14): error C2037: left of 'X' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dunsafe.c(14): error C2037: left of 'columns' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dunsafe.c(18): error C2037: left of 'X' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dunsafe.c(18): error C2037: left of 'rows' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dunsafe.c(18): fatal error C1903: unable to recover from previous error(s); stopping compilation
+  cal2DRun.c
+c:\users\aloisius\documents\github\opencal\opencal-omp\include\cal2d.h(71): error C2059: syntax error : ';'
+c:\users\aloisius\documents\github\opencal\opencal-omp\include\cal2d.h(72): error C2059: syntax error : '}'
+  cal2DIO.c
+c:\users\aloisius\documents\github\opencal\opencal-omp\include\cal2d.h(71): error C2059: syntax error : ';'
+c:\users\aloisius\documents\github\opencal\opencal-omp\include\cal2d.h(72): error C2059: syntax error : '}'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(7): error C2037: left of 'rows' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(7): error C2037: left of 'columns' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(7): warning C4047: 'function' : 'int' differs in levels of indirection from 'FILE *'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(7): warning C4024: 'calfLoadMatrix2Db' : different types for formal and actual parameter 2
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(7): error C2198: 'calfLoadMatrix2Db' : too few arguments for call
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(9): error C2037: left of 'rows' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(9): error C2037: left of 'columns' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(9): error C2198: 'calCopyBuffer2Db' : too few arguments for call
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(12): error C2037: left of 'rows' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(12): error C2037: left of 'columns' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(12): warning C4047: 'function' : 'int' differs in levels of indirection from 'FILE *'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(12): warning C4024: 'calfLoadMatrix2Di' : different types for formal and actual parameter 2
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(12): error C2198: 'calfLoadMatrix2Di' : too few arguments for call
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(14): error C2037: left of 'rows' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(14): error C2037: left of 'columns' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(14): error C2198: 'calCopyBuffer2Di' : too few arguments for call
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(17): error C2037: left of 'rows' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(17): error C2037: left of 'columns' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(17): warning C4047: 'function' : 'int' differs in levels of indirection from 'FILE *'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(17): warning C4024: 'calfLoadMatrix2Dr' : different types for formal and actual parameter 2
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(17): error C2198: 'calfLoadMatrix2Dr' : too few arguments for call
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(19): error C2037: left of 'rows' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(19): error C2037: left of 'columns' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(19): error C2198: 'calCopyBuffer2Dr' : too few arguments for call
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(24): error C2037: left of 'rows' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(24): error C2037: left of 'columns' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(24): warning C4047: 'function' : 'int' differs in levels of indirection from 'char *'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(24): warning C4024: 'calLoadMatrix2Db' : different types for formal and actual parameter 2
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(24): error C2198: 'calLoadMatrix2Db' : too few arguments for call
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(26): error C2037: left of 'rows' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(26): error C2037: left of 'columns' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(26): error C2198: 'calCopyBuffer2Db' : too few arguments for call
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(30): error C2037: left of 'rows' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(30): error C2037: left of 'columns' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(30): warning C4047: 'function' : 'int' differs in levels of indirection from 'char *'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(30): warning C4024: 'calLoadMatrix2Di' : different types for formal and actual parameter 2
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(30): error C2198: 'calLoadMatrix2Di' : too few arguments for call
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(32): error C2037: left of 'rows' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(32): error C2037: left of 'columns' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(32): error C2198: 'calCopyBuffer2Di' : too few arguments for call
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(36): error C2037: left of 'rows' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(36): error C2037: left of 'columns' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(36): warning C4047: 'function' : 'int' differs in levels of indirection from 'char *'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(36): warning C4024: 'calLoadMatrix2Dr' : different types for formal and actual parameter 2
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(36): error C2198: 'calLoadMatrix2Dr' : too few arguments for call
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(38): error C2037: left of 'rows' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(38): error C2037: left of 'columns' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(38): error C2198: 'calCopyBuffer2Dr' : too few arguments for call
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(44): error C2037: left of 'rows' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(44): error C2037: left of 'columns' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(44): warning C4047: 'function' : 'int' differs in levels of indirection from 'FILE *'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(44): warning C4024: 'calfSaveMatrix2Db' : different types for formal and actual parameter 2
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(44): error C2198: 'calfSaveMatrix2Db' : too few arguments for call
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(47): error C2037: left of 'rows' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(47): error C2037: left of 'columns' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(47): warning C4047: 'function' : 'int' differs in levels of indirection from 'FILE *'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(47): warning C4024: 'calfSaveMatrix2Di' : different types for formal and actual parameter 2
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(47): error C2198: 'calfSaveMatrix2Di' : too few arguments for call
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(50): error C2037: left of 'rows' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(50): error C2037: left of 'columns' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(50): warning C4047: 'function' : 'int' differs in levels of indirection from 'FILE *'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(50): warning C4024: 'calfSaveMatrix2Dr' : different types for formal and actual parameter 2
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(50): error C2198: 'calfSaveMatrix2Dr' : too few arguments for call
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(55): error C2037: left of 'rows' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(55): error C2037: left of 'columns' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(55): warning C4047: 'function' : 'int' differs in levels of indirection from 'char *'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(55): warning C4024: 'calSaveMatrix2Db' : different types for formal and actual parameter 2
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(55): error C2198: 'calSaveMatrix2Db' : too few arguments for call
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(59): error C2037: left of 'rows' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(59): error C2037: left of 'columns' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(59): warning C4047: 'function' : 'int' differs in levels of indirection from 'char *'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(59): warning C4024: 'calSaveMatrix2Di' : different types for formal and actual parameter 2
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(59): error C2198: 'calSaveMatrix2Di' : too few arguments for call
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(63): error C2037: left of 'rows' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(63): error C2037: left of 'columns' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(63): warning C4047: 'function' : 'int' differs in levels of indirection from 'char *'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(63): warning C4024: 'calSaveMatrix2Dr' : different types for formal and actual parameter 2
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2dio.c(63): error C2198: 'calSaveMatrix2Dr' : too few arguments for call
+  cal2D.c
+c:\users\aloisius\documents\github\opencal\opencal-omp\include\cal2d.h(71): error C2059: syntax error : ';'
+c:\users\aloisius\documents\github\opencal\opencal-omp\include\cal2d.h(72): error C2059: syntax error : '}'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2d.c(105): error C2037: left of 'sizeof_X' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2d.c(154): error C2037: left of 'sizeof_X' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2d.c(164): error C2037: left of 'rows' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2d.c(164): error C2037: left of 'columns' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2d.c(164): error C2198: 'calAllocBuffer2Db' : too few arguments for call
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2d.c(165): error C2037: left of 'rows' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2d.c(165): error C2037: left of 'columns' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2d.c(165): error C2198: 'calAllocBuffer2Db' : too few arguments for call
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2d.c(179): error C2037: left of 'rows' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2d.c(179): error C2037: left of 'columns' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2d.c(179): error C2198: 'calAllocBuffer2Di' : too few arguments for call
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2d.c(180): error C2037: left of 'rows' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2d.c(180): error C2037: left of 'columns' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2d.c(180): error C2198: 'calAllocBuffer2Di' : too few arguments for call
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2d.c(194): error C2037: left of 'rows' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2d.c(194): error C2037: left of 'columns' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2d.c(194): error C2198: 'calAllocBuffer2Dr' : too few arguments for call
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2d.c(195): error C2037: left of 'rows' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2d.c(195): error C2037: left of 'columns' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2d.c(195): error C2198: 'calAllocBuffer2Dr' : too few arguments for call
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2d.c(249): error C2027: use of undefined type 'CALModel2D'
+          c:\users\aloisius\documents\github\opencal\opencal-omp\include\cal2d.h(48) : see declaration of 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2d.c(253): error C2037: left of 'rows' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2d.c(254): error C2037: left of 'columns' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2d.c(256): error C2037: left of 'T' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2d.c(258): error C2037: left of 'OPTIMIZATION' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2d.c(259): error C2037: left of 'OPTIMIZATION' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2d.c(260): error C2037: left of 'A' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2d.c(260): error C2037: left of 'rows' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2d.c(260): error C2037: left of 'columns' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2d.c(260): error C2198: 'calAllocBuffer2Db' : too few arguments for call
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2d.c(261): error C2037: left of 'A' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2d.c(261): error C2037: left of 'rows' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2d.c(261): error C2037: left of 'columns' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2d.c(261): error C2198: 'calSetBuffer2Db' : too few arguments for call
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2d.c(264): error C2037: left of 'A' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2d.c(269): error C2037: left of 'A' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2d.c(272): error C2037: left of 'A' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2d.c(272): error C2198: 'malloc' : too few arguments for call
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2d.c(274): error C2037: left of 'A' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2d.c(275): error C2037: left of 'A' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2d.c(278): error C2037: left of 'A' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2d.c(279): error C2037: left of 'A' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2d.c(281): error C2037: left of 'X' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2d.c(282): error C2037: left of 'sizeof_X' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2d.c(284): error C2037: left of 'X_id' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2d.c(300): error C2037: left of 'pQb_array' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2d.c(301): error C2037: left of 'pQi_array' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2d.c(302): error C2037: left of 'pQr_array' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2d.c(303): error C2037: left of 'sizeof_pQb_array' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2d.c(304): error C2037: left of 'sizeof_pQi_array' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2d.c(305): error C2037: left of 'sizeof_pQr_array' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2d.c(307): error C2037: left of 'elementary_processes' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2d.c(308): error C2037: left of 'num_of_elementary_processes' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2d.c(310): error C2037: left of 'is_safe' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2d.c(319): error C2037: left of 'is_safe' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2d.c(327): error C2037: left of 'A' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2d.c(327): error C2037: left of 'columns' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2d.c(329): error C2037: left of 'A' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2d.c(329): error C2037: left of 'columns' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2d.c(333): error C2037: left of 'A' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2d.c(342): error C2037: left of 'X_id' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2d.c(345): error C2037: left of 'T' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2d.c(346): error C2037: left of 'X' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2d.c(346): error C2198: 'calAddActiveCell2D' : too few arguments for call
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2d.c(349): error C2037: left of 'X' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2d.c(349): error C2037: left of 'rows' specifies undefined struct/union 'CALModel2D'
+c:\users\aloisius\documents\github\opencal\opencal-omp\source\cal2d.c(349): fatal error C1903: unable to recover from previous error(s); stopping compilation
+  Generating Code...
