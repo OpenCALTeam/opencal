@@ -30,3 +30,29 @@
 
 # Debug files
 *.dSYM/
+
+# Autotools files
+*sh
+build
+configure
+compile
+depcomp
+missing
+*.in
+*.m4
+ar-lib
+*.cache
+*.guess
+*.sub
+
+# OpenCAL examples specific files
+forestInsect
+iso
+life
+life3D
+life3D-glut
+mbusu-glut
+sciddicaS3Hex
+sciddicaT
+realSubstate*
+width_final*
