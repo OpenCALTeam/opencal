@@ -2,23 +2,15 @@ include ../Makefile.inc
 
 
 #INC_PATH 	= ./include
-SRC_PATH	= ./source
-BIN_PATH	= ./bin
-OPENCAL_LIB_PATH	= ../OpenCAL/lib
-OPENCAL_INC_PATH	= ../OpenCAL/include
+#SRC_PATH	= ./source
+#BIN_PATH	= ./bin
+#OPENCAL_LIB_PATH	= ../OpenCAL/lib
+#OPENCAL_INC_PATH	= ../OpenCAL/include
 #OPTFLAG		= -g
 
-all: $(BIN_PATH)/sciddicaT
+all: 
+	LD_RUN_PATH=../OpenCAL-OMP/build/lib gcc -o sciddicaT source/sciddicaT.c  ../OpenCAL-GL/build/lib/libopencalgl.a -I../OpenCAL-OMP/build/include/ -I../OpenCAL-GL/build/include/ -L../OpenCAL-OMP/build/lib/ -lGL -lGLU -lglut -lm -lpthread -fopenmp -lopencal
 
-$(BIN_PATH)/sciddicaT: $(BIN_PATH)/sciddicaT.o $(BIN_PATH)/gui.o $(OPENCAL_LIB_PATH)/opencal.a
-	$(CC) -o $(BIN_PATH)/sciddicaT $(BIN_PATH)/sciddicaT.o $(BIN_PATH)/gui.o $(OPENCAL_LIB_PATH)/opencal.a -lGL -lGLU -lglut
-	ln -fs $(BIN_PATH)/sciddicaT .
-
-$(BIN_PATH)/gui.o: $(SRC_PATH)/gui.c
-	$(CC) -c $(SRC_PATH)/gui.c $(CFLAGS) -I$(OPENCAL_INC_PATH) -o $(BIN_PATH)/gui.o
-
-$(BIN_PATH)/sciddicaT.o: $(SRC_PATH)/sciddicaT.c
-	$(CC) -c $(SRC_PATH)/sciddicaT.c $(CFLAGS) -I$(OPENCAL_INC_PATH) -o $(BIN_PATH)/sciddicaT.o
 
 clean:
-	@$(RM) sciddicaT $(BIN_PATH)/*.o $(BIN_PATH)/sciddicaT
+	@$(RM) sciddicaT *.o
