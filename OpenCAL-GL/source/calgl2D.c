@@ -483,32 +483,50 @@ void calglDrawRealModelDisplayCurrentNode2Db(struct CALDrawModel2D* calDrawModel
 		} else {
 			*calNode->callList = glGenLists(1);
 			glNewList(*calNode->callList, GL_COMPILE);{
-				for(i=0; i < rows-1; i++){	
-					glBegin(GL_TRIANGLE_STRIP); {
-						for(j=0; j < columns; j++){
+				for(i=0; i < rows-1; i++){				
+					for(j=0; j < columns-1; j++){
+						glBegin(GL_TRIANGLES); {
 							calglSetNormalData2Db(calDrawModel, calNode, i, j);
 							calglSetColorData2Db(calDrawModel, calNode, i, j);
 							calglDrawRealModelDisplayCurrentNodeSetVertexData2Db(calDrawModel, calNode, i, j);
-
 							calglSetColorData2Db(calDrawModel, calNode, i+1, j);
 							calglDrawRealModelDisplayCurrentNodeSetVertexData2Db(calDrawModel, calNode, i+1, j);
-						}		
-					} glEnd();
+							calglSetColorData2Db(calDrawModel, calNode, i+1, j+1);
+							calglDrawRealModelDisplayCurrentNodeSetVertexData2Db(calDrawModel, calNode, i+1, j+1);
+
+							calglSetNormalData2Db(calDrawModel, calNode, i, j);
+							calglSetColorData2Db(calDrawModel, calNode, i, j);
+							calglDrawRealModelDisplayCurrentNodeSetVertexData2Db(calDrawModel, calNode, i, j);
+							calglSetColorData2Db(calDrawModel, calNode, i+1, j+1);
+							calglDrawRealModelDisplayCurrentNodeSetVertexData2Db(calDrawModel, calNode, i+1, j+1);
+							calglSetColorData2Db(calDrawModel, calNode, i, j+1);
+							calglDrawRealModelDisplayCurrentNodeSetVertexData2Db(calDrawModel, calNode, i, j+1);	
+						} glEnd();
+					}					
 				}
 			} glEndList();
 		}
 	} else {
-		for(i=0; i < rows-1; i++){	
-			glBegin(GL_TRIANGLE_STRIP); {
-				for(j=0; j < columns; j++){
+		for(i=0; i < rows-1; i++){				
+			for(j=0; j < columns-1; j++){
+				glBegin(GL_TRIANGLES); {
 					calglSetNormalData2Db(calDrawModel, calNode, i, j);
 					calglSetColorData2Db(calDrawModel, calNode, i, j);
 					calglDrawRealModelDisplayCurrentNodeSetVertexData2Db(calDrawModel, calNode, i, j);
-
 					calglSetColorData2Db(calDrawModel, calNode, i+1, j);
 					calglDrawRealModelDisplayCurrentNodeSetVertexData2Db(calDrawModel, calNode, i+1, j);
-				}		
-			} glEnd();
+					calglSetColorData2Db(calDrawModel, calNode, i+1, j+1);
+					calglDrawRealModelDisplayCurrentNodeSetVertexData2Db(calDrawModel, calNode, i+1, j+1);
+
+					calglSetNormalData2Db(calDrawModel, calNode, i, j);
+					calglSetColorData2Db(calDrawModel, calNode, i, j);
+					calglDrawRealModelDisplayCurrentNodeSetVertexData2Db(calDrawModel, calNode, i, j);
+					calglSetColorData2Db(calDrawModel, calNode, i+1, j+1);
+					calglDrawRealModelDisplayCurrentNodeSetVertexData2Db(calDrawModel, calNode, i+1, j+1);
+					calglSetColorData2Db(calDrawModel, calNode, i, j+1);
+					calglDrawRealModelDisplayCurrentNodeSetVertexData2Db(calDrawModel, calNode, i, j+1);	
+				} glEnd();
+			}					
 		}
 	}
 }
@@ -528,32 +546,50 @@ void calglDrawRealModelDisplayCurrentNode2Di(struct CALDrawModel2D* calDrawModel
 		} else {
 			*calNode->callList = glGenLists(1);
 			glNewList(*calNode->callList, GL_COMPILE);{
-				for(i=0; i < rows-1; i++){	
-					glBegin(GL_TRIANGLE_STRIP); {
-						for(j=0; j < columns; j++){
+				for(i=0; i < rows-1; i++){				
+					for(j=0; j < columns-1; j++){
+						glBegin(GL_TRIANGLES); {
 							calglSetNormalData2Di(calDrawModel, calNode, i, j);
 							calglSetColorData2Di(calDrawModel, calNode, i, j);
 							calglDrawRealModelDisplayCurrentNodeSetVertexData2Di(calDrawModel, calNode, i, j);
-
 							calglSetColorData2Di(calDrawModel, calNode, i+1, j);
 							calglDrawRealModelDisplayCurrentNodeSetVertexData2Di(calDrawModel, calNode, i+1, j);
-						}		
-					} glEnd();
+							calglSetColorData2Di(calDrawModel, calNode, i+1, j+1);
+							calglDrawRealModelDisplayCurrentNodeSetVertexData2Di(calDrawModel, calNode, i+1, j+1);
+
+							calglSetNormalData2Di(calDrawModel, calNode, i, j);
+							calglSetColorData2Di(calDrawModel, calNode, i, j);
+							calglDrawRealModelDisplayCurrentNodeSetVertexData2Di(calDrawModel, calNode, i, j);
+							calglSetColorData2Di(calDrawModel, calNode, i+1, j+1);
+							calglDrawRealModelDisplayCurrentNodeSetVertexData2Di(calDrawModel, calNode, i+1, j+1);
+							calglSetColorData2Di(calDrawModel, calNode, i, j+1);
+							calglDrawRealModelDisplayCurrentNodeSetVertexData2Di(calDrawModel, calNode, i, j+1);	
+						} glEnd();
+					}					
 				}
 			} glEndList();
 		}
 	} else {
-		for(i=0; i < rows-1; i++){	
-			glBegin(GL_TRIANGLE_STRIP); {
-				for(j=0; j < columns; j++){
+		for(i=0; i < rows-1; i++){				
+			for(j=0; j < columns-1; j++){
+				glBegin(GL_TRIANGLES); {
 					calglSetNormalData2Di(calDrawModel, calNode, i, j);
 					calglSetColorData2Di(calDrawModel, calNode, i, j);
 					calglDrawRealModelDisplayCurrentNodeSetVertexData2Di(calDrawModel, calNode, i, j);
-
 					calglSetColorData2Di(calDrawModel, calNode, i+1, j);
 					calglDrawRealModelDisplayCurrentNodeSetVertexData2Di(calDrawModel, calNode, i+1, j);
-				}		
-			} glEnd();
+					calglSetColorData2Di(calDrawModel, calNode, i+1, j+1);
+					calglDrawRealModelDisplayCurrentNodeSetVertexData2Di(calDrawModel, calNode, i+1, j+1);
+
+					calglSetNormalData2Di(calDrawModel, calNode, i, j);
+					calglSetColorData2Di(calDrawModel, calNode, i, j);
+					calglDrawRealModelDisplayCurrentNodeSetVertexData2Di(calDrawModel, calNode, i, j);
+					calglSetColorData2Di(calDrawModel, calNode, i+1, j+1);
+					calglDrawRealModelDisplayCurrentNodeSetVertexData2Di(calDrawModel, calNode, i+1, j+1);
+					calglSetColorData2Di(calDrawModel, calNode, i, j+1);
+					calglDrawRealModelDisplayCurrentNodeSetVertexData2Di(calDrawModel, calNode, i, j+1);	
+				} glEnd();
+			}					
 		}
 	}
 }
@@ -573,34 +609,50 @@ void calglDrawRealModelDisplayCurrentNode2Dr(struct CALDrawModel2D* calDrawModel
 		} else {
 			*calNode->callList = glGenLists(1);
 			glNewList(*calNode->callList, GL_COMPILE);{
-				for(i=0; i < rows-1; i++){	
-					glBegin(GL_TRIANGLE_STRIP); {
-						for(j=0; j < columns; j++){
+				for(i=0; i < rows-1; i++){				
+					for(j=0; j < columns-1; j++){
+						glBegin(GL_TRIANGLES); {
 							calglSetNormalData2Dr(calDrawModel, calNode, i, j);
-
 							calglSetColorData2Dr(calDrawModel, calNode, i, j);
 							calglDrawRealModelDisplayCurrentNodeSetVertexData2Dr(calDrawModel, calNode, i, j);
-
 							calglSetColorData2Dr(calDrawModel, calNode, i+1, j);
 							calglDrawRealModelDisplayCurrentNodeSetVertexData2Dr(calDrawModel, calNode, i+1, j);
-						}		
-					} glEnd();
+							calglSetColorData2Dr(calDrawModel, calNode, i+1, j+1);
+							calglDrawRealModelDisplayCurrentNodeSetVertexData2Dr(calDrawModel, calNode, i+1, j+1);
+
+							calglSetNormalData2Dr(calDrawModel, calNode, i, j);
+							calglSetColorData2Dr(calDrawModel, calNode, i, j);
+							calglDrawRealModelDisplayCurrentNodeSetVertexData2Dr(calDrawModel, calNode, i, j);
+							calglSetColorData2Dr(calDrawModel, calNode, i+1, j+1);
+							calglDrawRealModelDisplayCurrentNodeSetVertexData2Dr(calDrawModel, calNode, i+1, j+1);
+							calglSetColorData2Dr(calDrawModel, calNode, i, j+1);
+							calglDrawRealModelDisplayCurrentNodeSetVertexData2Dr(calDrawModel, calNode, i, j+1);	
+						} glEnd();
+					}					
 				}
 			} glEndList();
 		}
 	} else {
-		for(i=0; i < rows-1; i++){	
-			glBegin(GL_TRIANGLE_STRIP); {
-				for(j=0; j < columns; j++){
+		for(i=0; i < rows-1; i++){				
+			for(j=0; j < columns-1; j++){
+				glBegin(GL_TRIANGLES); {
 					calglSetNormalData2Dr(calDrawModel, calNode, i, j);
-
 					calglSetColorData2Dr(calDrawModel, calNode, i, j);
 					calglDrawRealModelDisplayCurrentNodeSetVertexData2Dr(calDrawModel, calNode, i, j);
-
 					calglSetColorData2Dr(calDrawModel, calNode, i+1, j);
 					calglDrawRealModelDisplayCurrentNodeSetVertexData2Dr(calDrawModel, calNode, i+1, j);
-				}		
-			} glEnd();
+					calglSetColorData2Dr(calDrawModel, calNode, i+1, j+1);
+					calglDrawRealModelDisplayCurrentNodeSetVertexData2Dr(calDrawModel, calNode, i+1, j+1);
+
+					calglSetNormalData2Dr(calDrawModel, calNode, i, j);
+					calglSetColorData2Dr(calDrawModel, calNode, i, j);
+					calglDrawRealModelDisplayCurrentNodeSetVertexData2Dr(calDrawModel, calNode, i, j);
+					calglSetColorData2Dr(calDrawModel, calNode, i+1, j+1);
+					calglDrawRealModelDisplayCurrentNodeSetVertexData2Dr(calDrawModel, calNode, i+1, j+1);
+					calglSetColorData2Dr(calDrawModel, calNode, i, j+1);
+					calglDrawRealModelDisplayCurrentNodeSetVertexData2Dr(calDrawModel, calNode, i, j+1);	
+				} glEnd();
+			}					
 		}
 	}
 }

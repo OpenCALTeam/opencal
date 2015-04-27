@@ -23,14 +23,14 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v110</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <CLRSupport>false</CLRSupport>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v110</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
     <CLRSupport>false</CLRSupport>
@@ -51,16 +51,16 @@
     <IntDir>./bin/$(Platform)/$(Configuration)/</IntDir>
     <TargetName>$(ProjectName)d</TargetName>
     <ExtensionsToDeleteOnClean>*.cdf;*.cache;*.obj;*.ilk;*.resources;*.tlb;*.tli;*.tlh;*.tmp;*.rsp;*.pgc;*.pgd;*.meta;*.tlog;*.manifest;*.res;*.pch;*.exp;*.idb;*.rep;*.xdc;*.pdb;*_manifest.rc;*.bsc;*.sbr;*.xml;*.metagen;*.bi</ExtensionsToDeleteOnClean>
-    <IncludePath>../pthread/Pre-built.2/include;../freeglut-2.8.1/include;$(IncludePath)</IncludePath>
-    <LibraryPath>../pthread/Pre-built.2/lib/x86;../freeglut-2.8.1/lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\OpenCAL-Steering-OMP\include;../pthread/Pre-built.2/include;../freeglut-2.8.1/include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\OpenCAL-Steering-OMP\lib;../pthread/Pre-built.2/lib/x86;../freeglut-2.8.1/lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>./</OutDir>
     <IntDir>./bin/</IntDir>
     <ExtensionsToDeleteOnClean>*.log;*.pdb;*.cdf;*.cache;*.obj;*.ilk;*.resources;*.tlb;*.tli;*.tlh;*.tmp;*.rsp;*.pgc;*.pgd;*.meta;*.tlog;*.manifest;*.res;*.pch;*.exp;*.idb;*.rep;*.xdc;*.pdb;*_manifest.rc;*.bsc;*.sbr;*.xml;*.metagen;*.bi</ExtensionsToDeleteOnClean>
-    <IncludePath>../pthread/Pre-built.2/include;../freeglut-2.8.1/include;$(IncludePath)</IncludePath>
-    <LibraryPath>../pthread/Pre-built.2/lib/x86;../freeglut-2.8.1/lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\OpenCAL-Steering-OMP\include;../pthread/Pre-built.2/include;../freeglut-2.8.1/include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\OpenCAL-Steering-OMP\lib;../pthread/Pre-built.2/lib/x86;../freeglut-2.8.1/lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -83,7 +83,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>../freeglut-2.8.1/lib/x86/Debug;../OpenCAL-GL/lib;../OpenCAL/lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>OpenCALd.lib;OpenCAL-GLd.lib;%(AdditionalDependencies);pthreadVC2.lib</AdditionalDependencies>
+      <AdditionalDependencies>OpenCALd.lib;OpenCAL-GLd.lib;%(AdditionalDependencies);pthreadVC2.lib;OpenCAL-Steering-OMP</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -105,8 +105,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>../freeglut-2.8.1/lib/x86;../OpenCAL-GL/lib;../OpenCAL/lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>OpenCAL.lib;OpenCAL-GL.lib;%(AdditionalDependencies);pthreadVC2.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\OpenCAL-Steering-OMP\lib;../freeglut-2.8.1/lib/x86;../OpenCAL-GL/lib;../OpenCAL/lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>OpenCAL.lib;OpenCAL-GL.lib;%(AdditionalDependencies);pthreadVC2.lib;OpenCAL-Steering-OMP.lib</AdditionalDependencies>
     </Link>
     <BuildLog>
       <Path>$(IntDir)\$(MSBuildProjectName).log</Path>

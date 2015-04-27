@@ -1,0 +1,17 @@
+﻿Project file contains ToolsVersion="12.0". This toolset may be unknown or missing, in which case you may be able to resolve this by installing the appropriate version of MSBuild, or the build may have been forced to a particular ToolsVersion for policy reasons. Treating the project as if it had ToolsVersion="4.0". For more information, please see http://go.microsoft.com/fwlink/?LinkId=291333.
+  life3D.c
+source\life3D.c(67): error C2143: syntax error : missing ';' before 'type'
+source\life3D.c(83): error C2065: 'drawModel' : undeclared identifier
+source\life3D.c(83): warning C4047: '=' : 'int' differs in levels of indirection from 'CALDrawModel3D *'
+source\life3D.c(84): error C2065: 'drawModel' : undeclared identifier
+source\life3D.c(84): warning C4047: 'function' : 'CALDrawModel3D *' differs in levels of indirection from 'int'
+source\life3D.c(84): warning C4024: 'calglAddToDrawModel3Db' : different types for formal and actual parameter 1
+source\life3D.c(85): error C2065: 'drawModel' : undeclared identifier
+source\life3D.c(85): warning C4047: 'function' : 'CALDrawModel3D *' differs in levels of indirection from 'int'
+source\life3D.c(85): warning C4024: 'calglColor3D' : different types for formal and actual parameter 1
+source\life3D.c(86): error C2065: 'drawModel' : undeclared identifier
+source\life3D.c(86): warning C4047: 'function' : 'CALDrawModel3D *' differs in levels of indirection from 'int'
+source\life3D.c(86): warning C4024: 'calglAddToDrawModel3Db' : different types for formal and actual parameter 1
+source\life3D.c(87): error C2065: 'drawModel' : undeclared identifier
+source\life3D.c(87): warning C4047: 'function' : 'CALDrawModel3D *' differs in levels of indirection from 'int'
+source\life3D.c(87): warning C4024: 'calglAddToDrawModel3Db' : different types for formal and actual parameter 1

@@ -1,0 +1,17 @@
+﻿Project file contains ToolsVersion="12.0". This toolset may be unknown or missing, in which case you may be able to resolve this by installing the appropriate version of MSBuild, or the build may have been forced to a particular ToolsVersion for policy reasons. Treating the project as if it had ToolsVersion="4.0". For more information, please see http://go.microsoft.com/fwlink/?LinkId=291333.
+  cal3DUnsafe.c
+  cal3DRun.c
+  cal3DIO.c
+  cal3DBufferIO.c
+  cal3DBuffer.c
+  cal3D.c
+  cal2DBufferIO.c
+  cal2DBuffer.c
+  cal2DUnsafe.c
+  cal2DRun.c
+  cal2DIO.c
+  cal2D.c
+  Generating Code...
+c:\users\aloisius\documents\github\opencal\opencal\source\cal2d.c(658): warning C4716: 'calApplyElementaryProcess2D' : must return a value
+c:\users\aloisius\documents\github\opencal\opencal\source\cal3d.c(593): warning C4716: 'calApplyElementaryProcess3D' : must return a value
+  OpenCAL.vcxproj -> C:\Users\Aloisius\Documents\GitHub\opencal\OpenCAL\./lib/OpenCALd.lib

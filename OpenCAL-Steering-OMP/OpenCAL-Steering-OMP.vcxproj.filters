@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="calSteering">
+      <UniqueIdentifier>{3ef013a3-e30a-4b84-9c44-e9bc314c1810}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="calSteering\Header Files">
+      <UniqueIdentifier>{e476e822-7cda-4675-9a56-7ca36378c8f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="calSteering\Source Files">
+      <UniqueIdentifier>{9996e9c0-d48e-44c9-9ed8-77cf5ec85263}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\calSteering2D.h">
+      <Filter>calSteering\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\calSteering3D.h">
+      <Filter>calSteering\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="calSteeringCommon.h">
+      <Filter>calSteering\Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="source\calSteering2D.c">
+      <Filter>calSteering\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\calSteering3D.c">
+      <Filter>calSteering\Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
