@@ -1,3 +1,10 @@
+#bin folders
+bin/
+
+#log files
+*.log
+*.tlog
+
 # Object files
 *.o
 *.ko
