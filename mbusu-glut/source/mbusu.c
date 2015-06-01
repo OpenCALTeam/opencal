@@ -47,7 +47,7 @@ void mbusuTransitionFunction(struct CALModel3D* ca, int _i, int _j, int _k)
 	double temp_value;
 
 	volume = lato*lato*lato;
-	_k_inv = (mbusu->layers - 1) - _k;
+	_k_inv = (mbusu->slices - 1) - _k;
 	quota = lato*_k_inv;
 	h = calGet3Dr(ca, Q.h, _i, _j, _k);
 
@@ -184,11 +184,11 @@ void mbusuSimulationInit(struct CALModel3D* mbusu)
 	double teta_start, denom_pow_start, moist_diff;
 	double temp_value;
 
-	for (_k = 0; _k < mbusu->layers; _k++)
+	for (_k = 0; _k < mbusu->slices; _k++)
 		for (_i = 0; _i < mbusu->rows; _i++)
 			for (_j = 0; _j < mbusu->columns; _j++)
 			{
-				_k_inv = (mbusu->layers - 1) - _k;
+				_k_inv = (mbusu->slices - 1) - _k;
 				quota = lato * _k_inv;
 				h = -734 + quota;
 
@@ -276,7 +276,7 @@ void mbusuSimulationSteering(struct CALModel3D* mbusu)
 
 
 #pragma omp parallel for private (k, i, j)
-	for (k = 0; k < mbusu->layers; k++)
+	for (k = 0; k < mbusu->slices; k++)
 		for (i = 0; i < mbusu->rows; i++)
 			for (j = 0; j<mbusu->columns; j++)
 				if (min > calGet3Dr(mbusu, Q.convergence, i, j, k))
@@ -315,11 +315,11 @@ CALbyte mbusuSimulationStopCondition(struct CALModel3D* mbusu)
 	if (delta_t_cum >= ascii_output_time_step && delta_t_cum_prec <= ascii_output_time_step)
 	{
 		j = YOUT/2;
-		for (k = 0; k < mbusu->layers; k++)
+		for (k = 0; k < mbusu->slices; k++)
 			for (i = 0; i < mbusu->rows; i++)
 				//for (j = 0; j < mbusu->columns; j++)
 				{
-					k_inv = (mbusu->layers - 1) - k;
+					k_inv = (mbusu->slices - 1) - k;
 					moist_print = calGet3Dr(mbusu, Q.moist_cont, i, j, k);
 
 					if (i == XW && k_inv == ZSUP)

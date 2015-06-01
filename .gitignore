@@ -39,8 +39,9 @@ bin/
 *.dSYM/
 
 # Visual Studio files
-*.sdf
 *.opensdf
+*.pdb
+*.sdf
 
 # Autotools files
 *sh

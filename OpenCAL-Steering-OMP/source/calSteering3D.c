@@ -136,8 +136,8 @@ CALbyte calSteeringOperation3Db(struct CALModel3D* model, struct CALSubstate3Db*
 	{
 		CALint start, end, threadId;
 		threadId = omp_get_thread_num();
-		start = threadId * (model->rows*model->columns*model->layers)/numThreads;
-		end = (threadId+1) * (model->rows*model->columns*model->layers)/numThreads;
+		start = threadId * (model->rows*model->columns*model->slices)/numThreads;
+		end = (threadId+1) * (model->rows*model->columns*model->slices)/numThreads;
 		if(threadId == numThreads-1){
 			end = model->rows;
 		}
@@ -306,8 +306,8 @@ CALint calSteeringOperation3Di(struct CALModel3D* model, struct CALSubstate3Di* 
 	{
 		CALint start, end, threadId;
 		threadId = omp_get_thread_num();
-		start = threadId * (model->rows*model->columns*model->layers)/numThreads;
-		end = (threadId+1) * (model->rows*model->columns*model->layers)/numThreads;
+		start = threadId * (model->rows*model->columns*model->slices)/numThreads;
+		end = (threadId+1) * (model->rows*model->columns*model->slices)/numThreads;
 		if(threadId == numThreads-1){
 			end = model->rows;
 		}
@@ -477,8 +477,8 @@ CALreal calSteeringOperation3Dr(struct CALModel3D* model, struct CALSubstate3Dr*
 	{
 		CALint start, end, threadId;
 		threadId = omp_get_thread_num();
-		start = threadId * (model->rows*model->columns*model->layers)/numThreads;
-		end = (threadId+1) * (model->rows*model->columns*model->layers)/numThreads;
+		start = threadId * (model->rows*model->columns*model->slices)/numThreads;
+		end = (threadId+1) * (model->rows*model->columns*model->slices)/numThreads;
 		if(threadId == numThreads-1){
 			end = model->rows;
 		}

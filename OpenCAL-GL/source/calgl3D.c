@@ -263,7 +263,7 @@ void calglDrawDiscreetModelDisplayCurrentNode3Db(struct CALDrawModel3D* calDrawM
 	int i, j, k, x;
 	int rows = calDrawModel->calModel->rows;
 	int columns = calDrawModel->calModel->columns;
-	int layers = calDrawModel->calModel->layers;
+	int slices = calDrawModel->calModel->slices;
 
 	GLfloat xData[8];
 	GLfloat yData[8];
@@ -273,7 +273,7 @@ void calglDrawDiscreetModelDisplayCurrentNode3Db(struct CALDrawModel3D* calDrawM
 	if(calNode->typeInfoSubstate != CALGL_TYPE_INFO_VERTEX_DATA)
 		return;
 
-	glTranslatef(-(rows/2.0f), -(layers/2.0f), -(columns/2.0f));
+	glTranslatef(-(rows/2.0f), -(slices/2.0f), -(columns/2.0f));
 
 	// Check for static data -> use display list here
 	if(calNode->dataType == CALGL_DATA_TYPE_STATIC){
@@ -282,7 +282,7 @@ void calglDrawDiscreetModelDisplayCurrentNode3Db(struct CALDrawModel3D* calDrawM
 		} else {
 			*calNode->callList = glGenLists(1);
 			glNewList(*calNode->callList, GL_COMPILE);{
-				for(k=0; k < layers; k++){
+				for(k=0; k < slices; k++){
 					for(i=0; i < rows; i++){		
 						for(j=0; j < columns; j++){
 							if(calglSetColorData3Db(calDrawModel, calNode, i, j, k) == CAL_TRUE){
@@ -327,7 +327,7 @@ void calglDrawDiscreetModelDisplayCurrentNode3Db(struct CALDrawModel3D* calDrawM
 			} glEndList();
 		}
 	} else {
-		for(k=0; k < layers; k++){
+		for(k=0; k < slices; k++){
 			for(i=0; i < rows; i++){		
 				for(j=0; j < columns; j++){
 					if(calglSetColorData3Db(calDrawModel, calNode, i, j, k) == CAL_TRUE){
@@ -375,7 +375,7 @@ void calglDrawDiscreetModelDisplayCurrentNode3Di(struct CALDrawModel3D* calDrawM
 	int i, j, k, x;
 	int rows = calDrawModel->calModel->rows;
 	int columns = calDrawModel->calModel->columns;
-	int layers = calDrawModel->calModel->layers;
+	int slices = calDrawModel->calModel->slices;
 
 	GLfloat xData[8];
 	GLfloat yData[8];
@@ -385,7 +385,7 @@ void calglDrawDiscreetModelDisplayCurrentNode3Di(struct CALDrawModel3D* calDrawM
 	if(calNode->typeInfoSubstate != CALGL_TYPE_INFO_VERTEX_DATA)
 		return;
 
-	glTranslatef(-(rows/2.0f), -(layers/2.0f), -(columns/2.0f));
+	glTranslatef(-(rows/2.0f), -(slices/2.0f), -(columns/2.0f));
 
 	// Check for static data -> use display list here
 	if(calNode->dataType == CALGL_DATA_TYPE_STATIC){
@@ -394,7 +394,7 @@ void calglDrawDiscreetModelDisplayCurrentNode3Di(struct CALDrawModel3D* calDrawM
 		} else {
 			*calNode->callList = glGenLists(1);
 			glNewList(*calNode->callList, GL_COMPILE);{
-				for(k=0; k < layers; k++){
+				for(k=0; k < slices; k++){
 					for(i=0; i < rows; i++){		
 						for(j=0; i < columns; j++){
 							if(calglSetColorData3Di(calDrawModel, calNode, i, j, k) == CAL_TRUE){
@@ -439,7 +439,7 @@ void calglDrawDiscreetModelDisplayCurrentNode3Di(struct CALDrawModel3D* calDrawM
 			} glEndList();
 		}
 	} else {
-		for(k=0; k < layers; k++){
+		for(k=0; k < slices; k++){
 			for(i=0; i < rows; i++){		
 				for(j=0; i < columns; j++){
 					if(calglSetColorData3Di(calDrawModel, calNode, i, j, k) == CAL_TRUE){
@@ -487,7 +487,7 @@ void calglDrawDiscreetModelDisplayCurrentNode3Dr(struct CALDrawModel3D* calDrawM
 	int i, j, k, x;
 	int rows = calDrawModel->calModel->rows;
 	int columns = calDrawModel->calModel->columns;
-	int layers = calDrawModel->calModel->layers;
+	int slices = calDrawModel->calModel->slices;
 
 	GLfloat xData[8];
 	GLfloat yData[8];
@@ -497,7 +497,7 @@ void calglDrawDiscreetModelDisplayCurrentNode3Dr(struct CALDrawModel3D* calDrawM
 	if(calNode->typeInfoSubstate != CALGL_TYPE_INFO_VERTEX_DATA)
 		return;
 
-	glTranslatef(-(rows/2.0f), -(layers/2.0f), -(columns/2.0f));
+	glTranslatef(-(rows/2.0f), -(slices/2.0f), -(columns/2.0f));
 
 	// Check for static data -> use display list here
 	if(calNode->dataType == CALGL_DATA_TYPE_STATIC){
@@ -506,7 +506,7 @@ void calglDrawDiscreetModelDisplayCurrentNode3Dr(struct CALDrawModel3D* calDrawM
 		} else {
 			*calNode->callList = glGenLists(1);
 			glNewList(*calNode->callList, GL_COMPILE);{
-				for(k=0; k < layers; k++){
+				for(k=0; k < slices; k++){
 					for(i=0; i < rows; i++){		
 						for(j=0; i < columns; j++){
 							if(calglSetColorData3Dr(calDrawModel, calNode, i, j, k) == CAL_TRUE){
@@ -551,7 +551,7 @@ void calglDrawDiscreetModelDisplayCurrentNode3Dr(struct CALDrawModel3D* calDrawM
 			} glEndList();
 		}
 	} else {
-		for(k=0; k < layers; k++){
+		for(k=0; k < slices; k++){
 			for(i=0; i < rows; i++){		
 				for(j=0; i < columns; j++){
 					if(calglSetColorData3Dr(calDrawModel, calNode, i, j, k) == CAL_TRUE){
@@ -628,7 +628,7 @@ void calglComputeExtremesDrawModel3Db(struct CALDrawModel3D* calDrawModel, struc
 
 	for (i=0; i<calDrawModel->calModel->rows; i++){
 		for (j=0; j<calDrawModel->calModel->columns; j++){
-			for(k=0; k<calDrawModel->calModel->layers; k++){
+			for(k=0; k<calDrawModel->calModel->slices; k++){
 				if (calGet3Db(calDrawModel->calModel, calNode->substate, i, j, k) > 0){
 					*m = calGet3Db(calDrawModel->calModel, calNode->substate, i, j, k);
 					*M = calGet3Db(calDrawModel->calModel, calNode->substate, i, j, k);
@@ -639,7 +639,7 @@ void calglComputeExtremesDrawModel3Db(struct CALDrawModel3D* calDrawModel, struc
 
 	for (i=0; i<calDrawModel->calModel->rows; i++){
 		for (j=0; j<calDrawModel->calModel->columns; j++){
-			for(k=0; k<calDrawModel->calModel->layers; k++){
+			for(k=0; k<calDrawModel->calModel->slices; k++){
 				tmp = calGet3Db(calDrawModel->calModel, calNode->substate, i, j, k);
 				if (tmp > 0 && *M < tmp){
 					*M = tmp;
@@ -659,7 +659,7 @@ void calglComputeExtremesDrawModel3Di(struct CALDrawModel3D* calDrawModel, struc
 
 	for (i=0; i<calDrawModel->calModel->rows; i++){
 		for (j=0; j<calDrawModel->calModel->columns; j++){
-			for(k=0; k<calDrawModel->calModel->layers; k++){
+			for(k=0; k<calDrawModel->calModel->slices; k++){
 				if (calGet3Di(calDrawModel->calModel, calNode->substate, i, j, k) > 0){
 					*m = calGet3Di(calDrawModel->calModel, calNode->substate, i, j, k);
 					*M = calGet3Di(calDrawModel->calModel, calNode->substate, i, j, k);
@@ -670,7 +670,7 @@ void calglComputeExtremesDrawModel3Di(struct CALDrawModel3D* calDrawModel, struc
 
 	for (i=0; i<calDrawModel->calModel->rows; i++){
 		for (j=0; j<calDrawModel->calModel->columns; j++){
-			for(k=0; k<calDrawModel->calModel->layers; k++){
+			for(k=0; k<calDrawModel->calModel->slices; k++){
 				tmp = calGet3Di(calDrawModel->calModel, calNode->substate, i, j, k);
 				if (tmp > 0 && *M < tmp){
 					*M = tmp;
@@ -690,7 +690,7 @@ void calglComputeExtremesDrawModel3Dr(struct CALDrawModel3D* calDrawModel, struc
 
 	for (i=0; i<calDrawModel->calModel->rows; i++){
 		for (j=0; j<calDrawModel->calModel->columns; j++){
-			for(k=0; k<calDrawModel->calModel->layers; k++){
+			for(k=0; k<calDrawModel->calModel->slices; k++){
 				if (calGet3Dr(calDrawModel->calModel, calNode->substate, i, j, k) > 0){
 					*m = calGet3Dr(calDrawModel->calModel, calNode->substate, i, j, k);
 					*M = calGet3Dr(calDrawModel->calModel, calNode->substate, i, j, k);
@@ -701,7 +701,7 @@ void calglComputeExtremesDrawModel3Dr(struct CALDrawModel3D* calDrawModel, struc
 
 	for (i=0; i<calDrawModel->calModel->rows; i++){
 		for (j=0; j<calDrawModel->calModel->columns; j++){
-			for(k=0; k<calDrawModel->calModel->layers; k++){
+			for(k=0; k<calDrawModel->calModel->slices; k++){
 				tmp = calGet3Dr(calDrawModel->calModel, calNode->substate, i, j, k);
 				if (tmp > 0 && *M < tmp){
 					*M = tmp;
@@ -1041,10 +1041,10 @@ void calglDrawBoundingBox3D(struct CALDrawModel3D* calDrawModel){
 		glColor3f(0.0, 1.0, 0.0);
 
 		// Cube coordinates
-		xData[0] = (GLfloat) calDrawModel->calModel->columns;	yData[0] = (GLfloat) calDrawModel->calModel->layers;	zData[0] = 0.0f;
-		xData[1] = (GLfloat) calDrawModel->calModel->columns;	yData[1] = (GLfloat) calDrawModel->calModel->layers;	zData[1] = (GLfloat) calDrawModel->calModel->rows;
-		xData[2] = 0.0f;	yData[2] = (GLfloat) calDrawModel->calModel->layers;	zData[2] = 0.0f;
-		xData[3] = 0.0f;	yData[3] = (GLfloat) calDrawModel->calModel->layers;	zData[3] = (GLfloat) calDrawModel->calModel->rows;
+		xData[0] = (GLfloat) calDrawModel->calModel->columns;	yData[0] = (GLfloat) calDrawModel->calModel->slices;	zData[0] = 0.0f;
+		xData[1] = (GLfloat) calDrawModel->calModel->columns;	yData[1] = (GLfloat) calDrawModel->calModel->slices;	zData[1] = (GLfloat) calDrawModel->calModel->rows;
+		xData[2] = 0.0f;	yData[2] = (GLfloat) calDrawModel->calModel->slices;	zData[2] = 0.0f;
+		xData[3] = 0.0f;	yData[3] = (GLfloat) calDrawModel->calModel->slices;	zData[3] = (GLfloat) calDrawModel->calModel->rows;
 
 		xData[6] = (GLfloat) calDrawModel->calModel->columns;	yData[6] = 0.0f;	zData[6] = 0.0f;
 		xData[7] = (GLfloat) calDrawModel->calModel->columns;	yData[7] = 0.0f;	zData[7] = (GLfloat) calDrawModel->calModel->rows;

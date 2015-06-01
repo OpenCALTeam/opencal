@@ -43,7 +43,7 @@ void display(void)
 	glPopAttrib();	
 
 	glColor3f(1,1,1);
-	for (k=0; k<life3D->layers; k++)
+	for (k=0; k<life3D->slices; k++)
 		for (i=0; i<life3D->rows; i++)
 			for (j=0; j<life3D->columns; j++)
 			{

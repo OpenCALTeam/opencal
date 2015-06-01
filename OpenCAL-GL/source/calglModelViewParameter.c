@@ -47,7 +47,7 @@ struct CALGLModelViewParameter* calglAutoCreateModelViewParameterFlat3D(struct C
 
 	modelView = calglCreateModelViewParameter(-calDrawModel->calModel->rows*(1.0f/48.0f), -calDrawModel->calModel->columns*(1.0f/48.0f), 0,
 		0,0,0,
-		1/(calDrawModel->calModel->columns/10.0f), -1/(calDrawModel->calModel->rows/10.0f), 1/(calDrawModel->calModel->layers/10.0f));
+		1/(calDrawModel->calModel->columns/10.0f), -1/(calDrawModel->calModel->rows/10.0f), 1/(calDrawModel->calModel->slices/10.0f));
 
 	return modelView;
 }

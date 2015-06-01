@@ -42,7 +42,7 @@ void display(void)
 	// Restore lighting state variables
 	glPopAttrib();
 
-	for (k=0; k<mbusu->layers; k++)
+	for (k=0; k<mbusu->slices; k++)
 		for (i=0; i<mbusu->rows; i++)
 			for (j=14; j<15; j++)
 			//for (j=0; j<mbusu->columns; j++)
