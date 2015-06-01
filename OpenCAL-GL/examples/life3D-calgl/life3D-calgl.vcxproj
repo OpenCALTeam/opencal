@@ -11,17 +11,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="source\gui.c" />
-    <ClCompile Include="source\forestInsect.c" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="source\forestInsect.h" />
+    <ClCompile Include="source\life3D.c" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{1E9EA4F3-02DB-4453-9AE5-F9BA65EA215E}</ProjectGuid>
+    <ProjectGuid>{999520F4-E768-4B10-8DFB-55F02639B0F8}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>test_glut_static</RootNamespace>
-    <ProjectName>ForestInsect-calgl</ProjectName>
+    <ProjectName>life3D-calgl</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -29,7 +25,6 @@
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
-    <CLRSupport>false</CLRSupport>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -37,7 +32,6 @@
     <PlatformToolset>v120</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
-    <CLRSupport>false</CLRSupport>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -55,16 +49,16 @@
     <IntDir>./bin/$(Platform)/$(Configuration)/</IntDir>
     <TargetName>$(ProjectName)d</TargetName>
     <ExtensionsToDeleteOnClean>*.cdf;*.cache;*.obj;*.ilk;*.resources;*.tlb;*.tli;*.tlh;*.tmp;*.rsp;*.pgc;*.pgd;*.meta;*.tlog;*.manifest;*.res;*.pch;*.exp;*.idb;*.rep;*.xdc;*.pdb;*_manifest.rc;*.bsc;*.sbr;*.xml;*.metagen;*.bi</ExtensionsToDeleteOnClean>
-    <IncludePath>../pthread/Pre-built.2/include;../freeglut-2.8.1/include;$(IncludePath)</IncludePath>
-    <LibraryPath>../pthread/Pre-built.2/lib/x86;../freeglut-2.8.1/lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>../../../extern/pthread/Pre-built.2/include;../../../extern/freeglut-2.8.1/include;../../../OpenCAL/include;../../../OpenCAL-GL/include;$(IncludePath)</IncludePath>
+    <LibraryPath>../../../extern/pthread/Pre-built.2/lib/x86;../../../extern/freeglut-2.8.1/lib/x86/Debug;../../../OpenCAL/lib;../../../OpenCAL-GL/lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>./</OutDir>
     <IntDir>./bin/</IntDir>
     <ExtensionsToDeleteOnClean>*.log;*.pdb;*.cdf;*.cache;*.obj;*.ilk;*.resources;*.tlb;*.tli;*.tlh;*.tmp;*.rsp;*.pgc;*.pgd;*.meta;*.tlog;*.manifest;*.res;*.pch;*.exp;*.idb;*.rep;*.xdc;*.pdb;*_manifest.rc;*.bsc;*.sbr;*.xml;*.metagen;*.bi</ExtensionsToDeleteOnClean>
-    <IncludePath>../pthread/Pre-built.2/include;../freeglut-2.8.1/include;$(IncludePath)</IncludePath>
-    <LibraryPath>../pthread/Pre-built.2/lib/x86;../freeglut-2.8.1/lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>../../../extern/pthread/Pre-built.2/include;../../../extern/freeglut-2.8.1/include;../../../OpenCAL/include;../../../OpenCAL-GL/include;$(IncludePath)</IncludePath>
+    <LibraryPath>../../../extern/pthread/Pre-built.2/lib/x86;../../../extern/freeglut-2.8.1/lib/x86/Debug;../../../OpenCAL/lib;../../../OpenCAL-GL/lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -72,9 +66,10 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;FREEGLUT_STATIC;_CRT_SECURE_NO_WARNINGS;_DEBUG;_CONSOLE;FREEGLUT_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;FREEGLUT_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../freeglut-2.8.1/include;../OpenCAL-GL/include;../OpenCAL/include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
       <InlineFunctionExpansion>Default</InlineFunctionExpansion>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <WholeProgramOptimization>false</WholeProgramOptimization>
@@ -86,7 +81,8 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>../freeglut-2.8.1/lib/x86/Debug;../OpenCAL-GL/lib;../OpenCAL/lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
       <AdditionalDependencies>OpenCALd.lib;OpenCAL-GLd.lib;%(AdditionalDependencies);pthreadVC2.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -98,9 +94,9 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;FREEGLUT_STATIC;_CRT_SECURE_NO_WARNINGS;NDEBUG;_CONSOLE;FREEGLUT_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;FREEGLUT_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../freeglut-2.8.1/include;../OpenCAL-GL/include;../OpenCAL/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>None</DebugInformationFormat>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
@@ -109,7 +105,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>../freeglut-2.8.1/lib/x86;../OpenCAL-GL/lib;../OpenCAL/lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
       <AdditionalDependencies>OpenCAL.lib;OpenCAL-GL.lib;%(AdditionalDependencies);pthreadVC2.lib</AdditionalDependencies>
     </Link>
     <BuildLog>

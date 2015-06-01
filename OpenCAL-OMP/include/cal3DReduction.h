@@ -9,11 +9,10 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 // Lesser General Public License for more details.
 
-#ifndef calSteering3D_h
-#define calSteering3D_h
+#ifndef cal3DReduction_h
+#define cal3DReduction_h
 
 #include <cal3D.h>
-#include <calSteeringCommon.h>
 
 /*! \brief 
 
@@ -100,9 +99,9 @@ CALreal calSteeringComputeBinaryXor3Dr(struct CALModel3D* model, struct CALSubst
 	Private set of functions that execute the operation specified on a given substate.
 	The user must not call directly this function, but instead call the functions specifed above.
 */
-CALbyte calSteeringOperation3Db(struct CALModel3D* model, struct CALSubstate3Db* substate, enum STEERING_OPERATION operation);
-CALint calSteeringOperation3Di(struct CALModel3D* model, struct CALSubstate3Di* substate, enum STEERING_OPERATION operation);
-CALreal calSteeringOperation3Dr(struct CALModel3D* model, struct CALSubstate3Dr* substate, enum STEERING_OPERATION operation);
+CALbyte calSteeringOperation3Db(struct CALModel3D* model, struct CALSubstate3Db* substate, enum REDUCTION_OPERATION operation);
+CALint calSteeringOperation3Di(struct CALModel3D* model, struct CALSubstate3Di* substate, enum REDUCTION_OPERATION operation);
+CALreal calSteeringOperation3Dr(struct CALModel3D* model, struct CALSubstate3Dr* substate, enum REDUCTION_OPERATION operation);
 
 /*! \brief 
 

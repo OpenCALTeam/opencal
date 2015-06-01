@@ -197,4 +197,26 @@ struct CALSubstate3Dr {
 */
 #define CAL_RUN_LOOP 0
 
+
+
+/*! \brief Enumeration defining global reduction operations.
+
+Enumeration defining global reduction operations inside the
+steering function.
+*/
+enum REDUCTION_OPERATION {
+	REDUCTION_NONE = 0,
+	REDUCTION_MAX,
+	REDUCTION_MIN,
+	REDUCTION_SUM,
+	REDUCTION_PROD,
+	REDUCTION_LOGICAL_AND,
+	REDUCTION_BINARY_AND,
+	REDUCTION_LOGICAL_OR,
+	REDUCTION_BINARY_OR,
+	REDUCTION_LOGICAL_XOR,
+	REDUCTION_BINARY_XOR
+};
+
+
 #endif

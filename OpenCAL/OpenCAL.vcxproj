@@ -86,11 +86,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="include\cal2DReduction.h" />
     <ClInclude Include="include\cal2DUnsafe.h" />
     <ClInclude Include="include\cal3D.h" />
     <ClInclude Include="include\cal3DBuffer.h" />
     <ClInclude Include="include\cal3DBufferIO.h" />
     <ClInclude Include="include\cal3DIO.h" />
+    <ClInclude Include="include\cal3DReduction.h" />
     <ClInclude Include="include\cal3DRun.h" />
     <ClInclude Include="include\cal3DUnsafe.h" />
     <ClInclude Include="include\calCommon.h" />
@@ -103,6 +105,7 @@
   <ItemGroup>
     <ClCompile Include="source\cal2D.c" />
     <ClCompile Include="source\cal2DIO.c" />
+    <ClCompile Include="source\cal2DReduction.c" />
     <ClCompile Include="source\cal2DRun.c" />
     <ClCompile Include="source\cal2DUnsafe.c" />
     <ClCompile Include="source\cal2DBuffer.c" />
@@ -111,6 +114,7 @@
     <ClCompile Include="source\cal3DBuffer.c" />
     <ClCompile Include="source\cal3DBufferIO.c" />
     <ClCompile Include="source\cal3DIO.c" />
+    <ClCompile Include="source\cal3DReduction.c" />
     <ClCompile Include="source\cal3DRun.c" />
     <ClCompile Include="source\cal3DUnsafe.c" />
   </ItemGroup>

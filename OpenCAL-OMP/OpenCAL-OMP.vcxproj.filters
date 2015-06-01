@@ -61,6 +61,12 @@
       <Filter>cal3D\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\calOmpDef.h" />
+    <ClInclude Include="include\cal2DReduction.h">
+      <Filter>cal2D\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\cal3DReduction.h">
+      <Filter>cal3D\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\cal2D.c">
@@ -97,6 +103,12 @@
       <Filter>cal3D\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\cal3DUnsafe.c">
+      <Filter>cal3D\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cal2DReduction.c">
+      <Filter>cal2D\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cal3DReduction.c">
       <Filter>cal3D\Source Files</Filter>
     </ClCompile>
   </ItemGroup>

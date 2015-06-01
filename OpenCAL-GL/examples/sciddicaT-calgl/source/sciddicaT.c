@@ -1,11 +1,11 @@
 #include <cal2D.h>
 #include <cal2DIO.h>
+#include <cal2DReduction.h>
 #include <cal2DRun.h>
 #include <calgl2D.h>
 #include <calgl2DWindow.h>
 #include <stdlib.h>
 
-#include <calSteering2D.h>
 
 //-----------------------------------------------------------------------
 //	   THE sciddicaT(oy) cellular automaton definition section
@@ -146,7 +146,7 @@ void sciddicaTSteering(struct CALModel2D* sciddicaT)
 	calInitSubstate2Dr(sciddicaT, Q.f[2], 0);
 	calInitSubstate2Dr(sciddicaT, Q.f[3], 0);
 
-	value = calSteeringComputeMax2Dr(sciddicaT, Q.z);
+	value = calReductionComputeMax2Dr(sciddicaT, Q.z);
 	printf("Max: %g\t", value);
 }
 
