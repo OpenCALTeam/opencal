@@ -8,7 +8,10 @@ OPENCAL_LIB_PATH	= ../OpenCAL/lib
 OPENCAL_INC_PATH	= ../OpenCAL/include/
 #OPTFLAG		= -g
 
-all: $(BIN_PATH)/sciddicaS3Hex
+all:dir $(BIN_PATH)/sciddicaS3Hex
+
+dir:
+	mkdir -p ./bin
 
 $(BIN_PATH)/sciddicaS3Hex: $(BIN_PATH)/sciddicaS3Hex.o $(BIN_PATH)/gui.o $(OPENCAL_LIB_PATH)/opencal.a
 	$(CC) -o $(BIN_PATH)/sciddicaS3Hex $(BIN_PATH)/sciddicaS3Hex.o $(BIN_PATH)/gui.o $(OPENCAL_LIB_PATH)/opencal.a -lGL -lGLU -lglut
@@ -22,3 +25,4 @@ $(BIN_PATH)/sciddicaS3Hex.o: $(SRC_PATH)/sciddicaS3Hex.c
 
 clean:
 	@$(RM) sciddicaS3Hex $(BIN_PATH)/*.o $(BIN_PATH)/sciddicaS3Hex
+	rm -fr bin

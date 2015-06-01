@@ -8,7 +8,10 @@ OPENCAL_LIB_PATH	= ../OpenCAL/lib
 OPENCAL_INC_PATH	= ../OpenCAL/include
 #OPTFLAG		= -g
 
-all: $(BIN_PATH)/life3D-glut
+all:dir $(BIN_PATH)/life3D-glut
+
+dir:
+	mkdir -p ./bin
 
 $(BIN_PATH)/life3D-glut: $(BIN_PATH)/life3D.o $(BIN_PATH)/gui.o $(OPENCAL_LIB_PATH)/opencal.a
 	$(CC) -o $(BIN_PATH)/life3D-glut $(BIN_PATH)/life3D.o $(BIN_PATH)/gui.o $(OPENCAL_LIB_PATH)/opencal.a -lGL -lGLU -lglut
@@ -22,3 +25,4 @@ $(BIN_PATH)/life3D.o: $(SRC_PATH)/life3D.c
 
 clean:
 	@$(RM) life3D-glut $(BIN_PATH)/*.o $(BIN_PATH)/life3D-glut
+	rm -fr bin

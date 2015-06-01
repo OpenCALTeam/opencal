@@ -7,8 +7,11 @@ BIN_PATH	= ./bin
 LIB_PATH	= ./lib
 #OPTFLAG		= -g
 
-all: $(LIB_PATH)/opencal.a
+all: dir $(LIB_PATH)/opencal.a
 
+dir:
+	mkdir -p ./bin
+	mkdir -p ./lib
 
 
 $(LIB_PATH)/opencal.a:	$(BIN_PATH)/cal2D.o \
@@ -82,3 +85,5 @@ $(BIN_PATH)/cal3DUnsafe.o: $(SRC_PATH)/cal3DUnsafe.c
 
 clean:
 	@$(RM) $(LIB_PATH)/opencal.a $(BIN_PATH)/*
+	rm -fr bin
+	rm -fr lib

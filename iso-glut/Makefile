@@ -8,7 +8,10 @@ OPENCAL_LIB_PATH	= ../OpenCAL/lib
 OPENCAL_INC_PATH	= ../OpenCAL/include
 #OPTFLAG		= -g
 
-all: $(BIN_PATH)/iso
+all: dir $(BIN_PATH)/iso
+
+dir:
+	mkdir -p ./bin
 
 $(BIN_PATH)/iso: $(BIN_PATH)/iso.o $(BIN_PATH)/gui.o $(OPENCAL_LIB_PATH)/opencal.a
 	$(CC) -o $(BIN_PATH)/iso $(BIN_PATH)/iso.o $(BIN_PATH)/gui.o $(OPENCAL_LIB_PATH)/opencal.a -lGL -lGLU -lglut -lm
@@ -22,3 +25,4 @@ $(BIN_PATH)/iso.o: $(SRC_PATH)/iso.c
 
 clean:
 	@$(RM) iso $(BIN_PATH)/*.o $(BIN_PATH)/iso
+	rm -fr bin

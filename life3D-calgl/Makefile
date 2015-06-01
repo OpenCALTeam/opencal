@@ -8,9 +8,8 @@ include ../Makefile.inc
 #OPENCAL_INC_PATH	= ../OpenCAL/include
 #OPTFLAG		= -g
 
-all: 
+all:
 	LD_RUN_PATH=../OpenCAL-OMP/build/lib gcc -o life3D source/life3D.c  ../OpenCAL-GL/build/lib/libopencalgl.a -I../OpenCAL-OMP/build/include/ -I../OpenCAL-GL/build/include/ -L../OpenCAL-OMP/build/lib/ -lGL -lGLU -lglut -lm -lpthread -fopenmp -lopencal
-
 
 clean:
 	@$(RM) life3D *.o

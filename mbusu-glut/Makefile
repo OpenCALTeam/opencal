@@ -8,7 +8,10 @@ OPENCAL_LIB_PATH	= ../OpenCAL/lib
 OPENCAL_INC_PATH	= ../OpenCAL/include
 #OPTFLAG		= -g
 
-all: $(BIN_PATH)/mbusu-glut
+all:dir $(BIN_PATH)/mbusu-glut
+
+dir:
+	mkdir -p ./bin
 
 $(BIN_PATH)/mbusu-glut: $(BIN_PATH)/mbusu.o $(BIN_PATH)/mbusu_gui.o $(OPENCAL_LIB_PATH)/opencal.a
 	$(CC) -o $(BIN_PATH)/mbusu-glut $(BIN_PATH)/mbusu.o $(BIN_PATH)/mbusu_gui.o $(OPENCAL_LIB_PATH)/opencal.a -lGL -lGLU -lglut -lm
@@ -22,3 +25,4 @@ $(BIN_PATH)/mbusu.o: $(SRC_PATH)/mbusu.c
 
 clean:
 	@$(RM) mbusu-glut $(BIN_PATH)/*.o $(BIN_PATH)/mbusu-glut
+	rm -fr bin

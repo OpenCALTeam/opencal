@@ -8,7 +8,10 @@ OPENCAL_LIB_PATH	= ../OpenCAL/lib
 OPENCAL_INC_PATH	= ../OpenCAL/include
 #OPTFLAG		= -g
 
-all: $(BIN_PATH)/life
+all: dir $(BIN_PATH)/life
+
+dir:
+	mkdir -p ./bin
 
 $(BIN_PATH)/life: $(BIN_PATH)/life.o $(OPENCAL_LIB_PATH)/opencal.a
 	$(CC) -o $(BIN_PATH)/life $(BIN_PATH)/life.o $(OPENCAL_LIB_PATH)/opencal.a
@@ -19,3 +22,4 @@ $(BIN_PATH)/life.o: $(SRC_PATH)/life.c
 
 clean:
 	@$(RM) life $(BIN_PATH)/*
+	rm -fr bin

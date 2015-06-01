@@ -8,7 +8,10 @@ OPENCAL_LIB_PATH	= ../OpenCAL/lib
 OPENCAL_INC_PATH	= ../OpenCAL/include
 #OPTFLAG		= -g
 
-all: $(BIN_PATH)/sciddicaT
+all:dir $(BIN_PATH)/sciddicaT
+
+dir:
+	mkdir -p ./bin
 
 $(BIN_PATH)/sciddicaT: $(BIN_PATH)/sciddicaT.o $(BIN_PATH)/gui.o $(OPENCAL_LIB_PATH)/opencal.a
 	$(CC) -o $(BIN_PATH)/sciddicaT $(BIN_PATH)/sciddicaT.o $(BIN_PATH)/gui.o $(OPENCAL_LIB_PATH)/opencal.a -lGL -lGLU -lglut
@@ -22,3 +25,4 @@ $(BIN_PATH)/sciddicaT.o: $(SRC_PATH)/sciddicaT.c
 
 clean:
 	@$(RM) sciddicaT $(BIN_PATH)/*.o $(BIN_PATH)/sciddicaT
+	rm -fr bin
