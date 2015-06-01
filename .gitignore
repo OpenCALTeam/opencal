@@ -38,6 +38,10 @@ bin/
 # Debug files
 *.dSYM/
 
+# Visual Studio files
+*.sdf
+*.opensdf
+
 # Autotools files
 *sh
 build
