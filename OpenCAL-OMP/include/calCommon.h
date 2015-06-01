@@ -85,7 +85,7 @@ struct CALCell2D {
 struct CALCell3D {
 	int i;		//!< Cell row coordinate.
 	int j;		//!< Cell column coordinate.
-	int k;		//!< Cell layer coordinate.
+	int k;		//!< Cell slice coordinate.
 };
 
 

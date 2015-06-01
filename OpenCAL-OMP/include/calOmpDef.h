@@ -34,14 +34,14 @@
 
 
 #define CAL_ALLOC_LOCKS_3D(ca3D)					\
-	(ca3D)->locks = (omp_lock_t *)malloc(sizeof(omp_lock_t) * (ca3D)->rows * (ca3D)->columns * (ca3D)->layers)
+	(ca3D)->locks = (omp_lock_t *)malloc(sizeof(omp_lock_t) * (ca3D)->rows * (ca3D)->columns * (ca3D)->slices)
 
 #define CAL_INIT_LOCKS_3D(ca3D, i)						\
-	for (i = 0; i < (ca3D)->rows * (ca3D)->columns * (ca3D)->layers; i++) \
+	for (i = 0; i < (ca3D)->rows * (ca3D)->columns * (ca3D)->slices; i++) \
 		omp_init_lock(&ca3D->locks[i])
 
 #define CAL_DESTROY_LOCKS_3D(ca3D, i)					\
-	for (i = 0; (i) < (ca3D)->rows * (ca3D)->columns * (ca3D)->layers; (i)++) \
+	for (i = 0; (i) < (ca3D)->rows * (ca3D)->columns * (ca3D)->slices; (i)++) \
 		omp_destroy_lock(&((ca3D)->locks[i]));			\
 
 #define CAL_SET_CELL_LOCK_3D(i, j, k, ca3D)				\

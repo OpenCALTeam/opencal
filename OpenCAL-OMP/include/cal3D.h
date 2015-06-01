@@ -55,7 +55,7 @@ struct CALActiveCells3D {
 struct CALModel3D {
 	int rows;							//!< Number of rows of the 3D cellular space.
 	int columns;						//!< Number of columns of the 3D cellular space.
-	int layers;							//!< Number of layers of the 3D cellular space.
+	int slices;							//!< Number of slices of the 3D cellular space.
 	enum CALSpaceBoundaryCondition T;	//!< Type of cellular space: toroidal or non-toroidal.
 
 	enum CALOptimization OPTIMIZATION;	//!< Type of optimization used. It can be CAL_NO_OPT or CAL_OPT_ACTIVE_CELLS.
@@ -99,7 +99,7 @@ typedef void (* CALCallbackFunc3D)(struct CALModel3D* ca3D, int i, int j, int k)
 */
 struct CALModel3D* calCADef3D(int rows, //!< Number of rows of the 3D cellular space.
 							  int columns, //!< Number of columns of the 3D cellular space.
-							  int layers, //!< Number of layers of the 3D cellular space.
+							  int slices, //!< Number of slices of the 3D cellular space.
 							  enum CALNeighborhood3D CAL_NEIGHBORHOOD_3D, //!< Enumerator that identifies the type of neighbourhood relation to be used.
 							  enum CALSpaceBoundaryCondition CAL_TOROIDALITY, //!< Enumerator that identifies the type of cellular space: toroidal or non-toroidal.
 							  enum CALOptimization CAL_OPTIMIZATION //!< Enumerator used for specifying the active cells optimization or no optimization.
@@ -119,7 +119,7 @@ void calSetUnsafe3D(struct CALModel3D* ca3D);
 void calAddActiveCell3D(struct CALModel3D* ca3D,	//!< Pointer to the cellular automaton structure.
 						int i,	//!< Row coordinate of the cell to be added.
 						int j,	//!< Column coordinate of the cell to be added.
-						int k	//!< Layer coordinate of the cell to be added.
+						int k	//!< Slice coordinate of the cell to be added.
 						);
 
 
@@ -129,7 +129,7 @@ void calAddActiveCell3D(struct CALModel3D* ca3D,	//!< Pointer to the cellular au
 void calAddActiveCellX3D(struct CALModel3D* ca3D,	//!< Pointer to the cellular automaton structure.
 						 int i,	//!< Row coordinate of the central cell.
 						 int j,	//!< Column coordinate of the central cell.
-						 int k,	//!< Layer coordinate of the central cell.
+						 int k,	//!< Slice coordinate of the central cell.
 						 int n	//!< Index of the n-th neighbor to be added.
 						 );
 
@@ -139,7 +139,7 @@ void calAddActiveCellX3D(struct CALModel3D* ca3D,	//!< Pointer to the cellular a
 void calRemoveActiveCell3D(struct CALModel3D* ca3D,	//!< Pointer to the cellular automaton structure.
 						   int i,	//!< Row coordinate of the cell to be removed.
 						   int j,	//!< Column coordinate of the cell to be removed.
-						   int k	//!< Layer coordinate of the cell to be removed.
+						   int k	//!< Slice coordinate of the cell to be removed.
 						   );
 
 /*! \brief Puts the cells marked as actives in A.flags into the array of active cells 
@@ -156,7 +156,7 @@ void calUpdateActiveCells3D(struct CALModel3D* ca3D	//!< Pointer to the cellular
 struct CALCell3D*  calAddNeighbor3D(struct CALModel3D* ca3D, //!< Pointer to the cellular automaton structure.
 									int i,	//!< Relative row coordinate with respect to the central cell (the north neighbour has i = -1, the south i = +1, etc.).
 									int j,	//!< Relative column coordinate with respect to the central cell (the east neighbour has j = -1, the west i = +1, etc.).
-									int k	//!< Relative layer coordinate with respect to the central cell (that has relative layer 0).
+									int k	//!< Relative slice coordinate with respect to the central cell (that has relative slice 0).
 									);
 
 
@@ -308,7 +308,7 @@ void calInit3Db(struct CALModel3D* ca3D,	//!< Pointer to the cellular automaton 
 				struct CALSubstate3Db* Q,	//!< Pointer to a 3D byte substate.
 				int i,						//!< Row coordinate of the cell to be initialized.
 				int j,						//!< Column coordinate of the cell to be initialized.
-				int k,						//!< Layer coordinate of the cell to be initialized.
+				int k,						//!< Slice coordinate of the cell to be initialized.
 				CALbyte value				//!< initializing value for the substate at the cell (i, j, k).
 				);
 
@@ -318,7 +318,7 @@ void calInit3Di(struct CALModel3D* ca3D,	//!< Pointer to the cellular automaton 
 				struct CALSubstate3Di* Q,	//!< Pointer to a 3D int substate.
 				int i,						//!< Row coordinate of the cell to be initialized.
 				int j,						//!< Column coordinate of the cell to be initialized.
-				int k,						//!< Layer coordinate of the cell to be initialized.
+				int k,						//!< Slice coordinate of the cell to be initialized.
 				CALint value				//!< initializing value for the substate at the cell (i, j, k).
 				);
 
@@ -328,7 +328,7 @@ void calInit3Dr(struct CALModel3D* ca3D,	//!< Pointer to the cellular automaton 
 				struct CALSubstate3Dr* Q,	//!< Pointer to a 3D real (floating point) substate.
 				int i,						//!< Row coordinate of the cell to be initialized.
 				int j,						//!< Column coordinate of the cell to be initialized.
-				int k,						//!< Layer coordinate of the cell to be initialized.
+				int k,						//!< Slice coordinate of the cell to be initialized.
 				CALreal value				//!< initializing value for the substate at the cell (i, j, k).
 				);
 
@@ -340,7 +340,7 @@ CALbyte calGet3Db(struct CALModel3D* ca3D,	//!< Pointer to the cellular automato
 				  struct CALSubstate3Db* Q,	//!< Pointer to a 3D byte substate.	
 				  int i,					//!< Row coordinate of the cell.
 				  int j,					//!< Column coordinate of the cell.
-				  int k						//!< Layer coordinate of the cell.
+				  int k						//!< Slice coordinate of the cell.
 				  );
 
 /*! \brief Returns the cell (i, j, k) value of an integer substate.  
@@ -349,7 +349,7 @@ CALint calGet3Di(struct CALModel3D* ca3D,	//!< Pointer to the cellular automaton
 				 struct CALSubstate3Di* Q,	//!< Pointer to a 3D int substate.
 				 int i,						//!< Row coordinate of the cell.
 				 int j,						//!< Column coordinate of the cell.
-				 int k						//!< Layer coordinate of the cell to be initialized.
+				 int k						//!< Slice coordinate of the cell to be initialized.
 				 );
 
 /*! \brief Returns the cell (i, j, k) value of the of a real (floating point) substate.  
@@ -358,7 +358,7 @@ CALreal calGet3Dr(struct CALModel3D* ca3D,	//!< Pointer to the cellular automato
 				  struct CALSubstate3Dr* Q,	//!< Pointer to a 3D real (floating point) substate.
 				  int i,					//!< Row coordinate of the cell.
 				  int j,					//!< Column coordinate of the cell.
-				  int k						//!< Layer coordinate of the cell.
+				  int k						//!< Slice coordinate of the cell.
 				  );
 
 
@@ -369,7 +369,7 @@ CALbyte calGetX3Db(struct CALModel3D* ca3D,	//!< Pointer to the cellular automat
 				   struct CALSubstate3Db* Q,//!< Pointer to a 3D byte substate.
 				   int i,					//!< Row coordinate of the central cell.
 				   int j,					//!< Column coordinate of the central cell.
-				   int k,					//!< Layer coordinate of the central cell.
+				   int k,					//!< Slice coordinate of the central cell.
 				   int n					//!< Index of the n-th neighbor.
 				   );
 
@@ -379,7 +379,7 @@ CALint calGetX3Di(struct CALModel3D* ca3D,	//!< Pointer to the cellular automato
 				  struct CALSubstate3Di* Q,	//!< Pointer to a 3D int substate.
 				  int i,					//!< Row coordinate of the central cell.
 				  int j,					//!< Column coordinate of the central cell.
-				  int k,					//!< Layer coordinate of the central cell.
+				  int k,					//!< Slice coordinate of the central cell.
 				  int n						//!< Index of the n-th neighbor.
 				  );
 
@@ -389,7 +389,7 @@ CALreal calGetX3Dr(struct CALModel3D* ca3D,	//!< Pointer to the cellular automat
 				   struct CALSubstate3Dr* Q,//!< Pointer to a 3D real (floating point) substate.
 				   int i,					//!< Row coordinate of the central cell.
 				   int j,					//!< Column coordinate of the central cell.
-				   int k,					//!< Layer coordinate of the central cell.
+				   int k,					//!< Slice coordinate of the central cell.
 				   int n					//!< Index of the n-th neighbor.
 				   );
 
@@ -401,7 +401,7 @@ void calSet3Db(struct CALModel3D* ca3D,		//!< Pointer to the cellular automaton 
 			   struct CALSubstate3Db* Q,	//!< Pointer to a 3D byte substate.
 			   int i,						//!< Row coordinate of the cell.
 			   int j,						//!< Column coordinate of the cell.
-			   int k,						//!< Layer coordinate of the cell.
+			   int k,						//!< Slice coordinate of the cell.
 			   CALbyte value				//!< initializing value.
 			   );
 
@@ -411,7 +411,7 @@ void calSet3Di(struct CALModel3D* ca3D,		//!< Pointer to the cellular automaton 
 			   struct CALSubstate3Di* Q,	//!< Pointer to a 3D int substate.
 			   int i,						//!< Row coordinate of the cell.
 			   int j,						//!< Column coordinate of the cell.
-			   int k,						//!< Layer coordinate of the cell.
+			   int k,						//!< Slice coordinate of the cell.
 			   CALint value					//!< initializing value.
 			   );
 
@@ -421,7 +421,7 @@ void calSet3Dr(struct CALModel3D* ca3D,		//!< Pointer to the cellular automaton 
 			   struct CALSubstate3Dr* Q,	//!< Pointer to a 3D real (floating point) substate.
 			   int i,						//!< Row coordinate of the cell.
 			   int j,						//!< Column coordinate of the cell.
-			   int k,						//!< Layer coordinate of the cell.
+			   int k,						//!< Slice coordinate of the cell.
 			   CALreal value				//!< initializing value.
 			   );
 
@@ -434,7 +434,7 @@ void calSetCurrent3Db(struct CALModel3D* ca3D,	//!< Pointer to the cellular auto
 					  struct CALSubstate3Db* Q,	//!< Pointer to a 3D byte substate.
 					  int i,					//!< Row coordinate of the central cell.
 					  int j,					//!< Column coordinate of the central cell.
-					  int k,					//!< Layer coordinate of the central cell.
+					  int k,					//!< Slice coordinate of the central cell.
 					  CALbyte value				//!< initializing value.
 					  );
 
@@ -445,7 +445,7 @@ void calSetCurrent3Di(struct CALModel3D* ca3D,	//!< Pointer to the cellular auto
 					  struct CALSubstate3Di* Q,	//!< Pointer to a 3D int substate.
 					  int i,					//!< Row coordinate of the central cell.
 					  int j,					//!< Column coordinate of the central cell.
-					  int k,					//!< Layer coordinate of the central cell.
+					  int k,					//!< Slice coordinate of the central cell.
 					  CALint value				//!< initializing value.
 					  );
 
@@ -456,7 +456,7 @@ void calSetCurrent3Dr(struct CALModel3D* ca3D,	//!< Pointer to the cellular auto
 					  struct CALSubstate3Dr* Q,	//!< Pointer to a 3D int substate.
 					  int i,					//!< Row coordinate of the central cell.
 					  int j,					//!< Column coordinate of the central cell.
-					  int k,					//!< Layer coordinate of the central cell.
+					  int k,					//!< Slice coordinate of the central cell.
 					  CALreal value				//!< initializing value.
 					  );
 

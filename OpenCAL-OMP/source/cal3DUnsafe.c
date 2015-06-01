@@ -24,8 +24,8 @@ void calInitX3Db(struct CALModel3D* ca3D, struct CALSubstate3Db* Q, int i, int j
 	}
 	else
 	{
-		calSetBuffer3DElement(Q->current, ca3D->rows, ca3D->columns, calGetToroidalX(i+ca3D->X[n].i, ca3D->rows), calGetToroidalX(j+ca3D->X[n].j, ca3D->columns), calGetToroidalX(k+ca3D->X[n].k, ca3D->layers), value);
-		calSetBuffer3DElement(Q->next, ca3D->rows, ca3D->columns, calGetToroidalX(i+ca3D->X[n].i, ca3D->rows), calGetToroidalX(j+ca3D->X[n].j, ca3D->columns), calGetToroidalX(k+ca3D->X[n].k, ca3D->layers), value);
+		calSetBuffer3DElement(Q->current, ca3D->rows, ca3D->columns, calGetToroidalX(i+ca3D->X[n].i, ca3D->rows), calGetToroidalX(j+ca3D->X[n].j, ca3D->columns), calGetToroidalX(k+ca3D->X[n].k, ca3D->slices), value);
+		calSetBuffer3DElement(Q->next, ca3D->rows, ca3D->columns, calGetToroidalX(i+ca3D->X[n].i, ca3D->rows), calGetToroidalX(j+ca3D->X[n].j, ca3D->columns), calGetToroidalX(k+ca3D->X[n].k, ca3D->slices), value);
 	}
 }
 
@@ -38,8 +38,8 @@ void calInitX3Di(struct CALModel3D* ca3D, struct CALSubstate3Di* Q, int i, int j
 	}
 	else
 	{
-		calSetBuffer3DElement(Q->current, ca3D->rows, ca3D->columns, calGetToroidalX(i+ca3D->X[n].i, ca3D->rows), calGetToroidalX(j+ca3D->X[n].j, ca3D->columns), calGetToroidalX(k+ca3D->X[n].k, ca3D->layers), value);
-		calSetBuffer3DElement(Q->next, ca3D->rows, ca3D->columns, calGetToroidalX(i+ca3D->X[n].i, ca3D->rows), calGetToroidalX(j+ca3D->X[n].j, ca3D->columns), calGetToroidalX(k+ca3D->X[n].k, ca3D->layers), value);
+		calSetBuffer3DElement(Q->current, ca3D->rows, ca3D->columns, calGetToroidalX(i+ca3D->X[n].i, ca3D->rows), calGetToroidalX(j+ca3D->X[n].j, ca3D->columns), calGetToroidalX(k+ca3D->X[n].k, ca3D->slices), value);
+		calSetBuffer3DElement(Q->next, ca3D->rows, ca3D->columns, calGetToroidalX(i+ca3D->X[n].i, ca3D->rows), calGetToroidalX(j+ca3D->X[n].j, ca3D->columns), calGetToroidalX(k+ca3D->X[n].k, ca3D->slices), value);
 	}
 }
 
@@ -52,8 +52,8 @@ void calInitX3Dr(struct CALModel3D* ca3D, struct CALSubstate3Dr* Q, int i, int j
 	}
 	else
 	{
-		calSetBuffer3DElement(Q->current, ca3D->rows, ca3D->columns, calGetToroidalX(i+ca3D->X[n].i, ca3D->rows), calGetToroidalX(j+ca3D->X[n].j, ca3D->columns), calGetToroidalX(k+ca3D->X[n].k, ca3D->layers), value);
-		calSetBuffer3DElement(Q->next, ca3D->rows, ca3D->columns, calGetToroidalX(i+ca3D->X[n].i, ca3D->rows), calGetToroidalX(j+ca3D->X[n].j, ca3D->columns), calGetToroidalX(k+ca3D->X[n].k, ca3D->layers), value);
+		calSetBuffer3DElement(Q->current, ca3D->rows, ca3D->columns, calGetToroidalX(i+ca3D->X[n].i, ca3D->rows), calGetToroidalX(j+ca3D->X[n].j, ca3D->columns), calGetToroidalX(k+ca3D->X[n].k, ca3D->slices), value);
+		calSetBuffer3DElement(Q->next, ca3D->rows, ca3D->columns, calGetToroidalX(i+ca3D->X[n].i, ca3D->rows), calGetToroidalX(j+ca3D->X[n].j, ca3D->columns), calGetToroidalX(k+ca3D->X[n].k, ca3D->slices), value);
 	}
 }
 
@@ -130,7 +130,7 @@ void calSetX3Db(struct CALModel3D* ca3D, struct CALSubstate3Db* Q, int i, int j,
 	else
 		calSet3Db(ca3D, Q, calGetToroidalX(i + ca3D->X[n].i, ca3D->rows),
 			  calGetToroidalX(j + ca3D->X[n].j, ca3D->columns),
-			  calGetToroidalX(k + ca3D->X[n].k, ca3D->layers), value);
+			  calGetToroidalX(k + ca3D->X[n].k, ca3D->slices), value);
 }
 
 void calSetX3Di(struct CALModel3D* ca3D, struct CALSubstate3Di* Q, int i, int j, int k, int n, CALint value)
@@ -140,7 +140,7 @@ void calSetX3Di(struct CALModel3D* ca3D, struct CALSubstate3Di* Q, int i, int j,
 	else
 		calSet3Di(ca3D, Q, calGetToroidalX(i + ca3D->X[n].i, ca3D->rows),
 			  calGetToroidalX(j + ca3D->X[n].j, ca3D->columns),
-			  calGetToroidalX(k + ca3D->X[n].k, ca3D->layers), value);
+			  calGetToroidalX(k + ca3D->X[n].k, ca3D->slices), value);
 }
 
 void calSetX3Dr(struct CALModel3D* ca3D, struct CALSubstate3Dr* Q, int i, int j, int k, int n, CALreal value)
@@ -150,7 +150,7 @@ void calSetX3Dr(struct CALModel3D* ca3D, struct CALSubstate3Dr* Q, int i, int j,
 	else
 		calSet3Dr(ca3D, Q, calGetToroidalX(i + ca3D->X[n].i, ca3D->rows),
 			  calGetToroidalX(j + ca3D->X[n].j, ca3D->columns),
-			  calGetToroidalX(k + ca3D->X[n].k, ca3D->layers), value);
+			  calGetToroidalX(k + ca3D->X[n].k, ca3D->slices), value);
 }
 
 
@@ -160,7 +160,7 @@ void calSetCurrentX3Db(struct CALModel3D* ca3D, struct CALSubstate3Db* Q, int i,
 	if (ca3D->T == CAL_SPACE_FLAT)
 		calSetBuffer3DElement(Q->current, ca3D->rows, ca3D->columns, i + ca3D->X[n].i, j + ca3D->X[n].j, k + ca3D->X[n].k, value);
 	else
-		calSetBuffer3DElement(Q->current, ca3D->rows, ca3D->columns, calGetToroidalX(i + ca3D->X[n].i, ca3D->rows), calGetToroidalX(j + ca3D->X[n].j, ca3D->columns), calGetToroidalX(k + ca3D->X[n].k, ca3D->layers), value);
+		calSetBuffer3DElement(Q->current, ca3D->rows, ca3D->columns, calGetToroidalX(i + ca3D->X[n].i, ca3D->rows), calGetToroidalX(j + ca3D->X[n].j, ca3D->columns), calGetToroidalX(k + ca3D->X[n].k, ca3D->slices), value);
 }
 
 void calSetCurrentX3Di(struct CALModel3D* ca3D, struct CALSubstate3Di* Q, int i, int j, int k, int n, CALint value)
@@ -168,7 +168,7 @@ void calSetCurrentX3Di(struct CALModel3D* ca3D, struct CALSubstate3Di* Q, int i,
 if (ca3D->T == CAL_SPACE_FLAT)
 		calSetBuffer3DElement(Q->current, ca3D->rows, ca3D->columns, i + ca3D->X[n].i, j + ca3D->X[n].j, k + ca3D->X[n].k, value);
 	else
-		calSetBuffer3DElement(Q->current, ca3D->rows, ca3D->columns, calGetToroidalX(i + ca3D->X[n].i, ca3D->rows), calGetToroidalX(j + ca3D->X[n].j, ca3D->columns), calGetToroidalX(k + ca3D->X[n].k, ca3D->layers), value);
+		calSetBuffer3DElement(Q->current, ca3D->rows, ca3D->columns, calGetToroidalX(i + ca3D->X[n].i, ca3D->rows), calGetToroidalX(j + ca3D->X[n].j, ca3D->columns), calGetToroidalX(k + ca3D->X[n].k, ca3D->slices), value);
 }
 
 void calSetCurrentX3Dr(struct CALModel3D* ca3D, struct CALSubstate3Dr* Q, int i, int j,	int k, int n, CALreal value)
@@ -176,7 +176,7 @@ void calSetCurrentX3Dr(struct CALModel3D* ca3D, struct CALSubstate3Dr* Q, int i,
 if (ca3D->T == CAL_SPACE_FLAT)
 		calSetBuffer3DElement(Q->current, ca3D->rows, ca3D->columns, i + ca3D->X[n].i, j + ca3D->X[n].j, k + ca3D->X[n].k, value);
 	else
-		calSetBuffer3DElement(Q->current, ca3D->rows, ca3D->columns, calGetToroidalX(i + ca3D->X[n].i, ca3D->rows), calGetToroidalX(j + ca3D->X[n].j, ca3D->columns), calGetToroidalX(k + ca3D->X[n].k, ca3D->layers), value);
+		calSetBuffer3DElement(Q->current, ca3D->rows, ca3D->columns, calGetToroidalX(i + ca3D->X[n].i, ca3D->rows), calGetToroidalX(j + ca3D->X[n].j, ca3D->columns), calGetToroidalX(k + ca3D->X[n].k, ca3D->slices), value);
 }
 
 void calAddNext3Dr(struct CALModel3D *ca3D, struct CALSubstate3Dr *Q, int i, int j, int k, CALreal value) {
@@ -195,7 +195,7 @@ void calAddNextX3Dr(struct CALModel3D *ca3D, struct CALSubstate3Dr *Q, int i, in
 	else
 		calAddNext3Dr(ca3D, Q, calGetToroidalX(i + ca3D->X[n].i, ca3D->rows),
 			      calGetToroidalX(j + ca3D->X[n].j, ca3D->columns),
-			      calGetToroidalX(k + ca3D->X[n].k, ca3D->layers), value);
+			      calGetToroidalX(k + ca3D->X[n].k, ca3D->slices), value);
 }
 
 void calAddNext3Db(struct CALModel3D *ca3D, struct CALSubstate3Db *Q, int i, int j, int k, CALbyte value) {
@@ -214,7 +214,7 @@ void calAddNextX3Db(struct CALModel3D *ca3D, struct CALSubstate3Db *Q, int i, in
 	else
 		calAddNext3Db(ca3D, Q, calGetToroidalX(i + ca3D->X[n].i, ca3D->rows),
 			      calGetToroidalX(j + ca3D->X[n].j, ca3D->columns),
-			      calGetToroidalX(k + ca3D->X[n].k, ca3D->layers), value);
+			      calGetToroidalX(k + ca3D->X[n].k, ca3D->slices), value);
 
 }
 
@@ -234,5 +234,5 @@ void calAddNextX3Di(struct CALModel3D *ca3D, struct CALSubstate3Di *Q, int i, in
 	else
 		calAddNext3Di(ca3D, Q, calGetToroidalX(i + ca3D->X[n].i, ca3D->rows),
 			      calGetToroidalX(j + ca3D->X[n].j, ca3D->columns),
-			      calGetToroidalX(k + ca3D->X[n].k, ca3D->layers), value);
+			      calGetToroidalX(k + ca3D->X[n].k, ca3D->slices), value);
 }

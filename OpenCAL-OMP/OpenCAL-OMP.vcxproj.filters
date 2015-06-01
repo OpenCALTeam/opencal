@@ -60,6 +60,7 @@
     <ClInclude Include="include\cal3DUnsafe.h">
       <Filter>cal3D\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\calOmpDef.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\cal2D.c">

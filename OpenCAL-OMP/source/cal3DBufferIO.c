@@ -19,12 +19,12 @@
 
 
 
-void calfLoadBuffer3Db(CALbyte* M, int rows, int columns, int layers, FILE* f)
+void calfLoadBuffer3Db(CALbyte* M, int rows, int columns, int slices, FILE* f)
 {
 	char str[STRLEN];
 	int i, j, k;
 	
-	for (k=0; k<layers; k++)
+	for (k=0; k<slices; k++)
 		for (i=0; i<rows; i++)
 			for (j=0; j<columns; j++){
 				fscanf(f, "%s", str);
@@ -32,12 +32,12 @@ void calfLoadBuffer3Db(CALbyte* M, int rows, int columns, int layers, FILE* f)
 			}
 }
 
-void calfLoadBuffer3Di(CALint* M, int rows, int columns, int layers, FILE* f)
+void calfLoadBuffer3Di(CALint* M, int rows, int columns, int slices, FILE* f)
 {
 	char str[STRLEN];
 	int i, j, k;
 	
-	for (k=0; k<layers; k++)
+	for (k=0; k<slices; k++)
 		for (i=0; i<rows; i++)
 			for (j=0; j<columns; j++){
 				fscanf(f, "%s", str);
@@ -45,12 +45,12 @@ void calfLoadBuffer3Di(CALint* M, int rows, int columns, int layers, FILE* f)
 		}
 }
 
-void calfLoadBuffer3Dr(CALreal* M, int rows, int columns, int layers, FILE* f)
+void calfLoadBuffer3Dr(CALreal* M, int rows, int columns, int slices, FILE* f)
 {
 	char str[STRLEN];
 	int i, j, k;
 	
-	for (k=0; k<layers; k++)
+	for (k=0; k<slices; k++)
 		for (i=0; i<rows; i++)
 			for (j=0; j<columns; j++){
 				fscanf(f, "%s", str);
@@ -60,7 +60,7 @@ void calfLoadBuffer3Dr(CALreal* M, int rows, int columns, int layers, FILE* f)
 
 
 
-CALbyte calLoadBuffer3Db(CALbyte* M, int rows, int columns, int layers, char* path)
+CALbyte calLoadBuffer3Db(CALbyte* M, int rows, int columns, int slices, char* path)
 {
 	FILE *f = NULL;
 	f = fopen(path, "r");
@@ -68,14 +68,14 @@ CALbyte calLoadBuffer3Db(CALbyte* M, int rows, int columns, int layers, char* pa
 	if ( !f )
 		return CAL_FALSE;
 
-	calfLoadBuffer3Db(M, rows, columns, layers, f);
+	calfLoadBuffer3Db(M, rows, columns, slices, f);
 
 	fclose(f);
 	
 	return CAL_TRUE;
 }
 
-CALbyte calLoadBuffer3Di(CALint* M, int rows, int columns, int layers, char* path)
+CALbyte calLoadBuffer3Di(CALint* M, int rows, int columns, int slices, char* path)
 {
 	FILE *f = NULL;
 	f = fopen(path, "r");
@@ -83,14 +83,14 @@ CALbyte calLoadBuffer3Di(CALint* M, int rows, int columns, int layers, char* pat
 	if ( !f )
 		return CAL_FALSE;
 
-	calfLoadBuffer3Di(M, rows, columns, layers, f);
+	calfLoadBuffer3Di(M, rows, columns, slices, f);
 
 	fclose(f);
 	
 	return CAL_TRUE;
 }
 
-CALbyte calLoadBuffer3Dr(CALreal* M, int rows, int columns, int layers, char* path)
+CALbyte calLoadBuffer3Dr(CALreal* M, int rows, int columns, int slices, char* path)
 {
 	FILE *f = NULL;
 	f = fopen(path, "r");
@@ -98,7 +98,7 @@ CALbyte calLoadBuffer3Dr(CALreal* M, int rows, int columns, int layers, char* pa
 	if ( !f )
 		return CAL_FALSE;
 
-	calfLoadBuffer3Dr(M, rows, columns, layers, f);
+	calfLoadBuffer3Dr(M, rows, columns, slices, f);
 
 	fclose(f);
 	
@@ -107,12 +107,12 @@ CALbyte calLoadBuffer3Dr(CALreal* M, int rows, int columns, int layers, char* pa
 
 
 
-void calfSaveBuffer3Db(CALbyte* M, int rows, int columns, int layers, FILE* f)
+void calfSaveBuffer3Db(CALbyte* M, int rows, int columns, int slices, FILE* f)
 {
 	char str[STRLEN];
 	int i, j, k;
 
-	for (k=0; k<layers; k++) {
+	for (k=0; k<slices; k++) {
 		for (i=0; i<rows; i++) {
 			for (j=0; j<columns; j++) {
 				sprintf(str, "%d ", calGetBuffer3DElement(M, rows, columns, i, j, k));
@@ -124,12 +124,12 @@ void calfSaveBuffer3Db(CALbyte* M, int rows, int columns, int layers, FILE* f)
 	}
 }
 
-void calfSaveBuffer3Di(CALint* M, int rows, int columns, int layers, FILE* f)
+void calfSaveBuffer3Di(CALint* M, int rows, int columns, int slices, FILE* f)
 {
 	char str[STRLEN];
 	int i, j, k;
 
-	for (k=0; k<layers; k++) {
+	for (k=0; k<slices; k++) {
 		for (i=0; i<rows; i++) {
 			for (j=0; j<columns; j++) {
 				sprintf(str, "%d ", calGetBuffer3DElement(M, rows, columns, i, j, k));
@@ -141,12 +141,12 @@ void calfSaveBuffer3Di(CALint* M, int rows, int columns, int layers, FILE* f)
 	}
 }
 
-void calfSaveBuffer3Dr(CALreal* M, int rows, int columns, int layers, FILE* f)
+void calfSaveBuffer3Dr(CALreal* M, int rows, int columns, int slices, FILE* f)
 {
 	char str[STRLEN];
 	int i, j, k;
 
-	for (k=0; k<layers; k++) {
+	for (k=0; k<slices; k++) {
 		for (i=0; i<rows; i++) {
 			for (j=0; j<columns; j++) {
 				sprintf(str, "%f ", calGetBuffer3DElement(M, rows, columns, i, j, k));
@@ -160,7 +160,7 @@ void calfSaveBuffer3Dr(CALreal* M, int rows, int columns, int layers, FILE* f)
 
 
 
-CALbyte calSaveBuffer3Db(CALbyte* M, int rows, int columns, int layers, char* path)
+CALbyte calSaveBuffer3Db(CALbyte* M, int rows, int columns, int slices, char* path)
 {
 	FILE *f;
 	f = fopen(path, "w");
@@ -168,14 +168,14 @@ CALbyte calSaveBuffer3Db(CALbyte* M, int rows, int columns, int layers, char* pa
 	if ( !f ) 
 		return CAL_FALSE;
 
-	calfSaveBuffer3Db(M, rows, columns, layers, f);
+	calfSaveBuffer3Db(M, rows, columns, slices, f);
 
 	fclose(f);
 	
 	return CAL_TRUE;
 }
 
-CALbyte calSaveBuffer3Di(CALint* M, int rows, int columns, int layers, char* path)
+CALbyte calSaveBuffer3Di(CALint* M, int rows, int columns, int slices, char* path)
 {
 	FILE *f;
 	f = fopen(path, "w");
@@ -183,14 +183,14 @@ CALbyte calSaveBuffer3Di(CALint* M, int rows, int columns, int layers, char* pat
 	if ( !f ) 
 		return CAL_FALSE;
 
-	calfSaveBuffer3Di(M, rows, columns, layers, f);
+	calfSaveBuffer3Di(M, rows, columns, slices, f);
 
 	fclose(f);
 	
 	return CAL_TRUE;
 }
 
-CALbyte calSaveBuffer3Dr(CALreal* M, int rows, int columns, int layers, char* path)
+CALbyte calSaveBuffer3Dr(CALreal* M, int rows, int columns, int slices, char* path)
 {
 	FILE *f;
 	f = fopen(path, "w");
@@ -198,7 +198,7 @@ CALbyte calSaveBuffer3Dr(CALreal* M, int rows, int columns, int layers, char* pa
 	if ( !f ) 
 		return CAL_FALSE;
 
-	calfSaveBuffer3Dr(M, rows, columns, layers, f);
+	calfSaveBuffer3Dr(M, rows, columns, slices, f);
 
 	fclose(f);
 	
