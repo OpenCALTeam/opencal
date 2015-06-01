@@ -1,9 +1,0 @@
-digraph "calAllocSubstate3Di"
-{
-  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
-  node [fontname="Helvetica",fontsize="10",shape=record];
-  rankdir="LR";
-  Node1 [label="calAllocSubstate3Di",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled" fontcolor="black"];
-  Node1 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node2 [label="calAddSubstate3Di",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$cal3_d_8h.html#a562d246cda1b323d7408aa6db6dd9940",tooltip="Creates and adds a new int substate to CALModel3D::pQi_array and return a pointer to it..."];
-}
