@@ -15,14 +15,14 @@
 
 
 
-CALbyte* calAllocBuffer3Db(int rows, int columns, int layers) {
-	return (CALbyte*)malloc(sizeof(CALbyte)*rows*columns*layers);
+CALbyte* calAllocBuffer3Db(int rows, int columns, int slices) {
+	return (CALbyte*)malloc(sizeof(CALbyte)*rows*columns*slices);
 }
-CALint* calAllocBuffer3Di(int rows, int columns, int layers) {
-	return (CALint*)malloc(sizeof(CALint)*rows*columns*layers);
+CALint* calAllocBuffer3Di(int rows, int columns, int slices) {
+	return (CALint*)malloc(sizeof(CALint)*rows*columns*slices);
 }
-CALreal* calAllocBuffer3Dr(int rows, int columns, int layers) {
-	return (CALreal*)malloc(sizeof(CALreal)*rows*columns*layers);
+CALreal* calAllocBuffer3Dr(int rows, int columns, int slices) {
+	return (CALreal*)malloc(sizeof(CALreal)*rows*columns*slices);
 }
 
 
@@ -39,21 +39,21 @@ void calDeleteBuffer3Dr(CALreal* M) {
 
 
 
-void calCopyBuffer3Db(CALbyte* M_src, CALbyte* M_dest, int rows, int columns, int layers)
+void calCopyBuffer3Db(CALbyte* M_src, CALbyte* M_dest, int rows, int columns, int slices)
 {
-	memcpy(M_dest, M_src, sizeof(CALbyte)*rows*columns*layers);
+	memcpy(M_dest, M_src, sizeof(CALbyte)*rows*columns*slices);
 }
-void calCopyBuffer3Di(CALint* M_src, CALint* M_dest, int rows, int columns, int layers)
+void calCopyBuffer3Di(CALint* M_src, CALint* M_dest, int rows, int columns, int slices)
 {	
-	memcpy(M_dest, M_src, sizeof(CALint)*rows*columns*layers);
+	memcpy(M_dest, M_src, sizeof(CALint)*rows*columns*slices);
 }
-void calCopyBuffer3Dr(CALreal* M_src, CALreal* M_dest, int rows, int columns, int layers)
+void calCopyBuffer3Dr(CALreal* M_src, CALreal* M_dest, int rows, int columns, int slices)
 {
-	memcpy(M_dest, M_src, sizeof(CALreal)*rows*columns*layers);
+	memcpy(M_dest, M_src, sizeof(CALreal)*rows*columns*slices);
 }
 
 
-void calCopyActiveCellsBuffer3Db(CALbyte* M_src, CALbyte* M_dest, int rows, int columns, int layers, struct CALCell3D* active_cells, int sizeof_active_cells) {
+void calCopyActiveCellsBuffer3Db(CALbyte* M_src, CALbyte* M_dest, int rows, int columns, int slices, struct CALCell3D* active_cells, int sizeof_active_cells) {
 	int c, n;
 
 	for(n=0; n<sizeof_active_cells; n++)
@@ -64,7 +64,7 @@ void calCopyActiveCellsBuffer3Db(CALbyte* M_src, CALbyte* M_dest, int rows, int 
 	}
 }
 
-void calCopyActiveCellsBuffer3Di(CALint* M_src, CALint* M_dest, int rows, int columns, int layers, struct CALCell3D* active_cells, int sizeof_active_cells) {
+void calCopyActiveCellsBuffer3Di(CALint* M_src, CALint* M_dest, int rows, int columns, int slices, struct CALCell3D* active_cells, int sizeof_active_cells) {
 	int c, n;
 
 	for(n=0; n<sizeof_active_cells; n++)
@@ -75,7 +75,7 @@ void calCopyActiveCellsBuffer3Di(CALint* M_src, CALint* M_dest, int rows, int co
 	}
 }
 
-void calCopyActiveCellsBuffer3Dr(CALreal* M_src, CALreal* M_dest, int rows, int columns, int layers, struct CALCell3D* active_cells, int sizeof_active_cells) {
+void calCopyActiveCellsBuffer3Dr(CALreal* M_src, CALreal* M_dest, int rows, int columns, int slices, struct CALCell3D* active_cells, int sizeof_active_cells) {
 	int c, n;
 
 	for(n=0; n<sizeof_active_cells; n++)
@@ -87,22 +87,22 @@ void calCopyActiveCellsBuffer3Dr(CALreal* M_src, CALreal* M_dest, int rows, int 
 }
 
 
-void calAddBuffer3Db(CALbyte* M_op1, CALbyte* M_op2,  CALbyte* M_dest, int rows, int columns, int layers) {
-	int size = rows * columns * layers;
+void calAddBuffer3Db(CALbyte* M_op1, CALbyte* M_op2,  CALbyte* M_dest, int rows, int columns, int slices) {
+	int size = rows * columns * slices;
 	int i;
 
 	for (i=0; i<size; i++)
 		M_dest[i] = M_op1[i] + M_op2[i];
 }
-void calAddBuffer3Di(CALint* M_op1, CALint* M_op2,  CALint* M_dest, int rows, int columns, int layers) {
-	int size = rows * columns * layers;
+void calAddBuffer3Di(CALint* M_op1, CALint* M_op2,  CALint* M_dest, int rows, int columns, int slices) {
+	int size = rows * columns * slices;
 	int i;
 
 	for (i=0; i<size; i++)
 		M_dest[i] = M_op1[i] + M_op2[i];
 }
-void calAddBuffer3Dr(CALreal* M_op1, CALreal* M_op2,  CALreal* M_dest, int rows, int columns, int layers) {
-	int size = rows * columns * layers;
+void calAddBuffer3Dr(CALreal* M_op1, CALreal* M_op2,  CALreal* M_dest, int rows, int columns, int slices) {
+	int size = rows * columns * slices;
 	int i;
 	
 	for (i=0; i<size; i++)
@@ -111,22 +111,22 @@ void calAddBuffer3Dr(CALreal* M_op1, CALreal* M_op2,  CALreal* M_dest, int rows,
 
 
 
-void calSubtractBuffer3Db(CALbyte* M_op1, CALbyte* M_op2,  CALbyte* M_dest, int rows, int columns, int layers) {
-	int size = rows * columns * layers;
+void calSubtractBuffer3Db(CALbyte* M_op1, CALbyte* M_op2,  CALbyte* M_dest, int rows, int columns, int slices) {
+	int size = rows * columns * slices;
 	int i;
 
 	for (i=0; i<size; i++)
 		M_dest[i] = M_op1[i] - M_op2[i];
 }
-void calSubtractBuffer3Di(CALint* M_op1, CALint* M_op2,  CALint* M_dest, int rows, int columns, int layers) {
-	int size = rows * columns * layers;
+void calSubtractBuffer3Di(CALint* M_op1, CALint* M_op2,  CALint* M_dest, int rows, int columns, int slices) {
+	int size = rows * columns * slices;
 	int i;
 
 	for (i=0; i<size; i++)
 		M_dest[i] = M_op1[i] - M_op2[i];
 }
-void calSubtractBuffer3Dr(CALreal* M_op1, CALreal* M_op2,  CALreal* M_dest, int rows, int columns, int layers) {
-	int size = rows * columns * layers;
+void calSubtractBuffer3Dr(CALreal* M_op1, CALreal* M_op2,  CALreal* M_dest, int rows, int columns, int slices) {
+	int size = rows * columns * slices;
 	int i;
 	
 	for (i=0; i<size; i++)
@@ -135,17 +135,17 @@ void calSubtractBuffer3Dr(CALreal* M_op1, CALreal* M_op2,  CALreal* M_dest, int 
 
 
 
-void calSetBuffer3Db(CALbyte* M, int rows, int columns, int layers, CALbyte value)
+void calSetBuffer3Db(CALbyte* M, int rows, int columns, int slices, CALbyte value)
 {
-	memset(M, value, sizeof(CALbyte)*rows*columns*layers);
+	memset(M, value, sizeof(CALbyte)*rows*columns*slices);
 }
-void calSetBuffer3Di(CALint* M, int rows, int columns, int layers, CALint value)
+void calSetBuffer3Di(CALint* M, int rows, int columns, int slices, CALint value)
 {
-	memset(M, value, sizeof(CALint)*rows*columns*layers);
+	memset(M, value, sizeof(CALint)*rows*columns*slices);
 }
-void calSetBuffer3Dr(CALreal* M, int rows, int columns, int layers, CALreal value)
+void calSetBuffer3Dr(CALreal* M, int rows, int columns, int slices, CALreal value)
 {
-	int size = rows * columns * layers;
+	int size = rows * columns * slices;
 	int i;
 	
 	for (i=0; i<size; i++)
@@ -154,19 +154,19 @@ void calSetBuffer3Dr(CALreal* M, int rows, int columns, int layers, CALreal valu
 
 
 
-void calSetActiveCellsBuffer3Db(CALbyte* M, int rows, int columns, int layers, CALbyte value, struct CALCell3D* active_cells, int sizeof_active_cells) {
+void calSetActiveCellsBuffer3Db(CALbyte* M, int rows, int columns, int slices, CALbyte value, struct CALCell3D* active_cells, int sizeof_active_cells) {
 	int n;
 
 	for(n=0; n<sizeof_active_cells; n++)
 		M[active_cells[n].k*rows*columns + active_cells[n].i*columns + active_cells[n].j] = value;
 }
-void calSetActiveCellsBuffer3Di(CALint* M, int rows, int columns, int layers, CALint value, struct CALCell3D* active_cells, int sizeof_active_cells) {
+void calSetActiveCellsBuffer3Di(CALint* M, int rows, int columns, int slices, CALint value, struct CALCell3D* active_cells, int sizeof_active_cells) {
 	int n;
 
 	for(n=0; n<sizeof_active_cells; n++)
 		M[active_cells[n].k*rows*columns + active_cells[n].i*columns + active_cells[n].j] = value;
 }
-void calSetActiveCellsBuffer3Dr(CALreal* M, int rows, int columns, int layers, CALreal value, struct CALCell3D* active_cells, int sizeof_active_cells) {
+void calSetActiveCellsBuffer3Dr(CALreal* M, int rows, int columns, int slices, CALreal value, struct CALCell3D* active_cells, int sizeof_active_cells) {
 	int n;
 
 	for(n=0; n<sizeof_active_cells; n++)
