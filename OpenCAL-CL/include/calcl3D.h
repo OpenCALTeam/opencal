@@ -19,9 +19,9 @@
 
 #ifndef CALCL_H_
 #define CALCL_H_
-#define KERNEL_SOURCE_DIR ROOT_DIR"/OpenCAL/kernel/source/"     //!< Library kernel source file
-#define KERNEL_INCLUDE_DIR ROOT_DIR"/OpenCAL/kernel/include"	//!< Library kernel include file
-#define PARAMETERS_FILE ROOT_DIR"/OpenCAL/parameters"
+#define KERNEL_SOURCE_DIR ROOT_DIR"/OpenCAL-CL/kernel/source/"     //!< Library kernel source file
+#define KERNEL_INCLUDE_DIR ROOT_DIR"/OpenCAL-CL/kernel/include"	//!< Library kernel include file
+#define PARAMETERS_FILE ROOT_DIR"/OpenCAL-CL/parameters"
 
 //#define KERNEL_COMPILER_OPTIONS " -I "KERNEL_INCLUDE_DIR
 
@@ -61,7 +61,7 @@ typedef struct CALCLSubstateMapper {
  *
  */
 typedef struct CALCLToolkit3D {
-	CALOptimization opt;								//!< Enumeration used for optimization strategies (CAL_NO_OPT, CAL_OPT_ACTIVE_CELL).
+	enum CALOptimization opt;							//!< Enumeration used for optimization strategies (CAL_NO_OPT, CAL_OPT_ACTIVE_CELL).
 	int callbackSteps;									//!< Define how many steps must be executed before call the function cl_update_substates.
 	int steps;											//!< Simulation current step.
 	void (*cl_update_substates)(struct CALModel3D*);	//!< Callback function defined by the user. It allows to access data during a simulation.
@@ -130,7 +130,7 @@ CALCLToolkit3D * calclCreateToolkit3D(struct CALModel3D *model,		//!< Pointer to
 		CALCLcontext context,										//!< Opencl context
 		CALCLprogram program,										//!< Opencl program containing library source and user defined source
 		CALCLdevice device, 										//!< Opencl device
-		CALOptimization opt											//!< Optimization strategies (CAL_NO_OPT, CAL_OPT_ACTIVE_CELL)
+		enum CALOptimization opt									//!< Optimization strategies (CAL_NO_OPT, CAL_OPT_ACTIVE_CELL)
 		);
 
 /*! \brief Main simulation cycle. It can become a loop if maxStep == CALCL_RUN_LOOP */

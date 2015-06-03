@@ -12,17 +12,16 @@
 
 #include "cal2D.h"
 #include "math.h"
-
-#include "../OpenCL-Utils/include/OpenCL_Utility.h"
+#include "OpenCL_Utility.h"
 
 #ifdef _WIN32
 #define ROOT_DIR ".."
 #else
-#define ROOT_DIR "."
+#define ROOT_DIR ".."
 #endif // _WIN32
 
-#define KERNEL_SOURCE_DIR ROOT_DIR"/OpenCAL/kernel/source/" 	//!< Library kernel source file
-#define KERNEL_INCLUDE_DIR ROOT_DIR"/OpenCAL/kernel/include"	//!< Library kernel include file
+#define KERNEL_SOURCE_DIR ROOT_DIR"/OpenCAL-CL/kernel/source/" 	//!< Library kernel source file
+#define KERNEL_INCLUDE_DIR ROOT_DIR"/OpenCAL-CL/kernel/include"	//!< Library kernel include file
 
 #define KER_UPDATESUBSTATES "calclkernelUpdateSubstates2D"
 
@@ -60,7 +59,7 @@ typedef struct CALCLSubstateMapper {
  *
  */
 typedef struct CALCLToolkit2D {
-	CALOptimization opt;								//!< Enumeration used for optimization strategies (CALCL_NO_OPT, CALCL_OPT_ACTIVE_CELL).
+	enum CALOptimization opt;								//!< Enumeration used for optimization strategies (CAL_NO_OPT, CAL_OPT_ACTIVE_CELL).
 	int callbackSteps;									//!< Define how many steps must be executed before call the function cl_update_substates.
 	int steps;											//!< Simulation current step.
 	void (*cl_update_substates)(struct CALModel2D*); 	//!< Callback function defined by the user. It allows to access data during a simulation.
@@ -128,7 +127,7 @@ CALCLToolkit2D * calclCreateToolkit2D(struct CALModel2D *model,		//!< Pointer to
 		CALCLcontext context,										//!< Opencl context
 		CALCLprogram program,										//!< Opencl program containing library source and user defined source
 		CALCLdevice device,											//!< Opencl device
-		CALOptimization opt											//!< Optimization strategies (CAL_NO_OPT, CAL_OPT_ACTIVE_CELL)
+		enum CALOptimization opt											//!< Optimization strategies (CAL_NO_OPT, CAL_OPT_ACTIVE_CELL)
 		);
 
 /*! \brief Main simulation cycle. It can become a loop if maxStep == CALCL_RUN_LOOP */

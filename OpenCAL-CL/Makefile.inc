@@ -1,4 +1,4 @@
-CC = g++
+CC = gcc
 OPENCL_INC_PATH	= /usr/local/cuda/include
 OPENCL_UTILS_PATH = ./OpenCL-Utils
 OPENCL_UTILS_LIB_PATH	= $(OPENCL_UTILS_PATH)/lib

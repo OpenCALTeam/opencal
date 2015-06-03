@@ -4,7 +4,7 @@
  *  Created on: 10/giu/2014
  *      Author: alessio
  */
-#include "../../OpenCAL-CL/include/calcl2D.h"
+#include "calcl2D.h"
 
 /******************************************************************************
  * 							PRIVATE FUNCTIONS
@@ -254,7 +254,7 @@ CALCLqueue calclCreateQueue2D(CALCLToolkit2D * toolkit, struct CALModel2D * mode
  * 							PUBLIC FUNCTIONS
  ******************************************************************************/
 
-CALCLToolkit2D * calclCreateToolkit2D(struct CALModel2D *model, CALCLcontext context, CALCLprogram program, CALCLdevice device, CALOptimization opt) {
+CALCLToolkit2D * calclCreateToolkit2D(struct CALModel2D *model, CALCLcontext context, CALCLprogram program, CALCLdevice device, enum CALOptimization opt) {
 
 	CALCLToolkit2D * toolkit = (CALCLToolkit2D*) malloc(sizeof(CALCLToolkit2D));
 	toolkit->opt = opt;
@@ -578,6 +578,7 @@ void calclAddElementaryProcessKernel2D(CALCLToolkit2D* toolkit2d,struct CALModel
 }
 
 void calclFinalizeToolkit2D(CALCLToolkit2D * toolkit) {
+	int i;
 
 	clReleaseKernel(toolkit->kernelCompact);
 	clReleaseKernel(toolkit->kernelComputeCounts);
@@ -588,7 +589,7 @@ void calclFinalizeToolkit2D(CALCLToolkit2D * toolkit) {
 	clReleaseKernel(toolkit->kernelUpdateSubstate);
 	clReleaseKernel(toolkit->kernelStopCondition);
 
-	for (int i = 0; i < toolkit->elementaryProcessesNum; ++i)
+	for (i = 0; i < toolkit->elementaryProcessesNum; ++i)
 		clReleaseKernel(toolkit->elementaryProcesses[i]);
 
 	clReleaseMemObject(toolkit->bufferActiveCells);

@@ -1,4 +1,4 @@
 CC = gcc
-CFLAGS = -O2 -march=native -pipe # -fopenmp 
+CFLAGS = -O0 -g -march=native -pipe # -fopenmp 
 #CFLAGS = -g -fopenmp 
 #-DPROF

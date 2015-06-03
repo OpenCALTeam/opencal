@@ -4,7 +4,7 @@
  *  Created on: 10/giu/2014
  *      Author: alessio
  */
-#include "../../OpenCAL-CL/include/calcl3D.h"
+#include "calcl3D.h"
 
 /******************************************************************************
  * 							PRIVATE FUNCTIONS
@@ -256,7 +256,7 @@ CALCLqueue calclCreateQueue3D(CALCLToolkit3D * toolkit, struct CALModel3D * mode
  * 							PUBLIC FUNCTIONS
  ******************************************************************************/
 
-CALCLToolkit3D * calclCreateToolkit3D(struct CALModel3D *model, CALCLcontext context, CALCLprogram program,CALCLdevice device,CALOptimization opt) {
+CALCLToolkit3D * calclCreateToolkit3D(struct CALModel3D *model, CALCLcontext context, CALCLprogram program,CALCLdevice device,enum CALOptimization opt) {
 
 	CALCLToolkit3D * toolkit = (CALCLToolkit3D*) malloc(sizeof(CALCLToolkit3D));
 	//initialize toolkit stuff
@@ -587,6 +587,7 @@ void calclAddElementaryProcessKernel3D(CALCLToolkit3D* toolkit3d,struct CALModel
 
 
 void calclFinalizeToolkit3D(CALCLToolkit3D * toolkit) {
+	int i;
 
 	clReleaseKernel(toolkit->kernelCompact);
 	clReleaseKernel(toolkit->kernelComputeCounts);
@@ -597,7 +598,7 @@ void calclFinalizeToolkit3D(CALCLToolkit3D * toolkit) {
 	clReleaseKernel(toolkit->kernelUpdateSubstate);
 	clReleaseKernel(toolkit->kernelStopCondition);
 
-	for (int i = 0; i < toolkit->elementaryProcessesNum; ++i)
+	for (i = 0; i < toolkit->elementaryProcessesNum; ++i)
 		clReleaseKernel(toolkit->elementaryProcesses[i]);
 
 	clReleaseMemObject(toolkit->bufferActiveCells);

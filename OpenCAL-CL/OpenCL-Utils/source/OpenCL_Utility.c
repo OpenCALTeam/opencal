@@ -1,4 +1,4 @@
-#include "../../OpenCL-Utils/include/OpenCL_Utility.h"
+#include "OpenCL_Utility.h"
 
 CALOpenCL * calclCreateCALOpenCL() {
 	CALOpenCL * calOpenCL = (CALOpenCL*) malloc(sizeof(CALOpenCL));
