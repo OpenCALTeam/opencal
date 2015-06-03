@@ -35,13 +35,13 @@ bin/
 *.x86_64
 *.hex
 
-# Debug files
-*.dSYM/
-
 # Visual Studio files
 *.opensdf
 *.pdb
 *.sdf
+
+# Debug files
+*.dSYM/
 
 # Autotools files
 *sh

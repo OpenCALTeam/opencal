@@ -12,16 +12,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\gui.c" />
-    <ClCompile Include="source\iso.c" />
+    <ClCompile Include="source\sciddicaS3Hex.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="source\iso.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="data\test.txt" />
+    <ClInclude Include="source\sciddicaS3Hex.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{5DA8253E-28AA-4FD3-8BF4-C4FB15DD0F2A}</ProjectGuid>
+    <ProjectGuid>{A83FCF4F-4C72-4C93-9360-574BE1F38DC4}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>test_glut_static</RootNamespace>
   </PropertyGroup>
@@ -55,12 +52,16 @@
     <IntDir>./bin/$(Platform)/$(Configuration)/</IntDir>
     <TargetName>$(ProjectName)d</TargetName>
     <ExtensionsToDeleteOnClean>*.cdf;*.cache;*.obj;*.ilk;*.resources;*.tlb;*.tli;*.tlh;*.tmp;*.rsp;*.pgc;*.pgd;*.meta;*.tlog;*.manifest;*.res;*.pch;*.exp;*.idb;*.rep;*.xdc;*.pdb;*_manifest.rc;*.bsc;*.sbr;*.xml;*.metagen;*.bi</ExtensionsToDeleteOnClean>
+    <IncludePath>../../../extern/freeglut-2.8.1/include;../../../OpenCAL/include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <LibraryPath>../../../extern/freeglut-2.8.1/lib/x86/Debug;../../../OpenCAL/lib;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>./</OutDir>
-    <IntDir>./bin/</IntDir>
+    <OutDir>./bin/$(Platform)/$(Configuration)/</OutDir>
+    <IntDir>./bin/$(Platform)/$(Configuration)/</IntDir>
     <ExtensionsToDeleteOnClean>*.log;*.pdb;*.cdf;*.cache;*.obj;*.ilk;*.resources;*.tlb;*.tli;*.tlh;*.tmp;*.rsp;*.pgc;*.pgd;*.meta;*.tlog;*.manifest;*.res;*.pch;*.exp;*.idb;*.rep;*.xdc;*.pdb;*_manifest.rc;*.bsc;*.sbr;*.xml;*.metagen;*.bi</ExtensionsToDeleteOnClean>
+    <IncludePath>../../../extern/freeglut-2.8.1/include;../../../OpenCAL/include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <LibraryPath>../../../extern/freeglut-2.8.1/lib/x86;../../../OpenCAL/lib;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

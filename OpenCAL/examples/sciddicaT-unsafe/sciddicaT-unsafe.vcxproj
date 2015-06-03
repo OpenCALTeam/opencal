@@ -11,10 +11,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="source\life.c" />
+    <ClCompile Include="source\sciddicaT.c" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{5F183FAC-868A-4167-BFCC-0F4A5B559AC2}</ProjectGuid>
+    <ProjectGuid>{16E6D806-64DE-4E3B-9C35-06795F85704B}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>test</RootNamespace>
   </PropertyGroup>
@@ -24,7 +24,6 @@
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
-    <UseOfMfc>false</UseOfMfc>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -47,11 +46,15 @@
     <LinkIncremental>true</LinkIncremental>
     <OutDir>./bin/$(Platform)/$(Configuration)/</OutDir>
     <IntDir>./bin/$(Platform)/$(Configuration)/</IntDir>
+    <IncludePath>../../../OpenCAL/include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <LibraryPath>../../../OpenCAL/lib;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>./bin/$(Platform)/$(Configuration)/</OutDir>
-    <IntDir>./bin/$(Platform)/$(Configuration)/</IntDir>
+    <OutDir>./</OutDir>
+    <IntDir>./bin/</IntDir>
+    <IncludePath>../../../OpenCAL/include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <LibraryPath>../../../OpenCAL/lib;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
