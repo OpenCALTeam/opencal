@@ -44,14 +44,14 @@
     <OutDir>./lib/</OutDir>
     <TargetName>$(ProjectName)d</TargetName>
     <IntDir>./bin/$(Platform)/$(Configuration)/</IntDir>
-    <IncludePath>../extern/pthread/Pre-built.2/include;../extern/freeglut-2.8.1/include;$(IncludePath)</IncludePath>
-    <LibraryPath>../extern/pthread/Pre-built.2/lib/x86;../extern/freeglut-2.8.1/lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>../extern/pthreads/include;../extern/freeglut-2.8.1/include;$(IncludePath)</IncludePath>
+    <LibraryPath>../extern/pthreads/lib/x86;../extern/freeglut-2.8.1/lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>./lib/</OutDir>
     <IntDir>./bin/$(Platform)/$(Configuration)/</IntDir>
-    <IncludePath>../extern/pthread/Pre-built.2/include;../extern/freeglut-2.8.1/include;$(IncludePath)</IncludePath>
-    <LibraryPath>../extern/pthread/Pre-built.2/lib/x86;../extern/freeglut-2.8.1/lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>../extern/pthreads/include;../extern/freeglut-2.8.1/include;$(IncludePath)</IncludePath>
+    <LibraryPath>../extern/pthreads/lib/x86;../extern/freeglut-2.8.1/lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
