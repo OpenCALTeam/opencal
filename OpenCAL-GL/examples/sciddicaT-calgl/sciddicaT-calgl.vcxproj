@@ -60,7 +60,7 @@
     <IntDir>./bin/</IntDir>
     <ExtensionsToDeleteOnClean>*.log;*.pdb;*.cdf;*.cache;*.obj;*.ilk;*.resources;*.tlb;*.tli;*.tlh;*.tmp;*.rsp;*.pgc;*.pgd;*.meta;*.tlog;*.manifest;*.res;*.pch;*.exp;*.idb;*.rep;*.xdc;*.pdb;*_manifest.rc;*.bsc;*.sbr;*.xml;*.metagen;*.bi</ExtensionsToDeleteOnClean>
     <IncludePath>../../../extern/pthread/Pre-built.2/include;../../../extern/freeglut-2.8.1/include;../../../OpenCAL/include;../../../OpenCAL-GL/include;$(IncludePath)</IncludePath>
-    <LibraryPath>../../../extern/pthread/Pre-built.2/lib/x86;../../../extern/freeglut-2.8.1/lib/x86/Debug;../../../OpenCAL/lib;../../../OpenCAL-GL/lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>../../../extern/pthread/Pre-built.2/lib/x86;../../../extern/freeglut-2.8.1/lib/x86;../../../OpenCAL/lib;../../../OpenCAL-GL/lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
