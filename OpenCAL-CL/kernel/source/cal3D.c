@@ -1,4 +1,4 @@
-#include "../../../OpenCAL-CL/kernel/include/cal3D.h"
+#include "cal3D.h"
 
 void calInitSubstate3Db(MODEL_DEFINITION3D, CALbyte value, int i, int j, int k, CALint substateNum) {
 	__global CALbyte * current = calGetCurrentSubstate3Db(MODEL3D, substateNum);

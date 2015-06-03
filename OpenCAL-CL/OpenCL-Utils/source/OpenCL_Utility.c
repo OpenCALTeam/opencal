@@ -80,13 +80,14 @@ void calclGetDirFiles(char ** paths, int pathsNum, char *** files_names, int * n
 					(*num_files)++;
 			}
 			closedir(dir);
+
 		} else {
 			perror("could not open directory\n");
 			exit(1);
 		}
 	}
-	(*files_names) = (char**) malloc(sizeof(char*) * (*num_files));
 
+	(*files_names) = (char**) malloc(sizeof(char*) * (*num_files));
 	int count = 0;
 	for (i = 0; i < pathsNum; i++) {
 		if ((dir = opendir(paths[i])) != NULL) {
@@ -103,7 +104,10 @@ void calclGetDirFiles(char ** paths, int pathsNum, char *** files_names, int * n
 			perror("could not open directory\n");
 			exit(1);
 		}
+
 	}
+
+
 }
 
 void calclReadFile(char * fileName, char ** programBuffer, size_t * program_size) {
@@ -369,6 +373,51 @@ void calclHandleError(CALCLint err) {
 		exit(1);
 	}
 }
+
+void calclPrintAllPlatformAndDevices(CALOpenCL * opencl){
+	int i;
+	int j;
+	for (i = 0; i < opencl->num_platforms; i++) {
+
+		        printf("Platform: %d \n", i);
+		        calclPrintAllPlatformInfo(opencl->platforms[i]);
+		        // for each device print critical attributes
+		        for (j = 0; j < opencl->num_platforms_devices[i]; j++) {
+		        	char* value;
+		        	size_t valueSize;
+		            // print device name
+		            clGetDeviceInfo(opencl->devices[i][j], CL_DEVICE_NAME, 0, NULL, &valueSize);
+		            value = (char*) malloc(valueSize);
+		            clGetDeviceInfo(opencl->devices[i][j], CL_DEVICE_NAME, valueSize, value, NULL);
+		            printf("%d. Device: %s \n", j, value);
+		            free(value);
+
+		        }
+		    }
+}
+
+void calclGetPlatformAndDeviceFromStandardInput(CALOpenCL * opencl,CALCLdevice * device){
+	calclPrintAllPlatformAndDevices(opencl);
+	CALCLuint num_platform;
+	CALCLuint num_device;
+	char line[256];
+	int i;
+	printf("Insert platform :\n" );
+	if (fgets(line, sizeof(line), stdin)) {
+	    if (1 == sscanf(line, "%d", &i)) {
+	    	num_platform=i;
+	    }
+	}
+	printf("Insert device : \n" );
+	int j;
+	if (fgets(line, sizeof(line), stdin)) {
+		    if (1 == sscanf(line, "%d", &j)) {
+		    	num_device=j;
+		    }
+	}
+	*device= calclGetDevice(opencl, num_platform, num_device);
+}
+
 
 const char * calclGetErrorString(CALCLint err) {
 	switch (err) {

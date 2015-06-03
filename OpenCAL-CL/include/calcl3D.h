@@ -9,18 +9,18 @@
 #include "cal3D.h"
 #include <math.h>
 
-#include "../OpenCL-Utils/include/OpenCL_Utility.h"
+#include "OpenCL_Utility.h"
 
 #ifdef _WIN32
 #define ROOT_DIR ".."
 #else
-#define ROOT_DIR "."
+#define ROOT_DIR "../../.."
 #endif // _WIN32
 
 #ifndef CALCL_H_
 #define CALCL_H_
-#define KERNEL_SOURCE_DIR ROOT_DIR"/OpenCAL-CL/kernel/source/"     //!< Library kernel source file
-#define KERNEL_INCLUDE_DIR ROOT_DIR"/OpenCAL-CL/kernel/include"	//!< Library kernel include file
+#define KERNEL_SOURCE_DIR "/kernel/source/"     //!< Library kernel source file
+#define KERNEL_INCLUDE_DIR "/kernel/include"	//!< Library kernel include file
 #define PARAMETERS_FILE ROOT_DIR"/OpenCAL-CL/parameters"
 
 //#define KERNEL_COMPILER_OPTIONS " -I "KERNEL_INCLUDE_DIR
@@ -239,7 +239,8 @@ void calclFinalizeToolkit3D(CALCLToolkit3D * toolkit			//!< Pointer to a CALCLTo
 CALCLprogram calclLoadProgramLib3D(CALCLcontext context, 		//!< Opencl context
 		CALCLdevice device, 									//!< Opencl device
 		char* path_user_kernel,									//!< Kernel source files path
-		char* path_user_include									//!< Kernel include files path
+		char* path_user_include,								//!< Kernel include files path
+		char* path_opencalcl									//!< OpenCAL-CL path
 		);
 
 #endif /* CALCL_H_ */

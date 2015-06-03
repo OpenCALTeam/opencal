@@ -1,4 +1,4 @@
-#include "../../../OpenCAL-CL/kernel/include/cal2DBuffer.h"
+#include "cal2DBuffer.h"
 
 void calCopyBufferActiveCells2Db(__global CALbyte* M_src, __global CALbyte* M_dest, int columns, __global struct CALCell2D* active_cells, int n) {
 	int c = active_cells[n].i * columns + active_cells[n].j;

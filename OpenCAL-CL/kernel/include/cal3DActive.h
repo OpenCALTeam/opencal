@@ -5,7 +5,7 @@
 #ifndef cal3DActive_h
 #define cal3DActive_h
 
-#include "../../../OpenCAL-CL/kernel/include/cal3D.h"
+#include "cal3D.h"
 
 /*! \brief Sets the cell (i,j) of the linearized matrix flags to CAL_TRUE.
 */

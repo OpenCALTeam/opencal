@@ -1,4 +1,4 @@
-#include "../../../OpenCAL-CL/kernel/include/cal2DActive.h"
+#include "cal2DActive.h"
 
 void calAddActiveCell2D(MODEL_DEFINITION2D, int i, int j) {
 

@@ -10,7 +10,7 @@
 #ifndef cal3DBuffer_h
 #define cal3DBuffer_h
 
-#include "../../../OpenCAL-CL/kernel/include/calCommon.h"
+#include "calCommon.h"
 
 /*!	\brief Byte linearized matrix copy function.
  *

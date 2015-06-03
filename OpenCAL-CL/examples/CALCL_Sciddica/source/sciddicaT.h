@@ -21,7 +21,7 @@
 #ifdef _WIN32
 	#define ROOT_DATA_DIR "."
 #else
-	#define ROOT_DATA_DIR "./CALCL_Sciddica"
+	#define ROOT_DATA_DIR "./"
 #endif // _WIN32
 
 #define DEM_PATH ROOT_DATA_DIR"/data/dem.txt"

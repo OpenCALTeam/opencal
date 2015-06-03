@@ -626,26 +626,31 @@ void calclFinalizeToolkit2D(CALCLToolkit2D * toolkit) {
 
 }
 
-CALCLprogram calclLoadProgramLib2D(CALCLcontext context, CALCLdevice device, char* path_user_kernel, char* path_user_include) {
+CALCLprogram calclLoadProgramLib2D(CALCLcontext context, CALCLdevice device, char* path_user_kernel, char* path_user_include,char* path_opencalcl) {
 	char* u = " -cl-denorms-are-zero -cl-finite-math-only ";
 	char* tmp;
 	if (path_user_include == NULL) {
 		tmp = (char*) malloc(sizeof(char) * (strlen(KERNEL_INCLUDE_DIR) + strlen(" -I ") + strlen(u) + 1));
 		strcpy(tmp, " -I ");
 	} else {
-		tmp = (char*) malloc(sizeof(char) * (strlen(path_user_include) + strlen(KERNEL_INCLUDE_DIR) + strlen(" -I ") * 2 + strlen(u) + 1));
+		tmp = (char*) malloc(sizeof(char) * (strlen(path_user_include) + strlen(path_opencalcl) + strlen(KERNEL_INCLUDE_DIR) + strlen(" -I ") * 2 + strlen(u) + 1));
 		strcpy(tmp, " -I ");
 		strcat(tmp, path_user_include);
 		strcat(tmp, " -I ");
 	}
+	strcat(tmp, path_opencalcl);
 	strcat(tmp, KERNEL_INCLUDE_DIR);
 	strcat(tmp, u);
 
 	int num_files;
 	char** filesNames;
 	char** paths = (char**) malloc(sizeof(char*) * 2);
+	char* tmp2 = (char*) malloc(sizeof(char) * (strlen(path_opencalcl) + strlen(KERNEL_SOURCE_DIR)));
+	strcpy(tmp2,path_opencalcl );
+	strcat(tmp2,KERNEL_SOURCE_DIR );
+
 	paths[0] = path_user_kernel;
-	paths[1] = KERNEL_SOURCE_DIR;
+	paths[1] = tmp2;
 
 	calclGetDirFiles(paths, 2, &filesNames, &num_files);
 

@@ -5,7 +5,7 @@
 #ifndef cal2DActive_h
 #define cal2DActive_h
 
-#include "../../../OpenCAL-CL/kernel/include/cal2D.h"
+#include "cal2D.h"
 
 
 

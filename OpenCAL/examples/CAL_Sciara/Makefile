@@ -1,11 +1,11 @@
-include ../Makefile.inc
+include ../../../Makefile.inc
 
 CPP						= g++
 INC_PATH 				= ./include
 SRC_PATH				= ./source
 BIN_PATH				= ./bin
-OPENCAL_LIB_PATH		= ../OpenCAL/lib
-OPENCAL_INC_PATH		= ../OpenCAL/include
+OPENCAL_LIB_PATH		= ../../../OpenCAL/lib
+OPENCAL_INC_PATH		= ../../../OpenCAL/include
 
 all: dir $(BIN_PATH)/sciara
 
@@ -36,3 +36,4 @@ $(BIN_PATH)/io.o: $(SRC_PATH)/io.cpp
 
 clean:
 	@$(RM) sciara $(BIN_PATH)/*
+	rm -fr ./bin

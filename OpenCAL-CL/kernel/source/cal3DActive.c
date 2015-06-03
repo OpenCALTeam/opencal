@@ -1,4 +1,4 @@
-#include "../../../OpenCAL-CL/kernel/include/cal3DActive.h"
+#include "cal3DActive.h"
 
 void calAddActiveCell3D(MODEL_DEFINITION3D, int i, int j, int k) {
 

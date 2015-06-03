@@ -64,13 +64,15 @@ int main(int argc, char** argv) {
 //	int platformNum = atoi(argv[4]);
 //	int deviceNum = atoi(argv[5]);
 	int steps = 4000;
-	char * outputPath = "./CALCL_Sciddica/result/result";
+	char * outputPath = "./result/result";
 	int active = 1;
 	int platformNum = 0;
 	int deviceNum = 0;
 
 	char * kernelSrc;
 	char * kernelInc;
+	char * openCALCLPath;
+	openCALCLPath = "../../../OpenCAL-CL";
 	if (active == 0) {
 		kernelSrc = KERNEL_SRC;
 		kernelInc = KERNEL_INC;
@@ -91,7 +93,7 @@ int main(int argc, char** argv) {
 
 	CALCLcontext context = calclcreateContext(&device, 1);
 
-	CALCLprogram program = calclLoadProgramLib2D(context, device, kernelSrc, kernelInc);
+	CALCLprogram program = calclLoadProgramLib2D(context, device, kernelSrc, kernelInc, openCALCLPath);
 
 	//---------------------------------Parallel CA DEF & INIT----------------------------------/
 

@@ -6,8 +6,8 @@
 #ifndef cal3D_h
 #define cal3D_h
 
-#include "../../../OpenCAL-CL/kernel/include/cal3DBuffer.h"
-#include "../../../OpenCAL-CL/kernel/include/calclKernel3D.h"
+#include "cal3DBuffer.h"
+#include "calclKernel3D.h"
 
 /*! \brief Enumeration of 3D neighbourhood.
 

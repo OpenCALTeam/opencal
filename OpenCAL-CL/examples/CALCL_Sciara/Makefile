@@ -1,17 +1,17 @@
-include ../Makefile.inc
+include ../../../Makefile.inc
 
 CCP = g++
 INC_PATH 				= ./include
 SRC_PATH				= ./source
 BIN_PATH				= ./bin
-OPENCAL_LIB_PATH		= ../OpenCAL/lib
-OPENCAL_INC_PATH		= ../OpenCAL/include
-OPENCAL-CL_LIB_PATH		= ../OpenCAL-CL/lib
-OPENCAL-CL_INC_PATH		= ../OpenCAL-CL/include
-OPENCL_UTILS_PATH 		= ../OpenCAL-CL/OpenCL-Utils
+OPENCAL_LIB_PATH		= ../../../OpenCAL/lib
+OPENCAL_INC_PATH		= ../../../OpenCAL/include
+OPENCAL-CL_LIB_PATH		= ../../../OpenCAL-CL/lib
+OPENCAL-CL_INC_PATH		= ../../../OpenCAL-CL/include
+OPENCL_UTILS_PATH 		= ../../../OpenCAL-CL/OpenCL-Utils
 OPENCL_UTILS_LIB_PATH	= $(OPENCL_UTILS_PATH)/lib
 OPENCL_UTILS_INC_PATH	= $(OPENCL_UTILS_PATH)/include
-OPENCL_INC_PATH			= /usr/local/cuda-5.5/include
+OPENCL_INC_PATH			= $(value OPENCL_INCLUDE_PATH)
 all: dir $(BIN_PATH)/sciaraCL
 
 dir:

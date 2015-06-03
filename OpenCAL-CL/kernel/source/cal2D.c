@@ -1,4 +1,4 @@
-#include "../../../OpenCAL-CL/kernel/include/cal2D.h"
+#include "cal2D.h"
 
 void calInitSubstate2Db(MODEL_DEFINITION2D, CALbyte value, int i, int j, CALint substateNum) {
 	__global CALbyte * current = calGetCurrentSubstate2Db(MODEL2D,substateNum);

@@ -94,7 +94,11 @@ void calclGetDirFiles(char ** paths, 	//!< Array of strings. Each string is a pa
 		int pathsNum, 					//!< Number of paths
 		char *** files_names, 			//!< Pointer to an array of strings. The function allocates the array and initializes it with paths files names
 		int * num_files 				//!< Pointer to int. The function assigns to it the number of file contained in the paths
-		);
+		);/*! \brief Print on standard output informations about all platforms and devices*/
+void calclPrintAllPlatformAndDevices(CALOpenCL * opencl);
+
+/*! \brief Print on standard output informations about all platforms and devices*/
+void calclGetPlatformAndDeviceFromStandardInput(CALOpenCL * opencl,CALCLdevice * device);
 
 /*! \brief Reads a file and return its content  */
 void calclReadFile(char * fileName, 	//!< File path
@@ -224,5 +228,11 @@ CALCLuint calclGetDeviceMaxWorkItemDimensions(CALCLdevice device 	//!< Opencl de
 /*! \brief Print on standard output informations about the given device*/
 void calclPrintAllDeviceInfo(CALCLdevice device 	//!< Opencl device
 		);
+
+/*! \brief Print on standard output informations about all platforms and devices*/
+void calclPrintAllPlatformAndDevices(CALOpenCL * opencl);
+
+/*! \brief Print on standard output informations about all platforms and devices*/
+void calclGetPlatformAndDeviceFromStandardInput(CALOpenCL * opencl,CALCLdevice * device);
 
 #endif /* CALOpenCL_H_ */

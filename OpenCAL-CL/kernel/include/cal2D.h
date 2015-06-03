@@ -5,8 +5,8 @@
 #ifndef cal2D_h
 #define cal2D_h
 
-#include "../../../OpenCAL-CL/kernel/include/cal2DBuffer.h"
-#include "../../../OpenCAL-CL/kernel/include/calclKernel2D.h"
+#include "cal2DBuffer.h"
+#include "calclKernel2D.h"
 
 /*! \brief Enumeration of 2D neighbourhood.
 

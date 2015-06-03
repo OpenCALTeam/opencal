@@ -20,8 +20,8 @@
 #define ROOT_DIR ".."
 #endif // _WIN32
 
-#define KERNEL_SOURCE_DIR ROOT_DIR"/OpenCAL-CL/kernel/source/" 	//!< Library kernel source file
-#define KERNEL_INCLUDE_DIR ROOT_DIR"/OpenCAL-CL/kernel/include"	//!< Library kernel include file
+#define KERNEL_SOURCE_DIR "/kernel/source/" 	//!< Library kernel source file
+#define KERNEL_INCLUDE_DIR "/kernel/include"	//!< Library kernel include file
 
 #define KER_UPDATESUBSTATES "calclkernelUpdateSubstates2D"
 
@@ -235,6 +235,9 @@ void calclFinalizeToolkit2D(CALCLToolkit2D * toolkit2d		//!< Pointer to a CALCLT
 CALCLprogram calclLoadProgramLib2D(CALCLcontext context,		//!< Opencl context
 		CALCLdevice device,										//!< Opencl device
 		char* path_user_kernel,									//!< Kernel source files path
-		char* path_user_include);								//!< Kernel include files path
+		char* path_user_include,								//!< Kernel include files path
+		char* path_opencalcl									//!< OpenCAL-CL path
+		);
+
 
 #endif /* CALCL_H_ */
