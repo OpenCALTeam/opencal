@@ -44,14 +44,14 @@
     <OutDir>./lib/</OutDir>
     <TargetName>$(ProjectName)d</TargetName>
     <IntDir>./bin/$(Platform)/$(Configuration)/</IntDir>
-    <IncludePath>../extern/pthreads/include;../extern/freeglut-2.8.1/include;$(IncludePath)</IncludePath>
-    <LibraryPath>../extern/pthreads/lib/x86;../extern/freeglut-2.8.1/lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>../extern/pthread-win32/include;../extern/freeglut-2.8.1/include;$(IncludePath)</IncludePath>
+    <LibraryPath>../extern/pthread-win32/lib/x86/Debug;../extern/freeglut-2.8.1/lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>./lib/</OutDir>
     <IntDir>./bin/$(Platform)/$(Configuration)/</IntDir>
-    <IncludePath>../extern/pthreads/include;../extern/freeglut-2.8.1/include;$(IncludePath)</IncludePath>
-    <LibraryPath>../extern/pthreads/lib/x86;../extern/freeglut-2.8.1/lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>../extern/pthread-win32/include;../extern/freeglut-2.8.1/include;$(IncludePath)</IncludePath>
+    <LibraryPath>../extern/pthread-win32/lib/x86;../extern/freeglut-2.8.1/lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -59,7 +59,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;FREEGLUT_STATIC;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;FREEGLUT_STATIC;PTW32_STATIC_LIB;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>../OpenCAL/include;./include</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>
       </DisableSpecificWarnings>
@@ -81,7 +81,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;FREEGLUT_STATIC;NDEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;FREEGLUT_STATIC;PTW32_STATIC_LIB;NDEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>../OpenCAL/include;./include</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>

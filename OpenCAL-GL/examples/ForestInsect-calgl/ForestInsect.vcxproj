@@ -55,16 +55,16 @@
     <IntDir>./bin/$(Platform)/$(Configuration)/</IntDir>
     <TargetName>$(ProjectName)d</TargetName>
     <ExtensionsToDeleteOnClean>*.cdf;*.cache;*.obj;*.ilk;*.resources;*.tlb;*.tli;*.tlh;*.tmp;*.rsp;*.pgc;*.pgd;*.meta;*.tlog;*.manifest;*.res;*.pch;*.exp;*.idb;*.rep;*.xdc;*.pdb;*_manifest.rc;*.bsc;*.sbr;*.xml;*.metagen;*.bi</ExtensionsToDeleteOnClean>
-    <IncludePath>../../../extern/pthreads/include;../../../extern/freeglut-2.8.1/include;../../../OpenCAL/include;../../../OpenCAL-GL/include;$(IncludePath)</IncludePath>
-    <LibraryPath>../../../extern/pthreads/lib/x86;../../../extern/freeglut-2.8.1/lib/x86/Debug;../../../OpenCAL/lib;../../../OpenCAL-GL/lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>../../../extern/pthread-win32/include;../../../extern/freeglut-2.8.1/include;../../../OpenCAL/include;../../../OpenCAL-GL/include;$(IncludePath)</IncludePath>
+    <LibraryPath>../../../extern/pthread-win32/lib/x86/Debug;../../../extern/freeglut-2.8.1/lib/x86/Debug;../../../OpenCAL/lib;../../../OpenCAL-GL/lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>./</OutDir>
     <IntDir>./bin/</IntDir>
     <ExtensionsToDeleteOnClean>*.log;*.pdb;*.cdf;*.cache;*.obj;*.ilk;*.resources;*.tlb;*.tli;*.tlh;*.tmp;*.rsp;*.pgc;*.pgd;*.meta;*.tlog;*.manifest;*.res;*.pch;*.exp;*.idb;*.rep;*.xdc;*.pdb;*_manifest.rc;*.bsc;*.sbr;*.xml;*.metagen;*.bi</ExtensionsToDeleteOnClean>
-    <IncludePath>../../../extern/pthreads/include;../../../extern/freeglut-2.8.1/include;../../../OpenCAL/include;../../../OpenCAL-GL/include;$(IncludePath)</IncludePath>
-    <LibraryPath>../../../extern/pthreads/lib/x86;../../../extern/freeglut-2.8.1/lib/x86/Debug;../../../OpenCAL/lib;../../../OpenCAL-GL/lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>../../../extern/pthread-win32/include;../../../extern/freeglut-2.8.1/include;../../../OpenCAL/include;../../../OpenCAL-GL/include;$(IncludePath)</IncludePath>
+    <LibraryPath>../../../extern/pthread-win32/lib/x86;../../../extern/freeglut-2.8.1/lib/x86/Debug;../../../OpenCAL/lib;../../../OpenCAL-GL/lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -81,7 +81,6 @@
       <WholeProgramOptimization>false</WholeProgramOptimization>
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
     </ClCompile>
     <Link>
@@ -89,7 +88,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>
-      <AdditionalDependencies>OpenCALd.lib;OpenCAL-GLd.lib;%(AdditionalDependencies);pthreadVC2.lib</AdditionalDependencies>
+      <AdditionalDependencies>OpenCALd.lib;OpenCAL-GLd.lib;pthread_lib.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -104,7 +103,6 @@
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>None</DebugInformationFormat>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -113,7 +111,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>
-      <AdditionalDependencies>OpenCAL.lib;OpenCAL-GL.lib;pthreadVC2.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>OpenCAL.lib;OpenCAL-GL.lib;pthread_lib.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <BuildLog>
       <Path>$(IntDir)\$(MSBuildProjectName).log</Path>
