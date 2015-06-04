@@ -45,8 +45,7 @@ int main(int argc, char** argv) {
 //	int deviceNum = atoi(argv[6]);
 
 //	setenv("CUDA_CACHE_DISABLE", "1", 1);
-	char * outputPath = SAVE_PATH;
-	
+
 	int steps = STEPS;
 	int platformNum = 0;
 	int deviceNum = 0;
@@ -57,7 +56,6 @@ int main(int argc, char** argv) {
 
 	kernelSrc = "./kernel/source/";
 	kernelInc = "./kernel/include/";
-	openCALCLPath = "../../../OpenCAL-CL";
 	//---------------------------------OPENCL INIT----------------------------------/
 
 	CALOpenCL * calOpenCL = calclCreateCALOpenCL();
@@ -69,7 +67,7 @@ int main(int argc, char** argv) {
 
 	CALCLcontext context = calclcreateContext(&device, 1);
 
-	CALCLprogram program = calclLoadProgramLib3D(context, device, kernelSrc, kernelInc, openCALCLPath);
+	CALCLprogram program = calclLoadProgramLib3D(context, device, kernelSrc, kernelInc);
 	initMbusu();
 	simulationInitialize();
 	CALCLToolkit3D * mbusuToolkit = NULL;

@@ -239,8 +239,7 @@ void calclFinalizeToolkit3D(CALCLToolkit3D * toolkit			//!< Pointer to a CALCLTo
 CALCLprogram calclLoadProgramLib3D(CALCLcontext context, 		//!< Opencl context
 		CALCLdevice device, 									//!< Opencl device
 		char* path_user_kernel,									//!< Kernel source files path
-		char* path_user_include,								//!< Kernel include files path
-		char* path_opencalcl									//!< OpenCAL-CL path
+		char* path_user_include								//!< Kernel include files path
 		);
 
 #endif /* CALCL_H_ */

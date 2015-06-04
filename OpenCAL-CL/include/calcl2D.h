@@ -235,8 +235,7 @@ void calclFinalizeToolkit2D(CALCLToolkit2D * toolkit2d		//!< Pointer to a CALCLT
 CALCLprogram calclLoadProgramLib2D(CALCLcontext context,		//!< Opencl context
 		CALCLdevice device,										//!< Opencl device
 		char* path_user_kernel,									//!< Kernel source files path
-		char* path_user_include,								//!< Kernel include files path
-		char* path_opencalcl									//!< OpenCAL-CL path
+		char* path_user_include								//!< Kernel include files path
 		);
 
 

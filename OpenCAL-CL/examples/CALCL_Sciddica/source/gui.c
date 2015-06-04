@@ -71,8 +71,6 @@ int main(int argc, char** argv) {
 
 	char * kernelSrc;
 	char * kernelInc;
-	char * openCALCLPath;
-	openCALCLPath = "../../../OpenCAL-CL";
 	if (active == 0) {
 		kernelSrc = KERNEL_SRC;
 		kernelInc = KERNEL_INC;
@@ -93,7 +91,7 @@ int main(int argc, char** argv) {
 
 	CALCLcontext context = calclcreateContext(&device, 1);
 
-	CALCLprogram program = calclLoadProgramLib2D(context, device, kernelSrc, kernelInc, openCALCLPath);
+	CALCLprogram program = calclLoadProgramLib2D(context, device, kernelSrc, kernelInc);
 
 	//---------------------------------Parallel CA DEF & INIT----------------------------------/
 
