@@ -1,1 +1,7 @@
 OpenCAL README file...
+
+Compiling:
+mkdir bin
+cd bin
+cmake ..
+make
