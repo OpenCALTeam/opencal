@@ -15,7 +15,7 @@ file(GLOB SRC
     "source/*.c"
 )
 
-add_executable(calsciara ${SRC})
-target_link_libraries(calsciara libopencal.a)
+add_executable(sciara_fv2 ${SRC})
+target_link_libraries(sciara_fv2 libopencal.a)
 
 
