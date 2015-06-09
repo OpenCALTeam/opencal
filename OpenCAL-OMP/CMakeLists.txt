@@ -27,3 +27,6 @@ file(GLOB SRC
 )
 
 add_library(opencal-omp STATIC ${SRC})
+
+
+add_subdirectory(examples)
