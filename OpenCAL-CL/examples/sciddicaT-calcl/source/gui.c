@@ -1,11 +1,11 @@
 
 #include "sciddicaT.h"
 #include <calcl2D.h>
-#ifdef __APPLE__
-#include <GLUT/glut.h>
-#else
-#include <GL/glut.h>
-#endif
+//#ifdef __APPLE__
+//#include <GLUT/glut.h>
+//#else
+//#include <GL/glut.h>
+//#endif
 #include <time.h>
 
 #ifdef _WIN32
@@ -66,7 +66,7 @@ int main(int argc, char** argv) {
 	int steps = 4000;
 	char * outputPath = "./result/result";
 	int active = 1;
-	int platformNum = 0;
+	int platformNum = 1;
 	int deviceNum = 0;
 
 	char * kernelSrc;
@@ -86,7 +86,7 @@ int main(int argc, char** argv) {
 	CALOpenCL * calOpenCL = calclCreateCALOpenCL();
 	calclInitializePlatforms(calOpenCL);
 	calclInitializeDevices(calOpenCL);
-
+	calclPrintAllPlatformAndDevices(calOpenCL);
 	CALCLdevice device = calclGetDevice(calOpenCL, platformNum, deviceNum);
 
 	CALCLcontext context = calclcreateContext(&device, 1);

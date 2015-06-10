@@ -20,8 +20,8 @@
 #define ROOT_DIR ".."
 #endif // _WIN32
 
-#define KERNEL_SOURCE_DIR "/kernel/source/" 	//!< Library kernel source file
-#define KERNEL_INCLUDE_DIR "/kernel/include"	//!< Library kernel include file
+#define KERNEL_SOURCE_DIR "\\kernel\\source\\" 	//!< Library kernel source file
+#define KERNEL_INCLUDE_DIR "\\kernel\\include"	//!< Library kernel include file
 
 #define KER_UPDATESUBSTATES "calclkernelUpdateSubstates2D"
 

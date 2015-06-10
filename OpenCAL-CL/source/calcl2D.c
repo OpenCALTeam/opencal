@@ -647,13 +647,14 @@ CALCLprogram calclLoadProgramLib2D(CALCLcontext context, CALCLdevice device, cha
 	strcat(tmp, pathOpenCALCL);
 	strcat(tmp, KERNEL_INCLUDE_DIR);
 	strcat(tmp, u);
-
+	printf("include %s \n", tmp);
 	int num_files;
 	char** filesNames;
 	char** paths = (char**) malloc(sizeof(char*) * 2);
 	char* tmp2 = (char*) malloc(sizeof(char) * (strlen(pathOpenCALCL) + strlen(KERNEL_SOURCE_DIR)));
 	strcpy(tmp2,pathOpenCALCL );
 	strcat(tmp2,KERNEL_SOURCE_DIR );
+	printf("source %s \n", tmp2);
 
 	paths[0] = path_user_kernel;
 	paths[1] = tmp2;
