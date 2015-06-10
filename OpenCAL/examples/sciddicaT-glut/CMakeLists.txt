@@ -10,7 +10,6 @@ link_directories(${CMAKE_CURRENT_SOURCE_DIR}/source)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 LINK_DIRECTORIES(${PROJECT_SOURCE_DIR}/lib)
-MESSAGE( STATUS "currdir " ${PROJECT_SOURCE_DIR})
 
 file(GLOB SRC
     "include/*.h"

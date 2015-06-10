@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.1 FATAL_ERROR)
 find_package(OpenGL REQUIRED)
 find_package(GLUT REQUIRED)
 find_package (Threads REQUIRED)
+find_library(M_LIB m)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 
@@ -25,6 +26,6 @@ file(GLOB SRC
 )
 
 add_executable(life3D-calgl ${SRC})
-target_link_libraries(life3D-calgl -lm   libopencal-gl.a libopencal.a ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${CMAKE_THREAD_LIBS_INIT})
+target_link_libraries(life3D-calgl ${M_LIB}  libopencal-gl.a libopencal.a ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${CMAKE_THREAD_LIBS_INIT})
 
 
