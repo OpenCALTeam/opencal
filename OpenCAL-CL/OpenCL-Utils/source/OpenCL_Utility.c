@@ -202,7 +202,7 @@ void calclGetPlatformByVendor(CALCLplatform * platform, char* vendor) {
 	err = clGetPlatformIDs(size, platforms, NULL);
 	calclHandleError(err);
 
-	int i;
+	unsigned int i;
 
 	for (i = 0; i < size; i++)
 		if (strstr(calclGetPlatformVendor(platforms[i]), vendor) != NULL) {
@@ -299,7 +299,7 @@ void calclGetDevicesByName(CALCLplatform plat, CALCLdevice ** devices, CALCLuint
 	*size = 0;
 	calclGetDevices(plat, type, &all_devices, &all_size);
 
-	int i;
+	unsigned int i;
 	for (i = 0; i < all_size; i++)
 		if (strstr(calclGetDeviceName(all_devices[i]), name) != NULL)
 			(*size)++;
@@ -375,7 +375,7 @@ void calclHandleError(CALCLint err) {
 }
 
 void calclPrintAllPlatformAndDevices(CALOpenCL * opencl){
-	int i;
+	unsigned int i;
 	int j;
 	for (i = 0; i < opencl->num_platforms; i++) {
 
