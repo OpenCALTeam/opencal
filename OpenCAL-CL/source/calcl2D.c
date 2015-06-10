@@ -19,7 +19,7 @@ void calclMapperToSubstates2D(struct CALModel2D *model, CALCLSubstateMapper * ma
 	long int outIndex = 0;
 
 	int i;
-	int j;
+	unsigned int j;
 
 	for (i = 0; i < ssNum_r; i++) {
 		for (j = 0; j < elNum; j++)
@@ -172,7 +172,8 @@ void calclSetModelParameters2D(CALCLToolkit2D* toolkit2d, struct CALModel2D * mo
 	clSetKernelArg(*kernel, 17, sizeof(CALCLmem), &toolkit2d->bufferBoundaryCondition);
 	clSetKernelArg(*kernel, 18, sizeof(CALCLmem), &toolkit2d->bufferStop);
 	clSetKernelArg(*kernel, 19, sizeof(CALCLmem), &toolkit2d->bufferSTCountsDiff);
-	int chunk = ceil((double)(model->rows * model->columns)/toolkit2d->streamCompactionThreadsNum);
+	double chunk_double = ceil((double)(model->rows * model->columns)/toolkit2d->streamCompactionThreadsNum);
+	int chunk = (int)chunk_double;
 	clSetKernelArg(*kernel, 20, sizeof(int), &chunk);
 
 }
@@ -183,7 +184,7 @@ void calclRealSubstatesMapper2D(struct CALModel2D *model, CALreal * current, CAL
 	long int outIndex = 0;
 	long int outIndex1 = 0;
 	int i;
-	int j;
+	unsigned int j;
 
 	for (i = 0; i < ssNum; i++) {
 		for (j = 0; j < elNum; j++)
@@ -198,7 +199,7 @@ void calclByteSubstatesMapper2D(struct CALModel2D *model, CALbyte * current, CAL
 	long int outIndex = 0;
 	long int outIndex1 = 0;
 	int i;
-	int j;
+	unsigned int j;
 
 	for (i = 0; i < ssNum; i++) {
 		for (j = 0; j < elNum; j++)
@@ -213,7 +214,7 @@ void calclIntSubstatesMapper2D(struct CALModel2D *model, CALint * current, CALin
 	long int outIndex = 0;
 	long int outIndex1 = 0;
 	int i;
-	int j;
+	unsigned int j;
 
 	for (i = 0; i < ssNum; i++) {
 		for (j = 0; j < elNum; j++)
@@ -233,7 +234,7 @@ CALCLqueue calclCreateQueue2D(CALCLToolkit2D * toolkit, struct CALModel2D * mode
 	//TODO choose stream compaction threads num
 	toolkit->streamCompactionThreadsNum = cores * 4;
 
-	while (model->rows * model->columns <= toolkit->streamCompactionThreadsNum)
+	while (model->rows * model->columns <= (int)toolkit->streamCompactionThreadsNum)
 		toolkit->streamCompactionThreadsNum /= 2;
 
 	toolkit->bufferSTCounts = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR, sizeof(CALint) * toolkit->streamCompactionThreadsNum, NULL, &err);
@@ -371,7 +372,7 @@ CALCLToolkit2D * calclCreateToolkit2D(struct CALModel2D *model, CALCLcontext con
 }
 
 void calclRun2D(CALCLToolkit2D* toolkit2d, struct CALModel2D * model, unsigned maxStep) {
-	cl_int err;
+//	cl_int err;
 	CALbyte stop;
 	size_t * threadNumMax = (size_t*) malloc(sizeof(size_t) * 2);
 	threadNumMax[0] = model->rows;
@@ -394,7 +395,7 @@ void calclRun2D(CALCLToolkit2D* toolkit2d, struct CALModel2D * model, unsigned m
 		calclKernelCall2D(toolkit2d, toolkit2d->kernelInitSubstates, 1, threadNumMax, NULL);
 
 	toolkit2d->steps = 0;
-	while (toolkit2d->steps < maxStep || maxStep == CAL_RUN_LOOP) {
+	while (toolkit2d->steps < (int)maxStep || maxStep == CAL_RUN_LOOP) {
 		stop = calclSingleStep2D(toolkit2d, model, singleStepThreadNum, dimNum);
 		if (stop == CAL_TRUE)
 			break;
@@ -461,8 +462,8 @@ CALbyte calclSingleStep2D(CALCLToolkit2D* toolkit2d, struct CALModel2D * model, 
 FILE * file;
 void calclKernelCall2D(CALCLToolkit2D* toolkit2d, CALCLkernel ker, int numDim, size_t * dimSize, size_t * localDimSize) {
 
-	cl_event timing_event;
-	cl_ulong time_start, time_end, read_time;
+//	cl_event timing_event;
+//	cl_ulong time_start, cl_ulong time_end, read_time;
 	cl_int err;
 	CALCLdevice device;
 	size_t multiple;
@@ -530,7 +531,7 @@ void calclComputeStreamCompaction2D(CALCLToolkit2D * toolkit) {
 }
 
 void calclSetCALKernelArgs2D(CALCLkernel * kernel, CALCLmem * args, cl_uint numArgs) {
-	int i;
+	unsigned int i;
 	for (i = 0; i < numArgs; i++)
 		clSetKernelArg(*kernel, MODEL_ARGS_NUM + i, sizeof(CALCLmem), &args[i]);
 }
@@ -562,7 +563,7 @@ void calclAddElementaryProcessKernel2D(CALCLToolkit2D* toolkit2d,struct CALModel
 	CALCLkernel * ep = toolkit2d->elementaryProcesses;
 	CALCLkernel * ep_new = (CALCLkernel*) malloc(sizeof(CALCLkernel) * (size + 1));
 
-	int i;
+	unsigned int i;
 	for (i = 0; i < size; i++)
 		ep_new[i] = ep[i];
 

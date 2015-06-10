@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="calcl2D">
+      <UniqueIdentifier>{bceb4860-cc00-40d4-a051-c27194b5df7b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="calcl2D\Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="calcl2D\Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="calcl3D">
+      <UniqueIdentifier>{5f8443bd-309d-4bb8-84fd-136f57ae1c7a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="calcl3D\Header Files">
+      <UniqueIdentifier>{716df86d-0baf-4579-8eae-aff111231744}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="calcl3D\Source Files">
+      <UniqueIdentifier>{debf991e-11a1-4c55-a063-81f79867a88e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\calcl2D.h">
+      <Filter>calcl2D\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\calcl3D.h">
+      <Filter>calcl3D\Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="source\calcl2D.c">
+      <Filter>calcl2D\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\calcl3D.c">
+      <Filter>calcl3D\Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

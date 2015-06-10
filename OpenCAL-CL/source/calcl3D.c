@@ -18,7 +18,7 @@ void calclMapperToSubstates3D(struct CALModel3D *model, CALCLSubstateMapper * ma
 
 	long int outIndex = 0;
 	int i;
-	int j;
+	unsigned int j;
 
 	for (i = 0; i < ssNum_r; i++) {
 		for (j = 0; j < elNum; j++)
@@ -174,7 +174,8 @@ void calclSetModelParameters3D(CALCLToolkit3D * toolkit3d,struct CALModel3D * mo
 	clSetKernelArg(*kernel, 18, sizeof(CALCLmem), &toolkit3d->bufferBoundaryCondition);
 	clSetKernelArg(*kernel, 19, sizeof(CALCLmem), &toolkit3d->bufferStop);
 	clSetKernelArg(*kernel, 20, sizeof(CALCLmem), &toolkit3d->bufferSTCountsDiff);
-	int chunk = ceil((double)(model->rows * model->columns*model->slices)/toolkit3d->streamCompactionThreadsNum);
+	double chunk_double = ceil((double)(model->rows * model->columns*model->slices)/toolkit3d->streamCompactionThreadsNum);
+	int chunk = (int)chunk_double;
 	clSetKernelArg(*kernel, 21, sizeof(int), &chunk);
 
 
@@ -186,7 +187,7 @@ void calclRealSubstatesMapper3D(struct CALModel3D *model, CALreal * current, CAL
 	long int outIndex = 0;
 	long int outIndex1 = 0;
 	int i;
-	int j;
+	unsigned int j;
 
 	for (i = 0; i < ssNum; i++) {
 		for (j = 0; j < elNum; j++)
@@ -201,7 +202,7 @@ void calclByteSubstatesMapper3D(struct CALModel3D *model, CALbyte * current, CAL
 	long int outIndex = 0;
 	long int outIndex1 = 0;
 	int i;
-	int j;
+	unsigned int j;
 
 	for (i = 0; i < ssNum; i++) {
 		for (j = 0; j < elNum; j++)
@@ -216,7 +217,7 @@ void calclIntSubstatesMapper3D(struct CALModel3D *model, CALint * current, CALin
 	long int outIndex = 0;
 	long int outIndex1 = 0;
 	int i;
-	int j;
+	unsigned int j;
 
 	for (i = 0; i < ssNum; i++) {
 		for (j = 0; j < elNum; j++)
@@ -235,7 +236,7 @@ CALCLqueue calclCreateQueue3D(CALCLToolkit3D * toolkit, struct CALModel3D * mode
 	//TODO choose stream compaction threads num
 	toolkit->streamCompactionThreadsNum = cores * 4;
 
-	while (model->rows * model->columns * model->slices <= toolkit->streamCompactionThreadsNum)
+	while (model->rows * model->columns * model->slices <= (int)toolkit->streamCompactionThreadsNum)
 		toolkit->streamCompactionThreadsNum /= 2;
 
 	toolkit->bufferSTCounts = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR, sizeof(CALint) * toolkit->streamCompactionThreadsNum, NULL, &err);
@@ -378,7 +379,7 @@ CALCLToolkit3D * calclCreateToolkit3D(struct CALModel3D *model, CALCLcontext con
 
 void calclRun3D(CALCLToolkit3D* toolkit3d, struct CALModel3D * model, unsigned maxStep) {
 
-	cl_int err;
+//	cl_int err;
 	CALbyte stop;
 	size_t * threadNumMax = (size_t*) malloc(sizeof(size_t) * 3);
 	threadNumMax[0] = model->rows;
@@ -405,7 +406,7 @@ void calclRun3D(CALCLToolkit3D* toolkit3d, struct CALModel3D * model, unsigned m
 
 	toolkit3d->steps = 0;
 
-	while (toolkit3d->steps < maxStep || maxStep == CAL_RUN_LOOP) {
+	while (toolkit3d->steps < (int)maxStep || maxStep == CAL_RUN_LOOP) {
 		stop = calclSingleStep3D(toolkit3d, model, singleStepThreadNum, dimNum);
 		if (stop)
 			break;
@@ -536,7 +537,7 @@ void calclComputeStreamCompaction3D(CALCLToolkit3D * toolkit) {
 
 
 void calclSetCALKernelArgs3D(CALCLkernel * kernel, CALCLmem * args, cl_uint numArgs) {
-	int i;
+	unsigned int i;
 	for (i = 0; i < numArgs; i++)
 		clSetKernelArg(*kernel, MODEL_ARGS_NUM + i, sizeof(CALCLmem), &args[i]);
 }
@@ -568,7 +569,7 @@ void calclAddElementaryProcessKernel3D(CALCLToolkit3D* toolkit3d,struct CALModel
 	CALCLkernel * ep = toolkit3d->elementaryProcesses;
 	CALCLkernel * ep_new = (CALCLkernel*) malloc(sizeof(CALCLkernel) * (size + 1));
 
-	int i;
+	unsigned int i;
 
 	for (i = 0; i < size; i++)
 		ep_new[i] = ep[i];
