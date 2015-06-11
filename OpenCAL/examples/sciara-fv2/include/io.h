@@ -19,7 +19,7 @@ extern struct TGISInfo gis_info_generic;
 extern struct TGISInfo gis_info_nodata0;
 //---------------------------------------------------------------------------
 
-int loadParameters(char* path, Sciara* sciara);
+int loadParameters(char const* path, Sciara* sciara);
 int saveParameters(char *path, Sciara* sciara);
 void printParameters(Sciara* sciara);
 
@@ -30,8 +30,8 @@ int loadEmissionRate(char *path, Sciara* sciara);
 int loadAlreadyAllocatedMap(char *path, int* S, int* nS, int lx, int ly);
 int loadAlreadyAllocatedMap(char *path, double* S, double* nS, int lx, int ly);
 
-int loadConfiguration(char *path, Sciara* sciara);
-int saveConfiguration(char *path, Sciara* sciara);
+int loadConfiguration(char const *path, Sciara* sciara);
+int saveConfiguration(char const *path, Sciara* sciara);
 
 
 //---------------------------------------------------------------------------

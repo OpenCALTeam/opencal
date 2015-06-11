@@ -78,7 +78,7 @@ typedef struct{
 extern Sciara *sciara;
 extern int active;
 
-void initSciara(char * demPath, int steps);
+void initSciara(char const* demPath, int steps);
 void runSciara();
 
 

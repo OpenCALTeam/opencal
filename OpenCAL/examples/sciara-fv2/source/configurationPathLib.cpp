@@ -45,7 +45,7 @@ void ConfigurationIdPath(char config_file_path[], char config_id_str[])
 	}
 }
 
-void ConfigurationFilePath(char config_file_path[], char name[], char suffix[], char file_path[])
+void ConfigurationFilePath(char config_file_path[], char const * name, char const *suffix, char file_path[])
 {
     /*
       La funzione costruisce in file_path il percorso completo del filada aprire:
@@ -75,7 +75,7 @@ int GetStepFromConfigurationFile(char config_file_path[])
     return atoi(step_str);
 }
 //---------------------------------------------------------------------------
-bool ConfigurationFileSavingPath(char config_file_path[], int step, char name[], char suffix[], char file_path[])
+bool ConfigurationFileSavingPath(char config_file_path[], int step, char const * name, char const * suffix, char file_path[])
 {
     char p[32];                         //stringa contenete il passo di calcolo (step)
     char ps[] = "000000000000";         //stringa di 12 digts contenete il passo di calcolo (step)
