@@ -16,7 +16,9 @@
 #include <calgl3D.h>
 #include <calglCommon.h>
 #include <calglGlobalSettings.h>
-
+//#include <calCommon.h>
+struct CALDrawModel2D;
+struct CALDrawModel3D;
 struct CALGLInfoBar{
 	const char* substateName;
 	enum CALGL_TYPE_INFO_USE infoUse;

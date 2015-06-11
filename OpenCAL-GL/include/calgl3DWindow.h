@@ -13,6 +13,7 @@
 #define calgl3DWindow_h
 
 #include <calgl3D.h>
+#include <string.h>
 
 #ifdef __APPLE__
 #include <GLUT/glut.h>

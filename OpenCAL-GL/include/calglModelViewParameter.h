@@ -21,6 +21,8 @@
 #include <calgl2D.h>
 #include <calgl3D.h>
 
+struct CALDrawModel2D;
+
 struct CALGLModelViewParameter{
 	GLfloat xTranslate;
 	GLfloat yTranslate;
