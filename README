@@ -10,7 +10,7 @@ Example compilation can be controlled using  the following argument to cmake:
 -DEXAMPLES:STRING= that takes two possible values: YES or NO
 
 
-OPENCL users. One of the following environment variable have to be set defined.
+OPENCL users. One of the following environment variable have to be  defined.
 For example in order to compile with CUDA OpenCL implementation define:
 *export CUDA_PATH="root CUDA FOLDER" *
 (default: /usr/local/cuda/) 
