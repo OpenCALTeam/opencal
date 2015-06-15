@@ -1,11 +1,12 @@
 OpenCAL README file...
 
 Compiling:
-```mkdir bin
+```
+mkdir bin
 cd bin
 cmake ..
 make
-
+```
 Example compilation can be controlled using  the following argument to cmake:
 -DEXAMPLES:STRING= that takes two possible values: YES or NO
 
