@@ -21,12 +21,17 @@ For example, order to compile using clang compiler
 *CLANG does not fully support OpenMP*
 
 OPENCL users. One of the following environment variable have to be  defined.
+
 For example in order to compile with CUDA OpenCL implementation define:
-*export CUDA_PATH="root CUDA FOLDER" *
+```
+export CUDA_PATH="root CUDA FOLDER"
+```
 (default: /usr/local/cuda/) 
-    ENV "PROGRAMFILES(X86)"
-    ENV AMDAPPSDKROOT
-    ENV INTELOCLSDKROOT
-    ENV NVSDKCOMPUTE_ROOT
-    ENV CUDA_PATH
-    ENV ATISTREAMSDKROOT
+```bash
+ENV "PROGRAMFILES(X86)"
+ENV AMDAPPSDKROOT
+ENV INTELOCLSDKROOT
+ENV NVSDKCOMPUTE_ROOT
+ENV CUDA_PATH
+ENV ATISTREAMSDKROOT
+```
