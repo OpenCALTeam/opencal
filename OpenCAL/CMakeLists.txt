@@ -28,5 +28,9 @@ file(GLOB SRC
 add_library(opencal STATIC ${SRC})
 target_link_libraries(opencal omp)
 
+if(${EXAMPLES} STREQUAL "YES")
+        add_subdirectory(examples)
+else()
+	MESSAGE(STATUS "${CMAKE_CURRENT_SOURCE_DIR}/examples EXCLUDED FROM COMPILATION")	
 
-add_subdirectory(examples)
+endif()

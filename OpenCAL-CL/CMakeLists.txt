@@ -33,4 +33,11 @@ file(GLOB SRC
 
 add_library(opencal-cl STATIC ${SRC})
 
-add_subdirectory(examples)
+
+if(${EXAMPLES} STREQUAL "YES")
+        add_subdirectory(examples)
+else()
+      	MESSAGE(STATUS "${CMAKE_CURRENT_SOURCE_DIR}/examples EXCLUDED FROM COMPILATION")
+
+endif()
+
