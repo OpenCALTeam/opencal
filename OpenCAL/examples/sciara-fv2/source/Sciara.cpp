@@ -284,7 +284,7 @@ void simulationInitialize(struct CALModel2D* model) {
 
 }
 
-void initSciara(char * demPath, int steps) {
+void initSciara(char const* demPath, int steps) {
 
 	sciara = new Sciara;
 	FILE * demFile = fopen(demPath, "r");

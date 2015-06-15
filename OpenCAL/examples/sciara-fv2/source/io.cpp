@@ -30,10 +30,10 @@ void saveMatrixi(CALint * M, char configuration_path[1024],Sciara * sciara){
 	fclose(input_file);
 }
 
-int SaveConfigurationEmission(Sciara* sciara, char *path, char *name)
+int SaveConfigurationEmission(Sciara* sciara, char const *path, char const *name)
 {
     char s[1024];
-    if (ConfigurationFileSavingPath(path, sciara->step, name, ".txt", s) == false)
+    if (ConfigurationFileSavingPath((char*)path, sciara->step, (char*)name, ".txt", s) == false)
         return FILE_ERROR;
     else
     {
@@ -43,7 +43,7 @@ int SaveConfigurationEmission(Sciara* sciara, char *path, char *name)
         {
             char str[1024];
             strcpy(str, "Cannot save ");
-            strcat(str, name);
+            strcat(str, (char*)name);
             return FILE_ERROR;
         }
         saveEmissionRates(s_file, sciara->emission_time, sciara->emission_rate);
@@ -57,7 +57,7 @@ int SaveConfigurationEmission(Sciara* sciara, char *path, char *name)
 
 
 //---------------------------------------------------------------------------
-int loadParameters(char* path, Sciara* sciara) {
+int loadParameters(char const * path, Sciara* sciara) {
 	char str[256];
 	FILE *f;
 	fpos_t position;
@@ -355,53 +355,53 @@ int loadAlreadyAllocatedMap(char *path, CALreal* S, CALreal* nS, CALint lx, CALi
 	return FILE_OK;
 }
 //---------------------------------------------------------------------------------------------------
-int loadConfiguration(char *path, Sciara* sciara) {
+int loadConfiguration(char const *path, Sciara* sciara) {
 	char configuration_path[1024];
 //    int   gis_info_status;
 //    int   gis_info_verify;
 
 	//Apre il file di configurazione
 	if (!loadParameters(path, sciara)) {
-		strcat(path, "_000000000000.cfg");
+		strcat((char*)path, "_000000000000.cfg");
 		if (!loadParameters(path, sciara))
 			return FILE_ERROR;
 	}
 
 	//apre il file Morphology
-	ConfigurationFilePath(path, "Morphology", ".stt", configuration_path);
+	ConfigurationFilePath((char*)path, "Morphology", ".stt", configuration_path);
 	if (!loadMorphology(configuration_path, sciara))
 		return FILE_ERROR;
 
 	//apre il file Vents
-	ConfigurationFilePath(path, "Vents", ".stt", configuration_path);
+	ConfigurationFilePath((char*)path, "Vents", ".stt", configuration_path);
 	if (!loadVents(configuration_path, sciara))
 		return FILE_ERROR;
 
 	//apre il file EmissionRate
-	ConfigurationFilePath(path, "EmissionRate", ".txt", configuration_path);
+	ConfigurationFilePath((char*)path, "EmissionRate", ".txt", configuration_path);
 	if (!loadEmissionRate(configuration_path, sciara))
 		return FILE_ERROR;
 
 	//apre il file Thickness
-	ConfigurationFilePath(path, "Thickness", ".stt", configuration_path);
+	ConfigurationFilePath((char*)path, "Thickness", ".stt", configuration_path);
 	loadAlreadyAllocatedMap(configuration_path, sciara->substates->Slt->current, sciara->substates->Slt->next, sciara->cols, sciara->rows);
 
 	//apre il file Temperature
-	ConfigurationFilePath(path, "Temperature", ".stt", configuration_path);
+	ConfigurationFilePath((char*)path, "Temperature", ".stt", configuration_path);
 	loadAlreadyAllocatedMap(configuration_path, sciara->substates->St->current, sciara->substates->St->next, sciara->cols, sciara->rows);
 
 	//apre il file SolidifiedLavaThickness
-	ConfigurationFilePath(path, "SolidifiedLavaThickness", ".stt", configuration_path);
+	ConfigurationFilePath((char*)path, "SolidifiedLavaThickness", ".stt", configuration_path);
 	loadAlreadyAllocatedMap(configuration_path, sciara->substates->Msl->current, NULL, sciara->cols, sciara->rows);
 
 	//Imposta lo step in base al nome del file .cfg e aggiorna la barra di stato
-	sciara->step = GetStepFromConfigurationFile(path);
+	sciara->step = GetStepFromConfigurationFile((char*)path);
 
 
 	return FILE_OK;
 }
 
-int saveConfiguration(char *path, Sciara* sciara) {
+int saveConfiguration(char const *path, Sciara* sciara) {
 //    int   gis_info_status;
 //    int   gis_info_verify;
 
@@ -410,7 +410,7 @@ int saveConfiguration(char *path, Sciara* sciara) {
     char s[1024];
 
 	//Salva il file di configurazione e i sottostati
-    path_ok = ConfigurationFileSavingPath(path, sciara->step, "", ".cfg", s);
+    path_ok = ConfigurationFileSavingPath((char*)path, sciara->step, "", ".cfg", s);
 
     if (!path_ok || !saveParameters(s, sciara))
         return FILE_ERROR;
@@ -418,30 +418,30 @@ int saveConfiguration(char *path, Sciara* sciara) {
 
 
 	//apre il file Morphology
-	ConfigurationFileSavingPath(path, sciara->step, "Morphology", ".stt", s);
+	ConfigurationFileSavingPath((char*)path, sciara->step, "Morphology", ".stt", s);
 	saveMatrixr(sciara->substates->Sz->current,s,sciara);
 
 	//apre il file Vents
-	ConfigurationFileSavingPath(path, sciara->step, "Vents", ".stt", s);
+	ConfigurationFileSavingPath((char*)path, sciara->step, "Vents", ".stt", s);
 	sciara->substates->Mv->current = calAllocBuffer2Di(sciara->rows,sciara->cols);
 	rebuildVentsMatrix(sciara->substates->Mv->current,sciara->cols,sciara->rows,sciara->vent);
 	saveMatrixi(sciara->substates->Mv->current,s,sciara);
 	calDeleteBuffer2Di(sciara->substates->Mv->current);
 
 	//apre il file EmissionRate
-    if (!SaveConfigurationEmission(sciara, path, "EmissionRate"))
+    if (!SaveConfigurationEmission(sciara, (char*)path, "EmissionRate"))
 		return FILE_ERROR;
 
 	//apre il file Thickness
-	ConfigurationFileSavingPath(path, sciara->step, "Thickness", ".stt", s);
+	ConfigurationFileSavingPath((char*)path, sciara->step, "Thickness", ".stt", s);
 	saveMatrixr(sciara->substates->Slt->current,s,sciara);
 
 	//apre il file Temperature
-	ConfigurationFileSavingPath(path, sciara->step, "Temperature", ".stt", s);
+	ConfigurationFileSavingPath((char*)path, sciara->step, "Temperature", ".stt", s);
 	saveMatrixr(sciara->substates->St->current,s,sciara);
 
 	//apre il file SolidifiedLavaThickness
-	ConfigurationFileSavingPath(path, sciara->step, "SolidifiedLavaThickness", ".stt", s);
+	ConfigurationFileSavingPath((char*)path, sciara->step, "SolidifiedLavaThickness", ".stt", s);
 	saveMatrixr(sciara->substates->Msl->current,s,sciara);
 
 	return FILE_OK;

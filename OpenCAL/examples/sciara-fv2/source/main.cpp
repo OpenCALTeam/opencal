@@ -30,7 +30,7 @@ int main(int argc, char** argv) {
 //	active = atoi(argv[4]);
 
 	int steps = 2;
-	char * outputPath = SAVE_PATH;
+	char const* outputPath = SAVE_PATH;
 	active = 0;
 
 	char path[1024] = CONFIG_PATH;
