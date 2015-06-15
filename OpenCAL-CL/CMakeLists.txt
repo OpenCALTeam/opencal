@@ -3,7 +3,8 @@ cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 
 find_package( OpenCL REQUIRED )
 
-
+#first compile opencl-utils
+add_subdirectory(OpenCL-Utils)
 
 #include_directories( "$ENV{CUDA_PATH}/include" )
 #MESSAGE( STATUS "opencl includes: " "$ENV{CUDA_PATH}/include" )
@@ -30,6 +31,7 @@ file(GLOB SRC
     "source/*.cpp"
     "source/*.c"
 )
+
 
 add_library(opencal-cl STATIC ${SRC})
 
