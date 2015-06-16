@@ -67,6 +67,8 @@ CALbyte calGetNext3Db(struct CALModel3D* ca3D, struct CALSubstate3Db* Q, int i, 
 	ret = calGetBuffer3DElement(Q->next, ca3D->rows, ca3D->columns, i, j, k);
 
 	CAL_UNSET_CELL_LOCK_3D(i, j, k, ca3D);
+
+	return ret;
 }
 
 CALint calGetNext3Di(struct CALModel3D* ca3D, struct CALSubstate3Di* Q, int i, int j, int k) {
@@ -77,6 +79,8 @@ CALint calGetNext3Di(struct CALModel3D* ca3D, struct CALSubstate3Di* Q, int i, i
 	ret = calGetBuffer3DElement(Q->next, ca3D->rows, ca3D->columns, i, j, k);
 
 	CAL_UNSET_CELL_LOCK_3D(i, j, k, ca3D);
+
+	return ret;
 }
 
 CALreal calGetNext3Dr(struct CALModel3D* ca3D, struct CALSubstate3Dr* Q, int i, int j, int k) {
@@ -87,6 +91,8 @@ CALreal calGetNext3Dr(struct CALModel3D* ca3D, struct CALSubstate3Dr* Q, int i, 
 	ret = calGetBuffer3DElement(Q->next, ca3D->rows, ca3D->columns, i, j, k);
 
 	CAL_UNSET_CELL_LOCK_3D(i, j, k, ca3D);
+
+	return ret;
 }
 
 

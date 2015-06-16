@@ -68,7 +68,7 @@ void calInitX2Dr(struct CALModel2D* ca2D, struct CALSubstate2Dr* Q, int i, int j
 
 
 CALbyte calGetNext2Db(struct CALModel2D* ca2D, struct CALSubstate2Db* Q, int i, int j) {
-	CALint ret;
+	CALbyte ret;
 
 	CAL_SET_CELL_LOCK(i, j, ca2D);
 

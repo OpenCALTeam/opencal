@@ -575,8 +575,7 @@ void calUpdateSubstate3Dr(struct CALModel3D* ca3D, struct CALSubstate3Dr* Q) {
 }
 
 
-
-CALCallbackFunc3D* calApplyElementaryProcess3D(struct CALModel3D* ca3D,	//!< Pointer to the cellular automaton structure.
+void calApplyElementaryProcess3D(struct CALModel3D* ca3D,	//!< Pointer to the cellular automaton structure.
 											   void (* elementary_process)(struct CALModel3D* ca2D, int i, int j, int k) //!< Pointer to a transition function's elementary process.
 											   )
 {

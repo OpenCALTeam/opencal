@@ -708,9 +708,9 @@ void calUpdateSubstate2Dr(struct CALModel2D* ca2D, struct CALSubstate2Dr* Q) {
 
 
 
-CALCallbackFunc2D* calApplyElementaryProcess2D(struct CALModel2D* ca2D,	//!< Pointer to the cellular automaton structure.
-												void(*elementary_process)(struct CALModel2D* ca2D, int i, int j) //!< Pointer to a transition function's elementary process.
-												)
+void calApplyElementaryProcess2D(struct CALModel2D* ca2D,	//!< Pointer to the cellular automaton structure.
+								 void(*elementary_process)(struct CALModel2D* ca2D, int i, int j) //!< Pointer to a transition function's elementary process.
+								 )
 {
 	int i, j, n;
 

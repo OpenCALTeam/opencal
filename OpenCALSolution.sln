@@ -116,6 +116,11 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "examples", "examples", "{BC380AE8-7DC0-4FCE-AA12-3899B43E38F4}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sciddicaT-calcl", "OpenCAL-CL\examples\sciddicaT-calcl\sciddicaT-calcl.vcxproj", "{E5960BED-21F3-4D9B-B554-A8113EBD26C1}"
+	ProjectSection(ProjectDependencies) = postProject
+		{EBAABE85-159B-4E42-992B-BBF44FEF26D1} = {EBAABE85-159B-4E42-992B-BBF44FEF26D1}
+		{56FB67A0-A0E8-4989-B454-9D0EC20241FB} = {56FB67A0-A0E8-4989-B454-9D0EC20241FB}
+		{860DDFCE-6A23-4FCE-9A38-8A600812CE9B} = {860DDFCE-6A23-4FCE-9A38-8A600812CE9B}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
