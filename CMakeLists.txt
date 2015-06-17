@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.1 FATAL_ERROR)
 
+project(OpenCAL)
+
 OPTION( EXAMPLES "EXAMPLES" OFF)
 
 add_subdirectory(OpenCAL)
