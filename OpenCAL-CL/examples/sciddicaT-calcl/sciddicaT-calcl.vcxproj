@@ -52,7 +52,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>./bin/$(Platform)/$(Configuration)/</OutDir>
+    <OutDir>./</OutDir>
     <IntDir>./bin/$(Platform)/$(Configuration)/</IntDir>
     <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(OpenCL_Include);../../../OpenCAL/include;../../OpenCL-Utils/include;../../OpenCL-Utils/dirent4vs;../../include</IncludePath>
     <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);../../../OpenCAL/lib;../../lib;../../OpenCL-Utils/lib;$(OpenCL_Lib_Path)</LibraryPath>
