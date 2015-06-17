@@ -17,7 +17,7 @@ to change compiler use the following cmake variables:
 ```
 
 For example, order to compile using clang compiler 
-```cmake  -DCMAKE_C_COMPILER=/usr/bin/clang -DCMAKE_CXX_COMPILER=/usr/bin/clang++ -DEXAMPLES:STRING=YES ... ```
+```cmake  -DCMAKE_C_COMPILER=/usr/bin/clang -DCMAKE_CXX_COMPILER=/usr/bin/clang++ -DEXAMPLES:STRING=ON ... ```
 
 *clang does not fully support OpenMP*
 
