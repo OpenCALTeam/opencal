@@ -1,4 +1,6 @@
-cmake_minimum_required(VERSION 3.1 FATAL_ERROR)#findopencl.cmake required
+# opencal/OpenCAL-CL/examples/sciara-fv2-calcl/CMakeLists.txt
+
+cmake_minimum_required(VERSION 3.1 FATAL_ERROR)
 
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
@@ -23,6 +25,6 @@ file(GLOB SRC
 )
 
 add_executable(CALCL_Sciara ${SRC})
-target_link_libraries(CALCL_Sciara -lm libopencal-cl.a libopencal.a opencl_utils OpenCL )
+target_link_libraries(CALCL_Sciara opencal-cl opencal opencl_utils ${OpenCL_LIBRARY})
 
 

@@ -1,14 +1,28 @@
+# opencal/OpenCAL-GL/examples/ForestInsect-calgl/CMakeLists.txt
+
 cmake_minimum_required(VERSION 3.1 FATAL_ERROR)
+
 
 find_package(OpenGL REQUIRED)
 find_package(GLUT REQUIRED)
-find_package (Threads REQUIRED)
+#find_package (Threads REQUIRED)
+
+
+if (${PTW32_STATIC} STREQUAL "ON")
+	add_definitions(-DPTW32_STATIC_LIB)
+	set(PTW32_STATIC_LIB ${PROJECT_SOURCE_DIR}/extern/pthread-win32/lib/x86/pthread_lib.lib)
+	include_directories( ${PROJECT_SOURCE_DIR}/extern/pthread-win32/include )
+endif()
+
+if (${FREEGLUT_STATIC} STREQUAL "ON")
+	add_definitions(-DFREEGLUT_STATIC)
+endif()
+
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 
 link_directories(${CMAKE_CURRENT_SOURCE_DIR}/source)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
-
 
 LINK_DIRECTORIES(${PROJECT_SOURCE_DIR}/OpenCAL/lib)
 LINK_DIRECTORIES(${PROJECT_SOURCE_DIR}/OpenCAL-GL/lib)
@@ -25,6 +39,6 @@ file(GLOB SRC
 )
 
 add_executable(ForestInsect-calgl ${SRC})
-target_link_libraries(ForestInsect-calgl -lm   libopencal-gl.a libopencal.a ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${CMAKE_THREAD_LIBS_INIT})
-
+#target_link_libraries(ForestInsect-calgl opencal-gl opencal ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${CMAKE_THREAD_LIBS_INIT})
+target_link_libraries(ForestInsect-calgl opencal-gl opencal ${OPENGL_LIBRARIES} ${GLUT_LIBRARY}  ${PTW32_STATIC_LIB})
 

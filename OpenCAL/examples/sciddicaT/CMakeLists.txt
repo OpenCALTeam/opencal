@@ -1,3 +1,5 @@
+# opencal/OpenCAL/examples/sciddicaT/CMakeLists.txt
+
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 
 
@@ -16,6 +18,6 @@ file(GLOB SRC
 )
 
 add_executable(sciddicaT ${SRC})
-target_link_libraries(sciddicaT libopencal.a)
+target_link_libraries(sciddicaT opencal)
 
 

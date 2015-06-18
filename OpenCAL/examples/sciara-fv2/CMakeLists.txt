@@ -1,3 +1,5 @@
+# opencal/OpenCAL/examples/sciara-fv2/CMakeLists.txt
+
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 
 
@@ -16,6 +18,6 @@ file(GLOB SRC
 )
 
 add_executable(sciara_fv2 ${SRC})
-target_link_libraries(sciara_fv2 libopencal.a)
+target_link_libraries(sciara_fv2 opencal)
 
 

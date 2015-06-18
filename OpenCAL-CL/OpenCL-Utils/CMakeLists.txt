@@ -1,8 +1,13 @@
+# opencal/OpenCAL-CL/OpenCL-Utils/CMakeLists.txt
+
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 
 
 find_package( OpenCL REQUIRED )
 
+if(WIN32)
+	include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/dirent4vs )
+endif()
 #include_directories( "$ENV{CUDA_PATH}/include" )
 #MESSAGE( STATUS "opencl includes: " "$ENV{CUDA_PATH}/include" )
 include_directories( ${OpenCL_INCLUDE_DIRS} )

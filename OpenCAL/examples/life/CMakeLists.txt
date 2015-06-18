@@ -1,3 +1,5 @@
+# opencal/OpenCAL/examples/life/CMakeLists.txt
+
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 
 
@@ -16,6 +18,6 @@ file(GLOB SRC
 )
 
 add_executable(life ${SRC})
-target_link_libraries(life libopencal.a)
+target_link_libraries(life opencal)
 
 

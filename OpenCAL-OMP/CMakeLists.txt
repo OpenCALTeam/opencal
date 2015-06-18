@@ -1,6 +1,8 @@
+# opencal/OpenCAL-OMP/CMakeLists.txt
+
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 
-project(OpenCAL)
+project(OpenCAL-OMP)
 
 OPTION (USE_OpenMP "Use OpenMP" ON)
 IF(USE_OpenMP)
@@ -8,6 +10,7 @@ IF(USE_OpenMP)
   IF(OPENMP_FOUND)
     SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+	add_definitions(-DCAL_OMP)
   ENDIF()
 ENDIF()
 
@@ -28,12 +31,9 @@ file(GLOB SRC
 
 add_library(opencal-omp STATIC ${SRC})
 
-
-
-if(${EXAMPLES} STREQUAL "YES")
+if(${EXAMPLES} STREQUAL "ON")
         add_subdirectory(examples)
 else()
       	MESSAGE(STATUS "${CMAKE_CURRENT_SOURCE_DIR}/examples EXCLUDED FROM COMPILATION")
-
 endif()
 
