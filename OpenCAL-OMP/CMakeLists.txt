@@ -39,10 +39,7 @@ else()
       	MESSAGE(STATUS "${CMAKE_CURRENT_SOURCE_DIR}/examples EXCLUDED FROM COMPILATION")
 endif()
 
-
 # add a target to generate API documentation with Doxygen
-find_package(Doxygen)
-option(BUILD_DOCUMENTATION "Create and install the HTML based API documentation (requires Doxygen)" ${DOXYGEN_FOUND})
 if(BUILD_DOCUMENTATION)
     if(NOT DOXYGEN_FOUND)
         message(FATAL_ERROR "Doxygen is needed to build the documentation.")

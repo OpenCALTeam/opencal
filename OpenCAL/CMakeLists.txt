@@ -5,8 +5,6 @@ cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 project(OpenCAL)
 
 # add a target to generate API documentation with Doxygen
-find_package(Doxygen)
-option(BUILD_DOCUMENTATION "Create and install the HTML based API documentation (requires Doxygen)" ${DOXYGEN_FOUND})
 if(BUILD_DOCUMENTATION)
     if(NOT DOXYGEN_FOUND)
         message(FATAL_ERROR "Doxygen is needed to build the documentation.")
