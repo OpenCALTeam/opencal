@@ -5,8 +5,8 @@ cmake_minimum_required(VERSION 3.1 FATAL_ERROR)
 
 find_package(OpenGL REQUIRED)
 find_package(GLUT REQUIRED)
-#find_package(Threads REQUIRED)
-#find_library(M_LIB m)
+find_package(Threads REQUIRED)
+find_library(M_LIB m)
 
 if (${PTW32_STATIC} STREQUAL "ON")
 	add_definitions(-DPTW32_STATIC_LIB)
@@ -39,6 +39,9 @@ file(GLOB SRC
 )
 
 add_executable(life3D-calgl ${SRC})
-#target_link_libraries(life3D-calgl opencal-gl opencal ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${CMAKE_THREAD_LIBS_INIT})
-target_link_libraries(life3D-calgl opencal-gl opencal ${OPENGL_LIBRARIES} ${GLUT_LIBRARY}  ${PTW32_STATIC_LIB})
 
+if(WIN32)
+  target_link_libraries(life3D-calgl opencal-gl opencal ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${CMAKE_THREAD_LIBS_INIT} ${PTW32_STATIC_LIB})
+else(WIN32)
+  target_link_libraries(life3D-calgl opencal-gl opencal ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${CMAKE_THREAD_LIBS_INIT} -lm)
+endif(WIN32)

@@ -5,8 +5,13 @@ cmake_minimum_required(VERSION 3.1 FATAL_ERROR)
 
 find_package(OpenGL REQUIRED)
 find_package(GLUT REQUIRED)
-#find_package (Threads REQUIRED)
+find_package (Threads REQUIRED)
 
+FIND_PACKAGE(OpenMP)
+IF(OPENMP_FOUND)
+    SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+ENDIF()
 
 if (${PTW32_STATIC} STREQUAL "ON")
 	add_definitions(-DPTW32_STATIC_LIB)
@@ -39,6 +44,8 @@ file(GLOB SRC
 )
 
 add_executable(ForestInsect-calgl ${SRC})
-#target_link_libraries(ForestInsect-calgl opencal-gl opencal ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${CMAKE_THREAD_LIBS_INIT})
-target_link_libraries(ForestInsect-calgl opencal-gl opencal ${OPENGL_LIBRARIES} ${GLUT_LIBRARY}  ${PTW32_STATIC_LIB})
-
+if(WIN32)
+  target_link_libraries(ForestInsect-calgl opencal-gl opencal ${OPENGL_LIBRARIES} ${GLUT_LIBRARY}  ${PTW32_STATIC_LIB})
+else()
+  target_link_libraries(ForestInsect-calgl -lm opencal-gl opencal ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${CMAKE_THREAD_LIBS_INIT})
+endif()
