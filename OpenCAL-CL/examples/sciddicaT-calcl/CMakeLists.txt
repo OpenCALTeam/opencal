@@ -25,6 +25,13 @@ file(GLOB SRC
 )
 
 add_executable(CALCL_Sciddica ${SRC})
-target_link_libraries(CALCL_Sciddica opencal-cl opencal opencl_utils ${OpenCL_LIBRARY})
+
+if(WIN32)
+  target_link_libraries(CALCL_Sciddica opencal-cl opencal opencl_utils ${OpenCL_LIBRARY})
+else()
+  target_link_libraries(CALCL_Sciddica m opencal-cl opencal opencl_utils ${OpenCL_LIBRARY})
+endif()
+
+
 
 
