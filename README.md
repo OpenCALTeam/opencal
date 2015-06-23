@@ -25,7 +25,6 @@ OpenCL users. One of the following environment variable have to be  defined.
 
 For example in order to compile with CUDA OpenCL implementation define:
 
-
 ```
 export CUDA_PATH="root CUDA FOLDER"
 ```
@@ -38,6 +37,9 @@ ENV NVSDKCOMPUTE_ROOT
 ENV CUDA_PATH
 ENV ATISTREAMSDKROOT
 ```
+To disable OpenCL (and not compile the corrensponding version of OpenCAL) use the following option (defaulted to YES)
+```
+-DBUILD_DOCUMENTATION:STRING=OFF 
+```
 
-
-Documentation build may be enabled using the cmake option ```-DBUILD_DOCUMENTATION:STRING=ON```
+Documentation build may be enabled using the cmake option ```-DBUILD_DOCUMENTATION:STRING=ON``` (DOxygen and graphviz are required)
