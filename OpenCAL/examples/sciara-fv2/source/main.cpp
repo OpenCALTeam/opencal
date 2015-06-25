@@ -29,7 +29,7 @@ int main(int argc, char** argv) {
 //	char * outputPath = argv[3];
 //	active = atoi(argv[4]);
 
-	int steps = 2;
+	int steps = 1000;
 	char const* outputPath = SAVE_PATH;
 	active = 0;
 
