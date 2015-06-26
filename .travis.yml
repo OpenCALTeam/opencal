@@ -7,7 +7,7 @@ before_install:
 
 
 install:
- - sudo apt-get install freeglut3-dev libxmu libxi
+ - sudo apt-get install freeglut3-dev libxmu-dev libxi-dev
 
 before_script:
 - cmake --version
