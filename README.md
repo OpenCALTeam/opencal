@@ -43,3 +43,16 @@ To disable OpenCL (and not compile the corrensponding version of OpenCAL) use th
 ```
 
 Documentation build may be enabled using the cmake option ```-DBUILD_DOCUMENTATION:STRING=ON``` (DOxygen and graphviz are required)
+
+
+
+***developers only***
+in order to generate an eclipse makefile project run cmake using 
+```
+-G "Eclipse CDT4 - Unix Makefiles"
+```
+For example this:
+```
+cmake -G "Eclipse CDT4 - Unix Makefiles" -DEXAMPLES:STRING=ON -DBUILD_DOCUMENTATION=OFF ..
+```
+generates an eclipse project into the eclipseproject folder. Import it using the eclipse import menu.
