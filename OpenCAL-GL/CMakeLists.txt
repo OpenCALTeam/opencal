@@ -1,11 +1,13 @@
 # opencal/OpenCAL-GL/CMakeLists.txt
 
+project(Opencal-GL)
+
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 
 find_package(OpenGL REQUIRED)
 find_package(GLUT REQUIRED)
 include_directories( ${OPENGL_INCLUDE_DIRS} ${GLUT_INCLUDE_DIR} )
-include_directories( ${PROJECT_SOURCE_DIR}/OpenCAL/include )
+include_directories( ${PROJECT_SOURCE_DIR}/../OpenCAL/include )
 
 if (${PTW32_STATIC} STREQUAL "ON")
 	add_definitions(-DPTW32_STATIC_LIB)

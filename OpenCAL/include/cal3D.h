@@ -192,21 +192,21 @@ CALCallbackFunc3D* calAddElementaryProcess3D(struct CALModel3D* ca3D,	//!< Point
 
 
 
-/*! \brief Initializes a byte substate to a constant value; both the current and next matrices are initialized.
+/*! \brief Initializes a byte substate to a constant value; both the current and next (if not single layer substate) matrices are initialized.
 */
 void calInitSubstate3Db(struct CALModel3D* ca3D,	//!< Pointer to the cellular automaton structure.
 						struct CALSubstate3Db* Q,	//!< Pointer to a 3D byte substate.
 						CALbyte value				//!< Value to which each cell of the substate is set.
 						);
 
-/*! \brief Initializes a integer substate a constant value; both the current and next matrices are initialized.
+/*! \brief Initializes a integer substate a constant value; both the current and next (if not single layer substate) matrices are initialized.
 */
 void calInitSubstate3Di(struct CALModel3D* ca3D,	//!< Pointer to the cellular automaton structure.
 						struct CALSubstate3Di* Q,	//!< Pointer to a 3D int substate.
 						CALint value				//!< Value to which each cell of the substate is set.
 						);
 
-/*! \brief Initializes a real (floating point) substate a constant value; both the current and next matrices are initialized.
+/*! \brief Initializes a real (floating point) substate a constant value; both the current and next (if not single layer substate) matrices are initialized.
 */
 void calInitSubstate3Dr(struct CALModel3D* ca3D,	//!< Pointer to the cellular automaton structure.
 						struct CALSubstate3Dr* Q,	//!< Pointer to a 3D real (floating point) substate.

@@ -1,5 +1,5 @@
 # opencal/OpenCAL-CL/CMakeLists.txt
-
+project(Opencal-CL)
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 
 
@@ -15,10 +15,10 @@ endif()
 #include_directories( "$ENV{CUDA_PATH}/include" )
 #MESSAGE( STATUS "opencl includes: " "$ENV{CUDA_PATH}/include" )
 include_directories( ${OpenCL_INCLUDE_DIRS} )
-include_directories( ${PROJECT_SOURCE_DIR}/OpenCAL/include )
+include_directories( ${PROJECT_SOURCE_DIR}/../OpenCAL/include )
 include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/OpenCL-Utils/include)
 
-
+MESSAGE( STATUS "opencal includes : "  ${PROJECT_SOURCE_DIR}/../OpenCAL/include )
 MESSAGE( STATUS "opencl includes: " ${OpenCL_INCLUDE_DIRS} )
 MESSAGE( STATUS "opencl includes: " ${OpenCL_LIBRARIES} )
 

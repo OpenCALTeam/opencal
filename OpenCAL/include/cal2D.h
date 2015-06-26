@@ -190,21 +190,21 @@ CALCallbackFunc2D* calAddElementaryProcess2D(struct CALModel2D* ca2D,	//!< Point
 
 
 
-/*! \brief Initializes a byte substate to a constant value; both the current and next matrices are initialized.
+/*! \brief Initializes a byte substate to a constant value; both the current and next (if not single layer substate) matrices are initialized.
 */
 void calInitSubstate2Db(struct CALModel2D* ca2D,	//!< Pointer to the cellular automaton structure.
 						struct CALSubstate2Db* Q,	//!< Pointer to a 2D byte substate.
 						CALbyte value				//!< Value to which each cell of the substate is set.
 						);
 
-/*! \brief Initializes a integer substate a constant value; both the current and next matrices are initialized.
+/*! \brief Initializes a integer substate a constant value; both the current and next (if not single layer substate) matrices are initialized.
 */
 void calInitSubstate2Di(struct CALModel2D* ca2D,	//!< Pointer to the cellular automaton structure.
 						struct CALSubstate2Di* Q,	//!< Pointer to a 2D int substate.
 						CALint value				//!< Value to which each cell of the substate is set.
 						);
 
-/*! \brief Initializes a real (floating point) substate a constant value; both the current and next matrices are initialized.
+/*! \brief Initializes a real (floating point) substate a constant value; both the current and next (if not single layer substate) matrices are initialized.
 */
 void calInitSubstate2Dr(struct CALModel2D* ca2D,	//!< Pointer to the cellular automaton structure.
 						struct CALSubstate2Dr* Q,	//!< Pointer to a 2D real (floating point) substate.

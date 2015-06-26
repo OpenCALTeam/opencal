@@ -2,7 +2,7 @@
 
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 
-project(OpenCAL)
+project(OperCAL)
 
 OPTION(EXAMPLES "EXAMPLES" OFF)
 OPTION(FREEGLUT_STATIC "Use static lib" OFF)
