@@ -1,3 +1,7 @@
+
+OpenCAL - The Cellular Automata Library    [![Build Status](https://travis-ci.org/OpenCALTeam/opencal.svg?branch=master)](https://travis-ci.org/OpenCALTeam/opencal)
+
+
 OpenCAL README file...
 
 Compiling:
@@ -56,3 +60,12 @@ For example this:
 cmake -G "Eclipse CDT4 - Unix Makefiles" -DEXAMPLES:STRING=ON -DBUILD_DOCUMENTATION=OFF ..
 ```
 generates an eclipse project into the eclipseproject folder. Import it using the eclipse import menu.
+
+In oder to for cmake to generate dependencies list (internal and to external libraries) use
+
+cmake --graphviz=deps.dot .. && dot -Tps peds.dot -o deps.ps
+
+for example in order to generate deps.ps postscript image that shows dependencies (***inside build directory***)
+
+```
+rm -rf * && cmake --graphviz=deps.dot ..  -DEXAMPLES:STRING=ON -DBUILD_DOCUMENTATION=OFF -DBUILD_OPENCL:STRING=ON -DBUILD_GL:STRING=ON -DBUILD_OMP:STRING=ON .. && dot -Tps deps.dot -o deps.ps
