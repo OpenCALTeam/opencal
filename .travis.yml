@@ -10,14 +10,14 @@ install:
  - sudo apt-get install freeglut3-dev
 
 before_script:
-	- cmake --version
-	- gcc --version
-	- g++ --version
+- cmake --version
+- gcc --version
+- g++ --version
 
 
 
 script: 
-	- mkdir -p build 
-	- cd build 
-	- cmake -DEXAMPLES:STRING=ON -DBUILD_DOCUMENTATION=OFF -DBUILD_OPENCL:STRING=OFF -DBUILD_GL:STRING=OFF -DBUILD_OMP:STRING=OFF .. 
-	- make -j4
+- mkdir -p build 
+- cd build 
+- cmake -DEXAMPLES:STRING=ON -DBUILD_DOCUMENTATION=OFF -DBUILD_OPENCL:STRING=OFF -DBUILD_GL:STRING=OFF -DBUILD_OMP:STRING=OFF .. 
+- make -j4
