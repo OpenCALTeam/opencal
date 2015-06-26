@@ -493,12 +493,14 @@ void calInitSubstate3Db(struct CALModel3D* ca3D, struct CALSubstate3Db* Q, CALby
 	if (ca3D->A.cells)
 	{
 		calSetActiveCellsBuffer3Db(Q->current, ca3D->rows, ca3D->columns, ca3D->slices, value, ca3D->A.cells, ca3D->A.size_current);
-		calSetActiveCellsBuffer3Db(Q->next, ca3D->rows, ca3D->columns, ca3D->slices, value, ca3D->A.cells, ca3D->A.size_current);
+		if(Q->next)		
+			calSetActiveCellsBuffer3Db(Q->next, ca3D->rows, ca3D->columns, ca3D->slices, value, ca3D->A.cells, ca3D->A.size_current);
 	}
 	else
 	{
 		calSetBuffer3Db(Q->current, ca3D->rows, ca3D->columns, ca3D->slices, value);
-		calSetBuffer3Db(Q->next, ca3D->rows, ca3D->columns, ca3D->slices, value);
+		if(Q->next)		
+			calSetBuffer3Db(Q->next, ca3D->rows, ca3D->columns, ca3D->slices, value);
 	}
 }
 
@@ -506,12 +508,14 @@ void calInitSubstate3Di(struct CALModel3D* ca3D, struct CALSubstate3Di* Q, CALin
 	if (ca3D->A.cells)
 	{
 		calSetActiveCellsBuffer3Di(Q->current, ca3D->rows, ca3D->columns, ca3D->slices, value, ca3D->A.cells, ca3D->A.size_current);
-		calSetActiveCellsBuffer3Di(Q->next, ca3D->rows, ca3D->columns, ca3D->slices, value, ca3D->A.cells, ca3D->A.size_current);
+		if(Q->next)		
+			calSetActiveCellsBuffer3Di(Q->next, ca3D->rows, ca3D->columns, ca3D->slices, value, ca3D->A.cells, ca3D->A.size_current);
 	}
 	else
 	{
 		calSetBuffer3Di(Q->current, ca3D->rows, ca3D->columns, ca3D->slices, value);
-		calSetBuffer3Di(Q->next, ca3D->rows, ca3D->columns, ca3D->slices, value);
+		if(Q->next)		
+			calSetBuffer3Di(Q->next, ca3D->rows, ca3D->columns, ca3D->slices, value);
 	}
 }
 
@@ -519,12 +523,14 @@ void calInitSubstate3Dr(struct CALModel3D* ca3D, struct CALSubstate3Dr* Q, CALre
 	if (ca3D->A.cells)
 	{
 		calSetActiveCellsBuffer3Dr(Q->current, ca3D->rows, ca3D->columns, ca3D->slices, value, ca3D->A.cells, ca3D->A.size_current);
-		calSetActiveCellsBuffer3Dr(Q->next, ca3D->rows, ca3D->columns, ca3D->slices, value, ca3D->A.cells, ca3D->A.size_current);
+		if(Q->next)		
+			calSetActiveCellsBuffer3Dr(Q->next, ca3D->rows, ca3D->columns, ca3D->slices, value, ca3D->A.cells, ca3D->A.size_current);
 	}
 	else
 	{
 		calSetBuffer3Dr(Q->current, ca3D->rows, ca3D->columns, ca3D->slices, value);
-		calSetBuffer3Dr(Q->next, ca3D->rows, ca3D->columns, ca3D->slices, value);
+		if(Q->next)		
+			calSetBuffer3Dr(Q->next, ca3D->rows, ca3D->columns, ca3D->slices, value);
 	}
 }
 

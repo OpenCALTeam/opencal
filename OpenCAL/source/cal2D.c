@@ -560,12 +560,14 @@ void calInitSubstate2Db(struct CALModel2D* ca2D, struct CALSubstate2Db* Q, CALby
 	if (ca2D->A.cells)
 	{
 		calSetActiveCellsBuffer2Db(Q->current, ca2D->rows, ca2D->columns, value, ca2D->A.cells, ca2D->A.size_current);
-		calSetActiveCellsBuffer2Db(Q->next, ca2D->rows, ca2D->columns, value, ca2D->A.cells, ca2D->A.size_current);
+		if(Q->next)		
+			calSetActiveCellsBuffer2Db(Q->next, ca2D->rows, ca2D->columns, value, ca2D->A.cells, ca2D->A.size_current);
 	}
 	else
 	{
 		calSetBuffer2Db(Q->current, ca2D->rows, ca2D->columns, value);
-		calSetBuffer2Db(Q->next, ca2D->rows, ca2D->columns, value);
+		if(Q->next)
+			calSetBuffer2Db(Q->next, ca2D->rows, ca2D->columns, value);
 	}
 }
 
@@ -573,12 +575,14 @@ void calInitSubstate2Di(struct CALModel2D* ca2D, struct CALSubstate2Di* Q, CALin
 	if (ca2D->A.cells)
 	{
 		calSetActiveCellsBuffer2Di(Q->current, ca2D->rows, ca2D->columns, value, ca2D->A.cells, ca2D->A.size_current);
-		calSetActiveCellsBuffer2Di(Q->next, ca2D->rows, ca2D->columns, value, ca2D->A.cells, ca2D->A.size_current);
+		if(Q->next)		
+			calSetActiveCellsBuffer2Di(Q->next, ca2D->rows, ca2D->columns, value, ca2D->A.cells, ca2D->A.size_current);
 	}
 	else
 	{
 		calSetBuffer2Di(Q->current, ca2D->rows, ca2D->columns, value);
-		calSetBuffer2Di(Q->next, ca2D->rows, ca2D->columns, value);
+		if(Q->next)
+			calSetBuffer2Di(Q->next, ca2D->rows, ca2D->columns, value);
 	}
 }
 
@@ -586,12 +590,14 @@ void calInitSubstate2Dr(struct CALModel2D* ca2D, struct CALSubstate2Dr* Q, CALre
 	if (ca2D->A.cells)
 	{
 		calSetActiveCellsBuffer2Dr(Q->current, ca2D->rows, ca2D->columns, value, ca2D->A.cells, ca2D->A.size_current);
-		calSetActiveCellsBuffer2Dr(Q->next, ca2D->rows, ca2D->columns, value, ca2D->A.cells, ca2D->A.size_current);
+		if(Q->next)		
+			calSetActiveCellsBuffer2Dr(Q->next, ca2D->rows, ca2D->columns, value, ca2D->A.cells, ca2D->A.size_current);
 	}
 	else
 	{
 		calSetBuffer2Dr(Q->current, ca2D->rows, ca2D->columns, value);
-		calSetBuffer2Dr(Q->next, ca2D->rows, ca2D->columns, value);
+		if(Q->next)
+			calSetBuffer2Dr(Q->next, ca2D->rows, ca2D->columns, value);
 	}
 }
 
