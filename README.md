@@ -1,3 +1,7 @@
+
+OpenCAL - The Cellular Automata Library    [![Build Status](https://travis-ci.org/OpenCALTeam/opencal.svg?branch=master)](https://travis-ci.org/OpenCALTeam/opencal)
+
+
 OpenCAL README file...
 
 Compiling:
