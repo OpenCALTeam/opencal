@@ -1,26 +1,39 @@
 # opencal/OpenCAL-GL/CMakeLists.txt
-
-project(Opencal-GL)
-
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 
+
 find_package(OpenGL REQUIRED)
-find_package(GLUT REQUIRED)
-include_directories( ${OPENGL_INCLUDE_DIRS} ${GLUT_INCLUDE_DIR} )
-include_directories( ${PROJECT_SOURCE_DIR}/../OpenCAL/include )
 
-if (${PTW32_STATIC} STREQUAL "ON")
-	add_definitions(-DPTW32_STATIC_LIB)
-	include_directories( ${PROJECT_SOURCE_DIR}/extern/pthread-win32/include )
-endif()
-
-if (${FREEGLUT_STATIC} STREQUAL "ON")
+if(${USE_EXTERN_FREEGLUT_STATIC} STREQUAL "ON")
+	set (GLUT_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/extern/freeglut-2.8.1/include")
+	set (GLUT_glut_LIBRARY "${PROJECT_SOURCE_DIR}/extern/freeglut-2.8.1/lib/x86/freeglut_static.lib")
 	add_definitions(-DFREEGLUT_STATIC)
+else()
+	find_package(GLUT REQUIRED)
 endif()
 
+if (${USE_EXTERN_PTW32_STATIC} STREQUAL "ON")
+	set (PTW32_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/extern/pthread-win32/include")
+	set (PTW32_ptw32_LIBRARY "${PROJECT_SOURCE_DIR}/extern/pthread-win32/lib/x86/pthread_lib.lib")
+	add_definitions(-DPTW32_STATIC_LIB)
+else()
+	find_package(Threads REQUIRED)
+endif()
 
-link_directories(${CMAKE_CURRENT_SOURCE_DIR}/source)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
+set (OPENCAL_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/OpenCAL/include")
+set (OPENCAL-GL_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include")
+
+include_directories(
+	${OPENCAL-GL_INCLUDE_DIR}
+	${OPENCAL_INCLUDE_DIR}
+	${OPENGL_INCLUDE_DIRS}
+	${GLUT_INCLUDE_DIR}
+	${PTW32_INCLUDE_DIR}
+)
+
+link_directories(
+	${CMAKE_CURRENT_SOURCE_DIR}/source
+)
 
 file(GLOB SRC
     "include/*.h"
@@ -35,7 +48,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 add_library(opencal-gl STATIC ${SRC} )
 
 
-if(${EXAMPLES} STREQUAL "ON")
+if(${BUILD_EXAMPLES} STREQUAL "ON")
         add_subdirectory(examples)
 else()
       	MESSAGE(STATUS "${CMAKE_CURRENT_SOURCE_DIR}/examples EXCLUDED FROM COMPILATION")

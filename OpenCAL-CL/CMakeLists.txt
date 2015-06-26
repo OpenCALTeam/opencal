@@ -1,9 +1,9 @@
 # opencal/OpenCAL-CL/CMakeLists.txt
-project(Opencal-CL)
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 
 
 find_package( OpenCL REQUIRED )
+
 
 #first compile opencl-utils
 add_subdirectory(OpenCL-Utils)
@@ -12,22 +12,18 @@ if(WIN32)
 	include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/OpenCL-Utils/dirent4vs )
 endif()
 
-#include_directories( "$ENV{CUDA_PATH}/include" )
-#MESSAGE( STATUS "opencl includes: " "$ENV{CUDA_PATH}/include" )
-include_directories( ${OpenCL_INCLUDE_DIRS} )
-include_directories( ${PROJECT_SOURCE_DIR}/../OpenCAL/include )
-include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/OpenCL-Utils/include)
+set (OPENCL-UTILS_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/OpenCL-Utils/include")
+set (OPENCAL_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/OpenCAL/include")
 
-MESSAGE( STATUS "opencal includes : "  ${PROJECT_SOURCE_DIR}/../OpenCAL/include )
-MESSAGE( STATUS "opencl includes: " ${OpenCL_INCLUDE_DIRS} )
-MESSAGE( STATUS "opencl includes: " ${OpenCL_LIBRARIES} )
-
-
+include_directories(
+	${OpenCL_INCLUDE_DIRS}
+	${OPENCL-UTILS_INCLUDE_DIR}
+	${OPENCAL_INCLUDE_DIR}
+)
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
-
 
 link_directories(${CMAKE_CURRENT_SOURCE_DIR}/source)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
@@ -42,7 +38,7 @@ file(GLOB SRC
 add_library(opencal-cl STATIC ${SRC})
 
 
-if(${EXAMPLES} STREQUAL "ON")
+if(${BUILD_EXAMPLES} STREQUAL "ON")
         add_subdirectory(examples)
 else()
       	MESSAGE(STATUS "${CMAKE_CURRENT_SOURCE_DIR}/examples EXCLUDED FROM COMPILATION")

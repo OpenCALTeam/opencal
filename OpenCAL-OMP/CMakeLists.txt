@@ -1,9 +1,5 @@
 # opencal/OpenCAL-OMP/CMakeLists.txt
-
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
-
-project(OpenCAL-OMP)
-
 
 
 OPTION (USE_OpenMP "Use OpenMP" ON)
@@ -33,7 +29,7 @@ file(GLOB SRC
 
 add_library(opencal-omp STATIC ${SRC})
 
-if(${EXAMPLES} STREQUAL "ON")
+if(${BUILD_EXAMPLES} STREQUAL "ON")
         add_subdirectory(examples)
 else()
       	MESSAGE(STATUS "${CMAKE_CURRENT_SOURCE_DIR}/examples EXCLUDED FROM COMPILATION")
