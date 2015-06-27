@@ -44,6 +44,10 @@ bin/
 *.sdf
 *.vcxprj*
 
+# Build files
+*/bin/*
+*/build/*
+
 # Debug files
 # *.dSYM/
 
