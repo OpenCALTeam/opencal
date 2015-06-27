@@ -1,4 +1,4 @@
-#include "life3D.h"
+#include "mod2CA3D.h"
 #include <stdio.h>
 #include <stdlib.h>
 #ifdef __APPLE__
