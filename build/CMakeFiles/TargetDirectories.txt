@@ -1,0 +1,15 @@
+C:/Users/Donato/Documents/git/opencal/build/OpenCAL/CMakeFiles/opencal.dir
+C:/Users/Donato/Documents/git/opencal/build/OpenCAL/examples/sciddicaT-unsafe/CMakeFiles/sciddicaT-unsafe.dir
+C:/Users/Donato/Documents/git/opencal/build/OpenCAL/examples/sciddicaS3hex-unsafe-explicit-glut/CMakeFiles/sciddicaS3hex-unsafe-explicit-glut.dir
+C:/Users/Donato/Documents/git/opencal/build/OpenCAL/examples/sciddicaT-activecells-glut/CMakeFiles/sciddicaT-activecells-glut.dir
+C:/Users/Donato/Documents/git/opencal/build/OpenCAL/examples/mod2CA3D-glut/CMakeFiles/mod2CA3D-glut.dir
+C:/Users/Donato/Documents/git/opencal/build/OpenCAL/examples/iso-3src-glut/CMakeFiles/iso-3src-glut.dir
+C:/Users/Donato/Documents/git/opencal/build/OpenCAL/examples/life3D-glut/CMakeFiles/life3D-glut.dir
+C:/Users/Donato/Documents/git/opencal/build/OpenCAL/examples/sciddicaT-unsafe-glut/CMakeFiles/sciddicaT-unsafe-glut.dir
+C:/Users/Donato/Documents/git/opencal/build/CMakeFiles/ALL_BUILD.dir
+C:/Users/Donato/Documents/git/opencal/build/OpenCAL/examples/sciddicaT-glut/CMakeFiles/sciddicaT-glut.dir
+C:/Users/Donato/Documents/git/opencal/build/OpenCAL/examples/life/CMakeFiles/life.dir
+C:/Users/Donato/Documents/git/opencal/build/OpenCAL/examples/sciddicaT/CMakeFiles/sciddicaT.dir
+C:/Users/Donato/Documents/git/opencal/build/CMakeFiles/ZERO_CHECK.dir
+C:/Users/Donato/Documents/git/opencal/build/OpenCAL/examples/sciara-fv2/CMakeFiles/sciara_fv2.dir
+C:/Users/Donato/Documents/git/opencal/build/OpenCAL/examples/sciddicaS3hex-unsafe-glut/CMakeFiles/sciddicaS3hex-unsafe-glut.dir

@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\Donato\Documents\git\opencal\OpenCAL\source\cal2D.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Donato\Documents\git\opencal\OpenCAL\source\cal2DBuffer.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Donato\Documents\git\opencal\OpenCAL\source\cal2DBufferIO.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Donato\Documents\git\opencal\OpenCAL\source\cal2DIO.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Donato\Documents\git\opencal\OpenCAL\source\cal2DReduction.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Donato\Documents\git\opencal\OpenCAL\source\cal2DRun.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Donato\Documents\git\opencal\OpenCAL\source\cal2DUnsafe.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Donato\Documents\git\opencal\OpenCAL\source\cal3D.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Donato\Documents\git\opencal\OpenCAL\source\cal3DBuffer.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Donato\Documents\git\opencal\OpenCAL\source\cal3DBufferIO.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Donato\Documents\git\opencal\OpenCAL\source\cal3DIO.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Donato\Documents\git\opencal\OpenCAL\source\cal3DReduction.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Donato\Documents\git\opencal\OpenCAL\source\cal3DRun.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Donato\Documents\git\opencal\OpenCAL\source\cal3DUnsafe.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="C:\Users\Donato\Documents\git\opencal\OpenCAL\include\cal2D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Donato\Documents\git\opencal\OpenCAL\include\cal2DBuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Donato\Documents\git\opencal\OpenCAL\include\cal2DBufferIO.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Donato\Documents\git\opencal\OpenCAL\include\cal2DIO.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Donato\Documents\git\opencal\OpenCAL\include\cal2DReduction.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Donato\Documents\git\opencal\OpenCAL\include\cal2DRun.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Donato\Documents\git\opencal\OpenCAL\include\cal2DUnsafe.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Donato\Documents\git\opencal\OpenCAL\include\cal3D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Donato\Documents\git\opencal\OpenCAL\include\cal3DBuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Donato\Documents\git\opencal\OpenCAL\include\cal3DBufferIO.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Donato\Documents\git\opencal\OpenCAL\include\cal3DIO.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Donato\Documents\git\opencal\OpenCAL\include\cal3DReduction.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Donato\Documents\git\opencal\OpenCAL\include\cal3DRun.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Donato\Documents\git\opencal\OpenCAL\include\cal3DUnsafe.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Donato\Documents\git\opencal\OpenCAL\include\calCommon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\Donato\Documents\git\opencal\OpenCAL\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{A1CC6940-74C5-4628-843C-697374597DE9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{EC76BF38-7621-4114-BD7F-B85E992DED46}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

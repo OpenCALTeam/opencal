@@ -71,3 +71,4 @@ bin/
 # sciddicaT
 # realSubstate*
 # width_final*
+/OpenCAL/examples/life3D-glut/_CMakeLists.txt
