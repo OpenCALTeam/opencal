@@ -42,6 +42,7 @@ bin/
 *.opensdf
 *.pdb
 *.sdf
+*.vcxprj*
 
 # Debug files
 # *.dSYM/

@@ -1,4 +1,4 @@
-# opencal/OpenCAL/examples/life3D-glut/CMakeLists.txt
+# opencal/OpenCAL/examples/mod2CA3D-glut/CMakeLists.txt
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 
 find_package(OpenGL REQUIRED)

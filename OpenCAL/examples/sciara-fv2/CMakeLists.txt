@@ -1,5 +1,4 @@
 # opencal/OpenCAL/examples/sciara-fv2/CMakeLists.txt
-
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 
 
