@@ -1,10 +1,7 @@
-# opencal/OpenCAL-OMP/examples/sciara-fv2/CMakeLists.txt
-
+# opencal/OpenCAL-OMP/examples/sciddicaT/CMakeLists.txt
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 
-
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
-
 
 link_directories(${CMAKE_CURRENT_SOURCE_DIR}/source)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
@@ -12,12 +9,8 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 LINK_DIRECTORIES(${PROJECT_SOURCE_DIR}/lib)
 
 file(GLOB SRC
-    "include/*.h"
-    "source/*.cpp"
     "source/*.c"
 )
 
-add_executable(sciara_fv2-omp ${SRC})
-target_link_libraries(sciara_fv2-omp opencal-omp)
-
-
+add_executable(sciddicaT-omp ${SRC})
+target_link_libraries(sciddicaT-omp opencal-omp ${CMAKE_THREAD_LIBS_INIT})

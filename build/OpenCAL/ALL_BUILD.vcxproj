@@ -1,0 +1,208 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="MinSizeRel|Win32">
+      <Configuration>MinSizeRel</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="RelWithDebInfo|Win32">
+      <Configuration>RelWithDebInfo</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGUID>{B208A65D-5D3E-4D35-AEF6-489F99B2C5CC}</ProjectGUID>
+    <Keyword>Win32Proj</Keyword>
+    <Platform>Win32</Platform>
+    <ProjectName>ALL_BUILD</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+    <PropertyGroup>
+      <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+      <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+      <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+      <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+      <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\Donato\Documents\git\opencal\OpenCAL\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\Donato\Documents\git\opencal\OpenCAL\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\Donato\Documents\git\opencal\OpenCAL\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\Donato\Documents\git\opencal\OpenCAL\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\Donato\Documents\git\opencal\OpenCAL\CMakeLists.txt">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Building Custom Rule C:/Users/Donato/Documents/git/opencal/OpenCAL/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
+"C:\Program Files (x86)\CMake\bin\cmake.exe" -HC:/Users/Donato/Documents/git/opencal -BC:/Users/Donato/Documents/git/opencal/build --check-stamp-file C:\Users\Donato\Documents\git\opencal\build\OpenCAL\CMakeFiles\generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:/Users/Donato/Documents/git/opencal/OpenCAL/CMakeLists.txt;C:\Users\Donato\Documents\git\opencal\OpenCAL\CMakeLists.txt;C:\Users\Donato\Documents\git\opencal\OpenCAL\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\Users\Donato\Documents\git\opencal\build\OpenCAL\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Building Custom Rule C:/Users/Donato/Documents/git/opencal/OpenCAL/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
+"C:\Program Files (x86)\CMake\bin\cmake.exe" -HC:/Users/Donato/Documents/git/opencal -BC:/Users/Donato/Documents/git/opencal/build --check-stamp-file C:\Users\Donato\Documents\git\opencal\build\OpenCAL\CMakeFiles\generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:/Users/Donato/Documents/git/opencal/OpenCAL/CMakeLists.txt;C:\Users\Donato\Documents\git\opencal\OpenCAL\CMakeLists.txt;C:\Users\Donato\Documents\git\opencal\OpenCAL\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\Users\Donato\Documents\git\opencal\build\OpenCAL\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Building Custom Rule C:/Users/Donato/Documents/git/opencal/OpenCAL/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">setlocal
+"C:\Program Files (x86)\CMake\bin\cmake.exe" -HC:/Users/Donato/Documents/git/opencal -BC:/Users/Donato/Documents/git/opencal/build --check-stamp-file C:\Users\Donato\Documents\git\opencal\build\OpenCAL\CMakeFiles\generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">C:/Users/Donato/Documents/git/opencal/OpenCAL/CMakeLists.txt;C:\Users\Donato\Documents\git\opencal\OpenCAL\CMakeLists.txt;C:\Users\Donato\Documents\git\opencal\OpenCAL\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">C:\Users\Donato\Documents\git\opencal\build\OpenCAL\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Building Custom Rule C:/Users/Donato/Documents/git/opencal/OpenCAL/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">setlocal
+"C:\Program Files (x86)\CMake\bin\cmake.exe" -HC:/Users/Donato/Documents/git/opencal -BC:/Users/Donato/Documents/git/opencal/build --check-stamp-file C:\Users\Donato\Documents\git\opencal\build\OpenCAL\CMakeFiles\generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">C:/Users/Donato/Documents/git/opencal/OpenCAL/CMakeLists.txt;C:\Users\Donato\Documents\git\opencal\OpenCAL\CMakeLists.txt;C:\Users\Donato\Documents\git\opencal\OpenCAL\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">C:\Users\Donato\Documents\git\opencal\build\OpenCAL\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="C:/Users/Donato/Documents/git/opencal/build/OpenCAL/examples/iso-3src-glut/iso-3src-glut.vcxproj">
+      <Project>4B05F1B9-20F9-4925-A2F8-BFE48A4881D8</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/Users/Donato/Documents/git/opencal/build/OpenCAL/examples/life/life.vcxproj">
+      <Project>4855EEDE-CBA2-4B68-B47C-124050C8780F</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/Users/Donato/Documents/git/opencal/build/OpenCAL/examples/life3D-glut/life3D-glut.vcxproj">
+      <Project>6B0423A6-7FA3-467C-A72F-CB7BE009BACE</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/Users/Donato/Documents/git/opencal/build/OpenCAL/examples/mod2CA3D-glut/mod2CA3D-glut.vcxproj">
+      <Project>E10F6E8C-350E-4465-8DBD-79D300BF31F1</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/Users/Donato/Documents/git/opencal/build/OpenCAL/opencal.vcxproj">
+      <Project>1978043F-0B00-4FFE-B3F8-FE2D59ED890A</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/Users/Donato/Documents/git/opencal/build/OpenCAL/examples/sciara-fv2/sciara_fv2.vcxproj">
+      <Project>6298A4CD-12B1-4821-8A9F-EA9E9C894912</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/Users/Donato/Documents/git/opencal/build/OpenCAL/examples/sciddicaS3hex-unsafe-explicit-glut/sciddicaS3hex-unsafe-explicit-glut.vcxproj">
+      <Project>8BAE1CA5-4486-47FE-803C-5AC161473845</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/Users/Donato/Documents/git/opencal/build/OpenCAL/examples/sciddicaS3hex-unsafe-glut/sciddicaS3hex-unsafe-glut.vcxproj">
+      <Project>494B9B11-DCD3-46B7-9166-2792F39648CA</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/Users/Donato/Documents/git/opencal/build/OpenCAL/examples/sciddicaT/sciddicaT.vcxproj">
+      <Project>45C90071-C19A-4348-BA4E-6C6303AFAE75</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/Users/Donato/Documents/git/opencal/build/OpenCAL/examples/sciddicaT-activecells-glut/sciddicaT-activecells-glut.vcxproj">
+      <Project>E825B037-7FFB-44BC-954B-AE76C9A5070C</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/Users/Donato/Documents/git/opencal/build/OpenCAL/examples/sciddicaT-glut/sciddicaT-glut.vcxproj">
+      <Project>1EB72C41-0C76-4DAE-8839-6D4BB8623871</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/Users/Donato/Documents/git/opencal/build/OpenCAL/examples/sciddicaT-unsafe/sciddicaT-unsafe.vcxproj">
+      <Project>02C03FB4-6145-4A61-82D3-6A24F375BC97</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/Users/Donato/Documents/git/opencal/build/OpenCAL/examples/sciddicaT-unsafe-glut/sciddicaT-unsafe-glut.vcxproj">
+      <Project>8EAC6A5F-8261-47AD-80C4-3CB68E01971E</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

@@ -1,0 +1,6 @@
+# CMake generation dependency list for this directory.
+C:/Users/Donato/Documents/git/opencal/OpenCAL-GL/CMakeLists.txt
+C:/Program Files (x86)/CMake/share/cmake-3.2/Modules/FindOpenGL.cmake
+C:/Program Files (x86)/CMake/share/cmake-3.2/Modules/FindPackageHandleStandardArgs.cmake
+C:/Program Files (x86)/CMake/share/cmake-3.2/Modules/FindPackageMessage.cmake
+C:/Program Files (x86)/CMake/share/cmake-3.2/Modules/CMakeParseArguments.cmake
