@@ -41,9 +41,6 @@ struct CALActiveCells3D {
 	int size_current;					//!< Number of active cells in the current step.
 };
 
-/*! \brief Fake function pointer type.
-*/
-typedef void (* CALCallbackFunc3D)(struct CALModel3D* ca3D, int i, int j, int k);
 
 
 /*! \brief Structure defining the 3D cellular automaton.
@@ -72,6 +69,9 @@ struct CALModel3D {
 	int num_of_elementary_processes; //!< Number of function pointers to the transition functions's elementary processes callbacks.
 };
 
+/*! \brief Fake function pointer type.
+*/
+typedef void (* CALCallbackFunc3D)(struct CALModel3D* ca3D, int i, int j, int k);
 
 
 

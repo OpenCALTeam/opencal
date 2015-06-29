@@ -17,6 +17,6 @@ file(GLOB SRC
 )
 
 add_executable(calomp_sciara_fv2 ${SRC})
-target_link_libraries(calomp_sciara_fv2 opencal-omp)
+target_link_libraries(calomp_sciara_fv2 opencal-omp m)
 
 
