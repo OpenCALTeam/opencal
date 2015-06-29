@@ -598,7 +598,7 @@ struct CALSubstate2Dr* calAddSingleLayerSubstate2Dr(struct CALModel2D* ca2D){
 
 
 CALCallbackFunc2D* calAddElementaryProcess2D(struct CALModel2D* ca2D,	//!< Pointer to the cellular automaton structure.
-											 void (* elementary_process)(struct CALModel2D* ca2D, int i, int j)
+											 CALCallbackFunc2D elementary_process
 											 )
 {
 	void(** callbacks_temp)(struct CALModel2D* ca2D, int i, int j) = ca2D->elementary_processes;

@@ -465,7 +465,7 @@ struct CALSubstate3Dr* calAddSingleLayerSubstate3Dr(struct CALModel3D* ca3D){
 
 
 CALCallbackFunc3D* calAddElementaryProcess3D(struct CALModel3D* ca3D,	//!< Pointer to the cellular automaton structure.
-											 void (* elementary_process)(struct CALModel3D* ca3D, int i, int j, int k)
+											 CALCallbackFunc3D elementary_process
 											 )
 {
 	void(** callbacks_temp)(struct CALModel3D* ca3D, int i, int j, int k) = ca3D->elementary_processes;

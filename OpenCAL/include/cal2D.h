@@ -29,10 +29,15 @@ enum CALNeighborhood2D {
 	CAL_VON_NEUMANN_NEIGHBORHOOD_2D,	//!< Enumerator used for specifying the 2D von Neumann neighbourhood; no calls to calAddNeighbor2D are needed.
 	CAL_MOORE_NEIGHBORHOOD_2D,			//!< Enumerator used for specifying the 2D Moore neighbourhood; no calls to calAddNeighbor2D are needed.
 	CAL_HEXAGONAL_NEIGHBORHOOD_2D,		//!< Enumerator used for specifying the 2D Moore Hexagonal neighbourhood; no calls to calAddNeighbor2D are needed.
-	CAL_HEXAGONAL_NEIGHBORHOOD_ALT_2D	//!< Enumerator used for specifying the alternative 90° rotated 2D Moore Hexagonal neighbourhood; no calls to calAddNeighbor2D are needed.
+	CAL_HEXAGONAL_NEIGHBORHOOD_ALT_2D	//!< Enumerator used for specifying the alternative 90ï¿½ rotated 2D Moore Hexagonal neighbourhood; no calls to calAddNeighbor2D are needed.
 };
 
 #define CAL_HEXAGONAL_SHIFT 7			//<! Shif used for accessing to the correct neighbor in case hexagonal heighbourhood and odd column cell
+
+/*! \brief Fake function pointer type.
+*/
+typedef void (* CALCallbackFunc2D)(struct CALModel2D* ca2D, int i, int j);
+
 
 
 /*! \brief Active cells structure.
@@ -72,10 +77,6 @@ struct CALModel2D {
 };
 
 
-
-/*! \brief Fake function pointer type.
-*/
-typedef void (* CALCallbackFunc2D)(struct CALModel2D* ca2D, int i, int j);
 
 
 
@@ -185,7 +186,7 @@ struct CALSubstate2Dr* calAddSingleLayerSubstate2Dr(struct CALModel2D* ca2D	//!<
 	Note that the function calGlobalTransitionFunction2D calls a substates' update after each elementary process.
 */
 CALCallbackFunc2D* calAddElementaryProcess2D(struct CALModel2D* ca2D,	//!< Pointer to the cellular automaton structure.
-											 void (* elementary_process)(struct CALModel2D* ca2D, int i, int j) //!< Pointer to a transition function's elementary process.
+											CALCallbackFunc2D elementary_process //!< Pointer to a transition function's elementary process.
 											 );
 
 
@@ -260,7 +261,7 @@ void calUpdateSubstate2Dr(struct CALModel2D* ca2D,	//!< Pointer to the cellular 
 /*! \brief Apply an elementary process to all the cellular space.
 */
 void calApplyElementaryProcess2D(struct CALModel2D* ca2D,	//!< Pointer to the cellular automaton structure.
-											   void (* elementary_process)(struct CALModel2D* ca2D, int i, int j) //!< Pointer to a transition function's elementary process.
+											  CALCallbackFunc2D elementary_process //!< Pointer to a transition function's elementary process.
 											   );
 
 
