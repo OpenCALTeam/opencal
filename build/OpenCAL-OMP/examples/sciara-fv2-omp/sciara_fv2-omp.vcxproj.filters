@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\Donato\Documents\git\opencal\OpenCAL-OMP\examples\sciara-fv2-omp\source\configurationPathLib.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Donato\Documents\git\opencal\OpenCAL-OMP\examples\sciara-fv2-omp\source\GISInfo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Donato\Documents\git\opencal\OpenCAL-OMP\examples\sciara-fv2-omp\source\io.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Donato\Documents\git\opencal\OpenCAL-OMP\examples\sciara-fv2-omp\source\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Donato\Documents\git\opencal\OpenCAL-OMP\examples\sciara-fv2-omp\source\Sciara.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Donato\Documents\git\opencal\OpenCAL-OMP\examples\sciara-fv2-omp\source\vent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="C:\Users\Donato\Documents\git\opencal\OpenCAL-OMP\examples\sciara-fv2-omp\include\configurationPathLib.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Donato\Documents\git\opencal\OpenCAL-OMP\examples\sciara-fv2-omp\include\GISInfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Donato\Documents\git\opencal\OpenCAL-OMP\examples\sciara-fv2-omp\include\io.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Donato\Documents\git\opencal\OpenCAL-OMP\examples\sciara-fv2-omp\include\Sciara.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Donato\Documents\git\opencal\OpenCAL-OMP\examples\sciara-fv2-omp\include\vent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\Donato\Documents\git\opencal\OpenCAL-OMP\examples\sciara-fv2-omp\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{BA33DC12-3870-410C-A8A4-13A3E669152C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{705F5B50-E80A-4EAC-99BC-70F3F5A795FA}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

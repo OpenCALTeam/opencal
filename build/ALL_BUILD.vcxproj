@@ -1,0 +1,244 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="MinSizeRel|Win32">
+      <Configuration>MinSizeRel</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="RelWithDebInfo|Win32">
+      <Configuration>RelWithDebInfo</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGUID>{37FAFAD0-F2E2-46BC-9B9E-6947784977DF}</ProjectGUID>
+    <Keyword>Win32Proj</Keyword>
+    <Platform>Win32</Platform>
+    <ProjectName>ALL_BUILD</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+    <PropertyGroup>
+      <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+      <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+      <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+      <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+      <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Midl>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Midl>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">
+    <Midl>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">
+    <Midl>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\Donato\Documents\git\opencal\CMakeLists.txt">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Building Custom Rule C:/Users/Donato/Documents/git/opencal/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
+"C:\Program Files (x86)\CMake\bin\cmake.exe" -HC:/Users/Donato/Documents/git/opencal -BC:/Users/Donato/Documents/git/opencal/build --check-stamp-file C:\Users\Donato\Documents\git\opencal\build\CMakeFiles\generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:/Users/Donato/Documents/git/opencal/CMakeLists.txt;C:\Users\Donato\Documents\git\opencal\CMakeLists.txt;C:\Users\Donato\Documents\git\opencal\build\CMakeFiles\3.2.2\CMakeSystem.cmake;C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\CMakeSystemSpecificInitialize.cmake;C:\Users\Donato\Documents\git\opencal\build\CMakeFiles\3.2.2\CMakeCCompiler.cmake;C:\Users\Donato\Documents\git\opencal\build\CMakeFiles\3.2.2\CMakeCXXCompiler.cmake;C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\CMakeGenericSystem.cmake;C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\Platform\Windows.cmake;C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\Platform\WindowsPaths.cmake;C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\CMakeCInformation.cmake;C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\Platform\Windows-MSVC.cmake;C:\Users\Donato\Documents\git\opencal\build\CMakeFiles\3.2.2\CMakeRCCompiler.cmake;C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\CMakeRCInformation.cmake;C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\CMakeCXXInformation.cmake;C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\Platform\Windows-MSVC.cmake;C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\CMakeCommonLanguageInclude.cmake;C:\Users\Donato\Documents\git\opencal\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\Users\Donato\Documents\git\opencal\build\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Building Custom Rule C:/Users/Donato/Documents/git/opencal/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
+"C:\Program Files (x86)\CMake\bin\cmake.exe" -HC:/Users/Donato/Documents/git/opencal -BC:/Users/Donato/Documents/git/opencal/build --check-stamp-file C:\Users\Donato\Documents\git\opencal\build\CMakeFiles\generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:/Users/Donato/Documents/git/opencal/CMakeLists.txt;C:\Users\Donato\Documents\git\opencal\CMakeLists.txt;C:\Users\Donato\Documents\git\opencal\build\CMakeFiles\3.2.2\CMakeSystem.cmake;C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\CMakeSystemSpecificInitialize.cmake;C:\Users\Donato\Documents\git\opencal\build\CMakeFiles\3.2.2\CMakeCCompiler.cmake;C:\Users\Donato\Documents\git\opencal\build\CMakeFiles\3.2.2\CMakeCXXCompiler.cmake;C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\CMakeGenericSystem.cmake;C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\Platform\Windows.cmake;C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\Platform\WindowsPaths.cmake;C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\CMakeCInformation.cmake;C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\Platform\Windows-MSVC.cmake;C:\Users\Donato\Documents\git\opencal\build\CMakeFiles\3.2.2\CMakeRCCompiler.cmake;C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\CMakeRCInformation.cmake;C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\CMakeCXXInformation.cmake;C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\Platform\Windows-MSVC.cmake;C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\CMakeCommonLanguageInclude.cmake;C:\Users\Donato\Documents\git\opencal\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\Users\Donato\Documents\git\opencal\build\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Building Custom Rule C:/Users/Donato/Documents/git/opencal/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">setlocal
+"C:\Program Files (x86)\CMake\bin\cmake.exe" -HC:/Users/Donato/Documents/git/opencal -BC:/Users/Donato/Documents/git/opencal/build --check-stamp-file C:\Users\Donato\Documents\git\opencal\build\CMakeFiles\generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">C:/Users/Donato/Documents/git/opencal/CMakeLists.txt;C:\Users\Donato\Documents\git\opencal\CMakeLists.txt;C:\Users\Donato\Documents\git\opencal\build\CMakeFiles\3.2.2\CMakeSystem.cmake;C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\CMakeSystemSpecificInitialize.cmake;C:\Users\Donato\Documents\git\opencal\build\CMakeFiles\3.2.2\CMakeCCompiler.cmake;C:\Users\Donato\Documents\git\opencal\build\CMakeFiles\3.2.2\CMakeCXXCompiler.cmake;C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\CMakeGenericSystem.cmake;C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\Platform\Windows.cmake;C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\Platform\WindowsPaths.cmake;C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\CMakeCInformation.cmake;C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\Platform\Windows-MSVC.cmake;C:\Users\Donato\Documents\git\opencal\build\CMakeFiles\3.2.2\CMakeRCCompiler.cmake;C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\CMakeRCInformation.cmake;C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\CMakeCXXInformation.cmake;C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\Platform\Windows-MSVC.cmake;C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\CMakeCommonLanguageInclude.cmake;C:\Users\Donato\Documents\git\opencal\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">C:\Users\Donato\Documents\git\opencal\build\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Building Custom Rule C:/Users/Donato/Documents/git/opencal/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">setlocal
+"C:\Program Files (x86)\CMake\bin\cmake.exe" -HC:/Users/Donato/Documents/git/opencal -BC:/Users/Donato/Documents/git/opencal/build --check-stamp-file C:\Users\Donato\Documents\git\opencal\build\CMakeFiles\generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">C:/Users/Donato/Documents/git/opencal/CMakeLists.txt;C:\Users\Donato\Documents\git\opencal\CMakeLists.txt;C:\Users\Donato\Documents\git\opencal\build\CMakeFiles\3.2.2\CMakeSystem.cmake;C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\CMakeSystemSpecificInitialize.cmake;C:\Users\Donato\Documents\git\opencal\build\CMakeFiles\3.2.2\CMakeCCompiler.cmake;C:\Users\Donato\Documents\git\opencal\build\CMakeFiles\3.2.2\CMakeCXXCompiler.cmake;C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\CMakeGenericSystem.cmake;C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\Platform\Windows.cmake;C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\Platform\WindowsPaths.cmake;C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\CMakeCInformation.cmake;C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\Platform\Windows-MSVC.cmake;C:\Users\Donato\Documents\git\opencal\build\CMakeFiles\3.2.2\CMakeRCCompiler.cmake;C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\CMakeRCInformation.cmake;C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\CMakeCXXInformation.cmake;C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\Platform\Windows-MSVC.cmake;C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\CMakeCommonLanguageInclude.cmake;C:\Users\Donato\Documents\git\opencal\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">C:\Users\Donato\Documents\git\opencal\build\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="C:/Users/Donato/Documents/git/opencal/build/OpenCAL-GL/examples/ForestInsect-calgl/ForestInsect-calgl.vcxproj">
+      <Project>8590E3F3-7052-424C-B74B-CF2EF97C5165</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/Users/Donato/Documents/git/opencal/build/ZERO_CHECK.vcxproj">
+      <Project>62548F8D-C49D-49F5-9778-825564453811</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/Users/Donato/Documents/git/opencal/build/OpenCAL-CL/examples/calcl_sciddicaT/calcl_sciddicaT.vcxproj">
+      <Project>D8642542-2C17-4DAB-8168-9A49D9C5B948</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/Users/Donato/Documents/git/opencal/build/OpenCAL/examples/iso-3src-glut/iso-3src-glut.vcxproj">
+      <Project>BBBA1333-4DBE-4700-9440-7DBC3B0B3658</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/Users/Donato/Documents/git/opencal/build/OpenCAL/examples/life/life.vcxproj">
+      <Project>8F77CBB2-7787-4C0A-8EC1-BA344DE83763</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/Users/Donato/Documents/git/opencal/build/OpenCAL-GL/examples/life3D-calgl/life3D-calgl.vcxproj">
+      <Project>CFD1988B-8B67-488E-AD90-C297B1484D0D</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/Users/Donato/Documents/git/opencal/build/OpenCAL/examples/life3D-glut/life3D-glut.vcxproj">
+      <Project>EE6394C2-94B5-4696-B1E0-BC0EA3B9A72D</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/Users/Donato/Documents/git/opencal/build/OpenCAL-OMP/examples/mbusu-glut/mbusu-glut-omp.vcxproj">
+      <Project>EDDA9E50-7002-4204-A535-4EE9584E0C1A</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/Users/Donato/Documents/git/opencal/build/OpenCAL/examples/mod2CA3D-glut/mod2CA3D-glut.vcxproj">
+      <Project>69BB3327-3109-4B8F-BD68-48260EDBDC40</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/Users/Donato/Documents/git/opencal/build/OpenCAL/opencal.vcxproj">
+      <Project>95605083-94F7-42B2-96F6-ABED8DF3B5C4</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/Users/Donato/Documents/git/opencal/build/OpenCAL-CL/opencal-cl.vcxproj">
+      <Project>DD35ACA8-2CA4-46CE-8368-4B87B190017F</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/Users/Donato/Documents/git/opencal/build/OpenCAL-GL/opencal-gl.vcxproj">
+      <Project>E2A6D2B6-36FE-4038-804B-FE4225E6D66E</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/Users/Donato/Documents/git/opencal/build/OpenCAL-OMP/opencal-omp.vcxproj">
+      <Project>5D183031-B2E0-447B-8C4F-7909CB4589AE</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/Users/Donato/Documents/git/opencal/build/OpenCAL-CL/OpenCL-Utils/opencl_utils.vcxproj">
+      <Project>61545531-09DB-4F11-89AB-4C7CD97F5103</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/Users/Donato/Documents/git/opencal/build/OpenCAL/examples/sciara-fv2/sciara_fv2.vcxproj">
+      <Project>2ADF7B5C-18F5-427D-AF34-63AA322820D9</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/Users/Donato/Documents/git/opencal/build/OpenCAL-OMP/examples/sciara-fv2-omp/sciara_fv2-omp.vcxproj">
+      <Project>0653722E-67A3-4FB4-AECA-13759AAFB62B</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/Users/Donato/Documents/git/opencal/build/OpenCAL/examples/sciddicaS3hex-unsafe-explicit-glut/sciddicaS3hex-unsafe-explicit-glut.vcxproj">
+      <Project>199CE19D-E6C7-4D4C-9684-45CCD8733BA7</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/Users/Donato/Documents/git/opencal/build/OpenCAL/examples/sciddicaS3hex-unsafe-glut/sciddicaS3hex-unsafe-glut.vcxproj">
+      <Project>D97D9BF2-E82D-4FDA-88B5-7C36DED31C4C</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/Users/Donato/Documents/git/opencal/build/OpenCAL/examples/sciddicaT/sciddicaT.vcxproj">
+      <Project>A8F971AC-CCDE-41DB-A4DD-0273A5A5AC76</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/Users/Donato/Documents/git/opencal/build/OpenCAL/examples/sciddicaT-activecells-glut/sciddicaT-activecells-glut.vcxproj">
+      <Project>C3A752B2-FECB-4413-BF25-EE5B5C6C3F21</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/Users/Donato/Documents/git/opencal/build/OpenCAL-GL/examples/sciddicaT-calgl/sciddicaT-calgl.vcxproj">
+      <Project>133D71D8-1C58-4EE9-A99F-486E694D6A8A</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/Users/Donato/Documents/git/opencal/build/OpenCAL/examples/sciddicaT-glut/sciddicaT-glut.vcxproj">
+      <Project>D660AA19-0136-4AA4-B84E-ADA9DF435C54</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/Users/Donato/Documents/git/opencal/build/OpenCAL-OMP/examples/sciddicaT-omp/sciddicaT-omp.vcxproj">
+      <Project>8ABD6457-CDE4-4AF9-AEF3-3892EA889A3F</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/Users/Donato/Documents/git/opencal/build/OpenCAL/examples/sciddicaT-unsafe/sciddicaT-unsafe.vcxproj">
+      <Project>82BDEB3A-01AE-400F-9942-78E853D28D4E</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/Users/Donato/Documents/git/opencal/build/OpenCAL/examples/sciddicaT-unsafe-glut/sciddicaT-unsafe-glut.vcxproj">
+      <Project>1F9143C0-3C9C-4ADF-A28C-57BCCCA50076</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
