@@ -46,7 +46,9 @@ bin/
 
 # Build files
 */bin/*
+*bin*
 */build/*
+*build*
 
 # Debug files
 # *.dSYM/
