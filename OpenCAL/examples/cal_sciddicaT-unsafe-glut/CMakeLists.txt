@@ -1,4 +1,4 @@
-# opencal/OpenCAL/examples/sciddicaT-activecells-glut/CMakeLists.txt
+# opencal/OpenCAL/examples/sciddicaT-unsafe-glut/CMakeLists.txt
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 
 find_package(OpenGL REQUIRED)
@@ -29,7 +29,7 @@ file(GLOB SRC
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 
 
-add_executable(sciddicaT-activecells-glut ${SRC})
-target_link_libraries(sciddicaT-activecells-glut opencal ${OPENGL_LIBRARIES} ${GLUT_glut_LIBRARY} )
+add_executable(cal_sciddicaT-unsafe-glut ${SRC})
+target_link_libraries(cal_sciddicaT-unsafe-glut -lm opencal ${OPENGL_LIBRARIES} ${GLUT_glut_LIBRARY} )
 
 

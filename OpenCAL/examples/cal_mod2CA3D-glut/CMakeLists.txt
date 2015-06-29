@@ -28,7 +28,7 @@ file(GLOB SRC
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 
-add_executable(mod2CA3D-glut ${SRC})
-target_link_libraries(mod2CA3D-glut opencal ${OPENGL_LIBRARIES} ${GLUT_glut_LIBRARY} )
+add_executable(cal_mod2CA3D-glut ${SRC})
+target_link_libraries(cal_mod2CA3D-glut opencal ${OPENGL_LIBRARIES} ${GLUT_glut_LIBRARY} )
 
 

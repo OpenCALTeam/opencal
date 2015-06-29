@@ -1,4 +1,4 @@
-# opencal/OpenCAL/examples/life/CMakeLists.txt
+# opencal/OpenCAL/examples/sciddicaT-unsafe/CMakeLists.txt
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 
 
@@ -16,7 +16,7 @@ file(GLOB SRC
     "source/*.c"
 )
 
-add_executable(life ${SRC})
-target_link_libraries(life opencal)
+add_executable(cal_sciddicaT-unsafe ${SRC})
+target_link_libraries(cal_sciddicaT-unsafe opencal)
 
 

@@ -1,5 +1,6 @@
-# opencal/OpenCAL/examples/sciddicaT-glut/CMakeLists.txt
+# opencal/OpenCAL/examples/iso-3src-glut/CMakeLists.txt
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
+
 
 find_package(OpenGL REQUIRED)
 if (${USE_EXTERN_FREEGLUT_STATIC} STREQUAL "ON")
@@ -10,14 +11,16 @@ else()
 	find_package(GLUT REQUIRED)
 endif()
 
-link_directories(${CMAKE_CURRENT_SOURCE_DIR}/source)
+link_directories(
+	${PROJECT_SOURCE_DIR}/lib
+	${CMAKE_CURRENT_SOURCE_DIR}/source
+)
+
 include_directories(
 	${CMAKE_CURRENT_SOURCE_DIR}/include
 	${OPENGL_INCLUDE_DIRS}
 	${GLUT_INCLUDE_DIR}
 )
-
-LINK_DIRECTORIES(${PROJECT_SOURCE_DIR}/lib)
 
 file(GLOB SRC
     "include/*.h"
@@ -25,11 +28,9 @@ file(GLOB SRC
     "source/*.c"
 )
 
-
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 
-
-add_executable(sciddicaT-glut ${SRC})
-target_link_libraries(sciddicaT-glut opencal ${OPENGL_LIBRARIES} ${GLUT_glut_LIBRARY} )
+add_executable(cal_iso-3src-glut ${SRC})
+target_link_libraries(cal_iso-3src-glut opencal ${OPENGL_LIBRARIES} ${GLUT_glut_LIBRARY} )
 
 

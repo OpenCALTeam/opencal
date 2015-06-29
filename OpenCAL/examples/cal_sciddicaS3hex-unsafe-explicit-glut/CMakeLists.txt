@@ -29,7 +29,7 @@ file(GLOB SRC
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 
 
-add_executable(sciddicaS3hex-unsafe-explicit-glut ${SRC})
-target_link_libraries(sciddicaS3hex-unsafe-explicit-glut -lm opencal ${OPENGL_LIBRARIES} ${GLUT_glut_LIBRARY} )
+add_executable(cal_sciddicaS3hex-unsafe-explicit-glut ${SRC})
+target_link_libraries(cal_sciddicaS3hex-unsafe-explicit-glut -lm opencal ${OPENGL_LIBRARIES} ${GLUT_glut_LIBRARY} )
 
 

@@ -1,4 +1,4 @@
-# opencal/OpenCAL/examples/life3D-glut/CMakeLists.txt
+# opencal/OpenCAL/examples/sciddicaT-glut/CMakeLists.txt
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 
 find_package(OpenGL REQUIRED)
@@ -28,7 +28,8 @@ file(GLOB SRC
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 
-add_executable(life3D-glut ${SRC})
-target_link_libraries(life3D-glut opencal ${OPENGL_LIBRARIES} ${GLUT_glut_LIBRARY} )
+
+add_executable(cal_sciddicaT-glut ${SRC})
+target_link_libraries(cal_sciddicaT-glut opencal ${OPENGL_LIBRARIES} ${GLUT_glut_LIBRARY} )
 
 
