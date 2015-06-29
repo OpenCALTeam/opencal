@@ -16,7 +16,7 @@ file(GLOB SRC
     "source/*.c"
 )
 
-add_executable(sciara_fv2-omp ${SRC})
-target_link_libraries(sciara_fv2-omp opencal-omp)
+add_executable(calomp_sciara_fv2 ${SRC})
+target_link_libraries(calomp_sciara_fv2 opencal-omp)
 
 

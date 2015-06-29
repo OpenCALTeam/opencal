@@ -32,7 +32,7 @@ file(GLOB SRC
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 
-add_executable(mbusu-glut-omp ${SRC})
-target_link_libraries(mbusu-glut-omp -lm opencal-omp ${OPENGL_LIBRARIES} ${GLUT_glut_LIBRARY} ${CMAKE_THREAD_LIBS_INIT})
+add_executable(calomp_mbusu-glut ${SRC})
+target_link_libraries(calomp_mbusu-glut -lm opencal-omp ${OPENGL_LIBRARIES} ${GLUT_glut_LIBRARY} ${CMAKE_THREAD_LIBS_INIT})
 
 

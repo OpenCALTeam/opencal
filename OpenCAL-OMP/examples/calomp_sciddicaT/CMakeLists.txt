@@ -12,5 +12,5 @@ file(GLOB SRC
     "source/*.c"
 )
 
-add_executable(sciddicaT-omp ${SRC})
-target_link_libraries(sciddicaT-omp opencal-omp ${CMAKE_THREAD_LIBS_INIT})
+add_executable(calomp_sciddicaT ${SRC})
+target_link_libraries(calomp_sciddicaT opencal-omp ${CMAKE_THREAD_LIBS_INIT})
