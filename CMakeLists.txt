@@ -12,8 +12,11 @@ option(BUILD_EXAMPLES       "Build the examples for each OpenCAL version"       
 option(BUILD_DOCUMENTATION  "Build the HTML based API documentation (requires Doxygen)"             OFF)
 
 if (WIN32)
-	OPTION(USE_EXTERN_FREEGLUT_STATIC "Link the freeglut Win32 lib, included in the extern directory, statically (set to ON only if you use MS Visual Studio)" ON)
-	OPTION(USE_EXTERN_PTW32_STATIC    "Link the pthread Win32 lib, included in the extern directory, statically (set to ON only if you use MS Visual Studio)"  ON)	
+	OPTION(USE_EXTERN_FREEGLUT_STATIC "Link the freeglut Win32 lib, included in the extern directory, statically (set to ON only if you use MS Visual Studio)" ON )
+	OPTION(USE_EXTERN_PTW32_STATIC    "Link the pthread Win32 lib, included in the extern directory, statically (set to ON only if you use MS Visual Studio)"  ON )
+else()
+	OPTION(USE_EXTERN_FREEGLUT_STATIC "Link the freeglut Win32 lib, included in the extern directory, statically (set to ON only if you use MS Visual Studio)" OFF)
+	OPTION(USE_EXTERN_PTW32_STATIC    "Link the pthread Win32 lib, included in the extern directory, statically (set to ON only if you use MS Visual Studio)"  OFF)
 endif()
 
 
