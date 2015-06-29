@@ -1,8 +1,5 @@
 # opencal/OpenCAL/CMakeLists.txt
-
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
-
-project(OpenCAL)
 
 # add a target to generate API documentation with Doxygen
 if(BUILD_DOCUMENTATION)
