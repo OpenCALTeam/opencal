@@ -50,10 +50,10 @@ file(GLOB SRC
 )
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
-add_executable(life3D-calgl ${SRC})
+add_executable(calgl_life3D ${SRC})
 
 if(WIN32)
-  target_link_libraries(life3D-calgl opencal-gl opencal ${OPENGL_LIBRARIES} ${GLUT_glut_LIBRARY} ${CMAKE_THREAD_LIBS_INIT} ${PTW32_ptw32_LIBRARY})
+  target_link_libraries(calgl_life3D opencal-gl opencal ${OPENGL_LIBRARIES} ${GLUT_glut_LIBRARY} ${CMAKE_THREAD_LIBS_INIT} ${PTW32_ptw32_LIBRARY})
 else(WIN32)
-  target_link_libraries(life3D-calgl opencal-gl opencal ${OPENGL_LIBRARIES} ${GLUT_glut_LIBRARY} ${CMAKE_THREAD_LIBS_INIT} -lm)
+  target_link_libraries(calgl_life3D opencal-gl opencal ${OPENGL_LIBRARIES} ${GLUT_glut_LIBRARY} ${CMAKE_THREAD_LIBS_INIT} -lm)
 endif(WIN32)

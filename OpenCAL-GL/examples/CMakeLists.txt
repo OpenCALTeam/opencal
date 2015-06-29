@@ -3,6 +3,26 @@
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 
 
-add_subdirectory(life3D-calgl)
-add_subdirectory(sciddicaT-calgl)
-add_subdirectory(ForestInsect-calgl)
+MACRO(SUBDIRLIST result curdir)
+  FILE(GLOB children RELATIVE ${curdir} ${curdir}/*)
+  SET(dirlist "")
+  FOREACH(child ${children})
+    IF(IS_DIRECTORY ${curdir}/${child})
+        LIST(APPEND dirlist ${child})
+    ENDIF()
+  ENDFOREACH()
+  SET(${result} ${dirlist})
+ENDMACRO()
+
+SUBDIRLIST(SUBDIRS ${CMAKE_CURRENT_SOURCE_DIR})
+
+#add all subdirectory 
+FOREACH(subdir ${SUBDIRS})
+    ADD_SUBDIRECTORY(${subdir})
+ENDFOREACH()
+
+
+#add_subdirectory(life3D-calgl)
+#add_subdirectory(sciddicaT-calgl)
+#add_subdirectory(ForestInsect-calgl)
+

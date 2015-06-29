@@ -1,4 +1,4 @@
-# opencal/OpenCAL-GL/examples/sciddicaT-calgl/CMakeLists.txt
+# opencal/OpenCAL-GL/examples/ForestInsect-calgl/CMakeLists.txt
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 
 
@@ -51,11 +51,9 @@ file(GLOB SRC
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 
-add_executable(sciddicaT-calgl ${SRC})
-
+add_executable(calgl_forestInsect ${SRC})
 if(WIN32)
-  target_link_libraries(sciddicaT-calgl opencal-gl opencal ${OPENGL_LIBRARIES} ${GLUT_glut_LIBRARY} ${PTW32_ptw32_LIBRARY})
+	target_link_libraries(calgl_forestInsect opencal-gl opencal ${OPENGL_LIBRARIES} ${GLUT_glut_LIBRARY}  ${PTW32_ptw32_LIBRARY})
 else()
-  target_link_libraries(sciddicaT-calgl -lm opencal-gl opencal ${OPENGL_LIBRARIES} ${GLUT_glut_LIBRARY} ${CMAKE_THREAD_LIBS_INIT})
+	target_link_libraries(calgl_forestInsect -lm opencal-gl opencal ${OPENGL_LIBRARIES} ${GLUT_glut_LIBRARY} ${CMAKE_THREAD_LIBS_INIT})
 endif()
-
