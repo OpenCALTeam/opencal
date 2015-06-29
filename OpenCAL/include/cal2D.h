@@ -34,9 +34,6 @@ enum CALNeighborhood2D {
 
 #define CAL_HEXAGONAL_SHIFT 7			//<! Shif used for accessing to the correct neighbor in case hexagonal heighbourhood and odd column cell
 
-/*! \brief Fake function pointer type.
-*/
-typedef void (* CALCallbackFunc2D)(struct CALModel2D* ca2D, int i, int j);
 
 
 
@@ -78,6 +75,9 @@ struct CALModel2D {
 
 
 
+/*! \brief Fake function pointer type.
+*/
+typedef void (* CALCallbackFunc2D)(struct CALModel2D* ca2D, int i, int j);
 
 
 /******************************************************************************
