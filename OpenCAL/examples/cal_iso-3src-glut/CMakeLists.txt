@@ -31,6 +31,6 @@ file(GLOB SRC
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 
 add_executable(cal_iso-3src-glut ${SRC})
-target_link_libraries(cal_iso-3src-glut opencal ${OPENGL_LIBRARIES} ${GLUT_glut_LIBRARY} )
+target_link_libraries(cal_iso-3src-glut opencal -lm ${OPENGL_LIBRARIES} ${GLUT_glut_LIBRARY} )
 
 
