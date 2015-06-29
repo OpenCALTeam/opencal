@@ -3,11 +3,11 @@ compiler: gcc
 
 
 before_install:
- - sudo apt-get update
+ - sudo apt-get update -qq
 
 
 install:
- - sudo apt-get install freeglut3-dev libxmu-dev libxi-dev
+ - sudo apt-get install -qq freeglut3-dev libxmu-dev libxi-dev 
 
 before_script:
 - cmake --version
@@ -18,5 +18,5 @@ before_script:
 script: 
 - mkdir -p build 
 - cd build 
-- cmake -DBUILD_EXAMPLES:STRING=ON -DBUILD_DOCUMENTATION=OFF -DBUILD_OPENCAL_CL:STRING=OFF -DBUILD_OPENCAL_GL:STRING=OFF -DBUILD_OPENCAL_OMP:STRING=OFF .. 
+- cmake -DBUILD_EXAMPLES:STRING=ON -DBUILD_DOCUMENTATION=OFF -DBUILD_OPENCAL_CL:STRING=OFF -DBUILD_OPENCAL_GL:STRING=OFF -DBUILD_OPENCAL_OMP:STRING=ON .. 
 - make -j4
