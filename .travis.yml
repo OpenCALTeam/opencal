@@ -8,8 +8,7 @@ before_install:
 
 
 install:
- - sudo apt-get install -qq freeglut3-dev libxmu-dev libxi-dev gcc-4.8
- - if [ "$CXX" = "g++" ]; then export CXX="g++-4.8" CC="gcc-4.8"; fi
+ - sudo apt-get install -qq freeglut3-dev libxmu-dev libxi-dev 
 
 
 before_script:
