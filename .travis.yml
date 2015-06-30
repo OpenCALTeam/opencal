@@ -10,7 +10,7 @@ before_install:
 install:
  - sudo apt-get install -qq freeglut3-dev libxmu-dev libxi-dev gcc-4.8
  - if [ "$CXX" = "g++" ]; then export CXX="g++-4.8" CC="gcc-4.8"; fi
- - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 90
+
 
 before_script:
 - cmake --version
@@ -21,5 +21,5 @@ before_script:
 script: 
 - mkdir -p build 
 - cd build 
-- cmake -DBUILD_EXAMPLES:STRING=ON -DBUILD_DOCUMENTATION=OFF -DBUILD_OPENCAL_CL:STRING=OFF -DBUILD_OPENCAL_GL:STRING=ON -DBUILD_OPENCAL_OMP:STRING=OFF .. 
+- cmake -DBUILD_EXAMPLES:STRING=ON -DBUILD_DOCUMENTATION=OFF -DBUILD_OPENCAL_CL:STRING=OFF -DBUILD_OPENCAL_GL:STRING=OFF -DBUILD_OPENCAL_OMP:STRING=OFF .. 
 - make -j4
