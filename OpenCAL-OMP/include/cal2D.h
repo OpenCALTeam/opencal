@@ -36,7 +36,7 @@ enum CALNeighborhood2D {
 	CAL_VON_NEUMANN_NEIGHBORHOOD_2D,	//!< Enumerator used for specifying the 2D von Neumann neighbourhood; no calls to calAddNeighbor2D are needed.
 	CAL_MOORE_NEIGHBORHOOD_2D,			//!< Enumerator used for specifying the 2D Moore neighbourhood; no calls to calAddNeighbor2D are needed.
 	CAL_HEXAGONAL_NEIGHBORHOOD_2D,		//!< Enumerator used for specifying the 2D Moore Hexagonal neighbourhood; no calls to calAddNeighbor2D are needed.
-	CAL_HEXAGONAL_NEIGHBORHOOD_ALT_2D	//!< Enumerator used for specifying the alternative 90° rotated 2D Moore Hexagonal neighbourhood; no calls to calAddNeighbor2D are needed.
+	CAL_HEXAGONAL_NEIGHBORHOOD_ALT_2D	//!< Enumerator used for specifying the alternative 90ï¿½ rotated 2D Moore Hexagonal neighbourhood; no calls to calAddNeighbor2D are needed.
 };
 
 #define CAL_HEXAGONAL_SHIFT 7			//<! Shif used for accessing to the correct neighbor in case hexagonal heighbourhood and odd column cell
@@ -52,6 +52,11 @@ struct CALActiveCells2D {
         int num_threads; //!< number of threads using the data structure (used to iterate over size_next)
 };
 
+
+struct CALModel2D;
+/*! \brief Fake function pointer type.
+*/
+typedef void (* CALCallbackFunc2D)(struct CALModel2D* ca2D, int i, int j);
 
 
 /*! \brief Structure defining the 2D cellular automaton.
@@ -76,7 +81,7 @@ struct CALModel2D {
 	int sizeof_pQi_array;				//!< Number of substates of type int.
 	int sizeof_pQr_array;				//!< Number of substates of type real (floating point).
 
-	void (**elementary_processes)(struct CALModel2D* ca2D, int i, int j); //!< Array of function pointers to the transition function's elementary processes callback functions. Note that a substates' update must be performed after each elementary process has been applied to each cell of the cellular space (see calGlobalTransitionFunction2D).
+	CALCallbackFunc2D* elementary_processes; //!< Array of function pointers to the transition function's elementary processes callback functions. Note that a substates' update must be performed after each elementary process has been applied to each cell of the cellular space (see calGlobalTransitionFunction2D).
 	int num_of_elementary_processes; //!< Number of function pointers to the transition functions's elementary processes callbacks.
 
 	CAL_LOCKS_DEFINE(locks);
@@ -84,9 +89,6 @@ struct CALModel2D {
 
 
 
-/*! \brief Fake function pointer type.
-*/
-typedef void (* CALCallbackFunc2D)(struct CALModel2D* ca2D, int i, int j);
 
 
 
@@ -198,7 +200,7 @@ struct CALSubstate2Dr* calAddSingleLayerSubstate2Dr(struct CALModel2D* ca2D	//!<
 	Note that the function calGlobalTransitionFunction2D calls a substates' update after each elementary process.
 */
 CALCallbackFunc2D* calAddElementaryProcess2D(struct CALModel2D* ca2D,	//!< Pointer to the cellular automaton structure.
-											 void (* elementary_process)(struct CALModel2D* ca2D, int i, int j) //!< Pointer to a transition function's elementary process.
+											CALCallbackFunc2D elementary_process  //!< Pointer to a transition function's elementary process.
 											 );
 
 
@@ -273,7 +275,7 @@ void calUpdateSubstate2Dr(struct CALModel2D* ca2D,	//!< Pointer to the cellular 
 /*! \brief Apply an elementary process to all the cellular space.
 */
 void calApplyElementaryProcess2D(struct CALModel2D* ca2D,	//!< Pointer to the cellular automaton structure.
-								 void(*elementary_process)(struct CALModel2D* ca2D, int i, int j) //!< Pointer to a transition function's elementary process.
+								 CALCallbackFunc2D elementary_process //!< Pointer to a transition function's elementary process.
 								 );
 
 

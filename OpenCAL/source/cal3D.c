@@ -468,8 +468,8 @@ CALCallbackFunc3D* calAddElementaryProcess3D(struct CALModel3D* ca3D,	//!< Point
 											 CALCallbackFunc3D elementary_process
 											 )
 {
-	void(** callbacks_temp)(struct CALModel3D* ca3D, int i, int j, int k) = ca3D->elementary_processes;
-	void(** callbacks_new)(struct CALModel3D* ca3D, int i, int j, int k) = (void(**)(struct CALModel3D* ca3D, int i, int j, int k))malloc(sizeof(void (*)(struct CALModel3D* ca3D, int i, int j, int k))*(ca3D->num_of_elementary_processes + 1));
+	CALCallbackFunc3D* callbacks_temp = ca3D->elementary_processes;
+	CALCallbackFunc3D* callbacks_new = (CALCallbackFunc3D*)malloc(sizeof(CALCallbackFunc3D)*(ca3D->num_of_elementary_processes + 1));
 	int n;
 
 	if (!callbacks_new)
@@ -582,7 +582,7 @@ void calUpdateSubstate3Dr(struct CALModel3D* ca3D, struct CALSubstate3Dr* Q) {
 
 
 void calApplyElementaryProcess3D(struct CALModel3D* ca3D,	//!< Pointer to the cellular automaton structure.
-											   void (* elementary_process)(struct CALModel3D* ca2D, int i, int j, int k) //!< Pointer to a transition function's elementary process.
+								CALCallbackFunc3D elementary_process //!< Pointer to a transition function's elementary process.
 											   )
 {
 	int i, j, k, n;

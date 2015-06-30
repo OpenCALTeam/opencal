@@ -601,8 +601,8 @@ CALCallbackFunc2D* calAddElementaryProcess2D(struct CALModel2D* ca2D,	//!< Point
 											 CALCallbackFunc2D elementary_process
 											 )
 {
-	void(** callbacks_temp)(struct CALModel2D* ca2D, int i, int j) = ca2D->elementary_processes;
-	void(** callbacks_new)(struct CALModel2D* ca2D, int i, int j) = (void(**)(struct CALModel2D* ca2D, int i, int j))malloc(sizeof(void (*)(struct CALModel2D* ca2D, int i, int j))*(ca2D->num_of_elementary_processes + 1));
+	CALCallbackFunc2D* callbacks_temp= ca2D->elementary_processes;
+	CALCallbackFunc2D* callbacks_new = (CALCallbackFunc2D*)malloc(sizeof(CALCallbackFunc2D)*(ca2D->num_of_elementary_processes + 1));
 	int n;
 
 	if (!callbacks_new)
@@ -715,7 +715,7 @@ void calUpdateSubstate2Dr(struct CALModel2D* ca2D, struct CALSubstate2Dr* Q) {
 
 
 void calApplyElementaryProcess2D(struct CALModel2D* ca2D,	//!< Pointer to the cellular automaton structure.
-								 void(*elementary_process)(struct CALModel2D* ca2D, int i, int j) //!< Pointer to a transition function's elementary process.
+								CALCallbackFunc2D elementary_process  //!< Pointer to a transition function's elementary process.
 								 )
 {
 	int i, j, n;

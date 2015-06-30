@@ -46,6 +46,10 @@ struct CALActiveCells2D {
         int size_current;					//!< Number of active cells in the current step.
 };
 
+struct CALModel2D;
+/*! \brief Fake function pointer type.
+*/
+typedef void (* CALCallbackFunc2D)(struct CALModel2D* ca2D, int i, int j);
 
 
 /*! \brief Structure defining the 2D cellular automaton.
@@ -69,15 +73,11 @@ struct CALModel2D {
 	int sizeof_pQi_array;				//!< Number of substates of type int.
 	int sizeof_pQr_array;				//!< Number of substates of type real (floating point).
 
-	void (**elementary_processes)(struct CALModel2D* ca2D, int i, int j); //!< Array of function pointers to the transition function's elementary processes callback functions. Note that a substates' update must be performed after each elementary process has been applied to each cell of the cellular space (see calGlobalTransitionFunction2D).
+	CALCallbackFunc2D *elementary_processes; //!< Array of function pointers to the transition function's elementary processes callback functions. Note that a substates' update must be performed after each elementary process has been applied to each cell of the cellular space (see calGlobalTransitionFunction2D).
 	int num_of_elementary_processes; //!< Number of function pointers to the transition functions's elementary processes callbacks.
 };
 
 
-
-/*! \brief Fake function pointer type.
-*/
-typedef void (* CALCallbackFunc2D)(struct CALModel2D* ca2D, int i, int j);
 
 
 /******************************************************************************
