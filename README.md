@@ -51,9 +51,9 @@ Documentation build may be enabled using the cmake option ```-DBUILD_DOCUMENTATI
 
 
 ***developers only***
-in order to generate an eclipse makefile project run cmake using 
+in order to generate an eclipse makefile project run cmake using (x.y are major and minor version of eclipse. Use 4.3 for instance)
 ```
--G "Eclipse CDT4 - Unix Makefiles"
+-G "Eclipse CDT4 - Unix Makefiles" -DCMAKE_ECLIPSE_VERSION:STRING=x.y
 ```
 For example this:
 ```
