@@ -9,7 +9,7 @@ before_install:
 install:
  - sudo apt-get install -qq freeglut3-dev libxmu-dev libxi-dev 
  - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
- - sudo apt-get install g++-4.9 -qq
+ - sudo apt-get install -qq g++-4.9 
  - if [ "$CXX" = "g++" ]; then export CXX="g++-4.9" CC="gcc-4.9"; fi
 
 before_script:
