@@ -171,7 +171,7 @@ void calglDestroyInfoBar(struct CALGLInfoBar* infoBar){
 }
 
 void calglSetInfoBarConstDimension(struct CALGLInfoBar* infoBar, GLfloat width, GLfloat height){
-	width > 0 ? infoBar->constWidth = width : 1;
-	height > 0 ? infoBar->constHeight = height : 1;
+	width > 0 ? infoBar->constWidth = (CALint)width : 1;
+	height > 0 ? infoBar->constHeight = (CALint)height : 1;
 }
 

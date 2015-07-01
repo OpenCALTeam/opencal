@@ -509,7 +509,7 @@ void calglDisplayBar2D(struct CALGLInfoBar* infoBar){
 					calglSetInfoBarConstDimension(infoBar, sub_width * 0.1f, -1);
 					infoBar->width = infoBar->constWidth;
 				}				
-				infoBar->height = sub_height - minimumDistanceY * 2;
+				infoBar->height = (GLint)(sub_height - minimumDistanceY * 2);
 
 				infoBar->xPosition = sub_width - minimumDistanceX - infoBar->width;
 				infoBar->yPosition = sub_height - minimumDistanceY;
@@ -572,7 +572,7 @@ void calglDisplayBar2D(struct CALGLInfoBar* infoBar){
 					calglSetInfoBarConstDimension(infoBar, -1, sub_height * 0.1f);
 					infoBar->height = infoBar->constHeight;
 				}
-				infoBar->width = sub_width - minimumDistanceX * 2;
+				infoBar->width = (GLint)(sub_width - minimumDistanceX * 2);
 
 				infoBar->xPosition = minimumDistanceX;
 				infoBar->yPosition = minimumDistanceY + infoBar->height;
