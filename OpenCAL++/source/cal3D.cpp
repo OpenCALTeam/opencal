@@ -580,7 +580,8 @@ void calUpdateSubstate3Dr(struct CALModel3D* ca3D, struct CALSubstate3Dr* Q) {
 		calCopyBuffer3Dr(Q->next, Q->current, ca3D->rows, ca3D->columns, ca3D->slices);
 }
 
-
+#include<stdio.h>
+#include<stdlib.h>
 void calApplyElementaryProcess3D(struct CALModel3D* ca3D,	//!< Pointer to the cellular automaton structure.
 								CALCallbackFunc3D elementary_process //!< Pointer to a transition function's elementary process.
 											   )
@@ -593,8 +594,10 @@ void calApplyElementaryProcess3D(struct CALModel3D* ca3D,	//!< Pointer to the ce
 		else //Standart cicle of the transition function
 			for (i=0; i<ca3D->rows; i++)
 				for (j=0; j<ca3D->columns; j++)	
-					for (k = 0; k<ca3D->slices; k++)
+					for (k = 0; k<ca3D->slices; k++){
 						(*elementary_process)(ca3D, i, j, k);
+											
+						}
 }
 
 
@@ -610,6 +613,7 @@ void calGlobalTransitionFunction3D(struct CALModel3D* ca3D)
 	for (b=0; b<ca3D->num_of_elementary_processes; b++)
 	{
 		//applying the b-th elementary process
+		
 		calApplyElementaryProcess3D(ca3D, ca3D->elementary_processes[b]);
 
 		//updating substates

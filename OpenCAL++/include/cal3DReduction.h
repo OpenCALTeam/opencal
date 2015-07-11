@@ -100,7 +100,7 @@ CALreal calSteeringComputeBinaryXor3Dr(struct CALModel3D* model, struct CALSubst
 	The user must not call directly this function, but instead call the functions specifed above.
 */
 CALbyte calSteeringOperation3Db(struct CALModel3D* model, struct CALSubstate3Db* substate, enum REDUCTION_OPERATION operation);
-CALint calSteeringOperation3Di(struct CALModel3D* model, struct CALSubstate3Di* substate, enum REDUCTION_OPERATION operation);
+//CALint calSteeringOperation3Di(struct CALModel3D* model, struct CALSubstate3Di* substate, enum REDUCTION_OPERATION operation);
 CALreal calSteeringOperation3Dr(struct CALModel3D* model, struct CALSubstate3Dr* substate, enum REDUCTION_OPERATION operation);
 
 /*! \brief 

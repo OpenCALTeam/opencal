@@ -1,5 +1,5 @@
 %module(directors="1")  ElementaryProcessFunctor3D
-%feature("director");
+%feature("director") ElementaryProcessFunctor3D;
 %{
 #include <ElementaryProcessFunctor3D.h>
 %}

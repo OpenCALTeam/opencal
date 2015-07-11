@@ -88,10 +88,8 @@ void calRunInitSimulation3D(struct CALRun3D* simulation)
 
 
 
-CALbyte calRunCAStep3D(struct CALRun3D* simulation)
-{
-    if (simulation->globalTransition)
-		{
+CALbyte calRunCAStep3D(struct CALRun3D* simulation){
+    if (simulation->globalTransition){
 			simulation->globalTransition(simulation->ca3D);
 			if (simulation->UPDATE_MODE == CAL_UPDATE_IMPLICIT)
 				calUpdate3D(simulation->ca3D);

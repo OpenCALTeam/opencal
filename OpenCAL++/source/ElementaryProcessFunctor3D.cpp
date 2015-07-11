@@ -19,6 +19,8 @@ ElementaryProcessFunctor3D::~ElementaryProcessFunctor3D() {
 
 }
 
+
+
 void ElementaryProcessFunctor3D::operator()(CALModel3D* model, int i, int j,int k){
 	this->run(model,i,j,k);
 }

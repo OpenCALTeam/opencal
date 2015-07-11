@@ -12,10 +12,10 @@ if(BUILD_DOCUMENTATION)
 
     configure_file(${doxyfile_in} ${doxyfile} @ONLY)
 
-    add_custom_target(opencal-doc ALL
+    add_custom_target(opencalpp-doc ALL
         COMMAND ${DOXYGEN_EXECUTABLE} ${doxyfile}
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-        COMMENT "Generating API documentation with Doxygen for for OpenCAL"
+        COMMENT "Generating API documentation with Doxygen for for OpenCAL++"
         VERBATIM)
 
     	install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html DESTINATION share/doc)
@@ -41,7 +41,7 @@ file(GLOB SRC
     "source/*.c"
 )
 
-add_library(opencal STATIC ${SRC})
+add_library(opencalpp STATIC ${SRC})
 
 if(${BUILD_EXAMPLES} STREQUAL "ON")
 	add_subdirectory(examples)

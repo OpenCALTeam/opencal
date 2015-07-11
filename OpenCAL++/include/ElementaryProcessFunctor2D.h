@@ -6,10 +6,10 @@
 class ElementaryProcessFunctor2D {
 public:
 
-								ElementaryProcessFunctor2D();
-								virtual void run(struct CALModel2D* model, int i, int j) =0;
-								virtual void operator()(CALModel2D* model, int i, int j);
-								virtual ~ElementaryProcessFunctor2D();
+	ElementaryProcessFunctor2D();
+	virtual void run(struct CALModel2D* model, int i, int j) =0;
+	virtual void operator()(CALModel2D* model, int i, int j);
+	virtual ~ElementaryProcessFunctor2D();
 };
 
 

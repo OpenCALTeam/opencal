@@ -20,7 +20,7 @@ public:
 	ElementaryProcessFunctor3D();
 	virtual void run(struct CALModel3D* model, int i, int j,int k) =0;
 
-	void operator()(CALModel3D* model, int i, int j, int k);
+	virtual void operator()(CALModel3D* model, int i, int j, int k);
 
 	virtual ~ElementaryProcessFunctor3D();
 };
