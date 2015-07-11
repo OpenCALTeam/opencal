@@ -24,7 +24,7 @@
 %include "cal3DBuffer.i"
 %include "cal3DBufferIO.i"
 %include "cal3DUnsafe.i"
-%include "cal3DReduction.i"
+//%include "cal3DReduction.i"
 %include "cal3DIO.i"
 %include "cal3D.i"
 %include "cal3DRun.i"
