@@ -3,7 +3,6 @@ from OpenGL.GL import *
 from OpenGL.GLUT import *
 from OpenGL.GLU import *
 from OpenGL.constants import GLfloat
-import sys
 
 
 import opencal

@@ -58,7 +58,7 @@ void calfLoadMatrix2Dr(CALreal* M, int rows, int columns, FILE* f)
 
 CALbyte calLoadMatrix2Db(CALbyte* M, int rows, int columns, char* path)
 {
-	FILE *f = NULL;
+	FILE *f = nullptr;
 	f = fopen(path, "r");
 
 	if ( !f )
@@ -73,7 +73,7 @@ CALbyte calLoadMatrix2Db(CALbyte* M, int rows, int columns, char* path)
 
 CALbyte calLoadMatrix2Di(CALint* M, int rows, int columns, char* path)
 {
-	FILE *f = NULL;
+	FILE *f = nullptr;
 	f = fopen(path, "r");
 
 	if ( !f )
@@ -88,7 +88,7 @@ CALbyte calLoadMatrix2Di(CALint* M, int rows, int columns, char* path)
 
 CALbyte calLoadMatrix2Dr(CALreal* M, int rows, int columns, char* path)
 {
-	FILE *f = NULL;
+	FILE *f = nullptr;
 	f = fopen(path, "r");
 
 	if ( !f )

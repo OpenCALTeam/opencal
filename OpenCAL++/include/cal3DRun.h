@@ -16,6 +16,12 @@
 
 
 
+typedef CalModelFunctor<CALModel3D,void> InitFunction3D;
+typedef CalModelFunctor<CALModel3D,void> SteeringFunction3D;
+typedef CalModelFunctor<CALModel3D,CALbyte> StopConditionFunction3D;
+typedef CalModelFunctor<CALModel3D,void> GlobalTransitionFunction3D;
+typedef CalModelFunctor<CALModel3D,void> FinalizeFunction3D;
+
 /*! \brief Structure that defines the cellular automaton's simulation run specifications.
 */
 struct CALRun3D
@@ -28,11 +34,12 @@ struct CALRun3D
 	
 	enum CALUpdateMode UPDATE_MODE;	//!< Callbacks substates' update mode; it can be CAL_UPDATE_EXPLICIT or CAL_UPDATE_IMPLICIT.
 
-	void (*init)(struct CALModel3D*);				//!< Simulation's initialization callback function.
-	void (*globalTransition)(struct CALModel3D*);	//!< CA's globalTransition callback function. If defined, it is executed instead of cal3D.c::calGlobalTransitionFunction3D.
-	void (*steering)(struct CALModel3D*);			//!< Simulation's steering callback function.
-	CALbyte (*stopCondition)(struct CALModel3D*);	//!< Simulation's stopCondition callback function.
-	void (*finalize)(struct CALModel3D*);			//!< Simulation's finalize callback function.
+	InitFunction3D* init;								//!< Simulation's initialization callback functor.
+	GlobalTransitionFunction3D* globalTransition;		//!< CA's globalTransition callback function. If defined, it is executed instead of cal2D.c::calGlobalTransitionFunction2D.
+	SteeringFunction3D* steering;						//!< Simulation's steering callback function.
+	StopConditionFunction3D* stopCondition;			//!< Simulation's stopCondition callback function.
+	FinalizeFunction3D* finalize;						//!< Simulation's finalize callback function.
+
 };
 
 
@@ -50,32 +57,32 @@ struct CALRun3D* calRunDef3D(struct CALModel3D* ca3D,			//!< Pointer to the cell
 /*! \brief Adds a simulation initialization function to CALRun3D.
 */
 void calRunAddInitFunc3D(struct CALRun3D* simulation,			//!< Pointer to the run structure.
-						 void (*init)(struct CALModel3D*)		//!< Simulation's initialization callback function.
+						InitFunction3D* 		//!< Simulation's initialization callback function.
 						 );
 
 /*! \brief Adds a CA's globalTransition callback function.
 	If defined, it is executed instead of cal3D.c::calGlobalTransitionFunction3D.
 */
 void calRunAddGlobalTransitionFunc3D(struct CALRun3D* simulation,					//!< Pointer to the run structure.
-									 void (*globalTransition)(struct CALModel3D*)	//!< CA's globalTransition callback function. If defined, it is executed instead of cal3D.c::calGlobalTransitionFunction3D.
+									GlobalTransitionFunction3D* 	//!< CA's globalTransition callback function. If defined, it is executed instead of cal3D.c::calGlobalTransitionFunction3D.
 									 );
 
 /*! \brief Adds a simulation steering function to CALRun3D.
 */
 void calRunAddSteeringFunc3D(struct CALRun3D* simulation,			//!< Pointer to the run structure.
-							 void (*steering)(struct CALModel3D*)	//!< Simulation's steering callback function.
+							SteeringFunction3D*	//!< Simulation's steering callback function.
 							 );
 
 /*! \brief Adds a stop condition function to CALRun3D.
 */
 void calRunAddStopConditionFunc3D(struct CALRun3D* simulation,					//!< Pointer to the run structure.
-								  CALbyte (*stopCondition)(struct CALModel3D*)	//!< Simulation's stopCondition callback function.
+								  StopConditionFunction3D*	//!< Simulation's stopCondition callback function.
 								  );
 
 /*! \brief Adds a finalization function to CALRun3D.
 */
 void calRunAddFinalizeFunc3D(struct CALRun3D* simulation,			//!< Pointer to the run structure.
-							 void (*finalize)(struct CALModel3D*)	//!< Simulation's finalize callback function.
+							 FinalizeFunction3D*	//!< Simulation's finalize callback function.
 							 );
 
 

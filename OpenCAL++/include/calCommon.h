@@ -13,6 +13,21 @@
 #define calCommon_h
 
 
+template<class MODEL,class RET_TYPE>
+class CalModelFunctor{
+
+private:
+	virtual RET_TYPE run(MODEL*)=0;
+public:
+	virtual RET_TYPE operator()(MODEL* model){
+		return this->run(model);
+	}
+	CalModelFunctor(){};
+	virtual ~CalModelFunctor(){};
+
+};
+
+
 #define CAL_FALSE 0		//!< Boolean alias for false
 #define CAL_TRUE  1		//!< Boolean alias for true
 
@@ -28,7 +43,7 @@ typedef CALreal CALParameterr;	//!< Redefinition of the type CALreal. It is used
 
 
 /*!	\brief Enumeration used for cellular space toroidality setting.
-*/
+ */
 enum CALSpaceBoundaryCondition{
 	CAL_SPACE_FLAT = 0,			//!< Enumerator used for setting non-toroidal cellular space.
 	CAL_SPACE_TOROIDAL			//!< Enumerator used for setting toroidal cellular space.
@@ -36,7 +51,7 @@ enum CALSpaceBoundaryCondition{
 
 
 /*!	\brief Enumeration used for substate updating settings.
-*/
+ */
 enum CALUpdateMode{ 
 	CAL_UPDATE_EXPLICIT = 0,	//!< Enumerator used for specifying that explicit calls to calUpdateSubstate2D* and calUpdate2D are needed.
 	CAL_UPDATE_IMPLICIT			//!< Enumerator used for specifying that explicit calls to calUpdateSubstate2D* and calUpdate2D are NOT needed.
@@ -44,7 +59,7 @@ enum CALUpdateMode{
 
 
 /*!	\brief Enumeration used for optimization strategies.
-*/
+ */
 enum CALOptimization{ 
 	CAL_NO_OPT = 0,				//!< Enumerator used for specifying no optimizations.
 	CAL_OPT_ACTIVE_CELLS		//!< Enumerator used for specifying the active cells optimization.
@@ -52,7 +67,7 @@ enum CALOptimization{
 
 
 /*! \brief Macro recomputing the out of bound neighbourhood indexes in case of toroidal cellular space.
-*/
+ */
 #define calGetToroidalX(index, size) (   (index)<0?((size)+(index)):( (index)>((size)-1)?((index)-(size)):(index) )   )
 
 
@@ -62,7 +77,7 @@ enum CALOptimization{
 	cellular automata.
 	Here, the first coordinate, i, represents the cell's row coordinate; 
 	the second coordinate, j, represents the cell's column coordinate.
-*/
+ */
 struct CALCell2D {
 	int i;		//!< Cell row coordinate.
 	int j;		//!< Cell column coordinate.
@@ -75,7 +90,7 @@ struct CALCell2D {
 	cellular automata.
 	Here, the first coordinate, i, represents the cell's row coordinate; 
 	the second coordinate, j, represents the cell's column coordinate.
-*/
+ */
 struct CALCell3D {
 	int i;		//!< Cell row coordinate.
 	int j;		//!< Cell column coordinate.
@@ -95,11 +110,11 @@ struct CALCell3D {
 	In this way, implicit parallelism is obtained, since the changes 
 	to the values of the substates do not affect the current values
 	inside the cells.
-*/
+ */
 struct CALSubstate2Db {
 	CALbyte* current;	//!< Current linearised matrix of the substate, used for reading purposes.
 	CALbyte* next;		//!< Next linearised matrix of the substate, used for writing purposes.
-	};
+};
 
 /*! \brief 2D integer substate.
 
@@ -111,7 +126,7 @@ struct CALSubstate2Db {
 	In this way, implicit parallelism is obtained, since the changes 
 	to the values of the substates do not affect the current values
 	inside the cells.
-*/
+ */
 struct CALSubstate2Di {
 	CALint* current;	//!< Current linearised matrix of the substate, used for reading purposes.
 	CALint* next;		//!< Next linearised matrix of the substate, used for writing purposes.
@@ -127,7 +142,7 @@ struct CALSubstate2Di {
 	In this way, implicit parallelism is obtained, since the changes 
 	to the values of the substates do not affect the current values
 	inside the cells.
-*/
+ */
 struct CALSubstate2Dr {
 	CALreal* current;	//!< Current linearised matrix of the substate, used for reading purposes.
 	CALreal* next;		//!< Next linearised matrix of the substate, used for writing purposes.
@@ -146,11 +161,11 @@ struct CALSubstate2Dr {
 	In this way, implicit parallelism is obtained, since the changes 
 	to the values of the substates do not affect the current values
 	inside the cells.
-*/
+ */
 struct CALSubstate3Db {
 	CALbyte* current;	//!< Current linearised 3D buffer of the substate, used for reading purposes.
 	CALbyte* next;		//!< Next linearised 3D buffer of the substate, used for writing purposes.
-	};
+};
 
 /*! \brief 3D integer substate.
 
@@ -162,7 +177,7 @@ struct CALSubstate3Db {
 	In this way, implicit parallelism is obtained, since the changes 
 	to the values of the substates do not affect the current values
 	inside the cells.
-*/
+ */
 struct CALSubstate3Di {
 	CALint* current;	//!< Current linearised 3D buffer of the substate, used for reading purposes.
 	CALint* next;		//!< Next linearised 3D buffer of the substate, used for writing purposes.
@@ -178,7 +193,7 @@ struct CALSubstate3Di {
 	In this way, implicit parallelism is obtained, since the changes 
 	to the values of the substates do not affect the current values
 	inside the cells.
-*/
+ */
 struct CALSubstate3Dr {
 	CALreal* current;	//!< Current linearised 3D buffer of the substate, used for reading purposes.
 	CALreal* next;		//!< Next linearised 3D buffer of the substate, used for writing purposes.
@@ -188,7 +203,7 @@ struct CALSubstate3Dr {
 
 /*! Constant used to set the run final step to 0, correspondig to a loop condition.
 	In this case, a stop condition should be defined.
-*/
+ */
 #define CAL_RUN_LOOP 0
 
 
@@ -197,7 +212,7 @@ struct CALSubstate3Dr {
 
 Enumeration defining global reduction operations inside the 
 steering function.
-*/
+ */
 enum REDUCTION_OPERATION {
 	REDUCTION_NONE = 0,
 	REDUCTION_MAX,

@@ -17,7 +17,6 @@ struct CALRun3D* life3Dsimulation;					//the simulartion run
 //					life3D transition function
 //------------------------------------------------------------------------------
 
-
 /*
  * 3-D Life is "played" on an arbitrarily large three dimensional grid of cubes. Each cube represents a cell, which is either "alive"(i.e. filled in) or "dead" (i.e. not filled in). Each cube (cell) is viewed as having 26 neighbors or adjacent touching cells. A cell is "alive" or "dead", based on some transition rules i.e. on the number of living neighbors it has.
 
@@ -57,6 +56,36 @@ Various configurations of living cells show suprisingly complex and almost lifel
 	calSet3Db(ca, Q.life, i, j, k, nextState);
 }
 */
+int step=0;
+class stopCondition : public CalModelFunctor<CALModel3D,CALbyte>{
+	CALbyte run(CALModel3D* model){
+		if(step>10)
+			return CAL_TRUE;
+		else
+			step++;
+
+		return CAL_FALSE;
+	}
+};
+
+
+CALbyte nextBool(double probability){
+		return rand() <  probability * ((double)RAND_MAX + 1.0);
+}
+class initFunctio : public CalModelFunctor<CALModel3D,void>{
+	void run(CALModel3D* ca){
+		int i, j, k, state;
+
+			//initializing substate to 0
+			calInitSubstate3Db(ca, Q.life, 0);
+
+			for(i=0;i<ca->rows;i++)
+				for(j=0;j<ca->columns;j++)
+					for(k=0;k<ca->slices;k++)
+						calSet3Db(ca, Q.life, i, j, k, nextBool(0.01));
+	}
+};
+
 
 class life3DTransitionFunction : public ElementaryProcessFunctor3D{
 
@@ -85,24 +114,7 @@ public:
 //------------------------------------------------------------------------------
 //					life3D simulation functions
 //------------------------------------------------------------------------------
-CALbyte nextBool(double probability){
-		return rand() <  probability * ((double)RAND_MAX + 1.0);
-}
 
-void life3DSimulationInit(struct CALModel3D* ca)
-{
-	int i, j, k, state;
-
-	//initializing substate to 0
-	calInitSubstate3Db(ca, Q.life, 0);
-
-
-	for(i=0;i<ca->rows;i++)
-		for(j=0;j<ca->columns;j++)
-			for(k=0;k<ca->slices;k++)
-				calSet3Db(ca, Q.life, i, j, k, nextBool(0.01));
-
-}
 
 CALbyte life3DSimulationStopCondition(struct CALModel3D* life3D)
 {
@@ -128,8 +140,9 @@ void life3DCADef()
 	Q.life = calAddSubstate3Db(life3D);
 
 	//simulation run setup
-	calRunAddInitFunc3D(life3Dsimulation, life3DSimulationInit); calRunInitSimulation3D(life3Dsimulation);
-	calRunAddStopConditionFunc3D(life3Dsimulation, life3DSimulationStopCondition);
+	calRunAddInitFunc3D(life3Dsimulation, new initFunctio());
+	calRunInitSimulation3D(life3Dsimulation);
+	calRunAddStopConditionFunc3D(life3Dsimulation, new stopCondition());
 }
 
 //------------------------------------------------------------------------------

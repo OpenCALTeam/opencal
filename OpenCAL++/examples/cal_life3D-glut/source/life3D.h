@@ -27,7 +27,6 @@ extern struct life3DSubstates Q;
 
 
 void life3DCADef();
-void life3DSimulationInit(struct CALModel3D* ca);
 void life3DExit();
 
 

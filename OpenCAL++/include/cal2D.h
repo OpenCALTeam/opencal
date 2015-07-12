@@ -60,7 +60,7 @@ struct CALModel2D {
 	enum CALSpaceBoundaryCondition T;	//!< Type of cellular space: toroidal or non-toroidal.
 
 	enum CALOptimization OPTIMIZATION;	//!< Type of optimization used. It can be CAL_NO_OPT or CAL_OPT_ACTIVE_CELLS.
-	struct CALActiveCells2D A;			//!< Computational Active cells object. if A.actives==NULL no optimization is applied.
+	struct CALActiveCells2D A;			//!< Computational Active cells object. if A.actives==nullptr no optimization is applied.
 		
 	struct CALCell2D* X;				//!< Array of cell coordinates defining the cellular automaton neighbourhood relation.
 	int sizeof_X;						//!< Number of cells belonging to the neighbourhood. Note that predefined neighbourhoods include the central cell.

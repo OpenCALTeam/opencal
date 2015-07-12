@@ -20,7 +20,7 @@ struct CALRun3D* calRunDef3D(struct CALModel3D* ca3D,
 {
 	struct CALRun3D* simulation = (struct CALRun3D*)malloc(sizeof(struct CALRun3D));
 	if (!simulation)
-		return NULL;
+		return nullptr;
 
 	simulation->ca3D = ca3D;
 
@@ -30,46 +30,46 @@ struct CALRun3D* calRunDef3D(struct CALModel3D* ca3D,
 
 	simulation->UPDATE_MODE = UPDATE_MODE;
 
-	simulation->init = NULL;
-	simulation->globalTransition = NULL;
-	simulation->steering = NULL;
-	simulation->stopCondition = NULL;
-	simulation->finalize = NULL;
+	simulation->init = nullptr;
+	simulation->globalTransition = nullptr;
+	simulation->steering = nullptr;
+	simulation->stopCondition = nullptr;
+	simulation->finalize = nullptr;
 
 	return simulation;
 }
 
 
 
-void calRunAddInitFunc3D(struct CALRun3D* simulation, void (*init)(struct CALModel3D*))
+void calRunAddInitFunc3D(struct CALRun3D* simulation, InitFunction3D* init)
 {
 	simulation->init = init;
 }
 
 
 
-void calRunAddGlobalTransitionFunc3D(struct CALRun3D* simulation, void (*globalTransition)(struct CALModel3D*))
+void calRunAddGlobalTransitionFunc3D(struct CALRun3D* simulation, GlobalTransitionFunction3D* globalTransition)
 {
 	simulation->globalTransition = globalTransition;
 }
 
 
 
-void calRunAddSteeringFunc3D(struct CALRun3D* simulation, void (*steering)(struct CALModel3D*))
+void calRunAddSteeringFunc3D(struct CALRun3D* simulation, SteeringFunction3D* steering)
 {
 	simulation->steering = steering;
 }
 
 
 
-void calRunAddStopConditionFunc3D(struct CALRun3D* simulation, CALbyte (*stopCondition)(struct CALModel3D*))
+void calRunAddStopConditionFunc3D(struct CALRun3D* simulation, StopConditionFunction3D* stopCondition)
 {
 	simulation->stopCondition = stopCondition;
 }
 
 
 
-void calRunAddFinalizeFunc3D(struct CALRun3D* simulation, void (*finalize)(struct CALModel3D*))
+void calRunAddFinalizeFunc3D(struct CALRun3D* simulation, FinalizeFunction3D* finalize)
 {
 	simulation->finalize = finalize;
 }
@@ -80,7 +80,7 @@ void calRunInitSimulation3D(struct CALRun3D* simulation)
 {
 	if (simulation->init)
 	{
-		simulation->init(simulation->ca3D);
+		(*simulation->init)(simulation->ca3D);
 		if (simulation->UPDATE_MODE == CAL_UPDATE_IMPLICIT)
 			calUpdate3D(simulation->ca3D);
 	}
@@ -90,7 +90,7 @@ void calRunInitSimulation3D(struct CALRun3D* simulation)
 
 CALbyte calRunCAStep3D(struct CALRun3D* simulation){
     if (simulation->globalTransition){
-			simulation->globalTransition(simulation->ca3D);
+			(*simulation->globalTransition)(simulation->ca3D);
 			if (simulation->UPDATE_MODE == CAL_UPDATE_IMPLICIT)
 				calUpdate3D(simulation->ca3D);
 		}
@@ -100,13 +100,13 @@ CALbyte calRunCAStep3D(struct CALRun3D* simulation){
 		
 		if (simulation->steering)
 		{
-			simulation->steering(simulation->ca3D);
+			(*simulation->steering)(simulation->ca3D);
 			if (simulation->UPDATE_MODE == CAL_UPDATE_IMPLICIT)
 				calUpdate3D(simulation->ca3D);
 		}
 
         if (simulation->stopCondition)
-			if (simulation->stopCondition(simulation->ca3D)) 
+			if ((*simulation->stopCondition)(simulation->ca3D))
 				return CAL_FALSE;
 
         return CAL_TRUE;
@@ -118,7 +118,7 @@ void calRunFinalizeSimulation3D(struct CALRun3D* simulation)
 {
 	if (simulation->finalize)
 	{
-		simulation->finalize(simulation->ca3D);
+		(*simulation->finalize)(simulation->ca3D);
 		if (simulation->UPDATE_MODE == CAL_UPDATE_IMPLICIT)
 			calUpdate3D(simulation->ca3D);
 	}
@@ -148,5 +148,5 @@ void calRunFinalize3D(struct CALRun3D* cal3DRun)
 {
 	//Note that cal3DRun->ca3D MUST NOT BE DEALLOCATED as it is not allocated within cal3DRun.
 	free(cal3DRun);
-	cal3DRun = NULL;
+	cal3DRun = nullptr;
 }

@@ -9,9 +9,9 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 // Lesser General Public License for more details.
 
+#include <stdlib.h>
 #include <cal2D.h>
 #include <cal2DBuffer.h>
-#include <stdlib.h>
 
 
 /******************************************************************************
@@ -256,7 +256,7 @@ struct CALModel2D* calCADef2D(int rows,
 {
 	struct CALModel2D *ca2D = (struct CALModel2D *)malloc(sizeof(struct CALModel2D));
 	if (!ca2D)
-		return NULL;
+		return nullptr;
 
 	ca2D->rows = rows;
 	ca2D->columns = columns;
@@ -269,12 +269,12 @@ struct CALModel2D* calCADef2D(int rows,
 		calSetBuffer2Db(ca2D->A.flags, ca2D->rows, ca2D->columns, CAL_FALSE);
 	}
 	else
-		ca2D->A.flags = NULL;
+		ca2D->A.flags = nullptr;
 	ca2D->A.size_next = 0;
-	ca2D->A.cells = NULL;
+	ca2D->A.cells = nullptr;
 	ca2D->A.size_current = 0;
 	
-	ca2D->X = NULL;
+	ca2D->X = nullptr;
 	ca2D->sizeof_X = 0;
 
 	ca2D->X_id = CAL_NEIGHBORHOOD_2D;
@@ -293,14 +293,14 @@ struct CALModel2D* calCADef2D(int rows,
 			break;
 	}
 
-	ca2D->pQb_array = NULL;
-	ca2D->pQi_array = NULL;
-	ca2D->pQr_array = NULL;
+	ca2D->pQb_array = nullptr;
+	ca2D->pQi_array = nullptr;
+	ca2D->pQr_array = nullptr;
 	ca2D->sizeof_pQb_array = 0;
 	ca2D->sizeof_pQi_array = 0;
 	ca2D->sizeof_pQr_array = 0;
 
-	ca2D->elementary_processes = NULL;
+	ca2D->elementary_processes = nullptr;
 	ca2D->num_of_elementary_processes = 0;
 
 	return ca2D;
@@ -354,7 +354,7 @@ void calUpdateActiveCells2D(struct CALModel2D* ca2D)
 	int i, j, n;
 
 	free(ca2D->A.cells);
-	ca2D->A.cells = NULL;
+	ca2D->A.cells = nullptr;
 
 	ca2D->A.size_current = ca2D->A.size_next;
 	if (ca2D->A.size_current == 0)
@@ -382,7 +382,7 @@ struct CALCell2D* calAddNeighbor2D(struct CALModel2D* ca2D, int i, int j) {
 
 	X_new = (struct CALCell2D*)malloc(sizeof(struct CALCell2D)*(ca2D->sizeof_X + 1));
 	if (!X_new)
-		return NULL;
+		return nullptr;
 
 	for (n = 0; n < ca2D->sizeof_X; n++) {
 		X_new[n].i = ca2D->X[n].i;
@@ -409,16 +409,16 @@ struct CALSubstate2Db* calAddSubstate2Db(struct CALModel2D* ca2D){
 
 	pQb_array_new = (struct CALSubstate2Db**)malloc(sizeof(struct CALSubstate2Db*)*(ca2D->sizeof_pQb_array + 1));
 	if (!pQb_array_new)
-		return NULL;
+		return nullptr;
 
 	for (i = 0; i < ca2D->sizeof_pQb_array; i++)
 		pQb_array_new[i] = ca2D->pQb_array[i];
 
 	Q = (struct CALSubstate2Db*)malloc(sizeof(struct CALSubstate2Db));
 	if (!Q)
-		return NULL;
+		return nullptr;
 	if (!calAllocSubstate2Db(ca2D, Q))
-		return NULL;
+		return nullptr;
 
 	pQb_array_new[ca2D->sizeof_pQb_array] = Q;
 	ca2D->sizeof_pQb_array++;
@@ -437,16 +437,16 @@ struct CALSubstate2Di* calAddSubstate2Di(struct CALModel2D* ca2D){
 
 	pQi_array_new = (struct CALSubstate2Di**)malloc(sizeof(struct CALSubstate2Di*)*(ca2D->sizeof_pQi_array + 1));
 	if(!pQi_array_new)
-		return NULL;
+		return nullptr;
 
 	for (i = 0; i < ca2D->sizeof_pQi_array; i++)
 		pQi_array_new[i] = ca2D->pQi_array[i];
 
 	Q = (struct CALSubstate2Di*)malloc(sizeof(struct CALSubstate2Di));
 	if (!Q)
-		return NULL;
+		return nullptr;
 	if (!calAllocSubstate2Di(ca2D, Q))
-		return NULL;
+		return nullptr;
 
 	pQi_array_new[ca2D->sizeof_pQi_array] = Q;
 	ca2D->sizeof_pQi_array++;
@@ -465,16 +465,16 @@ struct CALSubstate2Dr* calAddSubstate2Dr(struct CALModel2D* ca2D){
 
 	pQr_array_new = (struct CALSubstate2Dr**)malloc(sizeof(struct CALSubstate2Dr*)*(ca2D->sizeof_pQr_array + 1));
 	if (!pQr_array_new)
-		return NULL;
+		return nullptr;
 
 	for (i = 0; i < ca2D->sizeof_pQr_array; i++)
 		pQr_array_new[i] = ca2D->pQr_array[i];
 
 	Q = (struct CALSubstate2Dr*)malloc(sizeof(struct CALSubstate2Dr));
 	if (!Q)
-		return NULL;
+		return nullptr;
 	if (!calAllocSubstate2Dr(ca2D, Q))
-		return NULL;
+		return nullptr;
 
 	pQr_array_new[ca2D->sizeof_pQr_array] = Q;
 	ca2D->sizeof_pQr_array++;
@@ -492,11 +492,11 @@ struct CALSubstate2Db* calAddSingleLayerSubstate2Db(struct CALModel2D* ca2D){
 	struct CALSubstate2Db* Q;
 	Q = (struct CALSubstate2Db*)malloc(sizeof(struct CALSubstate2Db));
 	if (!Q)
-		return NULL;
+		return nullptr;
 	Q->current = calAllocBuffer2Db(ca2D->rows, ca2D->columns);
 	if (!Q->current)
-		return NULL;
-	Q->next = NULL;
+		return nullptr;
+	Q->next = nullptr;
 
 	return Q;
 }
@@ -506,11 +506,11 @@ struct CALSubstate2Di* calAddSingleLayerSubstate2Di(struct CALModel2D* ca2D){
 	struct CALSubstate2Di* Q;
 	Q = (struct CALSubstate2Di*)malloc(sizeof(struct CALSubstate2Di));
 	if (!Q)
-		return NULL;
+		return nullptr;
 	Q->current = calAllocBuffer2Di(ca2D->rows, ca2D->columns);
 	if (!Q->current)
-		return NULL;
-	Q->next = NULL;
+		return nullptr;
+	Q->next = nullptr;
 
 	return Q;
 }
@@ -520,11 +520,11 @@ struct CALSubstate2Dr* calAddSingleLayerSubstate2Dr(struct CALModel2D* ca2D){
 	struct CALSubstate2Dr* Q;
 	Q = (struct CALSubstate2Dr*)malloc(sizeof(struct CALSubstate2Dr));
 	if (!Q)
-		return NULL;
+		return nullptr;
 	Q->current = calAllocBuffer2Dr(ca2D->rows, ca2D->columns);
 	if (!Q->current)
-		return NULL;
-	Q->next = NULL;
+		return nullptr;
+	Q->next = nullptr;
 
 	return Q;
 }
@@ -540,7 +540,7 @@ CALCallbackFunc2D* calAddElementaryProcess2D(struct CALModel2D* ca2D,	//!< Point
 	int n;
 
 	if (!callbacks_new)
-		return NULL;
+		return nullptr;
 
 	for (n = 0; n < ca2D->num_of_elementary_processes; n++)
 		callbacks_new[n] = ca2D->elementary_processes[n];
@@ -823,5 +823,5 @@ void calFinalize2D(struct CALModel2D* ca2D)
 	free(ca2D->elementary_processes);
 
 	free(ca2D);
-	ca2D = NULL;
+	ca2D = nullptr;
 }

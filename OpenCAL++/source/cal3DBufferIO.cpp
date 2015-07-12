@@ -62,7 +62,7 @@ void calfLoadBuffer3Dr(CALreal* M, int rows, int columns, int slices, FILE* f)
 
 CALbyte calLoadBuffer3Db(CALbyte* M, int rows, int columns, int slices, char* path)
 {
-	FILE *f = NULL;
+	FILE *f = nullptr;
 	f = fopen(path, "r");
 
 	if ( !f )
@@ -77,7 +77,7 @@ CALbyte calLoadBuffer3Db(CALbyte* M, int rows, int columns, int slices, char* pa
 
 CALbyte calLoadBuffer3Di(CALint* M, int rows, int columns, int slices, char* path)
 {
-	FILE *f = NULL;
+	FILE *f = nullptr;
 	f = fopen(path, "r");
 
 	if ( !f )
@@ -92,7 +92,7 @@ CALbyte calLoadBuffer3Di(CALint* M, int rows, int columns, int slices, char* pat
 
 CALbyte calLoadBuffer3Dr(CALreal* M, int rows, int columns, int slices, char* path)
 {
-	FILE *f = NULL;
+	FILE *f = nullptr;
 	f = fopen(path, "r");
 
 	if ( !f )

@@ -193,7 +193,7 @@ struct CALModel3D* calCADef3D(int rows,
 {
 	struct CALModel3D *ca3D = (struct CALModel3D *)malloc(sizeof(struct CALModel3D));
 	if (!ca3D)
-		return NULL;
+		return nullptr;
 
 	ca3D->rows = rows;
 	ca3D->columns = columns;
@@ -207,12 +207,12 @@ struct CALModel3D* calCADef3D(int rows,
 		calSetBuffer3Db(ca3D->A.flags, ca3D->rows, ca3D->columns, ca3D->slices, CAL_FALSE);
 	}
 	else
-		ca3D->A.flags = NULL;
+		ca3D->A.flags = nullptr;
 	ca3D->A.size_next = 0;
-	ca3D->A.cells = NULL;
+	ca3D->A.cells = nullptr;
 	ca3D->A.size_current = 0;
 	
-	ca3D->X = NULL;
+	ca3D->X = nullptr;
 	ca3D->sizeof_X = 0;
 
 	ca3D->X_id = CAL_NEIGHBORHOOD_3D;
@@ -225,14 +225,14 @@ struct CALModel3D* calCADef3D(int rows,
 			break;
 	}
 
-	ca3D->pQb_array = NULL;
-	ca3D->pQi_array = NULL;
-	ca3D->pQr_array = NULL;
+	ca3D->pQb_array = nullptr;
+	ca3D->pQi_array = nullptr;
+	ca3D->pQr_array = nullptr;
 	ca3D->sizeof_pQb_array = 0;
 	ca3D->sizeof_pQi_array = 0;
 	ca3D->sizeof_pQr_array = 0;
 
-	ca3D->elementary_processes = NULL;
+	ca3D->elementary_processes = nullptr;
 	ca3D->num_of_elementary_processes = 0;
 
 	return ca3D;
@@ -283,7 +283,7 @@ void calUpdateActiveCells3D(struct CALModel3D* ca3D)
 	int i, j, k, n;
 
 	free(ca3D->A.cells);
-	ca3D->A.cells = NULL;
+	ca3D->A.cells = nullptr;
 
 	ca3D->A.size_current = ca3D->A.size_next;
 	if (ca3D->A.size_current == 0)
@@ -313,7 +313,7 @@ struct CALCell3D* calAddNeighbor3D(struct CALModel3D* ca3D, int i, int j, int k)
 
 	X_new = (struct CALCell3D*)malloc(sizeof(struct CALCell3D)*(ca3D->sizeof_X + 1));
 	if (!X_new)
-		return NULL;
+		return nullptr;
 
 	for (n = 0; n < ca3D->sizeof_X; n++) {
 		X_new[n].i = ca3D->X[n].i;
@@ -342,16 +342,16 @@ struct CALSubstate3Db* calAddSubstate3Db(struct CALModel3D* ca3D){
 
 	pQb_array_new = (struct CALSubstate3Db**)malloc(sizeof(struct CALSubstate3Db*)*(ca3D->sizeof_pQb_array + 1));
 	if (!pQb_array_new)
-		return NULL;
+		return nullptr;
 
 	for (i = 0; i < ca3D->sizeof_pQb_array; i++)
 		pQb_array_new[i] = ca3D->pQb_array[i];
 
 	Q = (struct CALSubstate3Db*)malloc(sizeof(struct CALSubstate3Db));
 	if (!Q)
-		return NULL;
+		return nullptr;
 	if (!calAllocSubstate3Db(ca3D, Q))
-		return NULL;
+		return nullptr;
 
 	pQb_array_new[ca3D->sizeof_pQb_array] = Q;
 	ca3D->sizeof_pQb_array++;
@@ -370,16 +370,16 @@ struct CALSubstate3Di* calAddSubstate3Di(struct CALModel3D* ca3D){
 
 	pQi_array_new = (struct CALSubstate3Di**)malloc(sizeof(struct CALSubstate3Di*)*(ca3D->sizeof_pQi_array + 1));
 	if(!pQi_array_new)
-		return NULL;
+		return nullptr;
 
 	for (i = 0; i < ca3D->sizeof_pQi_array; i++)
 		pQi_array_new[i] = ca3D->pQi_array[i];
 
 	Q = (struct CALSubstate3Di*)malloc(sizeof(struct CALSubstate3Di));
 	if (!Q)
-		return NULL;
+		return nullptr;
 	if (!calAllocSubstate3Di(ca3D, Q))
-		return NULL;
+		return nullptr;
 
 	pQi_array_new[ca3D->sizeof_pQi_array] = Q;
 	ca3D->sizeof_pQi_array++;
@@ -398,16 +398,16 @@ struct CALSubstate3Dr* calAddSubstate3Dr(struct CALModel3D* ca3D){
 
 	pQr_array_new = (struct CALSubstate3Dr**)malloc(sizeof(struct CALSubstate3Dr*)*(ca3D->sizeof_pQr_array + 1));
 	if (!pQr_array_new)
-		return NULL;
+		return nullptr;
 
 	for (i = 0; i < ca3D->sizeof_pQr_array; i++)
 		pQr_array_new[i] = ca3D->pQr_array[i];
 
 	Q = (struct CALSubstate3Dr*)malloc(sizeof(struct CALSubstate3Dr));
 	if (!Q)
-		return NULL;
+		return nullptr;
 	if (!calAllocSubstate3Dr(ca3D, Q))
-		return NULL;
+		return nullptr;
 
 	pQr_array_new[ca3D->sizeof_pQr_array] = Q;
 	ca3D->sizeof_pQr_array++;
@@ -425,11 +425,11 @@ struct CALSubstate3Db* calAddSingleLayerSubstate3Db(struct CALModel3D* ca3D){
 	struct CALSubstate3Db* Q;
 	Q = (struct CALSubstate3Db*)malloc(sizeof(struct CALSubstate3Db));
 	if (!Q)
-		return NULL;
+		return nullptr;
 	Q->current = calAllocBuffer3Db(ca3D->rows, ca3D->columns, ca3D->slices);
 	if (!Q->current)
-		return NULL;
-	Q->next = NULL;
+		return nullptr;
+	Q->next = nullptr;
 
 	return Q;
 }
@@ -439,11 +439,11 @@ struct CALSubstate3Di* calAddSingleLayerSubstate3Di(struct CALModel3D* ca3D){
 	struct CALSubstate3Di* Q;
 	Q = (struct CALSubstate3Di*)malloc(sizeof(struct CALSubstate3Di));
 	if (!Q)
-		return NULL;
+		return nullptr;
 	Q->current = calAllocBuffer3Di(ca3D->rows, ca3D->columns, ca3D->slices);
 	if (!Q->current)
-		return NULL;
-	Q->next = NULL;
+		return nullptr;
+	Q->next = nullptr;
 
 	return Q;
 }
@@ -453,11 +453,11 @@ struct CALSubstate3Dr* calAddSingleLayerSubstate3Dr(struct CALModel3D* ca3D){
 	struct CALSubstate3Dr* Q;
 	Q = (struct CALSubstate3Dr*)malloc(sizeof(struct CALSubstate3Dr));
 	if (!Q)
-		return NULL;
+		return nullptr;
 	Q->current = calAllocBuffer3Dr(ca3D->rows, ca3D->columns, ca3D->slices);
 	if (!Q->current)
-		return NULL;
-	Q->next = NULL;
+		return nullptr;
+	Q->next = nullptr;
 
 	return Q;
 }
@@ -473,7 +473,7 @@ CALCallbackFunc3D* calAddElementaryProcess3D(struct CALModel3D* ca3D,	//!< Point
 	int n;
 
 	if (!callbacks_new)
-		return NULL;
+		return nullptr;
 
 	for (n = 0; n < ca3D->num_of_elementary_processes; n++)
 		callbacks_new[n] = ca3D->elementary_processes[n];
@@ -750,5 +750,5 @@ void calFinalize3D(struct CALModel3D* ca3D)
 	free(ca3D->elementary_processes);
 
 	free(ca3D);
-	ca3D = NULL;
+	ca3D = nullptr;
 }

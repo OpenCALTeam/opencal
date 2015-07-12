@@ -14,6 +14,11 @@
 
 #include <cal2D.h>
 
+typedef CalModelFunctor<CALModel2D,void> InitFunction2D;
+typedef CalModelFunctor<CALModel2D,void> SteeringFunction2D;
+typedef CalModelFunctor<CALModel2D,CALbyte> StopConditionFunction2D;
+typedef CalModelFunctor<CALModel2D,void> GlobalTransitionFunction2D;
+typedef CalModelFunctor<CALModel2D,void> FinalizeFunction2D;
 
 
 /*! \brief Structure that defines the cellular automaton's simulation run specifications.
@@ -28,11 +33,11 @@ struct CALRun2D
 	
 	enum CALUpdateMode UPDATE_MODE;	//!< Callbacks substates' update mode; it can be CAL_UPDATE_EXPLICIT or CAL_UPDATE_IMPLICIT.
 
-	void (*init)(struct CALModel2D*);				//!< Simulation's initialization callback function.
-	void (*globalTransition)(struct CALModel2D*);	//!< CA's globalTransition callback function. If defined, it is executed instead of cal2D.c::calGlobalTransitionFunction2D.
-	void (*steering)(struct CALModel2D*);			//!< Simulation's steering callback function.
-	CALbyte (*stopCondition)(struct CALModel2D*);	//!< Simulation's stopCondition callback function.
-	void (*finalize)(struct CALModel2D*);			//!< Simulation's finalize callback function.
+	InitFunction2D* init;								//!< Simulation's initialization callback functor.
+	GlobalTransitionFunction2D* globalTransition;		//!< CA's globalTransition callback function. If defined, it is executed instead of cal2D.c::calGlobalTransitionFunction2D.
+	SteeringFunction2D* steering;						//!< Simulation's steering callback function.
+	StopConditionFunction2D* stopCondition;			//!< Simulation's stopCondition callback function.
+	FinalizeFunction2D* finalize;						//!< Simulation's finalize callback function.
 };
 
 
@@ -50,32 +55,32 @@ struct CALRun2D* calRunDef2D(struct CALModel2D* ca2D,			//!< Pointer to the cell
 /*! \brief Adds a simulation initialization function to CALRun2D.
 */
 void calRunAddInitFunc2D(struct CALRun2D* simulation,			//!< Pointer to the run structure.
-						 void (*init)(struct CALModel2D*)		//!< Simulation's initialization callback function.
+						 InitFunction2D*		//!< Simulation's initialization callback function.
 						 );
 
 /*! \brief Adds a CA's globalTransition callback function.
 	If defined, it is executed instead of cal2D.c::calGlobalTransitionFunction2D.
 */
 void calRunAddGlobalTransitionFunc2D(struct CALRun2D* simulation,					//!< Pointer to the run structure.
-									 void (*globalTransition)(struct CALModel2D*)	//!< CA's globalTransition callback function. If defined, it is executed instead of cal2D.c::calGlobalTransitionFunction2D.
+									 GlobalTransitionFunction2D*	//!< CA's globalTransition callback function. If defined, it is executed instead of cal2D.c::calGlobalTransitionFunction2D.
 									 );
 
 /*! \brief Adds a simulation steering function to CALRun2D.
 */
 void calRunAddSteeringFunc2D(struct CALRun2D* simulation,			//!< Pointer to the run structure.
-							 void (*steering)(struct CALModel2D*)	//!< Simulation's steering callback function.
+							 SteeringFunction2D*	//!< Simulation's steering callback function.
 							 );
 
 /*! \brief Adds a stop condition function to CALRun2D.
 */
 void calRunAddStopConditionFunc2D(struct CALRun2D* simulation,					//!< Pointer to the run structure.
-								  CALbyte (*stopCondition)(struct CALModel2D*)	//!< Simulation's stopCondition callback function.
+								  StopConditionFunction2D*	//!< Simulation's stopCondition callback function.
 								  );
 
 /*! \brief Adds a finalization function to CALRun2D.
 */
 void calRunAddFinalizeFunc2D(struct CALRun2D* simulation,			//!< Pointer to the run structure.
-							 void (*finalize)(struct CALModel2D*)	//!< Simulation's finalize callback function.
+							 FinalizeFunction2D*	//!< Simulation's finalize callback function.
 							 );
 
 
