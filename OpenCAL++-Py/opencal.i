@@ -29,3 +29,4 @@
 %include "cal3D.i"
 %include "cal3DRun.i"
 %include "ElementaryProcessFunctor3D.i"
+%include "CalModelFunctor.i"

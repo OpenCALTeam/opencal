@@ -12,6 +12,26 @@ life3D = None
 life_simulation = None
 model_view= None
 life_transition_function = None
+life_stop_condition = None
+
+class Life_transition_function(opencal.ElementaryProcessFunctor3D):
+	def run(SELF,life,i,j,k):
+			s=0
+			global Q
+			neighbor = range(1,life.sizeof_X)
+			for n in neighbor:
+				s =s+opencal.calGetX3Di(life, Q, i, j,k,n);
+			if (s==3) or (s==2 and opencal.calGet3Di(life, Q, i, j,k) == 1):
+				opencal.calSet3Di(life, Q, i, j,k,1)
+			else:
+				opencal.calSet3Di(life, Q, i, j,k,0)
+
+class Life_stop_condition(opencal.StopConditionFunction3D):
+ 	def __init__(self, *args, **kwargs):
+		print("HELLO");
+	
+	def run(model):
+		return False;
 
 def init():
 	ambientLight = GLfloat_4(0.2, 0.2, 0.2, 1.0);
@@ -41,17 +61,6 @@ class ModelView():
 		self.z_trans=ztrans;
 
 
-class Life_transition_function(opencal.ElementaryProcessFunctor3D):
-	def run(SELF,life,i,j,k):
-			s=0
-			global Q
-			neighbor = range(1,life.sizeof_X)
-			for n in neighbor:
-				s =s+opencal.calGetX3Di(life, Q, i, j,k,n);
-			if (s==3) or (s==2 and opencal.calGet3Di(life, Q, i, j,k) == 1):
-				opencal.calSet3Di(life, Q, i, j,k,1)
-			else:
-				opencal.calSet3Di(life, Q, i, j,k,0)
 
 def lifeCADef():
 		global model_view
@@ -70,6 +79,10 @@ def lifeCADef():
 		life_transition_function = Life_transition_function()
 		opencal.calAddElementaryProcess3D(life3D, life_transition_function)
 		
+		global life_stop_condition
+		life_stop_condition = Life_stop_condition();
+		print(life_stop_condition)
+		#opencal.calRunAddStopConditionFunc3D(life_simulation, life_stop_condition);
 		#add substates
 		global Q
 		Q = opencal.calAddSubstate3Di(life3D);
