@@ -13,20 +13,6 @@
 #define calCommon_h
 
 
-template<class MODEL,class RET_TYPE>
-class CalModelFunctor{
-
-private:
-	virtual RET_TYPE run(MODEL*)=0;
-public:
-	virtual RET_TYPE operator()(MODEL* model){
-		return this->run(model);
-	}
-	CalModelFunctor(){};
-	virtual ~CalModelFunctor(){};
-
-};
-
 
 #define CAL_FALSE 0		//!< Boolean alias for false
 #define CAL_TRUE  1		//!< Boolean alias for true

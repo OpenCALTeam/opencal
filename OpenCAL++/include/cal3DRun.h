@@ -13,7 +13,7 @@
 #define cal3DRun_h
 
 #include <cal3D.h>
-
+#include <CalModelFunctor.h>
 
 
 typedef CalModelFunctor<CALModel3D,void> InitFunction3D;

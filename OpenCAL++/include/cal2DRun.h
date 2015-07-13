@@ -13,6 +13,7 @@
 #define cal2DRun_h
 
 #include <cal2D.h>
+#include <CalModelFunctor.h>
 
 typedef CalModelFunctor<CALModel2D,void> InitFunction2D;
 typedef CalModelFunctor<CALModel2D,void> SteeringFunction2D;
