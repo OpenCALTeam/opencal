@@ -12,6 +12,11 @@
 #ifndef calOmpDef_h
 #define calOmpDef_h
 
+	enum CALUnsafeState {
+		CAL_UNSAFE_ACTIVE,
+		CAL_UNSAFE_INACTIVE
+	};
+
 	#ifdef HAVE_CONFIG_H
 	#include<config.h>
 	#endif
@@ -20,10 +25,6 @@
 
 	#include <omp.h>
 
-	enum CALUnsafeState {
-		CAL_UNSAFE_ACTIVE,
-		CAL_UNSAFE_INACTIVE
-	};
 
 	#define CAL_SET_CELL_LOCK(i, j, ca2D)					\
 		omp_set_lock(&calGetMatrixElement((ca2D)->locks, (ca2D)->columns, (i), (j)));
