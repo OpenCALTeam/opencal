@@ -10,6 +10,7 @@ option(BUILD_OPENCAL_CL     "Build the OpenCAL-CL OpenCL parallel version (OpenC
 option(BUILD_OPENCAL_GL     "Build the OpenCAL-GL visualization library (OpenGL and GLUT required)" OFF)
 option(BUILD_EXAMPLES       "Build the examples for each OpenCAL version"                           OFF)
 option(BUILD_OPENCAL_PP     "Build the OpenCAL-C++ version (C++11 Required)"		 				OFF)
+option(BUILD_OPENCAL_TESTS  "Build the test suite of application for OPENCAL"		 				OFF)
 
 if(BUILD_DOCUMENTATION)
 	find_package(Doxygen)
@@ -35,3 +36,6 @@ if(BUILD_OPENCAL_PP)
 	add_subdirectory(OpenCAL++)
 endif(BUILD_OPENCAL_PP)
 
+if(BUILD_OPENCAL_TESTS)
+	add_subdirectory(tests)
+endif(BUILD_OPENCAL_TESTS)
