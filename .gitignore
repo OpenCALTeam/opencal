@@ -1,3 +1,6 @@
+#sst output example files
+*.stt
+
 #python
 *.py[co]
 

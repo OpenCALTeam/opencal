@@ -45,13 +45,18 @@ endif(WIN32)
 
 link_directories(${CMAKE_CURRENT_SOURCE_DIR}/source)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
+include_directories(${PROJECT_SOURCE_DIR}/OpenCAL/include)
 
 file(GLOB SRC
     "include/*.h"
-    "source/*.cpp"
     "source/*.c"
+    "${PROJECT_SOURCE_DIR}/OpenCAL/include/*IO.h"
+    "${PROJECT_SOURCE_DIR}/OpenCAL/include/calCommon.h"
+    "${PROJECT_SOURCE_DIR}/OpenCAL/source/*IO.c"
 )
-
+FOREACH(infileName ${SRC})
+    MESSAGE(STATUS "Process file: ${infileName} -----------")
+ENDFOREACH(infileName)
 add_library(opencal-omp STATIC ${SRC})
 
 if(${BUILD_EXAMPLES} STREQUAL "ON")
