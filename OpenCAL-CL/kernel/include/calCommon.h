@@ -1,3 +1,14 @@
+// (C) Copyright University of Calabria and others.
+// All rights reserved. This program and the accompanying materials
+// are made available under the terms of the GNU Lesser General Public License
+// (LGPL) version 2.1 which accompanies this distribution, and is available at
+// http://www.gnu.org/licenses/lgpl-2.1.html
+//
+// This library is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+// Lesser General Public License for more details.
+
 #ifndef calCommon_h
 #define calCommon_h
 
@@ -15,7 +26,9 @@
 #pragma OPENCL EXTENSION cl_khr_fp64: enable
 #endif
 
-#define CAL_FALSE 0		//!< Boolean alias for false#define CAL_TRUE  1		//!< Boolean alias for truetypedef char CALbyte;	//!< Redefinition of the type char.
+#define CAL_FALSE 0		//!< Boolean alias for false
+#define CAL_TRUE  1		//!< Boolean alias for true
+typedef char CALbyte;	//!< Redefinition of the type char.
 typedef int CALint;		//!< Redefinition of the type int.
 #ifdef USEFLOAT
 typedef float CALreal;	//!< Redefinition of the type double.
