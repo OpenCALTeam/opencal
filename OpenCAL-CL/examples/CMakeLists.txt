@@ -15,10 +15,7 @@ ENDMACRO()
 SUBDIRLIST(SUBDIRS ${CMAKE_CURRENT_SOURCE_DIR})
 
 #add all subdirectory 
-#FOREACH(subdir ${SUBDIRS})
-#    ADD_SUBDIRECTORY(${subdir})
-#ENDFOREACH()
+FOREACH(subdir ${SUBDIRS})
+    ADD_SUBDIRECTORY(${subdir})
+ENDFOREACH()
 
-#ADD_SUBDIRECTORY(calcl_mbusu)
-#ADD_SUBDIRECTORY(calcl_sciara-fv2)
-ADD_SUBDIRECTORY(calcl_sciddicaT)

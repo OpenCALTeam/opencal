@@ -1,4 +1,4 @@
-# opencal/OpenCAL-OMP/examples/sciara-fv2/CMakeLists.txt
+# opencal/OpenCAL-OMP/examples/calomp_sciara-fv2/CMakeLists.txt
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 
 
@@ -13,7 +13,6 @@ LINK_DIRECTORIES(${PROJECT_SOURCE_DIR}/lib)
 file(GLOB SRC
     "include/*.h"
     "source/*.cpp"
-    "source/*.c"
 )
 
 add_executable(calomp_sciara_fv2 ${SRC})
