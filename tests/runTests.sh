@@ -13,6 +13,9 @@ Indent() {
 	 echo "$1" | sed -e 's/^/    /'
 }
 
+mkdir -p testsout
+mkdir -p testsout/serial
+mkdir -p testsout/other
 for d in */ ; do
 	if [[ $d != "testsout/" ]]; then
 		dir=${d%/}
@@ -39,6 +42,7 @@ for d in */ ; do
 		
 	fi
 done
+#cd .. && rm testsout/serial/*.txt testsout/other/*.txt
 echo -e "\e[39mPASSED"
 
 
