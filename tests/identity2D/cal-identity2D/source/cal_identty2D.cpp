@@ -36,7 +36,7 @@ void life_transition_function(struct CALModel2D* life, int i, int j)
 
 int main(int argc, char** argv)
 {
-	int version;	
+	int version=0;	
 	if (sscanf (argv[1], "%i", &version)!=1 && version >=0) {
 		printf ("error - not an integer");
 		exit(-1);

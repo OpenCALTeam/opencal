@@ -13,6 +13,10 @@ YELLOW="\e[33m"
 BLUE="\e[34m"
 DEFAULT="\e[39m"
 
+NUMERICALTEST=1
+MD5TEST=0
+
+EPSILON=0.0001
 printColored() {
 	echo -e "$1$2$DEFAULT"
 }
@@ -44,18 +48,51 @@ Md5CumulativeTest() {
 	RES="OK"
 	if [[ "$MD5ALLSERIALS" != "$MD5ALLOTHERS" ]]; then
 		Indent "$(Indent "$(printColored $RED "MD5 CUMULATIVE FAILED.")")"	
-		Exiting
+		#Exiting
 	else
 		Indent "$(Indent "$(printColored $GREEN "MD5 CUMULATIVE OK.")")"
 	fi
 
 }
 
+Md5CompareTwoFile() {
+refFile="$1"
+otherFile="$2"
+base=`basename $refFile`
+ 	
+		#if it exists performs the md5sum check on it
+		#(use awk to take only the md5hex output) md5sum output: HEX <space> filename
+		MD5REF=`md5sum 	$refFile 	| awk '{print $1;}'`
+		MD5OTH=`md5sum 	$otherFile  | awk '{print $1;}'`
+		if [[ "$MD5REF" != "$MD5OTH" ]]; then
+			Indent "$(Indent "$(printColored $RED "MD5 FAILED: $base ")")"
+			Indent "$(Indent "$(Indent "$(printColored $RED "$MD5REF : $MD5OTH")")")"		
+						#Exiting
+		else
+		#md5sum on this file OK								
+			Indent "$(Indent "$(printColored $GREEN "MD5: $base OK")")"
+			#Indent "$(Indent "$(Indent "$(printColored $GREEN "$MD5REF : $MD5OTH")")")"
+		fi
+
+}
+
+
+CompareMatrixEpsilon() {
+	refFile="$1"
+	othFile="$2"
+	base=`basename $refFile`
+	OUT="$(perl $TESTROOT/compareMatrix.pl $refFile $othFile $EPSILON" ")"
+	if [[ "$OUT" == "OK" ]]; then
+		Indent "$(Indent "$(printColored $GREEN "NUMERICAL COMPARISON(e=$EPSILON): $base $OUT")")"
+	else
+		Indent "$(Indent "$(printColored $RED "NUMERICAL COMPARISON(e=$EPSILON): $base $OUT")")"
+	fi
+}
+
 #functions --------------------------
-
-Md5OneFileAtTimeTest() {
+TestOutputFiles() {
 	#md5sum of one of the output file at time. Usefule if not all the output is wrong
-
+	testType=$1
 	for refFile in "$TESTROOT/testsout/serial"/*
 	do
 	base=`basename $refFile`
@@ -63,20 +100,20 @@ Md5OneFileAtTimeTest() {
 	
 	  if [ -f "$refFile" ];then
 		#check that the same file exists in the 'other' directory
-			 if [ -f "$otherFile" ];then
-				#if it exists performs the md5sum check on it
-				#(use awk to take only the md5hex output) md5sum output: HEX <space> filename
-				MD5REF=`md5sum 	$refFile 	| awk '{print $1;}'`
-				MD5OTH=`md5sum 	$otherFile  | awk '{print $1;}'`
-				if [[ "$MD5REF" != "$MD5OTH" ]]; then
-					Indent "$(Indent "$(printColored $RED "MD5 FAILED: $base ")")"
-					Indent "$(Indent "$(Indent "$(printColored $RED "$MD5REF : $MD5OTH")")")"		
-								#Exiting
-				else
-				#md5sum on this file OK								
-					Indent "$(Indent "$(printColored $GREEN "MD5: $base OK")")"
-					#Indent "$(Indent "$(Indent "$(printColored $GREEN "$MD5REF : $MD5OTH")")")"
-				fi
+			if [ -f "$otherFile" ];then
+				#CHOOSE THE APPROPRIATE TEST
+				case "$testType" in
+					"$MD5TEST")
+						Md5CompareTwoFile "$refFile" "$otherFile"
+						;;
+					"$NUMERICALTEST")
+						CompareMatrixEpsilon "$refFile" "$otherFile"
+						;;
+					*)
+					 printColored $RED "Invalid test type"
+					Exiting
+						;;
+				esac		
 			#in case the other file does not exists
 			else
 				Indent "$(Indent "$(printColored $RED "OUTPUT $base NOT FOUND")")"	
@@ -90,12 +127,14 @@ Md5OneFileAtTimeTest() {
 
 }
 
+
+
 #functions --------------------------
 
 
 #------------SCRIPT STARTS------------#
 #numerical accuracy for the tests
-EPSILON=0.0001
+
 
 #tests should always be launched from opencal/tests directory!
 TESTROOT=`pwd`
@@ -113,7 +152,7 @@ rm -f testsout/serial/*
 rm -f testsout/other/*
 
 for d in */ ; do
-	if [[ $d != "testsout/" ]]; then
+	if [[ $d != "testsout/" &&  $d != "testData/" ]]; then
 		dir=${d%/}
 		
 		echo ""
@@ -145,14 +184,19 @@ for d in */ ; do
 				Indent "$(printColored $YELLOW "Executing  $odir-test")"
 			#execute test
 				./$otherBin 1
-		#restore test directory to run other version of the test
 				
 
 			#md5sum on all single files
-				Md5OneFileAtTimeTest
+				TestOutputFiles $MD5TEST
 			#md5sum CUMULATIVE
 				Md5CumulativeTest
+			#Numerical comparison
+				TestOutputFiles $NUMERICALTEST
 				
+				rm -f $TESTROOT/testsout/serial/*
+				rm -f $TESTROOT/testsout/other/*
+				
+		#restore test directory to run other version of the test
 				cd $TESTROOT
 				
 				
