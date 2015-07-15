@@ -69,13 +69,13 @@ Md5OneFileAtTimeTest() {
 				MD5REF=`md5sum 	$refFile 	| awk '{print $1;}'`
 				MD5OTH=`md5sum 	$otherFile  | awk '{print $1;}'`
 				if [[ "$MD5REF" != "$MD5OTH" ]]; then
-					Indent "$(Indent "$(printColored $RED "MD5 FAILED: $base. ")")"
+					Indent "$(Indent "$(printColored $RED "MD5 FAILED: $base ")")"
 					Indent "$(Indent "$(Indent "$(printColored $RED "$MD5REF : $MD5OTH")")")"		
 								#Exiting
 				else
 				#md5sum on this file OK								
-					Indent "$(Indent "$(printColored $GREEN "MD5 OK: $base.")")"
-					Indent "$(Indent "$(Indent "$(printColored $GREEN "$MD5REF : $MD5OTH")")")"
+					Indent "$(Indent "$(printColored $GREEN "MD5: $base OK")")"
+					#Indent "$(Indent "$(Indent "$(printColored $GREEN "$MD5REF : $MD5OTH")")")"
 				fi
 			#in case the other file does not exists
 			else
@@ -84,8 +84,6 @@ Md5OneFileAtTimeTest() {
 	  		fi	
 	  fi
 	done
-
-	
 
 	RES="OK"
 	
@@ -111,13 +109,22 @@ fi
 
 mkdir -p testsout/serial
 mkdir -p testsout/other
+rm -f testsout/serial/*
+rm -f testsout/other/*
+
 for d in */ ; do
 	if [[ $d != "testsout/" ]]; then
 		dir=${d%/}
+		
+		echo ""
 		printColored $GREEN "TEST SUITE $dir";
+		#printColored $GREEN "`cat $dir/description.txt`"; #uncomment if you want to print a description of the test
+		
+
 		#execute serial version
 		bin=$dir/cal-$dir/bin/cal-$dir-test
 
+		
 		ExecutableExistsOrDie "$bin"
 
 		Indent "$(printColored $BLUE "Creating Reference Test Data (Serial Version)  $bin 0")"
@@ -139,13 +146,14 @@ for d in */ ; do
 			#execute test
 				./$otherBin 1
 		#restore test directory to run other version of the test
-				cd $dir
+				
 
 			#md5sum on all single files
 				Md5OneFileAtTimeTest
 			#md5sum CUMULATIVE
 				Md5CumulativeTest
 				
+				cd $TESTROOT
 				
 				
 			fi
@@ -153,9 +161,7 @@ for d in */ ; do
 		
 	fi
 done
+rm -f $TESTROOT/testsout/serial/*
+rm -f $TESTROOT/testsout/other/*
 #cd .. && rm testsout/serial/*.txt testsout/other/*.txt
 printColored $DEFAULT "END";
-
-
-
-
