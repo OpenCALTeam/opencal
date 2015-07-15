@@ -18,7 +18,7 @@ if(BUILD_DOCUMENTATION)
         COMMENT "Generating API documentation with Doxygen for for OpenCAL-CL"
         VERBATIM)
 
-    install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html DESTINATION share/doc)
+    	install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html DESTINATION share/doc/OpenCAL/OpenCAL-CL)
 endif()
 
 
@@ -49,9 +49,13 @@ file(GLOB SRC
     "source/*.c"
 )
 
+file(GLOB HEADERS
+    "include/*.h"
+)
 
 add_library(opencal-cl STATIC ${SRC})
-
+install(TARGETS opencal-cl DESTINATION lib/)
+install(FILES ${HEADERS} DESTINATION include/OpenCAL-CL)
 
 if(${BUILD_EXAMPLES} STREQUAL "ON")
         add_subdirectory(examples)

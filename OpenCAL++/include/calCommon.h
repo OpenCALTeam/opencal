@@ -14,11 +14,11 @@
 
 
 
-#define CAL_FALSE 0		//!< Boolean alias for false
-#define CAL_TRUE  1		//!< Boolean alias for true
+#define CAL_FALSE false		//!< Boolean alias for false
+#define CAL_TRUE  true		//!< Boolean alias for true
 
 
-typedef char CALbyte;	//!< Redefinition of the type char.
+typedef bool CALbyte;	//!< Redefinition of the type char.
 typedef int CALint;		//!< Redefinition of the type int.
 typedef double CALreal;	//!< Redefinition of the type double.
 

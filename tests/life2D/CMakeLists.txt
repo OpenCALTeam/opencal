@@ -1,7 +1,20 @@
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 
 
+MACRO(SUBDIRLIST result curdir)
+  FILE(GLOB children RELATIVE ${curdir} ${curdir}/*)
+  SET(dirlist "")
+  FOREACH(child ${children})
+    IF(IS_DIRECTORY ${curdir}/${child})
+        LIST(APPEND dirlist ${child})
+    ENDIF()
+  ENDFOREACH()
+  SET(${result} ${dirlist})
+ENDMACRO()
 
-ADD_SUBDIRECTORY(cal-life2D)
+SUBDIRLIST(SUBDIRS ${CMAKE_CURRENT_SOURCE_DIR})
 
-ADD_SUBDIRECTORY(calomp-life2D)
+#add all subdirectory 
+FOREACH(subdir ${SUBDIRS})
+    ADD_SUBDIRECTORY(${subdir})
+ENDFOREACH()

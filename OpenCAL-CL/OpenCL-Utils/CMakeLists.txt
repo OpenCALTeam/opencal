@@ -5,6 +5,7 @@ cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 find_package( OpenCL REQUIRED )
 
 
+
 include_directories( ${OpenCL_INCLUDE_DIRS} )
 
 if(WIN32)
@@ -26,5 +27,11 @@ file(GLOB SRC
     "source/*.c"
 )
 
+file(GLOB HEADERS
+    "include/*.h"
+)
 
 add_library(opencl_utils STATIC ${SRC})
+install(TARGETS opencl_utils  DESTINATION lib/)
+install(FILES ${HEADERS} DESTINATION include/OpenCAL-CL)
+

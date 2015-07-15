@@ -23,7 +23,7 @@ template <typename T>
 
 #define DIMX 	(100)
 #define DIMY 	(100)
-#define STEPS 	(500)
+#define STEPS 	(100)
 
 struct CALModel2D* life;
 struct CALSubstate2Di *Q;

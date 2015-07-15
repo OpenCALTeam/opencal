@@ -11,8 +11,7 @@ include_directories(
 	${GLUT_INCLUDE_DIR}
 )
 
-LINK_DIRECTORIES(${PROJECT_SOURCE_DIR}/lib)
-
+LINK_DIRECTORIES(${PROJECT_SOURCE_DIR}/OpenCAL-OMP/lib)
 file(GLOB SRC
     "include/*.h"
     "source/*.c"

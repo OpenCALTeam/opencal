@@ -18,18 +18,15 @@ if(BUILD_DOCUMENTATION)
         COMMENT "Generating API documentation with Doxygen for for OpenCAL-OMP"
         VERBATIM)
 
-    	install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html DESTINATION share/doc)
+    	install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html DESTINATION share/doc/OpenCAL/OpenCAL-OMP)
 endif()
 
 
-OPTION (USE_OpenMP "Use OpenMP" ON)
-IF(USE_OpenMP)
-  FIND_PACKAGE(OpenMP)
-  IF(OPENMP_FOUND)
-    SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
-    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
-	add_definitions(-DCAL_OMP)
-  ENDIF()
+FIND_PACKAGE(OpenMP)
+IF(OPENMP_FOUND)
+	SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
+	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
 ENDIF()
 
 
@@ -48,8 +45,15 @@ file(GLOB SRC
     "${PROJECT_SOURCE_DIR}/OpenCAL/include/calCommon.h"
     "${PROJECT_SOURCE_DIR}/OpenCAL/source/*IO.c"
 )
+file(GLOB HEADERS
+    "include/*.h"
+    "${PROJECT_SOURCE_DIR}/OpenCAL/include/*IO.h"
+    "${PROJECT_SOURCE_DIR}/OpenCAL/include/calCommon.h"
+)
 
 add_library(opencal-omp STATIC ${SRC})
+install(TARGETS opencal-omp DESTINATION lib/)
+install(FILES ${HEADERS} DESTINATION include/OpenCAL-OMP)
 
 if(${BUILD_EXAMPLES} STREQUAL "ON")
 	add_subdirectory(examples)
