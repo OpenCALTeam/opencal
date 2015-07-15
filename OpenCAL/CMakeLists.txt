@@ -17,7 +17,6 @@ if(BUILD_DOCUMENTATION)
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
         COMMENT "Generating API documentation with Doxygen for for OpenCAL"
         VERBATIM)
-message (STATUS "adcsdvcsdvsdvsd ${CMAKE_CURRENT_SOURCE_DIR}")
     	install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html DESTINATION share/doc/OpenCAL/OpenCAL)
 endif()
 

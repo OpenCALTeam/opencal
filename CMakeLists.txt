@@ -1,7 +1,9 @@
 # opencal/CMakeLists.txt
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
-
-project(OpenCAL-ALL)
+cmake_policy(SET CMP0048 NEW)
+project(OpenCAL-ALL 
+		VERSION 0.1
+		LANGUAGES C CXX)
 
 option(BUILD_DOCUMENTATION  "Build the HTML based API documentation (Doxygen required)"             OFF)
 option(BUILD_OPENCAL_SERIAL "Build the OpenCAL serial version"                                      ON )
