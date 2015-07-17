@@ -8,7 +8,7 @@
 #include <kernel.h>
 
 //first elementary process
-__kernel void sciddicaT_flows_computation(MODEL_DEFINITION2D, __global CALParameterr * epsilon, __global CALParameterr * r
+__kernel void sciddicaT_flows_computation(MODEL_DEFINITION2D, __global CALParameterr * Pepsilon, __global CALParameterr * Pr
 
 ) {
 
@@ -27,7 +27,7 @@ __kernel void sciddicaT_flows_computation(MODEL_DEFINITION2D, __global CALParame
 	CALint n;
 	CALreal z, h;
 	CALint sizeOfX_ = get_neighborhoods_size();
-	CALParameterr eps = *epsilon;
+	CALParameterr eps = *Pepsilon;
 
 	if (calGet2Dr(MODEL2D, i, j,H) <= eps)
 		return;
@@ -36,7 +36,7 @@ __kernel void sciddicaT_flows_computation(MODEL_DEFINITION2D, __global CALParame
 	u[0] = calGet2Dr(MODEL2D, i, j, Z) + eps;
 	for (n = 1; n < sizeOfX_; n++) {
 		z = calGetX2Dr(MODEL2D, i, j, n, Z);
-		h = calGetX2Dr(MODEL2D, i, j, n,H);
+		h = calGetX2Dr(MODEL2D, i, j, n, H);
 		u[n] = z + h;
 	}
 
@@ -66,9 +66,9 @@ __kernel void sciddicaT_flows_computation(MODEL_DEFINITION2D, __global CALParame
 
 	for (n = 1; n < sizeOfX_; n++) {
 		if (eliminated_cells[n])
-			calSet2Dr(MODEL2D, 0.0, i, j,(n - 1)+2);
+			calSet2Dr(MODEL2D, 0.0, i, j, n-1);
 		else {
-			calSet2Dr(MODEL2D, (average - u[n]) * (*r), i, j,(n - 1)+2);
+			calSet2Dr(MODEL2D, (average - u[n]) * (*Pr), i, j, n-1);
 			calAddActiveCellX2D(MODEL2D, i, j, n);
 		}
 	}
@@ -92,10 +92,22 @@ __kernel void sciddicaT_width_update(MODEL_DEFINITION2D) {
 
 
 	for (n = 1; n < neighborhoodSize; n++)
-		h_next += (calGetX2Dr(MODEL2D, i, j, n, (NUMBER_OF_OUTFLOWS - n)+2) - calGet2Dr(MODEL2D, i, j,(n - 1)+2 ));
+		h_next += ( calGetX2Dr(MODEL2D, i, j, n, NUMBER_OF_OUTFLOWS-n) - calGet2Dr(MODEL2D, i, j, n-1) );
 
-	calSet2Dr(MODEL2D, h_next, i, j,H);
+	calSet2Dr(MODEL2D, h_next, i, j, H);
 
+}
+
+__kernel void sciddicaT_remove_inactive_cells(MODEL_DEFINITION2D, __global CALParameterr * Pepsilon) {
+
+	initActiveThreads2D();
+
+	int threadID = getX();
+	int i = getActiveCellX(threadID);
+	int j = getActiveCellY(threadID);
+
+	if (calGet2Dr(MODEL2D, i, j, H) <= *Pepsilon)
+		calRemoveActiveCell2D(MODEL2D,i,j);
 }
 
 __kernel void sciddicaTSteering(MODEL_DEFINITION2D) {
@@ -106,8 +118,8 @@ __kernel void sciddicaTSteering(MODEL_DEFINITION2D) {
 
 	int dim = get_columns() * get_rows();
 	int i;
-	for (i = 2; i < get_real_substates_num(); ++i)
-		calInitSubstateActiveCell2Dr(MODEL2D, 0, threadID,i);
+	for (i = 0; i < NUMBER_OF_OUTFLOWS; ++i)
+		calInitSubstateActiveCell2Dr(MODEL2D, 0, threadID, i);
 
 }
 
