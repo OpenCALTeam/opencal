@@ -195,7 +195,7 @@ struct CALSubstate3Dr {
 
 /*! \brief Enumeration defining global reduction operations.
 
-Enumeration defining global reduction operations inside the 
+Enumeration defining global reduction operations inside the
 steering function.
 */
 enum REDUCTION_OPERATION {

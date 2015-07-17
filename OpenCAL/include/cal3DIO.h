@@ -13,6 +13,7 @@
 #define cal3DIO_h
 
 #include <calCommon.h>
+#include <cal3D.h>
 #include <stdio.h>
 
 

@@ -88,10 +88,6 @@ struct CALModel2D {
 };
 
 
-
-
-
-
 /******************************************************************************
 					DEFINITIONS OF FUNCTIONS PROTOTYPES
 

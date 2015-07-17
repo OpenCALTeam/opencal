@@ -62,7 +62,7 @@ void CADef(struct CellularAutomaton* ca)
 	calAddElementaryProcess2D(life.model, lifeTransitionFunction);
 
 	//simulation run setup
-	calRunAddInitFunc2D(life.model, randSimulationInit);
+	calRunAddInitFunc2D(life.run, randSimulationInit);
 }
 
 void Init(struct CellularAutomaton* ca)

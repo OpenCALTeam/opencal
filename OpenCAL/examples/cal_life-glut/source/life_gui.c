@@ -132,6 +132,7 @@ void keyboard(unsigned char key, int x, int y)
 	}
 }
 
+
 int main(int argc, char** argv)
 {
 	CADef(&life);

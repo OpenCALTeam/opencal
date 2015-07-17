@@ -1,25 +1,22 @@
 # opencal/CMakeLists.txt
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
+cmake_policy(SET CMP0048 NEW)
+project(OpenCAL-ALL 
+		VERSION 0.1
+		LANGUAGES C CXX)
 
-project(OpenCAL-ALL)
-
-
+option(BUILD_DOCUMENTATION  "Build the HTML based API documentation (Doxygen required)"             OFF)
 option(BUILD_OPENCAL_SERIAL "Build the OpenCAL serial version"                                      ON )
-option(BUILD_OPENCAL_OMP    "Build the OpenCAL-OMP OpenMP parallel version (OpenMP required)"       ON )
-option(BUILD_OPENCAL_CL     "Build the OpenCAL-CL OpenCL parallel version (OpenCL required)"        ON )
+option(BUILD_OPENCAL_OMP    "Build the OpenCAL-OMP OpenMP parallel version (OpenMP required)"       OFF)
+option(BUILD_OPENCAL_CL     "Build the OpenCAL-CL OpenCL parallel version (OpenCL required)"        OFF)
 option(BUILD_OPENCAL_GL     "Build the OpenCAL-GL visualization library (OpenGL and GLUT required)" OFF)
-option(BUILD_EXAMPLES       "Build the examples for each OpenCAL version"                           ON )
-option(BUILD_DOCUMENTATION  "Build the HTML based API documentation (requires Doxygen)"             OFF)
-option(BUILD_OPENCAL_PP     "Build the OpenCAL-C++ version (c++ compiler required)" OFF)
+option(BUILD_EXAMPLES       "Build the examples for each OpenCAL version"                           OFF)
+option(BUILD_OPENCAL_PP     "Build the OpenCAL-C++ version (C++11 Required)"		 				OFF)
+option(BUILD_OPENCAL_TESTS  "Build the test suite of application for OPENCAL"		 				OFF)
 
-if (WIN32)
-	OPTION(USE_EXTERN_FREEGLUT_STATIC "Link the freeglut Win32 lib, included in the extern directory, statically (set to ON only if you use MS Visual Studio)" ON )
-	OPTION(USE_EXTERN_PTW32_STATIC    "Link the pthread Win32 lib, included in the extern directory, statically (set to ON only if you use MS Visual Studio)"  ON )
-else()
-	OPTION(USE_EXTERN_FREEGLUT_STATIC "Link the freeglut Win32 lib, included in the extern directory, statically (set to ON only if you use MS Visual Studio)" OFF)
-	OPTION(USE_EXTERN_PTW32_STATIC    "Link the pthread Win32 lib, included in the extern directory, statically (set to ON only if you use MS Visual Studio)"  OFF)
-endif()
-
+if(BUILD_DOCUMENTATION)
+	find_package(Doxygen)
+endif(BUILD_DOCUMENTATION)
 
 if (BUILD_OPENCAL_SERIAL)
 	add_subdirectory(OpenCAL)
@@ -41,8 +38,15 @@ if(BUILD_OPENCAL_PP)
 	add_subdirectory(OpenCAL++)
 endif(BUILD_OPENCAL_PP)
 
+if(BUILD_OPENCAL_TESTS)
+	add_subdirectory(tests)
+endif(BUILD_OPENCAL_TESTS)
 
-if(BUILD_DOCUMENTATION)
-	find_package(Doxygen)
-endif(BUILD_DOCUMENTATION)
+# uninstall target
+configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/cmake_uninstall.cmake.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
+    IMMEDIATE @ONLY)
 
+add_custom_target(uninstall
+    COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)

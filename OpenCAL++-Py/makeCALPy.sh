@@ -50,9 +50,9 @@ echo "$2 = $VAR"
 
 CC_DEBUG="-g3 -ggdb"
 echo "Generating swig files..."
-swig  -c++ -python  -I./include/swig_interfaces -I../OpenCAL++/include -outdir ./lib ./opencal.i
+swig  -c++  -builtin -python  -I./swig_interfaces -I../OpenCAL++/include -outdir ./lib ./opencal.i
 echo "Compiling Python Wrapper..."
-g++ -O2 -std=c++11 -shared  -fPIC -fopenmp  opencal_wrap.cxx  ../OpenCAL++/source/* -I./ -I../OpenCAL++/include/  -I/usr/include/python2.7/  -o lib/_opencal.so
+g++ -O3 -std=c++11 -shared  -fPIC -fopenmp  opencal_wrap.cxx  ../OpenCAL++/source/* -I./ -I../OpenCAL++/include/  -I/usr/include/python2.7/  -o lib/_opencal.so
 
 # exporting ldlibrarypath of opencal.so:
 if ask "Do you want to export _opencal.so in LD_LIBRARY_PATH? (make sure that you are in the root of OpenCAL++-Py and that the script is called using *source*) and pdate the PYTHONPATH" Y; then

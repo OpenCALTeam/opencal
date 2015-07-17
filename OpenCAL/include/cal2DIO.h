@@ -13,9 +13,11 @@
 #define cal2DIO_h
 
 #include <calCommon.h>
+#include <cal2D.h>
 #include <stdio.h>
-struct CALModel2D;
-struct CALSubstate2Db;
+
+
+
 
 /*! \brief Loads a byte substate from file. 
 */

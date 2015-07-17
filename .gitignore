@@ -1,3 +1,10 @@
+#tests files
+tests/testsout/serial
+/tests/testsout/other
+
+#sst output example files
+*.stt
+
 #python
 *.py[co]
 

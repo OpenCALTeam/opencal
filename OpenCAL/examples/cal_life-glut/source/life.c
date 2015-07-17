@@ -35,15 +35,22 @@ void randSimulationInit(struct CALModel2D* ca)
 	CALint i, j, state;
 	
 	calInitSubstate2Di(ca, life.Q, STATE_DEAD);
-
-	srand(0);
-	
-	for (i = 0; i<ca->rows; i++)
-		for (j = 0; j<ca->columns; j++)
-		{	
-			state = rand() % 2;
-			calInit2Di(ca, life.Q, i, j, state);
-		}			
+	int ri=2;
+	int	ci=2;
+	int zi=2;
+	calInit2Di(ca, life.Q, 0+ri, 2+ci, STATE_ALIVE);
+	calInit2Di(ca, life.Q, 1+ri, 0+ci, STATE_ALIVE);
+	calInit2Di(ca, life.Q, 1+ri, 2+ci, STATE_ALIVE);
+	calInit2Di(ca, life.Q, 2+ri, 1+ci, STATE_ALIVE);
+	calInit2Di(ca, life.Q, 2+ri, 2+ci, STATE_ALIVE);
+//	srand(0);
+//
+//	for (i = 0; i<ca->rows; i++)
+//		for (j = 0; j<ca->columns; j++)
+//		{
+//			state = rand() % 2;
+//			calInit2Di(ca, life.Q, i, j, state);
+//		}
 }
 
 //------------------------------------------------------------------------------
@@ -62,7 +69,7 @@ void CADef(struct CellularAutomaton* ca)
 	calAddElementaryProcess2D(life.model, lifeTransitionFunction);
 
 	//simulation run setup
-	calRunAddInitFunc2D(life.model, randSimulationInit);
+	calRunAddInitFunc2D(life.run, randSimulationInit);
 }
 
 void Init(struct CellularAutomaton* ca)
