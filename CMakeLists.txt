@@ -1,9 +1,24 @@
 # opencal/CMakeLists.txt
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 cmake_policy(SET CMP0048 NEW)
+
+
+set(OPENCAL_MAJOR_VERSION 1)
+set(OPENCAL_MINOR_VERSION 0)
+set(OPENCAL_PATCH_VERSION 0)
+set(OPENCAL_VERSION
+  ${OPENCAL_MAJOR_VERSION}.${OPENCAL_MINOR_VERSION}.${OPENCAL_PATCH_VERSION})
+
 project(OpenCAL-ALL 
-		VERSION 0.1
+		VERSION ${OPENCAL_VERSION}
 		LANGUAGES C CXX)
+
+
+# Offer the user the choice of overriding the installation directories
+set(INSTALL_LIB_DIR lib CACHE PATH "Installation directory for libraries")
+set(INSTALL_DOC_DIR lib CACHE PATH "Installation directory for libraries")
+set(INSTALL_INCLUDE_DIR include CACHE PATH
+  "Installation directory for header files")
 
 option(BUILD_DOCUMENTATION  "Build the HTML based API documentation (Doxygen required)"             OFF)
 option(BUILD_OPENCAL_SERIAL "Build the OpenCAL serial version"                                      ON )
@@ -13,6 +28,17 @@ option(BUILD_OPENCAL_GL     "Build the OpenCAL-GL visualization library (OpenGL 
 option(BUILD_EXAMPLES       "Build the examples for each OpenCAL version"                           OFF)
 option(BUILD_OPENCAL_PP     "Build the OpenCAL-C++ version (C++11 Required)"		 				OFF)
 option(BUILD_OPENCAL_TESTS  "Build the test suite of application for OPENCAL"		 				OFF)
+
+option(ENABLE_SHARED "Enable Shared Libraries" OFF)
+
+if ( ENABLE_SHARED )
+	set( SHAREDORSTATIC SHARED )
+else()
+	set( SHAREDORSTATIC STATIC )
+endif()
+
+add_definitions( -DPACKAGE="OPENCAL" -DVERSION="${OPENCAL_VERSION}" )
+
 
 if(BUILD_DOCUMENTATION)
 	find_package(Doxygen)

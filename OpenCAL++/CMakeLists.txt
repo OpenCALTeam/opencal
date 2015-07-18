@@ -52,7 +52,7 @@ file(GLOB SRC
     "source/*.c"
 )
 
-add_library(opencalpp STATIC ${SRC})
+add_library(opencalpp ${SHAREDORSTATIC} ${SRC})
 
 if(${BUILD_EXAMPLES} STREQUAL "ON")
 	add_subdirectory(examples)

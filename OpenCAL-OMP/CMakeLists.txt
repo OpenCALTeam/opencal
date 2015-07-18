@@ -22,7 +22,7 @@ if(BUILD_DOCUMENTATION)
 endif()
 
 
-FIND_PACKAGE(OpenMP)
+FIND_PACKAGE(OpenMP REQUIRED)
 IF(OPENMP_FOUND)
 	SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
 	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
@@ -51,7 +51,7 @@ file(GLOB HEADERS
     "${PROJECT_SOURCE_DIR}/OpenCAL/include/calCommon.h"
 )
 
-add_library(opencal-omp STATIC ${SRC})
+add_library(opencal-omp ${SHAREDORSTATIC} ${SRC})
 install(TARGETS opencal-omp DESTINATION lib/)
 install(FILES ${HEADERS} DESTINATION include/OpenCAL-OMP)
 
