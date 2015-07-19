@@ -12,7 +12,7 @@
 #ifndef cal3DReduction_h
 #define cal3DReduction_h
 
-#include <OpenCAL/cal3D.h>
+#include <OpenCAL-OMP/cal3D.h>
 
 /*! \brief 
 

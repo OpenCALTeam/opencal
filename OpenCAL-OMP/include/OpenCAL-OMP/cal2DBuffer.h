@@ -12,7 +12,7 @@
 #ifndef cal2DBuffer_h
 #define cal2DBuffer_h
 
-#include <OpenCAL/calCommon.h>
+#include <OpenCAL-OMP/calCommon.h>
 
 
 /*! \brief Allocates a byte linearized matrix.

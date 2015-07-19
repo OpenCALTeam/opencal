@@ -1,10 +1,10 @@
 #include "sciddicaTunsafe.h"
 
-#include <OpenCAL/cal2DUnsafe.h>
+#include <OpenCAL-OMP/cal2DUnsafe.h>
 #include <stdlib.h>
 
 //-----------------------------------------------------------------------
-//	   THE sciddicaT(oy) cellular automaton definition section
+//	   THE sciddicaT(toy) cellular automaton definition section
 //-----------------------------------------------------------------------
 
 //cadef and rundef

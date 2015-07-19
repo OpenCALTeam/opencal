@@ -9,7 +9,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 // Lesser General Public License for more details.
 
-#include <OpenCAL/cal3DRun.h>
+#include <OpenCAL-OMP/cal3DRun.h>
 #include <stdlib.h>
 #include <stdio.h>
 

@@ -1,9 +1,9 @@
 #ifndef sciddicaT_h
 #define sciddicaT_h
 
-#include <OpenCAL/cal2D.h>
-#include <OpenCAL/cal2DIO.h>
-#include <OpenCAL/cal2DRun.h>
+#include <OpenCAL-OMP/cal2D.h>
+#include <OpenCAL-OMP/cal2DIO.h>
+#include <OpenCAL-OMP/cal2DRun.h>
 
 
 #define ROWS 610

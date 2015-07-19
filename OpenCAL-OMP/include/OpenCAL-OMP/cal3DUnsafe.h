@@ -12,7 +12,7 @@
 #ifndef cal3DUnsafe_h
 #define cal3DUnsafe_h
 
-#include <OpenCAL/cal3D.h>
+#include <OpenCAL-OMP/cal3D.h>
 
 
 

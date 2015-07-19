@@ -9,8 +9,8 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 // Lesser General Public License for more details.
 
+#include <OpenCAL-OMP/cal3DReduction.h>
 #include <omp.h>
-#include <OpenCAL/cal3DReduction.h>
 #include <stdlib.h>
 
 

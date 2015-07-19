@@ -12,7 +12,7 @@
 #ifndef cal2DUnsafe_h
 #define cal2DUnsafe_h
 
-#include <OpenCAL/cal2D.h>
+#include <OpenCAL-OMP/cal2D.h>
 
 
 

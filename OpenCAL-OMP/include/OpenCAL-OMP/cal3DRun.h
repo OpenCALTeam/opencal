@@ -12,7 +12,7 @@
 #ifndef cal3DRun_h
 #define cal3DRun_h
 
-#include <OpenCAL/cal3D.h>
+#include <OpenCAL-OMP/cal3D.h>
 
 
 

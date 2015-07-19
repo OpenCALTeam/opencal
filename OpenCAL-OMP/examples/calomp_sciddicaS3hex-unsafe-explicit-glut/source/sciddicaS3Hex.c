@@ -1,6 +1,6 @@
 #include "sciddicaS3Hex.h"
 
-#include <OpenCAL/cal2DUnsafe.h>
+#include <OpenCAL-OMP/cal2DUnsafe.h>
 #include <stdlib.h>
 
 //-----------------------------------------------------------------------

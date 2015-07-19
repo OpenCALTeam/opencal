@@ -12,7 +12,7 @@
 #ifndef cal3DBuffer_h
 #define cal3DBuffer_h
 
-#include <OpenCAL/calCommon.h>
+#include <OpenCAL-OMP/calCommon.h>
 
 
 /*! \brief Allocates a byte linearized 3D buffer.

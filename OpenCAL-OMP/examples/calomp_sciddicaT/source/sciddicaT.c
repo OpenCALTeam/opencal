@@ -1,6 +1,6 @@
-#include <OpenCAL/cal2D.h>
-#include <OpenCAL/cal2DIO.h>
-#include <OpenCAL/cal2DRun.h>
+#include <OpenCAL-OMP/cal2D.h>
+#include <OpenCAL-OMP/cal2DIO.h>
+#include <OpenCAL-OMP/cal2DRun.h>
 #include <stdlib.h>
 #include <time.h>
 

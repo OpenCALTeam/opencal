@@ -9,7 +9,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 // Lesser General Public License for more details.
 
-#include <OpenCAL/cal3DBuffer.h>
+#include <OpenCAL-OMP/cal3DBuffer.h>
 #include <OpenCAL-OMP/calOmpDef.h>
 #include <stdlib.h>
 #include <string.h>

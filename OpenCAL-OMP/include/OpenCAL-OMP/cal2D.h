@@ -12,7 +12,7 @@
 #ifndef cal2D_h
 #define cal2D_h
 
-#include <OpenCAL/calCommon.h>
+#include <OpenCAL-OMP/calCommon.h>
 #include <OpenCAL-OMP/calOmpDef.h>
 
 #ifdef CAL_OMP

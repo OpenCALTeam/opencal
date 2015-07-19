@@ -36,20 +36,15 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 
 link_directories(${CMAKE_CURRENT_SOURCE_DIR}/source)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
-include_directories(${PROJECT_SOURCE_DIR}/OpenCAL/include)
 
 file(GLOB SRC
     "include/*.h"
+     "include/OpenCAL-OMP/*.h"    
     "source/*.c"
-    "${PROJECT_SOURCE_DIR}/OpenCAL/include/*IO.h"
-    "${PROJECT_SOURCE_DIR}/OpenCAL/include/calCommon.h"
-    "${PROJECT_SOURCE_DIR}/OpenCAL/source/*IO.c"
 )
 file(GLOB HEADERS
     "include/*.h"
     "include/OpenCAL-OMP/*.h"
-    "${PROJECT_SOURCE_DIR}/OpenCAL/include/OpenCAL/*IO.h"
-    "${PROJECT_SOURCE_DIR}/OpenCAL/include/OpenCAL/calCommon.h"
 )
 
 add_library(opencal-omp ${SHAREDORSTATIC} ${SRC})
