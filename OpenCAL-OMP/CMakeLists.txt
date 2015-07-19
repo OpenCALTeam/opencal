@@ -47,8 +47,9 @@ file(GLOB SRC
 )
 file(GLOB HEADERS
     "include/*.h"
-    "${PROJECT_SOURCE_DIR}/OpenCAL/include/*IO.h"
-    "${PROJECT_SOURCE_DIR}/OpenCAL/include/calCommon.h"
+    "include/OpenCAL-OMP/*.h"
+    "${PROJECT_SOURCE_DIR}/OpenCAL/include/OpenCAL/*IO.h"
+    "${PROJECT_SOURCE_DIR}/OpenCAL/include/OpenCAL/calCommon.h"
 )
 
 add_library(opencal-omp ${SHAREDORSTATIC} ${SRC})

@@ -2,11 +2,11 @@
 #define CA_H_
 
 extern "C"{
-#include <cal2D.h>
-#include <cal2DIO.h>
-#include <cal2DBuffer.h>
-#include <cal2DBufferIO.h>
-#include <cal2DRun.h>
+#include <OpenCAL/cal2D.h>
+#include <OpenCAL/cal2DIO.h>
+#include <OpenCAL/cal2DBuffer.h>
+#include <OpenCAL/cal2DBufferIO.h>
+#include <OpenCAL/cal2DRun.h>
 }
 #include "GISInfo.h"
 #include "vent.h"

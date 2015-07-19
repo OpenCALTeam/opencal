@@ -9,10 +9,10 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 // Lesser General Public License for more details.
 
-#include <cal2DBuffer.h>
-#include <cal2DUnsafe.h>
+#include <OpenCAL/cal2DBuffer.h>
+#include <OpenCAL/cal2DUnsafe.h>
+#include <OpenCAL-OMP/calOmpDef.h>
 #include <stdlib.h>
-#include <calOmpDef.h>
 
 void calInitX2Db(struct CALModel2D* ca2D, struct CALSubstate2Db* Q, int i, int j, int n, CALbyte value)
 {

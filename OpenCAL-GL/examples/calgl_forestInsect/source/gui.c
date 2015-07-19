@@ -3,8 +3,8 @@
 /*+++++++++++++++++++++++++++++++++++++++*/
 
 #include "forestInsect.h"
-#include <calgl2D.h>
-#include <calgl2DWindow.h>
+#include <OpenCAL-GL/calgl2D.h>
+#include <OpenCAL-GL/calgl2DWindow.h>
 
 int main(int argc, char** argv){
 	calglSetApplicationNameGlobalSettings("Forest Insect");

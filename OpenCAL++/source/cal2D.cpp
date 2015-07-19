@@ -10,8 +10,8 @@
 // Lesser General Public License for more details.
 
 #include <stdlib.h>
-#include <cal2D.h>
-#include <cal2DBuffer.h>
+#include <OpenCAL++/cal2D.h>
+#include <OpenCAL++/cal2DBuffer.h>
 
 
 /******************************************************************************

@@ -9,9 +9,9 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 // Lesser General Public License for more details.
 
-#include <cal2D.h>
-#include <cal2DBuffer.h>
-#include <cal2DBufferIO.h>
+#include <OpenCAL/cal2D.h>
+#include <OpenCAL/cal2DBuffer.h>
+#include <OpenCAL/cal2DBufferIO.h>
 
 
 void calfLoadSubstate2Db(struct CALModel2D* ca2D, struct CALSubstate2Db* Q, FILE* f) {

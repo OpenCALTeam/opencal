@@ -9,7 +9,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 // Lesser General Public License for more details.
 
-#include "calglUtils.h"
+#include <OpenCAL-GL/calglUtils.h>
 
 // Calculate the cross product of two vectors
 void calglVectorCrossProduct(CALGLVector3 vU, CALGLVector3 vV, CALGLVector3 vResult)

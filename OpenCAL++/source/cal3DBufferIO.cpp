@@ -9,10 +9,8 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 // Lesser General Public License for more details.
 
-#include <cal3DBuffer.h>
-#include <cal3DBufferIO.h>
-
-
+#include <OpenCAL++/cal3DBuffer.h>
+#include <OpenCAL++/cal3DBufferIO.h>
 #include <stdlib.h>
 
 #define STRLEN 256

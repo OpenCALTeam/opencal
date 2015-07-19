@@ -1,9 +1,9 @@
 #ifndef iso_h
 #define iso_h
 
-#include <cal2D.h>
-#include <cal2DIO.h>
-#include <cal2DRun.h>
+#include <OpenCAL/cal2D.h>
+#include <OpenCAL/cal2DIO.h>
+#include <OpenCAL/cal2DRun.h>
 
 //#define IDW		//if defined, the IDW algorithm is applied
 //#define TEST		//if defined, the TEST configuration is loaded

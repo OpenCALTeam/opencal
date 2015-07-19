@@ -9,9 +9,9 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 // Lesser General Public License for more details.
 
-#include <cal3D.h>
-#include <cal3DBuffer.h>
-#include <cal3DBufferIO.h>
+#include <OpenCAL/cal3D.h>
+#include <OpenCAL/cal3DBuffer.h>
+#include <OpenCAL/cal3DBufferIO.h>
 
 
 void calfLoadSubstate3Db(struct CALModel3D* ca3D, struct CALSubstate3Db* Q, FILE* f) {

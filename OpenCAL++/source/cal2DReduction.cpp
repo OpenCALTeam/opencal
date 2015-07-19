@@ -9,7 +9,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 // Lesser General Public License for more details.
 
-#include <cal2DReduction.h>
+#include <OpenCAL++/cal2DReduction.h>
 #include <omp.h>
 #include <stdlib.h>
 

@@ -9,8 +9,8 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 // Lesser General Public License for more details.
 
-#include <calglGlobalSettings.h>
-#include <calglCommon.h>
+#include <OpenCAL-GL/calglCommon.h>
+#include <OpenCAL-GL/calglGlobalSettings.h>
 #include <stdlib.h>
 
 #ifndef _WIN32

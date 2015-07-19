@@ -1,5 +1,5 @@
-#include <calgl3D.h>
-#include <calgl3DWindow.h>
+#include <OpenCAL-GL/calgl3D.h>
+#include <OpenCAL-GL/calgl3DWindow.h>
 #include <stdio.h>
 #include <stdlib.h>
 
