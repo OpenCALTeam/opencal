@@ -5,7 +5,6 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 
 link_directories(${CMAKE_CURRENT_SOURCE_DIR}/source)
 include_directories(${PROJECT_SOURCE_DIR}/OpenCAL-OMP/include)
-include_directories(${PROJECT_SOURCE_DIR}/OpenCAL/include)
 
 FIND_PACKAGE(OpenMP)
 IF(OPENMP_FOUND)
@@ -17,9 +16,7 @@ ENDIF()
 link_directories(${PROJECT_SOURCE_DIR}/OpenCAL-OMP/lib)
 file(GLOB SRC
     "source/*.cpp"
-	"${PROJECT_SOURCE_DIR}/OpenCAL-OMP/include/*.h"
-    "${PROJECT_SOURCE_DIR}/OpenCAL/include/*IO.h"
-    "${PROJECT_SOURCE_DIR}/OpenCAL/include/calCommon.h"
+     "OpenCAL-OMP/include/*.h"
 )
 add_executable(calomp-sciddicaT-test ${SRC})
 target_link_libraries(calomp-sciddicaT-test opencal-omp)
