@@ -8,11 +8,11 @@
 #define CA_H_
 
 extern "C"{
-#include <cal3D.h>
-#include <cal3DIO.h>
-#include <cal3DBuffer.h>
-#include <cal3DBufferIO.h>
-#include <cal3DRun.h>
+#include <OpenCAL/cal3D.h>
+#include <OpenCAL/cal3DIO.h>
+#include <OpenCAL/cal3DBuffer.h>
+#include <OpenCAL/cal3DBufferIO.h>
+#include <OpenCAL/cal3DRun.h>
 }
 #include <math.h>
 #include <stdlib.h>
