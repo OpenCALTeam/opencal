@@ -69,3 +69,6 @@ for example in order to generate deps.ps postscript image that shows dependencie
 
 ```
 rm -rf * && cmake --graphviz=deps.dot ..  -DEXAMPLES:STRING=ON -DBUILD_DOCUMENTATION=OFF -DBUILD_OPENCL:STRING=ON -DBUILD_GL:STRING=ON -DBUILD_OMP:STRING=ON .. && dot -Tps deps.dot -o deps.ps
+```
+
+The cmake option ENABLE_SHARED is used to switch from static and shared object output for the library.
