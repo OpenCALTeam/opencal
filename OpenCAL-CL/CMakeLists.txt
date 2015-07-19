@@ -51,6 +51,7 @@ file(GLOB SRC
 
 file(GLOB HEADERS
     "include/*.h"
+    "include/OpenCAL-CL/*.h"
 )
 
 add_library(opencal-cl ${SHAREDORSTATIC} ${SRC})
