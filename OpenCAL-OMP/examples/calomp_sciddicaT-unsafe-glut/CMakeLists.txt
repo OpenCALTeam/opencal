@@ -5,6 +5,7 @@ find_package(OpenGL REQUIRED)
 find_package(GLUT REQUIRED)
 find_library(M_LIB m)
 
+
 link_directories(${CMAKE_CURRENT_SOURCE_DIR}/source)
 include_directories(
 	${CMAKE_CURRENT_SOURCE_DIR}/include
@@ -15,8 +16,8 @@ include_directories(
 LINK_DIRECTORIES(${PROJECT_SOURCE_DIR}/lib)
 
 file(GLOB SRC
-    "include/*.h"
     "source/*.c"
+    "source/*.h"
 )
 
 

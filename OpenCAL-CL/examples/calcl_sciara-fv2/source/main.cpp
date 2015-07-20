@@ -8,7 +8,7 @@
 #include "io.h"
 #include "Sciara.h"
 extern "C"{
-#include "calcl2D.h"
+#include "../../../include/OpenCAL-CL/calcl2D.h"
 }
 #include <time.h>
 

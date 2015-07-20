@@ -9,8 +9,8 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 // Lesser General Public License for more details.
 
-#include <cal2DBuffer.h>
-#include <cal2DUnsafe.h>
+#include <OpenCAL/cal2DBuffer.h>
+#include <OpenCAL/cal2DUnsafe.h>
 #include <stdlib.h>
 
 

@@ -1,5 +1,6 @@
 #include "sciddicaTunsafe.h"
-#include <cal2DUnsafe.h>
+
+#include <OpenCAL/cal2DUnsafe.h>
 #include <stdlib.h>
 
 //-----------------------------------------------------------------------

@@ -1,7 +1,8 @@
+
 extern "C" {
-	#include <cal3D.h>
-	#include <cal3DIO.h>
-	#include <cal3DRun.h>
+	#include <OpenCAL/cal3DIO.h>
+	#include <OpenCAL/cal3D.h>
+	#include <OpenCAL/cal3DRun.h>
 }
 #include <stdlib.h>
 #include<string>

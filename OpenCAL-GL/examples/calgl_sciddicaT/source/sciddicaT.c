@@ -1,9 +1,9 @@
-#include <cal2D.h>
-#include <cal2DIO.h>
-#include <cal2DReduction.h>
-#include <cal2DRun.h>
-#include <calgl2D.h>
-#include <calgl2DWindow.h>
+#include <OpenCAL/cal2D.h>
+#include <OpenCAL/cal2DIO.h>
+#include <OpenCAL/cal2DReduction.h>
+#include <OpenCAL/cal2DRun.h>
+#include <OpenCAL-GL/calgl2D.h>
+#include <OpenCAL-GL/calgl2DWindow.h>
 #include <stdlib.h>
 
 

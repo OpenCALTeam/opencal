@@ -9,10 +9,10 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 // Lesser General Public License for more details.
 
-#include <calgl3DUpdater.h>
-#include <cal3DIO.h>
-#include <calglGlobalSettings.h>
-#include <calgl3DWindow.h>
+#include <OpenCAL/cal3DIO.h>
+#include <OpenCAL-GL/calgl3DUpdater.h>
+#include <OpenCAL-GL/calgl3DWindow.h>
+#include <OpenCAL-GL/calglGlobalSettings.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

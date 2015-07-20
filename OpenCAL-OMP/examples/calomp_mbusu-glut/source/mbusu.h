@@ -1,8 +1,8 @@
 #ifndef mbusu_h
 #define mbusu_h
 
-#include <cal3D.h>
-#include <cal3DRun.h>
+#include <OpenCAL-OMP/cal3D.h>
+#include <OpenCAL-OMP/cal3DRun.h>
 
 #define YOUT 29
 #define YIN 0

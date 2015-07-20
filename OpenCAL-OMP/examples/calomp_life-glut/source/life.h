@@ -1,8 +1,8 @@
 #ifndef life_h
 #define life_h
 
-#include <cal2D.h>
-#include <cal2DRun.h>
+#include <OpenCAL-OMP/cal2D.h>
+#include <OpenCAL-OMP/cal2DRun.h>
 
 #define ROWS 1024
 #define COLS 1024

@@ -17,7 +17,7 @@
 
 #include "MbusuCL.h"
 extern "C"{
-#include "calcl3D.h"
+#include "../../../include/OpenCAL-CL/calcl3D.h"
 }
 #define STEPS 0
 #include <time.h>

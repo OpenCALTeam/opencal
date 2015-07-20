@@ -15,7 +15,7 @@
  *  Created on: 10/giu/2014
  *      Author: alessio
  */
-#include "calcl3D.h"
+#include "../include/OpenCAL-CL/calcl3D.h"
 
 /******************************************************************************
  * 							PRIVATE FUNCTIONS

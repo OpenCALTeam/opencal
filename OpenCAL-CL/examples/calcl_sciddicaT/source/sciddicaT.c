@@ -1,7 +1,7 @@
-#include <cal2DIO.h>
-#include <calcl2D.h>
+#include <OpenCAL/cal2DIO.h>
 #include <stdlib.h>
 #include <time.h>
+#include "../../../include/OpenCAL-CL/calcl2D.h"
 
 //-----------------------------------------------------------------------
 //   THE sciddicaT (Toy model) CELLULAR AUTOMATON

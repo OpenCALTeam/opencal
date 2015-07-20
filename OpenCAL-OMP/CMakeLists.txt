@@ -22,7 +22,7 @@ if(BUILD_DOCUMENTATION)
 endif()
 
 
-FIND_PACKAGE(OpenMP)
+FIND_PACKAGE(OpenMP REQUIRED)
 IF(OPENMP_FOUND)
 	SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
 	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
@@ -36,22 +36,18 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 
 link_directories(${CMAKE_CURRENT_SOURCE_DIR}/source)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
-include_directories(${PROJECT_SOURCE_DIR}/OpenCAL/include)
 
 file(GLOB SRC
     "include/*.h"
+     "include/OpenCAL-OMP/*.h"    
     "source/*.c"
-    "${PROJECT_SOURCE_DIR}/OpenCAL/include/*IO.h"
-    "${PROJECT_SOURCE_DIR}/OpenCAL/include/calCommon.h"
-    "${PROJECT_SOURCE_DIR}/OpenCAL/source/*IO.c"
 )
 file(GLOB HEADERS
     "include/*.h"
-    "${PROJECT_SOURCE_DIR}/OpenCAL/include/*IO.h"
-    "${PROJECT_SOURCE_DIR}/OpenCAL/include/calCommon.h"
+    "include/OpenCAL-OMP/*.h"
 )
 
-add_library(opencal-omp STATIC ${SRC})
+add_library(opencal-omp ${SHAREDORSTATIC} ${SRC})
 install(TARGETS opencal-omp DESTINATION lib/)
 install(FILES ${HEADERS} DESTINATION include/OpenCAL-OMP)
 

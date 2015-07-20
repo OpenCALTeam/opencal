@@ -39,7 +39,7 @@ include_directories(
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
-
+knotman90
 link_directories(${CMAKE_CURRENT_SOURCE_DIR}/source)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
@@ -51,9 +51,10 @@ file(GLOB SRC
 
 file(GLOB HEADERS
     "include/*.h"
+    "include/OpenCAL-CL/*.h"
 )
 
-add_library(opencal-cl STATIC ${SRC})
+add_library(opencal-cl ${SHAREDORSTATIC} ${SRC})
 install(TARGETS opencal-cl DESTINATION lib/)
 install(FILES ${HEADERS} DESTINATION include/OpenCAL-CL)
 

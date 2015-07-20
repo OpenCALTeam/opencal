@@ -1,7 +1,8 @@
+
 extern "C"{
-#include <cal2D.h>
-#include <cal2DIO.h>
-#include <cal2DRun.h>
+#include <OpenCAL/cal2DIO.h>
+#include <OpenCAL/cal2D.h>
+#include <OpenCAL/cal2DRun.h>
 }
 #include <stdlib.h>
 #include <iostream>

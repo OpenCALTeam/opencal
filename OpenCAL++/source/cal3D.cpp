@@ -9,8 +9,8 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 // Lesser General Public License for more details.
 
-#include <cal3D.h>
-#include <cal3DBuffer.h>
+#include <OpenCAL++/cal3D.h>
+#include <OpenCAL++/cal3DBuffer.h>
 #include <stdlib.h>
 
 

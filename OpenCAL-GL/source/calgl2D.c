@@ -9,12 +9,12 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 // Lesser General Public License for more details.
 
-#include <calgl2D.h>
-#include <calglUtils.h>
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <calgl2DWindow.h>
+#include <OpenCAL-GL/calgl2D.h>
+#include <OpenCAL-GL/calgl2DWindow.h>
+#include <OpenCAL-GL/calglUtils.h>
 
 static GLuint componentColor[3] = {0};
 static GLint currentIndex = 0;

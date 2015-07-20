@@ -9,7 +9,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 // Lesser General Public License for more details.
 
-#include <calglModelViewParameter.h>
+#include <OpenCAL-GL/calglModelViewParameter.h>
 
 struct CALGLModelViewParameter* calglCreateModelViewParameter(GLfloat xT, GLfloat yT, GLfloat zT, 
 	GLfloat xR, GLfloat yR, GLfloat zR, 

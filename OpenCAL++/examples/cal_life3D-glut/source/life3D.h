@@ -1,9 +1,9 @@
 #ifndef life3D_h
 #define life3D_h
 
-#include <cal3D.h>
-#include <cal3DRun.h>
-#include <ElementaryProcessFunctor3D.h>
+#include <OpenCAL++/ElementaryProcessFunctor3D.h>
+#include <OpenCAL++/cal3D.h>
+#include <OpenCAL++/cal3DRun.h>
 
 
 #define ROWS 65

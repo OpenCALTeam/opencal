@@ -11,6 +11,7 @@ RED="\e[31m"
 GREEN="\e[32m"
 YELLOW="\e[33m"
 BLUE="\e[34m"
+PURPLE="\e[35m"
 DEFAULT="\e[39m"
 
 NUMERICALTEST=1
@@ -127,6 +128,15 @@ TestOutputFiles() {
 
 }
 
+ExecuteAndSaveElapsedTime() {
+	outFile="$1"
+	binary="$2"
+	parameters="$3"
+	execTime="$(time ( ./$binary $parameters) 2>&1 1>/dev/null )"
+	Indent "$(printColored $PURPLE "Elapsed Time: $execTime")"
+	echo -e "\tTEST $binary" >> $TIMINGFILE;	
+	echo -e "\t $execTime\n" >> $outFile
+}
 
 
 #functions --------------------------
@@ -139,6 +149,7 @@ TestOutputFiles() {
 #tests should always be launched from opencal/tests directory!
 TESTROOT=`pwd`
 ISCALTESTDIR=$(basename $(dirname $TESTROOT))/$(basename $TESTROOT)
+
 if [[ $ISCALTESTDIR != "opencal/tests" ]]; then
 	printColored $DEFAULT "Please launch tests from opencal/test directory"	
 	printColored $DEFAULT "EXITING . . ."
@@ -150,13 +161,15 @@ mkdir -p testsout/serial
 mkdir -p testsout/other
 rm -f testsout/serial/*
 rm -f testsout/other/*
-
+TIMINGFILE="TestTiming-`date +"%s"`"
+touch $TIMINGFILE
 for d in */ ; do
 	if [[ $d != "testsout/" &&  $d != "testData/" ]]; then
 		dir=${d%/}
 		
 		echo ""
 		printColored $GREEN "TEST SUITE $dir";
+		echo "TEST SUITE $dir" >> $TIMINGFILE;
 		#printColored $GREEN "`cat $dir/description.txt`"; #uncomment if you want to print a description of the test
 		
 
@@ -167,7 +180,8 @@ for d in */ ; do
 		ExecutableExistsOrDie "$bin"
 
 		Indent "$(printColored $BLUE "Creating Reference Test Data (Serial Version)  $bin 0")"
-		./$bin 0
+		#./$bin 0 
+		ExecuteAndSaveElapsedTime $TIMINGFILE $bin 0
 
 		#now run all the otherversion of this test
 		cd $dir
@@ -183,8 +197,9 @@ for d in */ ; do
 
 				Indent "$(printColored $YELLOW "Executing  $odir-test")"
 			#execute test
-				./$otherBin 1
-				
+				 #./$otherBin 1
+
+				ExecuteAndSaveElapsedTime $TIMINGFILE $otherBin 1
 
 			#md5sum on all single files
 				TestOutputFiles $MD5TEST

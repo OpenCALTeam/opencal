@@ -9,7 +9,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 // Lesser General Public License for more details.
 
-#include <ElementaryProcessFunctor3D.h>
+#include <OpenCAL++/ElementaryProcessFunctor3D.h>
 
 ElementaryProcessFunctor3D::ElementaryProcessFunctor3D() {
 
