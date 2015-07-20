@@ -19,7 +19,7 @@
 extern "C"{
 #include "calcl3D.h"
 }
-#define STEPS 10
+#define STEPS 0
 #include <time.h>
 
 #define KER_SCIARA_ELEMENTARY_PROCESS_ONE "mbusuTransitionFunction"
@@ -30,32 +30,33 @@ FILE *stream;
 Mbusu *mbusu;
 int active;
 time_t start_time, end_time;
+
+void setParameters(){
+	mbusu->parameters.ascii_output_time_step = 86400;				//[s] in seconds
+	mbusu->parameters.lato = 5.0;
+	mbusu->parameters.delta_t = 10.0;
+	mbusu->parameters.delta_t_cum = 0.0;
+	mbusu->parameters.delta_t_cum_prec = 0.0;
+	mbusu->parameters.tetas1 = 0.368, mbusu->parameters.tetas2 = 0.351, mbusu->parameters.tetas3 = 0.325, mbusu->parameters.tetas4 = 0.325;
+	mbusu->parameters.tetar1 = 0.102, mbusu->parameters.tetar2 = 0.0985, mbusu->parameters.tetar3 = 0.0859, mbusu->parameters.tetar4 = 0.0859;
+	mbusu->parameters.alfa1 = 0.0334, mbusu->parameters.alfa2 = 0.0363, mbusu->parameters.alfa3 = 0.0345, mbusu->parameters.alfa4 = 0.0345;
+	mbusu->parameters.n1 = 1.982, mbusu->parameters.n2 = 1.632, mbusu->parameters.n3 = 1.573, mbusu->parameters.n4 = 1.573;
+	mbusu->parameters.ks1 = 0.009154, mbusu->parameters.ks2 = 0.005439, mbusu->parameters.ks3 = 0.004803, mbusu->parameters.ks4 = 0.048032;
+	mbusu->parameters.rain = 0.000023148148;
+}
+
+
 int main(int argc, char** argv) {
 
-	start_time = time(NULL);
-//	int steps = atoi(argv[1]);
-//	char path[1024];
-//	strcpy(path, argv[2]);
-//	char * demPath = (char*)malloc(sizeof(char)*(strlen(path)+strlen("_000000000000_Morphology.stt")+1));
-//	strcpy(demPath, path);
-//	strcat(demPath, "_000000000000_Morphology.stt\0");
-//	char * outputPath = argv[3];
-//	active = atoi(argv[4]);
-//	int platformNum = atoi(argv[5]);
-//	int deviceNum = atoi(argv[6]);
-
-//	setenv("CUDA_CACHE_DISABLE", "1", 1);
 
 	int steps = STEPS;
 	int platformNum = 0;
 	int deviceNum = 0;
 	active = 0;
-	char * kernelSrc;
-	char * kernelInc;
-	char * openCALCLPath;
+	const char * kernelSrc = "./kernel/source/";
+	const char * kernelInc = "./kernel/include/";
 
-	kernelSrc = "./kernel/source/";
-	kernelInc = "./kernel/include/";
+
 	//---------------------------------OPENCL INIT----------------------------------/
 
 	CALOpenCL * calOpenCL = calclCreateCALOpenCL();
@@ -67,16 +68,17 @@ int main(int argc, char** argv) {
 
 	CALCLcontext context = calclcreateContext(&device, 1);
 
-	CALCLprogram program = calclLoadProgramLib3D(context, device, kernelSrc, kernelInc);
+	CALCLprogram program = calclLoadProgramLib3D(context, device, (char *)kernelSrc, (char *)kernelInc);
 	initMbusu();
+	setParameters();
 	simulationInitialize();
 	CALCLToolkit3D * mbusuToolkit = NULL;
 
 	mbusuToolkit = calclCreateToolkit3D(mbusu->model,context,program,device,CAL_NO_OPT);
 
-	CALCLkernel kernel_elementary_process_one = calclGetKernelFromProgram(&program, KER_SCIARA_ELEMENTARY_PROCESS_ONE);
-	CALCLkernel kernel_stop_condition = calclGetKernelFromProgram(&program, KER_SCIARA_STOP_CONDITION);
-	CALCLkernel kernel_steering = calclGetKernelFromProgram(&program, KER_SCIARA_STEERING);
+	CALCLkernel kernel_elementary_process_one = calclGetKernelFromProgram(&program, (char *)KER_SCIARA_ELEMENTARY_PROCESS_ONE);
+	CALCLkernel kernel_stop_condition = calclGetKernelFromProgram(&program, (char *)KER_SCIARA_STOP_CONDITION);
+	CALCLkernel kernel_steering = calclGetKernelFromProgram(&program, (char *)KER_SCIARA_STEERING);
 
 	CALCLmem parametersBuff = calclCreateBuffer(context, &mbusu->parameters, sizeof(Parameters));
 	clSetKernelArg(kernel_elementary_process_one, MODEL_ARGS_NUM, sizeof(CALCLmem), &parametersBuff);
@@ -89,7 +91,9 @@ int main(int argc, char** argv) {
 
 	calclSetSteeringKernel3D(mbusuToolkit, mbusu->model, &kernel_steering);
 	calclSetStopConditionKernel3D(mbusuToolkit, mbusu->model, &kernel_stop_condition);
+	start_time = time(NULL);
 	calclRun3D(mbusuToolkit, mbusu->model,STEPS);
+	end_time = time(NULL);
 
 	CALreal moist_print;
 	CALint k_inv;
@@ -119,7 +123,6 @@ int main(int argc, char** argv) {
 	calclFinalizeToolkit3D(mbusuToolkit);
 	exit();
 
-	end_time = time(NULL);
 	printf("%d", end_time - start_time);
 
 	return 0;

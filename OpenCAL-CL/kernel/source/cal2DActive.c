@@ -53,19 +53,19 @@ void calRemoveActiveCell2D(MODEL_DEFINITION2D, int i, int j) {
 
 }
 
-void calInitSubstateActiveCell2Db(MODEL_DEFINITION2D, CALbyte value, int n, int substateNum) {
+void calInitSubstateActiveCell2Db(MODEL_DEFINITION2D, int substateNum, int n, CALbyte value) {
 	__global CALbyte * current = calGetCurrentSubstate2Db(MODEL2D, substateNum);
 	__global CALbyte * next = calGetNextSubstate2Db(MODEL2D, substateNum);
 	calSetBufferActiveCells2Db(current, get_columns(), value, get_active_cells(), n);
 	calSetBufferActiveCells2Db(next, get_columns(), value, get_active_cells(), n);
 }
-void calInitSubstateActiveCell2Di(MODEL_DEFINITION2D, CALint value, int n, int substateNum) {
+void calInitSubstateActiveCell2Di(MODEL_DEFINITION2D, int substateNum, int n, CALint value) {
 	__global CALint * current = calGetCurrentSubstate2Di(MODEL2D, substateNum);
 	__global CALint * next = calGetNextSubstate2Di(MODEL2D, substateNum);
 	calSetBufferActiveCells2Di(current, get_columns(), value, get_active_cells(), n);
 	calSetBufferActiveCells2Di(next, get_columns(), value, get_active_cells(), n);
 }
-void calInitSubstateActiveCell2Dr(MODEL_DEFINITION2D, CALreal value, int n, int substateNum) {
+void calInitSubstateActiveCell2Dr(MODEL_DEFINITION2D, int substateNum, int n, CALreal value) {
 	__global CALreal * current = calGetCurrentSubstate2Dr(MODEL2D, substateNum);
 	__global CALreal * next = calGetNextSubstate2Dr(MODEL2D, substateNum);
 	calSetBufferActiveCells2Dr(current, get_columns(), value, get_active_cells(), n);

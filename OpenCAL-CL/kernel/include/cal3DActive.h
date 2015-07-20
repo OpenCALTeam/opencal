@@ -47,23 +47,23 @@ void calRemoveActiveCell3D(MODEL_DEFINITION3D,			//!< Defines model parameters.
 /*! \brief Initializes the n-th byte active cell to a constant value.
 */
 void calInitSubstateActiveCell3Db(MODEL_DEFINITION3D,	//!< Defines model parameters.
-		CALbyte value,									//!< Value to which the cell of the substate is set.
+		int substateNum,								//!< Indicates the number of the substate.
 		int n,											//!< Index of the n-th neighbor to be initialized.
-		int substateNum									//!< Indicates the number of the substate.
+		CALbyte value									//!< Value to which the cell of the substate is set.
 		);
 /*! \brief Initializes the n-th int active cell to a constant value.
 */
 void calInitSubstateActiveCell3Di(MODEL_DEFINITION3D,	//!< Defines model parameters.
-		CALint value,									//!< Value to which the cell of the substate is set.
+		int substateNum,									//!< Indicates the number of the substate.
 		int n,											//!< Index of the n-th neighbor to be initialized.
-		int substateNum									//!< Indicates the number of the substate.
+		CALint value									//!< Value to which the cell of the substate is set.
 		);
 /*! \brief Initializes the n-th real (floating point) active cell to a constant value.
 */
 void calInitSubstateActiveCell3Dr(MODEL_DEFINITION3D,	//!< Defines model parameters.
-		CALreal value,									//!< Value to which the cell of the substate is set.
+		int substateNum,									//!< Indicates the number of the substate.
 		int n,											//!< Index of the n-th neighbor to be initialized.
-		int substateNum									//!< Indicates the number of the substate.
+		CALreal value									//!< Value to which the cell of the substate is set.
 		);
 
 #endif

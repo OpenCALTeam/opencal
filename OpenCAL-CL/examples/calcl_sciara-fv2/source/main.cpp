@@ -63,25 +63,15 @@ void ventsMapper(CALCLToolkit2D * sciddicaToolkit, CALCLcontext &context, cl_ker
 int main(int argc, char** argv) {
 
 	start_time = time(NULL);
-//	int steps = atoi(argv[1]);
-//	char path[1024];
-//	strcpy(path, argv[2]);
-//	char * demPath = (char*)malloc(sizeof(char)*(strlen(path)+strlen("_000000000000_Morphology.stt")+1));
-//	strcpy(demPath, path);
-//	strcat(demPath, "_000000000000_Morphology.stt\0");
-//	char * outputPath = argv[3];
-//	active = atoi(argv[4]);
-//	int platformNum = atoi(argv[5]);
-//	int deviceNum = atoi(argv[6]);
 
 	setenv("CUDA_CACHE_DISABLE", "1", 1);
-	char * outputPath = SAVE_PATH;
-	int steps = 2;
+	const char * outputPath = SAVE_PATH;
+	int steps =1000;
 	int platformNum = 0;
 	int deviceNum = 0;
-	active = 0;
-	char * kernelSrc;
-	char * kernelInc;
+	active = 1;
+	const char * kernelSrc;
+	const char * kernelInc;
 	if (active == 0) {
 		kernelSrc = KERNEL_SRC;
 		kernelInc = KERNEL_INC;
@@ -101,10 +91,10 @@ int main(int argc, char** argv) {
 
 	CALCLcontext context = calclcreateContext(&device, 1);
 
-	CALCLprogram program = calclLoadProgramLib2D(context, device, kernelSrc, kernelInc);
+	CALCLprogram program = calclLoadProgramLib2D(context, device,(char*) kernelSrc,(char*) kernelInc);
 
 	char path[1024] = CONFIG_PATH;
-	initSciara(DEM_PATH);
+	initSciara((char*)DEM_PATH);
 	int err = loadConfiguration(path, sciara);
 	if (err == 0) {
 		perror("cannot load configuration\n");
@@ -118,12 +108,12 @@ int main(int argc, char** argv) {
 	else
 		sciaraToolkit = calclCreateToolkit2D(sciara->model, context, program, device, CAL_OPT_ACTIVE_CELLS);
 
-	CALCLkernel kernel_elementary_process_one = calclGetKernelFromProgram(&program, KER_SCIARA_ELEMENTARY_PROCESS_ONE);
-	CALCLkernel kernel_elementary_process_two = calclGetKernelFromProgram(&program, KER_SCIARA_ELEMENTARY_PROCESS_TWO);
-	CALCLkernel kernel_elementary_process_three = calclGetKernelFromProgram(&program, KER_SCIARA_ELEMENTARY_PROCESS_THREE);
-	CALCLkernel kernel_elementary_process_four = calclGetKernelFromProgram(&program, KER_SCIARA_ELEMENTARY_PROCESS_FOUR);
-	CALCLkernel kernel_stop_condition = calclGetKernelFromProgram(&program, KER_SCIARA_STOP_CONDITION);
-	CALCLkernel kernel_steering = calclGetKernelFromProgram(&program, KER_SCIARA_STEERING);
+	CALCLkernel kernel_elementary_process_one = calclGetKernelFromProgram(&program,(char*) KER_SCIARA_ELEMENTARY_PROCESS_ONE);
+	CALCLkernel kernel_elementary_process_two = calclGetKernelFromProgram(&program,(char*) KER_SCIARA_ELEMENTARY_PROCESS_TWO);
+	CALCLkernel kernel_elementary_process_three = calclGetKernelFromProgram(&program,(char*) KER_SCIARA_ELEMENTARY_PROCESS_THREE);
+	CALCLkernel kernel_elementary_process_four = calclGetKernelFromProgram(&program,(char*) KER_SCIARA_ELEMENTARY_PROCESS_FOUR);
+	CALCLkernel kernel_stop_condition = calclGetKernelFromProgram(&program,(char*) KER_SCIARA_STOP_CONDITION);
+	CALCLkernel kernel_steering = calclGetKernelFromProgram(&program,(char*) KER_SCIARA_STEERING);
 
 	CALCLmem elapsed_timeBuffer = calclCreateBuffer(context, &sciara->elapsed_time, sizeof(CALreal));
 
@@ -159,7 +149,7 @@ int main(int argc, char** argv) {
 	calclAddElementaryProcessKernel2D(sciaraToolkit, sciara->model, &kernel_elementary_process_four);
 
 	if (active) {
-		CALCLkernel kernel_elementary_process_five = calclGetKernelFromProgram(&program, KER_SCIARA_ELEMENTARY_PROCESS_FIVE);
+		CALCLkernel kernel_elementary_process_five = calclGetKernelFromProgram(&program,(char*) KER_SCIARA_ELEMENTARY_PROCESS_FIVE);
 		clSetKernelArg(kernel_elementary_process_five, MODEL_ARGS_NUM, sizeof(CALCLmem), &mbBuffer);
 		clSetKernelArg(kernel_elementary_process_five, MODEL_ARGS_NUM + 1, sizeof(Parameters), &sciara->parameters);
 		calclAddElementaryProcessKernel2D(sciaraToolkit, sciara->model, &kernel_elementary_process_five);
@@ -172,7 +162,7 @@ int main(int argc, char** argv) {
 
 	clEnqueueReadBuffer(sciaraToolkit->queue,mslBuffer,CAL_TRUE,0,sizeof(CALreal)*sciara->rows*sciara->cols,sciara->substates->Msl->current,0,NULL,NULL);
 
-	err = saveConfiguration(outputPath, sciara);
+	err = saveConfiguration((char*)outputPath, sciara);
 
 	if (err == 0) {
 		perror("cannot save configuration\n");

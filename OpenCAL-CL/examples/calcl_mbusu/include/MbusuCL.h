@@ -54,17 +54,17 @@ typedef struct {
 } mbusuSubstates;
 
 typedef struct {
-	CALint ascii_output_time_step = 864000;				//[s] in seconds
-	CALreal lato = 5.0;
-	CALreal delta_t = 10.0;
-	CALreal delta_t_cum = 0.0;
-	CALreal delta_t_cum_prec = 0.0;
-	CALreal tetas1 = 0.368, tetas2 = 0.351, tetas3 = 0.325, tetas4 = 0.325;
-	CALreal tetar1 = 0.102, tetar2 = 0.0985, tetar3 = 0.0859, tetar4 = 0.0859;
-	CALreal alfa1 = 0.0334, alfa2 = 0.0363, alfa3 = 0.0345, alfa4 = 0.0345;
-	CALreal n1 = 1.982, n2 = 1.632, n3 = 1.573, n4 = 1.573;
-	CALreal ks1 = 0.009154, ks2 = 0.005439, ks3 = 0.004803, ks4 = 0.048032;
-	CALreal rain = 0.000023148148;
+	CALint ascii_output_time_step;				//[s] in seconds
+	CALreal lato ;
+	CALreal delta_t;
+	CALreal delta_t_cum;
+	CALreal delta_t_cum_prec;
+	CALreal tetas1 , tetas2, tetas3, tetas4;
+	CALreal tetar1 , tetar2, tetar3, tetar4;
+	CALreal alfa1 , alfa2, alfa3, alfa4;
+	CALreal n1 , n2, n3, n4;
+	CALreal ks1 , ks2, ks3, ks4;
+	CALreal rain;
 } Parameters;
 
 typedef struct {

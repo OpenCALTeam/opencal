@@ -12,11 +12,9 @@
 #define get_global_id (int)
 #endif
 
-
 #include "kernel.h"
 
-
-__kernel void mbusuTransitionFunction(MODEL_DEFINITION3D,__global Parameters* parameters) {
+__kernel void mbusuTransitionFunction(MODEL_DEFINITION3D, __global Parameters* parameters) {
 
 	initThreads3D();
 
@@ -25,9 +23,7 @@ __kernel void mbusuTransitionFunction(MODEL_DEFINITION3D,__global Parameters* pa
 	int _k = getZ();
 	int _k_inv;
 
-
-
-	double quota, teta, satur, psi, h, k, uno_su_dqdh, teta_pioggia;//
+	double quota, teta, satur, psi, h, k, uno_su_dqdh, teta_pioggia; //
 	double alfa, n, tetar, tetas, ks, Delta_h, moist_cont;
 	double denom_pow, denompow_uno, denompow_due, denompow_tre;
 	double exp_c, exp_d, satur_expc, satur_expd;//
@@ -40,7 +36,7 @@ __kernel void mbusuTransitionFunction(MODEL_DEFINITION3D,__global Parameters* pa
 	volume = parameters->lato*parameters->lato*parameters->lato;
 	_k_inv = (get_slices() - 1) - _k;
 	quota = parameters->lato*_k_inv;
-	h = calGet3Dr(MODEL3D, _i, _j, _k,H);
+	h = calGet3Dr(MODEL3D,H, _i, _j, _k);
 
 	//---- PARAMETRI SUOLO
 
@@ -81,7 +77,7 @@ __kernel void mbusuTransitionFunction(MODEL_DEFINITION3D,__global Parameters* pa
 
 	for (i = 1; i < VON_NEUMANN_NEIGHBORS; i++)
 	{
-		Delta_h = h - calGetX3Dr(MODEL3D, _i, _j, _k, i,H);
+		Delta_h = h - calGetX3Dr(MODEL3D,H, _i, _j, _k, i);
 
 		if (_k_inv == ZSUP && i == 5)	//6
 		Delta_h = 0;
@@ -96,7 +92,7 @@ __kernel void mbusuTransitionFunction(MODEL_DEFINITION3D,__global Parameters* pa
 		if (_j == YIN && i == 2)//4
 		Delta_h = 0;
 
-		temp_value = ((calGet3Dr(MODEL3D, _i, _j, _k,K) + calGetX3Dr(MODEL3D, _i, _j, _k, i,K)) / 2.0) * calGet3Dr(MODEL3D, _i, _j, _k,DQDH);
+		temp_value = ((calGet3Dr(MODEL3D,K, _i, _j, _k) + calGetX3Dr(MODEL3D,K, _i, _j, _k, i)) / 2.0) * calGet3Dr(MODEL3D,DQDH, _i, _j, _k);
 		h = h - ((Delta_h / (parameters->lato*parameters->lato))*parameters->delta_t*temp_value);
 
 	}
@@ -107,7 +103,7 @@ __kernel void mbusuTransitionFunction(MODEL_DEFINITION3D,__global Parameters* pa
 	if (_k_inv == ZSUP && _i<45 && _j>(Ymid - 20) && _j < (Ymid + 20))
 	{
 		teta_pioggia = parameters->lato*parameters->rain*parameters->delta_t / volume;
-		h = h + teta_pioggia*calGet3Dr(MODEL3D, _i, _j, _k,DQDH);
+		h = h + teta_pioggia*calGet3Dr(MODEL3D,DQDH, _i, _j, _k);
 
 	}
 
@@ -115,26 +111,19 @@ __kernel void mbusuTransitionFunction(MODEL_DEFINITION3D,__global Parameters* pa
 
 	psi = h - quota;
 
-
-
 	//---------------------------(dteta/dh)^(-1) SECONDO RICHARDS
-
 
 	denompow_uno = pow(alfa*(-psi), (1 - n));
 	denompow_due = pow(alfa*(-psi), n);
 	denompow_tre = pow((1 / (1 + denompow_due)), (1 / n - 2));
 	uno_su_dqdh = (denompow_uno / (alfa*(n - 1)*(tetas - tetar)))*denompow_tre;
 
-
-
 	denom_pow = pow(alfa*(-psi), n);
 	teta = tetar + ((tetas - tetar)*pow((1 / (1 + denom_pow)), (1 - 1 / n)));
 	denom_pow_start = pow(alfa*(734), n);
 
-
 	teta_start = tetar + ((tetas - tetar)*pow((1 / (1 + denom_pow_start)), (1 - 1 / n)));
 	moist_cont = teta / tetas;
-
 
 	moist_diff = moist_cont - teta_start / tetas;
 
@@ -158,44 +147,44 @@ __kernel void mbusuTransitionFunction(MODEL_DEFINITION3D,__global Parameters* pa
 		convergence = 1.0;
 	}
 
-
-
 	//---Update
 
-	calSet3Dr(MODEL3D,uno_su_dqdh, _i, _j, _k,DQDH);
-	calSet3Dr(MODEL3D,psi, _i, _j, _k,PSI);
-	calSet3Dr(MODEL3D,k, _i, _j, _k,K);
-	calSet3Dr(MODEL3D,h, _i, _j, _k,H);
-	calSet3Dr(MODEL3D,teta, _i, _j, _k,TETA);
-	calSet3Dr(MODEL3D,moist_cont, _i, _j, _k,MOIST_CONT);
-	calSet3Dr(MODEL3D,moist_diff, _i, _j, _k,MOIST_DIFF);
-	calSet3Dr(MODEL3D,convergence,_i, _j, _k,CONVERGENCE);
+	calSet3Dr(MODEL3D,DQDH, _i, _j, _k,uno_su_dqdh);
+	calSet3Dr(MODEL3D,PSI, _i, _j, _k,psi);
+	calSet3Dr(MODEL3D,K, _i, _j, _k,k);
+	calSet3Dr(MODEL3D,H, _i, _j, _k,h);
+	calSet3Dr(MODEL3D,TETA, _i, _j, _k,teta);
+	calSet3Dr(MODEL3D,MOIST_CONT, _i, _j, _k,moist_cont);
+	calSet3Dr(MODEL3D,MOIST_DIFF, _i, _j, _k,moist_diff);
+	calSet3Dr(MODEL3D,CONVERGENCE,_i, _j, _k,convergence);
 
 }
 
-__kernel void steering(MODEL_DEFINITION3D,__global Parameters* parameters) {
+__kernel void steering(MODEL_DEFINITION3D, __global Parameters* parameters) {
 
 	initThreads3D();
 
 	int i = getX();
 	int j = getY();
 	int k = getZ();
-	CALreal moist_print;
-	CALint Ymid = YOUT / 2;
-	CALint k_inv;
 
-	double min = calGet3Dr(MODEL3D, 0, 0,0,CONVERGENCE);
-	double tempMin =  calGet3Dr(MODEL3D, i, j,k,CONVERGENCE);
-	if (min > tempMin)
+	if(i==0 && j==0 && k==0) {
+		double min = calGet3Dr(MODEL3D,CONVERGENCE, 0, 0,0);
+
+		for(int s =0; s < get_slices(); s++)
+		for(int x =0; x < get_rows(); x++)
+		for(int y =0; y < get_columns(); y++) {
+			double tempMin = calGet3Dr(MODEL3D,CONVERGENCE, s, x, y);
+			if (min > tempMin)
 			min = tempMin;
+		}
 
-	if (min > 105.0)
-			min = 105.0;
-
-	parameters->delta_t = 0.95*min;
-	parameters->delta_t_cum_prec = parameters->delta_t_cum;
-	parameters->delta_t_cum += parameters->delta_t;
-
+		if (min > 105.0)
+		min = 105.0;
+		parameters->delta_t = 0.95*min;
+		parameters->delta_t_cum_prec = parameters->delta_t_cum;
+		parameters->delta_t_cum += parameters->delta_t;
+	}
 
 }
 
@@ -210,13 +199,9 @@ __kernel void stopCondition(MODEL_DEFINITION3D, __global Parameters* parameters)
 	//Stop condition
 	if ((parameters->delta_t_cum >= parameters->ascii_output_time_step && parameters->delta_t_cum_prec <= parameters->ascii_output_time_step))
 	{
+
 		stopExecution();
 	}
 
 }
-
-
-
-
-
 

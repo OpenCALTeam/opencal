@@ -53,19 +53,19 @@ void calRemoveActiveCell3D(MODEL_DEFINITION3D, int i, int j, int k) {
 
 }
 
-void calInitSubstateActiveCell3Db(MODEL_DEFINITION3D, CALbyte value, int n, int substateNum) {
+void calInitSubstateActiveCell3Db(MODEL_DEFINITION3D, int substateNum, int n, CALbyte value) {
 	__global CALbyte * current = calGetCurrentSubstate3Db(MODEL3D, substateNum);
 	__global CALbyte * next = calGetNextSubstate3Db(MODEL3D, substateNum);
 	calSetBufferActiveCells3Db(current, get_rows(), get_columns(), value, get_active_cells(), n);
 	calSetBufferActiveCells3Db(next, get_rows(), get_columns(), value, get_active_cells(), n);
 }
-void calInitSubstateActiveCell3Di(MODEL_DEFINITION3D, CALint value, int n, int substateNum) {
+void calInitSubstateActiveCell3Di(MODEL_DEFINITION3D, int substateNum, int n, CALint value) {
 	__global CALint * current = calGetCurrentSubstate3Di(MODEL3D, substateNum);
 	__global CALint * next = calGetNextSubstate3Di(MODEL3D, substateNum);
 	calSetBufferActiveCells3Di(current, get_rows(), get_columns(), value, get_active_cells(), n);
 	calSetBufferActiveCells3Di(next, get_rows(), get_columns(), value, get_active_cells(), n);
 }
-void calInitSubstateActiveCell3Dr(MODEL_DEFINITION3D, CALreal value, int n, int substateNum) {
+void calInitSubstateActiveCell3Dr(MODEL_DEFINITION3D, int substateNum, int n, CALreal value) {
 	__global CALreal * current = calGetCurrentSubstate3Dr(MODEL3D, substateNum);
 	__global CALreal * next = calGetNextSubstate3Dr(MODEL3D, substateNum);
 	calSetBufferActiveCells3Dr(current, get_rows(), get_columns(), value, get_active_cells(), n);

@@ -37,11 +37,11 @@ enum CALNeighborhood3D {
  *
  * */
 void calInitSubstate3Db(MODEL_DEFINITION3D,		//!< Defines model parameters
-		CALbyte value,							//!< Value to which the cell is set
+		CALint substateNum,						//!< Indicates the number of the substate
 		int i, 									//!< Row coordinate of the cell to be initialized
 		int j,									//!< Column coordinate of the cell to be initialized
 		int k,									//!< Slice coordinate of the cell to be initialized
-		CALint substateNum						//!< Indicates the number of the substate
+		CALbyte value							//!< Value to which the cell is set
 		);
 
 /*! \brief Initializes a integer substate to a constant value.
@@ -51,11 +51,11 @@ void calInitSubstate3Db(MODEL_DEFINITION3D,		//!< Defines model parameters
  *
  * */
 void calInitSubstate3Di(MODEL_DEFINITION3D,		//!< Defines model parameters
-		CALint value,							//!< Value to which the cell is set
+		CALint substateNum,						//!< Indicates the number of the substate
 		int i, 									//!< Row coordinate of the cell to be initialized
 		int j,									//!< Column coordinate of the cell to be initialized
 		int k,									//!< Slice coordinate of the cell to be initialized
-		CALint substateNum						//!< Indicates the number of the substate
+		CALint value							//!< Value to which the cell is set
 		);
 
 /*! \brief Initializes a real (floating point) substate to a constant value.
@@ -65,11 +65,11 @@ void calInitSubstate3Di(MODEL_DEFINITION3D,		//!< Defines model parameters
  *
  * */
 void calInitSubstate3Dr(MODEL_DEFINITION3D,		//!< Defines model parameters
-		CALreal value,							//!< Value to which the cell is set
+		CALint substateNum,						//!< Indicates the number of the substate
 		int i, 									//!< Row coordinate of the cell to be initialized
 		int j,									//!< Column coordinate of the cell to be initialized
 		int k,									//!< Slice coordinate of the cell to be initialized
-		CALint substateNum						//!< Indicates the number of the substate
+		CALreal value							//!< Value to which the cell is set
 		);
 
 /*! \brief Gets a pointer to the current byte matrix of the substate corresponding to substateNum */
@@ -104,80 +104,80 @@ __global CALint * calGetNextSubstate3Di(MODEL_DEFINITION3D,			//!< Defines model
 
 /*! \brief Returns the cell (i, j, k) value of a byte substate.*/
 CALbyte calGet3Db(MODEL_DEFINITION3D,	//!< Defines model parameters
+		CALint substateNum,				//!< Indicates the number of the substate
 		int i, 							//!< Row coordinate of the cell
 		int j,							//!< Column coordinate of the cell
-		int k,							//!< Slice coordinate of the cell
-		CALint substateNum				//!< Indicates the number of the substate
+		int k							//!< Slice coordinate of the cell
 		);
 
 /*! \brief Returns the cell (i, j, k) value of a integer substate.*/
 CALint calGet3Di(MODEL_DEFINITION3D,	//!< Defines model parameters
+		CALint substateNum,				//!< Indicates the number of the substate
 		int i, 							//!< Row coordinate of the cell
 		int j,							//!< Column coordinate of the cell
-		int k,							//!< Slice coordinate of the cell
-		CALint substateNum				//!< Indicates the number of the substate
+		int k							//!< Slice coordinate of the cell
 		);
 
 /*! \brief Returns the cell (i, j, k) value of a real (floating point) substate.*/
 CALreal calGet3Dr(MODEL_DEFINITION3D,	//!< Defines model parameters
+		CALint substateNum,				//!< Indicates the number of the substate
 		int i, 							//!< Row coordinate of the cell
 		int j,							//!< Column coordinate of the cell
-		int k,							//!< Slice coordinate of the cell
-		CALint substateNum				//!< Indicates the number of the substate
+		int k							//!< Slice coordinate of the cell
 		);
 
 /*! \brief Returns the n-th neighbor of the cell (i, j, k) value of a byte substate.*/
 CALbyte calGetX3Db(MODEL_DEFINITION3D,	//!< Defines model parameters
+		CALint substateNum,				//!< Indicates the number of the substate
 		int i, 							//!< Row coordinate of the cell
 		int j,							//!< Column coordinate of the cell
 		int k,							//!< Slice coordinate of the cell
-		int n,							//!< Index of the n-th neighbor.
-		CALint substateNum				//!< Indicates the number of the substate
+		int n							//!< Index of the n-th neighbor.
 		);
 
 /*! \brief Returns the n-th neighbor of the cell (i, j, k) value of a integer substate.*/
 CALint calGetX3Di(MODEL_DEFINITION3D,	//!< Defines model parameters
+		CALint substateNum,				//!< Indicates the number of the substate
 		int i, 							//!< Row coordinate of the cell
 		int j,							//!< Column coordinate of the cell
 		int k,							//!< Slice coordinate of the cell
-		int n,							//!< Index of the n-th neighbor.
-		CALint substateNum				//!< Indicates the number of the substate
+		int n							//!< Index of the n-th neighbor.
 		);
 
 /*! \brief Returns the n-th neighbor of the cell (i, j, k) value of a real (floating point) substate.*/
 CALreal calGetX3Dr(MODEL_DEFINITION3D,	//!< Defines model parameters
+		CALint substateNum,				//!< Indicates the number of the substate
 		int i, 							//!< Row coordinate of the cell
 		int j,							//!< Column coordinate of the cell
 		int k,							//!< Slice coordinate of the cell
-		int n,							//!< Index of the n-th neighbor.
-		CALint substateNum				//!< Indicates the number of the substate
+		int n							//!< Index of the n-th neighbor.
 		);
 
 /*! \brief Sets the cell (i, j, k) value of a byte substate.  */
 void calSet3Db(MODEL_DEFINITION3D,		//!< Defines model parameters
-		CALbyte value,					//!< Value to which the cell is set
+		CALint substateNum,				//!< Indicates the number of the substate
 		int i, 							//!< Row coordinate of the cell
 		int j,							//!< Column coordinate of the cell
 		int k,							//!< Slice coordinate of the cell
-		CALint substateNum				//!< Indicates the number of the substate
+		CALbyte value					//!< Value to which the cell is set
 		);
 
 /*! \brief Sets the cell (i, j, k) value of a integer substate.  */
 void calSet3Di(MODEL_DEFINITION3D,		//!< Defines model parameters
-		CALint value,					//!< Value to which the cell is set
+		CALint substateNum,				//!< Indicates the number of the substate
 		int i, 							//!< Row coordinate of the cell
 		int j,							//!< Column coordinate of the cell
 		int k,							//!< Slice coordinate of the cell
-		CALint substateNum				//!< Indicates the number of the substate
+		CALint value					//!< Value to which the cell is set
 		);
 
 /*! \brief Sets the cell (i, j, k) value of a real (floating point) substate.  */
 void calSet3Dr(MODEL_DEFINITION3D,		//!< Defines model parameters
-		CALreal value,					//!< Value to which the cell is set
+		CALint substateNum,				//!< Indicates the number of the substate
 		int i, 							//!< Row coordinate of the cell
 		int j,							//!< Column coordinate of the cell
 		int k,							//!< Slice coordinate of the cell
-		CALint substateNum				//!< Indicates the number of the substate
+		CALreal value					//!< Value to which the cell is set
 		);
 
 

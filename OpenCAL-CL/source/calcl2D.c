@@ -405,6 +405,9 @@ void calclRun2D(CALCLToolkit2D* toolkit2d, struct CALModel2D * model, unsigned m
 	if (toolkit2d->kernelInitSubstates != NULL)
 		calclKernelCall2D(toolkit2d, toolkit2d->kernelInitSubstates, 1, threadNumMax, NULL);
 
+	//TODO call update
+
+
 	toolkit2d->steps = 0;
 	while (toolkit2d->steps < (int)maxStep || maxStep == CAL_RUN_LOOP) {
 		stop = calclSingleStep2D(toolkit2d, model, singleStepThreadNum, dimNum);

@@ -23,3 +23,4 @@ file(GLOB SRC
 
 add_executable(calcl_sciara-fv2 ${SRC})
 target_link_libraries(calcl_sciara-fv2 opencal-cl opencal opencl_utils ${OpenCL_LIBRARY})
+
