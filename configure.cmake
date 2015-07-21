@@ -3,6 +3,7 @@ set(INSTALL_BIN_DIR bin CACHE PATH "Installation directory for executables")
 set(INSTALL_LIB_DIR lib CACHE PATH "Installation directory for libraries")
 set(INSTALL_INCLUDE_DIR include CACHE PATH "Installation directory for headers")
 set(INSTALL_SHARE_DIR share CACHE PATH "Installation directory for data files")
+set(INSTALL_EXAMPLE_DIR share/OpenCAL-Examples CACHE PATH "Installation directory for data files")
 
 
 set(OPENCAL_MAJOR_VERSION 1)

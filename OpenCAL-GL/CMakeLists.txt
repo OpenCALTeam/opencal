@@ -46,13 +46,20 @@ file(GLOB SRC
     "source/*.c"
 )
 
+file(GLOB HEADERS
+    "include/*.h"
+    "include/OpenCAL-GL/*.h"
+)
+
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 
 add_library(opencal-gl ${SHAREDORSTATIC} ${SRC} )
-
+install(TARGETS opencal-gl DESTINATION  ${INSTALL_LIB_DIR})
+install(FILES ${HEADERS} DESTINATION ${INSTALL_INCLUDE_DIR}/OpenCAL-GL)
 
 if(${BUILD_EXAMPLES} STREQUAL "ON")
-        add_subdirectory(examples)
+    add_subdirectory(examples)
+	install(DIRECTORY examples DESTINATION ${INSTALL_EXAMPLE_DIR}/OpenCAL-GL)
 endif()

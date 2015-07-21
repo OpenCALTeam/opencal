@@ -73,4 +73,5 @@ install(FILES ${KERNELS_SRC} DESTINATION ${INSTALL_SHARE_DIR}/OpenCAL-CL/kernel/
 
 if(${BUILD_EXAMPLES} STREQUAL "ON")
         add_subdirectory(examples)
+		install(DIRECTORY examples DESTINATION ${INSTALL_EXAMPLE_DIR}/OpenCAL-CL)
 endif()
