@@ -9,7 +9,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 // Lesser General Public License for more details.
 
-#include <OpenCAL/cal3DBuffer.h>
+#include <cal3DBuffer.h>
 
 void calCopyBufferActiveCells3Db(__global CALbyte* M_src, __global CALbyte* M_dest, int columns, int rows, __global struct CALCell3D* active_cells, int n) {
 	int c = active_cells[n].k * columns * rows + active_cells[n].i * columns + active_cells[n].j;

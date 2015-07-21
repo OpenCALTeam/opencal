@@ -47,8 +47,8 @@ file(GLOB HEADERS
 )
 
 add_library(opencal ${SHAREDORSTATIC} ${SRC})
-install(TARGETS opencal DESTINATION lib/)
-install(FILES ${HEADERS} DESTINATION include/OpenCAL)
+install(TARGETS opencal DESTINATION  ${INSTALL_LIB_DIR})
+install(FILES ${HEADERS} DESTINATION ${INSTALL_INCLUDE_DIR}/OpenCAL)
 
 
 if(${BUILD_EXAMPLES} STREQUAL "ON")

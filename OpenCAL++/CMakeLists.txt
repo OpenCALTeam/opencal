@@ -57,8 +57,8 @@ file(GLOB HEADERS
     "include/OpenCAL++/*.h"
 )
 add_library(opencalpp ${SHAREDORSTATIC} ${SRC})
-install(TARGETS opencalpp DESTINATION lib/)
-install(FILES ${HEADERS} DESTINATION include/OpenCAL++)
+install(TARGETS opencalpp DESTINATION ${INSTALL_LIB_DIR})
+install(FILES ${HEADERS} DESTINATION ${INSTALL_INCLUDE_DIR}/OpenCAL++)
 
 if(${BUILD_EXAMPLES} STREQUAL "ON")
 	add_subdirectory(examples)

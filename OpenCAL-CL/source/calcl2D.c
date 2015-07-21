@@ -15,7 +15,7 @@
  *  Created on: 10/giu/2014
  *      Author: alessio
  */
-#include "../include/OpenCAL-CL/calcl2D.h"
+#include <OpenCAL-CL/calcl2D.h>
 
 /******************************************************************************
  * 							PRIVATE FUNCTIONS

@@ -17,6 +17,7 @@ void display(void)
 	CALbyte b;
 
 	glClear(GL_COLOR_BUFFER_BIT);
+	glClearColor(0,0,0,0);
 	glPushMatrix();
 
 	glTranslatef(-zhabotinsky.model->columns / 2.0f, zhabotinsky.model->rows / 2.0f, 0);

@@ -9,7 +9,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 // Lesser General Public License for more details.
 
-#include <OpenCAL/cal3D.h>
+#include <cal3D.h>
 
 void calInitSubstate3Db(MODEL_DEFINITION3D, CALint substateNum, int i, int j, int k, CALbyte value) {
 	__global CALbyte * current = calGetCurrentSubstate3Db(MODEL3D, substateNum);

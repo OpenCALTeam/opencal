@@ -39,9 +39,9 @@ include_directories(
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
-knotman90
 link_directories(${CMAKE_CURRENT_SOURCE_DIR}/source)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
+
 
 file(GLOB SRC
     "include/*.h"
@@ -54,9 +54,22 @@ file(GLOB HEADERS
     "include/OpenCAL-CL/*.h"
 )
 
+file(GLOB KERNELS_HEADERS
+    "kernel/include/*.h"
+)
+
+file(GLOB KERNELS_SRC
+    "kernel/source/*.cl"
+    "kernel/source/*.c"
+)
+
 add_library(opencal-cl ${SHAREDORSTATIC} ${SRC})
-install(TARGETS opencal-cl DESTINATION lib/)
-install(FILES ${HEADERS} DESTINATION include/OpenCAL-CL)
+install(TARGETS opencal-cl DESTINATION ${INSTALL_LIB_DIR})
+install(FILES ${HEADERS} DESTINATION ${INSTALL_INCLUDE_DIR}/OpenCAL-CL)
+
+install(FILES ${KERNELS_HEADERS} DESTINATION ${INSTALL_SHARE_DIR}/OpenCAL-CL/kernel/include)
+install(FILES ${KERNELS_SRC} DESTINATION ${INSTALL_SHARE_DIR}/OpenCAL-CL/kernel/source)
+
 
 if(${BUILD_EXAMPLES} STREQUAL "ON")
         add_subdirectory(examples)

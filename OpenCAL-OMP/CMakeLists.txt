@@ -48,8 +48,8 @@ file(GLOB HEADERS
 )
 
 add_library(opencal-omp ${SHAREDORSTATIC} ${SRC})
-install(TARGETS opencal-omp DESTINATION lib/)
-install(FILES ${HEADERS} DESTINATION include/OpenCAL-OMP)
+install(TARGETS opencal-omp DESTINATION ${INSTALL_LIB_DIR})
+install(FILES ${HEADERS} DESTINATION ${INSTALL_INCLUDE_DIR}/OpenCAL-OMP)
 
 if(${BUILD_EXAMPLES} STREQUAL "ON")
 	add_subdirectory(examples)

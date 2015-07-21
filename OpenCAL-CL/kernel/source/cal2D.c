@@ -9,7 +9,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 // Lesser General Public License for more details.
 
-#include <OpenCAL/cal2D.h>
+#include <cal2D.h>
 
 void calInitSubstate2Db(MODEL_DEFINITION2D, CALint substateNum, int i, int j, CALbyte value) {
 	__global CALbyte * current = calGetCurrentSubstate2Db(MODEL2D,substateNum);

@@ -27,8 +27,8 @@ This cellular automaton provides an illustration of order emerging "spontaneousl
 #include <OpenCAL-OMP/cal2D.h>
 #include <OpenCAL-OMP/cal2DRun.h>
 
-#define ROWS 512
-#define COLS 512
+#define ROWS 1024
+#define COLS 1024
 #define G (35)
 #define k1 (2)
 #define k2 (1)

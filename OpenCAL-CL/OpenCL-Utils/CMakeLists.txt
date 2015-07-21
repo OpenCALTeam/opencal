@@ -31,7 +31,7 @@ file(GLOB HEADERS
     "include/*.h"
 )
 
-add_library(opencl_utils STATIC ${SRC})
-install(TARGETS opencl_utils  DESTINATION lib/)
-install(FILES ${HEADERS} DESTINATION include/OpenCAL-CL)
+add_library(opencl_utils ${SHAREDORSTATIC} ${SRC})
+install(TARGETS opencl_utils  DESTINATION ${INSTALL_LIB_DIR})
+install(FILES ${HEADERS} DESTINATION ${INSTALL_INCLUDE_DIR}/OpenCAL-CL)
 
