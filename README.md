@@ -72,3 +72,15 @@ rm -rf * && cmake --graphviz=deps.dot ..  -DEXAMPLES:STRING=ON -DBUILD_DOCUMENTA
 ```
 
 The cmake option ENABLE_SHARED is used to switch from static and shared object output for the library.
+
+
+
+***TESTING THE LIBRARY***
+The library comes with a series of performance and correctness tests based on the running of various models with the different implementation of the library. ALl the test files are located in the ***opencal/test*** folder. In order to run the tests do the following.
+
+1. Configure using the options: -DBUILD_OPENCAL_TESTS (example: cd build && rm -rf * && cmake -DBUILD_EXAMPLES:STRING=ON -DBUILD_OPENCAL_PP=ON -DBUILD_OPENCAL_SERIAL=ON -DBUILD_OPENCAL_TESTS:STRING=ON -DBUILD_OPENCAL_OMP:STRING=ON )
+2. make
+3. cd ../tests && bash runTests.sh
+
+#fixme
+In order to add a new tests one should first create a new folder into  opencal/tests. Into this folder then create a number of directories each containing a particular implementation of the test. Foir instance in the life2D test there is an implementation for the serial version of the test (that is the reference output), and an omp implementation plus all the cmake files needed to compile the tests. Tests executable should output the result of the model run into the testsout folder using the convention that filenames are just incremental number. 
