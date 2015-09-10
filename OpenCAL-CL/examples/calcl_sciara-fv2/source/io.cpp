@@ -33,7 +33,8 @@ void saveMatrixi(CALint * M, char configuration_path[1024],Sciara * sciara){
 int SaveConfigurationEmission(Sciara* sciara, char *path, char *name)
 {
     char s[1024];
-    if (ConfigurationFileSavingPath(path, sciara->step, name, ".txt", s) == false)
+	char txt[]=".txt";
+    if (ConfigurationFileSavingPath(path, sciara->step, name, txt, s) == false)
         return FILE_ERROR;
     else
     {
@@ -366,32 +367,41 @@ int loadConfiguration(char *path, Sciara* sciara) {
 		if (!loadParameters(path, sciara))
 			return FILE_ERROR;
 	}
-
+	char stt[]=".stt";
+	char Morphology[]="Morphology";
 	//apre il file Morphology
-	ConfigurationFilePath(path, "Morphology", ".stt", configuration_path);
+	ConfigurationFilePath(path, Morphology, stt, configuration_path);
 	if (!loadMorphology(configuration_path, sciara))
 		return FILE_ERROR;
 
+	
+	char Vents[]="Vents";
 	//apre il file Vents
-	ConfigurationFilePath(path, "Vents", ".stt", configuration_path);
+	ConfigurationFilePath(path, Vents, stt, configuration_path);
 	if (!loadVents(configuration_path, sciara))
 		return FILE_ERROR;
 
+	char txt[]=".txt";
+	char EmissionRate[]="EmissionRate";
 	//apre il file EmissionRate
-	ConfigurationFilePath(path, "EmissionRate", ".txt", configuration_path);
+	ConfigurationFilePath(path, EmissionRate, txt, configuration_path);
 	if (!loadEmissionRate(configuration_path, sciara))
 		return FILE_ERROR;
 
+
+	char Thickness[]="Thickness";
 	//apre il file Thickness
-	ConfigurationFilePath(path, "Thickness", ".stt", configuration_path);
+	ConfigurationFilePath(path, Thickness, stt, configuration_path);
 	loadAlreadyAllocatedMap(configuration_path, sciara->substates->Slt->current, sciara->substates->Slt->next, sciara->cols, sciara->rows);
 
+	char Temperature[]="Temperature";
 	//apre il file Temperature
-	ConfigurationFilePath(path, "Temperature", ".stt", configuration_path);
+	ConfigurationFilePath(path,Temperature, stt, configuration_path);
 	loadAlreadyAllocatedMap(configuration_path, sciara->substates->St->current, sciara->substates->St->next, sciara->cols, sciara->rows);
 
+	char SolidifiedLavaThickness[]="SolidifiedLavaThickness";
 	//apre il file SolidifiedLavaThickness
-	ConfigurationFilePath(path, "SolidifiedLavaThickness", ".stt", configuration_path);
+	ConfigurationFilePath(path, SolidifiedLavaThickness, stt, configuration_path);
 	loadAlreadyAllocatedMap(configuration_path, sciara->substates->Msl->current, NULL, sciara->cols, sciara->rows);
 
 	//Imposta lo step in base al nome del file .cfg e aggiorna la barra di stato
@@ -409,39 +419,47 @@ int saveConfiguration(char *path, Sciara* sciara) {
 	bool path_ok;
     char s[1024];
 
+	char cfg[]=".cfg";
+	char empty[]="";
 	//Salva il file di configurazione e i sottostati
-    path_ok = ConfigurationFileSavingPath(path, sciara->step, "", ".cfg", s);
+    path_ok = ConfigurationFileSavingPath(path, sciara->step, empty, cfg, s);
 
     if (!path_ok || !saveParameters(s, sciara))
         return FILE_ERROR;
 
 
-
+	char stt[]=".stt";
+	char Morphology[]="Morphology";
 	//apre il file Morphology
-	ConfigurationFileSavingPath(path, sciara->step, "Morphology", ".stt", s);
+	ConfigurationFileSavingPath(path, sciara->step, Morphology, stt, s);
 	saveMatrixr(sciara->substates->Sz->current,s,sciara);
 
+	char Vents[]="Vents";
 	//apre il file Vents
-	ConfigurationFileSavingPath(path, sciara->step, "Vents", ".stt", s);
+	ConfigurationFileSavingPath(path, sciara->step, Vents, stt, s);
 	sciara->substates->Mv->current = calAllocBuffer2Di(sciara->rows,sciara->cols);
 	rebuildVentsMatrix(sciara->substates->Mv->current,sciara->cols,sciara->rows,sciara->vent);
 	saveMatrixi(sciara->substates->Mv->current,s,sciara);
 	calDeleteBuffer2Di(sciara->substates->Mv->current);
-
+	
+	char EmissionRate[]="EmissionRate";
 	//apre il file EmissionRate
-    if (!SaveConfigurationEmission(sciara, path, "EmissionRate"))
+    if (!SaveConfigurationEmission(sciara, path, EmissionRate))
 		return FILE_ERROR;
 
+	char Thickness[]="Thickness";
 	//apre il file Thickness
-	ConfigurationFileSavingPath(path, sciara->step, "Thickness", ".stt", s);
+	ConfigurationFileSavingPath(path, sciara->step, Thickness, stt, s);
 	saveMatrixr(sciara->substates->Slt->current,s,sciara);
 
+	char Temperature[]="Temperature";
 	//apre il file Temperature
-	ConfigurationFileSavingPath(path, sciara->step, "Temperature", ".stt", s);
+	ConfigurationFileSavingPath(path, sciara->step, Temperature, stt, s);
 	saveMatrixr(sciara->substates->St->current,s,sciara);
 
+	char SolidifiedLavaThickness[]="SolidifiedLavaThickness";
 	//apre il file SolidifiedLavaThickness
-	ConfigurationFileSavingPath(path, sciara->step, "SolidifiedLavaThickness", ".stt", s);
+	ConfigurationFileSavingPath(path, sciara->step, SolidifiedLavaThickness, stt, s);
 	saveMatrixr(sciara->substates->Msl->current,s,sciara);
 
 	return FILE_OK;
