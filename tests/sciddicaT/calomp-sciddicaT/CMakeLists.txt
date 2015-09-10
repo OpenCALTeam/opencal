@@ -16,7 +16,7 @@ ENDIF()
 link_directories(${PROJECT_SOURCE_DIR}/OpenCAL-OMP/lib)
 file(GLOB SRC
     "source/*.cpp"
-     "OpenCAL-OMP/include/*.h"
+    "OpenCAL-OMP/include/*.h"
 )
 add_executable(calomp-sciddicaT-test ${SRC})
 target_link_libraries(calomp-sciddicaT-test opencal-omp)

@@ -32,12 +32,16 @@ Exiting() {
 }
 
 ExecutableExistsOrDie(){
-bin="$1"
+
+binary="$1"
 #check if the executable exists (opencal not built? was BUILD_OPENCAL_TESTS cmake option used?
-if [ ! -e "$bin" ] ; then
-	printColored $RED "FATAL ERROR- Executable $bin does not exists"	
+file $binary
+if [ ! -f "$binary" ] ; then
+	printColored $RED "FATAL ERROR- Executable $binary does not exists"	
+	printColored $RED $OUT	
 	Indent "$(printColored $RED "Was opencal built?")"
 	Indent "$(printColored $RED "Did you use BUILD_OPENCAL_TESTS during configuration?")"
+	
 	Exiting
 fi		
 }
@@ -132,7 +136,7 @@ ExecuteAndSaveElapsedTime() {
 	outFile="$1"
 	binary="$2"
 	parameters="$3"
-	execTime="$(time ( ./$binary $parameters) 2>&1 1>/dev/null )"
+	execTime="$(time ( ./$binary $parameters) 2>&1 )"
 	Indent "$(printColored $PURPLE "Elapsed Time: $execTime")"
 	echo -e "\tTEST $binary" >> $TIMINGFILE;	
 	echo -e "\t $execTime\n" >> $outFile
@@ -193,6 +197,7 @@ for d in */ ; do
 								
 			#need to run the test from the tests directory!					
 				cd ..
+				echo "TESTING $otherBin"
 				ExecutableExistsOrDie "$otherBin"
 
 				Indent "$(printColored $YELLOW "Executing  $odir-test")"
@@ -212,12 +217,12 @@ for d in */ ; do
 				rm -f $TESTROOT/testsout/other/*
 				
 		#restore test directory to run other version of the test
-				cd $TESTROOT
+				cd $dir
 				
 				
 			fi
 		done
-		
+		cd $TESTROOT
 	fi
 done
 rm -f $TESTROOT/testsout/serial/*
