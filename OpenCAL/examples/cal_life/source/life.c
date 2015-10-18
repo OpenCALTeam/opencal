@@ -1,17 +1,16 @@
+// Conway's game of Life Cellular Automaton
+
 #include <OpenCAL/cal2D.h>
 #include <OpenCAL/cal2DIO.h>
 #include <OpenCAL/cal2DRun.h>
 #include <stdlib.h>
 
-//-----------------------------------------------------------------------
-//   THE LIFE CELLULAR AUTOMATON
-//-----------------------------------------------------------------------
-
+// declare CA, substate and simulation objects
 struct CALModel2D* life;
-struct CALSubstate2Di *Q;
+struct CALSubstate2Di* Q;
 struct CALRun2D* life_simulation;
 
-
+// The cell's transition function
 void life_transition_function(struct CALModel2D* life, int i, int j)
 {
 	int sum = 0, n;
@@ -26,41 +25,38 @@ void life_transition_function(struct CALModel2D* life, int i, int j)
 
 int main()
 {
-	//cadef and rundef
-	life = calCADef2D(100, 100, CAL_MOORE_NEIGHBORHOOD_2D, CAL_SPACE_TOROIDAL, CAL_NO_OPT);
-	life_simulation = calRunDef2D(life, 1, 1, CAL_UPDATE_EXPLICIT);
+	// define of the life CA and life_simulation simulation objects
+	life = calCADef2D(8, 16, CAL_MOORE_NEIGHBORHOOD_2D, CAL_SPACE_TOROIDAL, CAL_NO_OPT);
+	life_simulation = calRunDef2D(life, 1, 1, CAL_UPDATE_IMPLICIT);
 
-	//add substates
+	// add the Q substate to the life CA
 	Q = calAddSubstate2Di(life);
 
-	//add transition function's elementary processes. 
+	// add transition function's elementary processes
 	calAddElementaryProcess2D(life, life_transition_function);
 
-	
-	//set the whole substate to 0
+	// set the whole substate to 0
 	calInitSubstate2Di(life, Q, 0);
 
-	//set a glider
+	// set a glider
 	calInit2Di(life, Q, 0, 2, 1);
 	calInit2Di(life, Q, 1, 0, 1);
 	calInit2Di(life, Q, 1, 2, 1);
 	calInit2Di(life, Q, 2, 1, 1);
 	calInit2Di(life, Q, 2, 2, 1);
 
-	//saving configuration
+	// save the Q substate to file
 	calSaveSubstate2Di(life, Q, "./life_0000.txt");
 
-	//simulation run
+	// simulation run
 	calRun2D(life_simulation);
-	
-	//saving configuration
+
+	// save the Q substate to file
 	calSaveSubstate2Di(life, Q, "./life_LAST.txt");
 
-	//finalization
+	// finalize simulation and CA objects
 	calRunFinalize2D(life_simulation);
 	calFinalize2D(life);
 
 	return 0;
 }
-
-//-----------------------------------------------------------------------
