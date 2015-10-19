@@ -8,9 +8,10 @@ before_install:
 
 
 install:
- - sudo add-apt-repository --yes ppa:kalakris/cmake
  - sudo apt-get update -qq
  - sudo apt-get install -qq freeglut3-dev libxmu-dev libxi-dev cmake
+ 
+ 
 
 before_script:
 - cmake --version
