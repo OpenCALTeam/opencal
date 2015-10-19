@@ -10,23 +10,15 @@ before_install:
 install:
  - sudo apt-get update -qq
  - sudo apt-get install -qq freeglut3-dev libxmu-dev libxi-dev cmake
- - if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
-         wget http://www.cmake.org/files/v3.3/cmake-3.3.2-Linux-i386.tar.gz
-      && tar -xzf cmake-3.3.2-Linux-i386.tar.gz
-      && sudo cp -fR cmake-3.3.2-Linux-i386/bin/* /usr/bin
-      && sudo apt-get -qq update
-      && sudo apt-get -qq install g++-4.9 gcc-4.9
-      && export CXX="g++-4.9"
-      && export CC="gcc-4.9"
-      ;
-      else
-         brew update
-      && brew unlink cmake
-      && brew install -v cmake
-      && brew install -v qt5
-      && chmod -R 755 /usr/local/opt/qt5/*
-      ;
-    fi
+ 
+ - wget http://www.cmake.org/files/v3.3/cmake-3.3.2-Linux-i386.tar.gz
+ - tar -xzf cmake-3.3.2-Linux-i386.tar.gz
+ - sudo cp -fR cmake-3.3.2-Linux-i386/* /usr
+ - sudo apt-get -qq update
+ - sudo apt-get -qq install g++-4.8
+ - export CXX="g++-4.9"
+ - export CC="gcc-4.9"
+
 
 before_script:
 - cmake --version
