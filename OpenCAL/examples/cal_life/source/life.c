@@ -32,7 +32,7 @@ int main()
 	// add the Q substate to the life CA
 	Q = calAddSubstate2Di(life);
 
-	// add transition function's elementary processes
+	// add transition function's elementary process
 	calAddElementaryProcess2D(life, life_transition_function);
 
 	// set the whole substate to 0
