@@ -16,38 +16,23 @@
 #include <OpenCAL-GL/calglCommon.h>
 
 #ifndef _WIN32
-
 unsigned int Sleep(unsigned int);
-
 #endif
 
 struct CALGLGlobalSettings {
-	char* demPath;
-	char* sourcePath;
-	char* outputPath;
 	char* applicationName;
 	const char* iconPath;
-
-	int rows;
-	int columns;
 	int cellSize;
-	int step;	
-
 	int width;
 	int height;
 	int positionX;
 	int positionY;
-
 	int zNear;
 	int zFar;
-
-
 	CALbyte onlyModel;
 	enum CALGL_LIGHT lightStatus;
-
 	CALbyte fixedDisplay;
 	int fixedStep;
-
 	int refreshTime;
 };
 
@@ -59,21 +44,15 @@ struct CALGLGlobalSettings* calglCreateGlobalSettings();
 */
 void calglDestroyGlobalSettings();
 
-void calglSetPathGlobalSettings(char* demPath, char* sourcePath, char* outputPath);
+void calglSetApplicationName(char* applicationName);
 
-void calglSetApplicationNameGlobalSettings(char* applicationName);
+void calglSetCellSize(float cellSize);
 
-void calglSetRowsAndColumnsGlobalSettings(int rows, int columns);
+void calglSetWindowDimension(int width, int height);
 
-void calglSetCellSizeGlobalSettings(int cellSize);
+void calglSetWindowPosition(int positionX, int positionY);
 
-void calglSetStepGlobalSettings(int step);
-
-void calglSetWindowDimensionGlobalSettings(int width, int height);
-
-void calglSetWindowPositionGlobalSettings(int positionX, int positionY);
-
-void calglSetClippingFactorGlobalSettings(int zNear, int zFar);
+void calglSetClippingFactor(int zNear, int zFar);
 
 struct CALGLGlobalSettings* calglGetGlobalSettings();
 
@@ -85,11 +64,11 @@ enum CALGL_LIGHT calglAreLightsEnable();
 
 float* calglGetPositionLight();
 
-float* calglGetDiffuseLight(); 
+float* calglGetDiffuseLight();
 
-float* calglGetSpecularLight(); 
+float* calglGetSpecularLight();
 
-float* calglGetAmbientLight(); 
+float* calglGetAmbientLight();
 
 void calglSetRefreshTime(int time);
 

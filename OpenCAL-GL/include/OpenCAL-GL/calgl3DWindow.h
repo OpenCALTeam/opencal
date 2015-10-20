@@ -78,6 +78,8 @@ void calglSetfontWindow3D(struct CALWindow3D* window, char* name, int size);
 
 void calglDrawStringWindow3D(struct CALWindow3D* window, GLuint x, GLuint y, char* format, ...);
 
+void calglSpecialKeyboardEventWindow3D(int key, int x, int y);
+
 void calglKeyboardEventWindow3D(unsigned char key, int x, int y);
 
 void calglKeyboardUpEventWindow3D(unsigned char key, int x, int y);

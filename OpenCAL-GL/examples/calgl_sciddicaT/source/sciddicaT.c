@@ -15,6 +15,14 @@
 #define P_EPSILON 0.001
 #define NUMBER_OF_OUTFLOWS 4
 
+#define DEM "./data/dem.txt"
+#define SOURCE "./data/source.txt"
+#define FINAL "./data/width_final.txt"
+
+#define ROWS 610
+#define COLUMNS 496
+#define STEPS 4000
+
 struct sciddicaTSubstates {
 	struct CALSubstate2Dr *z;
 	struct CALSubstate2Dr *h;
@@ -39,7 +47,7 @@ struct CALRun2D* sciddicaTsimulation;				//the simulartion run
 //first elementary process
 void sciddicaT_flows_computation(struct CALModel2D* sciddicaT, int i, int j)
 {
-	CALbyte eliminated_cells[5]={CAL_FALSE,CAL_FALSE,CAL_FALSE,CAL_FALSE,CAL_FALSE};
+	CALbyte eliminated_cells[5] = { CAL_FALSE, CAL_FALSE, CAL_FALSE, CAL_FALSE, CAL_FALSE };
 	CALbyte again;
 	CALint cells_count;
 	CALreal average;
@@ -54,7 +62,7 @@ void sciddicaT_flows_computation(struct CALModel2D* sciddicaT, int i, int j)
 
 	m = calGet2Dr(sciddicaT, Q.h, i, j) - P.epsilon;
 	u[0] = calGet2Dr(sciddicaT, Q.z, i, j) + P.epsilon;
-	for (n=1; n<sciddicaT->sizeof_X; n++)
+	for (n = 1; n < sciddicaT->sizeof_X; n++)
 	{
 		z = calGetX2Dr(sciddicaT, Q.z, i, j, n);
 		h = calGetX2Dr(sciddicaT, Q.h, i, j, n);
@@ -67,28 +75,28 @@ void sciddicaT_flows_computation(struct CALModel2D* sciddicaT, int i, int j)
 		average = m;
 		cells_count = 0;
 
-		for (n=0; n<sciddicaT->sizeof_X; n++)
+		for (n = 0; n < sciddicaT->sizeof_X; n++)
 			if (!eliminated_cells[n]){
 				average += u[n];
 				cells_count++;
 			}
 
-			if (cells_count != 0)
-				average /= cells_count;
+		if (cells_count != 0)
+			average /= cells_count;
 
-			for (n=0; n<sciddicaT->sizeof_X; n++)
-				if( (average<=u[n]) && (!eliminated_cells[n]) ){
-					eliminated_cells[n]=CAL_TRUE;
-					again=CAL_TRUE;
-				}
+		for (n = 0; n < sciddicaT->sizeof_X; n++)
+			if ((average <= u[n]) && (!eliminated_cells[n])){
+				eliminated_cells[n] = CAL_TRUE;
+				again = CAL_TRUE;
+			}
 
-	}while (again); 
+	} while (again);
 
-	for (n=1; n<sciddicaT->sizeof_X; n++)
+	for (n = 1; n < sciddicaT->sizeof_X; n++)
 		if (eliminated_cells[n])
-			calSet2Dr(sciddicaT, Q.f[n-1], i, j, 0.0);
+			calSet2Dr(sciddicaT, Q.f[n - 1], i, j, 0.0);
 		else
-			calSet2Dr(sciddicaT, Q.f[n-1], i, j, (average-u[n])*P.r);
+			calSet2Dr(sciddicaT, Q.f[n - 1], i, j, (average - u[n])*P.r);
 }
 
 //second (and last) elementary process
@@ -98,8 +106,8 @@ void sciddicaT_width_update(struct CALModel2D* sciddicaT, int i, int j)
 	CALint n;
 
 	h_next = calGet2Dr(sciddicaT, Q.h, i, j);
-	for(n=1; n<sciddicaT->sizeof_X; n++)
-		h_next +=  calGetX2Dr(sciddicaT, Q.f[NUMBER_OF_OUTFLOWS - n], i, j, n) - calGet2Dr(sciddicaT, Q.f[n-1], i, j);
+	for (n = 1; n < sciddicaT->sizeof_X; n++)
+		h_next += calGetX2Dr(sciddicaT, Q.f[NUMBER_OF_OUTFLOWS - n], i, j, n) - calGet2Dr(sciddicaT, Q.f[n - 1], i, j);
 
 	calSet2Dr(sciddicaT, Q.h, i, j, h_next);
 }
@@ -124,14 +132,14 @@ void sciddicaTSimulationInit(struct CALModel2D* sciddicaT)
 	P.epsilon = P_EPSILON;
 
 	//sciddicaT source initialization
-	for (i=0; i<sciddicaT->rows; i++)
-		for (j=0; j<sciddicaT->columns; j++)
+	for (i = 0; i < sciddicaT->rows; i++)
+		for (j = 0; j < sciddicaT->columns; j++)
 		{
 			h = calGet2Dr(sciddicaT, Q.h, i, j);
 
-			if ( h > 0.0 ) {
+			if (h > 0.0) {
 				z = calGet2Dr(sciddicaT, Q.z, i, j);
-				calSet2Dr(sciddicaT, Q.z, i, j, z-h);
+				calSet2Dr(sciddicaT, Q.z, i, j, z - h);
 			}
 		}
 }
@@ -147,12 +155,12 @@ void sciddicaTSteering(struct CALModel2D* sciddicaT)
 	calInitSubstate2Dr(sciddicaT, Q.f[3], 0);
 
 	value = calReductionComputeMax2Dr(sciddicaT, Q.z);
-	printf("Max: %g\t", value);
+	//printf("Max: %g\t", value);
 }
 
 CALbyte sciddicaTSimulationStopCondition(struct CALModel2D* sciddicaT)
 {
-	if (sciddicaTsimulation->step >= calglGetGlobalSettings()->step)
+	if (sciddicaTsimulation->step >= STEPS)
 		return CAL_TRUE;
 	return CAL_FALSE;
 }
@@ -167,21 +175,16 @@ int main(int argc, char** argv)
 	//struct CALDrawModel2D* model2;
 	//struct CALDrawModel2D* model3;
 	//struct CALDrawModel2D* model4;
-	
-	
-	calglSetPathGlobalSettings("./data/dem.txt", "./data/source.txt", "./data/width_final.txt");
-	calglSetApplicationNameGlobalSettings("RealDraw");
-	calglSetRowsAndColumnsGlobalSettings(610, 496);
-	calglSetCellSizeGlobalSettings(5);
-	calglSetStepGlobalSettings(4000);
-	calglSetWindowDimensionGlobalSettings(800, 600);
-	calglSetWindowPositionGlobalSettings(10, 10);
+
+	calglSetApplicationName("RealDraw");
+	calglSetCellSize(5);
+	calglSetWindowDimension(800, 600);
+	calglSetWindowPosition(10, 10);
 	calglEnableLights();
 	//calglSetFixedDisplayStep(50);
 
-
 	//cadef and rundef
-	sciddicaT = calCADef2D(calglGetGlobalSettings()->rows, calglGetGlobalSettings()->columns, CAL_VON_NEUMANN_NEIGHBORHOOD_2D, CAL_SPACE_TOROIDAL, CAL_NO_OPT);
+	sciddicaT = calCADef2D(ROWS, COLUMNS, CAL_VON_NEUMANN_NEIGHBORHOOD_2D, CAL_SPACE_TOROIDAL, CAL_NO_OPT);
 	sciddicaTsimulation = calRunDef2D(sciddicaT, 1, CAL_RUN_LOOP, CAL_UPDATE_IMPLICIT);
 	//add substates
 	Q.z = calAddSubstate2Dr(sciddicaT);
@@ -195,18 +198,16 @@ int main(int argc, char** argv)
 	calAddElementaryProcess2D(sciddicaT, sciddicaT_width_update);
 
 	//load configuration
-	calLoadSubstate2Dr(sciddicaT, Q.z, calglGetGlobalSettings()->demPath);
-	calLoadSubstate2Dr(sciddicaT, Q.h, calglGetGlobalSettings()->sourcePath);
-	//calSaveSubstate2Dr(sciddicaT, Q.h, OUTPUT_PATH);
+	calLoadSubstate2Dr(sciddicaT, Q.z, DEM);
+	calLoadSubstate2Dr(sciddicaT, Q.h, SOURCE);
+	//calSaveSubstate2Dr(sciddicaT, Q.h, OUTPUT);
 
 	//simulation run setup
-	calRunAddInitFunc2D(sciddicaTsimulation, sciddicaTSimulationInit); 
-/**/calRunInitSimulation2D(sciddicaTsimulation);	//It is required in the case the simulation main loop is explicitated; similarly for calRunFinalizeSimulation2D
+	calRunAddInitFunc2D(sciddicaTsimulation, sciddicaTSimulationInit);
+	calRunInitSimulation2D(sciddicaTsimulation);	//It is required in the case the simulation main loop is explicitated; similarly for calRunFinalizeSimulation2D
 	calRunAddSteeringFunc2D(sciddicaTsimulation, sciddicaTSteering);
 	calRunAddStopConditionFunc2D(sciddicaTsimulation, sciddicaTSimulationStopCondition);
-	
-	
-	
+
 	// model1 definition
 	model1 = calglDefDrawModel2D(CALGL_DRAW_MODE_SURFACE, "SciddicaT", sciddicaT, sciddicaTsimulation);
 	// Add nodes
@@ -218,28 +219,32 @@ int main(int argc, char** argv)
 	calglAddToDrawModel2Dr(model1, Q.h, &Q.h, CALGL_TYPE_INFO_COLOR_DATA, CALGL_TYPE_INFO_USE_RED_SCALE, CALGL_DATA_TYPE_DYNAMIC);
 	calglAddToDrawModel2Dr(model1, Q.h, &Q.h, CALGL_TYPE_INFO_NORMAL_DATA, CALGL_TYPE_INFO_USE_DEFAULT, CALGL_DATA_TYPE_DYNAMIC);
 	// InfoBar
-	calglInfoBar2Dr(model1, Q.h, "Debris thickness", CALGL_TYPE_INFO_USE_RED_SCALE, CALGL_INFO_BAR_VERTICAL);
+	//calglRelativeInfoBar2Dr(model1, Q.h, "Debris thickness", CALGL_TYPE_INFO_USE_RED_SCALE, CALGL_INFO_BAR_ORIENTATION_VERTICAL);
+	//calglAbsoluteInfoBar2Dr(model1, Q.h, "Debris thickness", CALGL_TYPE_INFO_USE_RED_SCALE, 20, 300, 50, 280);
+	calglAbsoluteInfoBar2Dr(model1, Q.h, "Debris thickness", CALGL_TYPE_INFO_USE_RED_SCALE, 20, 120, 300, 80);
+
+	// New functions for hide/display intervals of cells
+	calglHideDrawJBound2D(model1, 0, model1->calModel->columns);
+	calglDisplayDrawJBound2D(model1, 300, model1->calModel->columns);
+	calglHideDrawIBound2D(model1, 100, 150);
 
 	/*model2 = calglDefDrawModel2D(CALGL_DRAW_MODE_FLAT, "model2", sciddicaT, sciddicaTsimulation);
 	model2->realModel = model1->realModel;
 	calglInfoBar2Dr(model2, Q.h, "Debris", CALGL_TYPE_INFO_USE_BLUE_SCALE, CALGL_INFO_BAR_HORIZONTAL);
-
 	model3 = calglDefDrawModel2D(CALGL_DRAW_MODE_FLAT, "model3", sciddicaT, sciddicaTsimulation);
 	model3->realModel = model1->realModel;
 	calglInfoBar2Dr(model3, Q.h, "Debris", CALGL_TYPE_INFO_USE_GREEN_SCALE, CALGL_INFO_BAR_VERTICAL);
-
 	model4 = calglDefDrawModel2D(CALGL_DRAW_MODE_SURFACE, "model4", sciddicaT, sciddicaTsimulation);
 	model4->realModel = model1->realModel;
 	calglInfoBar2Dr(model4, Q.z, "height", CALGL_TYPE_INFO_USE_GRAY_SCALE, CALGL_INFO_BAR_HORIZONTAL);*/
 
 	calglStartProcessWindow2D(argc, argv);
 
-
 	//finalizations
 	calRunFinalize2D(sciddicaTsimulation);
 	calFinalize2D(sciddicaT);
 
 	calglDestroyGlobalSettings();
-	
+
 	return 0;
 }
