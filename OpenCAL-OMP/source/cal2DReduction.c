@@ -23,7 +23,7 @@ CALbyte calReductionOperation2Db(struct CALModel2D* model, struct CALSubstate2Db
 	CALbyte *values;
 
 	numThreads = omp_get_num_procs();
-	omp_set_num_threads(numThreads);
+	CAL_SET_NUM_THREADS(numThreads);
 	values = (CALbyte*)malloc(sizeof(CALbyte) * numThreads);
 #endif
 
@@ -37,7 +37,7 @@ CALbyte calReductionOperation2Db(struct CALModel2D* model, struct CALSubstate2Db
 #pragma omp parallel private(tmp, i) shared(numThreads)
 	{
 		CALint start, end, threadId;
-		threadId = omp_get_thread_num();
+		threadId = CAL_GET_THREAD_NUM();
 		start = threadId * (model->rows*model->columns) / numThreads;
 		end = (threadId + 1) * (model->rows*model->columns) / numThreads;
 		if (threadId == numThreads - 1){
@@ -192,8 +192,8 @@ CALint calReductionOperation2Di(struct CALModel2D* model, struct CALSubstate2Di*
 #ifdef _OPENMP	
 	CALint *values;
 
-	numThreads = omp_get_num_procs();
-	omp_set_num_threads(numThreads);
+	numThreads = CAL_GET_NUM_PROCS();
+	CAL_SET_NUM_THREADS(numThreads);
 	values = (CALint*)malloc(sizeof(CALint) * numThreads);
 #endif
 
@@ -207,7 +207,7 @@ CALint calReductionOperation2Di(struct CALModel2D* model, struct CALSubstate2Di*
 #pragma omp parallel private(tmp, i) shared(numThreads)
 	{
 		CALint start, end, threadId;
-		threadId = omp_get_thread_num();
+		threadId = CAL_GET_THREAD_NUM();
 		start = threadId * (model->rows*model->columns) / numThreads;
 		end = (threadId + 1) * (model->rows*model->columns) / numThreads;
 		if (threadId == numThreads - 1){
@@ -363,8 +363,8 @@ CALreal calReductionOperation2Dr(struct CALModel2D* model, struct CALSubstate2Dr
 #ifdef _OPENMP	
 	CALreal *values;
 
-	numThreads = omp_get_num_procs();
-	omp_set_num_threads(numThreads);
+	numThreads = CAL_GET_NUM_PROCS();
+	CAL_SET_NUM_THREADS(numThreads);
 	values = (CALreal*)malloc(sizeof(CALreal) * numThreads);
 #endif
 
@@ -378,7 +378,7 @@ CALreal calReductionOperation2Dr(struct CALModel2D* model, struct CALSubstate2Dr
 #pragma omp parallel private(tmp, i) shared(numThreads)
 	{
 		CALint start, end, threadId;
-		threadId = omp_get_thread_num();
+		threadId = CAL_GET_THREAD_NUM();
 		start = threadId * (model->rows*model->columns) / numThreads;
 		end = (threadId + 1) * (model->rows*model->columns) / numThreads;
 		if (threadId == numThreads - 1){
