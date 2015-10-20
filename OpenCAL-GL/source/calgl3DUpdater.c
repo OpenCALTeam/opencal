@@ -38,7 +38,7 @@ struct CALUpdater3D* calglCreateUpdater3D(struct CALRun3D* calRun){
 }
 
 void calglDestroyUpdater3D(struct CALUpdater3D* calUpdater){
-	if(calUpdater){
+	if (calUpdater){
 		free(calUpdater);
 	}
 }
@@ -46,12 +46,12 @@ void calglDestroyUpdater3D(struct CALUpdater3D* calUpdater){
 void* calglFuncThreadUpdate3D(void* arg){
 	struct CALUpdater3D* calUpdater = (struct CALUpdater3D*) arg;
 
-	while(!calUpdater->stop){
+	while (!calUpdater->stop){
 		calglUpdate3D(calUpdater);
-		Sleep(10);	
+		Sleep(10);
 	}
 
-	return (void *) 0; 
+	return (void *)0;
 }
 
 void calglStartThread3D(struct CALUpdater3D* calUpdater){
@@ -59,8 +59,8 @@ void calglStartThread3D(struct CALUpdater3D* calUpdater){
 }
 
 void calglUpdate3D(struct CALUpdater3D* calUpdater){
-	if(calUpdater->active){
-		if(calUpdater->firstRun){
+	if (calUpdater->active){
+		if (calUpdater->firstRun){
 			calUpdater->firstRun = CAL_FALSE;
 			calUpdater->start_time = time(NULL);
 		}
@@ -69,15 +69,15 @@ void calglUpdate3D(struct CALUpdater3D* calUpdater){
 		//exectutes the global transition function, the steering function and check for the stop condition.
 		calUpdater->terminated = calRunCAStep3D(calUpdater->calRun);
 		//graphic rendering
-#ifdef WIN32
-		system("cls");
-#else
-		system("clear");
-#endif
-		printf("*----------------  Cellular Automata  ----------------*\n");
-		printf(" Rows: %d, Columns: %d\n", calglGetGlobalSettings()->rows, calglGetGlobalSettings()->columns);
-		printf(" Current Step: %d/%d; Active cells: %d\n", calUpdater->calRun->step, calglGetGlobalSettings()->step, calUpdater->calRun->ca3D->A.size_current);
-		printf("*-----------------------------------------------------*\n");
+		//#ifdef WIN32
+		//		system("cls");
+		//#else
+		//		system("clear");
+		//#endif
+		//		printf("*----------------  Cellular Automata  ----------------*\n");
+		//		printf(" Rows: %d, Columns: %d\n", calglGetGlobalSettings()->rows, calglGetGlobalSettings()->columns);
+		//		printf(" Current Step: %d/%d; Active cells: %d\n", calUpdater->calRun->step, calglGetGlobalSettings()->step, calUpdater->calRun->ca3D->A.size_current);
+		//		printf("*-----------------------------------------------------*\n");
 		//check for the stop condition
 		if (!calUpdater->terminated)
 		{
@@ -85,7 +85,7 @@ void calglUpdate3D(struct CALUpdater3D* calUpdater){
 			//breaking the simulation
 			calUpdater->end_time = time(NULL);
 			printf("\nSimulation terminated\n");
-			printf(" Elapsed time: %ds\n", calUpdater->end_time - calUpdater->start_time); 
+			printf(" Elapsed time: %ds\n", calUpdater->end_time - calUpdater->start_time);
 			printf("*-----------------------------------------------------*\n");
 			//saving configuration
 			calglSaveStateUpdater3D(calUpdater);
@@ -94,30 +94,30 @@ void calglUpdate3D(struct CALUpdater3D* calUpdater){
 }
 
 void calglSaveStateUpdater3D(struct CALUpdater3D* calUpdater){
-	int i=0;
+	int i = 0;
 	char tmpString[50];
 	struct CALModel3D* calModel = calUpdater->calRun->ca3D;
 
 	printf("Saving final state to folder \"./data/\"\n");
 
-	for(i=0; i<calModel->sizeof_pQb_array; i++){
+	for (i = 0; i < calModel->sizeof_pQb_array; i++){
 		strcpy(tmpString, "./data/byteSubstate");
 		strcat(tmpString, calglGetString3D(i));
-		strcat(tmpString, ".txt");		
+		strcat(tmpString, ".txt");
 		calSaveSubstate3Db(calModel, calModel->pQb_array[i], tmpString);
 	}
 
-	for(i=0; i<calModel->sizeof_pQi_array; i++){
+	for (i = 0; i < calModel->sizeof_pQi_array; i++){
 		strcpy(tmpString, "./data/intSubstate");
 		strcat(tmpString, calglGetString3D(i));
-		strcat(tmpString, ".txt");		
+		strcat(tmpString, ".txt");
 		calSaveSubstate3Di(calModel, calModel->pQi_array[i], tmpString);
 	}
 
-	for(i=0; i<calModel->sizeof_pQr_array; i++){
+	for (i = 0; i < calModel->sizeof_pQr_array; i++){
 		strcpy(tmpString, "./data/realSubstate");
 		strcat(tmpString, calglGetString3D(i));
-		strcat(tmpString, ".txt");		
+		strcat(tmpString, ".txt");
 		calSaveSubstate3Dr(calModel, calModel->pQr_array[i], tmpString);
 	}
 }

@@ -58,16 +58,15 @@ CALbyte life3DSimulationStopCondition(struct CALModel3D* life3D)
 //------------------------------------------------------------------------------
 
 int main(int argc, char** argv){
-	calglSetApplicationNameGlobalSettings("3D life");
-	calglSetRowsAndColumnsGlobalSettings(25, 25);
-	calglSetStepGlobalSettings(4000);
-	calglSetWindowDimensionGlobalSettings(400, 400);
-	calglSetWindowPositionGlobalSettings(40, 40);
+	calglSetApplicationName("3D life");
+	calglSetWindowDimension(400, 400);
+	calglSetWindowPosition(40, 40);
+	calglEnableLights();
 
 	struct CALDrawModel3D* drawModel;
 
 	//cadef and rundef
-	life3D = calCADef3D(calglGetGlobalSettings()->rows, calglGetGlobalSettings()->columns, LAYERS, CAL_MOORE_NEIGHBORHOOD_3D, CAL_SPACE_TOROIDAL, CAL_NO_OPT);
+	life3D = calCADef3D(ROWS, COLS, LAYERS, CAL_MOORE_NEIGHBORHOOD_3D, CAL_SPACE_TOROIDAL, CAL_NO_OPT);
 	life3Dsimulation = calRunDef3D(life3D, 1, CAL_RUN_LOOP, CAL_UPDATE_IMPLICIT);
 	//add substates
 	Q.life = calAddSubstate3Db(life3D);
@@ -85,6 +84,16 @@ int main(int argc, char** argv){
 	calglColor3D(drawModel, 0.5f, 0.5f, 0.5f, 1.0f);
 	calglAddToDrawModel3Db(drawModel, Q.life, &Q.life, CALGL_TYPE_INFO_COLOR_DATA, CALGL_TYPE_INFO_USE_CONST_VALUE, CALGL_DATA_TYPE_DYNAMIC);
 	calglAddToDrawModel3Db(drawModel, Q.life, &Q.life, CALGL_TYPE_INFO_NORMAL_DATA, CALGL_TYPE_INFO_USE_DEFAULT, CALGL_DATA_TYPE_DYNAMIC); 
+	
+	// New functions for hide/display intervals of cells
+	calglHideDrawKBound3D(drawModel, 0, drawModel->calModel->slices);
+	calglDisplayDrawKBound3D(drawModel, 4, 10);
+	calglDisplayDrawKBound3D(drawModel, 20, 25);	
+	calglHideDrawJBound3D(drawModel, 0, drawModel->calModel->columns);
+	calglDisplayDrawJBound3D(drawModel, 2, 6);
+	calglDisplayDrawJBound3D(drawModel, 18, 21);
+
+
 	calglStartProcessWindow3D(argc, argv);
 
 	//finalizations

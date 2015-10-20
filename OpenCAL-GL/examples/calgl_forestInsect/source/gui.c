@@ -7,12 +7,10 @@
 #include <OpenCAL-GL/calgl2DWindow.h>
 
 int main(int argc, char** argv){
-	calglSetApplicationNameGlobalSettings("Forest Insect");
-	calglSetRowsAndColumnsGlobalSettings(177, 177);
-	calglSetCellSizeGlobalSettings(4.1f);
-	calglSetStepGlobalSettings(3000);
-	calglSetWindowDimensionGlobalSettings(720, 640);
-	calglSetWindowPositionGlobalSettings(0, 0);
+	calglSetApplicationName("Forest Insect");
+	calglSetCellSize(4.1f);
+	calglSetWindowDimension(720, 640);
+	calglSetWindowPosition(0, 0);
 	calglEnableLights();
 	//calglSetFixedDisplayStep(50);
 

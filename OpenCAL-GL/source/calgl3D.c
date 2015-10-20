@@ -37,6 +37,14 @@ struct CALDrawModel3D* calglDefDrawModel3D(enum CALGL_DRAW_MODE mode, const char
 	drawModel->blueComponent = 1.0f;
 	drawModel->alphaComponent = 1.0f;
 
+	drawModel->drawKCells = (GLshort*)malloc(sizeof(GLshort)*calModel->slices);
+	drawModel->drawICells = (GLshort*)malloc(sizeof(GLshort)*calModel->rows);
+	drawModel->drawJCells = (GLshort*)malloc(sizeof(GLshort)*calModel->columns);
+
+	calglDisplayDrawKBound3D(drawModel, 0, calModel->slices);
+	calglDisplayDrawIBound3D(drawModel, 0, calModel->rows);
+	calglDisplayDrawJBound3D(drawModel, 0, calModel->columns);
+
 	drawModel->calUpdater = calglCreateUpdater3D(calRun);	
 	drawModel->infoBar = NULL;
 
@@ -53,6 +61,12 @@ void calglDestoyDrawModel3D(struct CALDrawModel3D* drawModel){
 			calglDestroyNode3Di(drawModel->intModel);
 		if(drawModel->realModel)
 			calglDestroyNode3Dr(drawModel->realModel);
+		if (drawModel->drawKCells)
+			free(drawModel->drawKCells);
+		if (drawModel->drawICells)
+			free(drawModel->drawICells);
+		if (drawModel->drawJCells)
+			free(drawModel->drawJCells);
 		calglDestroyModelViewParameter(drawModel->modelView);
 		calglDestroyLightParameter(drawModel->modelLight);
 		calglDestroyUpdater3D(drawModel->calUpdater);
@@ -282,9 +296,15 @@ void calglDrawDiscreetModelDisplayCurrentNode3Db(struct CALDrawModel3D* calDrawM
 		} else {
 			*calNode->callList = glGenLists(1);
 			glNewList(*calNode->callList, GL_COMPILE);{
-				for(k=0; k < slices; k++){
-					for(i=0; i < rows; i++){		
-						for(j=0; j < columns; j++){
+				for (k = 0; k < slices; k++){
+					if (!calDrawModel->drawKCells[k])
+						continue;
+					for (i = 0; i < rows; i++){
+						if (!calDrawModel->drawICells[i])
+							continue;
+						for (j = 0; j < columns; j++){
+							if (!calDrawModel->drawJCells[j])
+								continue;
 							if(calglSetColorData3Db(calDrawModel, calNode, i, j, k) == CAL_TRUE){
 								// Normal ?
 
@@ -328,8 +348,14 @@ void calglDrawDiscreetModelDisplayCurrentNode3Db(struct CALDrawModel3D* calDrawM
 		}
 	} else {
 		for(k=0; k < slices; k++){
-			for(i=0; i < rows; i++){		
+			if (!calDrawModel->drawKCells[k])
+				continue;
+			for(i=0; i < rows; i++){
+				if (!calDrawModel->drawICells[i])
+					continue;
 				for(j=0; j < columns; j++){
+					if (!calDrawModel->drawJCells[j])
+						continue;
 					if(calglSetColorData3Db(calDrawModel, calNode, i, j, k) == CAL_TRUE){
 						// Normal ?
 
@@ -394,9 +420,15 @@ void calglDrawDiscreetModelDisplayCurrentNode3Di(struct CALDrawModel3D* calDrawM
 		} else {
 			*calNode->callList = glGenLists(1);
 			glNewList(*calNode->callList, GL_COMPILE);{
-				for(k=0; k < slices; k++){
-					for(i=0; i < rows; i++){		
-						for(j=0; i < columns; j++){
+				for (k = 0; k < slices; k++){
+					if (!calDrawModel->drawKCells[k])
+						continue;
+					for (i = 0; i < rows; i++){
+						if (!calDrawModel->drawICells[i])
+							continue;
+						for (j = 0; j < columns; j++){
+							if (!calDrawModel->drawJCells[j])
+								continue;
 							if(calglSetColorData3Di(calDrawModel, calNode, i, j, k) == CAL_TRUE){
 								// Normal ?
 
@@ -439,9 +471,15 @@ void calglDrawDiscreetModelDisplayCurrentNode3Di(struct CALDrawModel3D* calDrawM
 			} glEndList();
 		}
 	} else {
-		for(k=0; k < slices; k++){
-			for(i=0; i < rows; i++){		
-				for(j=0; i < columns; j++){
+		for (k = 0; k < slices; k++){
+			if (!calDrawModel->drawKCells[k])
+				continue;
+			for (i = 0; i < rows; i++){
+				if (!calDrawModel->drawICells[i])
+					continue;
+				for (j = 0; j < columns; j++){
+					if (!calDrawModel->drawJCells[j])
+						continue;
 					if(calglSetColorData3Di(calDrawModel, calNode, i, j, k) == CAL_TRUE){
 						// Normal ?
 
@@ -506,9 +544,15 @@ void calglDrawDiscreetModelDisplayCurrentNode3Dr(struct CALDrawModel3D* calDrawM
 		} else {
 			*calNode->callList = glGenLists(1);
 			glNewList(*calNode->callList, GL_COMPILE);{
-				for(k=0; k < slices; k++){
-					for(i=0; i < rows; i++){		
-						for(j=0; i < columns; j++){
+				for (k = 0; k < slices; k++){
+					if (!calDrawModel->drawKCells[k])
+						continue;
+					for (i = 0; i < rows; i++){
+						if (!calDrawModel->drawICells[i])
+							continue;
+						for (j = 0; j < columns; j++){
+							if (!calDrawModel->drawJCells[j])
+								continue;
 							if(calglSetColorData3Dr(calDrawModel, calNode, i, j, k) == CAL_TRUE){
 								// Normal ?
 
@@ -551,9 +595,15 @@ void calglDrawDiscreetModelDisplayCurrentNode3Dr(struct CALDrawModel3D* calDrawM
 			} glEndList();
 		}
 	} else {
-		for(k=0; k < slices; k++){
-			for(i=0; i < rows; i++){		
-				for(j=0; i < columns; j++){
+		for (k = 0; k < slices; k++){
+			if (!calDrawModel->drawKCells[k])
+				continue;
+			for (i = 0; i < rows; i++){
+				if (!calDrawModel->drawICells[i])
+					continue;
+				for (j = 0; j < columns; j++){
+					if (!calDrawModel->drawJCells[j])
+						continue;
 					if(calglSetColorData3Dr(calDrawModel, calNode, i, j, k) == CAL_TRUE){
 						// Normal ?
 
@@ -1091,19 +1141,91 @@ void calglDrawBoundingBox3D(struct CALDrawModel3D* calDrawModel){
 #pragma endregion
 
 #pragma region InfoBar
-void calglInfoBar3Db(struct CALDrawModel3D* calDrawModel, struct CALSubstate3Db* substate, const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, enum CALGL_INFO_BAR_ORIENTATION orientation){
+void calglRelativeInfoBar3Db(struct CALDrawModel3D* calDrawModel, struct CALSubstate3Db* substate, const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, enum CALGL_INFO_BAR_ORIENTATION orientation){
 	calglDestroyInfoBar(calDrawModel->infoBar);
-	calDrawModel->infoBar = calglCreateInfoBar3Db(substateName, CALGL_TYPE_INFO_USE_RED_SCALE, calDrawModel, substate, orientation);
+	calDrawModel->infoBar = calglCreateRelativeInfoBar3Db(substateName, CALGL_TYPE_INFO_USE_RED_SCALE, calDrawModel, substate, orientation);
 }
-void calglInfoBar3Di(struct CALDrawModel3D* calDrawModel, struct CALSubstate3Di* substate, const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, enum CALGL_INFO_BAR_ORIENTATION orientation){
+void calglRelativeInfoBar3Di(struct CALDrawModel3D* calDrawModel, struct CALSubstate3Di* substate, const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, enum CALGL_INFO_BAR_ORIENTATION orientation){
 	calglDestroyInfoBar(calDrawModel->infoBar);
-	calDrawModel->infoBar = calglCreateInfoBar3Di(substateName, CALGL_TYPE_INFO_USE_RED_SCALE, calDrawModel, substate, orientation);
+	calDrawModel->infoBar = calglCreateRelativeInfoBar3Di(substateName, CALGL_TYPE_INFO_USE_RED_SCALE, calDrawModel, substate, orientation);
 }
-void calglInfoBar3Dr(struct CALDrawModel3D* calDrawModel, struct CALSubstate3Dr* substate, const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, enum CALGL_INFO_BAR_ORIENTATION orientation){
+void calglRelativeInfoBar3Dr(struct CALDrawModel3D* calDrawModel, struct CALSubstate3Dr* substate, const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, enum CALGL_INFO_BAR_ORIENTATION orientation){
 	calglDestroyInfoBar(calDrawModel->infoBar);
-	calDrawModel->infoBar = calglCreateInfoBar3Dr(substateName, CALGL_TYPE_INFO_USE_RED_SCALE, calDrawModel, substate, orientation);
+	calDrawModel->infoBar = calglCreateRelativeInfoBar3Dr(substateName, CALGL_TYPE_INFO_USE_RED_SCALE, calDrawModel, substate, orientation);
+}
+void calglAbsoluteInfoBar3Db(struct CALDrawModel3D* calDrawModel, struct CALSubstate3Db* substate, const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, GLfloat xPosition, GLfloat yPosition, GLint width, GLint height){
+	calglDestroyInfoBar(calDrawModel->infoBar);
+	calDrawModel->infoBar = calglCreateAbsoluteInfoBar3Db(substateName, infoUse, calDrawModel, substate, xPosition, yPosition, width, height);
+}
+void calglAbsoluteInfoBar3Di(struct CALDrawModel3D* calDrawModel, struct CALSubstate3Di* substate, const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, GLfloat xPosition, GLfloat yPosition, GLint width, GLint height){
+	calglDestroyInfoBar(calDrawModel->infoBar);
+	calDrawModel->infoBar = calglCreateAbsoluteInfoBar3Di(substateName, infoUse, calDrawModel, substate, xPosition, yPosition, width, height);
+}
+void calglAbsoluteInfoBar3Dr(struct CALDrawModel3D* calDrawModel, struct CALSubstate3Dr* substate, const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, GLfloat xPosition, GLfloat yPosition, GLint width, GLint height){
+	calglDestroyInfoBar(calDrawModel->infoBar);
+	calDrawModel->infoBar = calglCreateAbsoluteInfoBar3Dr(substateName, infoUse, calDrawModel, substate, xPosition, yPosition, width, height);
 }
 #pragma endregion
 
+#pragma region DrawIntervals
+void calglDisplayDrawKBound3D(struct CALDrawModel3D* calDrawModel, GLint min, GLint max){
+	int i = 0;
 
+	if (min < 0 || min > max || max > calDrawModel->calModel->slices)
+		return;
 
+	for (i = min; i < max; i++){
+		calDrawModel->drawKCells[i] = CAL_TRUE;
+	}
+}
+void calglDisplayDrawIBound3D(struct CALDrawModel3D* calDrawModel, GLint min, GLint max){
+	int i = 0;
+
+	if (min < 0 || min > max || max > calDrawModel->calModel->rows)
+		return;
+
+	for (i = min; i < max; i++){
+		calDrawModel->drawICells[i] = CAL_TRUE;
+	}
+}
+void calglDisplayDrawJBound3D(struct CALDrawModel3D* calDrawModel, GLint min, GLint max){
+	int i = 0;
+
+	if (min < 0 || min > max || max > calDrawModel->calModel->columns)
+		return;
+
+	for (i = min; i < max; i++){
+		calDrawModel->drawJCells[i] = CAL_TRUE;
+	}
+}
+void calglHideDrawKBound3D(struct CALDrawModel3D* calDrawModel, GLint min, GLint max){
+	int i = 0;
+
+	if (min < 0 || min > max || max > calDrawModel->calModel->slices)
+		return;
+
+	for (i = min; i < max; i++){
+		calDrawModel->drawKCells[i] = CAL_FALSE;
+	}
+}
+void calglHideDrawIBound3D(struct CALDrawModel3D* calDrawModel, GLint min, GLint max){
+	int i = 0;
+
+	if (min < 0 || min > max || max > calDrawModel->calModel->rows)
+		return;
+
+	for (i = min; i < max; i++){
+		calDrawModel->drawICells[i] = CAL_FALSE;
+	}
+}
+void calglHideDrawJBound3D(struct CALDrawModel3D* calDrawModel, GLint min, GLint max){
+	int i = 0;
+
+	if (min < 0 || min > max || max > calDrawModel->calModel->columns)
+		return;
+
+	for (i = min; i < max; i++){
+		calDrawModel->drawJCells[i] = CAL_FALSE;
+	}
+}
+#pragma endregion

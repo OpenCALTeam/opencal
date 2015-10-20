@@ -42,15 +42,9 @@ struct CALGLGlobalSettings* calglCreateGlobalSettings(){
 
 	globalSettings = (struct CALGLGlobalSettings*) malloc(sizeof(struct CALGLGlobalSettings));
 
-	globalSettings->demPath = "";
-	globalSettings->sourcePath = ""; 
-	globalSettings->outputPath = "";
 	globalSettings->applicationName = "OpenCAL";
 	globalSettings->iconPath = "";
-	globalSettings->rows = 0;
-	globalSettings->columns = 0;
 	globalSettings->cellSize = 0;
-	globalSettings->step = 0;
 	globalSettings->width = 640;
 	globalSettings->height = 480;
 	globalSettings->positionX = 0;
@@ -71,42 +65,18 @@ void calglDestroyGlobalSettings(){
 	}
 }
 
-void calglSetPathGlobalSettings(char* demPath, char* sourcePath, char* outputPath){
-	if(!globalSettings){
-		globalSettings = calglCreateGlobalSettings();
-	}
-	globalSettings->demPath = demPath;
-	globalSettings->sourcePath = sourcePath;
-	globalSettings->outputPath = outputPath;
-}
-
-void calglSetApplicationNameGlobalSettings(char* applicationName){
+void calglSetApplicationName(char* applicationName){
 	if(!globalSettings){
 		globalSettings = calglCreateGlobalSettings();
 	}
 	globalSettings->applicationName = applicationName;
 }
 
-void calglSetRowsAndColumnsGlobalSettings(int rows, int columns){
-	if(!globalSettings){
-		globalSettings = calglCreateGlobalSettings();
-	}
-	globalSettings->rows = rows;
-	globalSettings->columns = columns;
-}
-
-void calglSetCellSizeGlobalSettings(int cellSize){
+void calglSetCellSize(float cellSize){
 	globalSettings->cellSize = cellSize;
 }
 
-void calglSetStepGlobalSettings(int step){
-	if(!globalSettings){
-		globalSettings = calglCreateGlobalSettings();
-	}
-	globalSettings->step = step;
-}
-
-void calglSetWindowDimensionGlobalSettings(int width, int height){
+void calglSetWindowDimension(int width, int height){
 	if(!globalSettings){
 		globalSettings = calglCreateGlobalSettings();
 	}
@@ -114,7 +84,7 @@ void calglSetWindowDimensionGlobalSettings(int width, int height){
 	globalSettings->height = height;
 }
 
-void calglSetWindowPositionGlobalSettings(int positionX, int positionY){
+void calglSetWindowPosition(int positionX, int positionY){
 	if(!globalSettings){
 		globalSettings = calglCreateGlobalSettings();
 	}
@@ -122,7 +92,7 @@ void calglSetWindowPositionGlobalSettings(int positionX, int positionY){
 	globalSettings->positionY = positionY;
 }
 
-void calglSetClippingFactorGlobalSettings(int zNear, int zFar){
+void calglSetClippingFactor(int zNear, int zFar){
 	if(!globalSettings){
 		globalSettings = calglCreateGlobalSettings();
 	}
