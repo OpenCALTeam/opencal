@@ -38,6 +38,12 @@ struct CALDrawModel2D* calglDefDrawModel2D(enum CALGL_DRAW_MODE mode, const char
 	drawModel->blueComponent = 1.0f;
 	drawModel->alphaComponent = 1.0f;
 
+	drawModel->drawICells = (GLshort*)malloc(sizeof(GLshort)*calModel->rows);
+	drawModel->drawJCells = (GLshort*)malloc(sizeof(GLshort)*calModel->columns);
+
+	calglDisplayDrawIBound2D(drawModel, 0, calModel->rows);
+	calglDisplayDrawJBound2D(drawModel, 0, calModel->columns);
+	
 	drawModel->calUpdater = calglCreateUpdater2D(calRun);	
 	drawModel->infoBar = NULL;
 
@@ -54,6 +60,10 @@ void calglDestoyDrawModel2D(struct CALDrawModel2D* drawModel){
 			calglDestroyNode2Di(drawModel->intModel);
 		if(drawModel->realModel)
 			calglDestroyNode2Dr(drawModel->realModel);
+		if (drawModel->drawICells)
+			free(drawModel->drawICells);
+		if (drawModel->drawJCells)
+			free(drawModel->drawJCells);
 		calglDestroyModelViewParameter(drawModel->modelView);
 		calglDestroyLightParameter(drawModel->modelLight);
 		calglDestroyUpdater2D(drawModel->calUpdater);
@@ -494,8 +504,12 @@ void calglDrawRealModelDisplayCurrentNode2Db(struct CALDrawModel2D* calDrawModel
 		} else {
 			*calNode->callList = glGenLists(1);
 			glNewList(*calNode->callList, GL_COMPILE);{
-				for(i=0; i < rows-1; i++){				
-					for(j=0; j < columns-1; j++){
+				for (i = 0; i < rows - 1; i++){
+					if (!calDrawModel->drawICells[i])
+						continue;
+					for (j = 0; j < columns - 1; j++){
+						if (!calDrawModel->drawJCells[j])
+							continue;
 						glBegin(GL_TRIANGLES); {
 							calglSetNormalData2Db(calDrawModel, calNode, i, j);
 							calglSetColorData2Db(calDrawModel, calNode, i, j);
@@ -518,8 +532,12 @@ void calglDrawRealModelDisplayCurrentNode2Db(struct CALDrawModel2D* calDrawModel
 			} glEndList();
 		}
 	} else {
-		for(i=0; i < rows-1; i++){				
-			for(j=0; j < columns-1; j++){
+		for (i = 0; i < rows - 1; i++){
+			if (!calDrawModel->drawICells[i])
+				continue;
+			for (j = 0; j < columns - 1; j++){
+				if (!calDrawModel->drawJCells[j])
+					continue;
 				glBegin(GL_TRIANGLES); {
 					calglSetNormalData2Db(calDrawModel, calNode, i, j);
 					calglSetColorData2Db(calDrawModel, calNode, i, j);
@@ -557,8 +575,12 @@ void calglDrawRealModelDisplayCurrentNode2Di(struct CALDrawModel2D* calDrawModel
 		} else {
 			*calNode->callList = glGenLists(1);
 			glNewList(*calNode->callList, GL_COMPILE);{
-				for(i=0; i < rows-1; i++){				
-					for(j=0; j < columns-1; j++){
+				for (i = 0; i < rows - 1; i++){
+					if (!calDrawModel->drawICells[i])
+						continue;
+					for (j = 0; j < columns - 1; j++){
+						if (!calDrawModel->drawJCells[j])
+							continue;
 						glBegin(GL_TRIANGLES); {
 							calglSetNormalData2Di(calDrawModel, calNode, i, j);
 							calglSetColorData2Di(calDrawModel, calNode, i, j);
@@ -581,8 +603,12 @@ void calglDrawRealModelDisplayCurrentNode2Di(struct CALDrawModel2D* calDrawModel
 			} glEndList();
 		}
 	} else {
-		for(i=0; i < rows-1; i++){				
-			for(j=0; j < columns-1; j++){
+		for (i = 0; i < rows - 1; i++){
+			if (!calDrawModel->drawICells[i])
+				continue;
+			for (j = 0; j < columns - 1; j++){
+				if (!calDrawModel->drawJCells[j])
+					continue;
 				glBegin(GL_TRIANGLES); {
 					calglSetNormalData2Di(calDrawModel, calNode, i, j);
 					calglSetColorData2Di(calDrawModel, calNode, i, j);
@@ -620,8 +646,12 @@ void calglDrawRealModelDisplayCurrentNode2Dr(struct CALDrawModel2D* calDrawModel
 		} else {
 			*calNode->callList = glGenLists(1);
 			glNewList(*calNode->callList, GL_COMPILE);{
-				for(i=0; i < rows-1; i++){				
-					for(j=0; j < columns-1; j++){
+				for (i = 0; i < rows - 1; i++){
+					if (!calDrawModel->drawICells[i])
+						continue;
+					for (j = 0; j < columns - 1; j++){
+						if (!calDrawModel->drawJCells[j])
+							continue;
 						glBegin(GL_TRIANGLES); {
 							calglSetNormalData2Dr(calDrawModel, calNode, i, j);
 							calglSetColorData2Dr(calDrawModel, calNode, i, j);
@@ -644,8 +674,12 @@ void calglDrawRealModelDisplayCurrentNode2Dr(struct CALDrawModel2D* calDrawModel
 			} glEndList();
 		}
 	} else {
-		for(i=0; i < rows-1; i++){				
-			for(j=0; j < columns-1; j++){
+		for (i = 0; i < rows - 1; i++){
+			if (!calDrawModel->drawICells[i])
+				continue;
+			for (j = 0; j < columns - 1; j++){
+				if (!calDrawModel->drawJCells[j])
+					continue;
 				glBegin(GL_TRIANGLES); {
 					calglSetNormalData2Dr(calDrawModel, calNode, i, j);
 					calglSetColorData2Dr(calDrawModel, calNode, i, j);
@@ -1229,19 +1263,71 @@ void calglDrawBoundingBox2D(struct CALDrawModel2D* calDrawModel, GLfloat height,
 #pragma endregion
 
 #pragma region InfoBar
-void calglInfoBar2Db(struct CALDrawModel2D* calDrawModel, struct CALSubstate2Db* substate, const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, enum CALGL_INFO_BAR_ORIENTATION orientation){
+void calglRelativeInfoBar2Db(struct CALDrawModel2D* calDrawModel, struct CALSubstate2Db* substate, const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, enum CALGL_INFO_BAR_ORIENTATION orientation){
 	calglDestroyInfoBar(calDrawModel->infoBar);
-	calDrawModel->infoBar = calglCreateInfoBar2Db(substateName, infoUse, calDrawModel, substate, orientation); 
+	calDrawModel->infoBar = calglCreateRelativeInfoBar2Db(substateName, infoUse, calDrawModel, substate, orientation); 
 }
-void calglInfoBar2Di(struct CALDrawModel2D* calDrawModel, struct CALSubstate2Di* substate, const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, enum CALGL_INFO_BAR_ORIENTATION orientation){
+void calglRelativeInfoBar2Di(struct CALDrawModel2D* calDrawModel, struct CALSubstate2Di* substate, const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, enum CALGL_INFO_BAR_ORIENTATION orientation){
 	calglDestroyInfoBar(calDrawModel->infoBar);
-	calDrawModel->infoBar = calglCreateInfoBar2Di(substateName, infoUse, calDrawModel, substate, orientation);
+	calDrawModel->infoBar = calglCreateRelativeInfoBar2Di(substateName, infoUse, calDrawModel, substate, orientation);
 }
-void calglInfoBar2Dr(struct CALDrawModel2D* calDrawModel, struct CALSubstate2Dr* substate, const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, enum CALGL_INFO_BAR_ORIENTATION orientation){
+void calglRelativeInfoBar2Dr(struct CALDrawModel2D* calDrawModel, struct CALSubstate2Dr* substate, const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, enum CALGL_INFO_BAR_ORIENTATION orientation){
 	calglDestroyInfoBar(calDrawModel->infoBar);
-	calDrawModel->infoBar = calglCreateInfoBar2Dr(substateName, infoUse, calDrawModel, substate, orientation);
+	calDrawModel->infoBar = calglCreateRelativeInfoBar2Dr(substateName, infoUse, calDrawModel, substate, orientation);
+}
+void calglAbsoluteInfoBar2Db(struct CALDrawModel2D* calDrawModel, struct CALSubstate2Db* substate, const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, GLfloat xPosition, GLfloat yPosition, GLint width, GLint height){
+	calglDestroyInfoBar(calDrawModel->infoBar);
+	calDrawModel->infoBar = calglCreateAbsoluteInfoBar2Db(substateName, infoUse, calDrawModel, substate, xPosition, yPosition, width, height);
+}
+void calglAbsoluteInfoBar2Di(struct CALDrawModel2D* calDrawModel, struct CALSubstate2Di* substate, const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, GLfloat xPosition, GLfloat yPosition, GLint width, GLint height){
+	calglDestroyInfoBar(calDrawModel->infoBar);
+	calDrawModel->infoBar = calglCreateAbsoluteInfoBar2Di(substateName, infoUse, calDrawModel, substate, xPosition, yPosition, width, height);
+}
+void calglAbsoluteInfoBar2Dr(struct CALDrawModel2D* calDrawModel, struct CALSubstate2Dr* substate, const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, GLfloat xPosition, GLfloat yPosition, GLint width, GLint height){
+	calglDestroyInfoBar(calDrawModel->infoBar);
+	calDrawModel->infoBar = calglCreateAbsoluteInfoBar2Dr(substateName, infoUse, calDrawModel, substate, xPosition, yPosition, width, height);
 }
 #pragma endregion
 
+#pragma region DrawIntervals
+void calglDisplayDrawIBound2D(struct CALDrawModel2D* calDrawModel, GLint min, GLint max){
+	int i = 0;
 
+	if (min < 0 || min > max || max > calDrawModel->calModel->rows)
+		return;
 
+	for (i = min; i < max; i++){
+		calDrawModel->drawICells[i] = CAL_TRUE;
+	}
+}
+void calglDisplayDrawJBound2D(struct CALDrawModel2D* calDrawModel, GLint min, GLint max){
+	int i = 0;
+
+	if (min < 0 || min > max || max > calDrawModel->calModel->columns)
+		return;
+
+	for (i = min; i < max; i++){
+		calDrawModel->drawJCells[i] = CAL_TRUE;
+	}
+}
+void calglHideDrawIBound2D(struct CALDrawModel2D* calDrawModel, GLint min, GLint max){
+	int i = 0;
+
+	if (min < 0 || min > max || max > calDrawModel->calModel->rows)
+		return;
+
+	for (i = min; i < max; i++){
+		calDrawModel->drawICells[i] = CAL_FALSE;
+	}
+}
+void calglHideDrawJBound2D(struct CALDrawModel2D* calDrawModel, GLint min, GLint max){
+	int i = 0;
+
+	if (min < 0 || min > max || max > calDrawModel->calModel->columns)
+		return;
+
+	for (i = min; i < max; i++){
+		calDrawModel->drawJCells[i] = CAL_FALSE;
+	}
+}
+#pragma endregion

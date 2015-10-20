@@ -59,11 +59,20 @@ enum CALGL_LIGHT {
 	CALGL_LIGHT_ON
 };
 
+/*! Specify if an information bar must have fixed dimensions
+*	or relative to the window
+*/
+enum CALGL_INFO_BAR_DIMENSION{
+	CALGL_INFO_BAR_DIMENSION_ABSOLUTE = 0,
+	CALGL_INFO_BAR_DIMENSION_RELATIVE
+};
+
 /*! Specify information bar orientation
 */
 enum CALGL_INFO_BAR_ORIENTATION{
-	CALGL_INFO_BAR_VERTICAL = 0,
-	CALGL_INFO_BAR_HORIZONTAL
+	CALGL_INFO_BAR_ORIENTATION_UNKNOW = 0,
+	CALGL_INFO_BAR_ORIENTATION_VERTICAL,
+	CALGL_INFO_BAR_ORIENTATION_HORIZONTAL
 };
 
 #endif

@@ -76,6 +76,8 @@ void calglSetfontWindow2D(struct CALWindow2D* window, char* name, int size);
 
 void calglDrawStringWindow2D(struct CALWindow2D* window, GLuint x, GLuint y, char* format, ...);
 
+void calglSpecialKeyboardEventWindow2D(int key, int x, int y);
+
 void calglKeyboardEventWindow2D(unsigned char key, int x, int y);
 
 void calglKeyboardUpEventWindow2D(unsigned char key, int x, int y);

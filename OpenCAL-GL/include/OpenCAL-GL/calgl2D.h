@@ -44,6 +44,9 @@ struct CALDrawModel2D{
 	struct CALUpdater2D* calUpdater;
 	struct CALGLInfoBar* infoBar;
 
+	GLshort* drawICells;
+	GLshort* drawJCells;
+
 	// Private data for const color
 	GLfloat redComponent;
 	GLfloat greenComponent;
@@ -137,11 +140,19 @@ void calglDrawBoundingBox2D(struct CALDrawModel2D* calDrawModel, GLfloat height,
 #pragma endregion
 
 #pragma region InfoBar
-void calglInfoBar2Db(struct CALDrawModel2D* calDrawModel, struct CALSubstate2Db* substate, const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, enum CALGL_INFO_BAR_ORIENTATION orientation);
-void calglInfoBar2Di(struct CALDrawModel2D* calDrawModel, struct CALSubstate2Di* substate, const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, enum CALGL_INFO_BAR_ORIENTATION orientation);
-void calglInfoBar2Dr(struct CALDrawModel2D* calDrawModel, struct CALSubstate2Dr* substate, const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, enum CALGL_INFO_BAR_ORIENTATION orientation);
+void calglRelativeInfoBar2Db(struct CALDrawModel2D* calDrawModel, struct CALSubstate2Db* substate, const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, enum CALGL_INFO_BAR_ORIENTATION orientation);
+void calglRelativeInfoBar2Di(struct CALDrawModel2D* calDrawModel, struct CALSubstate2Di* substate, const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, enum CALGL_INFO_BAR_ORIENTATION orientation);
+void calglRelativeInfoBar2Dr(struct CALDrawModel2D* calDrawModel, struct CALSubstate2Dr* substate, const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, enum CALGL_INFO_BAR_ORIENTATION orientation);
+void calglAbsoluteInfoBar2Db(struct CALDrawModel2D* calDrawModel, struct CALSubstate2Db* substate, const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, GLfloat xPosition, GLfloat yPosition, GLint width, GLint height);
+void calglAbsoluteInfoBar2Di(struct CALDrawModel2D* calDrawModel, struct CALSubstate2Di* substate, const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, GLfloat xPosition, GLfloat yPosition, GLint width, GLint height);
+void calglAbsoluteInfoBar2Dr(struct CALDrawModel2D* calDrawModel, struct CALSubstate2Dr* substate, const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, GLfloat xPosition, GLfloat yPosition, GLint width, GLint height);
+#pragma endregion
+
+#pragma region DrawIntervals
+void calglDisplayDrawIBound2D(struct CALDrawModel2D* calDrawModel, GLint min, GLint max);
+void calglDisplayDrawJBound2D(struct CALDrawModel2D* calDrawModel, GLint min, GLint max);
+void calglHideDrawIBound2D(struct CALDrawModel2D* calDrawModel, GLint min, GLint max);
+void calglHideDrawJBound2D(struct CALDrawModel2D* calDrawModel, GLint min, GLint max);
 #pragma endregion
 
 #endif
-
-

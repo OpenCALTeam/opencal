@@ -7,6 +7,10 @@
 //	   ForestInsect cellular automaton definition section
 //-----------------------------------------------------------------------
 
+#define ROWS 177
+#define COLUMNS 177
+#define STEPS 3000
+
 //cadef and rundef
 struct CALModel2D* forestInsect;			//the cellular automaton
 struct forestInsectSubstates Q;				//the substates
@@ -771,7 +775,7 @@ void forestInsectSteering(struct CALModel2D* forestInsect)
 
 CALbyte forestInsectSimulationStopCondition(struct CALModel2D* forestInsect)
 {
-	if (forestInsectSimulation->step >= calglGetGlobalSettings()->step)
+	if (forestInsectSimulation->step >= STEPS)
 		return CAL_TRUE;
 	return CAL_FALSE;
 }
@@ -814,7 +818,7 @@ void forestInsectCADef() {
 	P.incrementSusceptibilityForAge = 0.2f;
 
 	//cadef and rundef
-	forestInsect = calCADef2D(calglGetGlobalSettings()->rows, calglGetGlobalSettings()->columns, CAL_MOORE_NEIGHBORHOOD_2D, CAL_SPACE_FLAT, CAL_NO_OPT);
+	forestInsect = calCADef2D(ROWS, COLUMNS, CAL_MOORE_NEIGHBORHOOD_2D, CAL_SPACE_FLAT, CAL_NO_OPT);
 	forestInsectSimulation = calRunDef2D(forestInsect, 1, CAL_RUN_LOOP, CAL_UPDATE_IMPLICIT);
 	//add transition function's elementary processes
 	calAddElementaryProcess2D(forestInsect, forestInsectUpdateDay);
@@ -964,79 +968,3 @@ void forestInsectCalculateTotalBettle(){
 	calUpdateSubstate2Dr(forestInsect, Q.boolFemaleBettle);
 	calUpdateSubstate2Dr(forestInsect, Q.boolMaleBettle);
 }
-
-//void forestInsectMoveBettle(struct CALModel2D* forestInsect, CALint i, CALint j){
-//	/*
-//	5 | 1 | 8
-//	---|---|---
-//	2 | 0 | 3
-//	---|---|---
-//	6 | 4 | 7
-//	*/
-//	CALint n = 0, notFound = 1, k = 0, tmp;
-//	CALint indexMaxSusceptibility = 0;
-//	CALreal valueMaxSusceptibility = 0.0;
-//
-//	if (calGet2Dr(forestInsect, Q.pineForest, i, j) > 0.0 && calGet2Dr(forestInsect, Q.pineHealth, i, j) <= P.minimumTreeEnergy)
-//	{
-//		for (n = 1; n <= 8; n++)
-//		{
-//			if (calGetX2Dr(forestInsect, Q.pineForest, i, j, n) > 0.0 && calGetX2Dr(forestInsect, Q.pineHealth, i, j, n) > P.minimumTreeEnergy)
-//			{ // If in the n-neighboor there is  a tree
-//				if (calGetX2Dr(forestInsect, Q.pineSusceptibility, i, j, n) > valueMaxSusceptibility)
-//				{
-//					indexMaxSusceptibility = n;
-//					valueMaxSusceptibility = calGetX2Dr(forestInsect, Q.pineSusceptibility, i, j, n);
-//				}
-//			}
-//		}
-//		if (indexMaxSusceptibility == 0){ // Random choose
-//			notFound = 1;
-//			k = 0;
-//			while (notFound){
-//				n = 1 + rand() % 8;
-//				// If in the n-neighboor there is  a tree and it is alive
-//				if (calGetX2Dr(forestInsect, Q.pineForest, i, j, n) > 0.0){ //&& calGetX2Dr(forestInsect, Q.pineHealth, i, j, n) > 0.1){
-//					indexMaxSusceptibility = n;
-//					notFound = 0;
-//				}
-//				k++;
-//			}		
-//		}
-//
-//		switch (indexMaxSusceptibility)
-//		{
-//		case 1:
-//			calSet2Dr(forestInsect, Q.movement, i, j, MOVEMENT_UP);
-//			break;
-//		case 2:
-//			calSet2Dr(forestInsect, Q.movement, i, j, MOVEMENT_LEFT);
-//			break;
-//		case 3:
-//			calSet2Dr(forestInsect, Q.movement, i, j, MOVEMENT_RIGHT);
-//			break;
-//		case 4:
-//			calSet2Dr(forestInsect, Q.movement, i, j, MOVEMENT_DOWN);
-//			break;
-//		case 5:
-//			calSet2Dr(forestInsect, Q.movement, i, j, MOVEMENT_UP_LEFT);
-//			break;
-//		case 6:
-//			calSet2Dr(forestInsect, Q.movement, i, j, MOVEMENT_DOWN_LEFT);
-//			break;
-//		case 7:
-//			calSet2Dr(forestInsect, Q.movement, i, j, MOVEMENT_DOWN_RIGHT);
-//			break;
-//		case 8:
-//			calSet2Dr(forestInsect, Q.movement, i, j, MOVEMENT_UP_RIGHT);
-//			break;
-//		default:
-//			calSet2Dr(forestInsect, Q.movement, i, j, MOVEMENT_NONE);
-//			break;
-//		}
-//	}
-//	else 
-//	{
-//		calSet2Dr(forestInsect, Q.movement, i, j, MOVEMENT_NONE);
-//	}
-//}

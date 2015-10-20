@@ -16,6 +16,7 @@
 
 #define SPACE 20
 #define SEPARATOR_SPACE 5
+#define TRANSLATION_CONSTANT 20
 
 static struct CALWindow3D* window3D = NULL;
 // Models data
@@ -45,25 +46,25 @@ struct CALWindow3D* calglCreateWindow3D(int argc, char** argv, struct CALGLGloba
 
 	window->noModels = size;
 	window->models = models;
-	window->subWindowID = (GLuint*) malloc(sizeof(GLuint)*window->noModels);
-	window->positionsX = (GLint*) malloc(sizeof(GLint)*window->noModels);
-	window->positionsY = (GLint*) malloc(sizeof(GLint)*window->noModels);
+	window->subWindowID = (GLuint*)malloc(sizeof(GLuint)*window->noModels);
+	window->positionsX = (GLint*)malloc(sizeof(GLint)*window->noModels);
+	window->positionsY = (GLint*)malloc(sizeof(GLint)*window->noModels);
 
 	// Setting parameter for translate
-	xPos = (GLfloat*) malloc(sizeof(GLfloat)*size);
-	yPos = (GLfloat*) malloc(sizeof(GLfloat)*size);
-	zPos = (GLfloat*) malloc(sizeof(GLfloat)*size);
-	xRot = (GLfloat*) malloc(sizeof(GLfloat)*size);
-	yRot = (GLfloat*) malloc(sizeof(GLfloat)*size);
-	zRot = (GLfloat*) malloc(sizeof(GLfloat)*size);
+	xPos = (GLfloat*)malloc(sizeof(GLfloat)*size);
+	yPos = (GLfloat*)malloc(sizeof(GLfloat)*size);
+	zPos = (GLfloat*)malloc(sizeof(GLfloat)*size);
+	xRot = (GLfloat*)malloc(sizeof(GLfloat)*size);
+	yRot = (GLfloat*)malloc(sizeof(GLfloat)*size);
+	zRot = (GLfloat*)malloc(sizeof(GLfloat)*size);
 
-	for(i = 0; i<window->noModels; i++){
+	for (i = 0; i < window->noModels; i++){
 		xPos[i] = 0.0f;	yPos[i] = 0.0f;	zPos[i] = 0.0f;
 		xRot[i] = 0.0f; yRot[i] = 0.0f; zRot[i] = 0.0f;
 	}
 
-	glutInitWindowSize(window->globalSettings->width, window->globalSettings->height); 
-	glutInitWindowPosition(window->globalSettings->positionX, window->globalSettings->positionY); 
+	glutInitWindowSize(window->globalSettings->width, window->globalSettings->height);
+	glutInitWindowPosition(window->globalSettings->positionX, window->globalSettings->positionY);
 	window->id = glutCreateWindow(window->globalSettings->applicationName);
 	glutReshapeFunc(calglReshapeWindow3D);
 	glutDisplayFunc(calglDisplayWindow3D);
@@ -72,7 +73,7 @@ struct CALWindow3D* calglCreateWindow3D(int argc, char** argv, struct CALGLGloba
 
 	calglCalculatePositionAndDimensionWindow3D(window);
 
-	for(i = 0; i<window->noModels; i++){
+	for (i = 0; i < window->noModels; i++){
 		window->subWindowID[i] = glutCreateSubWindow(window->id, window->positionsX[i], window->positionsY[i], window->sub_width, window->sub_height);
 		glutReshapeFunc(calglSubReshapeWindow3D);
 		glutDisplayFunc(calglSubDisplayWindow3D);
@@ -81,6 +82,7 @@ struct CALWindow3D* calglCreateWindow3D(int argc, char** argv, struct CALGLGloba
 		glutMotionFunc(calglMotionMouseWindow3D);
 		glutKeyboardFunc(calglKeyboardEventWindow3D);
 		glutKeyboardUpFunc(calglKeyboardUpEventWindow3D);
+		glutSpecialFunc(calglSpecialKeyboardEventWindow3D);
 	}
 
 	window->font_style = GLUT_BITMAP_8_BY_13;
@@ -92,11 +94,11 @@ struct CALWindow3D* calglCreateWindow3D(int argc, char** argv, struct CALGLGloba
 void calglDestroyWindow3D(struct CALWindow3D* window){
 	GLint i = 0;
 
-	if(window){
+	if (window){
 		free(window->subWindowID);
 		free(window->positionsX);
 		free(window->positionsY);
-		for(i = 0; i<window->noModels; i++){
+		for (i = 0; i < window->noModels; i++){
 			calglDestoyDrawModel3D(window->models[i]);
 		}
 		free(window);
@@ -114,7 +116,7 @@ void calglDestroyWindow3D(struct CALWindow3D* window){
 
 void calglRedisplayAllWindow3D(void){
 	GLint i = 0;
-	for(i = 0; i<window3D->noModels; i++){
+	for (i = 0; i < window3D->noModels; i++){
 		glutSetWindow(window3D->subWindowID[i]);
 		calglSubReshapeWindow3D(window3D->sub_width, window3D->sub_height);
 		glutPostRedisplay();
@@ -126,9 +128,9 @@ void calglDisplayWindow3D(void){
 	glClearColor(0.8f, 0.8f, 0.8f, 0.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	glColor3ub(0,0,0);
-	for(i = 0; i<window3D->noModels; i++){
-		calglDrawStringWindow3D(window3D, window3D->positionsX[i], window3D->positionsY[i]-SEPARATOR_SPACE, (char*) window3D->models[i]->name);
+	glColor3ub(0, 0, 0);
+	for (i = 0; i < window3D->noModels; i++){
+		calglDrawStringWindow3D(window3D, window3D->positionsX[i], window3D->positionsY[i] - SEPARATOR_SPACE, (char*)window3D->models[i]->name);
 	}
 
 	glutSwapBuffers();
@@ -137,14 +139,14 @@ void calglDisplayWindow3D(void){
 void calglReshapeWindow3D(int w, int h){
 	GLint i = 0;
 
-	if(w < 200){
+	if (w < 200){
 		w = 200;
 	}
-	if(h < 200){
+	if (h < 200){
 		h = 200;
 	}
 
-	calglSetWindowDimensionGlobalSettings(w, h);
+	calglSetWindowDimension(w, h);
 
 	glViewport(0, 0, window3D->globalSettings->width, window3D->globalSettings->height);
 	glMatrixMode(GL_PROJECTION);
@@ -155,7 +157,7 @@ void calglReshapeWindow3D(int w, int h){
 
 	calglCalculatePositionAndDimensionWindow3D(window3D);
 
-	for(i = 0; i<window3D->noModels; i++){
+	for (i = 0; i < window3D->noModels; i++){
 		glutSetWindow(window3D->subWindowID[i]);
 		glutPositionWindow(window3D->positionsX[i], window3D->positionsY[i]);
 		glutReshapeWindow(window3D->sub_width, window3D->sub_height);
@@ -165,16 +167,16 @@ void calglReshapeWindow3D(int w, int h){
 void calglSubDisplayWindow3D(void){
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	currentModel3D = glutGetWindow()-2;
+	currentModel3D = glutGetWindow() - 2;
 
 	glPushMatrix();	{
 		glTranslatef(xPos[currentModel3D], yPos[currentModel3D], zPos[currentModel3D]);
 
-		glRotatef((GLfloat) xRot[currentModel3D], 1.0f, 0.0f, 0.0f);
-		glRotatef((GLfloat) yRot[currentModel3D], 0.0f, 1.0f, 0.0f);	
-		glRotatef((GLfloat) zRot[currentModel3D], 0.0f, 0.0f, 1.0f);
+		glRotatef((GLfloat)xRot[currentModel3D], 1.0f, 0.0f, 0.0f);
+		glRotatef((GLfloat)yRot[currentModel3D], 0.0f, 1.0f, 0.0f);
+		glRotatef((GLfloat)zRot[currentModel3D], 0.0f, 0.0f, 1.0f);
 
-		if(window3D->models[currentModel3D]->modelLight){
+		if (window3D->models[currentModel3D]->modelLight){
 			glEnable(GL_LIGHTING);
 			glEnable(window3D->models[currentModel3D]->modelLight->currentLight);
 			glEnable(GL_COLOR_MATERIAL);
@@ -184,11 +186,11 @@ void calglSubDisplayWindow3D(void){
 
 		calglDisplayModel3D(window3D->models[currentModel3D]);
 
-		if(window3D->models[currentModel3D]->infoBar){
+		if (window3D->models[currentModel3D]->infoBar){
 			calglDisplayBar3D(window3D->models[currentModel3D]->infoBar);
 		}
 
-		currentModel3D = (currentModel3D+1)%window3D->noModels;
+		currentModel3D = (currentModel3D + 1) % window3D->noModels;
 	}	glPopMatrix();
 
 	glutSwapBuffers();
@@ -198,7 +200,7 @@ void calglSubReshapeWindow3D(int w, int h){
 	glViewport(0, 0, w, h);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(60.0, (GLdouble)w/(GLdouble)h, window3D->globalSettings->zNear, window3D->globalSettings->zFar);
+	gluPerspective(60.0, (GLdouble)w / (GLdouble)h, window3D->globalSettings->zNear, window3D->globalSettings->zFar);
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
@@ -216,23 +218,25 @@ void calglCalculatePositionAndDimensionWindow3D(struct CALWindow3D* window){
 	GLint noSubWindowY = 0;
 	GLint i = 0, j = 0, k = 0;
 
-	if(window->noModels==1){
+	if (window->noModels == 1){
 		noSubWindowX = noSubWindowY = 1;
-	} else if(window->noModels==2) {
+	}
+	else if (window->noModels == 2) {
 		noSubWindowX = 2;
 		noSubWindowY = 1;
-	} else {
-		noSubWindowX = (GLint) ceil(sqrt((GLdouble) window->noModels));
+	}
+	else {
+		noSubWindowX = (GLint)ceil(sqrt((GLdouble)window->noModels));
 		noSubWindowY = noSubWindowX;
 	}
 
-	window->sub_width = (window->globalSettings->width-SPACE*(noSubWindowY+1))/noSubWindowY;
-	window->sub_height = (window->globalSettings->height-SPACE*(noSubWindowX+1))/noSubWindowX;
+	window->sub_width = (window->globalSettings->width - SPACE*(noSubWindowY + 1)) / noSubWindowY;
+	window->sub_height = (window->globalSettings->height - SPACE*(noSubWindowX + 1)) / noSubWindowX;
 
-	for(i = 0; i<noSubWindowY && k<window->noModels; i++){
-		for(j = 0; j<noSubWindowX && k<window->noModels; j++){
-			window->positionsX[k] = SPACE+(window->sub_width+SPACE)*i;
-			window->positionsY[k] = SPACE+(window->sub_height+SPACE)*j;		
+	for (i = 0; i < noSubWindowY && k < window->noModels; i++){
+		for (j = 0; j < noSubWindowX && k < window->noModels; j++){
+			window->positionsX[k] = SPACE + (window->sub_width + SPACE)*i;
+			window->positionsY[k] = SPACE + (window->sub_height + SPACE)*j;
 			k++;
 		}
 	}
@@ -243,10 +247,10 @@ void calglStartProcessWindow3D(int argc, char** argv){
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
 
 	glClearColor(0.5f, 0.5f, 1.0f, 1.0f);
-	glShadeModel (GL_SMOOTH);
+	glShadeModel(GL_SMOOTH);
 	glEnable(GL_DEPTH_TEST);
 
-	calglCreateWindow3D(argc, argv, calglGetGlobalSettings(), models3D, noModels3D);	
+	calglCreateWindow3D(argc, argv, calglGetGlobalSettings(), models3D, noModels3D);
 
 	calglPrintfInfoCommand3D();
 
@@ -260,17 +264,20 @@ void calglStartProcessWindow3D(int argc, char** argv){
 void calglSetfontWindow3D(struct CALWindow3D* window, char* name, int size){
 	window->font_style = GLUT_BITMAP_HELVETICA_10;
 	if (strcmp(name, "helvetica") == 0) {
-		if (size == 12) 
+		if (size == 12)
 			window->font_style = GLUT_BITMAP_HELVETICA_12;
 		else if (size == 18)
 			window->font_style = GLUT_BITMAP_HELVETICA_18;
-	} else if (strcmp(name, "times roman") == 0) {
+	}
+	else if (strcmp(name, "times roman") == 0) {
 		window->font_style = GLUT_BITMAP_TIMES_ROMAN_10;
 		if (size == 24)
 			window->font_style = GLUT_BITMAP_TIMES_ROMAN_24;
-	} else if (strcmp(name, "8x13") == 0) {
+	}
+	else if (strcmp(name, "8x13") == 0) {
 		window->font_style = GLUT_BITMAP_8_BY_13;
-	} else if (strcmp(name, "9x15") == 0) {
+	}
+	else if (strcmp(name, "9x15") == 0) {
 		window->font_style = GLUT_BITMAP_9_BY_15;
 	}
 }
@@ -285,34 +292,56 @@ void calglDrawStringWindow3D(struct CALWindow3D* window, GLuint x, GLuint y, cha
 
 	glRasterPos2i(x, y);
 	for (s = buffer; *s; s++)
-		glutBitmapCharacter(window->font_style , *s);
+		glutBitmapCharacter(window->font_style, *s);
+}
+
+void calglSpecialKeyboardEventWindow3D(int key, int x, int y){
+	activeSubWindow = glutGetWindow() - 2;
+	switch (key){
+	case GLUT_KEY_UP: {
+		yPos[activeSubWindow] += TRANSLATION_CONSTANT*keyboardSensitivity;
+	}; break;
+	case GLUT_KEY_RIGHT: {
+		xPos[activeSubWindow] += TRANSLATION_CONSTANT*keyboardSensitivity;
+	}; break;
+	case GLUT_KEY_DOWN: {
+		yPos[activeSubWindow] -= TRANSLATION_CONSTANT*keyboardSensitivity;
+	}; break;
+	case GLUT_KEY_LEFT: {
+		xPos[activeSubWindow] -= TRANSLATION_CONSTANT*keyboardSensitivity;
+	}; break;
+	default: break;
+	}
+
+	calglRedisplayAllWindow3D();
 }
 
 void calglKeyboardEventWindow3D(unsigned char key, int x, int y){
-	if(key=='t'){
-		x -= window3D->sub_width/2;
-		y -= window3D->sub_height/2;
+	if (key == 't'){
+		x -= window3D->sub_width / 2;
+		y -= window3D->sub_height / 2;
 
-		if(translationOn){
-			yPos[activeSubWindow]+=-(y - key_old_y)*keyboardSensitivity;
-			xPos[activeSubWindow]+=(x - key_old_x)*keyboardSensitivity;
+		if (translationOn){
+			yPos[activeSubWindow] += -(y - key_old_y)*keyboardSensitivity;
+			xPos[activeSubWindow] += (x - key_old_x)*keyboardSensitivity;
 
 			key_old_x = x;
 			key_old_y = y;
-		} else {
-			activeSubWindow = glutGetWindow()-2;
+		}
+		else {
+			activeSubWindow = glutGetWindow() - 2;
 			key_old_x = x;
 			key_old_y = y;
 			translationOn = CAL_TRUE;
 		}
 	}
 
-	if(key=='h'){
-		calglGetGlobalSettings()->onlyModel = !calglGetGlobalSettings()->onlyModel; 
+	if (key == 'h'){
+		calglGetGlobalSettings()->onlyModel = !calglGetGlobalSettings()->onlyModel;
 	}
 
-	if(key=='p'){
-		if(window3D->models[0]->calUpdater){
+	if (key == 'x' || key == 's'){
+		if (window3D->models[0]->calUpdater){
 			window3D->models[0]->calUpdater->active = !window3D->models[0]->calUpdater->active;
 		}
 	}
@@ -321,9 +350,9 @@ void calglKeyboardEventWindow3D(unsigned char key, int x, int y){
 }
 
 void calglKeyboardUpEventWindow3D(unsigned char key, int x, int y){
-	if(key=='t'){
-		x -= window3D->sub_width/2;
-		y -= window3D->sub_height/2;
+	if (key == 't'){
+		x -= window3D->sub_width / 2;
+		y -= window3D->sub_height / 2;
 
 		key_old_x = x;
 		key_old_y = y;
@@ -332,60 +361,63 @@ void calglKeyboardUpEventWindow3D(unsigned char key, int x, int y){
 }
 
 void calglMouseWindow3D(int button, int state, int x, int y){
-	if (button==0){  // Left click
+	if (button == 0){  // Left click
 		leftPressed = CAL_TRUE;
-		old_x = x - window3D->sub_width/2;
-		old_y = y - window3D->sub_height/2;
-	} else if (button == 2) { // Right click
+		old_x = x - window3D->sub_width / 2;
+		old_y = y - window3D->sub_height / 2;
+	}
+	else if (button == 2) { // Right click
 		rightPressed = CAL_TRUE;
-		oldestY = y - window3D->sub_height/2;
+		oldestY = y - window3D->sub_height / 2;
 	}
 
-	if(state == GLUT_UP){
+	if (state == GLUT_UP){
 		leftPressed = CAL_FALSE;
 		rightPressed = CAL_FALSE;
-	} else {
+	}
+	else {
 		calglRedisplayAllWindow3D();
-	}	
+	}
 }
 
 void calglMotionMouseWindow3D(int x, int y){
 	GLfloat rot_x = 0.0f, rot_y = 0.0f;
 	GLfloat transY = 0;
 
-	if(leftPressed){
-		x -= window3D->sub_width/2;
-		y -= window3D->sub_height/2;
+	if (leftPressed){
+		x -= window3D->sub_width / 2;
+		y -= window3D->sub_height / 2;
 
 		rot_x = (float)(x - old_x) * mouseSensitivity;
 		rot_y = -(float)(y - old_y) * mouseSensitivity;
 		old_x = x;
 		old_y = y;
 
-		if(translationOn){
+		if (translationOn){
 			return;
 		}
 
-		xRot[glutGetWindow()-2] -= rot_y;
-		yRot[glutGetWindow()-2] += rot_x;
+		xRot[glutGetWindow() - 2] -= rot_y;
+		yRot[glutGetWindow() - 2] += rot_x;
 
 		/*window3D->models[glutGetWindow()-2]->modelView->xRotation -= rot_y;
 		window3D->models[glutGetWindow()-2]->modelView->yRotation += rot_x;*/
 
-		calglRedisplayAllWindow3D();		
-	} else if(rightPressed){
-		y -= window3D->sub_height/2;
+		calglRedisplayAllWindow3D();
+	}
+	else if (rightPressed){
+		y -= window3D->sub_height / 2;
 		transY = -(y - oldestY) * mouseSensitivity;
 		oldestY = y;
 
-		zPos[glutGetWindow()-2]+=transY;
+		zPos[glutGetWindow() - 2] += transY;
 
-		calglRedisplayAllWindow3D();	
+		calglRedisplayAllWindow3D();
 	}
 }
 
 void calglIdleFuncWindow3D(void){
-	if(calglGetGlobalSettings()->fixedDisplay && window3D->models[0]->calUpdater->calRun->step%calglGetGlobalSettings()->fixedStep==0){
+	if (calglGetGlobalSettings()->fixedDisplay && window3D->models[0]->calUpdater->calRun->step%calglGetGlobalSettings()->fixedStep == 0){
 		calglRedisplayAllWindow3D();
 	}
 }
@@ -393,23 +425,23 @@ void calglIdleFuncWindow3D(void){
 void calglTimeFunc3D(int value){
 	glutTimerFunc(calglGetGlobalSettings()->refreshTime, calglTimeFunc3D, value);
 
-	if(!calglGetGlobalSettings()->fixedDisplay){
+	if (!calglGetGlobalSettings()->fixedDisplay){
 		calglRedisplayAllWindow3D();
 	}
 }
 
 void calglCleanDrawModelList3D(){
-	if(models3D){
+	if (models3D){
 		free(models3D);
 	}
 }
 
 void calglShowModel3D(struct CALDrawModel3D* model){
-	if(!models3D){
+	if (!models3D){
 		models3D = (struct CALDrawModel3D**) malloc(sizeof(struct CALDrawModel3D));
 	}
 
-	if(noModels3D >= capacityModels3D){
+	if (noModels3D >= capacityModels3D){
 		calglIncreaseDrawModel3D();
 	}
 
@@ -423,7 +455,7 @@ void calglIncreaseDrawModel3D(){
 	capacityModels3D += 3;
 	models = (struct CALDrawModel3D**) malloc(sizeof(struct CALDrawModel3D) * (capacityModels3D));
 
-	for(i=0; i<(capacityModels3D-3); i++){
+	for (i = 0; i < (capacityModels3D - 3); i++){
 		models[i] = models3D[i];
 	}
 
@@ -442,7 +474,7 @@ void calglPrintfInfoCommand3D(){
 	printf("* Keep T key down and move mouse -> translate model   *\n");
 	printf("* Left click and move mouse -> rotate model           *\n");
 	printf("* Right click and move mouse -> zoom in/out model     *\n");
-	printf("* Press P key -> Start/Stop Simulation                *\n");
+	printf("* Press X/S key -> Start/Stop Simulation              *\n");
 	printf("* Press H key -> Toggle on/off Information Bar Draw   *\n");
 	printf("*-----------------------------------------------------*\n");
 }
@@ -457,173 +489,319 @@ void calglDisplayBar3D(struct CALGLInfoBar* infoBar){
 	GLint i = 0;
 	GLfloat internalDistance = 0.0f;
 
-	if(calglGetGlobalSettings()->onlyModel){
+	if (calglGetGlobalSettings()->onlyModel){
 		return;
 	}
 
-	sub_width = window3D->sub_width;
-	sub_height = window3D->sub_height;
+	if (infoBar->dimension == CALGL_INFO_BAR_DIMENSION_RELATIVE){
+#pragma region InfoBarRelativeDrawing
+		sub_width = window3D->sub_width;
+		sub_height = window3D->sub_height;
 
-	minimumDistanceX = (0.1f)*sub_width;
-	minimumDistanceY = (0.1f)*sub_height;
+		minimumDistanceX = (0.1f)*sub_width;
+		minimumDistanceY = (0.1f)*sub_height;
 
-	glPushAttrib(GL_LIGHTING_BIT);{
-		glDisable(GL_LIGHTING);
+		glPushAttrib(GL_LIGHTING_BIT); {
+			glDisable(GL_LIGHTING);
 
-		glPushMatrix();{
-			glDepthMask(GL_FALSE);
-			glDisable(GL_DEPTH_TEST);
+			glPushMatrix(); {
+				glDepthMask(GL_FALSE);
+				glDisable(GL_DEPTH_TEST);
 
-			glMatrixMode(GL_PROJECTION);
-			glLoadIdentity();
+				glMatrixMode(GL_PROJECTION);
+				glLoadIdentity();
 
-			gluOrtho2D(0, sub_width, 0, sub_height); //left,right,bottom,top
-			glMatrixMode(GL_MODELVIEW);
-			glLoadIdentity();	
+				gluOrtho2D(0, sub_width, 0, sub_height); //left,right,bottom,top
+				glMatrixMode(GL_MODELVIEW);
+				glLoadIdentity();
 
-			if(infoBar->height >= infoBar->width){ // h >= w
-				infoBar->xPosition = sub_width - minimumDistanceX - infoBar->width;
-				infoBar->yPosition = sub_height - minimumDistanceY;
+				if (infoBar->height >= infoBar->width){ // h >= w
+					infoBar->xPosition = sub_width - minimumDistanceX - infoBar->width;
+					infoBar->yPosition = sub_height - minimumDistanceY;
 
-				glBegin(GL_QUADS);{
-					switch(infoBar->infoUse){
-					case CALGL_TYPE_INFO_USE_GRAY_SCALE: 
-						glColor3f(1.0f, 1.0f, 1.0f);
-						break;
-					case CALGL_TYPE_INFO_USE_RED_SCALE:
-						glColor3f(1.0f, 1.0f, 0.0f);
-						break;
-					case CALGL_TYPE_INFO_USE_GREEN_SCALE:
-						glColor3f(0.0f, 1.0f, 0.0f);
-						break;
-					case CALGL_TYPE_INFO_USE_BLUE_SCALE:
-						glColor3f(0.0f, 0.0f, 1.0f);
-						break;
-					default:
-						glColor3f(1.0f, 1.0f, 1.0f);
-						break;
-					}
-					glVertex2f(infoBar->xPosition + infoBar->width, infoBar->yPosition);
-					glVertex2f(infoBar->xPosition, infoBar->yPosition);
-
-					switch(infoBar->infoUse){
-					case CALGL_TYPE_INFO_USE_RED_SCALE:
-						glColor3f(1.0f, 0.0f, 0.0f);
-						break;
-					default:
-						glColor3f(0.0f, 0.0f, 0.0f);
-						break;
-					}
-					glVertex2f(infoBar->xPosition, infoBar->yPosition - infoBar->height);
-					glVertex2f(infoBar->xPosition + infoBar->width, infoBar->yPosition - infoBar->height);
-				}glEnd();
-
-				glColor3f(1.0f, 1.0f, 1.0f);
-				calglPrintString3D(infoBar->xPosition + infoBar->width + normalDimension*3, infoBar->yPosition, calglGetString3D(*infoBar->max));
-				calglPrintString3D(infoBar->xPosition + infoBar->width + normalDimension*3, infoBar->yPosition - infoBar->height, calglGetString3D(*infoBar->min));
-
-				internalDistance = infoBar->height/10.0f; 
-
-				for(i = 0; i<11; i++){
-					glBegin(GL_LINES); {
-						if(i%5==0){
-							glVertex2f(infoBar->xPosition + infoBar->width, infoBar->yPosition - i*internalDistance);
-							glVertex2f(infoBar->xPosition + infoBar->width + normalDimension*2, infoBar->yPosition - i*internalDistance);
-						} else {
-							glVertex2f(infoBar->xPosition + infoBar->width, infoBar->yPosition - i*internalDistance);
-							glVertex2f(infoBar->xPosition + infoBar->width + smallDimension*2, infoBar->yPosition - i*internalDistance);
+					glBegin(GL_QUADS); {
+						switch (infoBar->infoUse){
+						case CALGL_TYPE_INFO_USE_GRAY_SCALE:
+							glColor3f(1.0f, 1.0f, 1.0f);
+							break;
+						case CALGL_TYPE_INFO_USE_RED_SCALE:
+							glColor3f(1.0f, 1.0f, 0.0f);
+							break;
+						case CALGL_TYPE_INFO_USE_GREEN_SCALE:
+							glColor3f(0.0f, 1.0f, 0.0f);
+							break;
+						case CALGL_TYPE_INFO_USE_BLUE_SCALE:
+							glColor3f(0.0f, 0.0f, 1.0f);
+							break;
+						default:
+							glColor3f(1.0f, 1.0f, 1.0f);
+							break;
 						}
-					} glEnd();
-				}
-			} else { // w > h
-				infoBar->xPosition = minimumDistanceX;
-				infoBar->yPosition = minimumDistanceY + infoBar->height;
+						glVertex2f(infoBar->xPosition + infoBar->width, infoBar->yPosition);
+						glVertex2f(infoBar->xPosition, infoBar->yPosition);
 
-				glBegin(GL_QUADS);{
-					switch(infoBar->infoUse){
-					case CALGL_TYPE_INFO_USE_RED_SCALE:
-						glColor3f(1.0f, 0.0f, 0.0f);
-						break;
-					default:
-						glColor3f(0.0f, 0.0f, 0.0f);
-						break;
-					}		
-					glVertex2f(infoBar->xPosition, infoBar->yPosition);
-					glVertex2f(infoBar->xPosition, infoBar->yPosition - infoBar->height);					
-
-					switch(infoBar->infoUse){
-					case CALGL_TYPE_INFO_USE_GRAY_SCALE: 
-						glColor3f(1.0f, 1.0f, 1.0f);
-						break;
-					case CALGL_TYPE_INFO_USE_RED_SCALE:
-						glColor3f(1.0f, 1.0f, 0.0f);
-						break;
-					case CALGL_TYPE_INFO_USE_GREEN_SCALE:
-						glColor3f(0.0f, 1.0f, 0.0f);
-						break;
-					case CALGL_TYPE_INFO_USE_BLUE_SCALE:
-						glColor3f(0.0f, 0.0f, 1.0f);
-						break;
-					default:
-						glColor3f(1.0f, 1.0f, 1.0f);
-						break;
-					}
-					glVertex2f(infoBar->xPosition + infoBar->width, infoBar->yPosition - infoBar->height);
-					glVertex2f(infoBar->xPosition + infoBar->width, infoBar->yPosition);
-				}glEnd();
-
-				glColor3f(1.0f, 1.0f, 1.0f);
-				calglPrintString3D(infoBar->xPosition + infoBar->width, infoBar->yPosition - infoBar->height - normalDimension*3, calglGetString3D(*infoBar->max));
-				calglPrintString3D(infoBar->xPosition, infoBar->yPosition - infoBar->height - normalDimension*3, calglGetString3D(*infoBar->min));
-
-				internalDistance = infoBar->width/10.0f; 
-
-				for(i = 0; i<11; i++){
-					glBegin(GL_LINES); {
-						if(i%5==0){
-							glVertex2f(infoBar->xPosition + i*internalDistance, infoBar->yPosition - infoBar->height);
-							glVertex2f(infoBar->xPosition + i*internalDistance, infoBar->yPosition - infoBar->height - normalDimension*2);
-						} else {
-							glVertex2f(infoBar->xPosition + i*internalDistance, infoBar->yPosition - infoBar->height);
-							glVertex2f(infoBar->xPosition + i*internalDistance, infoBar->yPosition - infoBar->height - smallDimension*2);
+						switch (infoBar->infoUse){
+						case CALGL_TYPE_INFO_USE_RED_SCALE:
+							glColor3f(1.0f, 0.0f, 0.0f);
+							break;
+						default:
+							glColor3f(0.0f, 0.0f, 0.0f);
+							break;
 						}
-					} glEnd();
+						glVertex2f(infoBar->xPosition, infoBar->yPosition - infoBar->height);
+						glVertex2f(infoBar->xPosition + infoBar->width, infoBar->yPosition - infoBar->height);
+					}glEnd();
+
+					glColor3f(1.0f, 1.0f, 1.0f);
+					calglPrintString3D(infoBar->xPosition + infoBar->width + normalDimension * 3, infoBar->yPosition, calglGetString3D(*infoBar->max));
+					calglPrintString3D(infoBar->xPosition + infoBar->width + normalDimension * 3, infoBar->yPosition - infoBar->height, calglGetString3D(*infoBar->min));
+
+					internalDistance = infoBar->height / 10.0f;
+
+					for (i = 0; i < 11; i++){
+						glBegin(GL_LINES); {
+							if (i % 5 == 0){
+								glVertex2f(infoBar->xPosition + infoBar->width, infoBar->yPosition - i*internalDistance);
+								glVertex2f(infoBar->xPosition + infoBar->width + normalDimension * 2, infoBar->yPosition - i*internalDistance);
+							}
+							else {
+								glVertex2f(infoBar->xPosition + infoBar->width, infoBar->yPosition - i*internalDistance);
+								glVertex2f(infoBar->xPosition + infoBar->width + smallDimension * 2, infoBar->yPosition - i*internalDistance);
+							}
+						} glEnd();
+					}
 				}
-			}
+				else { // w > h
+					infoBar->xPosition = minimumDistanceX;
+					infoBar->yPosition = minimumDistanceY + infoBar->height;
 
-			// Print name
-			glColor3f(1.0f, 1.0f, 1.0f);
-			calglPrintConstString3D(infoBar->xPosition, infoBar->yPosition + 21, infoBar->substateName);
+					glBegin(GL_QUADS); {
+						switch (infoBar->infoUse){
+						case CALGL_TYPE_INFO_USE_RED_SCALE:
+							glColor3f(1.0f, 0.0f, 0.0f);
+							break;
+						default:
+							glColor3f(0.0f, 0.0f, 0.0f);
+							break;
+						}
+						glVertex2f(infoBar->xPosition, infoBar->yPosition);
+						glVertex2f(infoBar->xPosition, infoBar->yPosition - infoBar->height);
 
-			glDepthMask(GL_TRUE);
-		}glPopMatrix();
-	}glPopAttrib();
+						switch (infoBar->infoUse){
+						case CALGL_TYPE_INFO_USE_GRAY_SCALE:
+							glColor3f(1.0f, 1.0f, 1.0f);
+							break;
+						case CALGL_TYPE_INFO_USE_RED_SCALE:
+							glColor3f(1.0f, 1.0f, 0.0f);
+							break;
+						case CALGL_TYPE_INFO_USE_GREEN_SCALE:
+							glColor3f(0.0f, 1.0f, 0.0f);
+							break;
+						case CALGL_TYPE_INFO_USE_BLUE_SCALE:
+							glColor3f(0.0f, 0.0f, 1.0f);
+							break;
+						default:
+							glColor3f(1.0f, 1.0f, 1.0f);
+							break;
+						}
+						glVertex2f(infoBar->xPosition + infoBar->width, infoBar->yPosition - infoBar->height);
+						glVertex2f(infoBar->xPosition + infoBar->width, infoBar->yPosition);
+					}glEnd();
+
+					glColor3f(1.0f, 1.0f, 1.0f);
+					calglPrintString3D(infoBar->xPosition + infoBar->width, infoBar->yPosition - infoBar->height - normalDimension * 3, calglGetString3D(*infoBar->max));
+					calglPrintString3D(infoBar->xPosition, infoBar->yPosition - infoBar->height - normalDimension * 3, calglGetString3D(*infoBar->min));
+
+					internalDistance = infoBar->width / 10.0f;
+
+					for (i = 0; i < 11; i++){
+						glBegin(GL_LINES); {
+							if (i % 5 == 0){
+								glVertex2f(infoBar->xPosition + i*internalDistance, infoBar->yPosition - infoBar->height);
+								glVertex2f(infoBar->xPosition + i*internalDistance, infoBar->yPosition - infoBar->height - normalDimension * 2);
+							}
+							else {
+								glVertex2f(infoBar->xPosition + i*internalDistance, infoBar->yPosition - infoBar->height);
+								glVertex2f(infoBar->xPosition + i*internalDistance, infoBar->yPosition - infoBar->height - smallDimension * 2);
+							}
+						} glEnd();
+					}
+				}
+
+				// Print name
+				glColor3f(1.0f, 1.0f, 1.0f);
+				calglPrintConstString3D(infoBar->xPosition, infoBar->yPosition + 21, infoBar->substateName);
+
+				glDepthMask(GL_TRUE);
+			}glPopMatrix();
+		}glPopAttrib();
+#pragma endregion
+	}
+	else if (infoBar->dimension == CALGL_INFO_BAR_DIMENSION_ABSOLUTE){
+#pragma region InfoBarAbsoluteDrawing
+		sub_width = window3D->sub_width;
+		sub_height = window3D->sub_height;
+
+		minimumDistanceX = (0.1f)*sub_width;
+		minimumDistanceY = (0.1f)*sub_height;
+
+		glPushAttrib(GL_LIGHTING_BIT); {
+			glDisable(GL_LIGHTING);
+
+			glPushMatrix(); {
+				glDepthMask(GL_FALSE);
+				glDisable(GL_DEPTH_TEST);
+
+				glMatrixMode(GL_PROJECTION);
+				glLoadIdentity();
+
+				gluOrtho2D(0, sub_width, 0, sub_height); //left,right,bottom,top
+				glMatrixMode(GL_MODELVIEW);
+				glLoadIdentity();
+
+				if (infoBar->height >= infoBar->width){ // h >= w
+					glBegin(GL_QUADS); {
+						switch (infoBar->infoUse){
+						case CALGL_TYPE_INFO_USE_GRAY_SCALE:
+							glColor3f(1.0f, 1.0f, 1.0f);
+							break;
+						case CALGL_TYPE_INFO_USE_RED_SCALE:
+							glColor3f(1.0f, 1.0f, 0.0f);
+							break;
+						case CALGL_TYPE_INFO_USE_GREEN_SCALE:
+							glColor3f(0.0f, 1.0f, 0.0f);
+							break;
+						case CALGL_TYPE_INFO_USE_BLUE_SCALE:
+							glColor3f(0.0f, 0.0f, 1.0f);
+							break;
+						default:
+							glColor3f(1.0f, 1.0f, 1.0f);
+							break;
+						}
+						glVertex2f(infoBar->xPosition + infoBar->width, infoBar->yPosition);
+						glVertex2f(infoBar->xPosition, infoBar->yPosition);
+
+						switch (infoBar->infoUse){
+						case CALGL_TYPE_INFO_USE_RED_SCALE:
+							glColor3f(1.0f, 0.0f, 0.0f);
+							break;
+						default:
+							glColor3f(0.0f, 0.0f, 0.0f);
+							break;
+						}
+						glVertex2f(infoBar->xPosition, infoBar->yPosition - infoBar->height);
+						glVertex2f(infoBar->xPosition + infoBar->width, infoBar->yPosition - infoBar->height);
+					}glEnd();
+
+					glColor3f(1.0f, 1.0f, 1.0f);
+					calglPrintString3D(infoBar->xPosition + infoBar->width + normalDimension * 3, infoBar->yPosition, calglGetString3D(*infoBar->max));
+					calglPrintString3D(infoBar->xPosition + infoBar->width + normalDimension * 3, infoBar->yPosition - infoBar->height, calglGetString3D(*infoBar->min));
+
+					internalDistance = infoBar->height / 10.0f;
+
+					for (i = 0; i < 11; i++){
+						glBegin(GL_LINES); {
+							if (i % 5 == 0){
+								glVertex2f(infoBar->xPosition + infoBar->width, infoBar->yPosition - i*internalDistance);
+								glVertex2f(infoBar->xPosition + infoBar->width + normalDimension * 2, infoBar->yPosition - i*internalDistance);
+							}
+							else {
+								glVertex2f(infoBar->xPosition + infoBar->width, infoBar->yPosition - i*internalDistance);
+								glVertex2f(infoBar->xPosition + infoBar->width + smallDimension * 2, infoBar->yPosition - i*internalDistance);
+							}
+						} glEnd();
+					}
+				}
+				else { // w > h
+					glBegin(GL_QUADS); {
+						switch (infoBar->infoUse){
+						case CALGL_TYPE_INFO_USE_RED_SCALE:
+							glColor3f(1.0f, 0.0f, 0.0f);
+							break;
+						default:
+							glColor3f(0.0f, 0.0f, 0.0f);
+							break;
+						}
+						glVertex2f(infoBar->xPosition, infoBar->yPosition);
+						glVertex2f(infoBar->xPosition, infoBar->yPosition - infoBar->height);
+
+						switch (infoBar->infoUse){
+						case CALGL_TYPE_INFO_USE_GRAY_SCALE:
+							glColor3f(1.0f, 1.0f, 1.0f);
+							break;
+						case CALGL_TYPE_INFO_USE_RED_SCALE:
+							glColor3f(1.0f, 1.0f, 0.0f);
+							break;
+						case CALGL_TYPE_INFO_USE_GREEN_SCALE:
+							glColor3f(0.0f, 1.0f, 0.0f);
+							break;
+						case CALGL_TYPE_INFO_USE_BLUE_SCALE:
+							glColor3f(0.0f, 0.0f, 1.0f);
+							break;
+						default:
+							glColor3f(1.0f, 1.0f, 1.0f);
+							break;
+						}
+						glVertex2f(infoBar->xPosition + infoBar->width, infoBar->yPosition - infoBar->height);
+						glVertex2f(infoBar->xPosition + infoBar->width, infoBar->yPosition);
+					}glEnd();
+
+					glColor3f(1.0f, 1.0f, 1.0f);
+					calglPrintString3D(infoBar->xPosition + infoBar->width, infoBar->yPosition - infoBar->height - normalDimension * 3, calglGetString3D(*infoBar->max));
+					calglPrintString3D(infoBar->xPosition, infoBar->yPosition - infoBar->height - normalDimension * 3, calglGetString3D(*infoBar->min));
+
+					internalDistance = infoBar->width / 10.0f;
+
+					for (i = 0; i < 11; i++){
+						glBegin(GL_LINES); {
+							if (i % 5 == 0){
+								glVertex2f(infoBar->xPosition + i*internalDistance, infoBar->yPosition - infoBar->height);
+								glVertex2f(infoBar->xPosition + i*internalDistance, infoBar->yPosition - infoBar->height - normalDimension * 2);
+							}
+							else {
+								glVertex2f(infoBar->xPosition + i*internalDistance, infoBar->yPosition - infoBar->height);
+								glVertex2f(infoBar->xPosition + i*internalDistance, infoBar->yPosition - infoBar->height - smallDimension * 2);
+							}
+						} glEnd();
+					}
+				}
+
+				// Print name
+				glColor3f(1.0f, 1.0f, 1.0f);
+				calglPrintConstString3D(infoBar->xPosition, infoBar->yPosition + 21, infoBar->substateName);
+
+				glDepthMask(GL_TRUE);
+			}glPopMatrix();
+		}glPopAttrib();
+#pragma endregion
+	}
 
 	calglSubReshapeWindow3D(sub_width, sub_height);
 }
 
 char* calglGetString3D(GLdouble number){
 	char* toReturn = NULL;
-	GLint tmp = (GLint) (number*100);
+	GLint tmp = (GLint)(number * 100);
 	GLint tmpSave = tmp;
 	GLint dimension = 0;
 	GLint i = 0;
 
-	while(tmp>0){
-		tmp/=10;
+	while (tmp > 0){
+		tmp /= 10;
 		dimension++;
 	}
-	dimension+=2;
+	dimension += 2;
 	tmp = tmpSave;
 
-	toReturn = (char*) malloc(sizeof(char)*dimension);
+	toReturn = (char*)malloc(sizeof(char)*dimension);
 
-	toReturn[dimension-1] = '\0';
-	for(i = dimension-2; i>=0; i--){
-		if(i == dimension-4){
+	toReturn[dimension - 1] = '\0';
+	for (i = dimension - 2; i >= 0; i--){
+		if (i == dimension - 4){
 			toReturn[i] = ',';
-		} else {
-			switch(tmp%10){
+		}
+		else {
+			switch (tmp % 10){
 			case 0: toReturn[i] = '0'; break;
 			case 1: toReturn[i] = '1'; break;
 			case 2: toReturn[i] = '2'; break;
@@ -646,9 +824,9 @@ char* calglGetString3D(GLdouble number){
 void calglPrintString3D(GLfloat x, GLfloat y, char *string){
 	int i = 0;
 	//get the length of the string to display
-	int len = (int) strlen(string);
+	int len = (int)strlen(string);
 	//set the position of the text in the window using the x and y coordinates
-	glRasterPos2f(x, y);	
+	glRasterPos2f(x, y);
 	//loop to display character by character
 	for (i = 0; i < len; i++){
 		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, string[i]);
@@ -659,9 +837,9 @@ void calglPrintString3D(GLfloat x, GLfloat y, char *string){
 void calglPrintConstString3D(GLfloat x, GLfloat y, const char *string){
 	int i = 0;
 	//get the length of the string to display
-	int len = (int) strlen(string);
+	int len = (int)strlen(string);
 	//set the position of the text in the window using the x and y coordinates
-	glRasterPos2f(x, y);	
+	glRasterPos2f(x, y);
 	//loop to display character by character
 	for (i = 0; i < len; i++){
 		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, string[i]);
