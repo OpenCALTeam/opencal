@@ -137,7 +137,7 @@ void sciddicaTCADef()
 	sciddicaTsimulation = calRunDef2D(sciddicaT, 1, CAL_RUN_LOOP, CAL_UPDATE_IMPLICIT);
 
 	//put OpenCAL - OMP in unsafe state execution(to allow unsafe operation to be used)
-	calSetUnsafe2D();
+	calSetUnsafe2D(sciddicaT);
 
 	//add transition function's elementary processes
 	calAddElementaryProcess2D(sciddicaT, sciddicaT_transition_function);

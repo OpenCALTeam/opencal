@@ -106,7 +106,7 @@ struct CALModel2D* calCADef2D(int rows, //!< Number of rows of the 2D cellular s
 
 /*! \brief Put OpenCAL-OMP in unsafe state execution (to allow unsafe operation to be used)
 */
-void calSetUnsafe2D();
+void calSetUnsafe2D(struct CALModel2D* ca2D);
 
 /*! \brief Sets the cell (i,j) of the matrix flags to CAL_TRUE and increments the 
 	couter sizeof_active_flags.
