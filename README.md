@@ -1,5 +1,5 @@
 
-OpenCAL - The Cellular Automata Library    [![Build Status](https://travis-ci.org/OpenCALTeam/opencal.svg?branch=master)](https://travis-ci.org/OpenCALTeam/opencal)
+#OpenCAL - The Cellular Automata Library    [![Build Status](https://travis-ci.org/OpenCALTeam/opencal.svg?branch=master)](https://travis-ci.org/OpenCALTeam/opencal)
 
 
 Developers should read the [DEVELOPER_README.md](DEVELOPER_README) file and be sure to have fully absorbed the CODE CONVENCTION before to push any code.
