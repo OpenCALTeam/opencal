@@ -1,7 +1,6 @@
 
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<!-- saved from url=(0053)CppCodingStandard.html -->
-<HTML><HEAD><TITLE>C Coding Standard</TITLE>
+
+
 <META http-equiv=Content-Type content="text/html; charset=windows-1252">
 <META content="Microsoft FrontPage 5.0" name=GENERATOR></HEAD>
 <BODY bgColor=#ffffff>
