@@ -3,11 +3,9 @@ OpenCAL - The Cellular Automata Library    [![Build Status](https://travis-ci.or
 
 
 Developers should read the [DEVELOPER_README.md](DEVELOPER_README) file and be sure to have fully absorbed the CODE CONVENCTION before to push any code.
-** Documentation is important **
 
-OpenCAL README file...
 
-Compiling:
+#Compiling
 ```
 mkdir build
 cd build
