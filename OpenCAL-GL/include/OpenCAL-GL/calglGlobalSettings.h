@@ -22,7 +22,7 @@ unsigned int Sleep(unsigned int);
 struct CALGLGlobalSettings {
 	char* applicationName;
 	const char* iconPath;
-	int cellSize;
+	float cellSize;
 	int width;
 	int height;
 	int positionX;

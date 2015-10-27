@@ -706,7 +706,7 @@ void calglDrawRealModelDisplayCurrentNodeSetVertexData2Db(struct CALDrawModel2D*
 	struct CALNode2Db* father = NULL;
 	GLint intVertex[3] = {0};
 
-	intVertex[0] = i * calglGetGlobalSettings()->cellSize;
+	intVertex[0] = (int) (i * calglGetGlobalSettings()->cellSize);
 	intVertex[1] = 0;
 	father = calNode;
 
@@ -718,7 +718,7 @@ void calglDrawRealModelDisplayCurrentNodeSetVertexData2Db(struct CALDrawModel2D*
 		intVertex[1] += calGet2Db(calDrawModel->calModel, father->substate, i, j);
 		father = calglGetFatherNode2Db(father);
 	};
-	intVertex[2] = j * calglGetGlobalSettings()->cellSize;
+	intVertex[2] = (int) (j * calglGetGlobalSettings()->cellSize);
 
 	glVertex3iv(intVertex);
 }
@@ -726,7 +726,7 @@ void calglDrawRealModelDisplayCurrentNodeSetVertexData2Di(struct CALDrawModel2D*
 	struct CALNode2Di* father = NULL;
 	GLint intVertex[3] = {0};
 
-	intVertex[0] = i * calglGetGlobalSettings()->cellSize;
+	intVertex[0] = (int) (i * calglGetGlobalSettings()->cellSize);
 	intVertex[1] = 0;
 	father = calNode;
 
@@ -738,7 +738,7 @@ void calglDrawRealModelDisplayCurrentNodeSetVertexData2Di(struct CALDrawModel2D*
 		intVertex[1] += calGet2Di(calDrawModel->calModel, father->substate, i, j);
 		father = calglGetFatherNode2Di(father);
 	};
-	intVertex[2] = j * calglGetGlobalSettings()->cellSize;
+	intVertex[2] = (int) (j * calglGetGlobalSettings()->cellSize);
 
 	glVertex3iv(intVertex);
 }

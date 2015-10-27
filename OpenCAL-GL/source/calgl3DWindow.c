@@ -182,6 +182,18 @@ void calglSubDisplayWindow3D(void){
 			glEnable(GL_COLOR_MATERIAL);
 			glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
 			glEnable(GL_NORMALIZE);
+
+			// Light Cone Drawing - Enable this for debugging
+			//glPushMatrix ();	{
+			//	glTranslatef (window3D->models[currentModel3D]->modelLight->lightPosition[0],
+			//		window3D->models[currentModel3D]->modelLight->lightPosition[1],
+			//		window3D->models[currentModel3D]->modelLight->lightPosition[2]);
+			//	//glRotatef (-90, 1.0f, 0.0f, 0.0f);
+			//	//glColor3f (1.0f, 0.0f, 0.0f);
+			//	//glutSolidCone (0.5, 1.5, 10, 12);
+			//	glColor3f (1.0f, 1.0f, 0.0f);
+			//	glutSolidSphere (0.4, 10, 12);
+			//}	glPopMatrix ();
 		}
 
 		calglDisplayModel3D(window3D->models[currentModel3D]);
