@@ -17,23 +17,15 @@
 
 CALbyte calReductionOperation3Db(struct CALModel3D* model, struct CALSubstate3Db* substate, enum REDUCTION_OPERATION operation){
   CALint i;
+  CALint start, end;
   CALbyte valueComputed = 0, tmp = 0;
-  CALint numThreads = 1;
+
+  start = 1;
+  end = model->rows*model->columns*model->slices;
 
   valueComputed = getValue3DbAtIndex(substate, 0);
 
-  CALint start, end, threadId;
-  threadId = omp_get_thread_num();
-  start = threadId * (model->rows*model->columns*model->slices) / numThreads;
-  end = (threadId + 1) * (model->rows*model->columns*model->slices) / numThreads;
-  if (threadId == numThreads - 1){
-    end = model->rows;
-  }
-
   for (i = start; i<end; i++){
-    if (i == 0){
-      continue;
-    }
     switch (operation){
     case REDUCTION_MAX:
       tmp = getValue3DbAtIndex(substate, i);
@@ -79,23 +71,16 @@ CALbyte calReductionOperation3Db(struct CALModel3D* model, struct CALSubstate3Db
   return valueComputed;
 }
 CALint calReductionOperation3Di(struct CALModel3D* model, struct CALSubstate3Di* substate, enum REDUCTION_OPERATION operation){
-  CALint i, valueComputed = 0, tmp = 0;
-  CALint numThreads = 1;
+  CALint i;
+  CALint start, end;
+  CALint valueComputed = 0, tmp = 0;
+
+  start = 1;
+  end = model->rows*model->columns*model->slices;
 
   valueComputed = getValue3DiAtIndex(substate, 0);
 
-  CALint start, end, threadId;
-  threadId = omp_get_thread_num();
-  start = threadId * (model->rows*model->columns*model->slices) / numThreads;
-  end = (threadId + 1) * (model->rows*model->columns*model->slices) / numThreads;
-  if (threadId == numThreads - 1){
-    end = model->rows;
-  }
-
   for (i = start; i<end; i++){
-    if (i == 0){
-      continue;
-    }
     switch (operation){
     case REDUCTION_MAX:
       tmp = getValue3DiAtIndex(substate, i);
@@ -142,23 +127,15 @@ CALint calReductionOperation3Di(struct CALModel3D* model, struct CALSubstate3Di*
 }
 CALreal calReductionOperation3Dr(struct CALModel3D* model, struct CALSubstate3Dr* substate, enum REDUCTION_OPERATION operation){
   CALint i;
+  CALint start, end;
   CALreal valueComputed = 0, tmp = 0;
-  CALint numThreads = 1;
+
+  start = 1;
+  end = model->rows*model->columns*model->slices;
 
   valueComputed = getValue3DrAtIndex(substate, 0);
 
-  CALint start, end, threadId;
-  threadId = omp_get_thread_num();
-  start = threadId * (model->rows*model->columns*model->slices) / numThreads;
-  end = (threadId + 1) * (model->rows*model->columns*model->slices) / numThreads;
-  if (threadId == numThreads - 1){
-    end = model->rows;
-  }
-
   for (i = start; i<end; i++){
-    if (i == 0){
-      continue;
-    }
     switch (operation){
     case REDUCTION_MAX:
       tmp = getValue3DrAtIndex(substate, i);
@@ -200,7 +177,7 @@ CALreal calReductionOperation3Dr(struct CALModel3D* model, struct CALSubstate3Dr
       break;
     }
   }
-		
+
   return valueComputed;
 }
 
@@ -236,7 +213,7 @@ CALreal calReductionComputeSum3Dr(struct CALModel3D* model, struct CALSubstate3D
   return calReductionOperation3Dr(model, substate, REDUCTION_SUM);
 }
 
-CALbyte calReductionComputeProd3Db(struct CALModel3D* model, struct CALSubstate3Db* substate){	
+CALbyte calReductionComputeProd3Db(struct CALModel3D* model, struct CALSubstate3Db* substate){
   return calReductionOperation3Db(model, substate, REDUCTION_PROD);
 }
 CALint calReductionComputeProd3Di(struct CALModel3D* model, struct CALSubstate3Di* substate){
@@ -246,7 +223,7 @@ CALreal calReductionComputeProd3Dr(struct CALModel3D* model, struct CALSubstate3
   return calReductionOperation3Dr(model, substate, REDUCTION_SUM);
 }
 
-CALbyte calReductionComputeLogicalAnd3Db(struct CALModel3D* model, struct CALSubstate3Db* substate){ 
+CALbyte calReductionComputeLogicalAnd3Db(struct CALModel3D* model, struct CALSubstate3Db* substate){
   return calReductionOperation3Db(model, substate, REDUCTION_LOGICAL_AND);
 }
 CALint calReductionComputeLogicalAnd3Di(struct CALModel3D* model, struct CALSubstate3Di* substate){
@@ -262,7 +239,7 @@ CALbyte calReductionComputeBinaryAnd3Db(struct CALModel3D* model, struct CALSubs
 CALint calReductionComputeBinaryAnd3Di(struct CALModel3D* model, struct CALSubstate3Di* substate){
   return calReductionOperation3Di(model, substate, REDUCTION_BINARY_AND);
 }
-CALreal calReductionComputeBinaryAnd3Dr(struct CALModel3D* model, struct CALSubstate3Dr* substate){ 
+CALreal calReductionComputeBinaryAnd3Dr(struct CALModel3D* model, struct CALSubstate3Dr* substate){
   return calReductionOperation3Dr(model, substate, REDUCTION_BINARY_AND);
 }
 
@@ -279,7 +256,7 @@ CALreal calReductionComputeLogicalOr3Dr(struct CALModel3D* model, struct CALSubs
 CALbyte calReductionComputeBinaryOr3Db(struct CALModel3D* model, struct CALSubstate3Db* substate){
   return calReductionOperation3Db(model, substate, REDUCTION_BINARY_OR);
 }
-CALint calReductionComputeBinaryOr3Di(struct CALModel3D* model, struct CALSubstate3Di* substate){ 
+CALint calReductionComputeBinaryOr3Di(struct CALModel3D* model, struct CALSubstate3Di* substate){
   return calReductionOperation3Di(model, substate, REDUCTION_BINARY_OR);
 }
 CALreal calReductionComputeBinaryOr3Dr(struct CALModel3D* model, struct CALSubstate3Dr* substate){
@@ -289,7 +266,7 @@ CALreal calReductionComputeBinaryOr3Dr(struct CALModel3D* model, struct CALSubst
 CALbyte calReductionComputeLogicalXor3Db(struct CALModel3D* model, struct CALSubstate3Db* substate){
   return calReductionOperation3Db(model, substate, REDUCTION_LOGICAL_XOR);
 }
-CALint calReductionComputeLogicalXor3Di(struct CALModel3D* model, struct CALSubstate3Di* substate){ 
+CALint calReductionComputeLogicalXor3Di(struct CALModel3D* model, struct CALSubstate3Di* substate){
   return calReductionOperation3Di(model, substate, REDUCTION_LOGICAL_XOR);
 }
 CALreal calReductionComputeLogicalXor3Dr(struct CALModel3D* model, struct CALSubstate3Dr* substate){
@@ -299,10 +276,10 @@ CALreal calReductionComputeLogicalXor3Dr(struct CALModel3D* model, struct CALSub
 CALbyte calReductionComputeBinaryXor3Db(struct CALModel3D* model, struct CALSubstate3Db* substate){
   return calReductionOperation3Db(model, substate, REDUCTION_BINARY_XOR);
 }
-CALint calReductionComputeBinaryXor3Di(struct CALModel3D* model, struct CALSubstate3Di* substate){ 
+CALint calReductionComputeBinaryXor3Di(struct CALModel3D* model, struct CALSubstate3Di* substate){
   return calReductionOperation3Di(model, substate, REDUCTION_BINARY_XOR);
 }
-CALreal calReductionComputeBinaryXor3Dr(struct CALModel3D* model, struct CALSubstate3Dr* substate){ 
+CALreal calReductionComputeBinaryXor3Dr(struct CALModel3D* model, struct CALSubstate3Dr* substate){
   return calReductionOperation3Dr(model, substate, REDUCTION_BINARY_XOR);
 }
 
