@@ -278,29 +278,6 @@ void calAddActiveCell3D(struct CALModel3D* ca3D, int i, int j, int k)
 	CAL_UNSET_CELL_LOCK_3D(i, j, k, ca3D);
 }
 
-void calAddActiveCellX3D(struct CALModel3D* ca3D, int i, int j, int k, int n)
-{
-	if (ca3D->T == CAL_SPACE_FLAT)
-	{
-		if (!calGetBuffer3DElement(ca3D->A.flags, ca3D->rows, ca3D->columns, (i + ca3D->X[n].i), (j + ca3D->X[n].j), (k + ca3D->X[n].k)))
-		{
-			calAddActiveCell3D(ca3D, (i + ca3D->X[n].i), (j + ca3D->X[n].j), (k + ca3D->X[n].k));
-		}
-	}
-	else
-	{
-		if (!calGetBuffer3DElement(ca3D->A.flags, ca3D->rows, ca3D->columns,
-					   calGetToroidalX(i + ca3D->X[n].i, ca3D->rows),
-					   calGetToroidalX(j + ca3D->X[n].j, ca3D->columns), 
-					   calGetToroidalX(k + ca3D->X[n].k, ca3D->slices)))
-		{
-			calAddActiveCell3D(ca3D,  calGetToroidalX(i + ca3D->X[n].i, ca3D->rows),
-					   calGetToroidalX(j + ca3D->X[n].j, ca3D->columns),
-					   calGetToroidalX(k + ca3D->X[n].k, ca3D->slices));
-		}
-	}
-}
-
 void calRemoveActiveCell3D(struct CALModel3D* ca3D, int i, int j, int k)
 {
 	CAL_SET_CELL_LOCK_3D(i, j, k, ca3D);

@@ -60,7 +60,7 @@ struct CALModel3D {
 
 	enum CALOptimization OPTIMIZATION;	//!< Type of optimization used. It can be CAL_NO_OPT or CAL_OPT_ACTIVE_CELLS.
 	struct CALActiveCells3D A;			//!< Computational Active cells object. if A.actives==NULL no optimization is applied.
-		
+
 	struct CALCell3D* X;				//!< Array of cell coordinates defining the cellular automaton neighbourhood relation.
 	int sizeof_X;						//!< Number of cells belonging to the neighbourhood. Note that predefined neighbourhoods include the central cell.
 	enum CALNeighborhood3D X_id;		//!< Neighbourhood relation's id.
@@ -107,7 +107,7 @@ struct CALModel3D* calCADef3D(int rows, //!< Number of rows of the 3D cellular s
 
 
 
-/*! \brief Sets the cell (i,j) of the matrix flags to CAL_TRUE and increments the 
+/*! \brief Sets the cell (i,j) of the matrix flags to CAL_TRUE and increments the
 	couter sizeof_active_flags.
 */
 
@@ -122,17 +122,6 @@ void calAddActiveCell3D(struct CALModel3D* ca3D,	//!< Pointer to the cellular au
 						int k	//!< Slice coordinate of the cell to be added.
 						);
 
-
-/*! \brief Sets the n-th neighbor of the cell (i,j) of the matrix flags to 
-	CAL_TRUE and increments the couter sizeof_active_flags.
-*/
-void calAddActiveCellX3D(struct CALModel3D* ca3D,	//!< Pointer to the cellular automaton structure.
-						 int i,	//!< Row coordinate of the central cell.
-						 int j,	//!< Column coordinate of the central cell.
-						 int k,	//!< Slice coordinate of the central cell.
-						 int n	//!< Index of the n-th neighbor to be added.
-						 );
-
 /*! \brief \brief Sets the cell (i,j) of the matrix flags to CAL_FALSE and decrements the 
 	couter sizeof_active_flags.
 */
@@ -142,8 +131,8 @@ void calRemoveActiveCell3D(struct CALModel3D* ca3D,	//!< Pointer to the cellular
 						   int k	//!< Slice coordinate of the cell to be removed.
 						   );
 
-/*! \brief Puts the cells marked as actives in A.flags into the array of active cells 
-	A.cells and sets its dimension, A.size, to A.size_of_actives, i.e. the actual 
+/*! \brief Puts the cells marked as actives in A.flags into the array of active cells
+	A.cells and sets its dimension, A.size, to A.size_of_actives, i.e. the actual
 	number of active cells.
 */
 void calUpdateActiveCells3D(struct CALModel3D* ca3D	//!< Pointer to the cellular automaton structure.
@@ -161,7 +150,7 @@ struct CALCell3D*  calAddNeighbor3D(struct CALModel3D* ca3D, //!< Pointer to the
 
 
 
-/*! \brief Creates and adds a new byte substate to CALModel3D::pQb_array and return a pointer to it. 
+/*! \brief Creates and adds a new byte substate to CALModel3D::pQb_array and return a pointer to it.
 */
 struct CALSubstate3Db* calAddSubstate3Db(struct CALModel3D* ca3D	//!< Pointer to the cellular automaton structure.
 										 );
@@ -200,7 +189,7 @@ struct CALSubstate3Dr* calAddSingleLayerSubstate3Dr(struct CALModel3D* ca3D	//!<
 										            );
 
 
-/*! \brief Adds a transition function's elementary process to the CALModel3D::elementary_processes array of callbacks pointers. 
+/*! \brief Adds a transition function's elementary process to the CALModel3D::elementary_processes array of callbacks pointers.
 	Note that the function calGlobalTransitionFunction3D calls a substates' update after each elementary process.
 */
 CALCallbackFunc3D* calAddElementaryProcess3D(struct CALModel3D* ca3D,	//!< Pointer to the cellular automaton structure.
@@ -293,8 +282,8 @@ void calGlobalTransitionFunction3D(struct CALModel3D* ca3D	//!< Pointer to the c
 
 
 
-/*! \brief Updates all the substates registered in CALModel3D::pQb_array, 
-	CALModel3D::pQi_array and CALModel3D::pQr_array. 
+/*! \brief Updates all the substates registered in CALModel3D::pQb_array,
+	CALModel3D::pQi_array and CALModel3D::pQr_array.
 	It is called by the global transition function.
 */
 void calUpdate3D(struct CALModel3D* ca3D	//!< Pointer to the cellular automaton structure.
@@ -302,7 +291,7 @@ void calUpdate3D(struct CALModel3D* ca3D	//!< Pointer to the cellular automaton 
 
 
 
-/*! \brief Inits the value of a byte substate in the cell (i, j, k) to value; it updates both the current and next buffers at the position (i, j, k).  
+/*! \brief Inits the value of a byte substate in the cell (i, j, k) to value; it updates both the current and next buffers at the position (i, j, k).
 */
 void calInit3Db(struct CALModel3D* ca3D,	//!< Pointer to the cellular automaton structure.
 				struct CALSubstate3Db* Q,	//!< Pointer to a 3D byte substate.
@@ -312,7 +301,7 @@ void calInit3Db(struct CALModel3D* ca3D,	//!< Pointer to the cellular automaton 
 				CALbyte value				//!< initializing value for the substate at the cell (i, j, k).
 				);
 
-/*! \brief Inits the value of a integer substate in the cell (i, j, k) to value; it updates both the current and next buffers at the position (i, j, k).  
+/*! \brief Inits the value of a integer substate in the cell (i, j, k) to value; it updates both the current and next buffers at the position (i, j, k).
 */
 void calInit3Di(struct CALModel3D* ca3D,	//!< Pointer to the cellular automaton structure.
 				struct CALSubstate3Di* Q,	//!< Pointer to a 3D int substate.
@@ -322,7 +311,7 @@ void calInit3Di(struct CALModel3D* ca3D,	//!< Pointer to the cellular automaton 
 				CALint value				//!< initializing value for the substate at the cell (i, j, k).
 				);
 
-/*! \brief Inits the value of a real (floating point) substate in the cell (i, j, k) to value; it updates both the current and next buffers at the position (i, j, k).  
+/*! \brief Inits the value of a real (floating point) substate in the cell (i, j, k) to value; it updates both the current and next buffers at the position (i, j, k).
 */
 void calInit3Dr(struct CALModel3D* ca3D,	//!< Pointer to the cellular automaton structure.
 				struct CALSubstate3Dr* Q,	//!< Pointer to a 3D real (floating point) substate.
@@ -334,16 +323,16 @@ void calInit3Dr(struct CALModel3D* ca3D,	//!< Pointer to the cellular automaton 
 
 
 
-/*! \brief Returns the cell (i, j, k) value of a byte substate.  
+/*! \brief Returns the cell (i, j, k) value of a byte substate.
 */
 CALbyte calGet3Db(struct CALModel3D* ca3D,	//!< Pointer to the cellular automaton structure.
-				  struct CALSubstate3Db* Q,	//!< Pointer to a 3D byte substate.	
+				  struct CALSubstate3Db* Q,	//!< Pointer to a 3D byte substate.
 				  int i,					//!< Row coordinate of the cell.
 				  int j,					//!< Column coordinate of the cell.
 				  int k						//!< Slice coordinate of the cell.
 				  );
 
-/*! \brief Returns the cell (i, j, k) value of an integer substate.  
+/*! \brief Returns the cell (i, j, k) value of an integer substate.
 */
 CALint calGet3Di(struct CALModel3D* ca3D,	//!< Pointer to the cellular automaton structure.
 				 struct CALSubstate3Di* Q,	//!< Pointer to a 3D int substate.
@@ -352,7 +341,7 @@ CALint calGet3Di(struct CALModel3D* ca3D,	//!< Pointer to the cellular automaton
 				 int k						//!< Slice coordinate of the cell to be initialized.
 				 );
 
-/*! \brief Returns the cell (i, j, k) value of the of a real (floating point) substate.  
+/*! \brief Returns the cell (i, j, k) value of the of a real (floating point) substate.
 */
 CALreal calGet3Dr(struct CALModel3D* ca3D,	//!< Pointer to the cellular automaton structure.
 				  struct CALSubstate3Dr* Q,	//!< Pointer to a 3D real (floating point) substate.
@@ -395,7 +384,7 @@ CALreal calGetX3Dr(struct CALModel3D* ca3D,	//!< Pointer to the cellular automat
 
 
 
-/*! \brief Sets the cell (i, j, k) value of a byte substate.  
+/*! \brief Sets the cell (i, j, k) value of a byte substate.
 */
 void calSet3Db(struct CALModel3D* ca3D,		//!< Pointer to the cellular automaton structure.
 			   struct CALSubstate3Db* Q,	//!< Pointer to a 3D byte substate.
@@ -405,7 +394,7 @@ void calSet3Db(struct CALModel3D* ca3D,		//!< Pointer to the cellular automaton 
 			   CALbyte value				//!< initializing value.
 			   );
 
-/*! \brief Set the cell (i, j, k) value of an integer substate.  
+/*! \brief Set the cell (i, j, k) value of an integer substate.
 */
 void calSet3Di(struct CALModel3D* ca3D,		//!< Pointer to the cellular automaton structure.
 			   struct CALSubstate3Di* Q,	//!< Pointer to a 3D int substate.
@@ -415,7 +404,7 @@ void calSet3Di(struct CALModel3D* ca3D,		//!< Pointer to the cellular automaton 
 			   CALint value					//!< initializing value.
 			   );
 
-/*! \brief Set the cell (i, j, k) value of a real (floating point) substate.  
+/*! \brief Set the cell (i, j, k) value of a real (floating point) substate.
 */
 void calSet3Dr(struct CALModel3D* ca3D,		//!< Pointer to the cellular automaton structure.
 			   struct CALSubstate3Dr* Q,	//!< Pointer to a 3D real (floating point) substate.

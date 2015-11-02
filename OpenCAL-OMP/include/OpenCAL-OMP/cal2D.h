@@ -69,7 +69,7 @@ struct CALModel2D {
 
 	enum CALOptimization OPTIMIZATION;	//!< Type of optimization used. It can be CAL_NO_OPT or CAL_OPT_ACTIVE_CELLS.
 	struct CALActiveCells2D A;			//!< Computational Active cells object. if A.actives==NULL no optimization is applied.
-		
+
 	struct CALCell2D* X;				//!< Array of cell coordinates defining the cellular automaton neighbourhood relation.
 	int sizeof_X;						//!< Number of cells belonging to the neighbourhood. Note that predefined neighbourhoods include the central cell.
 	enum CALNeighborhood2D X_id;		//!< Neighbourhood relation's id.
@@ -108,7 +108,7 @@ struct CALModel2D* calCADef2D(int rows, //!< Number of rows of the 2D cellular s
 */
 void calSetUnsafe2D(struct CALModel2D* ca2D);
 
-/*! \brief Sets the cell (i,j) of the matrix flags to CAL_TRUE and increments the 
+/*! \brief Sets the cell (i,j) of the matrix flags to CAL_TRUE and increments the
 	couter sizeof_active_flags.
 */
 void calAddActiveCell2D(struct CALModel2D* ca2D,	//!< Pointer to the cellular automaton structure.
@@ -116,17 +116,7 @@ void calAddActiveCell2D(struct CALModel2D* ca2D,	//!< Pointer to the cellular au
 						int j	//!< Column coordinate of the cell to be added.
 						);
 
-
-/*! \brief Sets the n-th neighbor of the cell (i,j) of the matrix flags to 
-	CAL_TRUE and increments the couter sizeof_active_flags.
-*/
-void calAddActiveCellX2D(struct CALModel2D* ca2D,	//!< Pointer to the cellular automaton structure.
-						 int i,	//!< Row coordinate of the central cell.
-						 int j,	//!< Column coordinate of the central cell.
-						 int n	//!< Index of the n-th neighbor to be added.
-						 );
-
-/*! \brief \brief Sets the cell (i,j) of the matrix flags to CAL_FALSE and decrements the 
+/*! \brief \brief Sets the cell (i,j) of the matrix flags to CAL_FALSE and decrements the
 	couter sizeof_active_flags.
 */
 void calRemoveActiveCell2D(struct CALModel2D* ca2D,	//!< Pointer to the cellular automaton structure.
@@ -134,8 +124,8 @@ void calRemoveActiveCell2D(struct CALModel2D* ca2D,	//!< Pointer to the cellular
 						   int j	//!< Column coordinate of the cell to be removed.
 						   );
 
-/*! \brief Puts the cells marked as actives in A.flags into the array of active cells 
-	A.cells and sets its dimension, A.size, to A.size_of_actives, i.e. the actual 
+/*! \brief Puts the cells marked as actives in A.flags into the array of active cells
+	A.cells and sets its dimension, A.size, to A.size_of_actives, i.e. the actual
 	number of active cells.
 */
 void calUpdateActiveCells2D(struct CALModel2D* ca2D	//!< Pointer to the cellular automaton structure.
@@ -152,7 +142,7 @@ struct CALCell2D*  calAddNeighbor2D(struct CALModel2D* ca2D, //!< Pointer to the
 
 
 
-/*! \brief Creates and adds a new byte substate to CALModel2D::pQb_array and return a pointer to it. 
+/*! \brief Creates and adds a new byte substate to CALModel2D::pQb_array and return a pointer to it.
 */
 struct CALSubstate2Db* calAddSubstate2Db(struct CALModel2D* ca2D	//!< Pointer to the cellular automaton structure.
 										 );
@@ -192,7 +182,7 @@ struct CALSubstate2Dr* calAddSingleLayerSubstate2Dr(struct CALModel2D* ca2D	//!<
 
 
 
-/*! \brief Adds a transition function's elementary process to the CALModel2D::elementary_processes array of callbacks pointers. 
+/*! \brief Adds a transition function's elementary process to the CALModel2D::elementary_processes array of callbacks pointers.
 	Note that the function calGlobalTransitionFunction2D calls a substates' update after each elementary process.
 */
 CALCallbackFunc2D* calAddElementaryProcess2D(struct CALModel2D* ca2D,	//!< Pointer to the cellular automaton structure.
@@ -285,8 +275,8 @@ void calGlobalTransitionFunction2D(struct CALModel2D* ca2D	//!< Pointer to the c
 
 
 
-/*! \brief Updates all the substates registered in CALModel2D::pQb_array, 
-	CALModel2D::pQi_array and CALModel2D::pQr_array. 
+/*! \brief Updates all the substates registered in CALModel2D::pQb_array,
+	CALModel2D::pQi_array and CALModel2D::pQr_array.
 	It is called by the global transition function.
 */
 void calUpdate2D(struct CALModel2D* ca2D	//!< Pointer to the cellular automaton structure.
@@ -294,7 +284,7 @@ void calUpdate2D(struct CALModel2D* ca2D	//!< Pointer to the cellular automaton 
 
 
 
-/*! \brief Inits the value of a byte substate in the cell (i, j) to value; it updates both the current and next matrices at the position (i, j).  
+/*! \brief Inits the value of a byte substate in the cell (i, j) to value; it updates both the current and next matrices at the position (i, j).
 */
 void calInit2Db(struct CALModel2D* ca2D,	//!< Pointer to the cellular automaton structure.
 				struct CALSubstate2Db* Q,	//!< Pointer to a 2D byte substate.
@@ -303,7 +293,7 @@ void calInit2Db(struct CALModel2D* ca2D,	//!< Pointer to the cellular automaton 
 				CALbyte value				//!< initializing value for the substate at the cell (i, j).
 				);
 
-/*! \brief Inits the value of a integer substate in the cell (i, j) to value; it updates both the current and next matrices at the position (i, j).  
+/*! \brief Inits the value of a integer substate in the cell (i, j) to value; it updates both the current and next matrices at the position (i, j).
 */
 void calInit2Di(struct CALModel2D* ca2D,	//!< Pointer to the cellular automaton structure.
 				struct CALSubstate2Di* Q,	//!< Pointer to a 2D int substate.
@@ -312,7 +302,7 @@ void calInit2Di(struct CALModel2D* ca2D,	//!< Pointer to the cellular automaton 
 				CALint value				//!< initializing value for the substate at the cell (i, j).
 				);
 
-/*! \brief Inits the value of a real (floating point) substate in the cell (i, j) to value; it updates both the current and next matrices at the position (i, j).  
+/*! \brief Inits the value of a real (floating point) substate in the cell (i, j) to value; it updates both the current and next matrices at the position (i, j).
 */
 void calInit2Dr(struct CALModel2D* ca2D,	//!< Pointer to the cellular automaton structure.
 				struct CALSubstate2Dr* Q,	//!< Pointer to a 2D real (floating point) substate.
@@ -323,15 +313,15 @@ void calInit2Dr(struct CALModel2D* ca2D,	//!< Pointer to the cellular automaton 
 
 
 
-/*! \brief Returns the cell (i, j) value of a byte substate.  
+/*! \brief Returns the cell (i, j) value of a byte substate.
 */
 CALbyte calGet2Db(struct CALModel2D* ca2D,	//!< Pointer to the cellular automaton structure.
-				  struct CALSubstate2Db* Q,	//!< Pointer to a 2D byte substate.	
+				  struct CALSubstate2Db* Q,	//!< Pointer to a 2D byte substate.
 				  int i,					//!< Row coordinate of the cell.
 				  int j						//!< Column coordinate of the cell.
 				  );
 
-/*! \brief Returns the cell (i, j) value of an integer substate.  
+/*! \brief Returns the cell (i, j) value of an integer substate.
 */
 CALint calGet2Di(struct CALModel2D* ca2D,	//!< Pointer to the cellular automaton structure.
 				 struct CALSubstate2Di* Q,	//!< Pointer to a 2D int substate.
@@ -339,7 +329,7 @@ CALint calGet2Di(struct CALModel2D* ca2D,	//!< Pointer to the cellular automaton
 				 int j						//!< Column coordinate of the cell.
 				 );
 
-/*! \brief Returns the cell (i, j) value of the of a real (floating point) substate.  
+/*! \brief Returns the cell (i, j) value of the of a real (floating point) substate.
 */
 CALreal calGet2Dr(struct CALModel2D* ca2D,	//!< Pointer to the cellular automaton structure.
 				  struct CALSubstate2Dr* Q,	//!< Pointer to a 2D real (floating point) substate.
@@ -378,7 +368,7 @@ CALreal calGetX2Dr(struct CALModel2D* ca2D,	//!< Pointer to the cellular automat
 
 
 
-/*! \brief Sets the cell (i, j) value of a byte substate.  
+/*! \brief Sets the cell (i, j) value of a byte substate.
 */
 void calSet2Db(struct CALModel2D* ca2D,		//!< Pointer to the cellular automaton structure.
 			   struct CALSubstate2Db* Q,	//!< Pointer to a 2D byte substate.
@@ -387,7 +377,7 @@ void calSet2Db(struct CALModel2D* ca2D,		//!< Pointer to the cellular automaton 
 			   CALbyte value				//!< initializing value.
 			   );
 
-/*! \brief Set the cell (i, j) value of an integer substate.  
+/*! \brief Set the cell (i, j) value of an integer substate.
 */
 void calSet2Di(struct CALModel2D* ca2D,		//!< Pointer to the cellular automaton structure.
 			   struct CALSubstate2Di* Q,	//!< Pointer to a 2D int substate.
@@ -396,7 +386,7 @@ void calSet2Di(struct CALModel2D* ca2D,		//!< Pointer to the cellular automaton 
 			   CALint value					//!< initializing value.
 			   );
 
-/*! \brief Set the cell (i, j) value of a real (floating point) substate.  
+/*! \brief Set the cell (i, j) value of a real (floating point) substate.
 */
 void calSet2Dr(struct CALModel2D* ca2D,		//!< Pointer to the cellular automaton structure.
 			   struct CALSubstate2Dr* Q,	//!< Pointer to a 2D real (floating point) substate.

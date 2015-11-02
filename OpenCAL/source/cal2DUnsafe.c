@@ -15,6 +15,31 @@
 
 
 
+void calAddActiveCellX2D(struct CALModel2D* ca2D, int i, int j, int n)
+{
+	if ((ca2D->X_id == CAL_HEXAGONAL_NEIGHBORHOOD_2D && j%2 ==1) || (ca2D->X_id == CAL_HEXAGONAL_NEIGHBORHOOD_ALT_2D && i%2 ==1))
+		n += CAL_HEXAGONAL_SHIFT;
+
+	if (ca2D->T == CAL_SPACE_FLAT)
+	{
+		if (!calGetMatrixElement(ca2D->A.flags, ca2D->columns, (i + ca2D->X[n].i), (j + ca2D->X[n].j)))
+		{
+			calSetMatrixElement(ca2D->A.flags, ca2D->columns, (i + ca2D->X[n].i), (j + ca2D->X[n].j), CAL_TRUE);
+			ca2D->A.size_next++;
+		}
+	}
+	else
+	{
+		if (!calGetMatrixElement(ca2D->A.flags, ca2D->columns, calGetToroidalX(i + ca2D->X[n].i, ca2D->rows), calGetToroidalX(j + ca2D->X[n].j, ca2D->columns)))
+		{
+			calSetMatrixElement(ca2D->A.flags, ca2D->columns, calGetToroidalX(i + ca2D->X[n].i, ca2D->rows), calGetToroidalX(j + ca2D->X[n].j, ca2D->columns), CAL_TRUE);
+			ca2D->A.size_next++;
+		}
+	}
+}
+
+
+
 void calInitX2Db(struct CALModel2D* ca2D, struct CALSubstate2Db* Q, int i, int j, int n, CALbyte value)
 {
 	if ((ca2D->X_id == CAL_HEXAGONAL_NEIGHBORHOOD_2D && j%2 ==1) || (ca2D->X_id == CAL_HEXAGONAL_NEIGHBORHOOD_ALT_2D && i%2 ==1))
@@ -25,7 +50,7 @@ void calInitX2Db(struct CALModel2D* ca2D, struct CALSubstate2Db* Q, int i, int j
 		calSetMatrixElement(Q->current, ca2D->columns, i + ca2D->X[n].i, j + ca2D->X[n].j, value);
 		calSetMatrixElement(Q->next, ca2D->columns, i + ca2D->X[n].i, j + ca2D->X[n].j, value);
 	}
-	else 
+	else
 	{
 		calSetMatrixElement(Q->current, ca2D->columns, calGetToroidalX(i + ca2D->X[n].i, ca2D->rows), calGetToroidalX(j + ca2D->X[n].j, ca2D->columns), value);
 		calSetMatrixElement(Q->next, ca2D->columns, calGetToroidalX(i + ca2D->X[n].i, ca2D->rows), calGetToroidalX(j + ca2D->X[n].j, ca2D->columns), value);

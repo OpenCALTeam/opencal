@@ -24,19 +24,19 @@
 /*! \brief Builds the 3D pre-defined von Neumann neighborhood.
 */
 void calDefineVonNeumannNeighborhood3D(struct CALModel3D* ca3D	//!< Pointer to the cellular automaton structure.
-									   ) 
+									   )
 {
 	/*
 	     slice -1       slice 0       slice 1
 		 (sopra)						(sotto)
 
-           |   |         | 1 |         |   |   
+           |   |         | 1 |         |   |
         ---|---|---   ---|---|---   ---|---|---
-           | 5 |       2 | 0 | 3       | 6 |   
+           | 5 |       2 | 0 | 3       | 6 |
         ---|---|---   ---|---|---   ---|---|---
-           |   |         | 4 |         |   |   
+           |   |         | 4 |         |   |
    */
-		
+
 	//slice  0
 	calAddNeighbor3D(ca3D,   0,   0,   0);
     calAddNeighbor3D(ca3D, - 1,   0,   0);
@@ -59,11 +59,11 @@ void calDefineMooreNeighborhood3D(struct CALModel3D* ca3D		//!< Pointer to the c
 	/*
 	     slice -1       slice 0       slice 1
 
-        14 |10 | 17    5 | 1 | 8    23 |19 | 26  
+        14 |10 | 17    5 | 1 | 8    23 |19 | 26
         ---|---|---   ---|---|---   ---|---|---
-        11 | 9 | 12    2 | 0 | 3    20 |18 | 21 
+        11 | 9 | 12    2 | 0 | 3    20 |18 | 21
         ---|---|---   ---|---|---   ---|---|---
-        15 |13 | 16    6 | 4 | 7    24 |22 | 25  
+        15 |13 | 16    6 | 4 | 7    24 |22 | 25
    */
 
 	//slice  0
@@ -211,12 +211,12 @@ struct CALModel3D* calCADef3D(int rows,
 	ca3D->A.size_next = 0;
 	ca3D->A.cells = NULL;
 	ca3D->A.size_current = 0;
-	
+
 	ca3D->X = NULL;
 	ca3D->sizeof_X = 0;
 
 	ca3D->X_id = CAL_NEIGHBORHOOD_3D;
-	switch (CAL_NEIGHBORHOOD_3D) {	
+	switch (CAL_NEIGHBORHOOD_3D) {
 		case CAL_VON_NEUMANN_NEIGHBORHOOD_3D:
 			calDefineVonNeumannNeighborhood3D(ca3D);
 			break;
@@ -249,26 +249,6 @@ void calAddActiveCell3D(struct CALModel3D* ca3D, int i, int j, int k)
 	}
 }
 
-void calAddActiveCellX3D(struct CALModel3D* ca3D, int i, int j, int k, int n)
-{
-	if (ca3D->T == CAL_SPACE_FLAT)
-	{
-		if (!calGetBuffer3DElement(ca3D->A.flags, ca3D->rows, ca3D->columns, (i + ca3D->X[n].i), (j + ca3D->X[n].j), (k + ca3D->X[n].k)))
-		{
-			calSetBuffer3DElement(ca3D->A.flags, ca3D->rows, ca3D->columns, (i + ca3D->X[n].i), (j + ca3D->X[n].j), (k + ca3D->X[n].k), CAL_TRUE);
-			ca3D->A.size_next++;
-		}
-	}
-	else
-	{
-		if (!calGetBuffer3DElement(ca3D->A.flags, ca3D->rows, ca3D->columns, calGetToroidalX(i + ca3D->X[n].i, ca3D->rows), calGetToroidalX(j + ca3D->X[n].j, ca3D->columns), calGetToroidalX(k + ca3D->X[n].k, ca3D->slices)))
-		{
-			calSetBuffer3DElement(ca3D->A.flags, ca3D->rows, ca3D->columns, calGetToroidalX(i + ca3D->X[n].i, ca3D->rows), calGetToroidalX(j + ca3D->X[n].j, ca3D->columns), calGetToroidalX(k + ca3D->X[n].k, ca3D->slices), CAL_TRUE);
-			ca3D->A.size_next++;
-		}
-	}
-}
-
 void calRemoveActiveCell3D(struct CALModel3D* ca3D, int i, int j, int k)
 {
 	if (calGetBuffer3DElement(ca3D->A.flags, ca3D->rows, ca3D->columns, i, j, k))
@@ -288,7 +268,7 @@ void calUpdateActiveCells3D(struct CALModel3D* ca3D)
 	ca3D->A.size_current = ca3D->A.size_next;
 	if (ca3D->A.size_current == 0)
 		return;
-	
+
 	ca3D->A.cells = (struct CALCell3D*)malloc(sizeof(struct CALCell3D)*ca3D->A.size_current);
 
 	n = 0;
@@ -421,7 +401,7 @@ struct CALSubstate3Dr* calAddSubstate3Dr(struct CALModel3D* ca3D){
 
 
 struct CALSubstate3Db* calAddSingleLayerSubstate3Db(struct CALModel3D* ca3D){
-	
+
 	struct CALSubstate3Db* Q;
 	Q = (struct CALSubstate3Db*)malloc(sizeof(struct CALSubstate3Db));
 	if (!Q)
@@ -435,7 +415,7 @@ struct CALSubstate3Db* calAddSingleLayerSubstate3Db(struct CALModel3D* ca3D){
 }
 
 struct CALSubstate3Di* calAddSingleLayerSubstate3Di(struct CALModel3D* ca3D){
-	
+
 	struct CALSubstate3Di* Q;
 	Q = (struct CALSubstate3Di*)malloc(sizeof(struct CALSubstate3Di));
 	if (!Q)
@@ -449,7 +429,7 @@ struct CALSubstate3Di* calAddSingleLayerSubstate3Di(struct CALModel3D* ca3D){
 }
 
 struct CALSubstate3Dr* calAddSingleLayerSubstate3Dr(struct CALModel3D* ca3D){
-	
+
 	struct CALSubstate3Dr* Q;
 	Q = (struct CALSubstate3Dr*)malloc(sizeof(struct CALSubstate3Dr));
 	if (!Q)
@@ -493,13 +473,13 @@ void calInitSubstate3Db(struct CALModel3D* ca3D, struct CALSubstate3Db* Q, CALby
 	if (ca3D->A.cells)
 	{
 		calSetActiveCellsBuffer3Db(Q->current, ca3D->rows, ca3D->columns, ca3D->slices, value, ca3D->A.cells, ca3D->A.size_current);
-		if(Q->next)		
+		if(Q->next)
 			calSetActiveCellsBuffer3Db(Q->next, ca3D->rows, ca3D->columns, ca3D->slices, value, ca3D->A.cells, ca3D->A.size_current);
 	}
 	else
 	{
 		calSetBuffer3Db(Q->current, ca3D->rows, ca3D->columns, ca3D->slices, value);
-		if(Q->next)		
+		if(Q->next)
 			calSetBuffer3Db(Q->next, ca3D->rows, ca3D->columns, ca3D->slices, value);
 	}
 }
@@ -508,13 +488,13 @@ void calInitSubstate3Di(struct CALModel3D* ca3D, struct CALSubstate3Di* Q, CALin
 	if (ca3D->A.cells)
 	{
 		calSetActiveCellsBuffer3Di(Q->current, ca3D->rows, ca3D->columns, ca3D->slices, value, ca3D->A.cells, ca3D->A.size_current);
-		if(Q->next)		
+		if(Q->next)
 			calSetActiveCellsBuffer3Di(Q->next, ca3D->rows, ca3D->columns, ca3D->slices, value, ca3D->A.cells, ca3D->A.size_current);
 	}
 	else
 	{
 		calSetBuffer3Di(Q->current, ca3D->rows, ca3D->columns, ca3D->slices, value);
-		if(Q->next)		
+		if(Q->next)
 			calSetBuffer3Di(Q->next, ca3D->rows, ca3D->columns, ca3D->slices, value);
 	}
 }
@@ -523,13 +503,13 @@ void calInitSubstate3Dr(struct CALModel3D* ca3D, struct CALSubstate3Dr* Q, CALre
 	if (ca3D->A.cells)
 	{
 		calSetActiveCellsBuffer3Dr(Q->current, ca3D->rows, ca3D->columns, ca3D->slices, value, ca3D->A.cells, ca3D->A.size_current);
-		if(Q->next)		
+		if(Q->next)
 			calSetActiveCellsBuffer3Dr(Q->next, ca3D->rows, ca3D->columns, ca3D->slices, value, ca3D->A.cells, ca3D->A.size_current);
 	}
 	else
 	{
 		calSetBuffer3Dr(Q->current, ca3D->rows, ca3D->columns, ca3D->slices, value);
-		if(Q->next)		
+		if(Q->next)
 			calSetBuffer3Dr(Q->next, ca3D->rows, ca3D->columns, ca3D->slices, value);
 	}
 }
@@ -592,7 +572,7 @@ void calApplyElementaryProcess3D(struct CALModel3D* ca3D,	//!< Pointer to the ce
 				elementary_process(ca3D, ca3D->A.cells[n].i, ca3D->A.cells[n].j, ca3D->A.cells[n].k);
 		else //Standart cicle of the transition function
 			for (i=0; i<ca3D->rows; i++)
-				for (j=0; j<ca3D->columns; j++)	
+				for (j=0; j<ca3D->columns; j++)
 					for (k = 0; k<ca3D->slices; k++)
 						elementary_process(ca3D, i, j, k);
 }
@@ -606,7 +586,7 @@ void calGlobalTransitionFunction3D(struct CALModel3D* ca3D)
 	//Note that a substates' update is performed after each elementary process.
 
 	int b;
-	
+
 	for (b=0; b<ca3D->num_of_elementary_processes; b++)
 	{
 		//applying the b-th elementary process
@@ -614,7 +594,7 @@ void calGlobalTransitionFunction3D(struct CALModel3D* ca3D)
 
 		//updating substates
 		calUpdate3D(ca3D);
-	}   
+	}
 }
 
 
@@ -728,7 +708,7 @@ void calSetCurrent3Dr(struct CALModel3D* ca3D, struct CALSubstate3Dr* Q, int i, 
 void calFinalize3D(struct CALModel3D* ca3D)
 {
 	int i;
-	
+
 	free(ca3D->A.flags);
 	free(ca3D->A.cells);
 

@@ -7,6 +7,7 @@ extern "C"{
 #include <OpenCAL/cal2DBuffer.h>
 #include <OpenCAL/cal2DBufferIO.h>
 #include <OpenCAL/cal2DRun.h>
+#include <OpenCAL/cal2DUnsafe.h>
 }
 #include "GISInfo.h"
 #include "vent.h"

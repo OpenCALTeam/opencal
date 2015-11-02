@@ -24,14 +24,14 @@
 /*! \brief Builds the pre-defined von Neumann neighborhood.
 */
 void calDefineVonNeumannNeighborhood2D(struct CALModel2D* ca2D	//!< Pointer to the cellular automaton structure.
-									   ) 
+									   )
 {
 	/*
-           | 1 |  
+           | 1 |
         ---|---|---
          2 | 0 | 3
         ---|---|---
-           | 4 |  
+           | 4 |
    */
 
 	calAddNeighbor2D(ca2D,   0,   0);
@@ -75,7 +75,7 @@ void calDefineHexagonalNeighborhood2D(struct CALModel2D* ca2D		//!< Pointer to t
 {
 	/*
 		cell orientation
-			 __	
+			 __
 			/  \
 			\__/
     */
@@ -84,7 +84,7 @@ void calDefineHexagonalNeighborhood2D(struct CALModel2D* ca2D		//!< Pointer to t
         ---|---|---
          4 | 0 | 6		if (j%2 == 0), i.e. even columns
         ---|---|---
-           | 5 |  
+           | 5 |
     */
 
 	calAddNeighbor2D(ca2D,   0,   0);
@@ -96,7 +96,7 @@ void calDefineHexagonalNeighborhood2D(struct CALModel2D* ca2D		//!< Pointer to t
     calAddNeighbor2D(ca2D,   0, + 1);
 
 	/*
-           | 2 |  
+           | 2 |
         ---|---|---
          3 | 0 | 1		if (j%2 == 1), i.e. odd columns
         ---|---|---
@@ -121,7 +121,7 @@ void calDefineAlternativeHexagonalNeighborhood2D(struct CALModel2D* ca2D	//!< Po
 {
 	/*
 		cell orientation
-			 	
+
 			/\
 		   /  \
 		   |  |
@@ -129,11 +129,11 @@ void calDefineAlternativeHexagonalNeighborhood2D(struct CALModel2D* ca2D	//!< Po
 		    \/
     */
 	/*
-         2 | 1 |  
+         2 | 1 |
         ---|---|---
          3 | 0 | 6		if (i%2 == 0), i.e. even rows
         ---|---|---
-         4 | 5 |  
+         4 | 5 |
     */
 
 	calAddNeighbor2D(ca2D,   0,   0);
@@ -273,12 +273,12 @@ struct CALModel2D* calCADef2D(int rows,
 	ca2D->A.size_next = 0;
 	ca2D->A.cells = NULL;
 	ca2D->A.size_current = 0;
-	
+
 	ca2D->X = NULL;
 	ca2D->sizeof_X = 0;
 
 	ca2D->X_id = CAL_NEIGHBORHOOD_2D;
-	switch (CAL_NEIGHBORHOOD_2D) {	
+	switch (CAL_NEIGHBORHOOD_2D) {
 		case CAL_VON_NEUMANN_NEIGHBORHOOD_2D:
 			calDefineVonNeumannNeighborhood2D(ca2D);
 			break;
@@ -317,29 +317,6 @@ void calAddActiveCell2D(struct CALModel2D* ca2D, int i, int j)
 	}
 }
 
-void calAddActiveCellX2D(struct CALModel2D* ca2D, int i, int j, int n)
-{
-	if ((ca2D->X_id == CAL_HEXAGONAL_NEIGHBORHOOD_2D && j%2 ==1) || (ca2D->X_id == CAL_HEXAGONAL_NEIGHBORHOOD_ALT_2D && i%2 ==1))
-		n += CAL_HEXAGONAL_SHIFT;
-
-	if (ca2D->T == CAL_SPACE_FLAT)
-	{
-		if (!calGetMatrixElement(ca2D->A.flags, ca2D->columns, (i + ca2D->X[n].i), (j + ca2D->X[n].j)))
-		{
-			calSetMatrixElement(ca2D->A.flags, ca2D->columns, (i + ca2D->X[n].i), (j + ca2D->X[n].j), CAL_TRUE);
-			ca2D->A.size_next++;
-		}
-	}
-	else
-	{
-		if (!calGetMatrixElement(ca2D->A.flags, ca2D->columns, calGetToroidalX(i + ca2D->X[n].i, ca2D->rows), calGetToroidalX(j + ca2D->X[n].j, ca2D->columns)))
-		{
-			calSetMatrixElement(ca2D->A.flags, ca2D->columns, calGetToroidalX(i + ca2D->X[n].i, ca2D->rows), calGetToroidalX(j + ca2D->X[n].j, ca2D->columns), CAL_TRUE);
-			ca2D->A.size_next++;
-		}
-	}
-}
-
 void calRemoveActiveCell2D(struct CALModel2D* ca2D, int i, int j)
 {
 	if (calGetMatrixElement(ca2D->A.flags, ca2D->columns, i, j))
@@ -359,7 +336,7 @@ void calUpdateActiveCells2D(struct CALModel2D* ca2D)
 	ca2D->A.size_current = ca2D->A.size_next;
 	if (ca2D->A.size_current == 0)
 		return;
-	
+
 	ca2D->A.cells = (struct CALCell2D*)malloc(sizeof(struct CALCell2D)*ca2D->A.size_current);
 
 	n = 0;
@@ -488,7 +465,7 @@ struct CALSubstate2Dr* calAddSubstate2Dr(struct CALModel2D* ca2D){
 
 
 struct CALSubstate2Db* calAddSingleLayerSubstate2Db(struct CALModel2D* ca2D){
-	
+
 	struct CALSubstate2Db* Q;
 	Q = (struct CALSubstate2Db*)malloc(sizeof(struct CALSubstate2Db));
 	if (!Q)
@@ -502,7 +479,7 @@ struct CALSubstate2Db* calAddSingleLayerSubstate2Db(struct CALModel2D* ca2D){
 }
 
 struct CALSubstate2Di* calAddSingleLayerSubstate2Di(struct CALModel2D* ca2D){
-	
+
 	struct CALSubstate2Di* Q;
 	Q = (struct CALSubstate2Di*)malloc(sizeof(struct CALSubstate2Di));
 	if (!Q)
@@ -516,7 +493,7 @@ struct CALSubstate2Di* calAddSingleLayerSubstate2Di(struct CALModel2D* ca2D){
 }
 
 struct CALSubstate2Dr* calAddSingleLayerSubstate2Dr(struct CALModel2D* ca2D){
-	
+
 	struct CALSubstate2Dr* Q;
 	Q = (struct CALSubstate2Dr*)malloc(sizeof(struct CALSubstate2Dr));
 	if (!Q)
@@ -560,7 +537,7 @@ void calInitSubstate2Db(struct CALModel2D* ca2D, struct CALSubstate2Db* Q, CALby
 	if (ca2D->A.cells)
 	{
 		calSetActiveCellsBuffer2Db(Q->current, ca2D->rows, ca2D->columns, value, ca2D->A.cells, ca2D->A.size_current);
-		if(Q->next)		
+		if(Q->next)
 			calSetActiveCellsBuffer2Db(Q->next, ca2D->rows, ca2D->columns, value, ca2D->A.cells, ca2D->A.size_current);
 	}
 	else
@@ -575,7 +552,7 @@ void calInitSubstate2Di(struct CALModel2D* ca2D, struct CALSubstate2Di* Q, CALin
 	if (ca2D->A.cells)
 	{
 		calSetActiveCellsBuffer2Di(Q->current, ca2D->rows, ca2D->columns, value, ca2D->A.cells, ca2D->A.size_current);
-		if(Q->next)		
+		if(Q->next)
 			calSetActiveCellsBuffer2Di(Q->next, ca2D->rows, ca2D->columns, value, ca2D->A.cells, ca2D->A.size_current);
 	}
 	else
@@ -590,7 +567,7 @@ void calInitSubstate2Dr(struct CALModel2D* ca2D, struct CALSubstate2Dr* Q, CALre
 	if (ca2D->A.cells)
 	{
 		calSetActiveCellsBuffer2Dr(Q->current, ca2D->rows, ca2D->columns, value, ca2D->A.cells, ca2D->A.size_current);
-		if(Q->next)		
+		if(Q->next)
 			calSetActiveCellsBuffer2Dr(Q->next, ca2D->rows, ca2D->columns, value, ca2D->A.cells, ca2D->A.size_current);
 	}
 	else
@@ -659,7 +636,7 @@ void calApplyElementaryProcess2D(struct CALModel2D* ca2D,	//!< Pointer to the ce
 			elementary_process(ca2D, ca2D->A.cells[n].i, ca2D->A.cells[n].j);
 	else //Standart cicle of the transition function
 		for (i=0; i<ca2D->rows; i++)
-			for (j=0; j<ca2D->columns; j++)	
+			for (j=0; j<ca2D->columns; j++)
 				elementary_process(ca2D, i, j);
 }
 
@@ -672,7 +649,7 @@ void calGlobalTransitionFunction2D(struct CALModel2D* ca2D)
 	//Note that a substates' update is performed after each elementary process.
 
 	int b;
-	
+
 	for (b=0; b<ca2D->num_of_elementary_processes; b++)
 	{
 		//applying the b-th elementary process
@@ -680,7 +657,7 @@ void calGlobalTransitionFunction2D(struct CALModel2D* ca2D)
 
 		//updating substates
 		calUpdate2D(ca2D);
-	}   
+	}
 }
 
 
@@ -805,7 +782,7 @@ void calSetCurrent2Dr(struct CALModel2D* ca2D, struct CALSubstate2Dr* Q, int i, 
 void calFinalize2D(struct CALModel2D* ca2D)
 {
 	int i;
-	
+
 	free(ca2D->A.flags);
 	free(ca2D->A.cells);
 

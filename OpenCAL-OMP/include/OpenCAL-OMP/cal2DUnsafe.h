@@ -16,6 +16,17 @@
 
 
 
+/*! \brief Sets the n-th neighbor of the cell (i,j) of the matrix flags to
+	CAL_TRUE and increments the couter sizeof_active_flags.
+*/
+void calAddActiveCellX2D(struct CALModel2D* ca2D,	//!< Pointer to the cellular automaton structure.
+						 int i,	//!< Row coordinate of the central cell.
+						 int j,	//!< Column coordinate of the central cell.
+						 int n	//!< Index of the n-th neighbor to be added.
+						 );
+
+
+
 /*! \brief Inits the cell (i, j) n-th neighbour of a byte substate to value;
 	it updates both the current and next matrix at the position (i, j).
 	This operation is unsafe since it writes value in a neighbor, both on the current and next matrix.
@@ -54,11 +65,11 @@ void calInitX2Dr(struct CALModel2D* ca2D,	//!< Pointer to the cellular automaton
 
 
 
-/*! \brief Returns the cell (i, j) value of a byte substate from the next matrix.  
+/*! \brief Returns the cell (i, j) value of a byte substate from the next matrix.
 	This operation is unsafe since it reads a value from the next matrix.
 */
 CALbyte calGetNext2Db(struct CALModel2D* ca2D,		//!< Pointer to the cellular automaton structure.
-						  struct CALSubstate2Db* Q,	//!< Pointer to a 2D byte substate.	
+						  struct CALSubstate2Db* Q,	//!< Pointer to a 2D byte substate.
 						  int i,					//!< Row coordinate of the cell.
 						  int j						//!< Column coordinate of the cell.
 						  );
@@ -83,7 +94,7 @@ CALreal calGetNext2Dr(struct CALModel2D* ca2D,		//!< Pointer to the cellular aut
 
 
 
-/*! \brief Returns the cell (i, j) n-th neighbor value of a byte substate from the next matrix.  
+/*! \brief Returns the cell (i, j) n-th neighbor value of a byte substate from the next matrix.
 	This operation is unsafe since it reads a value from the next matrix.
 */
 CALbyte calGetNextX2Db(struct CALModel2D* ca2D,		//!< Pointer to the cellular automaton structure.
