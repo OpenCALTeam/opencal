@@ -45,7 +45,7 @@ void display(void)
 
 	glClear(GL_COLOR_BUFFER_BIT);
 	glPushMatrix();
-	
+
 	glTranslatef(-ca[currentAC].iso->columns/2.0f, ca[currentAC].iso->rows/2.0f, 0);
 	glScalef(1, -1, 1);
 
@@ -55,7 +55,7 @@ void display(void)
 		for (j=0; j<ca[currentAC].iso->columns; j++)
 		{
 			s = calGet2Dr(ca[currentAC].iso,ca[currentAC].Q.value,i,j);
-			
+
 			if (s > 0)
 			{
 				color = (s - _min) / (_Max - _min);
@@ -112,11 +112,11 @@ void simulationRun(void)
 {
 	CALbyte again;
 
+  //exectutes the global transition function, the steering function and check for the stop condition.
+	again = calRunCAStep2D(ca[currentAC].isoRun);
+
 	//simulation main loop
 	ca[currentAC].isoRun->step++;
-	
-    //exectutes the global transition function, the steering function and check for the stop condition.
-	again = calRunCAStep2D(ca[currentAC].isoRun);
 
 	//check for the stop condition
 	if (!again)
@@ -126,7 +126,7 @@ void simulationRun(void)
 		glutIdleFunc(NULL);
 		printf("\n");
 		printf("Simulation terminated\n");
-		printf("Elapsed time: %ds\n", end_time - start_time); 
+		printf("Elapsed time: %ds\n", end_time - start_time);
 
 		//saving configuration
 		printf("Saving final state to %s\n", OUTPUT_PATH);
@@ -165,16 +165,16 @@ void reshape(int w, int h)
 	glLoadIdentity();
 	if (ca[currentAC].iso->rows > ca[currentAC].iso->columns) dim = ca[currentAC].iso->rows * 0.5f; else dim = ca[currentAC].iso->columns * 0.5f;
 	aspect = (GLfloat)w / (GLfloat)h;
-	if (w <= h) 
+	if (w <= h)
 		glOrtho (-dim, dim, -dim/aspect, dim/aspect, 1.0, -1.0);
-	else 
+	else
 		glOrtho (-dim*aspect, dim*aspect, -dim, dim, 1.0, -1.0);
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 }
 
-void mouse(int button, int state, int x, int y) 
+void mouse(int button, int state, int x, int y)
 {
 	switch (button) {
 	case GLUT_LEFT_BUTTON:
@@ -222,12 +222,12 @@ int main(int argc, char** argv)
 
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
-	glutInitWindowSize(640, 480); 
+	glutInitWindowSize(640, 480);
 	glutInitWindowPosition(100, 100);
 	glutCreateWindow(argv[0]);
 	init();
 	glutDisplayFunc(display);
-	glutReshapeFunc(reshape); 
+	glutReshapeFunc(reshape);
 	glutMouseFunc(mouse);
 	glutKeyboardFunc(keyboard);
 	glutMainLoop();

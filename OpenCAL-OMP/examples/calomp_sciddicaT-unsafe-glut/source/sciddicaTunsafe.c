@@ -4,7 +4,7 @@
 #include <stdlib.h>
 
 //-----------------------------------------------------------------------
-//	   THE sciddicaT(toy) cellular automaton definition section
+//	   THE sciddicaT(oy) cellular automaton definition section
 //-----------------------------------------------------------------------
 
 //cadef and rundef
@@ -62,7 +62,7 @@ void sciddicaT_transition_function(struct CALModel2D* sciddicaT, int i, int j)
 					again=CAL_TRUE;
 				}
 
-	}while (again); 
+	}while (again);
 
 
 	for (n=1; n<sciddicaT->sizeof_X; n++)
@@ -75,7 +75,7 @@ void sciddicaT_transition_function(struct CALModel2D* sciddicaT, int i, int j)
 #ifdef ACTIVE_CELLS
 			//adds the cell (i, j, n) to the set of active ones
             calAddActiveCellX2D(sciddicaT, i, j, n);
-#endif		
+#endif
 		}
 }
 
@@ -83,7 +83,7 @@ void sciddicaT_remove_inactive_cells(struct CALModel2D* sciddicaT, int i, int j)
 {
 #ifdef ACTIVE_CELLS
 	if (calGet2Dr(sciddicaT, Q.h, i, j) <= P.epsilon)
-		calRemoveActiveCell2D(sciddicaT,i,j);	
+		calRemoveActiveCell2D(sciddicaT,i,j);
 #endif
 }
 
@@ -142,11 +142,11 @@ void sciddicaTCADef()
 	//add transition function's elementary processes
 	calAddElementaryProcess2D(sciddicaT, sciddicaT_transition_function);
 	calAddElementaryProcess2D(sciddicaT, sciddicaT_remove_inactive_cells);
-	
+
 	//add substates
 	Q.z = calAddSingleLayerSubstate2Dr(sciddicaT);
 	Q.h = calAddSubstate2Dr(sciddicaT);
-	
+
 	//load configuration
 	sciddicaTLoadConfig();
 
@@ -177,7 +177,7 @@ void sciddicaTSaveConfig()
 
 
 void sciddicaTExit()
-{	
+{
 	//finalizations
 	calRunFinalize2D(sciddicaTsimulation);
 	calFinalize2D(sciddicaT);

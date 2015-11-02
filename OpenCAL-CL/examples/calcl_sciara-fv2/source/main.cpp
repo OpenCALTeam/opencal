@@ -158,7 +158,7 @@ int main(int argc, char** argv) {
 	calclSetSteeringKernel2D(sciaraToolkit, sciara->model, &kernel_steering);
 	calclSetStopConditionKernel2D(sciaraToolkit, sciara->model, &kernel_stop_condition);
 
-	calclRun2D(sciaraToolkit, sciara->model, steps);
+	calclRun2D(sciaraToolkit, sciara->model, 1, steps);
 
 	clEnqueueReadBuffer(sciaraToolkit->queue,mslBuffer,CAL_TRUE,0,sizeof(CALreal)*sciara->rows*sciara->cols,sciara->substates->Msl->current,0,NULL,NULL);
 
@@ -179,4 +179,3 @@ int main(int argc, char** argv) {
 	return 0;
 
 }
-

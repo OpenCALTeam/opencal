@@ -144,6 +144,7 @@ CALCLToolkit2D * calclCreateToolkit2D(struct CALModel2D *model,		//!< Pointer to
 /*! \brief Main simulation cycle. It can become a loop if maxStep == CALCL_RUN_LOOP */
 void calclRun2D(CALCLToolkit2D* toolkit2d, 		//!< Pointer to a CALCLToolkit2D
 		struct CALModel2D * model,				//!< Pointer to a CALModel2D
+		unsigned int initialStep,				//!< Initial simulation step 
 		unsigned maxStep						//!< Maximum number of CA steps. Simulation can become a loop if maxStep == CALCL_RUN_LOOP
 		);
 

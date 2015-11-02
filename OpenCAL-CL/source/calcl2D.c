@@ -382,7 +382,7 @@ CALCLToolkit2D * calclCreateToolkit2D(struct CALModel2D *model, CALCLcontext con
 
 }
 
-void calclRun2D(CALCLToolkit2D* toolkit2d, struct CALModel2D * model, unsigned maxStep) {
+void calclRun2D(CALCLToolkit2D* toolkit2d, struct CALModel2D * model, unsigned int initialStep, unsigned maxStep) {
 //	cl_int err;
 	CALbyte stop;
 	size_t * threadNumMax = (size_t*) malloc(sizeof(size_t) * 2);
@@ -408,7 +408,7 @@ void calclRun2D(CALCLToolkit2D* toolkit2d, struct CALModel2D * model, unsigned m
 	//TODO call update
 
 
-	toolkit2d->steps = 0;
+	toolkit2d->steps = initialStep;
 	while (toolkit2d->steps < (int)maxStep || maxStep == CAL_RUN_LOOP) {
 		stop = calclSingleStep2D(toolkit2d, model, singleStepThreadNum, dimNum);
 		if (stop == CAL_TRUE)
@@ -684,4 +684,3 @@ CALCLprogram calclLoadProgramLib2D(CALCLcontext context, CALCLdevice device, cha
 	free(tmp);
 	return program;
 }
-

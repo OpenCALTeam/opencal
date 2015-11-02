@@ -24,7 +24,7 @@ struct CALRun2D* calRunDef2D(struct CALModel2D* ca2D,
 
 	simulation->ca2D = ca2D;
 
-	simulation->step = 0;
+	simulation->step = initial_step;
 	simulation->initial_step = initial_step;
 	simulation->final_step = final_step;
 

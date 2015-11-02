@@ -47,12 +47,12 @@ void simulationRun(void)
 {
 	CALbyte again;
 
-	//simulation main loop
-	life.run->step++;
-
 	//exectutes the global transition function
 	//the steering function and check for the stop condition
 	again = calRunCAStep2D(life.run);
+
+	//simulation main loop
+	life.run->step++;
 
 	//graphic rendering
 	printf("step: %d\r", life.run->step);
@@ -93,7 +93,7 @@ void reshape(int w, int h)
 	glLoadIdentity();
 
 	(ROWS > COLS) ? (dim = ROWS*0.5f) : (dim = COLS*0.5f);
-	
+
 	aspect = (GLfloat)w / (GLfloat)h;
 	if (w <= h)
 		glOrtho(-dim, dim, -dim / aspect, dim / aspect, 1.0, -1.0);

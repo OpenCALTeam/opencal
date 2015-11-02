@@ -24,7 +24,7 @@ enum CALUpdateMode UPDATE_MODE)
 
 	simulation->ca2D = ca2D;
 
-	simulation->step = 0;
+	simulation->step = initial_step;
 	simulation->initial_step = initial_step;
 	simulation->final_step = final_step;
 

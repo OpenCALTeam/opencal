@@ -32,7 +32,7 @@ void display(void)
 	glRotatef(model_view.y_rot, 0, 1, 0);
 
 	// Save the lighting state variables
-	glPushAttrib(GL_LIGHTING_BIT);	
+	glPushAttrib(GL_LIGHTING_BIT);
 	glDisable(GL_LIGHTING);
 	glPushMatrix();
 	glColor3f(0,1,0);
@@ -40,7 +40,7 @@ void display(void)
 	glutWireCube(1.0);
 	glPopMatrix();
 	// Restore lighting state variables
-	glPopAttrib();	
+	glPopAttrib();
 
 	glColor3f(1,1,1);
 	for (k=0; k<life3D->slices; k++)
@@ -65,11 +65,11 @@ void simulationRun(void)
 {
 	CALbyte again;
 
+  //exectutes the global transition function, the steering function and check for the stop condition.
+	again = calRunCAStep3D(life3Dsimulation);
+
 	//simulation main loop
 	life3Dsimulation->step++;
-	
-    //exectutes the global transition function, the steering function and check for the stop condition.
-	again = calRunCAStep3D(life3Dsimulation);
 
 	//check for the stop condition
 	if (!again)
@@ -79,7 +79,7 @@ void simulationRun(void)
 		glutIdleFunc(NULL);
 		printf("\n");
 		printf("Simulation terminated\n");
-		printf("Elapsed time: %ds\n", end_time - start_time); 
+		printf("Elapsed time: %ds\n", end_time - start_time);
 
 		//graphic rendering
 		printf("step: %d; \tactive cells: %d\r", life3Dsimulation->step, life3Dsimulation->ca3D->A.size_current);
@@ -98,19 +98,19 @@ void init(void)
 {
 	GLfloat  ambientLight[] = { 0.2f, 0.2f, 0.2f, 1.0f };
 	GLfloat  diffuseLight[] = { 0.75f, 0.75f, 0.75f, 1.0f };
-	
+
 	glEnable(GL_LIGHTING);
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambientLight);
 	glLightfv(GL_LIGHT0, GL_DIFFUSE,  diffuseLight);
 	glEnable(GL_LIGHT0);
 	glEnable(GL_COLOR_MATERIAL);
 	glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
-	
+
 	glClearColor (0.0, 0.0, 0.0, 0.0);
 	glShadeModel (GL_FLAT);
 
 	glEnable (GL_DEPTH_TEST);
-	
+
 	model_view.x_rot = 0.0;
 	model_view.y_rot = 0.0;
 	model_view.z_trans = 0.0;
@@ -138,11 +138,11 @@ void reshape(int w, int h)
 	glLoadIdentity();
 	gluLookAt (0.0, 0.0, 2*MAX, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
 
-	lightPos[2] = 2*MAX; 
+	lightPos[2] = 2*MAX;
 	glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
 }
 
-void mouse(int button, int state, int x, int y) 
+void mouse(int button, int state, int x, int y)
 {
 	switch (button) {
 	case GLUT_LEFT_BUTTON:
@@ -163,7 +163,7 @@ void mouse(int button, int state, int x, int y)
 }
 
 void specialKeys(int key, int x, int y){
-	
+
 	GLubyte specialKey = glutGetModifiers();
 	const GLfloat x_rot = 5.0, y_rot = 5.0, z_trans = 5.0;
 
@@ -195,12 +195,12 @@ int main(int argc, char** argv)
 
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-	glutInitWindowSize(640, 480); 
+	glutInitWindowSize(640, 480);
 	glutInitWindowPosition(100, 100);
 	glutCreateWindow(argv[0]);
 	init();
-	glutDisplayFunc(display); 
-	glutReshapeFunc(reshape); 
+	glutDisplayFunc(display);
+	glutReshapeFunc(reshape);
 	glutSpecialFunc(specialKeys);
 	glutMouseFunc(mouse);
 	glutMainLoop();

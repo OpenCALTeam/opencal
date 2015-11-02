@@ -82,7 +82,7 @@ void s3hexFlowsComputation(struct CALModel2D* s3hex, int i, int j)
 	CALreal z_0, h_0, z_n, h_n, runup_0, z_0_plus_runup_0, sum;
 	CALreal f;
 
-	
+
 	if (calGet2Dr(s3hex,Q.h,i,j) <= P.adh)
 		return;
 
@@ -128,7 +128,7 @@ void s3hexFlowsComputation(struct CALModel2D* s3hex, int i, int j)
 					again=CAL_TRUE;
 				}
 
-	}while (again); 
+	}while (again);
 
 
 	sum = 0;
@@ -150,7 +150,7 @@ void s3hexFlowsComputation(struct CALModel2D* s3hex, int i, int j)
 #ifdef ACTIVE_CELLS
 			//adds the cell (i, j, n) to the set of active ones
             calAddActiveCellX2D(s3hex, i, j, n);
-#endif		
+#endif
 		}
 }
 
@@ -201,7 +201,7 @@ void sciddicaTSimulationInit(struct CALModel2D* s3hex)
 	//initializing debris source
 	calInitSubstate2Dr(s3hex, Q.h, 0);
 	calInitSubstate2Dr(s3hex, Q.p, 0);
-	
+
 #ifdef ACTIVE_CELLS
 	for (i=0; i<s3hex->rows; i++)
 		for (j=0; j<s3hex->columns; j++)
@@ -225,7 +225,7 @@ void sciddicaTransitionFunction(struct CALModel2D* s3hex)
 	calUpdateSubstate2Dr(s3hex, Q.p);
 
 	calApplyElementaryProcess2D(s3hex, s3hexRomoveInactiveCells);
-	
+
 
 	calApplyElementaryProcess2D(s3hex, s3hexEnergyLoss);
 	calUpdateSubstate2Dr(s3hex, Q.p);
@@ -257,7 +257,7 @@ void sciddicaTCADef()
 	calAddElementaryProcess2D(s3hex, s3hexFlowsComputation);
 	calAddElementaryProcess2D(s3hex, s3hexRomoveInactiveCells);
 	calAddElementaryProcess2D(s3hex, s3hexEnergyLoss);
-	
+
 	//add substates
 	Q.z = calAddSingleLayerSubstate2Dr(s3hex);
 	Q.d = calAddSingleLayerSubstate2Dr(s3hex);
@@ -267,7 +267,7 @@ void sciddicaTCADef()
 
 	//load configuration
 	sciddicaTLoadConfig();
-	
+
 	//simulation run setup
 	calRunAddInitFunc2D(s3hexSimulation, sciddicaTSimulationInit); calRunInitSimulation2D(s3hexSimulation);
 	calRunAddGlobalTransitionFunc2D(s3hexSimulation, sciddicaTransitionFunction);
@@ -297,7 +297,7 @@ void sciddicaTSaveConfig()
 
 
 void sciddicaTExit()
-{	
+{
 	//finalizations
 	calRunFinalize2D(s3hexSimulation);
 	calFinalize2D(s3hex);

@@ -147,6 +147,7 @@ CALCLToolkit3D * calclCreateToolkit3D(struct CALModel3D *model,		//!< Pointer to
 /*! \brief Main simulation cycle. It can become a loop if maxStep == CALCL_RUN_LOOP */
 void calclRun3D(CALCLToolkit3D* toolkit3d,			//!< Pointer to a CALCLToolkit3D
 		struct CALModel3D * model,					//!< Pointer to a CALModel3D
+		unsigned int initialStep,				//!< Initial simulation step
 		unsigned maxStep							//!< Maximum number of CA steps. Simulation can become a loop if maxStep == CALCL_RUN_LOOP
 		);
 

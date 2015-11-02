@@ -14,7 +14,7 @@
 #include <stdio.h>
 
 struct CALRun3D* calRunDef3D(struct CALModel3D* ca3D,
-							 int initial_step, 
+							 int initial_step,
 							 int final_step,
 							 enum CALUpdateMode UPDATE_MODE)
 {
@@ -24,7 +24,7 @@ struct CALRun3D* calRunDef3D(struct CALModel3D* ca3D,
 
 	simulation->ca3D = ca3D;
 
-	simulation->step = 0;
+	simulation->step = initial_step;
 	simulation->initial_step = initial_step;
 	simulation->final_step = final_step;
 
@@ -99,7 +99,7 @@ CALbyte calRunCAStep3D(struct CALRun3D* simulation)
 		else
 			calGlobalTransitionFunction3D(simulation->ca3D);
             //No explicit substates and active cells updates are needed in this case
-		
+
 		if (simulation->steering)
 		{
 			simulation->steering(simulation->ca3D);
@@ -108,7 +108,7 @@ CALbyte calRunCAStep3D(struct CALRun3D* simulation)
 		}
 
         if (simulation->stopCondition)
-			if (simulation->stopCondition(simulation->ca3D)) 
+			if (simulation->stopCondition(simulation->ca3D))
 				return CAL_FALSE;
 
         return CAL_TRUE;
@@ -138,7 +138,7 @@ void calRun3D(struct CALRun3D* simulation)
 	{
 		again = calRunCAStep3D(simulation);
         if (!again)
-            break;		
+            break;
 	}
 
 	calRunFinalizeSimulation3D(simulation);

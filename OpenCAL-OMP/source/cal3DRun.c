@@ -24,7 +24,7 @@ struct CALRun3D* calRunDef3D(struct CALModel3D* ca3D,
 
 	simulation->ca3D = ca3D;
 
-	simulation->step = 0;
+	simulation->step = initial_step;
 	simulation->initial_step = initial_step;
 	simulation->final_step = final_step;
 

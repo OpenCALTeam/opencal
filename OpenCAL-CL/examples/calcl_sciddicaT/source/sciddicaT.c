@@ -178,7 +178,7 @@ int main(int argc, char** argv) {
 
 	//simulation execution
 	start_time = time(NULL);
-	calclRun2D(sciddicaToolkit, sciddicaT, STEPS);
+	calclRun2D(sciddicaToolkit, sciddicaT, 1, STEPS);
 	end_time = time(NULL);
 	printf("%d", end_time - start_time);
 

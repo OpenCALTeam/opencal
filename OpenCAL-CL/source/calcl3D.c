@@ -388,7 +388,7 @@ CALCLToolkit3D * calclCreateToolkit3D(struct CALModel3D *model, CALCLcontext con
 
 }
 
-void calclRun3D(CALCLToolkit3D* toolkit3d, struct CALModel3D * model, unsigned maxStep) {
+void calclRun3D(CALCLToolkit3D* toolkit3d, struct CALModel3D * model, unsigned int initialStep, unsigned maxStep) {
 
 //	cl_int err;
 	CALbyte stop;
@@ -415,8 +415,7 @@ void calclRun3D(CALCLToolkit3D* toolkit3d, struct CALModel3D * model, unsigned m
 	if (toolkit3d->kernelInitSubstates != NULL)
 		calclKernelCall3D(toolkit3d, toolkit3d->kernelInitSubstates, dimNum, threadNumMax, NULL);
 
-	toolkit3d->steps = 0;
-
+	toolkit3d->steps = initialStep;
 	while (toolkit3d->steps < (int)maxStep || maxStep == CAL_RUN_LOOP) {
 		stop = calclSingleStep3D(toolkit3d, model, singleStepThreadNum, dimNum);
 		if (stop)
@@ -689,4 +688,3 @@ CALCLprogram calclLoadProgramLib3D(CALCLcontext context, CALCLdevice device, cha
 	free(tmp);
 	return program;
 }
-

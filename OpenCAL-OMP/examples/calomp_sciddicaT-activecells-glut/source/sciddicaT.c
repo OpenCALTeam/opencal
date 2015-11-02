@@ -62,7 +62,7 @@ void sciddicaT_flows_computation(struct CALModel2D* sciddicaT, int i, int j)
 					again=CAL_TRUE;
 				}
 
-	}while (again); 
+	}while (again);
 
 	for (n=1; n<sciddicaT->sizeof_X; n++)
 		if (eliminated_cells[n])
@@ -95,7 +95,7 @@ void sciddicaT_remove_inactive_cells(struct CALModel2D* sciddicaT, int i, int j)
 {
 #ifdef ACTIVE_CELLS
 	if (calGet2Dr(sciddicaT, Q.h, i, j) <= P.epsilon)
-		calRemoveActiveCell2D(sciddicaT,i,j);	
+		calRemoveActiveCell2D(sciddicaT,i,j);
 #endif
 }
 
@@ -178,7 +178,7 @@ void sciddicaTCADef()
 	Q.f[1] = calAddSubstate2Dr(sciddicaT);
 	Q.f[2] = calAddSubstate2Dr(sciddicaT);
 	Q.f[3] = calAddSubstate2Dr(sciddicaT);
-	
+
 	//load configuration
 	sciddicaTLoadConfig();
 
@@ -210,7 +210,7 @@ void sciddicaTSaveConfig()
 
 
 void sciddicaTExit()
-{	
+{
 	//finalizations
 	calRunFinalize2D(sciddicaTsimulation);
 	calFinalize2D(sciddicaT);

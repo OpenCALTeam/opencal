@@ -63,7 +63,7 @@ int main(int argc, char** argv) {
 	calclInitializePlatforms(calOpenCL);
 	calclInitializeDevices(calOpenCL);
 	calclPrintAllPlatformAndDevices(calOpenCL);
-	
+
 	CALCLdevice device = calclGetDevice(calOpenCL, platformNum, deviceNum);
 
 	CALCLcontext context = calclcreateContext(&device, 1);
@@ -92,7 +92,7 @@ int main(int argc, char** argv) {
 	calclSetSteeringKernel3D(mbusuToolkit, mbusu->model, &kernel_steering);
 	calclSetStopConditionKernel3D(mbusuToolkit, mbusu->model, &kernel_stop_condition);
 	start_time = time(NULL);
-	calclRun3D(mbusuToolkit, mbusu->model,STEPS);
+	calclRun3D(mbusuToolkit, mbusu->model, 1, STEPS);
 	end_time = time(NULL);
 
 	CALreal moist_print;
@@ -128,4 +128,3 @@ int main(int argc, char** argv) {
 	return 0;
 
 }
-

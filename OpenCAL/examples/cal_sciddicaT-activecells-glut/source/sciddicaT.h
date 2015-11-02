@@ -4,6 +4,7 @@
 #include <OpenCAL/cal2D.h>
 #include <OpenCAL/cal2DIO.h>
 #include <OpenCAL/cal2DRun.h>
+#include <OpenCAL/cal2DUnsafe.h>
 
 
 #define ROWS 610

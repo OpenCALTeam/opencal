@@ -46,12 +46,12 @@ void simulationRun(void)
 {
 	CALbyte again;
 
-	//simulation main loop
-	zhabotinsky.run->step++;
-
 	//exectutes the global transition function
 	//the steering function and check for the stop condition
 	again = calRunCAStep2D(zhabotinsky.run);
+
+	//simulation main loop
+	zhabotinsky.run->step++;
 
 	//graphic rendering
 	printf("step: %d\r", zhabotinsky.run->step);
@@ -92,7 +92,7 @@ void reshape(int w, int h)
 	glLoadIdentity();
 
 	(ROWS > COLS) ? (dim = ROWS*0.5f) : (dim = COLS*0.5f);
-	
+
 	aspect = (GLfloat)w / (GLfloat)h;
 	if (w <= h)
 		glOrtho(-dim, dim, -dim / aspect, dim / aspect, 1.0, -1.0);
@@ -153,4 +153,3 @@ int main(int argc, char** argv)
 
 	return 0;
 }
-
