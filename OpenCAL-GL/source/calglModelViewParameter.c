@@ -44,10 +44,19 @@ struct CALGLModelViewParameter* calglAutoCreateModelViewParameterFlat2D(struct C
 }
 struct CALGLModelViewParameter* calglAutoCreateModelViewParameterFlat3D(struct CALDrawModel3D* calDrawModel){
 	struct CALGLModelViewParameter* modelView = (struct CALGLModelViewParameter*) malloc(sizeof(struct CALGLModelViewParameter));
+	int rows = calDrawModel->calModel->rows;
+	int columns = calDrawModel->calModel->columns;
+	int slices = calDrawModel->calModel->slices;
 
-	modelView = calglCreateModelViewParameter(-calDrawModel->calModel->rows*(1.0f/48.0f), -calDrawModel->calModel->columns*(1.0f/48.0f), 0,
-		0,0,0,
-		1/(calDrawModel->calModel->columns/10.0f), -1/(calDrawModel->calModel->rows/10.0f), 1/(calDrawModel->calModel->slices/10.0f));
+	//modelView = calglCreateModelViewParameter(-calDrawModel->calModel->rows*(1.0f/48.0f), -calDrawModel->calModel->columns*(1.0f/48.0f), 0,
+	//	0,0,0,
+	//	1/(calDrawModel->calModel->columns/10.0f), -1/(calDrawModel->calModel->rows/10.0f), 1/(calDrawModel->calModel->slices/10.0f));
+
+	modelView = calglCreateModelViewParameter (
+		0.0f, 0.0f, 0.0f,
+		0, 0, 0,
+		1/(columns/10.0f), -1/(rows/10.0f), 1/(slices/10.0f));
+
 
 	return modelView;
 }
