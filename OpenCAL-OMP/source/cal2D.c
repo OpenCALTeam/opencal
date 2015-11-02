@@ -332,7 +332,6 @@ void calSetUnsafe2D(struct CALModel2D* ca2D) {
 
 void calAddActiveCell2D(struct CALModel2D* ca2D, int i, int j)
 {
-
 	CAL_SET_CELL_LOCK(i, j, ca2D);
 
 	if (!calGetMatrixElement(ca2D->A.flags, ca2D->columns, i, j))
@@ -427,16 +426,19 @@ void calUpdateActiveCells2D(struct CALModel2D* ca2D)
 					tsize[tn]++;
 				}
 
-#pragma omp single
-		{
-			n = 0;
-			for (i = 0; i < ca2D->A.num_threads; i++) {
-				memcpy(&ca2D->A.cells[n],
-				       tcells[i], sizeof(struct CALCell2D) * tsize[i]);
-				n += tsize[i];
-			}
-		}
 	}
+
+	n = 0;
+	for (i = 0; i < ca2D->A.num_threads; i++) {
+	  memcpy(&ca2D->A.cells[n],
+		 tcells[i], sizeof(struct CALCell2D) * tsize[i]);
+	  n += tsize[i];
+	  free(tcells[i]);
+	}
+
+	free(tsize);
+	free(tcells);
+
 }
 
 

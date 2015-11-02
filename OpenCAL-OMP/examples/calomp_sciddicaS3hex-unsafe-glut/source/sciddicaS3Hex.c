@@ -233,7 +233,7 @@ void sciddicaTCADef()
 	s3hexSimulation = calRunDef2D(s3hex, 1, CAL_RUN_LOOP, CAL_UPDATE_IMPLICIT);
 
 	//put OpenCAL - OMP in unsafe state execution(to allow unsafe operation to be used)
-	calSetUnsafe2D();
+	calSetUnsafe2D(s3hex);
 
 	//add transition function's elementary processes
 	calAddElementaryProcess2D(s3hex, s3hexErosion);
