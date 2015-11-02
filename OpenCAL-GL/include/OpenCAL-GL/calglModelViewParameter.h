@@ -23,31 +23,72 @@
 
 struct CALDrawModel2D;
 
+/*! \brief Structure that contains informations about the model view matrix.
+	It contains translations information.
+	It contains rotations information.
+	It contains scaling information.
+*/
 struct CALGLModelViewParameter{
-	GLfloat xTranslate;
-	GLfloat yTranslate;
-	GLfloat zTranslate;
-
-	GLfloat xRotation;
-	GLfloat yRotation;
-	GLfloat zRotation;
-
-	GLfloat xScale;
-	GLfloat yScale;
-	GLfloat zScale;
+	GLfloat xTranslate;	//!< x translations.
+	GLfloat yTranslate;	//!< y translations.
+	GLfloat zTranslate;	//!< z translations.
+	GLfloat xRotation;	//!< x rotations.
+	GLfloat yRotation;	//!< y rotations.
+	GLfloat zRotation;	//!< z rotations.
+	GLfloat xScale;		//!< x scaling.
+	GLfloat yScale;		//!< y scaling.
+	GLfloat zScale;		//!< z scaling.
 };
 
-struct CALGLModelViewParameter* calglCreateModelViewParameter(GLfloat xT, GLfloat yT, GLfloat zT, 
-	GLfloat xR, GLfloat yR, GLfloat zR, 
-	GLfloat xS, GLfloat yS, GLfloat zS);
+/*! \brief Constructor for create a model view matrix.
+*/
+struct CALGLModelViewParameter* calglCreateModelViewParameter(
+	GLfloat xT,		//!< x translations.
+	GLfloat yT,		//!< y translations.
+	GLfloat zT,		//!< z translations.
+	GLfloat xR,		//!< x rotations.
+	GLfloat yR,		//!< y rotations.
+	GLfloat zR,		//!< z rotations.
+	GLfloat xS,		//!< x scaling.
+	GLfloat yS,		//!< y scaling.
+	GLfloat zS		//!< z scaling.
+	);
 
-struct CALGLModelViewParameter* calglAutoCreateModelViewParameterFlat2D(struct CALDrawModel2D* calDrawModel);
-struct CALGLModelViewParameter* calglAutoCreateModelViewParameterFlat3D(struct CALDrawModel3D* calDrawModel);
-struct CALGLModelViewParameter* calglAutoCreateModelViewParameterSurface2D(struct CALDrawModel2D* calDrawModel);
-struct CALGLModelViewParameter* calglAutoCreateModelViewParameterSurface3D(struct CALDrawModel3D* calDrawModel);
+/*! \brief Function that auto-create a model view matrix.
+	This version is designed for 2D cellular automata for discreet drawing.
+*/
+struct CALGLModelViewParameter* calglAutoCreateModelViewParameterFlat2D(
+	struct CALDrawModel2D* calDrawModel	//!< Pointer to CALDrawModel.
+	);
+/*! \brief Function that auto-create a model view matrix.
+	This version is designed for 3D cellular automata for discreet drawing.
+*/
+struct CALGLModelViewParameter* calglAutoCreateModelViewParameterFlat3D(
+	struct CALDrawModel3D* calDrawModel	//!< Pointer to CALDrawModel.
+	);
+/*! \brief Function that auto-create a model view matrix.
+	This version is designed for 2D cellular automata for surface drawing.
+*/
+struct CALGLModelViewParameter* calglAutoCreateModelViewParameterSurface2D(
+	struct CALDrawModel2D* calDrawModel	//!< Pointer to CALDrawModel.
+	);
+/*! \brief Function that auto-create a model view matrix.
+	This version is designed for 3D cellular automata for surface drawing.
+*/
+struct CALGLModelViewParameter* calglAutoCreateModelViewParameterSurface3D(
+	struct CALDrawModel3D* calDrawModel	//!< Pointer to CALDrawModel.
+	);
 
-void calglDestroyModelViewParameter(struct CALGLModelViewParameter* calModelVieParameter);
+/*! \brief Destructor for de-allocate memory allocated before.
+*/
+void calglDestroyModelViewParameter(
+	struct CALGLModelViewParameter* calModelVieParameter		//!< Pointer to the CALGLModelViewParameter to destroy.
+	);
 
-void calglApplyModelViewParameter(struct CALGLModelViewParameter* calModelVieParameter);
+/*! \brief Function that replace the precedent model view matrix with the new one.
+*/
+void calglApplyModelViewParameter(
+	struct CALGLModelViewParameter* calModelVieParameter		//!< Pointer to the new CALGLModelViewParameter.
+	);
 
 #endif

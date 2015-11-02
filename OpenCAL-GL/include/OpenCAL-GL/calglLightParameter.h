@@ -18,29 +18,46 @@
 #include <GL/glut.h>
 #endif
 
+/*! \brief Structure that contains informations about the light that will be used in the scene.
+	It contains position information.
+	It contains ambient information.
+	It contains diffuse information.
+	It contains specular information.
+	It contains spot light information.
+*/
 struct CALGLLightParameter{
-	GLint currentLight;
-
-	GLfloat* lightPosition;
-	GLfloat* ambientLight;
-	GLfloat* diffuseLight;
-	GLfloat* specularLight;
-	GLint shininess;
-
-	GLfloat* spotDirection;
-	GLfloat cutOffAngle;
+	GLint currentLight;		//!< Current light index for OpenGL.
+	GLfloat* lightPosition;	//!< Light position in the scene.
+	GLfloat* ambientLight;	//!< Ambient component.
+	GLfloat* diffuseLight;	//!< Diffuse component.
+	GLfloat* specularLight;	//!< Specular component.
+	GLint shininess;		//!< Shininess for the specular component.
+	GLfloat* spotDirection;	//!< Spot direction.
+	GLfloat cutOffAngle;	//!< Cut off angle for the spot light.
 };
 
-struct CALGLLightParameter* calglCreateLightParameter(GLfloat* lightPosition,
-	GLfloat* ambientLight,
-	GLfloat* diffuseLight,
-	GLfloat* specularLight,
-	GLint shininess,
-	GLfloat* spotDirection,
-	GLfloat cutOffAngle);
+/*! \brief Constructor for create the light model.
+*/
+struct CALGLLightParameter* calglCreateLightParameter(
+	GLfloat* lightPosition,		//!< Light position in the scene.
+	GLfloat* ambientLight,		//!< Ambient component.
+	GLfloat* diffuseLight,		//!< Diffuse component.
+	GLfloat* specularLight,		//!< Specular component.
+	GLint shininess,			//!< Shininess for the specular component.
+	GLfloat* spotDirection,		//!< Spot direction.
+	GLfloat cutOffAngle			//!< Cut off angle for the spot light.
+	);	
 
-void calglDestroyLightParameter(struct CALGLLightParameter* calLightParameter);
+/*! \brief Destructor for de-allocate memory allocated before.
+*/
+void calglDestroyLightParameter(
+	struct CALGLLightParameter* calLightParameter		//!< Pointer to the CALGLLightParameter to destroy.
+	);
 
-void calglApplyLightParameter(struct CALGLLightParameter* calLightParameter);
+/*! \brief Function that replace the precedent model view matrix with the new one.
+*/
+void calglApplyLightParameter(
+	struct CALGLLightParameter* calLightParameter		//!< Pointer to the new CALGLLightParameter.
+	);
 
 #endif

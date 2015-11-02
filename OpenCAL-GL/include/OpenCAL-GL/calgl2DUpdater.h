@@ -16,31 +16,54 @@
 #include <time.h>
 #include <pthread.h>
 
+/*! \brief Structure that task is to update the cellular automata computation.
+	This version is for 2D cellular automata.
+*/
 struct CALUpdater2D {
-	CALbyte firstRun;
-	CALbyte active;
-	CALbyte terminated;
-	struct CALRun2D* calRun;
-	time_t start_time;
-	time_t end_time;
-	pthread_t thread;
-	CALbyte stop;
+	CALbyte firstRun;			//!< Boolean for a first launch.
+	CALbyte active;				//!< Boolean if it is active or not.
+	CALbyte terminated;			//!< Boolean if it is terminated.
+	struct CALRun2D* calRun;	//!< Reference to struct CALRun2D.
+	time_t start_time;			//!< Time for which the computation is started.
+	time_t end_time;			//!< Time for which the computation is ended.
+	pthread_t thread;			//!< Reference to a thread variable.
+	CALbyte stop;				//!< Boolean if it is stopped or not.
 };
 
-/*! Constructor
+/*! \brief Constructor for create a struct CALUpdater2D.
 */
-struct CALUpdater2D* calglCreateUpdater2D(struct CALRun2D* calRun);
+struct CALUpdater2D* calglCreateUpdater2D(
+	struct CALRun2D* calRun	//!< Reference to CALRun2D
+	);
 
-/*! Destructor
+/*! \brief Destructor for de-allocate memory.
 */
-void calglDestroyUpdater2D(struct CALUpdater2D* calUpdater);
+void calglDestroyUpdater2D(
+	struct CALUpdater2D* calUpdater //!< Struct to destroy.
+	);
 
-void* calglFuncThreadUpdate2D(void * arg);
+/*! \brief Main update function, it is called by the thread.
+*/
+void* calglFuncThreadUpdate2D(
+	void* arg	//!< Argument which is a struct CALUpdater2D.
+	);
 
-void calglStartThread2D(struct CALUpdater2D* calUpdater);
+/*! \brief Function for starting the thread.
+*/
+void calglStartThread2D(
+	struct CALUpdater2D* calUpdater	//!< Object which contains the thread to launch.
+	);
 
-void calglUpdate2D(struct CALUpdater2D* calUpdater);
+/*! \brief Update function for updating the cellular automata computation.
+*/
+void calglUpdate2D(
+	struct CALUpdater2D* calUpdater	//!< Struct for retrieve the cellular automata to update.
+	);
 
-void calglSaveStateUpdater2D(struct CALUpdater2D* calUpdater);
+/*! \brief Update function for saving the final state to disk.
+*/
+void calglSaveStateUpdater2D(
+	struct CALUpdater2D* calUpdater	//!< Struct for retrieve the cellular automata data.
+	);
 
 #endif

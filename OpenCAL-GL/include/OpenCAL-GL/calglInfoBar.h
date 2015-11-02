@@ -19,44 +19,177 @@
 //#include <calCommon.h>
 struct CALDrawModel2D;
 struct CALDrawModel3D;
+
+/*! \brief Structure that model the concept of the information bar.
+	It is used to display information about the substate of reference.
+*/
 struct CALGLInfoBar{
-	const char* substateName;
-	enum CALGL_TYPE_INFO_USE infoUse;
-	GLdouble* min;
-	GLdouble* max;
-
-	GLfloat xPosition;
-	GLfloat yPosition;
-	GLint width;
-	GLint height;
-
-	enum CALGL_INFO_BAR_DIMENSION dimension;
-	enum CALGL_INFO_BAR_ORIENTATION orientation;
-
-	CALbyte barInitialization;
-	GLint constWidth;
-	GLint constHeight;
+	const char* substateName;						//!< Infomation bar's name.
+	enum CALGL_TYPE_INFO_USE infoUse;				//!< Color gradient that must be used.
+	GLdouble* min;									//!< Minimum value of the bar.
+	GLdouble* max;									//!< Maximum value of the bar.
+	GLfloat xPosition;								//!< X position value of the bar.
+	GLfloat yPosition;								//!< Y position value of the bar.
+	GLint width;									//!< Width value of the bar.
+	GLint height;									//!< Heigth value of the bar.
+	enum CALGL_INFO_BAR_DIMENSION dimension;		//!< Type of dimension (absolute or relative).
+	enum CALGL_INFO_BAR_ORIENTATION orientation;	//!< Type of orientation (vertical or horizontal).
+	CALbyte barInitialization;						//!< Boolean value which tell if a bar has been instantiated.
+	GLint constWidth;								//!< Const width for relative bar.
+	GLint constHeight;								//!< Const height for relative bar.
 };
 
-/*! Constructor
+/*! \brief Constructor for a relative information bar.
+	This is for a 2D byte substate.
 */
-struct CALGLInfoBar* calglCreateRelativeInfoBar2Db(const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, struct CALDrawModel2D* calDrawModel, struct CALSubstate2Db* substate, enum CALGL_INFO_BAR_ORIENTATION orientation);
-struct CALGLInfoBar* calglCreateRelativeInfoBar2Di(const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, struct CALDrawModel2D* calDrawModel, struct CALSubstate2Di* substate, enum CALGL_INFO_BAR_ORIENTATION orientation);
-struct CALGLInfoBar* calglCreateRelativeInfoBar2Dr(const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, struct CALDrawModel2D* calDrawModel, struct CALSubstate2Dr* substate, enum CALGL_INFO_BAR_ORIENTATION orientation);
-struct CALGLInfoBar* calglCreateRelativeInfoBar3Db(const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, struct CALDrawModel3D* calDrawModel, struct CALSubstate3Db* substate, enum CALGL_INFO_BAR_ORIENTATION orientation);
-struct CALGLInfoBar* calglCreateRelativeInfoBar3Di(const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, struct CALDrawModel3D* calDrawModel, struct CALSubstate3Di* substate, enum CALGL_INFO_BAR_ORIENTATION orientation);
-struct CALGLInfoBar* calglCreateRelativeInfoBar3Dr(const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, struct CALDrawModel3D* calDrawModel, struct CALSubstate3Dr* substate, enum CALGL_INFO_BAR_ORIENTATION orientation);
-struct CALGLInfoBar* calglCreateAbsoluteInfoBar2Db(const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, struct CALDrawModel2D* calDrawModel, struct CALSubstate2Db* substate, GLfloat xPosition, GLfloat yPosition, GLint width, GLint height);
-struct CALGLInfoBar* calglCreateAbsoluteInfoBar2Di(const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, struct CALDrawModel2D* calDrawModel, struct CALSubstate2Di* substate, GLfloat xPosition, GLfloat yPosition, GLint width, GLint height);
-struct CALGLInfoBar* calglCreateAbsoluteInfoBar2Dr(const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, struct CALDrawModel2D* calDrawModel, struct CALSubstate2Dr* substate, GLfloat xPosition, GLfloat yPosition, GLint width, GLint height);
-struct CALGLInfoBar* calglCreateAbsoluteInfoBar3Db(const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, struct CALDrawModel3D* calDrawModel, struct CALSubstate3Db* substate, GLfloat xPosition, GLfloat yPosition, GLint width, GLint height);
-struct CALGLInfoBar* calglCreateAbsoluteInfoBar3Di(const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, struct CALDrawModel3D* calDrawModel, struct CALSubstate3Di* substate, GLfloat xPosition, GLfloat yPosition, GLint width, GLint height);
-struct CALGLInfoBar* calglCreateAbsoluteInfoBar3Dr(const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, struct CALDrawModel3D* calDrawModel, struct CALSubstate3Dr* substate, GLfloat xPosition, GLfloat yPosition, GLint width, GLint height);
-
-/*! Destructor
+struct CALGLInfoBar* calglCreateRelativeInfoBar2Db(
+	const char* substateName,						//!< Infomation bar's name.
+	enum CALGL_TYPE_INFO_USE infoUse,				//!< Color gradient that must be used.
+	struct CALDrawModel2D* calDrawModel,			//!< Pointer to the structure for which retrive the substate. 
+	struct CALSubstate2Db* substate,				//!< Pointer to the substate for which display information.
+	enum CALGL_INFO_BAR_ORIENTATION orientation		//!< Type of orientation (vertical or horizontal).
+	);
+/*! \brief Constructor for a relative information bar.
+	This is for a 2D int substate.
 */
-void calglDestroyInfoBar(struct CALGLInfoBar* infoBar);
+struct CALGLInfoBar* calglCreateRelativeInfoBar2Di(
+	const char* substateName, 						//!< Infomation bar's name.
+	enum CALGL_TYPE_INFO_USE infoUse, 				//!< Color gradient that must be used.
+	struct CALDrawModel2D* calDrawModel, 			//!< Pointer to the structure for which retrive the substate. 
+	struct CALSubstate2Di* substate, 				//!< Pointer to the substate for which display information.
+	enum CALGL_INFO_BAR_ORIENTATION orientation		//!< Type of orientation (vertical or horizontal).
+	);
+/*! \brief Constructor for a relative information bar.
+	This is for a 2D real substate.
+*/
+struct CALGLInfoBar* calglCreateRelativeInfoBar2Dr(
+	const char* substateName, 						//!< Infomation bar's name.
+	enum CALGL_TYPE_INFO_USE infoUse, 				//!< Color gradient that must be used.
+	struct CALDrawModel2D* calDrawModel, 			//!< Pointer to the structure for which retrive the substate. 
+	struct CALSubstate2Dr* substate, 				//!< Pointer to the substate for which display information.
+	enum CALGL_INFO_BAR_ORIENTATION orientation		//!< Type of orientation (vertical or horizontal).
+	);
+/*! \brief Constructor for a relative information bar.
+	This is for a 3D byte substate.
+*/
+struct CALGLInfoBar* calglCreateRelativeInfoBar3Db(
+	const char* substateName, 						//!< Infomation bar's name.
+	enum CALGL_TYPE_INFO_USE infoUse, 				//!< Color gradient that must be used.
+	struct CALDrawModel3D* calDrawModel, 			//!< Pointer to the structure for which retrive the substate. 
+	struct CALSubstate3Db* substate, 				//!< Pointer to the substate for which display information.
+	enum CALGL_INFO_BAR_ORIENTATION orientation		//!< Type of orientation (vertical or horizontal).
+	);
+/*! \brief Constructor for a relative information bar.
+	This is for a 3D int substate.
+*/
+struct CALGLInfoBar* calglCreateRelativeInfoBar3Di(
+	const char* substateName, 						//!< Infomation bar's name.
+	enum CALGL_TYPE_INFO_USE infoUse, 				//!< Color gradient that must be used.
+	struct CALDrawModel3D* calDrawModel, 			//!< Pointer to the structure for which retrive the substate. 
+	struct CALSubstate3Di* substate, 				//!< Pointer to the substate for which display information.
+	enum CALGL_INFO_BAR_ORIENTATION orientation		//!< Type of orientation (vertical or horizontal).
+	);
+/*! \brief Constructor for a relative information bar.
+	This is for a 3D real substate.
+*/
+struct CALGLInfoBar* calglCreateRelativeInfoBar3Dr(
+	const char* substateName, 						//!< Infomation bar's name.
+	enum CALGL_TYPE_INFO_USE infoUse, 				//!< Color gradient that must be used.
+	struct CALDrawModel3D* calDrawModel, 			//!< Pointer to the structure for which retrive the substate. 
+	struct CALSubstate3Dr* substate, 				//!< Pointer to the substate for which display information.
+	enum CALGL_INFO_BAR_ORIENTATION orientation		//!< Type of orientation (vertical or horizontal).
+	);
+/*! \brief Constructor for an absolute information bar.
+	This is for a 2D byte substate.
+*/
+struct CALGLInfoBar* calglCreateAbsoluteInfoBar2Db(
+	const char* substateName, 						//!< Infomation bar's name.
+	enum CALGL_TYPE_INFO_USE infoUse, 				//!< Color gradient that must be used.
+	struct CALDrawModel2D* calDrawModel, 			//!< Pointer to the structure for which retrive the substate. 
+	struct CALSubstate2Db* substate, 				//!< Pointer to the substate for which display information.
+	GLfloat xPosition,								//!< X position value of the bar.
+	GLfloat yPosition, 								//!< Y position value of the bar.
+	GLint width,									//!< Width value of the bar.
+	GLint height									//!< Heigth value of the bar.
+	);
+/*! \brief Constructor for an absolute information bar.
+	This is for a 2D int substate.
+*/
+struct CALGLInfoBar* calglCreateAbsoluteInfoBar2Di(
+	const char* substateName, 						//!< Infomation bar's name.
+	enum CALGL_TYPE_INFO_USE infoUse, 				//!< Color gradient that must be used.
+	struct CALDrawModel2D* calDrawModel, 			//!< Pointer to the structure for which retrive the substate. 
+	struct CALSubstate2Di* substate,				//!< Pointer to the substate for which display information.
+	GLfloat xPosition, 								//!< X position value of the bar.
+	GLfloat yPosition, 								//!< Y position value of the bar. 
+	GLint width, 									//!< Width value of the bar.
+	GLint height									//!< Heigth value of the bar.
+	);
+/*! \brief Constructor for an absolute information bar.
+	This is for a 2D real substate.
+*/
+struct CALGLInfoBar* calglCreateAbsoluteInfoBar2Dr(
+	const char* substateName, 						//!< Infomation bar's name.
+	enum CALGL_TYPE_INFO_USE infoUse, 				//!< Color gradient that must be used.
+	struct CALDrawModel2D* calDrawModel, 			//!< Pointer to the structure for which retrive the substate. 
+	struct CALSubstate2Dr* substate, 				//!< Pointer to the substate for which display information.
+	GLfloat xPosition, 								//!< X position value of the bar.
+	GLfloat yPosition, 								//!< Y position value of the bar.
+	GLint width, 									//!< Width value of the bar.
+	GLint height									//!< Heigth value of the bar.
+	);
+/*! \brief Constructor for an absolute information bar.
+	This is for a 3D byte substate.
+*/
+struct CALGLInfoBar* calglCreateAbsoluteInfoBar3Db(
+	const char* substateName, 						//!< Infomation bar's name.
+	enum CALGL_TYPE_INFO_USE infoUse, 				//!< Color gradient that must be used.
+	struct CALDrawModel3D* calDrawModel, 			//!< Pointer to the structure for which retrive the substate. 
+	struct CALSubstate3Db* substate, 				//!< Pointer to the substate for which display information.
+	GLfloat xPosition, 								//!< X position value of the bar.
+	GLfloat yPosition, 								//!< Y position value of the bar.
+	GLint width, 									//!< Width value of the bar.
+	GLint height									//!< Heigth value of the bar.
+	);
+/*! \brief Constructor for an absolute information bar.
+	This is for a 3D int substate.
+*/
+struct CALGLInfoBar* calglCreateAbsoluteInfoBar3Di(
+	const char* substateName, 						//!< Infomation bar's name.
+	enum CALGL_TYPE_INFO_USE infoUse, 				//!< Color gradient that must be used.
+	struct CALDrawModel3D* calDrawModel, 			//!< Pointer to the structure for which retrive the substate. 
+	struct CALSubstate3Di* substate, 				//!< Pointer to the substate for which display information.
+	GLfloat xPosition, 								//!< X position value of the bar.
+	GLfloat yPosition, 								//!< Y position value of the bar.
+	GLint width, 									//!< Width value of the bar.
+	GLint height									//!< Heigth value of the bar.
+	);
+/*! \brief Constructor for an absolute information bar.
+	This is for a 3D real substate.
+*/
+struct CALGLInfoBar* calglCreateAbsoluteInfoBar3Dr(
+	const char* substateName, 						//!< Infomation bar's name.
+	enum CALGL_TYPE_INFO_USE infoUse, 				//!< Color gradient that must be used.
+	struct CALDrawModel3D* calDrawModel, 			//!< Pointer to the structure for which retrive the substate. 
+	struct CALSubstate3Dr* substate, 				//!< Pointer to the substate for which display information.
+	GLfloat xPosition, 								//!< X position value of the bar.
+	GLfloat yPosition, 								//!< Y position value of the bar.
+	GLint width, 									//!< Width value of the bar.
+	GLint height									//!< Heigth value of the bar.
+	);
 
-void calglSetInfoBarConstDimension(struct CALGLInfoBar* infoBar, GLfloat width, GLfloat height);
+/*! \brief Destructor for de-allocate memory allocated before.
+*/
+void calglDestroyInfoBar(
+	struct CALGLInfoBar* infoBar //!< Pointer to object to destroy.
+	);
+
+/*! \brief Function for setting constant width and height for relative bar.
+*/
+void calglSetInfoBarConstDimension(
+	struct CALGLInfoBar* infoBar,	//!< Infomation bar's pointer.
+	GLfloat width,					//!< Infomation bar's const width.
+	GLfloat height					//!< Infomation bar's const height.
+	);
 
 #endif

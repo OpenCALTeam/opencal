@@ -16,127 +16,289 @@
 #include <OpenCAL-GL/calglCommon.h>
 
 #pragma region DataDefinition
+/*! \brief Recursive structure that is used to model the concept of hierarchy tree.
+	It is used for storing the data that will be used for draw the cellular automata.
+	The more relevant details about this structure is that it has a list of pointer to other CALNode structure, where in this list the first pointer is referred to the father and the rest of the pointers are referred to the children of the current node.
+	This structure is for 3D byte data.
+*/
 struct CALNode3Db {
-	enum CALGL_DATA_TYPE dataType;
-	GLuint* callList;
-
-	enum CALGL_TYPE_INFO typeInfoSubstate;
-	enum CALGL_TYPE_INFO_USE typeInfoUseSubstate;	
-	struct CALSubstate3Db* substate;
-
-	GLdouble min;
-	GLdouble max;
-	CALbyte noData;
-
-	// ColorValue
-	GLfloat redComponent;
-	GLfloat greenComponent;
-	GLfloat blueComponent;
-	GLfloat alphaComponent;
-
-	int capacityNode;
-	int insertedNode;
-	struct CALNode3Db** nodes; // the first is the father
+	enum CALGL_DATA_TYPE dataType;					//!< Specify if this node contains static or dynamic data.
+	GLuint* callList;								//!< Index used for the display list, where possible (Static data).
+	enum CALGL_TYPE_INFO typeInfoSubstate;			//!< Type of data that the node contains (Vertex, color, normal etc.).
+	enum CALGL_TYPE_INFO_USE typeInfoUseSubstate;	//!< Specify how to use the color information.	
+	struct CALSubstate3Db* substate;				//!< The substatewhich the node contains.
+	GLdouble min;									//!< Min value of the substate.
+	GLdouble max;									//!< Max value of the substate.
+	CALbyte noData;									//!< Value that specify a value to ignore if contained in the substate.
+	GLfloat redComponent;							//!< Red color component used for constant color.
+	GLfloat greenComponent;							//!< Green color component used for constant color.
+	GLfloat blueComponent;							//!< Blue color component used for constant color.
+	GLfloat alphaComponent;							//!< Alpha component used for constant color.
+	int capacityNode;								//!< Max number of children that the node can contains before to increase its dimension.
+	int insertedNode;								//!< Number of children that the node contains.
+	struct CALNode3Db** nodes; 						//!< List of nodes connected to this, the first is the father the other the children.
 };
+/*! \brief Recursive structure that is used to model the concept of hierarchy tree.
+	It is used for storing the data that will be used for draw the cellular automata.
+	The more relevant details about this structure is that it has a list of pointer to other CALNode structure, where in this list the first pointer is referred to the father and the rest of the pointers are referred to the children of the current node.
+	This structure is for 3D int data.
+*/
 struct CALNode3Di {
-	enum CALGL_DATA_TYPE dataType;
-	GLuint* callList;
-
-	enum CALGL_TYPE_INFO typeInfoSubstate;
-	enum CALGL_TYPE_INFO_USE typeInfoUseSubstate;	
-	struct CALSubstate3Di* substate;
-
-	GLdouble min;
-	GLdouble max;
-	CALint noData;
-
-	// ColorValue
-	GLfloat redComponent;
-	GLfloat greenComponent;
-	GLfloat blueComponent;
-	GLfloat alphaComponent;
-
-	int capacityNode;
-	int insertedNode;
-	struct CALNode3Di** nodes; // the first is the father
+	enum CALGL_DATA_TYPE dataType;					//!< Specify if this node contains static or dynamic data.
+	GLuint* callList;								//!< Index used for the display list, where possible (Static data).
+	enum CALGL_TYPE_INFO typeInfoSubstate;			//!< Type of data that the node contains (Vertex, color, normal etc.).
+	enum CALGL_TYPE_INFO_USE typeInfoUseSubstate;	//!< Specify how to use the color information.	
+	struct CALSubstate3Di* substate;				//!< The substatewhich the node contains.
+	GLdouble min;									//!< Min value of the substate.
+	GLdouble max;									//!< Max value of the substate.
+	CALint noData;									//!< Value that specify a value to ignore if contained in the substate.
+	GLfloat redComponent;							//!< Red color component used for constant color.
+	GLfloat greenComponent;							//!< Green color component used for constant color.
+	GLfloat blueComponent;							//!< Blue color component used for constant color.
+	GLfloat alphaComponent;							//!< Alpha component used for constant color.
+	int capacityNode;								//!< Max number of children that the node can contains before to increase its dimension.
+	int insertedNode;								//!< Number of children that the node contains.
+	struct CALNode3Di** nodes; 						//!< List of nodes connected to this, the first is the father the other the children.
 };
+/*! \brief Recursive structure that is used to model the concept of hierarchy tree.
+	It is used for storing the data that will be used for draw the cellular automata.
+	The more relevant details about this structure is that it has a list of pointer to other CALNode structure, where in this list the first pointer is referred to the father and the rest of the pointers are referred to the children of the current node.
+	This structure is for 3D real data.
+*/
 struct CALNode3Dr {
-	enum CALGL_DATA_TYPE dataType;
-	GLuint* callList;
-
-	enum CALGL_TYPE_INFO typeInfoSubstate;
-	enum CALGL_TYPE_INFO_USE typeInfoUseSubstate;	
-	struct CALSubstate3Dr* substate;
-
-	GLdouble min;
-	GLdouble max;
-	CALreal noData;
-
-	// ColorValue
-	GLfloat redComponent;
-	GLfloat greenComponent;
-	GLfloat blueComponent;
-	GLfloat alphaComponent;
-
-	int capacityNode;
-	int insertedNode;
-	struct CALNode3Dr** nodes; // the first is the father
+	enum CALGL_DATA_TYPE dataType;					//!< Specify if this node contains static or dynamic data.
+	GLuint* callList;								//!< Index used for the display list, where possible (Static data).
+	enum CALGL_TYPE_INFO typeInfoSubstate;			//!< Type of data that the node contains (Vertex, color, normal etc.).
+	enum CALGL_TYPE_INFO_USE typeInfoUseSubstate;	//!< Specify how to use the color information.	
+	struct CALSubstate3Dr* substate;				//!< The substatewhich the node contains.
+	GLdouble min;									//!< Min value of the substate.
+	GLdouble max;									//!< Max value of the substate.
+	CALreal noData;									//!< Value that specify a value to ignore if contained in the substate.
+	GLfloat redComponent;							//!< Red color component used for constant color.
+	GLfloat greenComponent;							//!< Green color component used for constant color.
+	GLfloat blueComponent;							//!< Blue color component used for constant color.
+	GLfloat alphaComponent;							//!< Alpha component used for constant color.
+	int capacityNode;								//!< Max number of children that the node can contains before to increase its dimension.
+	int insertedNode;								//!< Number of children that the node contains.
+	struct CALNode3Dr** nodes; 						//!< List of nodes connected to this, the first is the father the other the children.
 };
 #pragma endregion
 
+
 #pragma region Create
-struct CALNode3Db* calglCreateNode3Db(struct CALNode3Db* father);
-struct CALNode3Di* calglCreateNode3Di(struct CALNode3Di* father);
-struct CALNode3Dr* calglCreateNode3Dr(struct CALNode3Dr* father);
+/*! \brief Function for create a node in which tha father must be specified.
+This function is for 3D byte data.
+*/
+struct CALNode3Db* calglCreateNode3Db(
+struct CALNode3Db* father	//!< Father node.
+	);
+/*! \brief Function for create a node in which tha father must be specified.
+This function is for 3D int data.
+*/
+struct CALNode3Di* calglCreateNode3Di(
+struct CALNode3Di* father	//!< Father node.
+	);
+/*! \brief Function for create a node in which tha father must be specified.
+This function is for 3D real data.
+*/
+struct CALNode3Dr* calglCreateNode3Dr(
+struct CALNode3Dr* father	//!< Father node.
+	);
 #pragma endregion
 
 #pragma region Destroy
-void calglDestroyNode3Db(struct CALNode3Db* node);
-void calglDestroyNode3Di(struct CALNode3Di* node);
-void calglDestroyNode3Dr(struct CALNode3Dr* node);
+/*! \brief Function for de-allocate memory.
+This function is for 3D byte data.
+*/
+void calglDestroyNode3Db(
+struct CALNode3Db* node	//!< Node to destroy.
+	);
+/*! \brief Function for de-allocate memory.
+This function is for 3D int data.
+*/
+void calglDestroyNode3Di(
+struct CALNode3Di* node	//!< Node to destroy.
+	);
+/*! \brief Function for de-allocate memory.
+This function is for 3D real data.
+*/
+void calglDestroyNode3Dr(
+struct CALNode3Dr* node	//!< Node to destroy.
+	);
 #pragma endregion
 
 #pragma region IncreaseData
-void calglIncreaseDataNode3Db(struct CALNode3Db* node);
-void calglIncreaseDataNode3Di(struct CALNode3Di* node);
-void calglIncreaseDataNode3Dr(struct CALNode3Dr* node);
+/*! \brief Function for increase the capacity of the node.
+It is increased of three units.
+This function is for 3D byte data.
+*/
+void calglIncreaseDataNode3Db(
+struct CALNode3Db* node	//!< Node to which increase capacity.
+	);
+/*! \brief Function for increase the capacity of the node.
+It is increased of three units.
+This function is for 3D int data.
+*/
+void calglIncreaseDataNode3Di(
+struct CALNode3Di* node	//!< Node to which increase capacity.
+	);
+/*! \brief Function for increase the capacity of the node.
+It is increased of three units.
+This function is for 3D real data.
+*/
+void calglIncreaseDataNode3Dr(
+struct CALNode3Dr* node	//!< Node to which increase capacity.
+	);
 #pragma endregion
 
 #pragma region DecreaseData
-void calglDecreaseDataNode3Db(struct CALNode3Db* node);
-void calglDecreaseDataNode3Di(struct CALNode3Di* node);
-void calglDecreaseDataNode3Dr(struct CALNode3Dr* node);
+/*! \brief Function for decrease the capacity of the node.
+It is Decreased of three units.
+This function is for 3D byte data.
+*/
+void calglDecreaseDataNode3Db(
+struct CALNode3Db* node	//!< Node to which Decrease capacity.
+	);
+/*! \brief Function for decrease the capacity of the node.
+It is Decreased of three units.
+This function is for 3D Det data.
+*/
+void calglDecreaseDataNode3Di(
+struct CALNode3Di* node	//!< Node to which Decrease capacity.
+	);
+/*! \brief Function for decrease the capacity of the node.
+It is Decreased of three units.
+This function is for 3D real data.
+*/
+void calglDecreaseDataNode3Dr(
+struct CALNode3Dr* node	//!< Node to which Decrease capacity.
+	);
 #pragma endregion
 
 #pragma region AddData
-struct CALNode3Db* calglAddDataNode3Db(struct CALNode3Db* node, struct CALSubstate3Db* substate, enum CALGL_TYPE_INFO typeInfoSubstate, enum CALGL_TYPE_INFO_USE typeInfoUseSubstate, enum CALGL_DATA_TYPE dataType);
-struct CALNode3Di* calglAddDataNode3Di(struct CALNode3Di* node, struct CALSubstate3Di* substate, enum CALGL_TYPE_INFO typeInfoSubstate, enum CALGL_TYPE_INFO_USE typeInfoUseSubstate, enum CALGL_DATA_TYPE dataType);
-struct CALNode3Dr* calglAddDataNode3Dr(struct CALNode3Dr* node, struct CALSubstate3Dr* substate, enum CALGL_TYPE_INFO typeInfoSubstate, enum CALGL_TYPE_INFO_USE typeInfoUseSubstate, enum CALGL_DATA_TYPE dataType);
+/*! \brief Function for insert a substate in the hierarchy tree.
+This function is for 3D byte data.
+*/
+struct CALNode3Db* calglAddDataNode3Db(
+struct CALNode3Db* node,						//!< Node father.
+struct CALSubstate3Db* substate,				//!< Substate to add.
+enum CALGL_TYPE_INFO typeInfoSubstate,			//!< Type of the information.
+enum CALGL_TYPE_INFO_USE typeInfoUseSubstate,	//!< Color gradient to use.
+enum CALGL_DATA_TYPE dataType					//!< Static or dynamic data.
+	);
+/*! \brief Function for insert a substate in the hierarchy tree.
+This function is for 3D int data.
+*/
+struct CALNode3Di* calglAddDataNode3Di(
+struct CALNode3Di* node, 						//!< Node father.
+struct CALSubstate3Di* substate, 				//!< Substate to add.
+enum CALGL_TYPE_INFO typeInfoSubstate, 			//!< Type of the information.
+enum CALGL_TYPE_INFO_USE typeInfoUseSubstate, 	//!< Color gradient to use.
+enum CALGL_DATA_TYPE dataType
+	);
+/*! \brief Function for insert a substate in the hierarchy tree.
+This function is for 3D real data.
+*/
+struct CALNode3Dr* calglAddDataNode3Dr(
+struct CALNode3Dr* node, 						//!< Node father.
+struct CALSubstate3Dr* substate, 				//!< Substate to add.
+enum CALGL_TYPE_INFO typeInfoSubstate, 			//!< Type of the information.
+enum CALGL_TYPE_INFO_USE typeInfoUseSubstate, 	//!< Color gradient to use.
+enum CALGL_DATA_TYPE dataType					//!< Static or dynamic data.
+	);
 #pragma endregion
 
 #pragma region RemoveData
-void calglRemoveDataNode3Db(struct CALNode3Db* node, struct CALSubstate3Db* substate);
-void calglRemoveDataNode3Di(struct CALNode3Di* node, struct CALSubstate3Di* substate);
-void calglRemoveDataNode3Dr(struct CALNode3Dr* node, struct CALSubstate3Dr* substate);
+/*! \brief Function for remove a substate from the children of a node.
+This function is for 3D byte data.
+*/
+void calglRemoveDataNode3Db(
+struct CALNode3Db* node,		//!< Node from which remove data.
+struct CALSubstate3Db* substate	//!< Substate relative to the node to remove.
+	);
+/*! \brief Function for remove a substate from the children of a node.
+This function is for 3D int data.
+*/
+void calglRemoveDataNode3Di(
+struct CALNode3Di* node, 		//!< Node from which remove data.
+struct CALSubstate3Di* substate	//!< Substate relative to the node to remove.
+	);
+/*! \brief Function for remove a substate from the children of a node.
+This function is for 3D real data.
+*/
+void calglRemoveDataNode3Dr(
+struct CALNode3Dr* node, 		//!< Node from which remove data.
+struct CALSubstate3Dr* substate	//!< Substate relative to the node to remove.
+	);
 #pragma endregion
 
 #pragma region ShiftLeftFromIndex
-void calglShiftLeftFromIndexNode3Db(struct CALNode3Db* node, int index);
-void calglShiftLeftFromIndexNode3Di(struct CALNode3Di* node, int index);
-void calglShiftLeftFromIndexNode3Dr(struct CALNode3Dr* node, int index);
+/*! \brief Function that execute a left shift of the children of a node starting from index.
+This function is for 3D byte data.
+*/
+void calglShiftLeftFromIndexNode3Db(
+struct CALNode3Db* node,	//!< Node from which shift children.
+	int index	 				//!< Index to begin shifting.
+	);
+/*! \brief Function that execute a left shift of the children of a node starting from index.
+This function is for 3D int data.
+*/
+void calglShiftLeftFromIndexNode3Di(
+struct CALNode3Di* node,	//!< Node from which shift children.
+	int index	 				//!< Index to begin shifting.
+	);
+/*! \brief Function that execute a left shift of the children of a node starting from index.
+This function is for 3D real data.
+*/
+void calglShiftLeftFromIndexNode3Dr(
+struct CALNode3Dr* node,	//!< Node from which shift children. 
+	int index	 				//!< Index to begin shifting.
+	);
 #pragma endregion
 
 #pragma region GetFather
-struct CALNode3Db* calglGetFatherNode3Db(struct CALNode3Db* node);
-struct CALNode3Di* calglGetFatherNode3Di(struct CALNode3Di* node);
-struct CALNode3Dr* calglGetFatherNode3Dr(struct CALNode3Dr* node);
+/*! \brief Function that return the father of a node.
+This function is for 3D byte data.
+*/
+struct CALNode3Db* calglGetFatherNode3Db(
+struct CALNode3Db* node	//!< Node from which return the father.
+	);
+/*! \brief Function that return the father of a node.
+This function is for 3D int data.
+*/
+struct CALNode3Di* calglGetFatherNode3Di(
+struct CALNode3Di* node	//!< Node from which shift children.
+	);
+/*! \brief Function that return the father of a node.
+This function is for 3D real data.
+*/
+struct CALNode3Dr* calglGetFatherNode3Dr(
+struct CALNode3Dr* node	//!< Node from which shift children.
+	);
 #pragma endregion
 
 #pragma region SetNoData
-void calglSetNoDataToNode3Db(struct CALNode3Db* node, CALbyte noData);
-void calglSetNoDataToNode3Di(struct CALNode3Di* node, CALint noData);
-void calglSetNoDataToNode3Dr(struct CALNode3Dr* node, CALreal noData);
+/*! \brief Function for set the no data that will be discarded in drawing fase.
+This function is for 3D byte data.
+*/
+void calglSetNoDataToNode3Db(
+struct CALNode3Db* node,	//!< Node to which set no data value. 
+	CALbyte noData				//!< No data value.
+	);
+/*! \brief Function for set the no data that will be discarded in drawing fase.
+This function is for 3D int data.
+*/
+void calglSetNoDataToNode3Di(
+struct CALNode3Di* node, 	//!< Node to which set no data value.
+	CALint noData				//!< No data value.
+	);
+/*! \brief Function for set the no data that will be discarded in drawing fase.
+This function is for 3D real data.
+*/
+void calglSetNoDataToNode3Dr(
+struct CALNode3Dr* node, 	//!< Node to which set no data value.
+	CALreal noData				//!< No data value.
+	);
 #pragma endregion
 
 #endif
-

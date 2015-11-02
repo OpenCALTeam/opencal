@@ -27,132 +27,518 @@
 #include <OpenCAL-GL/calglInfoBar.h>
 #include <OpenCAL-GL/calglGlobalSettings.h>
 
-
-
-/*! Structure that contains informations regarding drawing type
-*/
-struct CALDrawModel2D{
-	const char* name;
-	enum CALGL_DRAW_MODE drawMode;
-	struct CALNode2Db* byteModel;
-	struct CALNode2Di* intModel;
-	struct CALNode2Dr* realModel;
-	struct CALModel2D* calModel;
-
-	struct CALGLModelViewParameter* modelView;
-	struct CALGLLightParameter* modelLight;
-	struct CALUpdater2D* calUpdater;
-	struct CALGLInfoBar* infoBar;
-
-	GLshort* drawICells;
-	GLshort* drawJCells;
-
-	// Private data for const color
-	GLfloat redComponent;
-	GLfloat greenComponent;
-	GLfloat blueComponent;
-	GLfloat alphaComponent;
+/*! \brief Structure that contains informations regarding the drawing type.
+	Internally it contains a hierarchy tree of substates.
+	In which each substate has several pointer to the other substates.
+	This is for 2D type of cellular automata.
+	*/
+struct CALDrawModel2D {
+	const char* name;							//!< Name of the drawing model.
+	enum CALGL_DRAW_MODE drawMode;				//!< Type of the drawing mode.
+	struct CALNode2Db* byteModel;				//!< Pointer to the byte type node tree that contains informations of the cellular automata's substate.
+	struct CALNode2Di* intModel;				//!< Pointer to the int type node tree that contains informations of the cellular automata's substate.
+	struct CALNode2Dr* realModel;				//!< Pointer to the real type node tree that contains informations of the cellular automata's substate.
+	struct CALModel2D* calModel;				//!< Pointer to the cellular automata.
+	struct CALGLModelViewParameter* modelView;	//!< Pointer to the model view matrix transformation.
+	struct CALGLLightParameter* modelLight;		//!< Pointer to the lights parameters.
+	struct CALUpdater2D* calUpdater;			//!< Pointer to the object that update the cellular automata
+	struct CALGLInfoBar* infoBar;				//!< Pointer to the information bar that contains informations releated to the reference sub-state. 
+	GLshort* drawICells;						//!< Array of value for the design of the automaton slices, in this case the rows.
+	GLshort* drawJCells;						//!< Array of value for the design of the automaton slices, in this case the columns.
+	GLfloat redComponent;						//!< Component for the channel of the red color, this is used for a const color.
+	GLfloat greenComponent;						//!< Component for the channel of the blue color, this is used for a const color.
+	GLfloat blueComponent;						//!< Component for the channel of the green color, this is used for a const color.
+	GLfloat alphaComponent;						//!< Component for the alpha channel, this is used for a const color.
 };
 
-/*! Constructor
+/*! \brief Constructor for creating the drawing model
 */
-struct CALDrawModel2D* calglDefDrawModel2D(enum CALGL_DRAW_MODE mode, const char* name, struct CALModel2D* calModel, struct CALRun2D* calRun);
+struct CALDrawModel2D* calglDefDrawModel2D(
+	enum CALGL_DRAW_MODE mode,		//!< Type of drawing (es. FLAT, SURFACE).
+	const char* name,				//!< Name of the drawing model.
+	struct CALModel2D* calModel,	//!< Pointer to the cellular automata.
+	struct CALRun2D* calRun			//!< Pointer to the struct CALRun2D.
+	);
 
-/*! Destructor
+/*! \brief Destructor for destroying the drawing model
 */
-void calglDestoyDrawModel2D(struct CALDrawModel2D* drawModel);
+void calglDestoyDrawModel2D(
+	struct CALDrawModel2D* drawModel	//!< Pointer to the CALDrawModel to destroy.
+	);
 
 #pragma region AddData
-void calglAddToDrawModel2Db(struct CALDrawModel2D* drawModel, struct CALSubstate2Db* substateFather, struct CALSubstate2Db** substateToAdd, enum CALGL_TYPE_INFO typeInfo, enum CALGL_TYPE_INFO_USE typeInfoUseSubstate, enum CALGL_DATA_TYPE dataType);
-void calglAddToDrawModel2Di(struct CALDrawModel2D* drawModel, struct CALSubstate2Di* substateFather, struct CALSubstate2Di** substateToAdd, enum CALGL_TYPE_INFO typeInfo, enum CALGL_TYPE_INFO_USE typeInfoUseSubstate, enum CALGL_DATA_TYPE dataType);
-void calglAddToDrawModel2Dr(struct CALDrawModel2D* drawModel, struct CALSubstate2Dr* substateFather, struct CALSubstate2Dr** substateToAdd, enum CALGL_TYPE_INFO typeInfo, enum CALGL_TYPE_INFO_USE typeInfoUseSubstate, enum CALGL_DATA_TYPE dataType);
+/*! \brief Add data to the byte drawing model.
+*/
+void calglAddToDrawModel2Db(
+	struct CALDrawModel2D* drawModel,				//!< The CALDrawModel to which adding data.
+	struct CALSubstate2Db* substateFather,			//!< The substate father to which add the new data.
+	struct CALSubstate2Db** substateToAdd,			//!< The new data to add.
+	enum CALGL_TYPE_INFO typeInfo,					//!< The information that the new substate contains. 
+	enum CALGL_TYPE_INFO_USE typeInfoUseSubstate,	//!< Information about the mode in which the data had to be used.
+	enum CALGL_DATA_TYPE dataType					//!< Specify if the data will change (Dynamic data) or will not (Static data).
+	);
+/*! \brief Add data to the int drawing model.
+*/
+void calglAddToDrawModel2Di(
+	struct CALDrawModel2D* drawModel,				//!< The CALDrawModel to which adding data.
+	struct CALSubstate2Di* substateFather,			//!< The substate father to which add the new data.
+	struct CALSubstate2Di** substateToAdd,			//!< The new data to add.
+	enum CALGL_TYPE_INFO typeInfo,					//!< The information that the new substate contains. 
+	enum CALGL_TYPE_INFO_USE typeInfoUseSubstate,	//!< Information about the mode in which the data had to be used. 
+	enum CALGL_DATA_TYPE dataType					//!< Specify if the data will change (Dynamic data) or will not (Static data).
+	);
+/*! \brief Add data to the real drawing model.
+*/
+void calglAddToDrawModel2Dr(
+	struct CALDrawModel2D* drawModel,				//!< The CALDrawModel to which adding data.
+	struct CALSubstate2Dr* substateFather,			//!< The substate father to which add the new data.
+	struct CALSubstate2Dr** substateToAdd,			//!< The new data to add.
+	enum CALGL_TYPE_INFO typeInfo,					//!< The information that the new substate contains. 
+	enum CALGL_TYPE_INFO_USE typeInfoUseSubstate,	//!< Information about the mode in which the data had to be used.
+	enum CALGL_DATA_TYPE dataType					//!< Specify if the data will change (Dynamic data) or will not (Static data).
+	);
 #pragma endregion
 
 #pragma region SearchSubstate
-void calglSearchSubstateDrawModel2Db(struct CALNode2Db* currentNode, struct CALSubstate2Db* substateToSearch, struct CALNode2Db** nodeSearched);
-void calglSearchSubstateDrawModel2Di(struct CALNode2Di* currentNode, struct CALSubstate2Di* substateToSearch, struct CALNode2Di** nodeSearched);
-void calglSearchSubstateDrawModel2Dr(struct CALNode2Dr* currentNode, struct CALSubstate2Dr* substateToSearch, struct CALNode2Dr** nodeSearched);
+/*! \brief Functions that search a node in the byte hierarchy tree.
+*/
+void calglSearchSubstateDrawModel2Db(
+	struct CALNode2Db* currentNode,				//!< The hierarchy tree that contains the node to search.
+	struct CALSubstate2Db* substateToSearch,	//!< The substate to search.
+	struct CALNode2Db** nodeSearched			//!< The node searched. NULL if it doesn't exists.
+	);
+/*! \brief Functions that search a node in the int hierarchy tree.
+*/
+void calglSearchSubstateDrawModel2Di(
+	struct CALNode2Di* currentNode,				//!< The hierarchy tree that contains the node to search.
+	struct CALSubstate2Di* substateToSearch,	//!< The substate to search.
+	struct CALNode2Di** nodeSearched			//!< The node searched. NULL if it doesn't exists.
+	);
+/*! \brief Functions that search a node in the real hierarchy tree.
+*/
+void calglSearchSubstateDrawModel2Dr(
+	struct CALNode2Dr* currentNode,				//!< The hierarchy tree that contains the node to search.
+	struct CALSubstate2Dr* substateToSearch,	//!< The substate to search.
+	struct CALNode2Dr** nodeSearched			//!< The node searched. NULL if it doesn't exists.
+	);
 #pragma endregion
 
-void calglDisplayModel2D(struct CALDrawModel2D* calDrawModel);
+/*! \brief Functions that display the model specified.
+	It must be called into the OpenGL display function callback.
+	*/
+void calglDisplayModel2D(
+	struct CALDrawModel2D* calDrawModel	//!< The CALDrawModel to display.
+	);
 
 #pragma region DrawDiscreetModel2D
-void calglDrawDiscreetModel2D(struct CALDrawModel2D* calDrawModel);
+/*! \brief Functions for the discreet displaying.
+	It is called by the calglDisplayModel.
+	*/
+void calglDrawDiscreetModel2D(
+	struct CALDrawModel2D* calDrawModel	//!< The CALDrawModel to display.
+	);
 
-void calglDrawDiscreetModelDisplayNode2Db(struct CALDrawModel2D* calDrawModel, struct CALNode2Db* calNode);
-void calglDrawDiscreetModelDisplayNode2Di(struct CALDrawModel2D* calDrawModel, struct CALNode2Di* calNode);
-void calglDrawDiscreetModelDisplayNode2Dr(struct CALDrawModel2D* calDrawModel, struct CALNode2Dr* calNode);
+/*! \brief Functions for the byte discreet displaying.
+	It recursively display all node of the hierarchy tree.
+	*/
+void calglDrawDiscreetModelDisplayNode2Db(
+	struct CALDrawModel2D* calDrawModel,	//!< The CALDrawModel to display.
+	struct CALNode2Db* calNode				//!< The node from which begin the drawing.
+	);
+/*! \brief Functions for the int discreet displaying.
+	It recursively display all node of the hierarchy tree.
+	*/
+void calglDrawDiscreetModelDisplayNode2Di(
+	struct CALDrawModel2D* calDrawModel,	//!< The CALDrawModel to display.
+	struct CALNode2Di* calNode				//!< The node from which begin the drawing.
+	);
+/*! \brief Functions for the real discreet displaying.
+	It recursively display all node of the hierarchy tree.
+	*/
+void calglDrawDiscreetModelDisplayNode2Dr(
+	struct CALDrawModel2D* calDrawModel,	//!< The CALDrawModel to display. 
+	struct CALNode2Dr* calNode				//!< The node from which begin the drawing.
+	);
 
-void calglDrawDiscreetModelDisplayCurrentNode2Db(struct CALDrawModel2D* calDrawModel, struct CALNode2Db* calNode);
-void calglDrawDiscreetModelDisplayCurrentNode2Di(struct CALDrawModel2D* calDrawModel, struct CALNode2Di* calNode);
-void calglDrawDiscreetModelDisplayCurrentNode2Dr(struct CALDrawModel2D* calDrawModel, struct CALNode2Dr* calNode);
+/*! \brief Functions for the byte discreet displaying of the current node.
+	This function is recursively called for all node in the hierarchy tree by the calglDrawDiscreetModelDisplayNode2Db
+	*/
+void calglDrawDiscreetModelDisplayCurrentNode2Db(
+	struct CALDrawModel2D* calDrawModel,	//!< The CALDrawModel to display.
+	struct CALNode2Db* calNode				//!< The current node to drawing.
+	);
+/*! \brief Functions for the byte discreet displaying of the current node.
+	This function is recursively called for all node in the hierarchy tree by the calglDrawDiscreetModelDisplayNode2Di
+	*/
+void calglDrawDiscreetModelDisplayCurrentNode2Di(
+	struct CALDrawModel2D* calDrawModel,	//!< The CALDrawModel to display.
+	struct CALNode2Di* calNode				//!< The current node to drawing.
+	);
+/*! \brief Functions for the byte discreet displaying of the current node.
+	This function is recursively called for all node in the hierarchy tree by the calglDrawDiscreetModelDisplayNode2Dr
+	*/
+void calglDrawDiscreetModelDisplayCurrentNode2Dr(
+	struct CALDrawModel2D* calDrawModel,	//!< The CALDrawModel to display.
+	struct CALNode2Dr* calNode				//!< The current node to drawing.
+	);
 #pragma endregion
 
 #pragma region DrawRealModel2D
-void calglDrawRealModel2D(struct CALDrawModel2D* calDrawModel);
+/*! \brief Functions for the real displaying.
+	It is called by the calglDisplayModel.
+	*/
+void calglDrawRealModel2D(
+	struct CALDrawModel2D* calDrawModel	//!< The CALDrawModel to display.
+	);
 
-void calglDrawRealModelDisplayNode2Db(struct CALDrawModel2D* calDrawModel, struct CALNode2Db* calNode);
-void calglDrawRealModelDisplayNode2Di(struct CALDrawModel2D* calDrawModel, struct CALNode2Di* calNode);
-void calglDrawRealModelDisplayNode2Dr(struct CALDrawModel2D* calDrawModel, struct CALNode2Dr* calNode);
+/*! \brief Functions for the byte real displaying.
+	It recursively display all node of the hierarchy tree.
+	*/
+void calglDrawRealModelDisplayNode2Db(
+	struct CALDrawModel2D* calDrawModel,	//!< The CALDrawModel to display.
+	struct CALNode2Db* calNode				//!< The node from which begin the drawing.
+	);
+/*! \brief Functions for the int real displaying.
+	It recursively display all node of the hierarchy tree.
+	*/
+void calglDrawRealModelDisplayNode2Di(
+	struct CALDrawModel2D* calDrawModel,	//!< The CALDrawModel to display.
+	struct CALNode2Di* calNode				//!< The node from which begin the drawing.
+	);
+/*! \brief Functions for the real real displaying.
+	It recursively display all node of the hierarchy tree.
+	*/
+void calglDrawRealModelDisplayNode2Dr(
+	struct CALDrawModel2D* calDrawModel,	//!< The CALDrawModel to display.
+	struct CALNode2Dr* calNode				//!< The node from which begin the drawing.
+	);
 
-void calglDrawRealModelDisplayCurrentNode2Db(struct CALDrawModel2D* calDrawModel, struct CALNode2Db* calNode);
-void calglDrawRealModelDisplayCurrentNode2Di(struct CALDrawModel2D* calDrawModel, struct CALNode2Di* calNode);
-void calglDrawRealModelDisplayCurrentNode2Dr(struct CALDrawModel2D* calDrawModel, struct CALNode2Dr* calNode);
+/*! \brief Functions for the byte real displaying of the current node.
+	This function is recursively called for all node in the hierarchy tree by the calglDrawRealModelDisplayNode2Db
+	*/
+void calglDrawRealModelDisplayCurrentNode2Db(
+	struct CALDrawModel2D* calDrawModel,	//!< The CALDrawModel to display.
+	struct CALNode2Db* calNode				//!< The current node to drawing.
+	);
+/*! \brief Functions for the int real displaying of the current node.
+	This function is recursively called for all node in the hierarchy tree by the calglDrawRealModelDisplayNode2Di
+	*/
+void calglDrawRealModelDisplayCurrentNode2Di(
+	struct CALDrawModel2D* calDrawModel,	//!< The CALDrawModel to display.
+	struct CALNode2Di* calNode				//!< The current node to drawing.
+	);
+/*! \brief Functions for the real real displaying of the current node.
+	This function is recursively called for all node in the hierarchy tree by the calglDrawRealModelDisplayNode2Dr
+	*/
+void calglDrawRealModelDisplayCurrentNode2Dr(
+	struct CALDrawModel2D* calDrawModel,	//!< The CALDrawModel to display.
+	struct CALNode2Dr* calNode				//!< The current node to drawing.
+	);
 
-void calglDrawRealModelDisplayCurrentNodeSetVertexData2Db(struct CALDrawModel2D* calDrawModel, struct CALNode2Db*calNode, GLint i, GLint j);
-void calglDrawRealModelDisplayCurrentNodeSetVertexData2Di(struct CALDrawModel2D* calDrawModel, struct CALNode2Di*calNode, GLint i, GLint j);
-void calglDrawRealModelDisplayCurrentNodeSetVertexData2Dr(struct CALDrawModel2D* calDrawModel, struct CALNode2Dr*calNode, GLint i, GLint j);
+/*! \brief Functions that specify, for the current row and column (i, j) in the current substate, the vertex.
+	This is for byte substate.
+	*/
+void calglDrawRealModelDisplayCurrentNodeSetVertexData2Db(
+	struct CALDrawModel2D* calDrawModel,	//!< The CALDrawModel to display. 
+	struct CALNode2Db*calNode,				//!< The current node to drawing. 
+	GLint i,								//!< The current row.
+	GLint j									//!< The current column.
+	);
+/*! \brief Functions that specify, for the current row and column (i, j) in the current substate, the vertex.
+	This is for int substate.
+	*/
+void calglDrawRealModelDisplayCurrentNodeSetVertexData2Di(
+	struct CALDrawModel2D* calDrawModel,	//!< The CALDrawModel to display.
+	struct CALNode2Di*calNode,				//!< The current node to drawing.
+	GLint i,								//!< The current row.								
+	GLint j									//!< The current column.
+	);
+/*! \brief Functions that specify, for the current row and column (i, j) in the current substate, the vertex.
+	This is for real substate.
+	*/
+void calglDrawRealModelDisplayCurrentNodeSetVertexData2Dr(
+	struct CALDrawModel2D* calDrawModel,	//!< The CALDrawModel to display.
+	struct CALNode2Dr*calNode,				//!< The current node to drawing.
+	GLint i,								//!< The current row.
+	GLint j									//!< The current column.
+	);
 #pragma endregion
 
 #pragma region ComputeExtremes
-void calglComputeExtremesDrawModel2Db(struct CALDrawModel2D* calDrawModel, struct CALNode2Db* calNode, GLdouble* m, GLdouble* M);
-void calglComputeExtremesDrawModel2Di(struct CALDrawModel2D* calDrawModel, struct CALNode2Di* calNode, GLdouble* m, GLdouble* M);
-void calglComputeExtremesDrawModel2Dr(struct CALDrawModel2D* calDrawModel, struct CALNode2Dr* calNode, GLdouble* m, GLdouble* M);
+/*! \brief Functions that calculate the minimum and maximum value for the specified substate.
+	This is for byte substate.
+	*/
+void calglComputeExtremesDrawModel2Db(
+	struct CALDrawModel2D* calDrawModel,	//!< The pointer to CALDrawModel.
+	struct CALNode2Db* calNode,				//!< The pointer to the substate for calculating the minimum and maximum.
+	GLdouble* m,							//!< The minimum value.
+	GLdouble* M								//!< The maximum value.
+	);
+/*! \brief Functions that calculate the minimum and maximum value for the specified substate.
+	This is for int substate.
+	*/
+void calglComputeExtremesDrawModel2Di(
+	struct CALDrawModel2D* calDrawModel, 	//!< The pointer to CALDrawModel.
+	struct CALNode2Di* calNode,				//!< The pointer to the substate for calculating the minimum and maximum.
+	GLdouble* m,							//!< The minimum value. 
+	GLdouble* M								//!< The maximum value.
+	);
+/*! \brief Functions that calculate the minimum and maximum value for the specified substate.
+	This is for real substate.
+	*/
+void calglComputeExtremesDrawModel2Dr(
+	struct CALDrawModel2D* calDrawModel, 	//!< The pointer to CALDrawModel.
+	struct CALNode2Dr* calNode,				//!< The pointer to the substate for calculating the minimum and maximum. 
+	GLdouble* m,							//!< The minimum value.
+	GLdouble* M								//!< The maximum value.
+	);
 #pragma endregion
 
 #pragma region ComputeExtremesToAll
-void calglComputeExtremesToAll2Db(struct CALDrawModel2D* calDrawModel, struct CALNode2Db* calNode);
-void calglComputeExtremesToAll2Di(struct CALDrawModel2D* calDrawModel, struct CALNode2Di* calNode);
-void calglComputeExtremesToAll2Dr(struct CALDrawModel2D* calDrawModel, struct CALNode2Dr* calNode);
+/*! \brief Functions that calculate the minimum and maximum for all substate in the tree.
+	This is for byte substates.
+	*/
+void calglComputeExtremesToAll2Db(
+	struct CALDrawModel2D* calDrawModel,	//!< The pointer to CALDrawModel. 
+	struct CALNode2Db* calNode				//!< The pointer to CALNode tree.
+	);
+/*! \brief Functions that calculate the minimum and maximum for all substate in the tree.
+	This is for int substates.
+	*/
+void calglComputeExtremesToAll2Di(
+	struct CALDrawModel2D* calDrawModel,	//!< The pointer to CALDrawModel. 
+	struct CALNode2Di* calNode				//!< The pointer to CALNode tree.
+	);
+/*! \brief Functions that calculate the minimum and maximum for all substate in the tree.
+	This is for real substates.
+	*/
+void calglComputeExtremesToAll2Dr(
+	struct CALDrawModel2D* calDrawModel,	//!< The pointer to CALDrawModel. 
+	struct CALNode2Dr* calNode				//!< The pointer to CALNode tree.
+	);
 #pragma endregion
 
 #pragma region SetNormalData
-void calglSetNormalData2Db(struct CALDrawModel2D* calDrawModel, struct CALNode2Db* calNode, GLint i, GLint j);
-void calglSetNormalData2Di(struct CALDrawModel2D* calDrawModel, struct CALNode2Di* calNode, GLint i, GLint j);
-void calglSetNormalData2Dr(struct CALDrawModel2D* calDrawModel, struct CALNode2Dr* calNode, GLint i, GLint j);
+/*! \brief Functions that specify, for the current row and column (i, j) in the current substate, the normal data.
+	This is a necessary information for the lights.
+	This is for byte substate.
+	*/
+void calglSetNormalData2Db(
+	struct CALDrawModel2D* calDrawModel,	//!< The CALDrawModel to display. 
+	struct CALNode2Db* calNode,				//!< The current node to drawing. 
+	GLint i, 								//!< The current row.
+	GLint j									//!< The current column.
+	);
+/*! \brief Functions that specify, for the current row and column (i, j) in the current substate, the normal data.
+	This is a necessary information for the lights.
+	This is for int substate.
+	*/
+void calglSetNormalData2Di(
+	struct CALDrawModel2D* calDrawModel,	//!< The CALDrawModel to display. 
+	struct CALNode2Di* calNode,				//!< The current node to drawing.
+	GLint i, 								//!< The current row.
+	GLint j									//!< The current column.
+	);
+/*! \brief Functions that specify, for the current row and column (i, j) in the current substate, the normal data.
+	This is a necessary information for the lights.
+	This is for real substate.
+	*/
+void calglSetNormalData2Dr(
+	struct CALDrawModel2D* calDrawModel,	//!< The CALDrawModel to display. 
+	struct CALNode2Dr* calNode,				//!< The current node to drawing.
+	GLint i, 								//!< The current row.
+	GLint j									//!< The current column.
+	);
 #pragma endregion
 
 #pragma region SetColorData
-GLboolean calglSetColorData2Db(struct CALDrawModel2D* calDrawModel, struct CALNode2Db* calNode, GLint i, GLint j);
-GLboolean calglSetColorData2Di(struct CALDrawModel2D* calDrawModel, struct CALNode2Di* calNode, GLint i, GLint j);
-GLboolean calglSetColorData2Dr(struct CALDrawModel2D* calDrawModel, struct CALNode2Dr* calNode, GLint i, GLint j);
+/*! \brief Functions that specify, for the current row and column (i, j) in the current substate, the color data.
+	This is for byte substate.
+	*/
+GLboolean calglSetColorData2Db(
+	struct CALDrawModel2D* calDrawModel,	//!< The CALDrawModel to display. 
+	struct CALNode2Db* calNode,				//!< The current node to drawing. 
+	GLint i, 								//!< The current row.
+	GLint j									//!< The current column.
+	);
+/*! \brief Functions that specify, for the current row and column (i, j) in the current substate, the color data.
+	This is for int substate.
+	*/
+GLboolean calglSetColorData2Di(
+	struct CALDrawModel2D* calDrawModel,	//!< The CALDrawModel to display. 
+	struct CALNode2Di* calNode,				//!< The current node to drawing. 
+	GLint i, 								//!< The current row.
+	GLint j									//!< The current column.
+	);
+/*! \brief Functions that specify, for the current row and column (i, j) in the current substate, the color data.
+	This is for real substate.
+	*/
+GLboolean calglSetColorData2Dr(
+	struct CALDrawModel2D* calDrawModel,	//!< The CALDrawModel to display. 
+	struct CALNode2Dr* calNode,				//!< The current node to drawing. 
+	GLint i, 								//!< The current row.
+	GLint j									//!< The current column.
+	);
 #pragma endregion
 
-void calglColor2D(struct CALDrawModel2D* calDrawModel, GLfloat redComponent, GLfloat greenComponent, GLfloat blueComponent, GLfloat alphaComponent);
+/*! \brief Functions that set a constant color to use in the drawing.
+*/
+void calglColor2D(
+struct CALDrawModel2D* calDrawModel,	//!< The pointer to CALDrawModel. 
+	GLfloat redComponent,					//!< The red component
+	GLfloat greenComponent, 				//!< The blue component
+	GLfloat blueComponent, 					//!< The green component
+	GLfloat alphaComponent					//!< The alpha component
+	);
 
-void calglSetModelViewParameter2D(struct CALDrawModel2D* calDrawModel, struct CALGLModelViewParameter* modelView);
+/*! \brief Functions that set the model view parameters.
+	It contains informations about the translation, rotation and scaling of the model.
+	*/
+void calglSetModelViewParameter2D(
+	struct CALDrawModel2D* calDrawModel,			//!< The pointer to CALDrawModel.  
+	struct CALGLModelViewParameter* modelView		//!< The pointer to CALGLModelViewParameter. 
+	);
 
-void calglSetLightParameter2D(struct CALDrawModel2D* calDrawModel, struct CALGLLightParameter* modelLight);
+/*! \brief Functions that set the light parameters.
+	It contains informations about the ambient, diffuse and specular component of the light.
+	*/
+void calglSetLightParameter2D(
+	struct CALDrawModel2D* calDrawModel,		//!< The pointer to CALDrawModel.  
+	struct CALGLLightParameter* modelLight		//!< The pointer to CALGLLightParameter. 
+	);
 
 #pragma region BoundingBox
-void calglDrawBoundingSquare2D(struct CALDrawModel2D* calDrawModel);
-void calglDrawBoundingBox2D(struct CALDrawModel2D* calDrawModel, GLfloat height, GLfloat low);
+/*! \brief Functions that in the drawing fase display a bounding box which contains the model.
+	This function is called in the discreet drawing.
+	*/
+void calglDrawBoundingSquare2D(
+	struct CALDrawModel2D* calDrawModel		//!< The pointer to CALDrawModel.
+	);
+/*! \brief Functions that in the drawing fase display a bounding box which contains the model.
+	This function is called in the real drawing.
+	*/
+void calglDrawBoundingBox2D(
+	struct CALDrawModel2D* calDrawModel,	//!< The pointer to CALDrawModel.
+	GLfloat height,							//!< The maximum height of the model.
+	GLfloat low								//!< The minimum height of the model.
+	);
 #pragma endregion
 
 #pragma region InfoBar
-void calglRelativeInfoBar2Db(struct CALDrawModel2D* calDrawModel, struct CALSubstate2Db* substate, const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, enum CALGL_INFO_BAR_ORIENTATION orientation);
-void calglRelativeInfoBar2Di(struct CALDrawModel2D* calDrawModel, struct CALSubstate2Di* substate, const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, enum CALGL_INFO_BAR_ORIENTATION orientation);
-void calglRelativeInfoBar2Dr(struct CALDrawModel2D* calDrawModel, struct CALSubstate2Dr* substate, const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, enum CALGL_INFO_BAR_ORIENTATION orientation);
-void calglAbsoluteInfoBar2Db(struct CALDrawModel2D* calDrawModel, struct CALSubstate2Db* substate, const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, GLfloat xPosition, GLfloat yPosition, GLint width, GLint height);
-void calglAbsoluteInfoBar2Di(struct CALDrawModel2D* calDrawModel, struct CALSubstate2Di* substate, const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, GLfloat xPosition, GLfloat yPosition, GLint width, GLint height);
-void calglAbsoluteInfoBar2Dr(struct CALDrawModel2D* calDrawModel, struct CALSubstate2Dr* substate, const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, GLfloat xPosition, GLfloat yPosition, GLint width, GLint height);
+/*! \brief Functions that display an information bar which contains informations about a specified substate.
+	This is the relative version, in which the display bar is positioned automatically according to the type of orientation.
+	This is for byte substate.
+	*/
+void calglRelativeInfoBar2Db(
+	struct CALDrawModel2D* calDrawModel,		//!< The pointer to CALDrawModel. 
+	struct CALSubstate2Db* substate, 			//!< The pointer to the substate to which display informations. 
+	const char* substateName,  					//!< The substate name.
+	enum CALGL_TYPE_INFO_USE infoUse,			//!< Enum used to specify the gradient color.
+	enum CALGL_INFO_BAR_ORIENTATION orientation	//!< The type of orientation (Vertical, Oriziontal).
+	);
+/*! \brief Functions that display an information bar which contains informations about a specified substate.
+	This is the relative version, in which the display bar is positioned automatically according to the type of orientation.
+	This is for byte substate.
+	*/
+void calglRelativeInfoBar2Di(
+	struct CALDrawModel2D* calDrawModel,		//!< The pointer to CALDrawModel. 
+	struct CALSubstate2Di* substate,  			//!< The pointer to the substate to which display informations.
+	const char* substateName,   				//!< The substate name.
+	enum CALGL_TYPE_INFO_USE infoUse, 			//!< Enum used to specify the gradient color.
+	enum CALGL_INFO_BAR_ORIENTATION orientation	//!< The type of orientation (Vertical, Oriziontal).
+	);
+/*! \brief Functions that display an information bar which contains informations about a specified substate.
+	This is the relative version, in which the display bar is positioned automatically according to the type of orientation.
+	This is for byte substate.
+	*/
+void calglRelativeInfoBar2Dr(
+	struct CALDrawModel2D* calDrawModel,		//!< The pointer to CALDrawModel. 
+	struct CALSubstate2Dr* substate, 			//!< The pointer to the substate to which display informations.
+	const char* substateName,   				//!< The substate name.
+	enum CALGL_TYPE_INFO_USE infoUse, 			//!< Enum used to specify the gradient color.
+	enum CALGL_INFO_BAR_ORIENTATION orientation	//!< The type of orientation (Vertical, Oriziontal).
+	);
+/*! \brief Functions that display an information bar which contains informations about a specified substate.
+	This is the absolute version, in which the display bar is positioned according to the position specified by the user.
+	This is for byte substate.
+	*/
+void calglAbsoluteInfoBar2Db(
+	struct CALDrawModel2D* calDrawModel,		//!< The pointer to CALDrawModel. 
+	struct CALSubstate2Db* substate,  			//!< The pointer to the substate to which display informations.
+	const char* substateName,   				//!< The substate name.
+	enum CALGL_TYPE_INFO_USE infoUse, 			//!< Enum used to specify the gradient color.
+	GLfloat xPosition,							//!< The window x position.
+	GLfloat yPosition, 							//!< The window y position.
+	GLint width, 								//!< The width dimension.
+	GLint height								//!< The height dimension.
+	);
+/*! \brief Functions that display an information bar which contains informations about a specified substate.
+	This is the absolute version, in which the display bar is positioned according to the position specified by the user.
+	This is for byte substate.
+	*/
+void calglAbsoluteInfoBar2Di(
+	struct CALDrawModel2D* calDrawModel,		//!< The pointer to CALDrawModel. 
+	struct CALSubstate2Di* substate,  			//!< The pointer to the substate to which display informations.
+	const char* substateName,   				//!< The substate name.
+	enum CALGL_TYPE_INFO_USE infoUse, 			//!< Enum used to specify the gradient color.
+	GLfloat xPosition, 							//!< The window x position.
+	GLfloat yPosition, 							//!< The window x position.
+	GLint width, 								//!< The width dimension.
+	GLint height								//!< The height dimension.
+	);
+/*! \brief Functions that display an information bar which contains informations about a specified substate.
+	This is the absolute version, in which the display bar is positioned according to the position specified by the user.
+	This is for byte substate.
+	*/
+void calglAbsoluteInfoBar2Dr(
+	struct CALDrawModel2D* calDrawModel,		//!< The pointer to CALDrawModel. 
+	struct CALSubstate2Dr* substate,  			//!< The pointer to the substate to which display informations.
+	const char* substateName,   				//!< The substate name.
+	enum CALGL_TYPE_INFO_USE infoUse, 			//!< Enum used to specify the gradient color.
+	GLfloat xPosition, 							//!< The window x position.
+	GLfloat yPosition, 							//!< The window x position.
+	GLint width, 								//!< The width dimension.
+	GLint height								//!< The height dimension.
+	);
 #pragma endregion
 
 #pragma region DrawIntervals
-void calglDisplayDrawIBound2D(struct CALDrawModel2D* calDrawModel, GLint min, GLint max);
-void calglDisplayDrawJBound2D(struct CALDrawModel2D* calDrawModel, GLint min, GLint max);
-void calglHideDrawIBound2D(struct CALDrawModel2D* calDrawModel, GLint min, GLint max);
-void calglHideDrawJBound2D(struct CALDrawModel2D* calDrawModel, GLint min, GLint max);
+/*! \brief Functions that set the slices to show of the cellular automata.
+	This is for the rows.
+	It shows the rows in the interval [min, max].
+	*/
+void calglDisplayDrawIBound2D(
+	struct CALDrawModel2D* calDrawModel,		//!< The pointer to CALDrawModel. 
+	GLint min, 									//!< The minimum of the interval.
+	GLint max 									//!< The maximum of the interval.
+	);
+/*! \brief Functions that set the slices to show of the cellular automata.
+	This is for the columns.
+	It shows the columns in the interval [min, max].
+	*/
+void calglDisplayDrawJBound2D(
+	struct CALDrawModel2D* calDrawModel,		//!< The pointer to CALDrawModel.
+	GLint min, 									//!< The minimum of the interval.
+	GLint max 									//!< The maximum of the interval.
+	);
+/*! \brief Functions that set the slices to hide of the cellular automata.
+	This is for the rows.
+	It hides the rows in the interval [min, max].
+	*/
+void calglHideDrawIBound2D(
+	struct CALDrawModel2D* calDrawModel, 		//!< The pointer to CALDrawModel.
+	GLint min,									//!< The minimum of the interval.
+	GLint max 									//!< The maximum of the interval.
+	);
+/*! \brief Functions that set the slices to hide of the cellular automata.
+	This is for the columns.
+	It hides the columns in the interval [min, max].
+	*/
+void calglHideDrawJBound2D(
+	struct CALDrawModel2D* calDrawModel,		//!< The pointer to CALDrawModel. 
+	GLint min, 									//!< The minimum of the interval.
+	GLint max 									//!< The maximum of the interval.
+	);
 #pragma endregion
 
 #endif
