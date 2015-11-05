@@ -42,6 +42,14 @@ struct forestInsectSubstates {
 	struct CALSubstate2Dr *movementMale;		// Used for calculate the next cell where to move male
 };
 
+enum WIND {
+	NO_WIND = 0,
+	NORTH_WIND,
+	EAST_WIND,
+	SOUTH_WIND,
+	WEAST_WIND
+};
+
 struct forestInsectParameters {
 	enum WIND windType;
 	CALreal winterModerateMortality;
@@ -78,13 +86,6 @@ void forestInsectCADef();
 void forestInsectLoadConfig();
 void forestInsectExit();
 
-enum WIND {
-	NO_WIND = 0,
-	NORTH_WIND,
-	EAST_WIND,
-	SOUTH_WIND,
-	WEAST_WIND
-};
 enum MOVEMENT {
 	MOVEMENT_NONE = 0,
 	MOVEMENT_UP,
