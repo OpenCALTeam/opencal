@@ -178,4 +178,10 @@ void calglPrintConstString2D(
 	const char *string	//!< String to print.
 	);
 
+/*! \brief Function that set horizontal/vertical layout when there are only two models to display.
+*/
+void calglSetLayoutOrientation2D(
+	enum CALGL_LAYOUT_ORIENTATION newOrientation	//!< Type of orientation.
+	);
+
 #endif

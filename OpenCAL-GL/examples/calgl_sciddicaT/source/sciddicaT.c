@@ -224,6 +224,9 @@ int main(int argc, char** argv)
 	model2->realModel = model1->realModel;
 	calglInfoBar2Dr(model2, Q.h, "Debris thickness", CALGL_TYPE_INFO_USE_RED_SCALE, 20, 200, 50, 150);
 
+	//calglSetLayoutOrientation2D(CALGL_LAYOUT_ORIENTATION_HORIZONTAL);
+	//calglSetLayoutOrientation2D(CALGL_LAYOUT_ORIENTATION_VERTICAL);
+
 	calglStartProcessWindow2D(argc, argv);
 
 	//finalizations

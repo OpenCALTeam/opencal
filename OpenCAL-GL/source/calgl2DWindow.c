@@ -45,7 +45,9 @@ static GLint key_old_x, key_old_y;
 static CALbyte translationOn = CAL_FALSE;
 static GLint activeSubWindow = -1;
 
-struct CALWindow2D* calglCreateWindow2D(int argc, char** argv, struct CALGLGlobalSettings* globalSettings, struct CALDrawModel2D** models, int size){
+static enum CALGL_LAYOUT_ORIENTATION orientation = CALGL_LAYOUT_ORIENTATION_UNKNOW;
+
+struct CALWindow2D* calglCreateWindow2D(int argc, char** argv, struct CALGLGlobalSettings* globalSettings, struct CALDrawModel2D** models, int size) {
 	struct CALWindow2D* window = (struct CALWindow2D*) malloc(sizeof(struct CALWindow2D));
 	GLint i = 0;
 
@@ -53,19 +55,19 @@ struct CALWindow2D* calglCreateWindow2D(int argc, char** argv, struct CALGLGloba
 
 	window->noModels = size;
 	window->models = models;
-	window->subWindowID = (GLuint*)malloc(sizeof(GLuint)*window->noModels);
-	window->positionsX = (GLint*)malloc(sizeof(GLint)*window->noModels);
-	window->positionsY = (GLint*)malloc(sizeof(GLint)*window->noModels);
+	window->subWindowID = (GLuint*) malloc(sizeof(GLuint)*window->noModels);
+	window->positionsX = (GLint*) malloc(sizeof(GLint)*window->noModels);
+	window->positionsY = (GLint*) malloc(sizeof(GLint)*window->noModels);
 
 	// Setting parameter for translate
-	xPos = (GLfloat*)malloc(sizeof(GLfloat)*size);
-	yPos = (GLfloat*)malloc(sizeof(GLfloat)*size);
-	zPos = (GLfloat*)malloc(sizeof(GLfloat)*size);
-	xRot = (GLfloat*)malloc(sizeof(GLfloat)*size);
-	yRot = (GLfloat*)malloc(sizeof(GLfloat)*size);
-	zRot = (GLfloat*)malloc(sizeof(GLfloat)*size);
+	xPos = (GLfloat*) malloc(sizeof(GLfloat)*size);
+	yPos = (GLfloat*) malloc(sizeof(GLfloat)*size);
+	zPos = (GLfloat*) malloc(sizeof(GLfloat)*size);
+	xRot = (GLfloat*) malloc(sizeof(GLfloat)*size);
+	yRot = (GLfloat*) malloc(sizeof(GLfloat)*size);
+	zRot = (GLfloat*) malloc(sizeof(GLfloat)*size);
 
-	for (i = 0; i < window->noModels; i++){
+	for(i = 0; i<window->noModels; i++) {
 		xPos[i] = 0.0f;	yPos[i] = 0.0f;	zPos[i] = 0.0f;
 		xRot[i] = 0.0f; yRot[i] = 0.0f; zRot[i] = 0.0f;
 		xRot[i] = 90.0f;
@@ -81,7 +83,7 @@ struct CALWindow2D* calglCreateWindow2D(int argc, char** argv, struct CALGLGloba
 
 	calglCalculatePositionAndDimensionWindow2D(window);
 
-	for (i = 0; i < window->noModels; i++){
+	for(i = 0; i<window->noModels; i++) {
 		window->subWindowID[i] = glutCreateSubWindow(window->id, window->positionsX[i], window->positionsY[i], window->sub_width, window->sub_height);
 		glutReshapeFunc(calglSubReshapeWindow2D);
 		glutDisplayFunc(calglSubDisplayWindow2D);
@@ -95,18 +97,21 @@ struct CALWindow2D* calglCreateWindow2D(int argc, char** argv, struct CALGLGloba
 
 	window->font_style = GLUT_BITMAP_8_BY_13;
 
+	if(orientation==CALGL_LAYOUT_ORIENTATION_UNKNOW)
+		orientation = CALGL_LAYOUT_ORIENTATION_HORIZONTAL;
+
 	window2D = window;
 	return window;
 }
 
-void calglDestroyWindow2D(struct CALWindow2D* window){
+void calglDestroyWindow2D(struct CALWindow2D* window) {
 	GLint i = 0;
 
-	if (window){
+	if(window) {
 		free(window->subWindowID);
 		free(window->positionsX);
 		free(window->positionsY);
-		for (i = 0; i < window->noModels; i++){
+		for(i = 0; i<window->noModels; i++) {
 			calglDestoyDrawModel2D(window->models[i]);
 		}
 		free(window);
@@ -123,35 +128,35 @@ void calglDestroyWindow2D(struct CALWindow2D* window){
 	calglDestroyGlobalSettings();
 }
 
-void calglRedisplayAllWindow2D(void){
+void calglRedisplayAllWindow2D(void) {
 	GLint i = 0;
-	for (i = 0; i < window2D->noModels; i++){
+	for(i = 0; i<window2D->noModels; i++) {
 		glutSetWindow(window2D->subWindowID[i]);
 		calglSubReshapeWindow2D(window2D->sub_width, window2D->sub_height);
 		glutPostRedisplay();
 	}
 }
 
-void calglDisplayWindow2D(void){
+void calglDisplayWindow2D(void) {
 	GLint i = 0;
 	glClearColor(0.8f, 0.8f, 0.8f, 0.0f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 
 	glColor3ub(0, 0, 0);
-	for (i = 0; i < window2D->noModels; i++){
-		calglDrawStringWindow2D(window2D, window2D->positionsX[i], window2D->positionsY[i] - SEPARATOR_SPACE, (char*)window2D->models[i]->name);
+	for(i = 0; i<window2D->noModels; i++) {
+		calglDrawStringWindow2D(window2D, window2D->positionsX[i], window2D->positionsY[i]-SEPARATOR_SPACE, (char*) window2D->models[i]->name);
 	}
 
 	glutSwapBuffers();
 }
 
-void calglReshapeWindow2D(int w, int h){
+void calglReshapeWindow2D(int w, int h) {
 	GLint i = 0;
 
-	if (w < 200){
+	if(w<200) {
 		w = 200;
 	}
-	if (h < 200){
+	if(h<200) {
 		h = 200;
 	}
 
@@ -166,17 +171,17 @@ void calglReshapeWindow2D(int w, int h){
 
 	calglCalculatePositionAndDimensionWindow2D(window2D);
 
-	for (i = 0; i < window2D->noModels; i++){
+	for(i = 0; i<window2D->noModels; i++) {
 		glutSetWindow(window2D->subWindowID[i]);
 		glutPositionWindow(window2D->positionsX[i], window2D->positionsY[i]);
 		glutReshapeWindow(window2D->sub_width, window2D->sub_height);
 	}
 }
 
-void calglSubDisplayWindow2D(void){
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+void calglSubDisplayWindow2D(void) {
+	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 
-	currentModel2D = glutGetWindow() - 2;
+	currentModel2D = glutGetWindow()-2;
 
 	glPushMatrix();	{
 		glTranslatef(xPos[currentModel2D], yPos[currentModel2D], zPos[currentModel2D]);
@@ -185,7 +190,7 @@ void calglSubDisplayWindow2D(void){
 		glRotatef(yRot[currentModel2D], 0.0f, 1.0f, 0.0f);
 		glRotatef(zRot[currentModel2D], 0.0f, 0.0f, 1.0f);
 
-		if (window2D->models[currentModel2D]->modelLight){
+		if(window2D->models[currentModel2D]->modelLight) {
 			glEnable(GL_LIGHTING);
 			glEnable(window2D->models[currentModel2D]->modelLight->currentLight);
 			glEnable(GL_COLOR_MATERIAL);
@@ -207,7 +212,7 @@ void calglSubDisplayWindow2D(void){
 
 		calglDisplayModel2D(window2D->models[currentModel2D]);
 
-		if (window2D->models[currentModel2D]->infoBar){
+		if(window2D->models[currentModel2D]->infoBar) {
 			calglDisplayBar2D(window2D->models[currentModel2D]->infoBar);
 		}
 
@@ -216,11 +221,11 @@ void calglSubDisplayWindow2D(void){
 	glutSwapBuffers();
 }
 
-void calglSubReshapeWindow2D(int w, int h){
+void calglSubReshapeWindow2D(int w, int h) {
 	glViewport(0, 0, w, h);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(60.0, (GLdouble)w / (GLdouble)h, window2D->globalSettings->zNear, window2D->globalSettings->zFar);
+	gluPerspective(60.0, (GLdouble) w/(GLdouble) h, window2D->globalSettings->zNear, window2D->globalSettings->zFar);
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
@@ -233,38 +238,41 @@ void calglSubReshapeWindow2D(int w, int h){
 	glEnable(GL_DEPTH_TEST);
 }
 
-void calglCalculatePositionAndDimensionWindow2D(struct CALWindow2D* window){
+void calglCalculatePositionAndDimensionWindow2D(struct CALWindow2D* window) {
 	GLint noSubWindowX = 0;
 	GLint noSubWindowY = 0;
 	GLint i = 0, j = 0, k = 0;
 
-	if (window->noModels == 1){
+	if(window->noModels==1) {
 		noSubWindowX = noSubWindowY = 1;
-	}
-	else if (window->noModels == 2) {
-		noSubWindowX = 2;
-		noSubWindowY = 1;
-	}
-	else {
-		noSubWindowX = (GLint)ceil(sqrt((GLdouble)window->noModels));
+	} else if(window->noModels==2) {
+		if(orientation==CALGL_LAYOUT_ORIENTATION_HORIZONTAL) {
+			noSubWindowX = 2;
+			noSubWindowY = 1;
+		} else {
+			noSubWindowX = 1;
+			noSubWindowY = 2;
+		}
+	} else {
+		noSubWindowX = (GLint) ceil(sqrt((GLdouble) window->noModels));
 		noSubWindowY = noSubWindowX;
 	}
 
-	window->sub_width = (window->globalSettings->width - SPACE*(noSubWindowY + 1)) / noSubWindowY;
-	window->sub_height = (window->globalSettings->height - SPACE*(noSubWindowX + 1)) / noSubWindowX;
+	window->sub_width = (window->globalSettings->width-SPACE*(noSubWindowY+1))/noSubWindowY;
+	window->sub_height = (window->globalSettings->height-SPACE*(noSubWindowX+1))/noSubWindowX;
 
-	for (i = 0; i < noSubWindowY && k < window->noModels; i++){
-		for (j = 0; j < noSubWindowX && k < window->noModels; j++){
-			window->positionsX[k] = SPACE + (window->sub_width + SPACE)*i;
-			window->positionsY[k] = SPACE + (window->sub_height + SPACE)*j;
+	for(i = 0; i<noSubWindowY && k<window->noModels; i++) {
+		for(j = 0; j<noSubWindowX && k<window->noModels; j++) {
+			window->positionsX[k] = SPACE+(window->sub_width+SPACE)*i;
+			window->positionsY[k] = SPACE+(window->sub_height+SPACE)*j;
 			k++;
 		}
 	}
 }
 
-void calglStartProcessWindow2D(int argc, char** argv){
+void calglStartProcessWindow2D(int argc, char** argv) {
 	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+	glutInitDisplayMode(GLUT_DOUBLE|GLUT_RGB|GLUT_DEPTH);
 
 	glClearColor(0.5f, 0.5f, 1.0f, 1.0f);
 	glShadeModel(GL_SMOOTH);
@@ -281,28 +289,25 @@ void calglStartProcessWindow2D(int argc, char** argv){
 	calglDestroyWindow2D(window2D);
 }
 
-void calglSetfontWindow2D(struct CALWindow2D* window, char* name, int size){
+void calglSetfontWindow2D(struct CALWindow2D* window, char* name, int size) {
 	window->font_style = GLUT_BITMAP_HELVETICA_10;
-	if (strcmp(name, "helvetica") == 0) {
-		if (size == 12)
+	if(strcmp(name, "helvetica")==0) {
+		if(size==12)
 			window->font_style = GLUT_BITMAP_HELVETICA_12;
-		else if (size == 18)
+		else if(size==18)
 			window->font_style = GLUT_BITMAP_HELVETICA_18;
-	}
-	else if (strcmp(name, "times roman") == 0) {
+	} else if(strcmp(name, "times roman")==0) {
 		window->font_style = GLUT_BITMAP_TIMES_ROMAN_10;
-		if (size == 24)
+		if(size==24)
 			window->font_style = GLUT_BITMAP_TIMES_ROMAN_24;
-	}
-	else if (strcmp(name, "8x13") == 0) {
+	} else if(strcmp(name, "8x13")==0) {
 		window->font_style = GLUT_BITMAP_8_BY_13;
-	}
-	else if (strcmp(name, "9x15") == 0) {
+	} else if(strcmp(name, "9x15")==0) {
 		window->font_style = GLUT_BITMAP_9_BY_15;
 	}
 }
 
-void calglDrawStringWindow2D(struct CALWindow2D* window, GLuint x, GLuint y, char* format, ...){
+void calglDrawStringWindow2D(struct CALWindow2D* window, GLuint x, GLuint y, char* format, ...) {
 	va_list args;
 	char buffer[255], *s;
 
@@ -311,13 +316,13 @@ void calglDrawStringWindow2D(struct CALWindow2D* window, GLuint x, GLuint y, cha
 	va_end(args);
 
 	glRasterPos2i(x, y);
-	for (s = buffer; *s; s++)
+	for(s = buffer; *s; s++)
 		glutBitmapCharacter(window->font_style, *s);
 }
 
-void calglSpecialKeyboardEventWindow2D(int key, int x, int y){
-	activeSubWindow = glutGetWindow() - 2;
-	switch (key){
+void calglSpecialKeyboardEventWindow2D(int key, int x, int y) {
+	activeSubWindow = glutGetWindow()-2;
+	switch(key) {
 	case GLUT_KEY_UP: {
 		yPos[activeSubWindow] += TRANSLATION_CONSTANT*keyboardSensitivity;
 	}; break;
@@ -336,40 +341,39 @@ void calglSpecialKeyboardEventWindow2D(int key, int x, int y){
 	calglRedisplayAllWindow2D();
 }
 
-void calglKeyboardEventWindow2D(unsigned char key, int x, int y){
+void calglKeyboardEventWindow2D(unsigned char key, int x, int y) {
 	int i = 0;
 
-	if (key == 't'){
-		x -= window2D->sub_width / 2;
-		y -= window2D->sub_height / 2;
+	if(key=='t') {
+		x -= window2D->sub_width/2;
+		y -= window2D->sub_height/2;
 
-		if (translationOn){
-			yPos[activeSubWindow] += -(y - key_old_y)*keyboardSensitivity;
-			xPos[activeSubWindow] += (x - key_old_x)*keyboardSensitivity;
+		if(translationOn) {
+			yPos[activeSubWindow] += -(y-key_old_y)*keyboardSensitivity;
+			xPos[activeSubWindow] += (x-key_old_x)*keyboardSensitivity;
 
 			key_old_x = x;
 			key_old_y = y;
-		}
-		else {
-			activeSubWindow = glutGetWindow() - 2;
+		} else {
+			activeSubWindow = glutGetWindow()-2;
 			key_old_x = x;
 			key_old_y = y;
 			translationOn = CAL_TRUE;
 		}
 	}
 
-	if (key == 'h'){
+	if(key=='h') {
 		calglGetGlobalSettings()->onlyModel = !calglGetGlobalSettings()->onlyModel;
 	}
 
-	if (key == 'x' || key == 's'){
-		if (window2D->models[0]->calUpdater){
+	if(key=='x'||key=='s') {
+		if(window2D->models[0]->calUpdater) {
 			window2D->models[0]->calUpdater->active = !window2D->models[0]->calUpdater->active;
 		}
 	}
 
 	if(key=='r') {
-		for(i = 0; i < window2D->noModels; i++) {
+		for(i = 0; i<window2D->noModels; i++) {
 			xPos[i] = 0.0f;	yPos[i] = 0.0f;	zPos[i] = 0.0f;
 			xRot[i] = 0.0f; yRot[i] = 0.0f; zRot[i] = 0.0f;
 			xRot[i] = 90.0f;
@@ -379,10 +383,10 @@ void calglKeyboardEventWindow2D(unsigned char key, int x, int y){
 	calglRedisplayAllWindow2D();
 }
 
-void calglKeyboardUpEventWindow2D(unsigned char key, int x, int y){
-	if (key == 't'){
-		x -= window2D->sub_width / 2;
-		y -= window2D->sub_height / 2;
+void calglKeyboardUpEventWindow2D(unsigned char key, int x, int y) {
+	if(key=='t') {
+		x -= window2D->sub_width/2;
+		y -= window2D->sub_height/2;
 
 		key_old_x = x;
 		key_old_y = y;
@@ -390,102 +394,99 @@ void calglKeyboardUpEventWindow2D(unsigned char key, int x, int y){
 	}
 }
 
-void calglMouseWindow2D(int button, int state, int x, int y){
-	if (button == 0){  // Left click
+void calglMouseWindow2D(int button, int state, int x, int y) {
+	if(button==0) {  // Left click
 		leftPressed = CAL_TRUE;
-		old_x = x - window2D->sub_width / 2;
-		old_y = y - window2D->sub_height / 2;
-	}
-	else if (button == 2) { // Right click
+		old_x = x-window2D->sub_width/2;
+		old_y = y-window2D->sub_height/2;
+	} else if(button==2) { // Right click
 		rightPressed = CAL_TRUE;
-		oldestY = y - window2D->sub_height / 2;
+		oldestY = y-window2D->sub_height/2;
 	}
 
-	if (state == GLUT_UP){
+	if(state==GLUT_UP) {
 		leftPressed = CAL_FALSE;
 		rightPressed = CAL_FALSE;
-	}
-	else {
+	} else {
 		calglRedisplayAllWindow2D();
 	}
 }
 
-void calglMotionMouseWindow2D(int x, int y){
+void calglMotionMouseWindow2D(int x, int y) {
 	GLfloat rot_x = 0.0f, rot_y = 0.0f;
 	GLfloat transY = 0;
 
-	if (leftPressed){
-		x -= window2D->sub_width / 2;
-		y -= window2D->sub_height / 2;
+	if(leftPressed) {
+		x -= window2D->sub_width/2;
+		y -= window2D->sub_height/2;
 
-		rot_x = (float)(x - old_x) * mouseSensitivity;
-		rot_y = -(float)(y - old_y) * mouseSensitivity;
+		rot_x = (float) (x-old_x) * mouseSensitivity;
+		rot_y = -(float) (y-old_y) * mouseSensitivity;
 		old_x = x;
 		old_y = y;
 
-		if (models2D[glutGetWindow() - 2]->drawMode == CALGL_DRAW_MODE_FLAT || translationOn){
+		if(models2D[glutGetWindow()-2]->drawMode==CALGL_DRAW_MODE_FLAT||translationOn) {
 			return;
 		}
 
-		xRot[glutGetWindow() - 2] -= rot_y;
-		yRot[glutGetWindow() - 2] += rot_x;
+		xRot[glutGetWindow()-2] -= rot_y;
+		yRot[glutGetWindow()-2] += rot_x;
 
 		/*window2D->models[glutGetWindow()-2]->modelView->xRotation -= rot_y;
 		window2D->models[glutGetWindow()-2]->modelView->yRotation += rot_x;*/
 
 		calglRedisplayAllWindow2D();
-	}
-	else if (rightPressed){
-		y -= window2D->sub_height / 2;
-		transY = -(y - oldestY) * mouseSensitivity;
+	} else if(rightPressed) {
+		y -= window2D->sub_height/2;
+		transY = -(y-oldestY) * mouseSensitivity;
 		oldestY = y;
 
-		zPos[glutGetWindow() - 2] += transY;
+		zPos[glutGetWindow()-2] += transY;
 
 		calglRedisplayAllWindow2D();
 	}
 }
 
-void calglIdleFuncWindow2D(void){
-	if (calglGetGlobalSettings()->fixedDisplay && window2D->models[0]->calUpdater->calRun->step%calglGetGlobalSettings()->fixedStep == 0){
+void calglIdleFuncWindow2D(void) {
+	if(calglGetGlobalSettings()->fixedDisplay && window2D->models[0]->calUpdater->calRun->step%calglGetGlobalSettings()->fixedStep==0) {
 		calglRedisplayAllWindow2D();
 	}
 }
 
-void calglTimeFunc2D(int value){
+void calglTimeFunc2D(int value) {
 	glutTimerFunc(calglGetGlobalSettings()->refreshTime, calglTimeFunc2D, value);
 
-	if (!calglGetGlobalSettings()->fixedDisplay){
+	if(!calglGetGlobalSettings()->fixedDisplay) {
 		calglRedisplayAllWindow2D();
 	}
 }
 
-void calglCleanDrawModelList2D(){
-	if (models2D){
+void calglCleanDrawModelList2D() {
+	if(models2D) {
 		free(models2D);
 	}
 }
 
-void calglShowModel2D(struct CALDrawModel2D* model){
-	if (!models2D){
+void calglShowModel2D(struct CALDrawModel2D* model) {
+	if(!models2D) {
 		models2D = (struct CALDrawModel2D**) malloc(sizeof(struct CALDrawModel2D));
 	}
 
-	if (noModels2D >= capacityModels2D){
+	if(noModels2D>=capacityModels2D) {
 		calglIncreaseDrawModel2D();
 	}
 
 	models2D[noModels2D++] = model;
 }
 
-void calglIncreaseDrawModel2D(){
+void calglIncreaseDrawModel2D() {
 	int i = 0;
 	struct CALDrawModel2D** models = NULL;
 
 	capacityModels2D += 3;
 	models = (struct CALDrawModel2D**) malloc(sizeof(struct CALDrawModel2D) * (capacityModels2D));
 
-	for (i = 0; i < (capacityModels2D - 3); i++){
+	for(i = 0; i<(capacityModels2D-3); i++) {
 		models[i] = models2D[i];
 	}
 
@@ -493,7 +494,7 @@ void calglIncreaseDrawModel2D(){
 	models2D = models;
 }
 
-void calglPrintfInfoCommand2D(){
+void calglPrintfInfoCommand2D() {
 #ifdef WIN32
 	system("cls");
 #else
@@ -502,14 +503,16 @@ void calglPrintfInfoCommand2D(){
 	printf("*---------------------  Command  ---------------------*\n");
 	printf("* Point mouse over a sub window                       *\n");
 	printf("* Keep T key down and move mouse -> translate model   *\n");
+	printf("* Use arrows -> translate model						  *\n");
 	printf("* Left click and move mouse -> rotate model           *\n");
 	printf("* Right click and move mouse -> zoom in/out model     *\n");
 	printf("* Press X/S key -> Start/Stop Simulation              *\n");
 	printf("* Press H key -> Toggle on/off Information Bar Draw   *\n");
+	printf("* Press R key -> Reset models positions			      *\n");
 	printf("*-----------------------------------------------------*\n");
 }
 
-void calglDisplayBar2D(struct CALGLInfoBar* infoBar){
+void calglDisplayBar2D(struct CALGLInfoBar* infoBar) {
 	static GLfloat minimumDistanceX = 0;
 	static GLfloat minimumDistanceY = 0;
 	static GLint sub_width;
@@ -519,11 +522,11 @@ void calglDisplayBar2D(struct CALGLInfoBar* infoBar){
 	GLint i = 0;
 	GLfloat internalDistance = 0.0f;
 
-	if (calglGetGlobalSettings()->onlyModel){
+	if(calglGetGlobalSettings()->onlyModel) {
 		return;
 	}
 
-	if (infoBar->dimension == CALGL_INFO_BAR_DIMENSION_RELATIVE){
+	if(infoBar->dimension==CALGL_INFO_BAR_DIMENSION_RELATIVE) {
 #pragma region InfoBarRelativeDrawing
 		sub_width = window2D->sub_width;
 		sub_height = window2D->sub_height;
@@ -545,21 +548,21 @@ void calglDisplayBar2D(struct CALGLInfoBar* infoBar){
 				glMatrixMode(GL_MODELVIEW);
 				glLoadIdentity();
 
-				if (infoBar->orientation == CALGL_INFO_BAR_ORIENTATION_VERTICAL){ // Vertical bar
+				if(infoBar->orientation==CALGL_INFO_BAR_ORIENTATION_VERTICAL) { // Vertical bar
 					minimumDistanceX = (0.2f)*sub_width;
 					minimumDistanceY = (0.1f)*sub_height;
 
-					if (infoBar->barInitialization){
+					if(infoBar->barInitialization) {
 						calglSetInfoBarConstDimension(infoBar, sub_width * 0.1f, -1);
 						infoBar->width = infoBar->constWidth;
 					}
-					infoBar->height = (GLint)(sub_height - minimumDistanceY * 2);
+					infoBar->height = (GLint) (sub_height-minimumDistanceY*2);
 
-					infoBar->xPosition = sub_width - minimumDistanceX - infoBar->width;
-					infoBar->yPosition = sub_height - minimumDistanceY;
+					infoBar->xPosition = sub_width-minimumDistanceX-infoBar->width;
+					infoBar->yPosition = sub_height-minimumDistanceY;
 
 					glBegin(GL_QUADS); {
-						switch (infoBar->infoUse){
+						switch(infoBar->infoUse) {
 						case CALGL_TYPE_INFO_USE_GRAY_SCALE:
 							glColor3f(1.0f, 1.0f, 1.0f);
 							break;
@@ -576,10 +579,10 @@ void calglDisplayBar2D(struct CALGLInfoBar* infoBar){
 							glColor3f(1.0f, 1.0f, 1.0f);
 							break;
 						}
-						glVertex2f(infoBar->xPosition + infoBar->width, infoBar->yPosition);
+						glVertex2f(infoBar->xPosition+infoBar->width, infoBar->yPosition);
 						glVertex2f(infoBar->xPosition, infoBar->yPosition);
 
-						switch (infoBar->infoUse){
+						switch(infoBar->infoUse) {
 						case CALGL_TYPE_INFO_USE_RED_SCALE:
 							glColor3f(1.0f, 0.0f, 0.0f);
 							break;
@@ -587,44 +590,42 @@ void calglDisplayBar2D(struct CALGLInfoBar* infoBar){
 							glColor3f(0.0f, 0.0f, 0.0f);
 							break;
 						}
-						glVertex2f(infoBar->xPosition, infoBar->yPosition - infoBar->height);
-						glVertex2f(infoBar->xPosition + infoBar->width, infoBar->yPosition - infoBar->height);
+						glVertex2f(infoBar->xPosition, infoBar->yPosition-infoBar->height);
+						glVertex2f(infoBar->xPosition+infoBar->width, infoBar->yPosition-infoBar->height);
 					}glEnd();
 
 					glColor3f(1.0f, 1.0f, 1.0f);
-					calglPrintString2D(infoBar->xPosition + infoBar->width + normalDimension * 3, infoBar->yPosition, calglGetString2D(*infoBar->max));
-					calglPrintString2D(infoBar->xPosition + infoBar->width + normalDimension * 3, infoBar->yPosition - infoBar->height, calglGetString2D(*infoBar->min));
+					calglPrintString2D(infoBar->xPosition+infoBar->width+normalDimension*3, infoBar->yPosition, calglGetString2D(*infoBar->max));
+					calglPrintString2D(infoBar->xPosition+infoBar->width+normalDimension*3, infoBar->yPosition-infoBar->height, calglGetString2D(*infoBar->min));
 
-					internalDistance = infoBar->height / 10.0f;
+					internalDistance = infoBar->height/10.0f;
 
-					for (i = 0; i < 11; i++){
+					for(i = 0; i<11; i++) {
 						glBegin(GL_LINES); {
-							if (i % 5 == 0){
-								glVertex2f(infoBar->xPosition + infoBar->width, infoBar->yPosition - i*internalDistance);
-								glVertex2f(infoBar->xPosition + infoBar->width + normalDimension * 2, infoBar->yPosition - i*internalDistance);
-							}
-							else {
-								glVertex2f(infoBar->xPosition + infoBar->width, infoBar->yPosition - i*internalDistance);
-								glVertex2f(infoBar->xPosition + infoBar->width + smallDimension * 2, infoBar->yPosition - i*internalDistance);
+							if(i%5==0) {
+								glVertex2f(infoBar->xPosition+infoBar->width, infoBar->yPosition-i*internalDistance);
+								glVertex2f(infoBar->xPosition+infoBar->width+normalDimension*2, infoBar->yPosition-i*internalDistance);
+							} else {
+								glVertex2f(infoBar->xPosition+infoBar->width, infoBar->yPosition-i*internalDistance);
+								glVertex2f(infoBar->xPosition+infoBar->width+smallDimension*2, infoBar->yPosition-i*internalDistance);
 							}
 						} glEnd();
 					}
-				}
-				else { // Horizontal bar
+				} else { // Horizontal bar
 					minimumDistanceX = (0.1f)*sub_width;
 					minimumDistanceY = (0.1f)*sub_height;
 
-					if (infoBar->barInitialization){
+					if(infoBar->barInitialization) {
 						calglSetInfoBarConstDimension(infoBar, -1, sub_height * 0.1f);
 						infoBar->height = infoBar->constHeight;
 					}
-					infoBar->width = (GLint)(sub_width - minimumDistanceX * 2);
+					infoBar->width = (GLint) (sub_width-minimumDistanceX*2);
 
 					infoBar->xPosition = minimumDistanceX;
-					infoBar->yPosition = minimumDistanceY + infoBar->height;
+					infoBar->yPosition = minimumDistanceY+infoBar->height;
 
 					glBegin(GL_QUADS); {
-						switch (infoBar->infoUse){
+						switch(infoBar->infoUse) {
 						case CALGL_TYPE_INFO_USE_RED_SCALE:
 							glColor3f(1.0f, 0.0f, 0.0f);
 							break;
@@ -633,9 +634,9 @@ void calglDisplayBar2D(struct CALGLInfoBar* infoBar){
 							break;
 						}
 						glVertex2f(infoBar->xPosition, infoBar->yPosition);
-						glVertex2f(infoBar->xPosition, infoBar->yPosition - infoBar->height);
+						glVertex2f(infoBar->xPosition, infoBar->yPosition-infoBar->height);
 
-						switch (infoBar->infoUse){
+						switch(infoBar->infoUse) {
 						case CALGL_TYPE_INFO_USE_GRAY_SCALE:
 							glColor3f(1.0f, 1.0f, 1.0f);
 							break;
@@ -652,25 +653,24 @@ void calglDisplayBar2D(struct CALGLInfoBar* infoBar){
 							glColor3f(1.0f, 1.0f, 1.0f);
 							break;
 						}
-						glVertex2f(infoBar->xPosition + infoBar->width, infoBar->yPosition - infoBar->height);
-						glVertex2f(infoBar->xPosition + infoBar->width, infoBar->yPosition);
+						glVertex2f(infoBar->xPosition+infoBar->width, infoBar->yPosition-infoBar->height);
+						glVertex2f(infoBar->xPosition+infoBar->width, infoBar->yPosition);
 					}glEnd();
 
 					glColor3f(1.0f, 1.0f, 1.0f);
-					calglPrintString2D(infoBar->xPosition + infoBar->width, infoBar->yPosition - infoBar->height - normalDimension * 3, calglGetString2D(*infoBar->max));
-					calglPrintString2D(infoBar->xPosition, infoBar->yPosition - infoBar->height - normalDimension * 3, calglGetString2D(*infoBar->min));
+					calglPrintString2D(infoBar->xPosition+infoBar->width, infoBar->yPosition-infoBar->height-normalDimension*3, calglGetString2D(*infoBar->max));
+					calglPrintString2D(infoBar->xPosition, infoBar->yPosition-infoBar->height-normalDimension*3, calglGetString2D(*infoBar->min));
 
-					internalDistance = infoBar->width / 10.0f;
+					internalDistance = infoBar->width/10.0f;
 
-					for (i = 0; i < 11; i++){
+					for(i = 0; i<11; i++) {
 						glBegin(GL_LINES); {
-							if (i % 5 == 0){
-								glVertex2f(infoBar->xPosition + i*internalDistance, infoBar->yPosition - infoBar->height);
-								glVertex2f(infoBar->xPosition + i*internalDistance, infoBar->yPosition - infoBar->height - normalDimension * 2);
-							}
-							else {
-								glVertex2f(infoBar->xPosition + i*internalDistance, infoBar->yPosition - infoBar->height);
-								glVertex2f(infoBar->xPosition + i*internalDistance, infoBar->yPosition - infoBar->height - smallDimension * 2);
+							if(i%5==0) {
+								glVertex2f(infoBar->xPosition+i*internalDistance, infoBar->yPosition-infoBar->height);
+								glVertex2f(infoBar->xPosition+i*internalDistance, infoBar->yPosition-infoBar->height-normalDimension*2);
+							} else {
+								glVertex2f(infoBar->xPosition+i*internalDistance, infoBar->yPosition-infoBar->height);
+								glVertex2f(infoBar->xPosition+i*internalDistance, infoBar->yPosition-infoBar->height-smallDimension*2);
 							}
 						} glEnd();
 					}
@@ -678,14 +678,13 @@ void calglDisplayBar2D(struct CALGLInfoBar* infoBar){
 
 				// Print name
 				glColor3f(1.0f, 1.0f, 1.0f);
-				calglPrintConstString2D(infoBar->xPosition, infoBar->yPosition + 21, infoBar->substateName);
+				calglPrintConstString2D(infoBar->xPosition, infoBar->yPosition+21, infoBar->substateName);
 
 				glDepthMask(GL_TRUE);
 			}glPopMatrix();
 		}glPopAttrib();
 #pragma endregion
-	}
-	else if (infoBar->dimension == CALGL_INFO_BAR_DIMENSION_ABSOLUTE){
+	} else if(infoBar->dimension==CALGL_INFO_BAR_DIMENSION_ABSOLUTE) {
 #pragma region InfoBarAbsoluteDrawing
 		sub_width = window2D->sub_width;
 		sub_height = window2D->sub_height;
@@ -707,12 +706,12 @@ void calglDisplayBar2D(struct CALGLInfoBar* infoBar){
 				glMatrixMode(GL_MODELVIEW);
 				glLoadIdentity();
 
-				if (infoBar->orientation == CALGL_INFO_BAR_ORIENTATION_VERTICAL){ // Vertical bar
+				if(infoBar->orientation==CALGL_INFO_BAR_ORIENTATION_VERTICAL) { // Vertical bar
 					minimumDistanceX = (0.2f)*sub_width;
 					minimumDistanceY = (0.1f)*sub_height;
 
 					glBegin(GL_QUADS); {
-						switch (infoBar->infoUse){
+						switch(infoBar->infoUse) {
 						case CALGL_TYPE_INFO_USE_GRAY_SCALE:
 							glColor3f(1.0f, 1.0f, 1.0f);
 							break;
@@ -729,10 +728,10 @@ void calglDisplayBar2D(struct CALGLInfoBar* infoBar){
 							glColor3f(1.0f, 1.0f, 1.0f);
 							break;
 						}
-						glVertex2f(infoBar->xPosition + infoBar->width, infoBar->yPosition);
+						glVertex2f(infoBar->xPosition+infoBar->width, infoBar->yPosition);
 						glVertex2f(infoBar->xPosition, infoBar->yPosition);
 
-						switch (infoBar->infoUse){
+						switch(infoBar->infoUse) {
 						case CALGL_TYPE_INFO_USE_RED_SCALE:
 							glColor3f(1.0f, 0.0f, 0.0f);
 							break;
@@ -740,35 +739,33 @@ void calglDisplayBar2D(struct CALGLInfoBar* infoBar){
 							glColor3f(0.0f, 0.0f, 0.0f);
 							break;
 						}
-						glVertex2f(infoBar->xPosition, infoBar->yPosition - infoBar->height);
-						glVertex2f(infoBar->xPosition + infoBar->width, infoBar->yPosition - infoBar->height);
+						glVertex2f(infoBar->xPosition, infoBar->yPosition-infoBar->height);
+						glVertex2f(infoBar->xPosition+infoBar->width, infoBar->yPosition-infoBar->height);
 					}glEnd();
 
 					glColor3f(1.0f, 1.0f, 1.0f);
-					calglPrintString2D(infoBar->xPosition + infoBar->width + normalDimension * 3, infoBar->yPosition, calglGetString2D(*infoBar->max));
-					calglPrintString2D(infoBar->xPosition + infoBar->width + normalDimension * 3, infoBar->yPosition - infoBar->height, calglGetString2D(*infoBar->min));
+					calglPrintString2D(infoBar->xPosition+infoBar->width+normalDimension*3, infoBar->yPosition, calglGetString2D(*infoBar->max));
+					calglPrintString2D(infoBar->xPosition+infoBar->width+normalDimension*3, infoBar->yPosition-infoBar->height, calglGetString2D(*infoBar->min));
 
-					internalDistance = infoBar->height / 10.0f;
+					internalDistance = infoBar->height/10.0f;
 
-					for (i = 0; i < 11; i++){
+					for(i = 0; i<11; i++) {
 						glBegin(GL_LINES); {
-							if (i % 5 == 0){
-								glVertex2f(infoBar->xPosition + infoBar->width, infoBar->yPosition - i*internalDistance);
-								glVertex2f(infoBar->xPosition + infoBar->width + normalDimension * 2, infoBar->yPosition - i*internalDistance);
-							}
-							else {
-								glVertex2f(infoBar->xPosition + infoBar->width, infoBar->yPosition - i*internalDistance);
-								glVertex2f(infoBar->xPosition + infoBar->width + smallDimension * 2, infoBar->yPosition - i*internalDistance);
+							if(i%5==0) {
+								glVertex2f(infoBar->xPosition+infoBar->width, infoBar->yPosition-i*internalDistance);
+								glVertex2f(infoBar->xPosition+infoBar->width+normalDimension*2, infoBar->yPosition-i*internalDistance);
+							} else {
+								glVertex2f(infoBar->xPosition+infoBar->width, infoBar->yPosition-i*internalDistance);
+								glVertex2f(infoBar->xPosition+infoBar->width+smallDimension*2, infoBar->yPosition-i*internalDistance);
 							}
 						} glEnd();
 					}
-				}
-				else { // Horizontal bar
+				} else { // Horizontal bar
 					minimumDistanceX = (0.1f)*sub_width;
 					minimumDistanceY = (0.1f)*sub_height;
 
 					glBegin(GL_QUADS); {
-						switch (infoBar->infoUse){
+						switch(infoBar->infoUse) {
 						case CALGL_TYPE_INFO_USE_RED_SCALE:
 							glColor3f(1.0f, 0.0f, 0.0f);
 							break;
@@ -777,9 +774,9 @@ void calglDisplayBar2D(struct CALGLInfoBar* infoBar){
 							break;
 						}
 						glVertex2f(infoBar->xPosition, infoBar->yPosition);
-						glVertex2f(infoBar->xPosition, infoBar->yPosition - infoBar->height);
+						glVertex2f(infoBar->xPosition, infoBar->yPosition-infoBar->height);
 
-						switch (infoBar->infoUse){
+						switch(infoBar->infoUse) {
 						case CALGL_TYPE_INFO_USE_GRAY_SCALE:
 							glColor3f(1.0f, 1.0f, 1.0f);
 							break;
@@ -796,25 +793,24 @@ void calglDisplayBar2D(struct CALGLInfoBar* infoBar){
 							glColor3f(1.0f, 1.0f, 1.0f);
 							break;
 						}
-						glVertex2f(infoBar->xPosition + infoBar->width, infoBar->yPosition - infoBar->height);
-						glVertex2f(infoBar->xPosition + infoBar->width, infoBar->yPosition);
+						glVertex2f(infoBar->xPosition+infoBar->width, infoBar->yPosition-infoBar->height);
+						glVertex2f(infoBar->xPosition+infoBar->width, infoBar->yPosition);
 					}glEnd();
 
 					glColor3f(1.0f, 1.0f, 1.0f);
-					calglPrintString2D(infoBar->xPosition + infoBar->width, infoBar->yPosition - infoBar->height - normalDimension * 3, calglGetString2D(*infoBar->max));
-					calglPrintString2D(infoBar->xPosition, infoBar->yPosition - infoBar->height - normalDimension * 3, calglGetString2D(*infoBar->min));
+					calglPrintString2D(infoBar->xPosition+infoBar->width, infoBar->yPosition-infoBar->height-normalDimension*3, calglGetString2D(*infoBar->max));
+					calglPrintString2D(infoBar->xPosition, infoBar->yPosition-infoBar->height-normalDimension*3, calglGetString2D(*infoBar->min));
 
-					internalDistance = infoBar->width / 10.0f;
+					internalDistance = infoBar->width/10.0f;
 
-					for (i = 0; i < 11; i++){
+					for(i = 0; i<11; i++) {
 						glBegin(GL_LINES); {
-							if (i % 5 == 0){
-								glVertex2f(infoBar->xPosition + i*internalDistance, infoBar->yPosition - infoBar->height);
-								glVertex2f(infoBar->xPosition + i*internalDistance, infoBar->yPosition - infoBar->height - normalDimension * 2);
-							}
-							else {
-								glVertex2f(infoBar->xPosition + i*internalDistance, infoBar->yPosition - infoBar->height);
-								glVertex2f(infoBar->xPosition + i*internalDistance, infoBar->yPosition - infoBar->height - smallDimension * 2);
+							if(i%5==0) {
+								glVertex2f(infoBar->xPosition+i*internalDistance, infoBar->yPosition-infoBar->height);
+								glVertex2f(infoBar->xPosition+i*internalDistance, infoBar->yPosition-infoBar->height-normalDimension*2);
+							} else {
+								glVertex2f(infoBar->xPosition+i*internalDistance, infoBar->yPosition-infoBar->height);
+								glVertex2f(infoBar->xPosition+i*internalDistance, infoBar->yPosition-infoBar->height-smallDimension*2);
 							}
 						} glEnd();
 					}
@@ -822,7 +818,7 @@ void calglDisplayBar2D(struct CALGLInfoBar* infoBar){
 
 				// Print name
 				glColor3f(1.0f, 1.0f, 1.0f);
-				calglPrintConstString2D(infoBar->xPosition, infoBar->yPosition + 21, infoBar->substateName);
+				calglPrintConstString2D(infoBar->xPosition, infoBar->yPosition+21, infoBar->substateName);
 
 				glDepthMask(GL_TRUE);
 			}glPopMatrix();
@@ -833,29 +829,28 @@ void calglDisplayBar2D(struct CALGLInfoBar* infoBar){
 	calglSubReshapeWindow2D(sub_width, sub_height);
 }
 
-char* calglGetString2D(GLdouble number){
+char* calglGetString2D(GLdouble number) {
 	char* toReturn = NULL;
-	GLint tmp = (GLint)(number * 100);
+	GLint tmp = (GLint) (number*100);
 	GLint tmpSave = tmp;
 	GLint dimension = 0;
 	GLint i = 0;
 
-	while (tmp > 0){
+	while(tmp>0) {
 		tmp /= 10;
 		dimension++;
 	}
 	dimension += 2;
 	tmp = tmpSave;
 
-	toReturn = (char*)malloc(sizeof(char)*dimension);
+	toReturn = (char*) malloc(sizeof(char)*dimension);
 
-	toReturn[dimension - 1] = '\0';
-	for (i = dimension - 2; i >= 0; i--){
-		if (i == dimension - 4){
+	toReturn[dimension-1] = '\0';
+	for(i = dimension-2; i>=0; i--) {
+		if(i==dimension-4) {
 			toReturn[i] = ',';
-		}
-		else {
-			switch (tmp % 10){
+		} else {
+			switch(tmp%10) {
 			case 0: toReturn[i] = '0'; break;
 			case 1: toReturn[i] = '1'; break;
 			case 2: toReturn[i] = '2'; break;
@@ -875,27 +870,31 @@ char* calglGetString2D(GLdouble number){
 	return toReturn;
 }
 
-void calglPrintString2D(GLfloat x, GLfloat y, char *string){
+void calglPrintString2D(GLfloat x, GLfloat y, char *string) {
 	int i = 0;
 	//get the length of the string to display
-	int len = (int)strlen(string);
+	int len = (int) strlen(string);
 	//set the position of the text in the window using the x and y coordinates
 	glRasterPos2f(x, y);
 	//loop to display character by character
-	for (i = 0; i < len; i++){
+	for(i = 0; i<len; i++) {
 		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, string[i]);
 	}
 	free(string);
 }
 
-void calglPrintConstString2D(GLfloat x, GLfloat y, const char *string){
+void calglPrintConstString2D(GLfloat x, GLfloat y, const char *string) {
 	int i = 0;
 	//get the length of the string to display
-	int len = (int)strlen(string);
+	int len = (int) strlen(string);
 	//set the position of the text in the window using the x and y coordinates
 	glRasterPos2f(x, y);
 	//loop to display character by character
-	for (i = 0; i < len; i++){
+	for(i = 0; i<len; i++) {
 		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, string[i]);
 	}
+}
+
+void calglSetLayoutOrientation2D(enum CALGL_LAYOUT_ORIENTATION newOrientation) {
+	orientation = newOrientation;
 }

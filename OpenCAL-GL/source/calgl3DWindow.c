@@ -38,6 +38,8 @@ static GLint key_old_x, key_old_y;
 static CALbyte translationOn = CAL_FALSE;
 static GLint activeSubWindow = -1;
 
+static enum CALGL_LAYOUT_ORIENTATION orientation = CALGL_LAYOUT_ORIENTATION_UNKNOW;
+
 struct CALWindow3D* calglCreateWindow3D(int argc, char** argv, struct CALGLGlobalSettings* globalSettings, struct CALDrawModel3D** models, int size){
 	struct CALWindow3D* window = (struct CALWindow3D*) malloc(sizeof(struct CALWindow3D));
 	GLint i = 0;
@@ -86,6 +88,9 @@ struct CALWindow3D* calglCreateWindow3D(int argc, char** argv, struct CALGLGloba
 	}
 
 	window->font_style = GLUT_BITMAP_8_BY_13;
+
+	if(orientation==CALGL_LAYOUT_ORIENTATION_UNKNOW)
+		orientation = CALGL_LAYOUT_ORIENTATION_HORIZONTAL;
 
 	window3D = window;
 	return window;
@@ -235,8 +240,13 @@ void calglCalculatePositionAndDimensionWindow3D(struct CALWindow3D* window){
 		noSubWindowX = noSubWindowY = 1;
 	}
 	else if (window->noModels == 2) {
-		noSubWindowX = 2;
-		noSubWindowY = 1;
+		if(orientation==CALGL_LAYOUT_ORIENTATION_HORIZONTAL) {
+			noSubWindowX = 2;
+			noSubWindowY = 1;
+		} else {
+			noSubWindowX = 1;
+			noSubWindowY = 2;
+		}
 	}
 	else {
 		noSubWindowX = (GLint)ceil(sqrt((GLdouble)window->noModels));
@@ -495,10 +505,12 @@ void calglPrintfInfoCommand3D(){
 	printf("*---------------------  Command  ---------------------*\n");
 	printf("* Point mouse over a sub window                       *\n");
 	printf("* Keep T key down and move mouse -> translate model   *\n");
+	printf("* Use arrows -> translate model						  *\n");
 	printf("* Left click and move mouse -> rotate model           *\n");
 	printf("* Right click and move mouse -> zoom in/out model     *\n");
 	printf("* Press X/S key -> Start/Stop Simulation              *\n");
 	printf("* Press H key -> Toggle on/off Information Bar Draw   *\n");
+	printf("* Press R key -> Reset models positions			      *\n");
 	printf("*-----------------------------------------------------*\n");
 }
 
@@ -869,4 +881,6 @@ void calglPrintConstString3D(GLfloat x, GLfloat y, const char *string){
 	}
 }
 
-
+void calglSetLayoutOrientation3D(enum CALGL_LAYOUT_ORIENTATION newOrientation) {
+	orientation = newOrientation;
+}

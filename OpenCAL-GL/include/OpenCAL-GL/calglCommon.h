@@ -74,4 +74,12 @@ enum CALGL_INFO_BAR_ORIENTATION{
 	CALGL_INFO_BAR_ORIENTATION_HORIZONTAL	//!< Enumerator used for specify a horizontal infomation bar.
 };
 
+/*! \brief Enumeration that specify layout orientation when there are two models to draw.
+*/
+enum CALGL_LAYOUT_ORIENTATION {
+	CALGL_LAYOUT_ORIENTATION_UNKNOW = 0,	//!< Enumerator used for an unknow layout orientation.
+	CALGL_LAYOUT_ORIENTATION_VERTICAL,		//!< Enumerator used for specify a vertical layout orientation.
+	CALGL_LAYOUT_ORIENTATION_HORIZONTAL		//!< Enumerator used for specify a horizontal layout orientation.
+};
+
 #endif
