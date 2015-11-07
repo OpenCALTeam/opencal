@@ -385,7 +385,7 @@ void calglRelativeInfoBar3Dr(
 	This is the absolute version, in which the display bar is positioned according to the position specified by the user.
 	This is for byte substate.
 */
-void calglAbsoluteInfoBar3Db(
+void calglInfoBar3Db(
 	struct CALDrawModel3D* calDrawModel,		//!< The pointer to CALDrawModel. 
 	struct CALSubstate3Db* substate,  			//!< The pointer to the substate to which display informations.
 	const char* substateName,  					//!< The substate name. 
@@ -399,7 +399,7 @@ void calglAbsoluteInfoBar3Db(
 	This is the absolute version, in which the display bar is positioned according to the position specified by the user.
 	This is for byte substate.
 */
-void calglAbsoluteInfoBar3Di(
+void calglInfoBar3Di(
 	struct CALDrawModel3D* calDrawModel,		//!< The pointer to CALDrawModel. 
 	struct CALSubstate3Di* substate,  			//!< The pointer to the substate to which display informations.
 	const char* substateName,  					//!< The substate name. 
@@ -413,7 +413,7 @@ void calglAbsoluteInfoBar3Di(
 	This is the absolute version, in which the display bar is positioned according to the position specified by the user.
 	This is for byte substate.
 */
-void calglAbsoluteInfoBar3Dr(
+void calglInfoBar3Dr(
 	struct CALDrawModel3D* calDrawModel, 		//!< The pointer to CALDrawModel.
 	struct CALSubstate3Dr* substate,  			//!< The pointer to the substate to which display informations.
 	const char* substateName,  					//!< The substate name. 

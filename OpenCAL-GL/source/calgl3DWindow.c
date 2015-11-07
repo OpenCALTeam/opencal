@@ -330,6 +330,8 @@ void calglSpecialKeyboardEventWindow3D(int key, int x, int y){
 }
 
 void calglKeyboardEventWindow3D(unsigned char key, int x, int y){
+	int i = 0;
+
 	if (key == 't'){
 		x -= window3D->sub_width / 2;
 		y -= window3D->sub_height / 2;
@@ -356,6 +358,14 @@ void calglKeyboardEventWindow3D(unsigned char key, int x, int y){
 	if (key == 'x' || key == 's'){
 		if (window3D->models[0]->calUpdater){
 			window3D->models[0]->calUpdater->active = !window3D->models[0]->calUpdater->active;
+		}
+	}
+
+	if(key=='r') {
+		for(i = 0; i < window3D->noModels; i++) {
+			xPos[i] = 0.0f;	yPos[i] = 0.0f;	zPos[i] = 0.0f;
+			xRot[i] = 0.0f; yRot[i] = 0.0f; zRot[i] = 0.0f;
+			xRot[i] = 90.0f;
 		}
 	}
 

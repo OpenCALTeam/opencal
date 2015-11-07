@@ -33,6 +33,7 @@ static struct CALDrawModel2D** models2D = NULL;
 // Worlds Properties
 static GLfloat mouseSensitivity = 0.2f;
 static GLfloat keyboardSensitivity = 0.02f;
+static GLfloat defaultPositionAndRotation = 0.0f;
 static GLfloat *xPos = NULL, *yPos = NULL, *zPos = NULL;
 static GLfloat *xRot = NULL, *yRot = NULL, *zRot = NULL;
 // Mouse And Keyboard data
@@ -336,6 +337,8 @@ void calglSpecialKeyboardEventWindow2D(int key, int x, int y){
 }
 
 void calglKeyboardEventWindow2D(unsigned char key, int x, int y){
+	int i = 0;
+
 	if (key == 't'){
 		x -= window2D->sub_width / 2;
 		y -= window2D->sub_height / 2;
@@ -362,6 +365,14 @@ void calglKeyboardEventWindow2D(unsigned char key, int x, int y){
 	if (key == 'x' || key == 's'){
 		if (window2D->models[0]->calUpdater){
 			window2D->models[0]->calUpdater->active = !window2D->models[0]->calUpdater->active;
+		}
+	}
+
+	if(key=='r') {
+		for(i = 0; i < window2D->noModels; i++) {
+			xPos[i] = 0.0f;	yPos[i] = 0.0f;	zPos[i] = 0.0f;
+			xRot[i] = 0.0f; yRot[i] = 0.0f; zRot[i] = 0.0f;
+			xRot[i] = 90.0f;
 		}
 	}
 

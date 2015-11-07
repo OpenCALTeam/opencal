@@ -65,13 +65,16 @@ void calglDestroyGlobalSettings(){
 	}
 }
 
-void calglInitViewer(char* applicationName, float cellSize, int width, int height, int positionX, int positionY, CALbyte enableLight) {
+void calglInitViewer(char* applicationName, float cellSize, int width, int height, int positionX, int positionY, CALbyte enableLight, int displayStep) {
 	calglSetApplicationName(applicationName);
 	calglSetCellSize(cellSize);
 	calglSetWindowDimension(width, height);
 	calglSetWindowPosition(positionX, positionY);
 	if(enableLight)
 		calglEnableLights();
+	if(displayStep>0) {
+		calglSetDisplayStep(displayStep);
+	}
 }
 
 void calglSetApplicationName(char* applicationName){
@@ -164,7 +167,7 @@ void calglSetRefreshTime(int time){
 	globalSettings->refreshTime = time;
 }
 
-void calglSetFixedDisplayStep(int step){
+void calglSetDisplayStep(int step){
 	if(!globalSettings){
 		globalSettings = calglCreateGlobalSettings();
 	}

@@ -102,7 +102,7 @@ struct CALGLInfoBar* calglCreateRelativeInfoBar3Dr(
 /*! \brief Constructor for an absolute information bar.
 	This is for a 2D byte substate.
 */
-struct CALGLInfoBar* calglCreateAbsoluteInfoBar2Db(
+struct CALGLInfoBar* calglCreateInfoBar2Db(
 	const char* substateName, 						//!< Infomation bar's name.
 	enum CALGL_TYPE_INFO_USE infoUse, 				//!< Color gradient that must be used.
 	struct CALDrawModel2D* calDrawModel, 			//!< Pointer to the structure for which retrive the substate. 
@@ -115,7 +115,7 @@ struct CALGLInfoBar* calglCreateAbsoluteInfoBar2Db(
 /*! \brief Constructor for an absolute information bar.
 	This is for a 2D int substate.
 */
-struct CALGLInfoBar* calglCreateAbsoluteInfoBar2Di(
+struct CALGLInfoBar* calglCreateInfoBar2Di(
 	const char* substateName, 						//!< Infomation bar's name.
 	enum CALGL_TYPE_INFO_USE infoUse, 				//!< Color gradient that must be used.
 	struct CALDrawModel2D* calDrawModel, 			//!< Pointer to the structure for which retrive the substate. 
@@ -128,7 +128,7 @@ struct CALGLInfoBar* calglCreateAbsoluteInfoBar2Di(
 /*! \brief Constructor for an absolute information bar.
 	This is for a 2D real substate.
 */
-struct CALGLInfoBar* calglCreateAbsoluteInfoBar2Dr(
+struct CALGLInfoBar* calglCreateInfoBar2Dr(
 	const char* substateName, 						//!< Infomation bar's name.
 	enum CALGL_TYPE_INFO_USE infoUse, 				//!< Color gradient that must be used.
 	struct CALDrawModel2D* calDrawModel, 			//!< Pointer to the structure for which retrive the substate. 
@@ -141,7 +141,7 @@ struct CALGLInfoBar* calglCreateAbsoluteInfoBar2Dr(
 /*! \brief Constructor for an absolute information bar.
 	This is for a 3D byte substate.
 */
-struct CALGLInfoBar* calglCreateAbsoluteInfoBar3Db(
+struct CALGLInfoBar* calglCreateInfoBar3Db(
 	const char* substateName, 						//!< Infomation bar's name.
 	enum CALGL_TYPE_INFO_USE infoUse, 				//!< Color gradient that must be used.
 	struct CALDrawModel3D* calDrawModel, 			//!< Pointer to the structure for which retrive the substate. 
@@ -154,7 +154,7 @@ struct CALGLInfoBar* calglCreateAbsoluteInfoBar3Db(
 /*! \brief Constructor for an absolute information bar.
 	This is for a 3D int substate.
 */
-struct CALGLInfoBar* calglCreateAbsoluteInfoBar3Di(
+struct CALGLInfoBar* calglCreateInfoBar3Di(
 	const char* substateName, 						//!< Infomation bar's name.
 	enum CALGL_TYPE_INFO_USE infoUse, 				//!< Color gradient that must be used.
 	struct CALDrawModel3D* calDrawModel, 			//!< Pointer to the structure for which retrive the substate. 
@@ -167,7 +167,7 @@ struct CALGLInfoBar* calglCreateAbsoluteInfoBar3Di(
 /*! \brief Constructor for an absolute information bar.
 	This is for a 3D real substate.
 */
-struct CALGLInfoBar* calglCreateAbsoluteInfoBar3Dr(
+struct CALGLInfoBar* calglCreateInfoBar3Dr(
 	const char* substateName, 						//!< Infomation bar's name.
 	enum CALGL_TYPE_INFO_USE infoUse, 				//!< Color gradient that must be used.
 	struct CALDrawModel3D* calDrawModel, 			//!< Pointer to the structure for which retrive the substate. 

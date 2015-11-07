@@ -56,7 +56,8 @@ void calglInitViewer(
 	int height, 			//!< Window height.
 	int positionX, 			//!< Window x position.
 	int positionY, 			//!< Window y position.
-	CALbyte enableLight		//!< Boolean for enabling light.
+	CALbyte enableLight,	//!< Boolean for enabling light.
+	int displayStep			//!< Value to which refresh the drawing.
 	);
 
 /*! \brief Function for set an application's name.
@@ -132,7 +133,7 @@ void calglSetRefreshTime(
 
 /*! \brief Function for set the fixed display step.
 */
-void calglSetFixedDisplayStep(
+void calglSetDisplayStep(
 	int step	//!< Fixed step.
 	);
 

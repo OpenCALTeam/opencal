@@ -174,7 +174,7 @@ int main(int argc, char** argv)
 	struct CALDrawModel2D* model1 = NULL;
 	struct CALDrawModel2D* model2;
 
-	calglInitViewer("RealDraw", 5, 800, 600, 10, 10, CAL_TRUE);
+	calglInitViewer("RealDraw", 5, 800, 600, 10, 10, CAL_TRUE, 0);
 
 	//cadef and rundef
 	sciddicaT = calCADef2D(ROWS, COLUMNS, CAL_VON_NEUMANN_NEIGHBORHOOD_2D, CAL_SPACE_TOROIDAL, CAL_NO_OPT);
@@ -213,7 +213,7 @@ int main(int argc, char** argv)
 	calglAddToDrawModel2Dr(model1, Q.h, &Q.h, CALGL_TYPE_INFO_NORMAL_DATA, CALGL_TYPE_INFO_USE_DEFAULT, CALGL_DATA_TYPE_DYNAMIC);
 	// InfoBar
 	//calglRelativeInfoBar2Dr(model1, Q.h, "Debris thickness", CALGL_TYPE_INFO_USE_RED_SCALE, CALGL_INFO_BAR_ORIENTATION_VERTICAL);
-	calglAbsoluteInfoBar2Dr(model1, Q.h, "Debris thickness", CALGL_TYPE_INFO_USE_RED_SCALE, 20, 120, 300, 80);
+	calglInfoBar2Dr(model1, Q.h, "Debris thickness", CALGL_TYPE_INFO_USE_RED_SCALE, 20, 120, 300, 80);
 
 	// New functions for hide/display intervals of cells
 	//calglHideDrawJBound2D(model1, 0, model1->calModel->columns);
@@ -222,7 +222,7 @@ int main(int argc, char** argv)
 
 	model2 = calglDefDrawModel2D(CALGL_DRAW_MODE_FLAT, "model2", sciddicaT, sciddicaTsimulation);
 	model2->realModel = model1->realModel;
-	calglAbsoluteInfoBar2Dr(model2, Q.h, "Debris thickness", CALGL_TYPE_INFO_USE_RED_SCALE, 20, 200, 50, 150);
+	calglInfoBar2Dr(model2, Q.h, "Debris thickness", CALGL_TYPE_INFO_USE_RED_SCALE, 20, 200, 50, 150);
 
 	calglStartProcessWindow2D(argc, argv);
 

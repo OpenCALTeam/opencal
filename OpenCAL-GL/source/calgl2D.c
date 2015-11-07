@@ -1275,17 +1275,17 @@ void calglRelativeInfoBar2Dr(struct CALDrawModel2D* calDrawModel, struct CALSubs
 	calglDestroyInfoBar(calDrawModel->infoBar);
 	calDrawModel->infoBar = calglCreateRelativeInfoBar2Dr(substateName, infoUse, calDrawModel, substate, orientation);
 }
-void calglAbsoluteInfoBar2Db(struct CALDrawModel2D* calDrawModel, struct CALSubstate2Db* substate, const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, GLfloat xPosition, GLfloat yPosition, GLint width, GLint height){
+void calglInfoBar2Db(struct CALDrawModel2D* calDrawModel, struct CALSubstate2Db* substate, const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, GLfloat xPosition, GLfloat yPosition, GLint width, GLint height){
 	calglDestroyInfoBar(calDrawModel->infoBar);
-	calDrawModel->infoBar = calglCreateAbsoluteInfoBar2Db(substateName, infoUse, calDrawModel, substate, xPosition, yPosition, width, height);
+	calDrawModel->infoBar = calglCreateInfoBar2Db(substateName, infoUse, calDrawModel, substate, xPosition, yPosition, width, height);
 }
-void calglAbsoluteInfoBar2Di(struct CALDrawModel2D* calDrawModel, struct CALSubstate2Di* substate, const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, GLfloat xPosition, GLfloat yPosition, GLint width, GLint height){
+void calglInfoBar2Di(struct CALDrawModel2D* calDrawModel, struct CALSubstate2Di* substate, const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, GLfloat xPosition, GLfloat yPosition, GLint width, GLint height){
 	calglDestroyInfoBar(calDrawModel->infoBar);
-	calDrawModel->infoBar = calglCreateAbsoluteInfoBar2Di(substateName, infoUse, calDrawModel, substate, xPosition, yPosition, width, height);
+	calDrawModel->infoBar = calglCreateInfoBar2Di(substateName, infoUse, calDrawModel, substate, xPosition, yPosition, width, height);
 }
-void calglAbsoluteInfoBar2Dr(struct CALDrawModel2D* calDrawModel, struct CALSubstate2Dr* substate, const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, GLfloat xPosition, GLfloat yPosition, GLint width, GLint height){
+void calglInfoBar2Dr(struct CALDrawModel2D* calDrawModel, struct CALSubstate2Dr* substate, const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, GLfloat xPosition, GLfloat yPosition, GLint width, GLint height){
 	calglDestroyInfoBar(calDrawModel->infoBar);
-	calDrawModel->infoBar = calglCreateAbsoluteInfoBar2Dr(substateName, infoUse, calDrawModel, substate, xPosition, yPosition, width, height);
+	calDrawModel->infoBar = calglCreateInfoBar2Dr(substateName, infoUse, calDrawModel, substate, xPosition, yPosition, width, height);
 }
 #pragma endregion
 

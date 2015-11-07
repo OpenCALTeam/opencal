@@ -1099,17 +1099,17 @@ void calglRelativeInfoBar3Dr (struct CALDrawModel3D* calDrawModel, struct CALSub
 	calglDestroyInfoBar (calDrawModel->infoBar);
 	calDrawModel->infoBar = calglCreateRelativeInfoBar3Dr (substateName, CALGL_TYPE_INFO_USE_RED_SCALE, calDrawModel, substate, orientation);
 }
-void calglAbsoluteInfoBar3Db (struct CALDrawModel3D* calDrawModel, struct CALSubstate3Db* substate, const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, GLfloat xPosition, GLfloat yPosition, GLint width, GLint height) {
+void calglInfoBar3Db (struct CALDrawModel3D* calDrawModel, struct CALSubstate3Db* substate, const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, GLfloat xPosition, GLfloat yPosition, GLint width, GLint height) {
 	calglDestroyInfoBar (calDrawModel->infoBar);
-	calDrawModel->infoBar = calglCreateAbsoluteInfoBar3Db (substateName, infoUse, calDrawModel, substate, xPosition, yPosition, width, height);
+	calDrawModel->infoBar = calglCreateInfoBar3Db (substateName, infoUse, calDrawModel, substate, xPosition, yPosition, width, height);
 }
-void calglAbsoluteInfoBar3Di (struct CALDrawModel3D* calDrawModel, struct CALSubstate3Di* substate, const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, GLfloat xPosition, GLfloat yPosition, GLint width, GLint height) {
+void calglInfoBar3Di (struct CALDrawModel3D* calDrawModel, struct CALSubstate3Di* substate, const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, GLfloat xPosition, GLfloat yPosition, GLint width, GLint height) {
 	calglDestroyInfoBar (calDrawModel->infoBar);
-	calDrawModel->infoBar = calglCreateAbsoluteInfoBar3Di (substateName, infoUse, calDrawModel, substate, xPosition, yPosition, width, height);
+	calDrawModel->infoBar = calglCreateInfoBar3Di (substateName, infoUse, calDrawModel, substate, xPosition, yPosition, width, height);
 }
-void calglAbsoluteInfoBar3Dr (struct CALDrawModel3D* calDrawModel, struct CALSubstate3Dr* substate, const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, GLfloat xPosition, GLfloat yPosition, GLint width, GLint height) {
+void calglInfoBar3Dr (struct CALDrawModel3D* calDrawModel, struct CALSubstate3Dr* substate, const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, GLfloat xPosition, GLfloat yPosition, GLint width, GLint height) {
 	calglDestroyInfoBar (calDrawModel->infoBar);
-	calDrawModel->infoBar = calglCreateAbsoluteInfoBar3Dr (substateName, infoUse, calDrawModel, substate, xPosition, yPosition, width, height);
+	calDrawModel->infoBar = calglCreateInfoBar3Dr (substateName, infoUse, calDrawModel, substate, xPosition, yPosition, width, height);
 }
 #pragma endregion
 
