@@ -58,10 +58,7 @@ CALbyte life3DSimulationStopCondition(struct CALModel3D* life3D)
 //------------------------------------------------------------------------------
 
 int main(int argc, char** argv){
-	calglSetApplicationName("3D life");
-	calglSetWindowDimension(400, 400);
-	calglSetWindowPosition(40, 40);
-	calglEnableLights();
+	calglInitViewer("3D life", 1.0f, 400, 400, 40, 40, CAL_TRUE);
 
 	struct CALDrawModel3D* drawModel;
 
@@ -86,21 +83,17 @@ int main(int argc, char** argv){
 	calglAddToDrawModel3Db(drawModel, Q.life, &Q.life, CALGL_TYPE_INFO_NORMAL_DATA, CALGL_TYPE_INFO_USE_DEFAULT, CALGL_DATA_TYPE_DYNAMIC); 
 	
 	// New functions for hide/display intervals of cells
-	calglHideDrawKBound3D(drawModel, 0, drawModel->calModel->slices);
-	calglDisplayDrawKBound3D(drawModel, 4, 10);
-	calglDisplayDrawKBound3D(drawModel, 20, 25);	
-	calglHideDrawJBound3D(drawModel, 0, drawModel->calModel->columns);
-	calglDisplayDrawJBound3D(drawModel, 2, 6);
-	calglDisplayDrawJBound3D(drawModel, 18, 21);
-
-
+	//calglHideDrawKBound3D(drawModel, 0, drawModel->calModel->slices);
+	//calglDisplayDrawKBound3D(drawModel, 4, 10);
+	//calglDisplayDrawKBound3D(drawModel, 20, 25);	
+	//calglHideDrawJBound3D(drawModel, 0, drawModel->calModel->columns);
+	//calglDisplayDrawJBound3D(drawModel, 2, 6);
+	//calglDisplayDrawJBound3D(drawModel, 18, 21);
+	
 	calglStartProcessWindow3D(argc, argv);
 
 	//finalizations
 	calRunFinalize3D(life3Dsimulation);
 	calFinalize3D(life3D);
-
-	calglDestroyGlobalSettings();
-	calglCleanDrawModelList3D();
 	return 0;
 }

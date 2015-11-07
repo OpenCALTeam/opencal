@@ -119,6 +119,7 @@ void calglDestroyWindow2D(struct CALWindow2D* window){
 	}
 
 	calglCleanDrawModelList2D();
+	calglDestroyGlobalSettings();
 }
 
 void calglRedisplayAllWindow2D(void){

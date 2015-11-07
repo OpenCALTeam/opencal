@@ -65,6 +65,15 @@ void calglDestroyGlobalSettings(){
 	}
 }
 
+void calglInitViewer(char* applicationName, float cellSize, int width, int height, int positionX, int positionY, CALbyte enableLight) {
+	calglSetApplicationName(applicationName);
+	calglSetCellSize(cellSize);
+	calglSetWindowDimension(width, height);
+	calglSetWindowPosition(positionX, positionY);
+	if(enableLight)
+		calglEnableLights();
+}
+
 void calglSetApplicationName(char* applicationName){
 	if(!globalSettings){
 		globalSettings = calglCreateGlobalSettings();

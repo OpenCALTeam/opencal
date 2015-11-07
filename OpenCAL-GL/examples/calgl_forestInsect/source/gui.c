@@ -7,12 +7,7 @@
 #include <OpenCAL-GL/calgl2DWindow.h>
 
 int main(int argc, char** argv){
-	calglSetApplicationName("Forest Insect");
-	calglSetCellSize(4.1f);
-	calglSetWindowDimension(720, 640);
-	calglSetWindowPosition(0, 0);
-	calglEnableLights();
-	//calglSetFixedDisplayStep(50);
+	calglInitViewer("Forest Insect", 4.1f, 720, 640, 0, 0, CAL_TRUE);
 
 	forestInsectCADef();
 
@@ -20,7 +15,6 @@ int main(int argc, char** argv){
 
 	// Free Heap Memory
 	forestInsectExit();
-	calglDestroyGlobalSettings();
 	return 0;
 }
 

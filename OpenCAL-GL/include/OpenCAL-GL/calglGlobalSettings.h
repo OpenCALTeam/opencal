@@ -47,6 +47,18 @@ struct CALGLGlobalSettings* calglCreateGlobalSettings();
 */
 void calglDestroyGlobalSettings();
 
+/*! \brief Function for set application parameters
+*/
+void calglInitViewer(
+	char* applicationName,	//!< Name of the application.
+	float cellSize,			//!< Cell size. 
+	int width,				//!< Window width. 
+	int height, 			//!< Window height.
+	int positionX, 			//!< Window x position.
+	int positionY, 			//!< Window y position.
+	CALbyte enableLight		//!< Boolean for enabling light.
+	);
+
 /*! \brief Function for set an application's name.
 */
 void calglSetApplicationName(
