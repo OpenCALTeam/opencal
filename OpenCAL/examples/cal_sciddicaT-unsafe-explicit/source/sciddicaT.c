@@ -131,10 +131,13 @@ void sciddicaT_simulation_init(struct CALModel2D* sciddicaT)
 
 void sciddicaTransitionFunction(struct CALModel2D* sciddicaT)
 {
+  // active cells must be updated first becouse outflows
+  // have already been sent to (pheraps inactive) the neighbours
 	calApplyElementaryProcess2D(sciddicaT, sciddicaT_flows);
-	calUpdateSubstate2Dr(sciddicaT, Q.h);
-	calUpdateActiveCells2D(sciddicaT);
+    calUpdateActiveCells2D(sciddicaT);
+    calUpdateSubstate2Dr(sciddicaT, Q.h);
 
+  // here you don't need to update Q.h
 	calApplyElementaryProcess2D(sciddicaT, sciddicaT_remove_inactive_cells);
 	calUpdateActiveCells2D(sciddicaT);
 }
@@ -182,8 +185,6 @@ int main()
 	do{
 			again = calRunCAStep2D(sciddicaT_simulation);
 			sciddicaT_simulation->step++;
-			printf("step %d\n", sciddicaT_simulation->step);
-
 	} while (again);
 	end_time = time(NULL);
 	printf ("Simulation terminated.\nElapsed time: %d\n", end_time-start_time);
