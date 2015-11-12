@@ -69,8 +69,8 @@ void sciddicaT_transition_function(struct CALModel2D* sciddicaT, int i, int j)
 		if (!eliminated_cells[n])
 		{
 			f = (average-u[n])*P.r;
-			calSet2Dr (sciddicaT,Q.h,i,j,   calGetNext2Dr (sciddicaT,Q.h,i,j)   - f );
-			calSetX2Dr(sciddicaT,Q.h,i,j,n, calGetNextX2Dr(sciddicaT,Q.h,i,j,n) + f );
+			calAddNext2Dr(sciddicaT,Q.h,i,j,-f);
+			calAddNextX2Dr(sciddicaT,Q.h,i,j,n,f);
 
 #ifdef ACTIVE_CELLS
 			//adds the cell (i, j, n) to the set of active ones

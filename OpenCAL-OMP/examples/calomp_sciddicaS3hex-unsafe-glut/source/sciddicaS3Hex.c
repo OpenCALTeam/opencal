@@ -139,13 +139,13 @@ void s3hexFlowsComputation(struct CALModel2D* s3hex, int i, int j)
 	for (n=1; n<s3hex->sizeof_X; n++)
 		if (!eliminated_cells[n])
 		{
-			//f = (h_0 - P.adh) * ((average-u[n])/sum) * P.r;
 			f = h_0 * ((average-u[n])/sum) * P.r;
-			calSet2Dr (s3hex,Q.h,i,j,   calGetNext2Dr (s3hex,Q.h,i,j)   - f );
-			calSetX2Dr(s3hex,Q.h,i,j,n, calGetNextX2Dr(s3hex,Q.h,i,j,n) + f );
 
-			calSet2Dr (s3hex,Q.p,i,j,   calGetNext2Dr (s3hex,Q.p,i,j)   - runup_0 * f );
-			calSetX2Dr(s3hex,Q.p,i,j,n, calGetNextX2Dr(s3hex,Q.p,i,j,n) + (z_0_plus_runup_0 - u[n]) * f );
+			calAddNext2Dr(s3hex,Q.h,i,j,-f);
+			calAddNextX2Dr(s3hex,Q.h,i,j,n,f);
+
+			calAddNext2Dr(s3hex,Q.p,i,j,-runup_0*f);
+			calAddNextX2Dr(s3hex,Q.p,i,j,n,(z_0_plus_runup_0 - u[n])*f);
 
 #ifdef ACTIVE_CELLS
 			//adds the cell (i, j, n) to the set of active ones
