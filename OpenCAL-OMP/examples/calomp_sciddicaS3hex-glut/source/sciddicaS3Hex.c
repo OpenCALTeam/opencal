@@ -138,12 +138,7 @@ void s3hexFlowsComputation(struct CALModel2D* s3hex, int i, int j)
 
     h0_out = p0_out = 0;
 	for (n=1; n<s3hex->sizeof_X; n++)
-      if (eliminated_cells[n])
-        {
-          calSet2Dr(s3hex, Q.fh[n], i, j, 0.0);
-          calSet2Dr(s3hex, Q.fp[n], i, j, 0.0);
-        }
-      else
+      if (!eliminated_cells[n])
 		{
           h = h_0 * ((average-u[n])/sum) * P.r;
           p = (z_0_plus_runup_0 - u[n])*h;
@@ -160,10 +155,11 @@ void s3hexFlowsComputation(struct CALModel2D* s3hex, int i, int j)
 #endif
 		}
 
+  if (h0_out > 0)
     calSet2Dr(s3hex, Q.fh[0], i, j, h0_out);
+  if (p0_out > 0)
     calSet2Dr(s3hex, Q.fp[0], i, j, p0_out);
 }
-
 
 void s3hexWidthAndPotentialUpdate(struct CALModel2D* s3hex, int i, int j)
 {
@@ -187,6 +183,17 @@ void s3hexWidthAndPotentialUpdate(struct CALModel2D* s3hex, int i, int j)
 	calSet2Dr(s3hex, Q.p, i, j, p_next);
 }
 
+void s3hexClearOutflows(struct CALModel2D* s3hex, int i, int j)
+{
+  int n;
+  for (n=0; n<s3hex->sizeof_X; n++)
+    {
+      if (calGet2Dr(s3hex, Q.fh[n], i, j) > 0.0)
+        calSet2Dr(s3hex, Q.fh[n], i, j, 0.0);
+      if (calGet2Dr(s3hex, Q.fp[n], i, j) > 0.0)
+        calSet2Dr(s3hex, Q.fp[n], i, j, 0.0);
+    }
+}
 
 void s3hexEnergyLoss(struct CALModel2D* s3hex, int i, int j)
 {
@@ -248,20 +255,6 @@ void sciddicaTSimulationInit(struct CALModel2D* s3hex)
 				calAddActiveCell2D(s3hex,i,j);
 	}
 #endif
-
-	//Substates and active cells update
-	calUpdate2D(s3hex);
-}
-
-void s3hexSteering(struct CALModel2D* s3hex)
-{
-  int n;
-    //initializing substates to 0
-    for (n=0; n<s3hex->sizeof_X; n++)
-    {
-      calInitSubstateNext2Dr(s3hex, Q.fh[n], 0);
-      calInitSubstateNext2Dr(s3hex, Q.fp[n], 0);
-    }
 }
 
 CALbyte sciddicaTSimulationStopCondition(struct CALModel2D* s3hex)
@@ -279,21 +272,26 @@ CALbyte sciddicaTSimulationStopCondition(struct CALModel2D* s3hex)
 void sciddicaTCADef()
 {
   int n;
+  CALbyte optimization_type = CAL_NO_OPT;
   
-	//cadef and rundef
-	s3hex = calCADef2D (ROWS, COLS, CAL_HEXAGONAL_NEIGHBORHOOD_2D, CAL_SPACE_TOROIDAL, CAL_OPT_ACTIVE_CELLS);
+#ifdef ACTIVE_CELLS
+  optimization_type = CAL_OPT_ACTIVE_CELLS;
+#endif
+
+  //cadef and rundef
+  s3hex = calCADef2D (ROWS, COLS, CAL_HEXAGONAL_NEIGHBORHOOD_2D, CAL_SPACE_TOROIDAL, optimization_type);
 	s3hexSimulation = calRunDef2D(s3hex, 1, CAL_RUN_LOOP, CAL_UPDATE_IMPLICIT);
 
 	//put OpenCAL - OMP in unsafe state execution(to allow unsafe operation to be used)
 	calSetUnsafe2D(s3hex);
 
 	//add transition function's elementary processes
-	calAddElementaryProcess2D(s3hex, s3hexErosion);
-	calAddElementaryProcess2D(s3hex, s3hexFlowsComputation);
+    calAddElementaryProcess2D(s3hex, s3hexErosion);
+    calAddElementaryProcess2D(s3hex, s3hexFlowsComputation);
     calAddElementaryProcess2D(s3hex, s3hexWidthAndPotentialUpdate);
-	calAddElementaryProcess2D(s3hex, s3hexRomoveInactiveCells);
-	calAddElementaryProcess2D(s3hex, s3hexEnergyLoss);
-
+    calAddElementaryProcess2D(s3hex, s3hexClearOutflows);
+    calAddElementaryProcess2D(s3hex, s3hexEnergyLoss);
+    calAddElementaryProcess2D(s3hex, s3hexRomoveInactiveCells);
 
 	//add substates
 	Q.z = calAddSingleLayerSubstate2Dr(s3hex);
@@ -312,7 +310,6 @@ void sciddicaTCADef()
 
 	//simulation run setup
 	calRunAddInitFunc2D(s3hexSimulation, sciddicaTSimulationInit); calRunInitSimulation2D(s3hexSimulation);
-    calRunAddSteeringFunc2D(s3hexSimulation, s3hexSteering);
 	calRunAddStopConditionFunc2D(s3hexSimulation, sciddicaTSimulationStopCondition);
 }
 
