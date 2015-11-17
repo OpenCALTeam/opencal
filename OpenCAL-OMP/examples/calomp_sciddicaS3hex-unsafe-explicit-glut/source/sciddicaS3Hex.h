@@ -21,7 +21,7 @@
 #define SOURCE_PATH "./data/source.txt"
 #define OUTPUT_PATH "./data/width_final.txt"
 
-//#define ACTIVE_CELLS
+#define ACTIVE_CELLS
 //#define VERBOSE
 
 

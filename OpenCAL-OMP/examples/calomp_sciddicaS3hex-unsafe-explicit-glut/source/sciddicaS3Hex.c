@@ -221,11 +221,12 @@ void sciddicaTransitionFunction(struct CALModel2D* s3hex)
 	calUpdateSubstate2Dr(s3hex, Q.p);
 
 	calApplyElementaryProcess2D(s3hex, s3hexFlowsComputation);
+	calUpdateActiveCells2D(s3hex);
 	calUpdateSubstate2Dr(s3hex, Q.h);
 	calUpdateSubstate2Dr(s3hex, Q.p);
 
 	calApplyElementaryProcess2D(s3hex, s3hexRomoveInactiveCells);
-
+	calUpdateActiveCells2D(s3hex);
 
 	calApplyElementaryProcess2D(s3hex, s3hexEnergyLoss);
 	calUpdateSubstate2Dr(s3hex, Q.p);
