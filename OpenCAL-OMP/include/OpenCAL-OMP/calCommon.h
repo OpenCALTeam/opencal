@@ -19,7 +19,7 @@
 
 typedef char CALbyte;	//!< Redefinition of the type char.
 typedef int CALint;		//!< Redefinition of the type int.
-typedef double CALreal;	//!< Redefinition of the type double.
+typedef long double CALreal;	//!< Redefinition of the type double.
 
 
 typedef CALbyte CALParameterb;	//!< Redefinition of the type CALbyte. It is used for the automaton's parameters.
