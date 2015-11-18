@@ -164,8 +164,8 @@ void run(struct CALRun2D* simulation)
 	}*/
 
 	do{
-			again = calRunCAStep2D(sciddicaT_simulation);
-			sciddicaT_simulation->step++;
+			again = calRunCAStep2D(simulation);
+			simulation->step++;
 	} while (again);
 
 	calRunFinalizeSimulation2D(simulation);
