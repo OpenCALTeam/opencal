@@ -85,7 +85,7 @@ void sciddicaT_flows(struct CALModel2D* sciddicaT, int i, int j)
 		if (!eliminated_cells[n])
 		{
 			f = (average-u[n])*P.r;
-      calAddNext2Dr(sciddicaT,Q.h,i,j,-f);
+			calAddNext2Dr(sciddicaT,Q.h,i,j,-f);
 			calAddNextX2Dr(sciddicaT,Q.h,i,j,n,f);
 
 			//adds the cell (i, j, n) to the set of active ones
@@ -124,8 +124,52 @@ void sciddicaT_simulation_init(struct CALModel2D* sciddicaT)
         calAddActiveCell2D(sciddicaT, i, j);
 			}
 		}
+
+	calUpdateActiveCells2D(sciddicaT);
 }
 
+
+void sciddicaTransitionFunction(struct CALModel2D* sciddicaT)
+{
+  // active cells must be updated first becouse outflows
+  // have already been sent to (pheraps inactive) the neighbours
+	calApplyElementaryProcess2D(sciddicaT, sciddicaT_flows);
+    calUpdateActiveCells2D(sciddicaT);
+    calUpdateSubstate2Dr(sciddicaT, Q.h);
+
+  // here you don't need to update Q.h
+	calApplyElementaryProcess2D(sciddicaT, sciddicaT_remove_inactive_cells);
+	calUpdateActiveCells2D(sciddicaT);
+}
+
+
+CALbyte sciddicaTSimulationStopCondition(struct CALModel2D* sciddicaT)
+{
+	if (sciddicaT_simulation->step >= STEPS)
+		return CAL_TRUE;
+	return CAL_FALSE;
+}
+
+void run(struct CALRun2D* simulation)
+{
+	CALbyte again;
+
+	calRunInitSimulation2D(simulation);
+
+	/*for (simulation->step = simulation->initial_step; (simulation->step <= simulation->final_step || simulation->final_step == CAL_RUN_LOOP); simulation->step++)
+	{
+		again = calRunCAStep2D(simulation);
+		if (!again)
+			break;
+	}*/
+
+	do{
+			again = calRunCAStep2D(sciddicaT_simulation);
+			sciddicaT_simulation->step++;
+	} while (again);
+
+	calRunFinalizeSimulation2D(simulation);
+}
 
 int main()
 {
@@ -133,11 +177,10 @@ int main()
 
 	// define of the sciddicaT CA and sciddicaT_simulation simulation objects
 	sciddicaT = calCADef2D (ROWS, COLS, CAL_VON_NEUMANN_NEIGHBORHOOD_2D, CAL_SPACE_TOROIDAL, CAL_OPT_ACTIVE_CELLS);
-	sciddicaT_simulation = calRunDef2D(sciddicaT, 1, STEPS, CAL_UPDATE_IMPLICIT);
+	sciddicaT_simulation = calRunDef2D(sciddicaT, 1, CAL_RUN_LOOP, CAL_UPDATE_EXPLICIT);
 
 	//put OpenCAL - OMP in unsafe state execution(to allow unsafe operation to be used)
 	calSetUnsafe2D(sciddicaT);
-
 
 	// add transition function's sigma_1 and sigma_2 elementary processes
 	calAddElementaryProcess2D(sciddicaT, sciddicaT_flows);
@@ -153,9 +196,12 @@ int main()
 
 	// simulation run
 	calRunAddInitFunc2D(sciddicaT_simulation, sciddicaT_simulation_init);
+	calRunAddGlobalTransitionFunc2D(sciddicaT_simulation, sciddicaTransitionFunction);
+	calRunAddStopConditionFunc2D(sciddicaT_simulation, sciddicaTSimulationStopCondition);
+
 	printf ("Starting simulation...\n");
 	start_time = time(NULL);
-	calRun2D(sciddicaT_simulation);
+	run(sciddicaT_simulation);
 	end_time = time(NULL);
 	printf ("Simulation terminated.\nElapsed time: %d\n", end_time-start_time);
 
