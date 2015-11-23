@@ -63,6 +63,8 @@ void calglUpdate2D(struct CALUpdater2D* calUpdater){
 		if (calUpdater->firstRun){
 			calUpdater->firstRun = CAL_FALSE;
 			calUpdater->start_time = time(NULL);
+			if (calUpdater->calRun->init)
+				calRunInitSimulation2D (calUpdater->calRun);
 		}
 		//simulation main loop
 		calUpdater->calRun->step++;
@@ -77,7 +79,8 @@ void calglUpdate2D(struct CALUpdater2D* calUpdater){
 		//printf("*----------------  Cellular Automata  ----------------*\n");
 		//printf(" Rows: %d, Columns: %d\n", calglGetGlobalSettings()->rows, calglGetGlobalSettings()->columns);
 		//printf(" Current Step: %d/%d; Active cells: %d\n", calUpdater->calRun->step, calglGetGlobalSettings()->step, calUpdater->calRun->ca2D->A.size_current);
-		//printf("*-----------------------------------------------------*\n");
+		printf ("Cellular Automata: Current Step: %d/%d; Active cells: %d\r", calUpdater->calRun->step, calUpdater->calRun->final_step, calUpdater->calRun->ca2D->A.size_current);
+		//printf ("*-----------------------------------------------------*\n");
 		//check for the stop condition
 		if (!calUpdater->terminated)
 		{
