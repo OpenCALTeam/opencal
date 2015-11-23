@@ -186,6 +186,7 @@ int main()
 			again = calRunCAStep2D(sciddicaT_simulation);
 			sciddicaT_simulation->step++;
 	} while (again);
+	calRunFinalizeSimulation2D(sciddicaT_simulation);
 	end_time = time(NULL);
 	printf ("Simulation terminated.\nElapsed time: %d\n", end_time-start_time);
 
