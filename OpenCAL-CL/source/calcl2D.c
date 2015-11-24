@@ -409,7 +409,7 @@ void calclRun2D(CALCLToolkit2D* toolkit2d, struct CALModel2D * model, unsigned i
 
 
 	toolkit2d->steps = initialStep;
-	while (toolkit2d->steps < (int)maxStep || maxStep == CAL_RUN_LOOP) {
+	while (toolkit2d->steps <= (int)maxStep || maxStep == CAL_RUN_LOOP) {
 		stop = calclSingleStep2D(toolkit2d, model, singleStepThreadNum, dimNum);
 		if (stop == CAL_TRUE)
 			break;

@@ -416,7 +416,7 @@ void calclRun3D(CALCLToolkit3D* toolkit3d, struct CALModel3D * model, unsigned i
 		calclKernelCall3D(toolkit3d, toolkit3d->kernelInitSubstates, dimNum, threadNumMax, NULL);
 
 	toolkit3d->steps = initialStep;
-	while (toolkit3d->steps < (int)maxStep || maxStep == CAL_RUN_LOOP) {
+	while (toolkit3d->steps <= (int)maxStep || maxStep == CAL_RUN_LOOP) {
 		stop = calclSingleStep3D(toolkit3d, model, singleStepThreadNum, dimNum);
 		if (stop)
 			break;
