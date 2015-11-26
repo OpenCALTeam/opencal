@@ -141,10 +141,22 @@ CALbyte sciddicaTSimulationStopCondition (struct CALModel2D* sciddicaT) {
 	return CAL_FALSE;
 }
 
+void exitFunction()
+{
+	// saving configuration
+	calSaveSubstate2Dr (sciddicaT, Q.h, OUTPUT_PATH);
+
+	// finalizations
+	calRunFinalize2D (sciddicaT_simulation);
+	calFinalize2D (sciddicaT);
+}
+
 int main (int argc, char** argv) {
 	struct CALDrawModel2D* drawModel = NULL;
 
-	calglInitViewer ("SciddicaT_explicit", 5, 800, 600, 10, 10, CAL_TRUE, 25);
+	atexit(exitFunction);
+
+	calglInitViewer ("SciddicaT_explicit", 5, 800, 600, 10, 10, CAL_TRUE, 100);
 
 	// define of the sciddicaT CA and sciddicaT_simulation simulation objects
 	sciddicaT = calCADef2D (ROWS, COLS, CAL_VON_NEUMANN_NEIGHBORHOOD_2D, CAL_SPACE_TOROIDAL, CAL_OPT_ACTIVE_CELLS);
@@ -157,7 +169,7 @@ int main (int argc, char** argv) {
 	// add substates
 	Q.z = calAddSingleLayerSubstate2Dr (sciddicaT);
 	Q.h = calAddSubstate2Dr (sciddicaT);
-	
+
 	// load configuration
 	calLoadSubstate2Dr (sciddicaT, Q.z, DEM_PATH);
 	calLoadSubstate2Dr (sciddicaT, Q.h, SOURCE_PATH);
@@ -181,14 +193,8 @@ int main (int argc, char** argv) {
 	calglInfoBar2Dr (drawModel, Q.h, "Debris thickness", CALGL_TYPE_INFO_USE_RED_SCALE, 20, 120, 300, 80);
 	//calglSetLayoutOrientation2D(CALGL_LAYOUT_ORIENTATION_HORIZONTAL);
 	//calglSetLayoutOrientation2D(CALGL_LAYOUT_ORIENTATION_VERTICAL);
-	
+
 	calglStartProcessWindow2D (argc, argv);
 
-	// saving configuration
-	calSaveSubstate2Dr (sciddicaT, Q.h, OUTPUT_PATH);
-
-	// finalizations
-	calRunFinalize2D (sciddicaT_simulation);
-	calFinalize2D (sciddicaT);
 	return 0;
 }

@@ -165,6 +165,16 @@ CALbyte sciddicaTSimulationStopCondition(struct CALModel2D* sciddicaT)
 	return CAL_FALSE;
 }
 
+void exitFunction()
+{
+	// saving configuration
+	calSaveSubstate2Dr (sciddicaT, Q.h, FINAL);
+
+	// finalizations
+	calRunFinalize2D (sciddicaTsimulation);
+	calFinalize2D (sciddicaT);
+}
+
 //------------------------------------------------------------------------------
 //					sciddicaT main function
 //------------------------------------------------------------------------------
@@ -173,6 +183,8 @@ int main(int argc, char** argv)
 {
 	struct CALDrawModel2D* model1 = NULL;
 	struct CALDrawModel2D* model2;
+
+	atexit(exitFunction);
 
 	calglInitViewer("RealDraw", 5, 800, 600, 10, 10, CAL_TRUE, 0);
 
@@ -193,7 +205,6 @@ int main(int argc, char** argv)
 	//load configuration
 	calLoadSubstate2Dr(sciddicaT, Q.z, DEM);
 	calLoadSubstate2Dr(sciddicaT, Q.h, SOURCE);
-	//calSaveSubstate2Dr(sciddicaT, Q.h, OUTPUT);
 
 	//simulation run setup
 	calRunAddInitFunc2D(sciddicaTsimulation, sciddicaTSimulationInit);
@@ -229,8 +240,5 @@ int main(int argc, char** argv)
 
 	calglStartProcessWindow2D(argc, argv);
 
-	//finalizations
-	calRunFinalize2D(sciddicaTsimulation);
-	calFinalize2D(sciddicaT);
 	return 0;
 }

@@ -53,6 +53,13 @@ CALbyte life3DSimulationStopCondition(struct CALModel3D* life3D)
 	return CAL_FALSE;
 }
 
+void exitFunction()
+{
+	//finalizations
+	calRunFinalize3D(life3Dsimulation);
+	calFinalize3D(life3D);
+}
+
 //------------------------------------------------------------------------------
 //					life3D main function
 //------------------------------------------------------------------------------
@@ -61,6 +68,8 @@ int main(int argc, char** argv){
 	calglInitViewer("3D life", 1.0f, 400, 400, 40, 40, CAL_TRUE, 1);
 
 	struct CALDrawModel3D* drawModel;
+
+	atexit(exitFunction);
 
 	//cadef and rundef
 	life3D = calCADef3D(ROWS, COLS, LAYERS, CAL_MOORE_NEIGHBORHOOD_3D, CAL_SPACE_TOROIDAL, CAL_NO_OPT);
@@ -92,8 +101,5 @@ int main(int argc, char** argv){
 
 	calglStartProcessWindow3D(argc, argv);
 
-	//finalizations
-	calRunFinalize3D(life3Dsimulation);
-	calFinalize3D(life3D);
 	return 0;
 }
