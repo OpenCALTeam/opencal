@@ -16,6 +16,26 @@
 #define FEMALE_BETTLE_PATH "./data/femaleBettles.txt"
 #define MALE_BETTLE_PATH "./data/maleBettles.txt"
 
+enum WIND {
+	NO_WIND = 0,
+	NORTH_WIND,
+	EAST_WIND,
+	SOUTH_WIND,
+	WEAST_WIND
+};
+
+enum MOVEMENT {
+	MOVEMENT_NONE = 0,
+	MOVEMENT_UP,
+	MOVEMENT_UP_RIGHT,
+	MOVEMENT_RIGHT,
+	MOVEMENT_DOWN_RIGHT,
+	MOVEMENT_DOWN,
+	MOVEMENT_DOWN_LEFT,
+	MOVEMENT_LEFT,
+	MOVEMENT_UP_LEFT
+};
+
 //cadef and rundef
 extern struct CALModel2D* forestInsect;
 extern struct CALRun2D* forestInsectSimulation;
@@ -77,25 +97,6 @@ extern struct forestInsectParameters P;
 void forestInsectCADef();
 void forestInsectLoadConfig();
 void forestInsectExit();
-
-enum WIND {
-	NO_WIND = 0,
-	NORTH_WIND,
-	EAST_WIND,
-	SOUTH_WIND,
-	WEAST_WIND
-};
-enum MOVEMENT {
-	MOVEMENT_NONE = 0,
-	MOVEMENT_UP,
-	MOVEMENT_UP_RIGHT,
-	MOVEMENT_RIGHT,
-	MOVEMENT_DOWN_RIGHT,
-	MOVEMENT_DOWN,
-	MOVEMENT_DOWN_LEFT,
-	MOVEMENT_LEFT,
-	MOVEMENT_UP_LEFT
-};
 
 // Elementary transition function
 void forestInsectUpdateDay(struct CALModel2D* forestInsect, CALint i, CALint j);

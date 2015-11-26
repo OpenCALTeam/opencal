@@ -64,7 +64,7 @@ void calglUpdate3D(struct CALUpdater3D* calUpdater){
 			calUpdater->firstRun = CAL_FALSE;
 			calUpdater->start_time = time (NULL);
 			if (calUpdater->calRun->init)
-				calRunInitSimulation2D (calUpdater->calRun);
+				calRunInitSimulation3D (calUpdater->calRun);
 		}
 		//simulation main loop
 		calUpdater->calRun->step++;
@@ -124,5 +124,3 @@ void calglSaveStateUpdater3D(struct CALUpdater3D* calUpdater){
 		calSaveSubstate3Dr(calModel, calModel->pQr_array[i], tmpString);
 	}
 }
-
-
