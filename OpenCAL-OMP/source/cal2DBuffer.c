@@ -52,9 +52,8 @@ void calCopyBuffer2Db(CALbyte* M_src, CALbyte* M_dest, int rows, int columns)
 
 	size = rows * columns;
 
-#pragma omp parallel private (start, chunk)
+#pragma omp parallel private (start, chunk, tn, ttotal)
 	{
-#pragma omp single
 		ttotal = CAL_GET_NUM_THREADS();
 
 		tn = CAL_GET_THREAD_NUM();
@@ -80,15 +79,12 @@ void calCopyBuffer2Di(CALint* M_src, CALint* M_dest, int rows, int columns)
 
 	size = rows * columns;
 
-#pragma omp parallel private (start, chunk)
+#pragma omp parallel private (start, chunk, tn, ttotal)
 	{
-
-#pragma omp single
 		ttotal = CAL_GET_NUM_THREADS();
 
 		tn = CAL_GET_THREAD_NUM();
 		chunk = size / ttotal;
-
 		start = tn * chunk;
 
 		if (tn == ttotal - 1)
@@ -111,10 +107,8 @@ void calCopyBuffer2Dr(CALreal* M_src, CALreal* M_dest, int rows, int columns)
 	size = rows * columns;
 
 
-#pragma omp parallel private (tn, start, chunk) shared (ttotal)
+#pragma omp parallel private (tn, start, chunk, ttotal)
 	{
-
-#pragma omp single
 		ttotal = CAL_GET_NUM_THREADS();
 
 
