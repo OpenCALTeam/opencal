@@ -67,7 +67,6 @@ void calCopyBuffer2Db(CALbyte* M_src, CALbyte* M_dest, int rows, int columns)
 		       sizeof(CALbyte) * chunk);
 	}
 }
-
 void calCopyBuffer2Di(CALint* M_src, CALint* M_dest, int rows, int columns)
 {
 	int tn;
@@ -95,9 +94,9 @@ void calCopyBuffer2Di(CALint* M_src, CALint* M_dest, int rows, int columns)
 	}
 
 }
-
 void calCopyBuffer2Dr(CALreal* M_src, CALreal* M_dest, int rows, int columns)
-{	int tn;
+{
+    int tn;
 	int ttotal;
 	size_t size;
 
@@ -105,7 +104,6 @@ void calCopyBuffer2Dr(CALreal* M_src, CALreal* M_dest, int rows, int columns)
 	int chunk;
 
 	size = rows * columns;
-
 
 #pragma omp parallel private (tn, start, chunk, ttotal)
 	{
