@@ -32,7 +32,7 @@ __kernel void calclkernelComputeCounts3D(CALint dim, __global CALbyte * flags, _
 	diff[id] = CAL_FALSE;
 
 	int threadsNum = get_global_size (0);
-	int chunk = ceil((CALreal)dim/threadsNum);
+	int chunk = ceil((double)dim/threadsNum);
 	int startOffset = chunk * id;
 	int count = 0;
 	int i;
@@ -91,7 +91,7 @@ __kernel void calclkernelCompact3D(
 	int id = get_global_id (0);
 	int threadsNum = get_global_size (0);
 	int cellIndex = 0;
-	int chunk = ceil((CALreal)dim/threadsNum);
+	int chunk = ceil((double)dim/threadsNum);
 	int startOffset = chunk * id;
 	int startPoint = 0;
 

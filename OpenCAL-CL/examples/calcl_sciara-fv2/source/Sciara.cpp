@@ -1,7 +1,7 @@
 #include "Sciara.h"
 
 
-void evaluatePowerLawParams(CALreal value_sol, CALreal value_vent, CALreal &k1, CALreal &k2) {
+void evaluatePowerLawParams(double value_sol, double value_vent, double &k1, double &k2) {
 	k2 = (log10(value_vent) - log10(value_sol)) / (sciara->parameters.PTvent - sciara->parameters.PTsol);
 	k1 = log10(value_sol) - k2 * (sciara->parameters.PTsol);
 }

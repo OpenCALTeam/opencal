@@ -21,9 +21,9 @@ __kernel void updateVentsEmission(MODEL_DEFINITION2D, __global Vent* vents, __gl
 
 	initActiveThreads2D();
 
-	int threadID = getX();
-	int i = getActiveCellX(threadID);
-	int j = getActiveCellY(threadID);
+	int threadID = getRow();
+	int i = getActiveCellRow(threadID);
+	int j = getActiveCellCol(threadID);
 
 	CALreal emitted_lava = 0;
 
@@ -43,8 +43,8 @@ __kernel void updateVentsEmission(MODEL_DEFINITION2D, __global Vent* vents, __gl
 }
 
 CALreal powerLaw(CALreal k1, CALreal k2, CALreal T) {
-	CALreal log_value = fma(k2, T, k1);
-	return powr(10, log_value);
+	CALreal log_value = (k2*T)+k1;
+	return powr(10, (double)log_value);
 }
 
 void outflowsMin(MODEL_DEFINITION2D, int i, int j, CALreal *f, Parameters parameters) {
@@ -82,7 +82,7 @@ void outflowsMin(MODEL_DEFINITION2D, int i, int j, CALreal *f, Parameters parame
 	for (int k = 1; k < MOORE_NEIGHBORS; k++)
 		if (z[0] + h[0] > z[k] + h[k]) {
 			H[k] = z[k] + h[k];
-			theta[k] = atan(((z[0] + h[0]) - (z[k] + h[k])) / _w);
+			theta[k] = atan((double)(((z[0] + h[0]) - (z[k] + h[k])) / _w));
 			n_eliminated[k] = true;
 		} else
 			n_eliminated[k] = false;
@@ -106,7 +106,7 @@ void outflowsMin(MODEL_DEFINITION2D, int i, int j, CALreal *f, Parameters parame
 	} while (loop);
 
 	for (int k = 1; k < MOORE_NEIGHBORS; k++) {
-		if (n_eliminated[k] && h[0] > hc * cos(theta[k])) {
+		if (n_eliminated[k] && h[0] > hc * cos((double)theta[k])) {
 			f[k] = _Pr * (avg - H[k]);
 		}
 	}
@@ -117,9 +117,9 @@ __kernel void empiricalFlows(MODEL_DEFINITION2D, Parameters parameters) {
 
 	initActiveThreads2D();
 
-	int threadID = getX();
-	int i = getActiveCellX(threadID);
-	int j = getActiveCellY(threadID);
+	int threadID = getRow();
+	int i = getActiveCellRow(threadID);
+	int j = getActiveCellCol(threadID);
 
 	if (calGet2Dr(MODEL2D, SLT, i, j) > 0) {
 		CALreal f[MOORE_NEIGHBORS];
@@ -137,9 +137,9 @@ __kernel void width_update(MODEL_DEFINITION2D) {
 
 	initActiveThreads2D();
 
-	int threadID = getX();
-	int i = getActiveCellX(threadID);
-	int j = getActiveCellY(threadID);
+	int threadID = getRow();
+	int i = getActiveCellRow(threadID);
+	int j = getActiveCellCol(threadID);
 
 	CALint outFlowsIndexes[NUMBER_OF_OUTFLOWS] = { 3, 2, 1, 0, 6, 7, 4, 5 };
 	CALint n;
@@ -158,7 +158,7 @@ __kernel void width_update(MODEL_DEFINITION2D) {
 		CALreal inFlow = calGetX2Dr(MODEL2D, F(outFlowsIndexes[n - 1]), i, j, n);
 		CALreal outFlow = calGet2Dr(MODEL2D, F(n - 1), i, j);
 		CALreal neigh_t = calGetX2Dr(MODEL2D, ST, i, j, n);
-		ht = fma(inFlow, neigh_t, ht);
+		ht =(inFlow*neigh_t)+ht;
 		inSum += inFlow;
 		outSum += outFlow;
 	}
@@ -166,7 +166,7 @@ __kernel void width_update(MODEL_DEFINITION2D) {
 	calSet2Dr(MODEL2D, SLT, i, j, h_next);
 	if (inSum > 0 || outSum > 0) {
 		residualLava -= outSum;
-		t_next = fma(residualLava, initial_t, ht) / (residualLava + inSum);
+		t_next = (residualLava*initial_t+ht) / (residualLava + inSum);
 		calSet2Dr(MODEL2D, ST, i, j, t_next);
 	}
 }
@@ -175,9 +175,9 @@ __kernel void updateTemperature(MODEL_DEFINITION2D, __global CALbyte * Mb, __glo
 
 	initActiveThreads2D();
 
-	int threadID = getX();
-	int i = getActiveCellX(threadID);
-	int j = getActiveCellY(threadID);
+	int threadID = getRow();
+	int i = getActiveCellRow(threadID);
+	int j = getActiveCellCol(threadID);
 
 	CALreal aus = 0;
 	CALreal sh = calGet2Dr(MODEL2D, SLT, i, j);
@@ -203,9 +203,9 @@ __kernel void removeActiveCells(MODEL_DEFINITION2D, __global CALbyte * Mb, Param
 
 	initActiveThreads2D();
 
-	int threadID = getX();
-	int i = getActiveCellX(threadID);
-	int j = getActiveCellY(threadID);
+	int threadID = getRow();
+	int i = getActiveCellRow(threadID);
+	int j = getActiveCellCol(threadID);;
 
 	CALreal st = calGet2Dr(MODEL2D, ST, i, j);
 	if (st <= parameters.PTsol && calGetBufferElement2D(Mb, get_columns(), i, j) == CAL_FALSE)
@@ -217,9 +217,9 @@ __kernel void stopCondition(MODEL_DEFINITION2D, Parameters parameters, __global 
 
 	initActiveThreads2D();
 
-	int threadID = getX();
-	int i = getActiveCellX(threadID);
-	int j = getActiveCellY(threadID);
+	int threadID = getRow();
+	int i = getActiveCellRow(threadID);
+	int j = getActiveCellCol(threadID);
 
 	if (threadID == 0){
 		if (*elapsed_time >= parameters.effusion_duration)
@@ -231,9 +231,9 @@ __kernel void steering(MODEL_DEFINITION2D, __global CALbyte * Mb, Parameters par
 
 	initActiveThreads2D();
 
-	int threadID = getX();
-	int i = getActiveCellX(threadID);
-	int j = getActiveCellY(threadID);
+	int threadID = getRow();
+	int i = getActiveCellRow(threadID);
+	int j = getActiveCellCol(threadID);
 
 	for (int k = 0; k < NUMBER_OF_OUTFLOWS; ++k)
 		calInitSubstate2Dr(MODEL2D, F(k), i, j,0);

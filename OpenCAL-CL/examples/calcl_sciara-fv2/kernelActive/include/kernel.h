@@ -18,28 +18,28 @@ typedef struct{
 typedef struct{
 
 	// Parameters
-	CALreal Pclock;	//AC clock [s]
-	CALreal Pc;		//cell side
-	CALreal Pac;		//area of the cell
-	CALreal PTsol;	//temperature of solidification
-	CALreal PTvent;	//temperature of lava at vent
+	double Pclock;	//AC clock [s]
+	double Pc;		//cell side
+	double Pac;		//area of the cell
+	double PTsol;	//temperature of solidification
+	double PTvent;	//temperature of lava at vent
 	// new Paramenters
-	CALreal Pr_Tsol;
-	CALreal Pr_Tvent;
-	CALreal a;		// parametro per calcolo Pr
-	CALreal b;		// parametro per calcolo Pr
-	CALreal Phc_Tsol;
-	CALreal Phc_Tvent;
-	CALreal c;		// parametro per calcolo hc
-	CALreal d;		// parametro per calcolo hc
-	CALreal Pcool;
-	CALreal Prho;	//density
-	CALreal Pepsilon;	//emissivity
-	CALreal Psigma;	//Stephen-Boltzamnn constant
-	CALreal Pcv;		//Specific heat
-	CALreal rad2;
+	double Pr_Tsol;
+	double Pr_Tvent;
+	double a;		// parametro per calcolo Pr
+	double b;		// parametro per calcolo Pr
+	double Phc_Tsol;
+	double Phc_Tvent;
+	double c;		// parametro per calcolo hc
+	double d;		// parametro per calcolo hc
+	double Pcool;
+	double Prho;	//density
+	double Pepsilon;	//emissivity
+	double Psigma;	//Stephen-Boltzamnn constant
+	double Pcv;		//Specific heat
+	double rad2;
 	unsigned int emission_time;
-	CALreal effusion_duration;
+	double effusion_duration;
 
 } Parameters;
 

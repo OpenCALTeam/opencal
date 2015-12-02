@@ -46,31 +46,31 @@
 #define stopExecution() *CALCLstop = CAL_TRUE
 
 /*! \brief Gets the thread id in the first global dimension */
-#define getX() get_global_id(0)
+#define getRow() get_global_id(0)
 
 /*! \brief Gets the thread id in the second global dimension */
-#define getY() get_global_id(1)
+#define getCol() get_global_id(1)
 
 /*! \brief Gets the thread id in the third global dimension */
-#define getZ() get_global_id(2)
+#define getSlice() get_global_id(2)
 
 /*! \brief Gets the thread id in the first local dimension */
-#define getLocalX() get_local_id(0)
+#define getLocalRow() get_local_id(0)
 
 /*! \brief Gets the thread id in the second local dimension */
-#define getLocalY() get_local_id(1)
+#define getLocalCol() get_local_id(1)
 
 /*! \brief Gets the thread id in the first local dimension */
-#define getLocalZ() get_local_id(2)
+#define getLocalSlice() get_local_id(2)
 
 /*! \brief Gets the active cell row coordinate relative to the given thread id */
-#define getActiveCellX(threadID) get_active_cells()[threadID].i
+#define getActiveCellRow(threadID) get_active_cells()[threadID].i
 
 /*! \brief Gets the active cell column coordinate relative to the given thread id */
-#define getActiveCellY(threadID) get_active_cells()[threadID].j
+#define getActiveCellCol(threadID) get_active_cells()[threadID].j
 
 /*! \brief Gets the active cell slice coordinate relative to the given thread id */
-#define getActiveCellZ(threadID) get_active_cells()[threadID].k
+#define getActiveCellSlice(threadID) get_active_cells()[threadID].k
 
 
 

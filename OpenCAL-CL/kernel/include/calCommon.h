@@ -33,7 +33,7 @@ typedef int CALint;		//!< Redefinition of the type int.
 #ifdef USEFLOAT
 typedef float CALreal;	//!< Redefinition of the type double.
 #else
-typedef double CALreal;	//!< Redefinition of the type double.
+typedef long double CALreal;	//!< Redefinition of the type double.
 #endif
 
 typedef CALbyte CALParameterb;	//!< Redefinition of the type CALbyte. It is used for the automaton's parameters.

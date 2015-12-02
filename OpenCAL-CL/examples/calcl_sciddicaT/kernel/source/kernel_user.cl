@@ -17,8 +17,8 @@ __kernel void sciddicaT_flows_computation(MODEL_DEFINITION2D, __global CALParame
 	__global CALbyte * activeCellsFlags = get_active_cells_flags();
 	CALint cols_ = get_columns();
 
-	int i = getX();
-	int j = getY();
+	int i = getRow();
+	int j = getCol();
 
 	CALbyte eliminated_cells[5] = { CAL_FALSE, CAL_FALSE, CAL_FALSE, CAL_FALSE, CAL_FALSE };
 	CALbyte again;
@@ -79,8 +79,8 @@ __kernel void sciddicaT_width_update(MODEL_DEFINITION2D) {
 	__global CALbyte * activeCellsFlags = get_active_cells_flags();
 	CALint cols_ = get_columns();
 
-	int i = getX();
-	int j = getY();
+	int i = getRow();
+	int j = getCol();
 
 	CALreal h_next;
 	CALint n;
@@ -102,8 +102,8 @@ __kernel void sciddicaTSteering(MODEL_DEFINITION2D) {
 	CALint cols_ = get_columns();
 	CALint rows_ = get_rows();
 
-	int i = getX();
-	int j = getY();
+	int i = getRow();
+	int j = getCol();
 
 	int dim = cols_ * rows_;
 	int s;

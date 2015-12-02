@@ -69,7 +69,7 @@ int main(int argc, char** argv) {
 	int steps =1000;
 	int platformNum = 0;
 	int deviceNum = 0;
-	active = 1;
+	active = 0;
 	const char * kernelSrc;
 	const char * kernelInc;
 	if (active == 0) {

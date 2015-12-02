@@ -14,9 +14,9 @@ __kernel void sciddicaT_flows_computation(MODEL_DEFINITION2D, __global CALParame
 
 	initActiveThreads2D();
 
-	int threadID = getX();
-	int i = getActiveCellX(threadID);
-	int j = getActiveCellY(threadID);
+	int threadID = getRow();
+	int i = getActiveCellRow(threadID);
+	int j = getActiveCellCol(threadID);
 
 	CALbyte eliminated_cells[5] = { CAL_FALSE, CAL_FALSE, CAL_FALSE, CAL_FALSE, CAL_FALSE };
 	CALbyte again;
@@ -81,9 +81,9 @@ __kernel void sciddicaT_width_update(MODEL_DEFINITION2D) {
 
 	CALint neighborhoodSize = get_neighborhoods_size();
 
-	int threadID = getX();
-	int i = getActiveCellX(threadID);
-	int j = getActiveCellY(threadID);
+	int threadID = getRow();
+	int i = getActiveCellRow(threadID);
+	int j = getActiveCellCol(threadID);
 
 	CALreal h_next;
 	CALint n;
@@ -102,9 +102,9 @@ __kernel void sciddicaT_remove_inactive_cells(MODEL_DEFINITION2D, __global CALPa
 
 	initActiveThreads2D();
 
-	int threadID = getX();
-	int i = getActiveCellX(threadID);
-	int j = getActiveCellY(threadID);
+	int threadID = getRow();
+	int i = getActiveCellRow(threadID);
+	int j = getActiveCellCol(threadID);
 
 	if (calGet2Dr(MODEL2D, H, i, j) <= *Pepsilon)
 		calRemoveActiveCell2D(MODEL2D,i,j);
@@ -114,7 +114,7 @@ __kernel void sciddicaTSteering(MODEL_DEFINITION2D) {
 
 	initActiveThreads2D();
 
-	int threadID = getX();
+	int threadID = getRow();
 
 	int dim = get_columns() * get_rows();
 	int i;

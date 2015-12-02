@@ -1,6 +1,7 @@
 // Conway's game of Life Cellular Automaton
 
 #include <OpenCAL/cal2D.h>
+#include <OpenCAL/cal2DIO.h>
 #include <time.h>
 #include <stdlib.h>
 #include <math.h>
@@ -29,16 +30,16 @@ int main()
 	CALCLprogram program;
 	CALCLToolkit2D * lifeToolkit;
 	char * kernelSrc = KERNEL_SRC;
-		char * kernelInc = KERNEL_INC;
-		CALCLkernel kernel_life_transition_function;
+	char * kernelInc = KERNEL_INC;
+	CALCLkernel kernel_life_transition_function;
 
-		calOpenCL = calclCreateCALOpenCL();
-		calclInitializePlatforms(calOpenCL);
-		calclInitializeDevices(calOpenCL);
-		calclPrintAllPlatformAndDevices(calOpenCL);
-		device = calclGetDevice(calOpenCL, platformNum, deviceNum);
-		context = calclcreateContext(&device, 1);
-		program = calclLoadProgramLib2D(context, device, kernelSrc, kernelInc);
+	calOpenCL = calclCreateCALOpenCL();
+	calclInitializePlatforms(calOpenCL);
+	calclInitializeDevices(calOpenCL);
+	calclPrintAllPlatformAndDevices(calOpenCL);
+	device = calclGetDevice(calOpenCL, platformNum, deviceNum);
+	context = calclcreateContext(&device, 1);
+	program = calclLoadProgramLib2D(context, device, kernelSrc, kernelInc);
 
 
 	// define of the life CA and life_simulation simulation objects
@@ -60,17 +61,18 @@ int main()
 	calInit2Di(life, Q, 2, 1, 1);
 	calInit2Di(life, Q, 2, 2, 1);
 
-  lifeToolkit = calclCreateToolkit2D(life, context, program, device, CAL_NO_OPT);
+    lifeToolkit = calclCreateToolkit2D(life, context, program, device, CAL_NO_OPT);
 
 	kernel_life_transition_function = calclGetKernelFromProgram(&program, KERNEL_LIFE_TRANSITION_FUNCTION);
+
+	// save the Q substate to file
+	calSaveSubstate2Di(life, Q, "./life_0000.txt");
+
 	calclAddElementaryProcessKernel2D(lifeToolkit, life, &kernel_life_transition_function);
 	start_time = time(NULL);
 	calclRun2D(lifeToolkit, life, 1, 1);
 	end_time = time(NULL);
 	printf("%d", end_time - start_time);
-
-	// save the Q substate to file
-//	calSaveSubstate2Di(life, Q, "./life_0000.txt");
 
 	// simulation run
 //	calRun2D(life_simulation);
@@ -79,7 +81,6 @@ int main()
 	calSaveSubstate2Di(life, Q, "./life_LAST.txt");
 
 	// finalize simulation and CA objects
-	calRunFinalize2D(life_simulation);
 	calFinalize2D(life);
 
 	return 0;

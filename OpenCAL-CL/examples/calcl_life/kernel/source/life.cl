@@ -14,10 +14,11 @@ __kernel void life_transition_function(MODEL_DEFINITION2D) {
 	CALint cols_ = get_columns();
 	CALint rows_ = get_rows();
 
-	int i = getX();
-	int j = getY();
-  CALint sizeOfX_ = get_neighborhoods_size();
-  int sum = 0, n;
+	int i = getRow();
+	int j = getCol();
+ 	CALint sizeOfX_ = get_neighborhoods_size();
+  	int sum = 0, n;
+	
 	for (n=1; n<sizeOfX_; n++)
 		sum += calGetX2Di(MODEL2D, Q, i, j, n);
 

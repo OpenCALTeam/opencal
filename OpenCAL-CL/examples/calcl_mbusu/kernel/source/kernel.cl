@@ -18,9 +18,9 @@ __kernel void mbusuTransitionFunction(MODEL_DEFINITION3D, __global Parameters* p
 
 	initThreads3D();
 
-	int _i = getX();
-	int _j = getY();
-	int _k = getZ();
+	int _i = getRow();
+	int _j = getCol();
+	int _k = getSlice();
 	int _k_inv;
 
 	double quota, teta, satur, psi, h, k, uno_su_dqdh, teta_pioggia; //
@@ -164,9 +164,9 @@ __kernel void steering(MODEL_DEFINITION3D, __global Parameters* parameters) {
 
 	initThreads3D();
 
-	int i = getX();
-	int j = getY();
-	int k = getZ();
+	int i = getRow();
+	int j = getCol();
+	int k = getSlice();
 
 	if(i==0 && j==0 && k==0) {
 		double min = calGet3Dr(MODEL3D,CONVERGENCE, 0, 0,0);
@@ -192,9 +192,9 @@ __kernel void stopCondition(MODEL_DEFINITION3D, __global Parameters* parameters)
 
 	initThreads3D();
 
-	int i = getX();
-	int j = getY();
-	int k = getZ();
+	int i = getRow();
+	int j = getCol();
+	int k = getSlice();
 
 	//Stop condition
 	if ((parameters->delta_t_cum >= parameters->ascii_output_time_step && parameters->delta_t_cum_prec <= parameters->ascii_output_time_step))
