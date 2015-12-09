@@ -38,6 +38,8 @@ static GLint key_old_x, key_old_y;
 static CALbyte translationOn = CAL_FALSE;
 static GLint activeSubWindow = -1;
 
+static GLfloat fovy = 45.0;
+
 static enum CALGL_LAYOUT_ORIENTATION orientation = CALGL_LAYOUT_ORIENTATION_UNKNOW;
 
 struct CALWindow3D* calglCreateWindow3D(int argc, char** argv, struct CALGLGlobalSettings* globalSettings, struct CALDrawModel3D** models, int size){
@@ -174,7 +176,10 @@ void calglSubDisplayWindow3D(void){
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	currentModel3D = glutGetWindow() - 2;
-
+	
+	if(window3D->models[currentModel3D]->modelLight)
+		calglApplyLightParameter(window3D->models[currentModel3D]->modelLight);
+	
 	glPushMatrix();	{
 		glTranslatef(xPos[currentModel3D], yPos[currentModel3D], zPos[currentModel3D]);
 
@@ -218,7 +223,7 @@ void calglSubReshapeWindow3D(int w, int h){
 	glViewport(0, 0, w, h);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(60.0, (GLdouble)w / (GLdouble)h, window3D->globalSettings->zNear, window3D->globalSettings->zFar);
+	gluPerspective(fovy, (GLdouble)w / (GLdouble)h, window3D->globalSettings->zNear, window3D->globalSettings->zFar);
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
@@ -265,7 +270,7 @@ void calglCalculatePositionAndDimensionWindow3D(struct CALWindow3D* window){
 	}
 }
 
-void calglStartProcessWindow3D(int argc, char** argv){
+void calglMainLoop3D(int argc, char** argv) {
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
 
@@ -397,16 +402,19 @@ void calglMouseWindow3D(int button, int state, int x, int y){
 	if (button == 0){  // Left click
 		leftPressed = CAL_TRUE;
 		old_x = x - window3D->sub_width / 2;
-		old_y = y - window3D->sub_height / 2;
+		old_y = y-window3D->sub_height/2;
+		models3D[glutGetWindow()-2]->moving = CAL_TRUE;
 	}
 	else if (button == 2) { // Right click
 		rightPressed = CAL_TRUE;
-		oldestY = y - window3D->sub_height / 2;
+		oldestY = y-window3D->sub_height/2;
+		models3D[glutGetWindow()-2]->moving = CAL_TRUE;
 	}
 
 	if (state == GLUT_UP){
 		leftPressed = CAL_FALSE;
 		rightPressed = CAL_FALSE;
+		models3D[glutGetWindow()-2]->moving = CAL_FALSE;
 	}
 	else {
 		calglRedisplayAllWindow3D();

@@ -81,7 +81,7 @@ struct CALWindow3D* window	//!< Pointer to window.
 
 /*! \brief Function that start the window system.
 */
-void calglStartProcessWindow3D(
+void calglMainLoop3D(
 	int argc,	//!< argc value passed from Main func.
 	char** argv	//!< argv value passed from Main func.
 	);

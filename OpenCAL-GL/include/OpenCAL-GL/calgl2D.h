@@ -49,6 +49,7 @@ struct CALDrawModel2D {
 	GLfloat greenComponent;						//!< Component for the channel of the blue color, this is used for a const color.
 	GLfloat blueComponent;						//!< Component for the channel of the green color, this is used for a const color.
 	GLfloat alphaComponent;						//!< Component for the alpha channel, this is used for a const color.
+	int moving;									//!< Component for control the drawing of the model when the user is moving the automata.
 };
 
 /*! \brief Constructor for creating the drawing model

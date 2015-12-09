@@ -99,7 +99,7 @@ int main(int argc, char** argv){
 	//calglDisplayDrawJBound3D(drawModel, 2, 6);
 	//calglDisplayDrawJBound3D(drawModel, 18, 21);
 
-	calglStartProcessWindow3D(argc, argv);
+	calglMainLoop3D(argc, argv);
 
 	return 0;
 }

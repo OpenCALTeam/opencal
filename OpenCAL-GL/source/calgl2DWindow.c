@@ -45,6 +45,8 @@ static GLint key_old_x, key_old_y;
 static CALbyte translationOn = CAL_FALSE;
 static GLint activeSubWindow = -1;
 
+static GLfloat fovy = 45.0;
+
 static enum CALGL_LAYOUT_ORIENTATION orientation = CALGL_LAYOUT_ORIENTATION_UNKNOW;
 
 struct CALWindow2D* calglCreateWindow2D(int argc, char** argv, struct CALGLGlobalSettings* globalSettings, struct CALDrawModel2D** models, int size) {
@@ -183,6 +185,9 @@ void calglSubDisplayWindow2D(void) {
 
 	currentModel2D = glutGetWindow()-2;
 
+	if(window2D->models[currentModel2D]->modelLight)
+		calglApplyLightParameter(window2D->models[currentModel2D]->modelLight);
+
 	glPushMatrix();	{
 		glTranslatef(xPos[currentModel2D], yPos[currentModel2D], zPos[currentModel2D]);
 
@@ -225,7 +230,7 @@ void calglSubReshapeWindow2D(int w, int h) {
 	glViewport(0, 0, w, h);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(60.0, (GLdouble) w/(GLdouble) h, window2D->globalSettings->zNear, window2D->globalSettings->zFar);
+	gluPerspective(fovy, (GLdouble) w/(GLdouble) h, window2D->globalSettings->zNear, window2D->globalSettings->zFar);
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
@@ -270,7 +275,7 @@ void calglCalculatePositionAndDimensionWindow2D(struct CALWindow2D* window) {
 	}
 }
 
-void calglStartProcessWindow2D(int argc, char** argv) {
+void calglMainLoop2D(int argc, char** argv) {
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE|GLUT_RGB|GLUT_DEPTH);
 
@@ -399,14 +404,17 @@ void calglMouseWindow2D(int button, int state, int x, int y) {
 		leftPressed = CAL_TRUE;
 		old_x = x-window2D->sub_width/2;
 		old_y = y-window2D->sub_height/2;
+		models2D[glutGetWindow()-2]->moving = CAL_TRUE;
 	} else if(button==2) { // Right click
 		rightPressed = CAL_TRUE;
 		oldestY = y-window2D->sub_height/2;
+		models2D[glutGetWindow()-2]->moving = CAL_TRUE;
 	}
 
 	if(state==GLUT_UP) {
 		leftPressed = CAL_FALSE;
 		rightPressed = CAL_FALSE;
+		models2D[glutGetWindow()-2]->moving = CAL_FALSE;
 	} else {
 		calglRedisplayAllWindow2D();
 	}

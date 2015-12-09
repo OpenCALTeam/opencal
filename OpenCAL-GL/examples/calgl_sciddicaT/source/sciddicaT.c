@@ -231,14 +231,14 @@ int main(int argc, char** argv)
 	//calglDisplayDrawJBound2D(model1, 300, model1->calModel->columns);
 	//calglHideDrawIBound2D(model1, 100, 150);
 
-	model2 = calglDefDrawModel2D(CALGL_DRAW_MODE_FLAT, "model2", sciddicaT, sciddicaTsimulation);
-	model2->realModel = model1->realModel;
-	calglInfoBar2Dr(model2, Q.h, "Debris thickness", CALGL_TYPE_INFO_USE_RED_SCALE, 20, 200, 50, 150);
+	//model2 = calglDefDrawModel2D(CALGL_DRAW_MODE_FLAT, "model2", sciddicaT, sciddicaTsimulation);
+	//model2->realModel = model1->realModel;
+	//calglInfoBar2Dr(model2, Q.h, "Debris thickness", CALGL_TYPE_INFO_USE_RED_SCALE, 20, 200, 50, 150);
 
 	//calglSetLayoutOrientation2D(CALGL_LAYOUT_ORIENTATION_HORIZONTAL);
 	//calglSetLayoutOrientation2D(CALGL_LAYOUT_ORIENTATION_VERTICAL);
 
-	calglStartProcessWindow2D(argc, argv);
+	calglMainLoop2D(argc, argv);
 
 	return 0;
 }

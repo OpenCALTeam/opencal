@@ -81,7 +81,7 @@ void calglCalculatePositionAndDimensionWindow2D(
 
 /*! \brief Function that start the window system.
 */
-void calglStartProcessWindow2D(
+void calglMainLoop2D(
 	int argc,	//!< argc value passed from Main func.
 	char** argv	//!< argv value passed from Main func.
 	);
