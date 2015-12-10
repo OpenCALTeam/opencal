@@ -48,9 +48,6 @@ int main()
 	// add the Q substate to the life CA
 	Q = calAddSubstate2Di(life);
 
-	// add transition function's elementary process
-//	calAddElementaryProcess2D(life, life_transition_function);
-
 	// set the whole substate to 0
 	calInitSubstate2Di(life, Q, 0);
 
@@ -61,21 +58,23 @@ int main()
 	calInit2Di(life, Q, 2, 1, 1);
 	calInit2Di(life, Q, 2, 2, 1);
 
+	// define Toolkit object
     lifeToolkit = calclCreateToolkit2D(life, context, program, device, CAL_NO_OPT);
-
+	
+	//create kernel
 	kernel_life_transition_function = calclGetKernelFromProgram(&program, KERNEL_LIFE_TRANSITION_FUNCTION);
 
 	// save the Q substate to file
 	calSaveSubstate2Di(life, Q, "./life_0000.txt");
 
+	// add transition function's elementary process
 	calclAddElementaryProcessKernel2D(lifeToolkit, life, &kernel_life_transition_function);
+
 	start_time = time(NULL);
+	// simulation run
 	calclRun2D(lifeToolkit, life, 1, 1);
 	end_time = time(NULL);
 	printf("%d", end_time - start_time);
-
-	// simulation run
-//	calRun2D(life_simulation);
 
 	// save the Q substate to file
 	calSaveSubstate2Di(life, Q, "./life_LAST.txt");
