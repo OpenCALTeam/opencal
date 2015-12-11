@@ -14,7 +14,7 @@ struct CALModel3D* mbusu;							//the cellular automaton
 struct mbusuSubstates Q;							//the set of substates
 struct CALRun3D* mbusuSimulation;					//the simulartion run
 
-int ascii_output_time_step = 8640;				//[s] in seconds
+int ascii_output_time_step = 864000;				//[s] in seconds
 float lato = 5.0;
 float delta_t = 10.0;
 float delta_t_cum = 0.0;

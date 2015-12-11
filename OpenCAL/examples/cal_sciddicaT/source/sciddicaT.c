@@ -144,8 +144,8 @@ int main()
 	time_t start_time, end_time;
 
 	// define of the sciddicaT CA and sciddicaT_simulation simulation objects
-	struct CALModel2D* sciddicaT = calCADef2D (ROWS, COLS, CAL_VON_NEUMANN_NEIGHBORHOOD_2D, CAL_SPACE_TOROIDAL, CAL_NO_OPT);
-	struct CALRun2D* sciddicaT_simulation = calRunDef2D(sciddicaT, 1, STEPS, CAL_UPDATE_IMPLICIT);
+    sciddicaT = calCADef2D (ROWS, COLS, CAL_VON_NEUMANN_NEIGHBORHOOD_2D, CAL_SPACE_TOROIDAL, CAL_NO_OPT);
+	sciddicaT_simulation = calRunDef2D(sciddicaT, 1, STEPS, CAL_UPDATE_IMPLICIT);
 
 	// add transition function's sigma_1 and sigma_2 elementary processes
 	calAddElementaryProcess2D(sciddicaT, sciddicaT_flows_computation);

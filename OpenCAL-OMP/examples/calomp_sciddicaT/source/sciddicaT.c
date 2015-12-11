@@ -1,13 +1,12 @@
+// The SciddicaT debris flows CCA simulation model
+
 #include <OpenCAL-OMP/cal2D.h>
 #include <OpenCAL-OMP/cal2DIO.h>
 #include <OpenCAL-OMP/cal2DRun.h>
 #include <stdlib.h>
 #include <time.h>
 
-//-----------------------------------------------------------------------
-//   THE sciddicaT (Toy model) CELLULAR AUTOMATON
-//-----------------------------------------------------------------------
-
+// Some definitions...
 #define ROWS 610
 #define COLS 496
 #define P_R 0.5
@@ -16,9 +15,11 @@
 #define DEM_PATH "./data/dem.txt"
 #define SOURCE_PATH "./data/source.txt"
 #define OUTPUT_PATH "./data/width_final.txt"
-
-
 #define NUMBER_OF_OUTFLOWS 4
+
+// declare CCA model (sciddicaT), substates (Q), parameters (P),
+// and simulation object (sciddicaT_simulation)
+struct CALModel2D* sciddicaT;
 
 struct sciddicaTSubstates {
 	struct CALSubstate2Dr *z;
@@ -31,8 +32,9 @@ struct sciddicaTParameters {
 	CALParameterr r;
 } P;
 
+struct CALRun2D* sciddicaT_simulation;
 
-
+// The sigma_1 elementary process
 void sciddicaT_flows_computation(struct CALModel2D* sciddicaT, int i, int j)
 {
 	CALbyte eliminated_cells[5]={CAL_FALSE,CAL_FALSE,CAL_FALSE,CAL_FALSE,CAL_FALSE};
@@ -43,7 +45,6 @@ void sciddicaT_flows_computation(struct CALModel2D* sciddicaT, int i, int j)
 	CALreal u[5];
 	CALint n;
 	CALreal z, h;
-
 
 	if (calGet2Dr(sciddicaT, Q.h, i, j) <= P.epsilon)
 		return;
@@ -77,7 +78,6 @@ void sciddicaT_flows_computation(struct CALModel2D* sciddicaT, int i, int j)
 					eliminated_cells[n]=CAL_TRUE;
 					again=CAL_TRUE;
 				}
-
 	}while (again); 
 
 	for (n=1; n<sciddicaT->sizeof_X; n++)
@@ -87,7 +87,7 @@ void sciddicaT_flows_computation(struct CALModel2D* sciddicaT, int i, int j)
 			calSet2Dr(sciddicaT, Q.f[n-1], i, j, (average-u[n])*P.r);
 }
 
-
+// The sigma_2 elementary process
 void sciddicaT_width_update(struct CALModel2D* sciddicaT, int i, int j)
 {
 	CALreal h_next;
@@ -100,7 +100,7 @@ void sciddicaT_width_update(struct CALModel2D* sciddicaT, int i, int j)
 	calSet2Dr(sciddicaT, Q.h, i, j, h_next);
 }
 
-
+// SciddicaT simulation init function
 void sciddicaT_simulation_init(struct CALModel2D* sciddicaT)
 {
 	CALreal z, h;
@@ -129,7 +129,7 @@ void sciddicaT_simulation_init(struct CALModel2D* sciddicaT)
 		}
 }
 
-
+// SciddicaT steering function
 void sciddicaTSteering(struct CALModel2D* sciddicaT)
 {
     //initializing substates to 0
@@ -139,14 +139,13 @@ void sciddicaTSteering(struct CALModel2D* sciddicaT)
 	calInitSubstate2Dr(sciddicaT, Q.f[3], 0);
 }
 
-
 int main()
 {
 	time_t start_time, end_time;
 
 	//cadef and rundef
-	struct CALModel2D* sciddicaT = calCADef2D (ROWS, COLS, CAL_VON_NEUMANN_NEIGHBORHOOD_2D, CAL_SPACE_TOROIDAL, CAL_NO_OPT);
-	struct CALRun2D* sciddicaT_simulation = calRunDef2D(sciddicaT, 1, STEPS, CAL_UPDATE_IMPLICIT);
+	sciddicaT = calCADef2D (ROWS, COLS, CAL_VON_NEUMANN_NEIGHBORHOOD_2D, CAL_SPACE_TOROIDAL, CAL_NO_OPT);
+	sciddicaT_simulation = calRunDef2D(sciddicaT, 1, STEPS, CAL_UPDATE_IMPLICIT);
 
 	//add transition function's elementary processes
 	calAddElementaryProcess2D(sciddicaT, sciddicaT_flows_computation);

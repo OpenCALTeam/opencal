@@ -238,7 +238,7 @@ int main(int argc, char** argv)
 	//calglSetLayoutOrientation2D(CALGL_LAYOUT_ORIENTATION_HORIZONTAL);
 	//calglSetLayoutOrientation2D(CALGL_LAYOUT_ORIENTATION_VERTICAL);
 
-	calglStartProcessWindow2D(argc, argv);
+	calglMainLoop2D(argc, argv);
 
 	return 0;
 }

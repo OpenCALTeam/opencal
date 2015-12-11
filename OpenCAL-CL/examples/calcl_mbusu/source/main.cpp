@@ -32,7 +32,7 @@ int active;
 time_t start_time, end_time;
 
 void setParameters(){
-	mbusu->parameters.ascii_output_time_step = 86400;				//[s] in seconds
+	mbusu->parameters.ascii_output_time_step = 864000;				//[s] in seconds
 	mbusu->parameters.lato = 5.0;
 	mbusu->parameters.delta_t = 10.0;
 	mbusu->parameters.delta_t_cum = 0.0;
