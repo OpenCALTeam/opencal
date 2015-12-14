@@ -156,13 +156,6 @@ void run(struct CALRun2D* simulation)
 
 	calRunInitSimulation2D(simulation);
 
-	/*for (simulation->step = simulation->initial_step; (simulation->step <= simulation->final_step || simulation->final_step == CAL_RUN_LOOP); simulation->step++)
-	{
-		again = calRunCAStep2D(simulation);
-		if (!again)
-			break;
-	}*/
-
 	do{
 			again = calRunCAStep2D(simulation);
 			simulation->step++;
@@ -201,26 +194,7 @@ int main()
 
 	printf ("Starting simulation...\n");
 	start_time = time(NULL);
-	//run(sciddicaT_simulation);
-
-    CALbyte again;
-
-	calRunInitSimulation2D(sciddicaT_simulation);
-
-	/*for (simulation->step = simulation->initial_step; (simulation->step <= simulation->final_step || simulation->final_step == CAL_RUN_LOOP); simulation->step++)
-	{
-		again = calRunCAStep2D(simulation);
-		if (!again)
-			break;
-	}*/
-
-	do{
-			again = calRunCAStep2D(sciddicaT_simulation);
-			sciddicaT_simulation->step++;
-	} while (again);
-
-	calRunFinalizeSimulation2D(sciddicaT_simulation);
-    
+	run(sciddicaT_simulation);
 	end_time = time(NULL);
 	printf ("Simulation terminated.\nElapsed time: %d\n", end_time-start_time);
 
