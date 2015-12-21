@@ -1,6 +1,0 @@
-cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
-
-ADD_SUBDIRECTORY(identity2D)
-ADD_SUBDIRECTORY(life2D)
-ADD_SUBDIRECTORY(identity3D)
-ADD_SUBDIRECTORY(sciddicaT)
