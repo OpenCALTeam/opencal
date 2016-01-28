@@ -1,3 +1,6 @@
+// The SciddicaT debris flows CCA simulation model width_final
+// a 3D graphic visualizer in OpenCAL-GL
+
 #include <OpenCAL/cal2D.h>
 #include <OpenCAL/cal2DIO.h>
 #include <OpenCAL/cal2DReduction.h>
@@ -6,23 +9,19 @@
 #include <OpenCAL-GL/calgl2DWindow.h>
 #include <stdlib.h>
 
-
-//-----------------------------------------------------------------------
-//	   THE sciddicaT(oy) cellular automaton definition section
-//-----------------------------------------------------------------------
-
+// Some definitions...
 #define P_R 0.5
 #define P_EPSILON 0.001
 #define NUMBER_OF_OUTFLOWS 4
-
 #define DEM "./data/dem.txt"
 #define SOURCE "./data/source.txt"
 #define FINAL "./data/width_final.txt"
-
 #define ROWS 610
 #define COLUMNS 496
 #define STEPS 4000
 
+// declare CCA model (sciddicaT), substates (Q), parameters (P),
+// and simulation object (sciddicaT_simulation)
 struct sciddicaTSubstates {
 	struct CALSubstate2Dr *z;
 	struct CALSubstate2Dr *h;
@@ -37,14 +36,9 @@ struct sciddicaTParameters {
 struct CALModel2D* sciddicaT;						//the cellular automaton
 struct sciddicaTSubstates Q;						//the substates
 struct sciddicaTParameters P;						//the parameters
-struct CALRun2D* sciddicaTsimulation;				//the simulartion run
+struct CALRun2D* sciddicaTsimulation;		//the simulartion run
 
-
-//------------------------------------------------------------------------------
-//					sciddicaT transition function
-//------------------------------------------------------------------------------
-
-//first elementary process
+// The sigma_1 elementary process
 void sciddicaT_flows_computation(struct CALModel2D* sciddicaT, int i, int j)
 {
 	CALbyte eliminated_cells[5] = { CAL_FALSE, CAL_FALSE, CAL_FALSE, CAL_FALSE, CAL_FALSE };
@@ -55,7 +49,6 @@ void sciddicaT_flows_computation(struct CALModel2D* sciddicaT, int i, int j)
 	CALreal u[5];
 	CALint n;
 	CALreal z, h;
-
 
 	if (calGet2Dr(sciddicaT, Q.h, i, j) <= P.epsilon)
 		return;
@@ -99,7 +92,7 @@ void sciddicaT_flows_computation(struct CALModel2D* sciddicaT, int i, int j)
 			calSet2Dr(sciddicaT, Q.f[n - 1], i, j, (average - u[n])*P.r);
 }
 
-//second (and last) elementary process
+// The sigma_2 elementary process
 void sciddicaT_width_update(struct CALModel2D* sciddicaT, int i, int j)
 {
 	CALreal h_next;
@@ -112,10 +105,7 @@ void sciddicaT_width_update(struct CALModel2D* sciddicaT, int i, int j)
 	calSet2Dr(sciddicaT, Q.h, i, j, h_next);
 }
 
-//------------------------------------------------------------------------------
-//					sciddicaT simulation functions
-//------------------------------------------------------------------------------
-
+// SciddicaT simulation init function
 void sciddicaTSimulationInit(struct CALModel2D* sciddicaT)
 {
 	CALreal z, h;
@@ -144,6 +134,7 @@ void sciddicaTSimulationInit(struct CALModel2D* sciddicaT)
 		}
 }
 
+// SciddicaT steering function
 void sciddicaTSteering(struct CALModel2D* sciddicaT)
 {
 	CALreal value = 0;
@@ -154,10 +145,11 @@ void sciddicaTSteering(struct CALModel2D* sciddicaT)
 	calInitSubstate2Dr(sciddicaT, Q.f[2], 0);
 	calInitSubstate2Dr(sciddicaT, Q.f[3], 0);
 
-	value = calReductionComputeMax2Dr(sciddicaT, Q.z);
+	//value = calReductionComputeMax2Dr(sciddicaT, Q.z);
 	//printf("Max: %g\t", value);
 }
 
+// SciddicaT stop condition function
 CALbyte sciddicaTSimulationStopCondition(struct CALModel2D* sciddicaT)
 {
 	if (sciddicaTsimulation->step >= STEPS)
@@ -165,6 +157,7 @@ CALbyte sciddicaTSimulationStopCondition(struct CALModel2D* sciddicaT)
 	return CAL_FALSE;
 }
 
+// SciddicaT exit function
 void exitFunction()
 {
 	// saving configuration
