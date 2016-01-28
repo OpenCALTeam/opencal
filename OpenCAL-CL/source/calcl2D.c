@@ -468,11 +468,6 @@ CALbyte calclSingleStep2D(CALCLToolkit2D* toolkit2d, struct CALModel2D * model, 
 
 }
 
-/**
-
- //#include <fstream>
- //ofstream out;
- */
 FILE * file;
 void calclKernelCall2D(CALCLToolkit2D* toolkit2d, CALCLkernel ker, int numDim, size_t * dimSize, size_t * localDimSize) {
 

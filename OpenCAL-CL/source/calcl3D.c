@@ -473,11 +473,6 @@ CALbyte calclSingleStep3D(CALCLToolkit3D* toolkit3d, struct CALModel3D * model, 
 
 }
 
-/**
-
- //#include <fstream>
- //ofstream out;
- */
 void calclKernelCall3D(CALCLToolkit3D * toolkit3d, CALCLkernel ker, int numDim, size_t * dimSize, size_t * localDimSize) {
 	CALCLqueue queue = toolkit3d->queue;
 

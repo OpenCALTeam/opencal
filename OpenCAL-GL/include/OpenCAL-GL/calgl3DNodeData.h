@@ -194,7 +194,7 @@ struct CALNode3Di* node, 						//!< Node father.
 struct CALSubstate3Di* substate, 				//!< Substate to add.
 enum CALGL_TYPE_INFO typeInfoSubstate, 			//!< Type of the information.
 enum CALGL_TYPE_INFO_USE typeInfoUseSubstate, 	//!< Color gradient to use.
-enum CALGL_DATA_TYPE dataType
+enum CALGL_DATA_TYPE dataType                   //!< Static or dynamic data.
 	);
 /*! \brief Function for insert a substate in the hierarchy tree.
 This function is for 3D real data.

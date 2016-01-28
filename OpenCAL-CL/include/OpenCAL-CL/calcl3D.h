@@ -9,10 +9,10 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 // Lesser General Public License for more details.
 
-/*! \file calCL3D.h
- *\brief calCL3D contains structures and functions that allow to run parallel CA simulation using Opencl and OpenCAL.
+/*! \file calcl3D.h
+ *\brief calcl3D contains structures and functions that allow to run parallel CA simulation using Opencl and OpenCAL.
  *
- *	calCL3D contains structures that allows easily to transfer data of a CALModel3D instance from host to GPU.
+ *	calcl3D contains structures that allows easily to transfer data of a CALModel3D instance from host to GPU.
  *	It's possible to setup a CA simulation by only defining kernels for elementary processes, and optionally
  *	initialization, steering and stop condition. Moreover, user can avoid to use the simulation cycle provided
  *	by the library and define his own simulation cycle.
