@@ -3,7 +3,6 @@
 
 #include <OpenCAL/cal2D.h>
 #include <OpenCAL/cal2DIO.h>
-#include <OpenCAL/cal2DReduction.h>
 #include <OpenCAL/cal2DRun.h>
 #include <OpenCAL-GL/calgl2D.h>
 #include <OpenCAL-GL/calgl2DWindow.h>
@@ -144,9 +143,6 @@ void sciddicaTSteering(struct CALModel2D* sciddicaT)
 	calInitSubstate2Dr(sciddicaT, Q.f[1], 0);
 	calInitSubstate2Dr(sciddicaT, Q.f[2], 0);
 	calInitSubstate2Dr(sciddicaT, Q.f[3], 0);
-
-	//value = calReductionComputeMax2Dr(sciddicaT, Q.z);
-	//printf("Max: %g\t", value);
 }
 
 // SciddicaT stop condition function
@@ -168,18 +164,15 @@ void exitFunction()
 	calFinalize2D (sciddicaT);
 }
 
-//------------------------------------------------------------------------------
-//					sciddicaT main function
-//------------------------------------------------------------------------------
 
 int main(int argc, char** argv)
 {
-	struct CALDrawModel2D* model1 = NULL;
-	struct CALDrawModel2D* model2;
+	struct CALDrawModel2D* draw_model3D = NULL;
+	struct CALDrawModel2D* draw_model2D;
 
 	atexit(exitFunction);
 
-	calglInitViewer("RealDraw", 5, 800, 600, 10, 10, CAL_TRUE, 0);
+	calglInitViewer("SciddicaT OpenCAL-GL visualizer", 5, 800, 600, 10, 10, CAL_TRUE, 0);
 
 	//cadef and rundef
 	sciddicaT = calCADef2D(ROWS, COLUMNS, CAL_VON_NEUMANN_NEIGHBORHOOD_2D, CAL_SPACE_TOROIDAL, CAL_NO_OPT);
@@ -194,42 +187,42 @@ int main(int argc, char** argv)
 	//add transition function's elementary processes
 	calAddElementaryProcess2D(sciddicaT, sciddicaT_flows_computation);
 	calAddElementaryProcess2D(sciddicaT, sciddicaT_width_update);
-
 	//load configuration
 	calLoadSubstate2Dr(sciddicaT, Q.z, DEM);
 	calLoadSubstate2Dr(sciddicaT, Q.h, SOURCE);
-
 	//simulation run setup
 	calRunAddInitFunc2D(sciddicaTsimulation, sciddicaTSimulationInit);
-	calRunInitSimulation2D(sciddicaTsimulation);	//It is required in the case the simulation main loop is explicitated; similarly for calRunFinalizeSimulation2D
+	calRunInitSimulation2D(sciddicaTsimulation);
 	calRunAddSteeringFunc2D(sciddicaTsimulation, sciddicaTSteering);
 	calRunAddStopConditionFunc2D(sciddicaTsimulation, sciddicaTSimulationStopCondition);
 
-	// model1 definition
-	model1 = calglDefDrawModel2D(CALGL_DRAW_MODE_SURFACE, "SciddicaT", sciddicaT, sciddicaTsimulation);
+	// draw_model3D definition
+	draw_model3D = calglDefDrawModel2D(CALGL_DRAW_MODE_SURFACE, "SciddicaT 3D view", sciddicaT, sciddicaTsimulation);
 	// Add nodes
-	calglAddToDrawModel2Dr(model1, NULL, &Q.z, CALGL_TYPE_INFO_VERTEX_DATA, CALGL_TYPE_INFO_USE_DEFAULT, CALGL_DATA_TYPE_STATIC);
-	calglColor2D(model1, 0.5, 0.5, 0.5, 1.0);
-	calglAddToDrawModel2Dr(model1, Q.z, &Q.z, CALGL_TYPE_INFO_COLOR_DATA, CALGL_TYPE_INFO_USE_CONST_VALUE, CALGL_DATA_TYPE_DYNAMIC);
-	calglAddToDrawModel2Dr(model1, Q.z, &Q.z, CALGL_TYPE_INFO_NORMAL_DATA, CALGL_TYPE_INFO_USE_DEFAULT, CALGL_DATA_TYPE_DYNAMIC);
-	calglAddToDrawModel2Dr(model1, Q.z, &Q.h, CALGL_TYPE_INFO_VERTEX_DATA, CALGL_TYPE_INFO_USE_DEFAULT, CALGL_DATA_TYPE_DYNAMIC);
-	calglAddToDrawModel2Dr(model1, Q.h, &Q.h, CALGL_TYPE_INFO_COLOR_DATA, CALGL_TYPE_INFO_USE_RED_SCALE, CALGL_DATA_TYPE_DYNAMIC);
-	calglAddToDrawModel2Dr(model1, Q.h, &Q.h, CALGL_TYPE_INFO_NORMAL_DATA, CALGL_TYPE_INFO_USE_DEFAULT, CALGL_DATA_TYPE_DYNAMIC);
+	calglAddToDrawModel2Dr(draw_model3D, NULL, &Q.z, CALGL_TYPE_INFO_VERTEX_DATA, CALGL_TYPE_INFO_USE_DEFAULT, CALGL_DATA_TYPE_STATIC);
+	calglColor2D(draw_model3D, 0.5, 0.5, 0.5, 1.0);
+	calglAddToDrawModel2Dr(draw_model3D, Q.z, &Q.z, CALGL_TYPE_INFO_COLOR_DATA, CALGL_TYPE_INFO_USE_CONST_VALUE, CALGL_DATA_TYPE_DYNAMIC);
+	calglAddToDrawModel2Dr(draw_model3D, Q.z, &Q.z, CALGL_TYPE_INFO_NORMAL_DATA, CALGL_TYPE_INFO_USE_DEFAULT, CALGL_DATA_TYPE_DYNAMIC);
+	calglAddToDrawModel2Dr(draw_model3D, Q.z, &Q.h, CALGL_TYPE_INFO_VERTEX_DATA, CALGL_TYPE_INFO_USE_DEFAULT, CALGL_DATA_TYPE_DYNAMIC);
+	calglAddToDrawModel2Dr(draw_model3D, Q.h, &Q.h, CALGL_TYPE_INFO_COLOR_DATA, CALGL_TYPE_INFO_USE_RED_SCALE, CALGL_DATA_TYPE_DYNAMIC);
+	calglAddToDrawModel2Dr(draw_model3D, Q.h, &Q.h, CALGL_TYPE_INFO_NORMAL_DATA, CALGL_TYPE_INFO_USE_DEFAULT, CALGL_DATA_TYPE_DYNAMIC);
 	// InfoBar
-	//calglRelativeInfoBar2Dr(model1, Q.h, "Debris thickness", CALGL_TYPE_INFO_USE_RED_SCALE, CALGL_INFO_BAR_ORIENTATION_VERTICAL);
-	calglInfoBar2Dr(model1, Q.h, "Debris thickness", CALGL_TYPE_INFO_USE_RED_SCALE, 20, 120, 300, 80);
+	//calglRelativeInfoBar2Dr(draw_model3D, Q.h, "Debris thickness", CALGL_TYPE_INFO_USE_RED_SCALE, CALGL_INFO_BAR_ORIENTATION_VERTICAL);
+	calglInfoBar2Dr(draw_model3D, Q.h, "Debris thickness", CALGL_TYPE_INFO_USE_RED_SCALE, 20, 120, 300, 80);
 
 	// New functions for hide/display intervals of cells
-	//calglHideDrawJBound2D(model1, 0, model1->calModel->columns);
-	//calglDisplayDrawJBound2D(model1, 300, model1->calModel->columns);
-	//calglHideDrawIBound2D(model1, 100, 150);
+	// calglHideDrawJBound2D(draw_model3D, 0, draw_model3D->calModel->columns);
+	// calglDisplayDrawJBound2D(draw_model3D, 300, draw_model3D->calModel->columns);
+	// calglHideDrawIBound2D(draw_model3D, 100, 150);
 
-	//model2 = calglDefDrawModel2D(CALGL_DRAW_MODE_FLAT, "model2", sciddicaT, sciddicaTsimulation);
-	//model2->realModel = model1->realModel;
-	//calglInfoBar2Dr(model2, Q.h, "Debris thickness", CALGL_TYPE_INFO_USE_RED_SCALE, 20, 200, 50, 150);
 
-	//calglSetLayoutOrientation2D(CALGL_LAYOUT_ORIENTATION_HORIZONTAL);
-	//calglSetLayoutOrientation2D(CALGL_LAYOUT_ORIENTATION_VERTICAL);
+	
+	draw_model2D = calglDefDrawModel2D(CALGL_DRAW_MODE_FLAT, "SciddicaT 2D view", sciddicaT, sciddicaTsimulation);
+	draw_model2D->realModel = draw_model3D->realModel;
+	calglInfoBar2Dr(draw_model2D, Q.h, "Debris thickness", CALGL_TYPE_INFO_USE_RED_SCALE, 20, 200, 50, 150);
+
+	calglSetLayoutOrientation2D(CALGL_LAYOUT_ORIENTATION_HORIZONTAL);
+	calglSetLayoutOrientation2D(CALGL_LAYOUT_ORIENTATION_VERTICAL);
 
 	calglMainLoop2D(argc, argv);
 
