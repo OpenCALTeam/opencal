@@ -1,5 +1,6 @@
 language: cpp
-compiler: gcc
+compiler: 
+- g++
 
 
 before_install:
@@ -10,7 +11,12 @@ before_install:
 install:
  - sudo apt-get update -qq
  - sudo apt-get install -qq freeglut3-dev libxmu-dev libxi-dev cmake
- - sudo apt-get -qq update
+ 
+ - wget https://cmake.org/files/v3.4/cmake-3.4.3.tar.gz
+ - tar -xzf /cmake-3.4.3.tar.gz
+ - sudo cp -fR /cmake-3.4.3/* /usr
+ 
+ 
 
 
 before_script:
@@ -22,5 +28,5 @@ before_script:
 script: 
 - mkdir -p build 
 - cd build 
-- cmake  -DBUILD_OPENCAL_SERIAL=ON -DBUILD_OPENCAL_OMP=ON -DBUILD_OPENCAL_GL=ON  -DBUILD_EXAMPLES=ON .. 
+- cmake  -DBUILD_OPENCAL_SERIAL=ON .. 
 - make -j4
