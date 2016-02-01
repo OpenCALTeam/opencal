@@ -18,13 +18,15 @@ install:
 
 
 before_script:
-- cmake-3.4.3-Linux-i386/bin/cmake --version
+- cd
+- ./cmake-3.4.3-Linux-i386/bin/cmake --version
 - gcc --version
 - g++ --version
 
 
-script: 
+script:
+- cd
 - mkdir -p build 
 - cd build 
-- cmake-3.4.3-Linux-i386/bin/cmake  -DBUILD_OPENCAL_SERIAL=ON .. 
+- ./cmake-3.4.3-Linux-i386/bin/cmake  -DBUILD_OPENCAL_SERIAL=ON .. 
 - make -j4
