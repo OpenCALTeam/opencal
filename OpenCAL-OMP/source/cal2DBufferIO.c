@@ -139,7 +139,7 @@ void calfSaveMatrix2Dr(CALreal* M, int rows, int columns, FILE* f)
 
 	for (i=0; i<rows; i++) {
 		for (j=0; j<columns; j++) {
-			sprintf(str, "%f ", calGetMatrixElement(M, columns, i, j));
+			sprintf(str, "%Lf ", calGetMatrixElement(M, columns, i, j));
 			fprintf(f,"%s ",str);
 		}
 		fprintf(f,"\n");
