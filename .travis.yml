@@ -1,32 +1,35 @@
 language: cpp
-compiler: 
-- g++
+compiler: g++
 
 
 before_install:
- - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
- - sudo apt-get update -qq
+- sudo add-apt-repository  ppa:ubuntu-toolchain-r/test -y
+- sudo apt-get update -qq
 
 
 install:
  - sudo apt-get update -qq
- - sudo apt-get install -qq freeglut3-dev libxmu-dev libxi-dev cmake
- - cd ~ 
- - wget --no-check-certificate https://cmake.org/files/v3.4/cmake-3.4.3-Linux-i386.tar.gz
- - tar -xzf cmake-3.4.3-Linux-i386.tar.gz
- 
+ - sudo apt-get install -qq freeglut3-dev libxmu-dev libxi-dev build-essential g++-4.8
+ - export CXX="g++-4.8"
+ #cmake latest
+ - wget --no-check-certificate https://cmake.org/files/v3.4/cmake-3.4.3.tar.gz
+ - tar xf cmake-3.4.3.tar.gz
+ - cd cmake-3.4.3
+ - ./configure
+ - make 
+ - sudo make install
+ - export PATH=/usr/local/bin:$PATH
+ - export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
 
 
 before_script:
-- cd
-- ./cmake-3.4.3-Linux-i386/bin/cmake --version
+- cmake --version
 - gcc --version
 - g++ --version
 
 
 script:
-- cd
 - mkdir -p build 
 - cd build 
-- ./cmake-3.4.3-Linux-i386/bin/cmake  -DBUILD_OPENCAL_SERIAL=ON .. 
-- make -j4
+- cmake  -DBUILD_OPENCAL_SERIAL=ON .. 
+- make
