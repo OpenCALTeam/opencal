@@ -4,7 +4,7 @@
 **OpenCAL** is an Open Source, multi-platform library for performing fast and reliable numerical simulations using the Cellular Automata Paradigm. It is support allows ultra-fast execution thanks to OpenCL and CUDA support.
 
 **OpenCAL** is written in C and support the majority such as Linux and FreeBSD out of the box.
-GLFW is licensed under the *GNU LESSER GENERAL PUBLIC LICENSE v2* license.
+**OpenCAL** is licensed under the *GNU LESSER GENERAL PUBLIC LICENSE v2* license.
 
 
 <img src="https://github.com/OpenCALTeam/OpenCALTeam.github.io/blob/master/assets/timer_icon.png" width="48">
