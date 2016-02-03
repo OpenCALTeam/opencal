@@ -1,23 +1,28 @@
 language: cpp
-compiler: gcc
+compiler: g++
 
 
 before_install:
- - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
- - sudo apt-get update -qq
+- sudo add-apt-repository  ppa:ubuntu-toolchain-r/test -y
+- sudo apt-get update -qq
 
 
 install:
+ - export BASE=`pwd`
  - sudo apt-get update -qq
- - sudo apt-get install -qq freeglut3-dev libxmu-dev libxi-dev cmake
- 
- - wget http://www.cmake.org/files/v3.3/cmake-3.3.2-Linux-i386.tar.gz
- - tar -xzf cmake-3.3.2-Linux-i386.tar.gz
- - sudo cp -fR cmake-3.3.2-Linux-i386/* /usr
- - sudo apt-get -qq update
- - sudo apt-get -qq install g++-4.8
- - export CXX="g++-4.9"
- - export CC="gcc-4.9"
+ - sudo apt-get install -qq freeglut3-dev libxmu-dev libxi-dev build-essential g++-4.8
+ - export CXX="g++-4.8"
+ - export CC="gcc-4.8"
+ #cmake latest
+ - wget --no-check-certificate https://cmake.org/files/v3.4/cmake-3.4.3.tar.gz
+ - tar xf cmake-3.4.3.tar.gz
+ - cd cmake-3.4.3
+ - ./configure
+ - make 
+ - sudo make install
+ - export PATH=/usr/local/bin:$PATH
+ - export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
+ - cd $BASE
 
 
 before_script:
@@ -26,8 +31,8 @@ before_script:
 - g++ --version
 
 
-script: 
+script:
 - mkdir -p build 
 - cd build 
-- cmake -DBUILD_EXAMPLES:STRING=ON -DBUILD_DOCUMENTATION=OFF -DBUILD_OPENCAL_CL:STRING=OFF -DBUILD_OPENCAL_GL:STRING=OFF -DBUILD_OPENCAL_OMP:STRING=OFF .. 
-- make -j4
+- cmake  -DBUILD_OPENCAL_SERIAL=ON .. 
+- make
