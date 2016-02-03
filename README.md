@@ -1,6 +1,27 @@
 
 #OpenCAL - The Cellular Automata Library    [![Build Status](https://travis-ci.org/OpenCALTeam/opencal.svg?branch=master)](https://travis-ci.org/OpenCALTeam/opencal)
 
+**OpenCAL** is an Open Source, multi-platform library for performing fast and reliable numerical simulations using the Cellular Automata Paradigm. It is support allows ultra-fast execution thanks to OpenCL and CUDA support.
+
+**OpenCAL** is written in C and support the majority such as Linux and FreeBSD out of the box.
+GLFW is licensed under the *GNU LESSER GENERAL PUBLIC LICENSE v2* license.
+
+
+<img src="https://github.com/OpenCALTeam/OpenCALTeam.github.io/blob/master/assets/timer_icon.png" width="48">
+Gives you the power to concentrate only on simulation code. No memory or parallelism management required.
+
+<img src="https://github.com/OpenCALTeam/OpenCALTeam.github.io/blob/master/assets/rocket_icon.png" width="48">
+Fast execution on multiple platforms. Exploits GPUs and multicore CPUs power.
+
+<img src="https://github.com/OpenCALTeam/OpenCALTeam.github.io/blob/master/assets/docs_icon.png" width="48">
+Code Documented and mantained
+
+<img src="https://github.com/OpenCALTeam/OpenCALTeam.github.io/blob/master/assets/opensource_icon.png" width="48">
+Opensource project released under the LGPLv2 license.
+
+
+***
+
 
 Developers should read the [DEVELOPER_README.md](DEVELOPER_README.md) file and be sure to have fully absorbed the CODE CONVENCTION before to push any code.
 
