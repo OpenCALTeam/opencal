@@ -208,15 +208,13 @@ int main(int argc, char** argv)
 	calglAddToDrawModel2Dr(draw_model3D, Q.h, &Q.h, CALGL_TYPE_INFO_NORMAL_DATA, CALGL_TYPE_INFO_USE_DEFAULT, CALGL_DATA_TYPE_DYNAMIC);
 	// InfoBar
 	//calglRelativeInfoBar2Dr(draw_model3D, Q.h, "Debris thickness", CALGL_TYPE_INFO_USE_RED_SCALE, CALGL_INFO_BAR_ORIENTATION_VERTICAL);
-	calglInfoBar2Dr(draw_model3D, Q.h, "Debris thickness", CALGL_TYPE_INFO_USE_RED_SCALE, 20, 120, 300, 80);
+	calglInfoBar2Dr(draw_model3D, Q.h, "Debris thickness", CALGL_TYPE_INFO_USE_RED_SCALE, 20, 120, 300, 40);
 
-	// New functions for hide/display intervals of cells
-	// calglHideDrawJBound2D(draw_model3D, 0, draw_model3D->calModel->columns);
-	// calglDisplayDrawJBound2D(draw_model3D, 300, draw_model3D->calModel->columns);
-	// calglHideDrawIBound2D(draw_model3D, 100, 150);
+	// Hide/display intervals of cells
+//	calglHideDrawJBound2D(draw_model3D, 0, draw_model3D->calModel->columns);
+//	calglDisplayDrawJBound2D(draw_model3D, 300, draw_model3D->calModel->columns);
+//	calglHideDrawIBound2D(draw_model3D, 100, 150);
 
-
-	
 	draw_model2D = calglDefDrawModel2D(CALGL_DRAW_MODE_FLAT, "SciddicaT 2D view", sciddicaT, sciddicaTsimulation);
 	draw_model2D->realModel = draw_model3D->realModel;
 	calglInfoBar2Dr(draw_model2D, Q.h, "Debris thickness", CALGL_TYPE_INFO_USE_RED_SCALE, 20, 200, 50, 150);
