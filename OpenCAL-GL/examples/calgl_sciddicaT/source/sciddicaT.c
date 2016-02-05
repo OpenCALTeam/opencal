@@ -219,7 +219,6 @@ int main(int argc, char** argv)
 	draw_model2D->realModel = draw_model3D->realModel;
 	calglInfoBar2Dr(draw_model2D, Q.h, "Debris thickness", CALGL_TYPE_INFO_USE_RED_SCALE, 20, 200, 50, 150);
 
-	calglSetLayoutOrientation2D(CALGL_LAYOUT_ORIENTATION_HORIZONTAL);
 	calglSetLayoutOrientation2D(CALGL_LAYOUT_ORIENTATION_VERTICAL);
 
 	calglMainLoop2D(argc, argv);
