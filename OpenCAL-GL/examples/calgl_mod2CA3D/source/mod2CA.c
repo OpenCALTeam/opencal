@@ -45,7 +45,7 @@ CALbyte mod2SimulationStopCondition(struct CALModel3D* mod2)
 }
 
 // Callback unction called just before program termination
-void exitFunction()
+void exitFunction(void)
 {
 	//finalizations
 	calRunFinalize3D(mod2simulation);
@@ -56,7 +56,7 @@ void exitFunction()
 int main(int argc, char** argv)
 {
 	// Declare a viewer object
-	struct CALDrawModel3D* drawModel;
+	struct CALGLDrawModel3D* drawModel;
 
 	atexit(exitFunction);
 
@@ -77,10 +77,10 @@ int main(int argc, char** argv)
 	calglInitViewer("mod2 3D CA viewer", 1.0f, 400, 400, 40, 40, CAL_TRUE, 1);
 	//drawModel definition
 	drawModel = calglDefDrawModel3D(CALGL_DRAW_MODE_FLAT, "3D view", mod2, mod2simulation);
-	calglAddToDrawModel3Db(drawModel, NULL, &Q, CALGL_TYPE_INFO_VERTEX_DATA, CALGL_TYPE_INFO_USE_DEFAULT, CALGL_DATA_TYPE_DYNAMIC);
+	calglAddToDrawModel3Db(drawModel, NULL, &Q, CALGL_TYPE_INFO_VERTEX_DATA, CALGL_TYPE_INFO_USE_NO_COLOR, CALGL_DATA_TYPE_DYNAMIC);
 	calglColor3D(drawModel, 0.5f, 0.5f, 0.5f, 1.0f);
-	calglAddToDrawModel3Db(drawModel, Q, &Q, CALGL_TYPE_INFO_COLOR_DATA, CALGL_TYPE_INFO_USE_CONST_VALUE, CALGL_DATA_TYPE_DYNAMIC);
-	calglAddToDrawModel3Db(drawModel, Q, &Q, CALGL_TYPE_INFO_NORMAL_DATA, CALGL_TYPE_INFO_USE_DEFAULT, CALGL_DATA_TYPE_DYNAMIC);
+	calglAddToDrawModel3Db(drawModel, Q, &Q, CALGL_TYPE_INFO_COLOR_DATA, CALGL_TYPE_INFO_USE_CURRENT_COLOR, CALGL_DATA_TYPE_DYNAMIC);
+	calglAddToDrawModel3Db(drawModel, Q, &Q, CALGL_TYPE_INFO_NORMAL_DATA, CALGL_TYPE_INFO_USE_NO_COLOR, CALGL_DATA_TYPE_DYNAMIC);
 
 	// New functions for hide/display intervals of cells
 	//calglHideDrawKBound3D(drawModel, 0, drawModel->calModel->slices);

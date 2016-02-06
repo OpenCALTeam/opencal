@@ -19,19 +19,18 @@ enum CALGL_TYPE_INFO {
 	CALGL_TYPE_INFO_VERTEX_DATA,	//!< Enumerator used for specify that a node contains vertex data.
 	CALGL_TYPE_INFO_COLOR_DATA,		//!< Enumerator used for specify that a node contains color data.
 	CALGL_TYPE_INFO_NORMAL_DATA,	//!< Enumerator used for specify that a node contains normal data.
-	CALGL_TYPE_INFO_TEXTURE_DATA,	//!< Enumerator used for specify that a node contains texture data.
-	CALGL_TYPE_INFO_STRING_DATA		//!< Enumerator used for specify that a node contains string data.
 };
 
 /*! \brief Enumeration that specify how the type substate must be use.
 */
 enum CALGL_TYPE_INFO_USE {
-	CALGL_TYPE_INFO_USE_DEFAULT = 0,	//!< Enumerator used for specify that a no color must be used on the node.
-	CALGL_TYPE_INFO_USE_CONST_VALUE,	//!< Enumerator used for specify a const color to use on the node.
+	CALGL_TYPE_INFO_USE_NO_COLOR = 0,	//!< Enumerator used for specify that a no color must be used on the node.
+	CALGL_TYPE_INFO_USE_CURRENT_COLOR,	//!< Enumerator used for specify a const color to use on the node.
 	CALGL_TYPE_INFO_USE_GRAY_SCALE,		//!< Enumerator used for specify a gray gradient to use on the node.
 	CALGL_TYPE_INFO_USE_RED_SCALE,		//!< Enumerator used for specify a red gradient to use on the node.
 	CALGL_TYPE_INFO_USE_GREEN_SCALE,	//!< Enumerator used for specify a green gradient to use on the node.
 	CALGL_TYPE_INFO_USE_BLUE_SCALE,		//!< Enumerator used for specify a blu gradient to use on the node.
+	CALGL_TYPE_INFO_USE_LAVA_GRADIENT,	//!< Enumerator used for specify a Red and Yellow gradient to use on the node.
 	CALGL_TYPE_INFO_USE_ALL_COLOR		//!< Enumerator used for specify a special color combination to use on the node.
 };
 

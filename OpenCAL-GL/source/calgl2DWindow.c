@@ -24,12 +24,12 @@
 #define SEPARATOR_SPACE 5
 #define TRANSLATION_CONSTANT 20
 
-static struct CALWindow2D* window2D = NULL;
+static struct CALGLWindow2D* window2D = NULL;
 // Models data
 static GLint noModels2D = 0;
 static GLint currentModel2D = 0;
 static GLint capacityModels2D = 1;
-static struct CALDrawModel2D** models2D = NULL;
+static struct CALGLDrawModel2D** models2D = NULL;
 // Worlds Properties
 static GLfloat mouseSensitivity = 0.2f;
 static GLfloat keyboardSensitivity = 0.02f;
@@ -49,8 +49,8 @@ static GLfloat fovy = 45.0;
 
 static enum CALGL_LAYOUT_ORIENTATION orientation = CALGL_LAYOUT_ORIENTATION_UNKNOW;
 
-struct CALWindow2D* calglCreateWindow2D(int argc, char** argv, struct CALGLGlobalSettings* globalSettings, struct CALDrawModel2D** models, int size) {
-	struct CALWindow2D* window = (struct CALWindow2D*) malloc(sizeof(struct CALWindow2D));
+struct CALGLWindow2D* calglCreateWindow2D(int argc, char** argv, struct CALGLGlobalSettings* globalSettings, struct CALGLDrawModel2D** models, int size) {
+	struct CALGLWindow2D* window = (struct CALGLWindow2D*) malloc(sizeof(struct CALGLWindow2D));
 	GLint i = 0;
 
 	window->globalSettings = globalSettings;
@@ -106,7 +106,7 @@ struct CALWindow2D* calglCreateWindow2D(int argc, char** argv, struct CALGLGloba
 	return window;
 }
 
-void calglDestroyWindow2D(struct CALWindow2D* window) {
+void calglDestroyWindow2D(struct CALGLWindow2D* window) {
 	GLint i = 0;
 
 	if(window) {
@@ -243,7 +243,7 @@ void calglSubReshapeWindow2D(int w, int h) {
 	glEnable(GL_DEPTH_TEST);
 }
 
-void calglCalculatePositionAndDimensionWindow2D(struct CALWindow2D* window) {
+void calglCalculatePositionAndDimensionWindow2D(struct CALGLWindow2D* window) {
 	GLint noSubWindowX = 0;
 	GLint noSubWindowY = 0;
 	GLint i = 0, j = 0, k = 0;
@@ -294,7 +294,7 @@ void calglMainLoop2D(int argc, char** argv) {
 	calglDestroyWindow2D(window2D);
 }
 
-void calglSetfontWindow2D(struct CALWindow2D* window, char* name, int size) {
+void calglSetfontWindow2D(struct CALGLWindow2D* window, char* name, int size) {
 	window->font_style = GLUT_BITMAP_HELVETICA_10;
 	if(strcmp(name, "helvetica")==0) {
 		if(size==12)
@@ -312,7 +312,7 @@ void calglSetfontWindow2D(struct CALWindow2D* window, char* name, int size) {
 	}
 }
 
-void calglDrawStringWindow2D(struct CALWindow2D* window, GLuint x, GLuint y, char* format, ...) {
+void calglDrawStringWindow2D(struct CALGLWindow2D* window, GLuint x, GLuint y, char* format, ...) {
 	va_list args;
 	char buffer[255], *s;
 
@@ -475,9 +475,9 @@ void calglCleanDrawModelList2D() {
 	}
 }
 
-void calglShowModel2D(struct CALDrawModel2D* model) {
+void calglShowModel2D(struct CALGLDrawModel2D* model) {
 	if(!models2D) {
-		models2D = (struct CALDrawModel2D**) malloc(sizeof(struct CALDrawModel2D));
+		models2D = (struct CALGLDrawModel2D**) malloc(sizeof(struct CALGLDrawModel2D));
 	}
 
 	if(noModels2D>=capacityModels2D) {
@@ -489,10 +489,10 @@ void calglShowModel2D(struct CALDrawModel2D* model) {
 
 void calglIncreaseDrawModel2D() {
 	int i = 0;
-	struct CALDrawModel2D** models = NULL;
+	struct CALGLDrawModel2D** models = NULL;
 
 	capacityModels2D += 3;
-	models = (struct CALDrawModel2D**) malloc(sizeof(struct CALDrawModel2D) * (capacityModels2D));
+	models = (struct CALGLDrawModel2D**) malloc(sizeof(struct CALGLDrawModel2D) * (capacityModels2D));
 
 	for(i = 0; i<(capacityModels2D-3); i++) {
 		models[i] = models2D[i];

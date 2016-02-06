@@ -21,7 +21,7 @@
 #include <OpenCAL-GL/calgl2D.h>
 #include <OpenCAL-GL/calgl3D.h>
 
-struct CALDrawModel2D;
+struct CalGlDrawModel2D;
 
 /*! \brief Structure that contains informations about the model view matrix.
 	It contains translations information.
@@ -58,25 +58,25 @@ struct CALGLModelViewParameter* calglCreateModelViewParameter(
 	This version is designed for 2D cellular automata for discreet drawing.
 */
 struct CALGLModelViewParameter* calglAutoCreateModelViewParameterFlat2D(
-	struct CALDrawModel2D* calDrawModel	//!< Pointer to CALDrawModel.
+	struct CALGLDrawModel2D* calDrawModel	//!< Pointer to CALDrawModel.
 	);
 /*! \brief Function that auto-create a model view matrix.
 	This version is designed for 3D cellular automata for discreet drawing.
 */
 struct CALGLModelViewParameter* calglAutoCreateModelViewParameterFlat3D(
-	struct CALDrawModel3D* calDrawModel	//!< Pointer to CALDrawModel.
+	struct CALGLDrawModel3D* calDrawModel	//!< Pointer to CALDrawModel.
 	);
 /*! \brief Function that auto-create a model view matrix.
 	This version is designed for 2D cellular automata for surface drawing.
 */
 struct CALGLModelViewParameter* calglAutoCreateModelViewParameterSurface2D(
-	struct CALDrawModel2D* calDrawModel	//!< Pointer to CALDrawModel.
+	struct CALGLDrawModel2D* calDrawModel	//!< Pointer to CALDrawModel.
 	);
 /*! \brief Function that auto-create a model view matrix.
 	This version is designed for 3D cellular automata for surface drawing.
 */
 struct CALGLModelViewParameter* calglAutoCreateModelViewParameterSurface3D(
-	struct CALDrawModel3D* calDrawModel	//!< Pointer to CALDrawModel.
+	struct CALGLDrawModel3D* calDrawModel	//!< Pointer to CALDrawModel.
 	);
 
 /*! \brief Destructor for de-allocate memory allocated before.

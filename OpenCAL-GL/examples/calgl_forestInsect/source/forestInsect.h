@@ -96,7 +96,7 @@ extern struct forestInsectParameters P;
 
 void forestInsectCADef();
 void forestInsectLoadConfig();
-void forestInsectExit();
+void forestInsectExit(void);
 
 // Elementary transition function
 void forestInsectUpdateDay(struct CALModel2D* forestInsect, CALint i, CALint j);

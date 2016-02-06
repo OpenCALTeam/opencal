@@ -18,12 +18,12 @@
 #define SEPARATOR_SPACE 5
 #define TRANSLATION_CONSTANT 20
 
-static struct CALWindow3D* window3D = NULL;
+static struct CALGLWindow3D* window3D = NULL;
 // Models data
 static GLint noModels3D = 0;
 static GLint currentModel3D = 0;
 static GLint capacityModels3D = 1;
-static struct CALDrawModel3D** models3D = NULL;
+static struct CALGLDrawModel3D** models3D = NULL;
 // Worlds Properties
 static GLfloat keyboardSensitivity = 0.02f;
 static GLfloat mouseSensitivity = 0.2f;
@@ -42,8 +42,8 @@ static GLfloat fovy = 45.0;
 
 static enum CALGL_LAYOUT_ORIENTATION orientation = CALGL_LAYOUT_ORIENTATION_UNKNOW;
 
-struct CALWindow3D* calglCreateWindow3D(int argc, char** argv, struct CALGLGlobalSettings* globalSettings, struct CALDrawModel3D** models, int size){
-	struct CALWindow3D* window = (struct CALWindow3D*) malloc(sizeof(struct CALWindow3D));
+struct CALGLWindow3D* calglCreateWindow3D(int argc, char** argv, struct CALGLGlobalSettings* globalSettings, struct CALGLDrawModel3D** models, int size){
+	struct CALGLWindow3D* window = (struct CALGLWindow3D*) malloc(sizeof(struct CALGLWindow3D));
 	GLint i = 0;
 
 	window->globalSettings = globalSettings;
@@ -98,7 +98,7 @@ struct CALWindow3D* calglCreateWindow3D(int argc, char** argv, struct CALGLGloba
 	return window;
 }
 
-void calglDestroyWindow3D(struct CALWindow3D* window){
+void calglDestroyWindow3D(struct CALGLWindow3D* window){
 	GLint i = 0;
 
 	if (window){
@@ -236,7 +236,7 @@ void calglSubReshapeWindow3D(int w, int h){
 	glEnable(GL_DEPTH_TEST);
 }
 
-void calglCalculatePositionAndDimensionWindow3D(struct CALWindow3D* window){
+void calglCalculatePositionAndDimensionWindow3D(struct CALGLWindow3D* window){
 	GLint noSubWindowX = 0;
 	GLint noSubWindowY = 0;
 	GLint i = 0, j = 0, k = 0;
@@ -289,7 +289,7 @@ void calglMainLoop3D(int argc, char** argv) {
 	calglDestroyWindow3D(window3D);
 }
 
-void calglSetfontWindow3D(struct CALWindow3D* window, char* name, int size){
+void calglSetfontWindow3D(struct CALGLWindow3D* window, char* name, int size){
 	window->font_style = GLUT_BITMAP_HELVETICA_10;
 	if (strcmp(name, "helvetica") == 0) {
 		if (size == 12)
@@ -310,7 +310,7 @@ void calglSetfontWindow3D(struct CALWindow3D* window, char* name, int size){
 	}
 }
 
-void calglDrawStringWindow3D(struct CALWindow3D* window, GLuint x, GLuint y, char* format, ...){
+void calglDrawStringWindow3D(struct CALGLWindow3D* window, GLuint x, GLuint y, char* format, ...){
 	va_list args;
 	char buffer[255], *s;
 
@@ -477,9 +477,9 @@ void calglCleanDrawModelList3D(){
 	}
 }
 
-void calglShowModel3D(struct CALDrawModel3D* model){
+void calglShowModel3D(struct CALGLDrawModel3D* model){
 	if (!models3D){
-		models3D = (struct CALDrawModel3D**) malloc(sizeof(struct CALDrawModel3D));
+		models3D = (struct CALGLDrawModel3D**) malloc(sizeof(struct CALGLDrawModel3D));
 	}
 
 	if (noModels3D >= capacityModels3D){
@@ -491,10 +491,10 @@ void calglShowModel3D(struct CALDrawModel3D* model){
 
 void calglIncreaseDrawModel3D(){
 	int i = 0;
-	struct CALDrawModel3D** models = NULL;
+	struct CALGLDrawModel3D** models = NULL;
 
 	capacityModels3D += 3;
-	models = (struct CALDrawModel3D**) malloc(sizeof(struct CALDrawModel3D) * (capacityModels3D));
+	models = (struct CALGLDrawModel3D**) malloc(sizeof(struct CALGLDrawModel3D) * (capacityModels3D));
 
 	for (i = 0; i < (capacityModels3D - 3); i++){
 		models[i] = models3D[i];

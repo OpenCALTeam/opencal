@@ -19,8 +19,8 @@
 static GLuint componentColor[3] = {0};
 static GLint currentIndex = 0;
 
-struct CALDrawModel2D* calglDefDrawModel2D(enum CALGL_DRAW_MODE mode, const char* name, struct CALModel2D* calModel, struct CALRun2D* calRun) {
-	struct CALDrawModel2D* drawModel = (struct CALDrawModel2D*) malloc(sizeof(struct CALDrawModel2D));
+struct CALGLDrawModel2D* calglDefDrawModel2D(enum CALGL_DRAW_MODE mode, const char* name, struct CALModel2D* calModel, struct CALRun2D* calRun) {
+	struct CALGLDrawModel2D* drawModel = (struct CALGLDrawModel2D*) malloc(sizeof(struct CALGLDrawModel2D));
 
 	drawModel->drawMode = mode;
 	drawModel->name = name;
@@ -54,7 +54,7 @@ struct CALDrawModel2D* calglDefDrawModel2D(enum CALGL_DRAW_MODE mode, const char
 	return drawModel;
 }
 
-void calglDestoyDrawModel2D(struct CALDrawModel2D* drawModel) {
+void calglDestoyDrawModel2D(struct CALGLDrawModel2D* drawModel) {
 	if(drawModel) {
 		if(drawModel->byteModel)
 			calglDestroyNode2Db(drawModel->byteModel);
@@ -74,7 +74,7 @@ void calglDestoyDrawModel2D(struct CALDrawModel2D* drawModel) {
 }
 
 #pragma region AddData
-void calglAddToDrawModel2Db(struct CALDrawModel2D* drawModel, struct CALSubstate2Db* substateFather, struct CALSubstate2Db** substateToAdd, enum CALGL_TYPE_INFO typeInfo, enum CALGL_TYPE_INFO_USE typeInfoUseSubstate, enum CALGL_DATA_TYPE dataType) {
+void calglAddToDrawModel2Db(struct CALGLDrawModel2D* drawModel, struct CALSubstate2Db* substateFather, struct CALSubstate2Db** substateToAdd, enum CALGL_TYPE_INFO typeInfo, enum CALGL_TYPE_INFO_USE typeInfoUseSubstate, enum CALGL_DATA_TYPE dataType) {
 	struct CALNode2Db* toReturn = NULL;
 	struct CALNode2Db* nodeFather = NULL;
 
@@ -90,14 +90,14 @@ void calglAddToDrawModel2Db(struct CALDrawModel2D* drawModel, struct CALSubstate
 		toReturn = calglAddDataNode2Db(nodeFather, *substateToAdd, typeInfo, typeInfoUseSubstate, dataType);
 	}
 
-	if(typeInfoUseSubstate==CALGL_TYPE_INFO_USE_CONST_VALUE) {
+	if(typeInfoUseSubstate==CALGL_TYPE_INFO_USE_CURRENT_COLOR) {
 		toReturn->redComponent = drawModel->redComponent;
 		toReturn->greenComponent = drawModel->blueComponent;
 		toReturn->blueComponent = drawModel->greenComponent;
 		toReturn->alphaComponent = drawModel->alphaComponent;
 	}
 }
-void calglAddToDrawModel2Di(struct CALDrawModel2D* drawModel, struct CALSubstate2Di* substateFather, struct CALSubstate2Di** substateToAdd, enum CALGL_TYPE_INFO typeInfo, enum CALGL_TYPE_INFO_USE typeInfoUseSubstate, enum CALGL_DATA_TYPE dataType) {
+void calglAddToDrawModel2Di(struct CALGLDrawModel2D* drawModel, struct CALSubstate2Di* substateFather, struct CALSubstate2Di** substateToAdd, enum CALGL_TYPE_INFO typeInfo, enum CALGL_TYPE_INFO_USE typeInfoUseSubstate, enum CALGL_DATA_TYPE dataType) {
 	struct CALNode2Di* toReturn = NULL;
 	struct CALNode2Di* nodeFather = NULL;
 
@@ -113,14 +113,14 @@ void calglAddToDrawModel2Di(struct CALDrawModel2D* drawModel, struct CALSubstate
 		toReturn = calglAddDataNode2Di(nodeFather, *substateToAdd, typeInfo, typeInfoUseSubstate, dataType);
 	}
 
-	if(typeInfoUseSubstate==CALGL_TYPE_INFO_USE_CONST_VALUE) {
+	if(typeInfoUseSubstate==CALGL_TYPE_INFO_USE_CURRENT_COLOR) {
 		toReturn->redComponent = drawModel->redComponent;
 		toReturn->greenComponent = drawModel->blueComponent;
 		toReturn->blueComponent = drawModel->greenComponent;
 		toReturn->alphaComponent = drawModel->alphaComponent;
 	}
 }
-void calglAddToDrawModel2Dr(struct CALDrawModel2D* drawModel, struct CALSubstate2Dr* substateFather, struct CALSubstate2Dr** substateToAdd, enum CALGL_TYPE_INFO typeInfo, enum CALGL_TYPE_INFO_USE typeInfoUseSubstate, enum CALGL_DATA_TYPE dataType) {
+void calglAddToDrawModel2Dr(struct CALGLDrawModel2D* drawModel, struct CALSubstate2Dr* substateFather, struct CALSubstate2Dr** substateToAdd, enum CALGL_TYPE_INFO typeInfo, enum CALGL_TYPE_INFO_USE typeInfoUseSubstate, enum CALGL_DATA_TYPE dataType) {
 	struct CALNode2Dr* toReturn = NULL;
 	struct CALNode2Dr* nodeFather = NULL;
 	int i = 0;
@@ -137,7 +137,7 @@ void calglAddToDrawModel2Dr(struct CALDrawModel2D* drawModel, struct CALSubstate
 		toReturn = calglAddDataNode2Dr(nodeFather, *substateToAdd, typeInfo, typeInfoUseSubstate, dataType);
 	}
 
-	if(typeInfoUseSubstate==CALGL_TYPE_INFO_USE_CONST_VALUE) {
+	if(typeInfoUseSubstate==CALGL_TYPE_INFO_USE_CURRENT_COLOR) {
 		toReturn->redComponent = drawModel->redComponent;
 		toReturn->greenComponent = drawModel->blueComponent;
 		toReturn->blueComponent = drawModel->greenComponent;
@@ -200,7 +200,7 @@ void calglSearchSubstateDrawModel2Dr(struct CALNode2Dr* currentNode, struct CALS
 }
 #pragma endregion
 
-void calglDisplayModel2D(struct CALDrawModel2D* calDrawModel) {
+void calglDisplayModel2D(struct CALGLDrawModel2D* calDrawModel) {
 	switch(calDrawModel->drawMode) {
 	case CALGL_DRAW_MODE_NO_DRAW:
 		break;
@@ -216,7 +216,7 @@ void calglDisplayModel2D(struct CALDrawModel2D* calDrawModel) {
 }
 
 #pragma region DrawDiscreetModel2D
-void calglDrawDiscreetModel2D(struct CALDrawModel2D* calDrawModel) {
+void calglDrawDiscreetModel2D(struct CALGLDrawModel2D* calDrawModel) {
 	glPushMatrix(); {
 		glPushAttrib(GL_LIGHTING_BIT); {
 			// Apply Light
@@ -268,21 +268,21 @@ void calglDrawDiscreetModel2D(struct CALDrawModel2D* calDrawModel) {
 	}	glPopMatrix();
 }
 
-void calglDrawDiscreetModelDisplayNode2Db(struct CALDrawModel2D* calDrawModel, struct CALNode2Db* calNode) {
+void calglDrawDiscreetModelDisplayNode2Db(struct CALGLDrawModel2D* calDrawModel, struct CALNode2Db* calNode) {
 	int i;
 	for(i = 1; i<calNode->insertedNode; i++) {
 		calglDrawDiscreetModelDisplayNode2Db(calDrawModel, calNode->nodes[i]);
 	}
 	calglDrawDiscreetModelDisplayCurrentNode2Db(calDrawModel, calNode);
 }
-void calglDrawDiscreetModelDisplayNode2Di(struct CALDrawModel2D* calDrawModel, struct CALNode2Di* calNode) {
+void calglDrawDiscreetModelDisplayNode2Di(struct CALGLDrawModel2D* calDrawModel, struct CALNode2Di* calNode) {
 	int i;
 	for(i = 1; i<calNode->insertedNode; i++) {
 		calglDrawDiscreetModelDisplayNode2Di(calDrawModel, calNode->nodes[i]);
 	}
 	calglDrawDiscreetModelDisplayCurrentNode2Di(calDrawModel, calNode);
 }
-void calglDrawDiscreetModelDisplayNode2Dr(struct CALDrawModel2D* calDrawModel, struct CALNode2Dr* calNode) {
+void calglDrawDiscreetModelDisplayNode2Dr(struct CALGLDrawModel2D* calDrawModel, struct CALNode2Dr* calNode) {
 	int i;
 	for(i = 1; i<calNode->insertedNode; i++) {
 		calglDrawDiscreetModelDisplayNode2Dr(calDrawModel, calNode->nodes[i]);
@@ -290,7 +290,7 @@ void calglDrawDiscreetModelDisplayNode2Dr(struct CALDrawModel2D* calDrawModel, s
 	calglDrawDiscreetModelDisplayCurrentNode2Dr(calDrawModel, calNode);
 }
 
-void calglDrawDiscreetModelDisplayCurrentNode2Db(struct CALDrawModel2D* calDrawModel, struct CALNode2Db* calNode) {
+void calglDrawDiscreetModelDisplayCurrentNode2Db(struct CALGLDrawModel2D* calDrawModel, struct CALNode2Db* calNode) {
 	int i, j;
 	int rows = calDrawModel->calModel->rows;
 	int columns = calDrawModel->calModel->columns;
@@ -339,7 +339,7 @@ void calglDrawDiscreetModelDisplayCurrentNode2Db(struct CALDrawModel2D* calDrawM
 		}
 	}
 }
-void calglDrawDiscreetModelDisplayCurrentNode2Di(struct CALDrawModel2D* calDrawModel, struct CALNode2Di* calNode) {
+void calglDrawDiscreetModelDisplayCurrentNode2Di(struct CALGLDrawModel2D* calDrawModel, struct CALNode2Di* calNode) {
 	int i, j;
 	int rows = calDrawModel->calModel->rows;
 	int columns = calDrawModel->calModel->columns;
@@ -389,7 +389,7 @@ void calglDrawDiscreetModelDisplayCurrentNode2Di(struct CALDrawModel2D* calDrawM
 		}
 	}
 }
-void calglDrawDiscreetModelDisplayCurrentNode2Dr(struct CALDrawModel2D* calDrawModel, struct CALNode2Dr* calNode) {
+void calglDrawDiscreetModelDisplayCurrentNode2Dr(struct CALGLDrawModel2D* calDrawModel, struct CALNode2Dr* calNode) {
 	int i, j;
 	int rows = calDrawModel->calModel->rows;
 	int columns = calDrawModel->calModel->columns;
@@ -442,7 +442,7 @@ void calglDrawDiscreetModelDisplayCurrentNode2Dr(struct CALDrawModel2D* calDrawM
 #pragma endregion
 
 #pragma region DrawRealModel2D
-void calglDrawRealModel2D(struct CALDrawModel2D* calDrawModel) {
+void calglDrawRealModel2D(struct CALGLDrawModel2D* calDrawModel) {
 	GLfloat max, min;
 
 	glPushMatrix(); {
@@ -509,21 +509,21 @@ void calglDrawRealModel2D(struct CALDrawModel2D* calDrawModel) {
 	}	glPopMatrix();
 }
 
-void calglDrawRealModelDisplayNode2Db(struct CALDrawModel2D* calDrawModel, struct CALNode2Db* calNode) {
+void calglDrawRealModelDisplayNode2Db(struct CALGLDrawModel2D* calDrawModel, struct CALNode2Db* calNode) {
 	int i;
 	calglDrawRealModelDisplayCurrentNode2Db(calDrawModel, calNode);
 	for(i = 1; i<calNode->insertedNode; i++) {
 		calglDrawRealModelDisplayNode2Db(calDrawModel, calNode->nodes[i]);
 	}
 }
-void calglDrawRealModelDisplayNode2Di(struct CALDrawModel2D* calDrawModel, struct CALNode2Di* calNode) {
+void calglDrawRealModelDisplayNode2Di(struct CALGLDrawModel2D* calDrawModel, struct CALNode2Di* calNode) {
 	int i;
 	calglDrawRealModelDisplayCurrentNode2Di(calDrawModel, calNode);
 	for(i = 1; i<calNode->insertedNode; i++) {
 		calglDrawRealModelDisplayNode2Di(calDrawModel, calNode->nodes[i]);
 	}
 }
-void calglDrawRealModelDisplayNode2Dr(struct CALDrawModel2D* calDrawModel, struct CALNode2Dr* calNode) {
+void calglDrawRealModelDisplayNode2Dr(struct CALGLDrawModel2D* calDrawModel, struct CALNode2Dr* calNode) {
 	int i;
 	calglDrawRealModelDisplayCurrentNode2Dr(calDrawModel, calNode);
 	for(i = 1; i<calNode->insertedNode; i++) {
@@ -531,7 +531,7 @@ void calglDrawRealModelDisplayNode2Dr(struct CALDrawModel2D* calDrawModel, struc
 	}
 }
 
-void calglDrawRealModelDisplayCurrentNode2Db(struct CALDrawModel2D* calDrawModel, struct CALNode2Db* calNode) {
+void calglDrawRealModelDisplayCurrentNode2Db(struct CALGLDrawModel2D* calDrawModel, struct CALNode2Db* calNode) {
 	int i, j;
 	int rows = calDrawModel->calModel->rows;
 	int columns = calDrawModel->calModel->columns;
@@ -602,7 +602,7 @@ void calglDrawRealModelDisplayCurrentNode2Db(struct CALDrawModel2D* calDrawModel
 		}
 	}
 }
-void calglDrawRealModelDisplayCurrentNode2Di(struct CALDrawModel2D* calDrawModel, struct CALNode2Di* calNode) {
+void calglDrawRealModelDisplayCurrentNode2Di(struct CALGLDrawModel2D* calDrawModel, struct CALNode2Di* calNode) {
 	int i, j;
 	int rows = calDrawModel->calModel->rows;
 	int columns = calDrawModel->calModel->columns;
@@ -673,7 +673,7 @@ void calglDrawRealModelDisplayCurrentNode2Di(struct CALDrawModel2D* calDrawModel
 		}
 	}
 }
-void calglDrawRealModelDisplayCurrentNode2Dr(struct CALDrawModel2D* calDrawModel, struct CALNode2Dr* calNode) {
+void calglDrawRealModelDisplayCurrentNode2Dr(struct CALGLDrawModel2D* calDrawModel, struct CALNode2Dr* calNode) {
 	int i, j;
 	int rows = calDrawModel->calModel->rows;
 	int columns = calDrawModel->calModel->columns;
@@ -745,7 +745,7 @@ void calglDrawRealModelDisplayCurrentNode2Dr(struct CALDrawModel2D* calDrawModel
 	}
 }
 
-void calglDrawRealModelDisplayCurrentNodeSetVertexData2Db(struct CALDrawModel2D* calDrawModel, struct CALNode2Db*calNode, GLint i, GLint j) {
+void calglDrawRealModelDisplayCurrentNodeSetVertexData2Db(struct CALGLDrawModel2D* calDrawModel, struct CALNode2Db*calNode, GLint i, GLint j) {
 	struct CALNode2Db* father = NULL;
 	GLint intVertex[3] = {0};
 
@@ -765,7 +765,7 @@ void calglDrawRealModelDisplayCurrentNodeSetVertexData2Db(struct CALDrawModel2D*
 
 	glVertex3iv(intVertex);
 }
-void calglDrawRealModelDisplayCurrentNodeSetVertexData2Di(struct CALDrawModel2D* calDrawModel, struct CALNode2Di*calNode, GLint i, GLint j) {
+void calglDrawRealModelDisplayCurrentNodeSetVertexData2Di(struct CALGLDrawModel2D* calDrawModel, struct CALNode2Di*calNode, GLint i, GLint j) {
 	struct CALNode2Di* father = NULL;
 	GLint intVertex[3] = {0};
 
@@ -785,7 +785,7 @@ void calglDrawRealModelDisplayCurrentNodeSetVertexData2Di(struct CALDrawModel2D*
 
 	glVertex3iv(intVertex);
 }
-void calglDrawRealModelDisplayCurrentNodeSetVertexData2Dr(struct CALDrawModel2D* calDrawModel, struct CALNode2Dr*calNode, GLint i, GLint j) {
+void calglDrawRealModelDisplayCurrentNodeSetVertexData2Dr(struct CALGLDrawModel2D* calDrawModel, struct CALNode2Dr*calNode, GLint i, GLint j) {
 	struct CALNode2Dr* father = NULL;
 	GLdouble doubleVertex[3] = {0};
 
@@ -808,7 +808,7 @@ void calglDrawRealModelDisplayCurrentNodeSetVertexData2Dr(struct CALDrawModel2D*
 #pragma endregion
 
 #pragma region ComputeExtremes
-void calglComputeExtremesDrawModel2Db(struct CALDrawModel2D* calDrawModel, struct CALNode2Db* calNode, GLdouble* m, GLdouble* M) {
+void calglComputeExtremesDrawModel2Db(struct CALGLDrawModel2D* calDrawModel, struct CALNode2Db* calNode, GLdouble* m, GLdouble* M) {
 	GLint i, j;
 	GLdouble tmp;
 
@@ -834,7 +834,7 @@ void calglComputeExtremesDrawModel2Db(struct CALDrawModel2D* calDrawModel, struc
 		}
 	}
 }
-void calglComputeExtremesDrawModel2Di(struct CALDrawModel2D* calDrawModel, struct CALNode2Di* calNode, GLdouble* m, GLdouble* M) {
+void calglComputeExtremesDrawModel2Di(struct CALGLDrawModel2D* calDrawModel, struct CALNode2Di* calNode, GLdouble* m, GLdouble* M) {
 	GLint i, j, tmp;
 
 	//computing min and max z
@@ -859,7 +859,7 @@ void calglComputeExtremesDrawModel2Di(struct CALDrawModel2D* calDrawModel, struc
 		}
 	}
 }
-void calglComputeExtremesDrawModel2Dr(struct CALDrawModel2D* calDrawModel, struct CALNode2Dr* calNode, GLdouble* m, GLdouble* M) {
+void calglComputeExtremesDrawModel2Dr(struct CALGLDrawModel2D* calDrawModel, struct CALNode2Dr* calNode, GLdouble* m, GLdouble* M) {
 	GLint i = 0, j = 0;
 	GLdouble tmp = 0;
 
@@ -888,7 +888,7 @@ void calglComputeExtremesDrawModel2Dr(struct CALDrawModel2D* calDrawModel, struc
 #pragma endregion
 
 #pragma region ComputeExtremesToAll
-void calglComputeExtremesToAll2Db(struct CALDrawModel2D* calDrawModel, struct CALNode2Db* calNode) {
+void calglComputeExtremesToAll2Db(struct CALGLDrawModel2D* calDrawModel, struct CALNode2Db* calNode) {
 	int i;
 	if(calNode!=NULL) {
 		calglComputeExtremesDrawModel2Db(calDrawModel, calNode, &calNode->min, &calNode->max);
@@ -898,7 +898,7 @@ void calglComputeExtremesToAll2Db(struct CALDrawModel2D* calDrawModel, struct CA
 		}
 	}
 }
-void calglComputeExtremesToAll2Di(struct CALDrawModel2D* calDrawModel, struct CALNode2Di* calNode) {
+void calglComputeExtremesToAll2Di(struct CALGLDrawModel2D* calDrawModel, struct CALNode2Di* calNode) {
 	int i;
 	if(calNode!=NULL) {
 		calglComputeExtremesDrawModel2Di(calDrawModel, calNode, &calNode->min, &calNode->max);
@@ -908,7 +908,7 @@ void calglComputeExtremesToAll2Di(struct CALDrawModel2D* calDrawModel, struct CA
 		}
 	}
 }
-void calglComputeExtremesToAll2Dr(struct CALDrawModel2D* calDrawModel, struct CALNode2Dr* calNode) {
+void calglComputeExtremesToAll2Dr(struct CALGLDrawModel2D* calDrawModel, struct CALNode2Dr* calNode) {
 	int i;
 	if(calNode!=NULL) {
 		calglComputeExtremesDrawModel2Dr(calDrawModel, calNode, &calNode->min, &calNode->max);
@@ -921,7 +921,7 @@ void calglComputeExtremesToAll2Dr(struct CALDrawModel2D* calDrawModel, struct CA
 #pragma endregion
 
 #pragma region SetNormalData
-void calglSetNormalData2Db(struct CALDrawModel2D* calDrawModel, struct CALNode2Db* calNode, GLint i, GLint j) {
+void calglSetNormalData2Db(struct CALGLDrawModel2D* calDrawModel, struct CALNode2Db* calNode, GLint i, GLint j) {
 	static GLint k;
 	static CALGLVector3 vPoints[3];
 	static CALGLVector3 vNormal;
@@ -951,7 +951,7 @@ void calglSetNormalData2Db(struct CALDrawModel2D* calDrawModel, struct CALNode2D
 		}
 	}
 }
-void calglSetNormalData2Di(struct CALDrawModel2D* calDrawModel, struct CALNode2Di* calNode, GLint i, GLint j) {
+void calglSetNormalData2Di(struct CALGLDrawModel2D* calDrawModel, struct CALNode2Di* calNode, GLint i, GLint j) {
 	static GLint k;
 	static CALGLVector3 vPoints[3];
 	static CALGLVector3 vNormal;
@@ -981,7 +981,7 @@ void calglSetNormalData2Di(struct CALDrawModel2D* calDrawModel, struct CALNode2D
 		}
 	}
 }
-void calglSetNormalData2Dr(struct CALDrawModel2D* calDrawModel, struct CALNode2Dr* calNode, GLint i, GLint j) {
+void calglSetNormalData2Dr(struct CALGLDrawModel2D* calDrawModel, struct CALNode2Dr* calNode, GLint i, GLint j) {
 	static GLint k;
 	static CALGLVector3 vPoints[3];
 	static CALGLVector3 vNormal;
@@ -1014,7 +1014,7 @@ void calglSetNormalData2Dr(struct CALDrawModel2D* calDrawModel, struct CALNode2D
 #pragma endregion
 
 #pragma region SetColorData
-GLboolean calglSetColorData2Db(struct CALDrawModel2D* calDrawModel, struct CALNode2Db* calNode, GLint i, GLint j) {
+GLboolean calglSetColorData2Db(struct CALGLDrawModel2D* calDrawModel, struct CALNode2Db* calNode, GLint i, GLint j) {
 	GLint k = 0;
 	GLboolean entered = CAL_FALSE;
 	GLdouble tmp = 1.0;
@@ -1032,6 +1032,12 @@ GLboolean calglSetColorData2Db(struct CALDrawModel2D* calDrawModel, struct CALNo
 					break;
 				case CALGL_TYPE_INFO_USE_RED_SCALE:
 					entered = CAL_TRUE;
+					doubleColor[0] = (tmp-calNode->nodes[k]->min)/(calNode->nodes[k]->max-calNode->nodes[k]->min);
+					doubleColor[1] = 0.0;
+					doubleColor[2] = 0.0;
+					break;
+				case CALGL_TYPE_INFO_USE_LAVA_GRADIENT:
+					entered = CAL_TRUE;
 					doubleColor[1] = (tmp-calNode->nodes[k]->min)/(calNode->nodes[k]->max-calNode->nodes[k]->min);
 					doubleColor[0] = 1.0;
 					doubleColor[2] = 0.0;
@@ -1046,7 +1052,7 @@ GLboolean calglSetColorData2Db(struct CALDrawModel2D* calDrawModel, struct CALNo
 					doubleColor[2] = (tmp-calNode->nodes[k]->min)/(calNode->nodes[k]->max-calNode->nodes[k]->min);
 					doubleColor[0] = doubleColor[1] = 0.0;
 					break;
-				case CALGL_TYPE_INFO_USE_CONST_VALUE:
+				case CALGL_TYPE_INFO_USE_CURRENT_COLOR:
 					entered = CAL_TRUE;
 					doubleColor[0] = calNode->nodes[k]->redComponent;
 					doubleColor[1] = calNode->nodes[k]->greenComponent;
@@ -1078,7 +1084,7 @@ GLboolean calglSetColorData2Db(struct CALDrawModel2D* calDrawModel, struct CALNo
 
 	return entered;
 }
-GLboolean calglSetColorData2Di(struct CALDrawModel2D* calDrawModel, struct CALNode2Di* calNode, GLint i, GLint j) {
+GLboolean calglSetColorData2Di(struct CALGLDrawModel2D* calDrawModel, struct CALNode2Di* calNode, GLint i, GLint j) {
 	GLint k = 0;
 	GLboolean entered = CAL_FALSE;
 	GLdouble tmp = 1.0;
@@ -1096,6 +1102,12 @@ GLboolean calglSetColorData2Di(struct CALDrawModel2D* calDrawModel, struct CALNo
 					break;
 				case CALGL_TYPE_INFO_USE_RED_SCALE:
 					entered = CAL_TRUE;
+					doubleColor[0] = (tmp-calNode->nodes[k]->min)/(calNode->nodes[k]->max-calNode->nodes[k]->min);
+					doubleColor[1] = 0.0;
+					doubleColor[2] = 0.0;
+					break;
+				case CALGL_TYPE_INFO_USE_LAVA_GRADIENT:
+					entered = CAL_TRUE;
 					doubleColor[1] = (tmp-calNode->nodes[k]->min)/(calNode->nodes[k]->max-calNode->nodes[k]->min);
 					doubleColor[0] = 1.0;
 					doubleColor[2] = 0.0;
@@ -1110,7 +1122,7 @@ GLboolean calglSetColorData2Di(struct CALDrawModel2D* calDrawModel, struct CALNo
 					doubleColor[2] = (tmp-calNode->nodes[k]->min)/(calNode->nodes[k]->max-calNode->nodes[k]->min);
 					doubleColor[0] = doubleColor[1] = 0.0;
 					break;
-				case CALGL_TYPE_INFO_USE_CONST_VALUE:
+				case CALGL_TYPE_INFO_USE_CURRENT_COLOR:
 					entered = CAL_TRUE;
 					doubleColor[0] = calNode->nodes[k]->redComponent;
 					doubleColor[1] = calNode->nodes[k]->greenComponent;
@@ -1142,7 +1154,7 @@ GLboolean calglSetColorData2Di(struct CALDrawModel2D* calDrawModel, struct CALNo
 
 	return entered;
 }
-GLboolean calglSetColorData2Dr(struct CALDrawModel2D* calDrawModel, struct CALNode2Dr* calNode, GLint i, GLint j) {
+GLboolean calglSetColorData2Dr(struct CALGLDrawModel2D* calDrawModel, struct CALNode2Dr* calNode, GLint i, GLint j) {
 	GLint k = 0;
 	GLboolean entered = CAL_FALSE;
 	GLdouble tmp = 1.0;
@@ -1160,6 +1172,12 @@ GLboolean calglSetColorData2Dr(struct CALDrawModel2D* calDrawModel, struct CALNo
 					break;
 				case CALGL_TYPE_INFO_USE_RED_SCALE:
 					entered = CAL_TRUE;
+					doubleColor[0] = (tmp-calNode->nodes[k]->min)/(calNode->nodes[k]->max-calNode->nodes[k]->min);
+					doubleColor[1] = 0.0;
+					doubleColor[2] = 0.0;
+					break;
+				case CALGL_TYPE_INFO_USE_LAVA_GRADIENT:
+					entered = CAL_TRUE;
 					doubleColor[1] = (tmp-calNode->nodes[k]->min)/(calNode->nodes[k]->max-calNode->nodes[k]->min);
 					doubleColor[0] = 1.0;
 					doubleColor[2] = 0.0;
@@ -1174,7 +1192,7 @@ GLboolean calglSetColorData2Dr(struct CALDrawModel2D* calDrawModel, struct CALNo
 					doubleColor[2] = (tmp-calNode->nodes[k]->min)/(calNode->nodes[k]->max-calNode->nodes[k]->min);
 					doubleColor[0] = doubleColor[1] = 0.0;
 					break;
-				case CALGL_TYPE_INFO_USE_CONST_VALUE:
+				case CALGL_TYPE_INFO_USE_CURRENT_COLOR:
 					entered = CAL_TRUE;
 					doubleColor[0] = calNode->nodes[k]->redComponent;
 					doubleColor[1] = calNode->nodes[k]->greenComponent;
@@ -1208,25 +1226,25 @@ GLboolean calglSetColorData2Dr(struct CALDrawModel2D* calDrawModel, struct CALNo
 }
 #pragma endregion
 
-void calglColor2D(struct CALDrawModel2D* calDrawModel, GLfloat redComponent, GLfloat greenComponent, GLfloat blueComponent, GLfloat alphaComponent) {
+void calglColor2D(struct CALGLDrawModel2D* calDrawModel, GLfloat redComponent, GLfloat greenComponent, GLfloat blueComponent, GLfloat alphaComponent) {
 	calDrawModel->redComponent = redComponent;
 	calDrawModel->greenComponent = greenComponent;
 	calDrawModel->blueComponent = blueComponent;
 	calDrawModel->alphaComponent = alphaComponent;
 }
 
-void calglSetModelViewParameter2D(struct CALDrawModel2D* calDrawModel, struct CALGLModelViewParameter* modelView) {
+void calglSetModelViewParameter2D(struct CALGLDrawModel2D* calDrawModel, struct CALGLModelViewParameter* modelView) {
 	calglDestroyModelViewParameter(calDrawModel->modelView);
 	calDrawModel->modelView = modelView;
 }
 
-void calglSetLightParameter2D(struct CALDrawModel2D* calDrawModel, struct CALGLLightParameter* modelLight) {
+void calglSetLightParameter2D(struct CALGLDrawModel2D* calDrawModel, struct CALGLLightParameter* modelLight) {
 	calglDestroyLightParameter(calDrawModel->modelLight);
 	calDrawModel->modelLight = modelLight;
 }
 
 #pragma region BoundingBox
-void calglDrawBoundingSquare2D(struct CALDrawModel2D* calDrawModel) {
+void calglDrawBoundingSquare2D(struct CALGLDrawModel2D* calDrawModel) {
 	int x;
 	GLfloat xData[4];
 	GLfloat yData[4];
@@ -1248,7 +1266,7 @@ void calglDrawBoundingSquare2D(struct CALDrawModel2D* calDrawModel) {
 		glEnd();
 	}	glPopAttrib();
 }
-void calglDrawBoundingBox2D(struct CALDrawModel2D* calDrawModel, GLfloat height, GLfloat low) {
+void calglDrawBoundingBox2D(struct CALGLDrawModel2D* calDrawModel, GLfloat height, GLfloat low) {
 	int x;
 	GLfloat xData[8];
 	GLfloat yData[8];
@@ -1306,34 +1324,34 @@ void calglDrawBoundingBox2D(struct CALDrawModel2D* calDrawModel, GLfloat height,
 #pragma endregion
 
 #pragma region InfoBar
-void calglRelativeInfoBar2Db(struct CALDrawModel2D* calDrawModel, struct CALSubstate2Db* substate, const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, enum CALGL_INFO_BAR_ORIENTATION orientation) {
+void calglRelativeInfoBar2Db(struct CALGLDrawModel2D* calDrawModel, struct CALSubstate2Db* substate, const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, enum CALGL_INFO_BAR_ORIENTATION orientation) {
 	calglDestroyInfoBar(calDrawModel->infoBar);
 	calDrawModel->infoBar = calglCreateRelativeInfoBar2Db(substateName, infoUse, calDrawModel, substate, orientation);
 }
-void calglRelativeInfoBar2Di(struct CALDrawModel2D* calDrawModel, struct CALSubstate2Di* substate, const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, enum CALGL_INFO_BAR_ORIENTATION orientation) {
+void calglRelativeInfoBar2Di(struct CALGLDrawModel2D* calDrawModel, struct CALSubstate2Di* substate, const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, enum CALGL_INFO_BAR_ORIENTATION orientation) {
 	calglDestroyInfoBar(calDrawModel->infoBar);
 	calDrawModel->infoBar = calglCreateRelativeInfoBar2Di(substateName, infoUse, calDrawModel, substate, orientation);
 }
-void calglRelativeInfoBar2Dr(struct CALDrawModel2D* calDrawModel, struct CALSubstate2Dr* substate, const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, enum CALGL_INFO_BAR_ORIENTATION orientation) {
+void calglRelativeInfoBar2Dr(struct CALGLDrawModel2D* calDrawModel, struct CALSubstate2Dr* substate, const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, enum CALGL_INFO_BAR_ORIENTATION orientation) {
 	calglDestroyInfoBar(calDrawModel->infoBar);
 	calDrawModel->infoBar = calglCreateRelativeInfoBar2Dr(substateName, infoUse, calDrawModel, substate, orientation);
 }
-void calglInfoBar2Db(struct CALDrawModel2D* calDrawModel, struct CALSubstate2Db* substate, const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, GLfloat xPosition, GLfloat yPosition, GLint width, GLint height) {
+void calglInfoBar2Db(struct CALGLDrawModel2D* calDrawModel, struct CALSubstate2Db* substate, const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, GLfloat xPosition, GLfloat yPosition, GLint width, GLint height) {
 	calglDestroyInfoBar(calDrawModel->infoBar);
 	calDrawModel->infoBar = calglCreateInfoBar2Db(substateName, infoUse, calDrawModel, substate, xPosition, yPosition, width, height);
 }
-void calglInfoBar2Di(struct CALDrawModel2D* calDrawModel, struct CALSubstate2Di* substate, const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, GLfloat xPosition, GLfloat yPosition, GLint width, GLint height) {
+void calglInfoBar2Di(struct CALGLDrawModel2D* calDrawModel, struct CALSubstate2Di* substate, const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, GLfloat xPosition, GLfloat yPosition, GLint width, GLint height) {
 	calglDestroyInfoBar(calDrawModel->infoBar);
 	calDrawModel->infoBar = calglCreateInfoBar2Di(substateName, infoUse, calDrawModel, substate, xPosition, yPosition, width, height);
 }
-void calglInfoBar2Dr(struct CALDrawModel2D* calDrawModel, struct CALSubstate2Dr* substate, const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, GLfloat xPosition, GLfloat yPosition, GLint width, GLint height) {
+void calglInfoBar2Dr(struct CALGLDrawModel2D* calDrawModel, struct CALSubstate2Dr* substate, const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, GLfloat xPosition, GLfloat yPosition, GLint width, GLint height) {
 	calglDestroyInfoBar(calDrawModel->infoBar);
 	calDrawModel->infoBar = calglCreateInfoBar2Dr(substateName, infoUse, calDrawModel, substate, xPosition, yPosition, width, height);
 }
 #pragma endregion
 
 #pragma region DrawIntervals
-void calglDisplayDrawIBound2D(struct CALDrawModel2D* calDrawModel, GLint min, GLint max) {
+void calglDisplayDrawIBound2D(struct CALGLDrawModel2D* calDrawModel, GLint min, GLint max) {
 	int i = 0;
 
 	if(min < 0||min > max||max>calDrawModel->calModel->rows)
@@ -1343,7 +1361,7 @@ void calglDisplayDrawIBound2D(struct CALDrawModel2D* calDrawModel, GLint min, GL
 		calDrawModel->drawICells[i] = CAL_TRUE;
 	}
 }
-void calglDisplayDrawJBound2D(struct CALDrawModel2D* calDrawModel, GLint min, GLint max) {
+void calglDisplayDrawJBound2D(struct CALGLDrawModel2D* calDrawModel, GLint min, GLint max) {
 	int i = 0;
 
 	if(min < 0||min > max||max>calDrawModel->calModel->columns)
@@ -1353,7 +1371,7 @@ void calglDisplayDrawJBound2D(struct CALDrawModel2D* calDrawModel, GLint min, GL
 		calDrawModel->drawJCells[i] = CAL_TRUE;
 	}
 }
-void calglHideDrawIBound2D(struct CALDrawModel2D* calDrawModel, GLint min, GLint max) {
+void calglHideDrawIBound2D(struct CALGLDrawModel2D* calDrawModel, GLint min, GLint max) {
 	int i = 0;
 
 	if(min < 0||min > max||max>calDrawModel->calModel->rows)
@@ -1363,7 +1381,7 @@ void calglHideDrawIBound2D(struct CALDrawModel2D* calDrawModel, GLint min, GLint
 		calDrawModel->drawICells[i] = CAL_FALSE;
 	}
 }
-void calglHideDrawJBound2D(struct CALDrawModel2D* calDrawModel, GLint min, GLint max) {
+void calglHideDrawJBound2D(struct CALGLDrawModel2D* calDrawModel, GLint min, GLint max) {
 	int i = 0;
 
 	if(min < 0||min > max||max>calDrawModel->calModel->columns)

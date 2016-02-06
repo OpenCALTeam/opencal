@@ -24,11 +24,11 @@
 /*! \brief Structure for creating a simple window system to which draw the cellular automata.
 This is for 3D type of cellular automata.
 */
-struct CALWindow3D {
+struct CALGLWindow3D {
 	GLuint id;										//!< Id of the main window.
 	struct CALGLGlobalSettings* globalSettings;		//!< Reference to global settings.
 	GLint noModels;									//!< No of models for which a no of sub window must be created.
-	struct CALDrawModel3D** models;					//!< List of models.
+	struct CALGLDrawModel3D** models;					//!< List of models.
 	GLuint* subWindowID;							//!< List of sub windows ids.
 	GLint* positionsX;								//!< List of sub windows x positions.
 	GLint* positionsY;								//!< List of sub windows y positions.
@@ -39,18 +39,18 @@ struct CALWindow3D {
 
 /*! \brief Constructor for create a window.
 */
-struct CALWindow3D* calglCreateWindow3D(
+struct CALGLWindow3D* calglCreateWindow3D(
 	int argc,									//!< argc value passed from Main func.
 	char** argv,								//!< argv value passed from Main func.
 struct CALGLGlobalSettings* globalSettings, //!< Reference to global settings.
-struct CALDrawModel3D** models,				//!< List of models to draw.
+struct CALGLDrawModel3D** models,				//!< List of models to draw.
 	int size									//!< List size of models to draw.
 	);
 
 /*! \brief Destructor for de-allocate memory.
 */
 void calglDestroyWindow3D(
-struct CALWindow3D* window	//!< Window to destroy.
+struct CALGLWindow3D* window	//!< Window to destroy.
 	);
 
 /*! \brief Function for redisplay the main window and all sub windows.
@@ -76,7 +76,7 @@ void calglSubReshapeWindow3D(int w, int h);
 /*! \brief Function for auto create positions and dimensions of all sub windows.
 */
 void calglCalculatePositionAndDimensionWindow3D(
-struct CALWindow3D* window	//!< Pointer to window.
+struct CALGLWindow3D* window	//!< Pointer to window.
 	);
 
 /*! \brief Function that start the window system.
@@ -89,7 +89,7 @@ void calglMainLoop3D(
 /*! \brief Function that set the font.
 */
 void calglSetfontWindow3D(
-struct CALWindow3D* window,	//!< Pointer to window.
+struct CALGLWindow3D* window,	//!< Pointer to window.
 	char* name, 				//!< Font name.
 	int size					//!< Font size.
 	);
@@ -97,7 +97,7 @@ struct CALWindow3D* window,	//!< Pointer to window.
 /*! \brief Function that print a string on the screen of the relative sub window.
 */
 void calglDrawStringWindow3D(
-struct CALWindow3D* window,	//!< Pointer to window. 
+struct CALGLWindow3D* window,	//!< Pointer to window. 
 	GLuint x, 					//!< X position to print.
 	GLuint y, 					//!< Y position to print.
 	char* format, 				//!< String to print.
@@ -139,7 +139,7 @@ void calglCleanDrawModelList3D();
 /*! \brief Insert a model in the list of models.
 */
 void calglShowModel3D(
-struct CALDrawModel3D* model	//!< Pointer to CALDrawModel3D.
+struct CALGLDrawModel3D* model	//!< Pointer to CALGLDrawModel3D.
 	);
 
 /*! \brief Increase the capacity of the list of models.

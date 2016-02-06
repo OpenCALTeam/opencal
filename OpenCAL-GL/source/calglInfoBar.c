@@ -13,7 +13,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-struct CALGLInfoBar* calglCreateRelativeInfoBar2Db(const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, struct CALDrawModel2D* calDrawModel, struct CALSubstate2Db* substate, enum CALGL_INFO_BAR_ORIENTATION orientation){
+struct CALGLInfoBar* calglCreateRelativeInfoBar2Db(const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, struct CALGLDrawModel2D* calDrawModel, struct CALSubstate2Db* substate, enum CALGL_INFO_BAR_ORIENTATION orientation){
 	struct CALGLInfoBar* infoBar = (struct CALGLInfoBar*) malloc(sizeof(struct CALGLInfoBar));
 	struct CALNode2Db* nodeSearched = NULL;
 
@@ -39,7 +39,7 @@ struct CALGLInfoBar* calglCreateRelativeInfoBar2Db(const char* substateName, enu
 
 	return infoBar;
 }
-struct CALGLInfoBar* calglCreateRelativeInfoBar2Di(const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, struct CALDrawModel2D* calDrawModel, struct CALSubstate2Di* substate, enum CALGL_INFO_BAR_ORIENTATION orientation){
+struct CALGLInfoBar* calglCreateRelativeInfoBar2Di(const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, struct CALGLDrawModel2D* calDrawModel, struct CALSubstate2Di* substate, enum CALGL_INFO_BAR_ORIENTATION orientation){
 	struct CALGLInfoBar* infoBar = (struct CALGLInfoBar*) malloc(sizeof(struct CALGLInfoBar));
 	struct CALNode2Di* nodeSearched = NULL;
 
@@ -65,7 +65,7 @@ struct CALGLInfoBar* calglCreateRelativeInfoBar2Di(const char* substateName, enu
 	
 	return infoBar;
 }
-struct CALGLInfoBar* calglCreateRelativeInfoBar2Dr(const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, struct CALDrawModel2D* calDrawModel, struct CALSubstate2Dr* substate, enum CALGL_INFO_BAR_ORIENTATION orientation){
+struct CALGLInfoBar* calglCreateRelativeInfoBar2Dr(const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, struct CALGLDrawModel2D* calDrawModel, struct CALSubstate2Dr* substate, enum CALGL_INFO_BAR_ORIENTATION orientation){
 	struct CALGLInfoBar* infoBar = (struct CALGLInfoBar*) malloc(sizeof(struct CALGLInfoBar));
 	struct CALNode2Dr* nodeSearched = NULL;
 
@@ -91,7 +91,7 @@ struct CALGLInfoBar* calglCreateRelativeInfoBar2Dr(const char* substateName, enu
 	
 	return infoBar;
 }
-struct CALGLInfoBar* calglCreateRelativeInfoBar3Db(const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, struct CALDrawModel3D* calDrawModel, struct CALSubstate3Db* substate, enum CALGL_INFO_BAR_ORIENTATION orientation){
+struct CALGLInfoBar* calglCreateRelativeInfoBar3Db(const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, struct CALGLDrawModel3D* calDrawModel, struct CALSubstate3Db* substate, enum CALGL_INFO_BAR_ORIENTATION orientation){
 	struct CALGLInfoBar* infoBar = (struct CALGLInfoBar*) malloc(sizeof(struct CALGLInfoBar));
 	struct CALNode3Db* nodeSearched = NULL;
 
@@ -117,7 +117,7 @@ struct CALGLInfoBar* calglCreateRelativeInfoBar3Db(const char* substateName, enu
 	
 	return infoBar;
 }
-struct CALGLInfoBar* calglCreateRelativeInfoBar3Di(const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, struct CALDrawModel3D* calDrawModel, struct CALSubstate3Di* substate, enum CALGL_INFO_BAR_ORIENTATION orientation){
+struct CALGLInfoBar* calglCreateRelativeInfoBar3Di(const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, struct CALGLDrawModel3D* calDrawModel, struct CALSubstate3Di* substate, enum CALGL_INFO_BAR_ORIENTATION orientation){
 	struct CALGLInfoBar* infoBar = (struct CALGLInfoBar*) malloc(sizeof(struct CALGLInfoBar));
 	struct CALNode3Di* nodeSearched = NULL;
 
@@ -143,7 +143,7 @@ struct CALGLInfoBar* calglCreateRelativeInfoBar3Di(const char* substateName, enu
 	
 	return infoBar;
 }
-struct CALGLInfoBar* calglCreateRelativeInfoBar3Dr(const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, struct CALDrawModel3D* calDrawModel, struct CALSubstate3Dr* substate, enum CALGL_INFO_BAR_ORIENTATION orientation){
+struct CALGLInfoBar* calglCreateRelativeInfoBar3Dr(const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, struct CALGLDrawModel3D* calDrawModel, struct CALSubstate3Dr* substate, enum CALGL_INFO_BAR_ORIENTATION orientation){
 	struct CALGLInfoBar* infoBar = (struct CALGLInfoBar*) malloc(sizeof(struct CALGLInfoBar));
 	struct CALNode3Dr* nodeSearched = NULL;
 
@@ -170,7 +170,7 @@ struct CALGLInfoBar* calglCreateRelativeInfoBar3Dr(const char* substateName, enu
 	return infoBar;
 }
 
-struct CALGLInfoBar* calglCreateInfoBar2Db(const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, struct CALDrawModel2D* calDrawModel, struct CALSubstate2Db* substate, GLfloat xPosition, GLfloat yPosition, GLint width, GLint height){
+struct CALGLInfoBar* calglCreateInfoBar2Db(const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, struct CALGLDrawModel2D* calDrawModel, struct CALSubstate2Db* substate, GLfloat xPosition, GLfloat yPosition, GLint width, GLint height){
 	struct CALGLInfoBar* infoBar = (struct CALGLInfoBar*) malloc(sizeof(struct CALGLInfoBar));
 	struct CALNode2Db* nodeSearched = NULL;
 
@@ -201,7 +201,7 @@ struct CALGLInfoBar* calglCreateInfoBar2Db(const char* substateName, enum CALGL_
 
 	return infoBar;
 }
-struct CALGLInfoBar* calglCreateInfoBar2Di(const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, struct CALDrawModel2D* calDrawModel, struct CALSubstate2Di* substate, GLfloat xPosition, GLfloat yPosition, GLint width, GLint height){
+struct CALGLInfoBar* calglCreateInfoBar2Di(const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, struct CALGLDrawModel2D* calDrawModel, struct CALSubstate2Di* substate, GLfloat xPosition, GLfloat yPosition, GLint width, GLint height){
 	struct CALGLInfoBar* infoBar = (struct CALGLInfoBar*) malloc(sizeof(struct CALGLInfoBar));
 	struct CALNode2Di* nodeSearched = NULL;
 
@@ -232,7 +232,7 @@ struct CALGLInfoBar* calglCreateInfoBar2Di(const char* substateName, enum CALGL_
 
 	return infoBar;
 }
-struct CALGLInfoBar* calglCreateInfoBar2Dr(const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, struct CALDrawModel2D* calDrawModel, struct CALSubstate2Dr* substate, GLfloat xPosition, GLfloat yPosition, GLint width, GLint height){
+struct CALGLInfoBar* calglCreateInfoBar2Dr(const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, struct CALGLDrawModel2D* calDrawModel, struct CALSubstate2Dr* substate, GLfloat xPosition, GLfloat yPosition, GLint width, GLint height){
 	struct CALGLInfoBar* infoBar = (struct CALGLInfoBar*) malloc(sizeof(struct CALGLInfoBar));
 	struct CALNode2Dr* nodeSearched = NULL;
 
@@ -263,7 +263,7 @@ struct CALGLInfoBar* calglCreateInfoBar2Dr(const char* substateName, enum CALGL_
 
 	return infoBar;
 }
-struct CALGLInfoBar* calglCreateInfoBar3Db(const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, struct CALDrawModel3D* calDrawModel, struct CALSubstate3Db* substate, GLfloat xPosition, GLfloat yPosition, GLint width, GLint height){
+struct CALGLInfoBar* calglCreateInfoBar3Db(const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, struct CALGLDrawModel3D* calDrawModel, struct CALSubstate3Db* substate, GLfloat xPosition, GLfloat yPosition, GLint width, GLint height){
 	struct CALGLInfoBar* infoBar = (struct CALGLInfoBar*) malloc(sizeof(struct CALGLInfoBar));
 	struct CALNode3Db* nodeSearched = NULL;
 
@@ -294,7 +294,7 @@ struct CALGLInfoBar* calglCreateInfoBar3Db(const char* substateName, enum CALGL_
 
 	return infoBar;
 }
-struct CALGLInfoBar* calglCreateInfoBar3Di(const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, struct CALDrawModel3D* calDrawModel, struct CALSubstate3Di* substate, GLfloat xPosition, GLfloat yPosition, GLint width, GLint height){
+struct CALGLInfoBar* calglCreateInfoBar3Di(const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, struct CALGLDrawModel3D* calDrawModel, struct CALSubstate3Di* substate, GLfloat xPosition, GLfloat yPosition, GLint width, GLint height){
 	struct CALGLInfoBar* infoBar = (struct CALGLInfoBar*) malloc(sizeof(struct CALGLInfoBar));
 	struct CALNode3Di* nodeSearched = NULL;
 
@@ -325,7 +325,7 @@ struct CALGLInfoBar* calglCreateInfoBar3Di(const char* substateName, enum CALGL_
 
 	return infoBar;
 }
-struct CALGLInfoBar* calglCreateInfoBar3Dr(const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, struct CALDrawModel3D* calDrawModel, struct CALSubstate3Dr* substate, GLfloat xPosition, GLfloat yPosition, GLint width, GLint height){
+struct CALGLInfoBar* calglCreateInfoBar3Dr(const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, struct CALGLDrawModel3D* calDrawModel, struct CALSubstate3Dr* substate, GLfloat xPosition, GLfloat yPosition, GLint width, GLint height){
 	struct CALGLInfoBar* infoBar = (struct CALGLInfoBar*) malloc(sizeof(struct CALGLInfoBar));
 	struct CALNode3Dr* nodeSearched = NULL;
 

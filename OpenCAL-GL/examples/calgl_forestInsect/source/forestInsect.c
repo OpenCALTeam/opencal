@@ -785,7 +785,7 @@ CALbyte forestInsectSimulationStopCondition(struct CALModel2D* forestInsect)
 //------------------------------------------------------------------------------
 
 void forestInsectCADef() {
-	struct CALDrawModel2D* drawModel = NULL;
+	struct CALGLDrawModel2D* drawModel = NULL;
 
 	srand((unsigned int)time(0));
 
@@ -864,27 +864,27 @@ void forestInsectCADef() {
 	// draw model definition
 	drawModel = calglDefDrawModel2D(CALGL_DRAW_MODE_SURFACE, "ForestInsect", forestInsect, forestInsectSimulation);
 	// Add Terrain
-	calglAddToDrawModel2Dr(drawModel, NULL, &Q.terrain, CALGL_TYPE_INFO_VERTEX_DATA, CALGL_TYPE_INFO_USE_DEFAULT, CALGL_DATA_TYPE_STATIC);
+	calglAddToDrawModel2Dr(drawModel, NULL, &Q.terrain, CALGL_TYPE_INFO_VERTEX_DATA, CALGL_TYPE_INFO_USE_NO_COLOR, CALGL_DATA_TYPE_STATIC);
 	calglColor2D(drawModel, 0.5, 0.5, 0.5, 1.0);
-	calglAddToDrawModel2Dr(drawModel, Q.terrain, &Q.terrain, CALGL_TYPE_INFO_COLOR_DATA, CALGL_TYPE_INFO_USE_CONST_VALUE, CALGL_DATA_TYPE_DYNAMIC);
-	calglAddToDrawModel2Dr(drawModel, Q.terrain, &Q.terrain, CALGL_TYPE_INFO_NORMAL_DATA, CALGL_TYPE_INFO_USE_DEFAULT, CALGL_DATA_TYPE_DYNAMIC);
+	calglAddToDrawModel2Dr(drawModel, Q.terrain, &Q.terrain, CALGL_TYPE_INFO_COLOR_DATA, CALGL_TYPE_INFO_USE_CURRENT_COLOR, CALGL_DATA_TYPE_DYNAMIC);
+	calglAddToDrawModel2Dr(drawModel, Q.terrain, &Q.terrain, CALGL_TYPE_INFO_NORMAL_DATA, CALGL_TYPE_INFO_USE_NO_COLOR, CALGL_DATA_TYPE_DYNAMIC);
 	// Add Pine Forest
-	calglAddToDrawModel2Dr(drawModel, Q.terrain, &Q.pineForest, CALGL_TYPE_INFO_VERTEX_DATA, CALGL_TYPE_INFO_USE_DEFAULT, CALGL_DATA_TYPE_DYNAMIC);
+	calglAddToDrawModel2Dr(drawModel, Q.terrain, &Q.pineForest, CALGL_TYPE_INFO_VERTEX_DATA, CALGL_TYPE_INFO_USE_NO_COLOR, CALGL_DATA_TYPE_DYNAMIC);
 	calglAddToDrawModel2Dr(drawModel, Q.pineForest, &Q.pineHealth, CALGL_TYPE_INFO_COLOR_DATA, CALGL_TYPE_INFO_USE_GREEN_SCALE, CALGL_DATA_TYPE_DYNAMIC);
-	calglAddToDrawModel2Dr(drawModel, Q.pineForest, &Q.pineForest, CALGL_TYPE_INFO_NORMAL_DATA, CALGL_TYPE_INFO_USE_DEFAULT, CALGL_DATA_TYPE_DYNAMIC);
+	calglAddToDrawModel2Dr(drawModel, Q.pineForest, &Q.pineForest, CALGL_TYPE_INFO_NORMAL_DATA, CALGL_TYPE_INFO_USE_NO_COLOR, CALGL_DATA_TYPE_DYNAMIC);
 	// Add Other Trees
-	calglAddToDrawModel2Dr(drawModel, Q.terrain, &Q.otherTrees, CALGL_TYPE_INFO_VERTEX_DATA, CALGL_TYPE_INFO_USE_DEFAULT, CALGL_DATA_TYPE_DYNAMIC);
+	calglAddToDrawModel2Dr(drawModel, Q.terrain, &Q.otherTrees, CALGL_TYPE_INFO_VERTEX_DATA, CALGL_TYPE_INFO_USE_NO_COLOR, CALGL_DATA_TYPE_DYNAMIC);
 	calglColor2D(drawModel, 159.0f / 255, 76.0f / 255, 0.1f, 1.0);
-	calglAddToDrawModel2Dr(drawModel, Q.otherTrees, &Q.otherTrees, CALGL_TYPE_INFO_COLOR_DATA, CALGL_TYPE_INFO_USE_CONST_VALUE, CALGL_DATA_TYPE_DYNAMIC);
-	calglAddToDrawModel2Dr(drawModel, Q.otherTrees, &Q.otherTrees, CALGL_TYPE_INFO_NORMAL_DATA, CALGL_TYPE_INFO_USE_DEFAULT, CALGL_DATA_TYPE_DYNAMIC);
+	calglAddToDrawModel2Dr(drawModel, Q.otherTrees, &Q.otherTrees, CALGL_TYPE_INFO_COLOR_DATA, CALGL_TYPE_INFO_USE_CURRENT_COLOR, CALGL_DATA_TYPE_DYNAMIC);
+	calglAddToDrawModel2Dr(drawModel, Q.otherTrees, &Q.otherTrees, CALGL_TYPE_INFO_NORMAL_DATA, CALGL_TYPE_INFO_USE_NO_COLOR, CALGL_DATA_TYPE_DYNAMIC);
 	// Add Female Bettle to drawing
-	calglAddToDrawModel2Dr(drawModel, Q.terrain, &Q.boolFemaleBettle, CALGL_TYPE_INFO_VERTEX_DATA, CALGL_TYPE_INFO_USE_DEFAULT, CALGL_DATA_TYPE_DYNAMIC);
+	calglAddToDrawModel2Dr(drawModel, Q.terrain, &Q.boolFemaleBettle, CALGL_TYPE_INFO_VERTEX_DATA, CALGL_TYPE_INFO_USE_NO_COLOR, CALGL_DATA_TYPE_DYNAMIC);
 	calglAddToDrawModel2Dr(drawModel, Q.boolFemaleBettle, &Q.totalFemaleBettle, CALGL_TYPE_INFO_COLOR_DATA, CALGL_TYPE_INFO_USE_BLUE_SCALE, CALGL_DATA_TYPE_DYNAMIC);
-	calglAddToDrawModel2Dr(drawModel, Q.boolFemaleBettle, &Q.boolFemaleBettle, CALGL_TYPE_INFO_NORMAL_DATA, CALGL_TYPE_INFO_USE_DEFAULT, CALGL_DATA_TYPE_DYNAMIC);
+	calglAddToDrawModel2Dr(drawModel, Q.boolFemaleBettle, &Q.boolFemaleBettle, CALGL_TYPE_INFO_NORMAL_DATA, CALGL_TYPE_INFO_USE_NO_COLOR, CALGL_DATA_TYPE_DYNAMIC);
 	// Add Male Bettle to drawing
-	calglAddToDrawModel2Dr(drawModel, Q.terrain, &Q.boolMaleBettle, CALGL_TYPE_INFO_VERTEX_DATA, CALGL_TYPE_INFO_USE_DEFAULT, CALGL_DATA_TYPE_DYNAMIC);
+	calglAddToDrawModel2Dr(drawModel, Q.terrain, &Q.boolMaleBettle, CALGL_TYPE_INFO_VERTEX_DATA, CALGL_TYPE_INFO_USE_NO_COLOR, CALGL_DATA_TYPE_DYNAMIC);
 	calglAddToDrawModel2Dr(drawModel, Q.boolMaleBettle, &Q.totalMaleBettle, CALGL_TYPE_INFO_COLOR_DATA, CALGL_TYPE_INFO_USE_RED_SCALE, CALGL_DATA_TYPE_DYNAMIC);
-	calglAddToDrawModel2Dr(drawModel, Q.boolMaleBettle, &Q.boolMaleBettle, CALGL_TYPE_INFO_NORMAL_DATA, CALGL_TYPE_INFO_USE_DEFAULT, CALGL_DATA_TYPE_DYNAMIC);
+	calglAddToDrawModel2Dr(drawModel, Q.boolMaleBettle, &Q.boolMaleBettle, CALGL_TYPE_INFO_NORMAL_DATA, CALGL_TYPE_INFO_USE_NO_COLOR, CALGL_DATA_TYPE_DYNAMIC);
 
 	forestInsectLoadConfig();
 }
@@ -925,7 +925,7 @@ void forestInsectLoadConfig()
 //					ForestInsect finalization function
 //------------------------------------------------------------------------------
 
-void forestInsectExit()
+void forestInsectExit(void)
 {
 	//finalizations
 	calRunFinalize2D(forestInsectSimulation);

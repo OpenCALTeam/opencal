@@ -17,8 +17,8 @@
 #include <OpenCAL-GL/calglCommon.h>
 #include <OpenCAL-GL/calglGlobalSettings.h>
 //#include <calCommon.h>
-struct CALDrawModel2D;
-struct CALDrawModel3D;
+struct CALGLDrawModel2D;
+struct CALGLDrawModel3D;
 
 /*! \brief Structure that model the concept of the information bar.
 	It is used to display information about the substate of reference.
@@ -45,7 +45,7 @@ struct CALGLInfoBar{
 struct CALGLInfoBar* calglCreateRelativeInfoBar2Db(
 	const char* substateName,						//!< Infomation bar's name.
 	enum CALGL_TYPE_INFO_USE infoUse,				//!< Color gradient that must be used.
-	struct CALDrawModel2D* calDrawModel,			//!< Pointer to the structure for which retrive the substate. 
+	struct CALGLDrawModel2D* calDrawModel,			//!< Pointer to the structure for which retrive the substate. 
 	struct CALSubstate2Db* substate,				//!< Pointer to the substate for which display information.
 	enum CALGL_INFO_BAR_ORIENTATION orientation		//!< Type of orientation (vertical or horizontal).
 	);
@@ -55,7 +55,7 @@ struct CALGLInfoBar* calglCreateRelativeInfoBar2Db(
 struct CALGLInfoBar* calglCreateRelativeInfoBar2Di(
 	const char* substateName, 						//!< Infomation bar's name.
 	enum CALGL_TYPE_INFO_USE infoUse, 				//!< Color gradient that must be used.
-	struct CALDrawModel2D* calDrawModel, 			//!< Pointer to the structure for which retrive the substate. 
+	struct CALGLDrawModel2D* calDrawModel, 			//!< Pointer to the structure for which retrive the substate. 
 	struct CALSubstate2Di* substate, 				//!< Pointer to the substate for which display information.
 	enum CALGL_INFO_BAR_ORIENTATION orientation		//!< Type of orientation (vertical or horizontal).
 	);
@@ -65,7 +65,7 @@ struct CALGLInfoBar* calglCreateRelativeInfoBar2Di(
 struct CALGLInfoBar* calglCreateRelativeInfoBar2Dr(
 	const char* substateName, 						//!< Infomation bar's name.
 	enum CALGL_TYPE_INFO_USE infoUse, 				//!< Color gradient that must be used.
-	struct CALDrawModel2D* calDrawModel, 			//!< Pointer to the structure for which retrive the substate. 
+	struct CALGLDrawModel2D* calDrawModel, 			//!< Pointer to the structure for which retrive the substate. 
 	struct CALSubstate2Dr* substate, 				//!< Pointer to the substate for which display information.
 	enum CALGL_INFO_BAR_ORIENTATION orientation		//!< Type of orientation (vertical or horizontal).
 	);
@@ -75,7 +75,7 @@ struct CALGLInfoBar* calglCreateRelativeInfoBar2Dr(
 struct CALGLInfoBar* calglCreateRelativeInfoBar3Db(
 	const char* substateName, 						//!< Infomation bar's name.
 	enum CALGL_TYPE_INFO_USE infoUse, 				//!< Color gradient that must be used.
-	struct CALDrawModel3D* calDrawModel, 			//!< Pointer to the structure for which retrive the substate. 
+	struct CALGLDrawModel3D* calDrawModel, 			//!< Pointer to the structure for which retrive the substate. 
 	struct CALSubstate3Db* substate, 				//!< Pointer to the substate for which display information.
 	enum CALGL_INFO_BAR_ORIENTATION orientation		//!< Type of orientation (vertical or horizontal).
 	);
@@ -85,7 +85,7 @@ struct CALGLInfoBar* calglCreateRelativeInfoBar3Db(
 struct CALGLInfoBar* calglCreateRelativeInfoBar3Di(
 	const char* substateName, 						//!< Infomation bar's name.
 	enum CALGL_TYPE_INFO_USE infoUse, 				//!< Color gradient that must be used.
-	struct CALDrawModel3D* calDrawModel, 			//!< Pointer to the structure for which retrive the substate. 
+	struct CALGLDrawModel3D* calDrawModel, 			//!< Pointer to the structure for which retrive the substate. 
 	struct CALSubstate3Di* substate, 				//!< Pointer to the substate for which display information.
 	enum CALGL_INFO_BAR_ORIENTATION orientation		//!< Type of orientation (vertical or horizontal).
 	);
@@ -95,7 +95,7 @@ struct CALGLInfoBar* calglCreateRelativeInfoBar3Di(
 struct CALGLInfoBar* calglCreateRelativeInfoBar3Dr(
 	const char* substateName, 						//!< Infomation bar's name.
 	enum CALGL_TYPE_INFO_USE infoUse, 				//!< Color gradient that must be used.
-	struct CALDrawModel3D* calDrawModel, 			//!< Pointer to the structure for which retrive the substate. 
+	struct CALGLDrawModel3D* calDrawModel, 			//!< Pointer to the structure for which retrive the substate. 
 	struct CALSubstate3Dr* substate, 				//!< Pointer to the substate for which display information.
 	enum CALGL_INFO_BAR_ORIENTATION orientation		//!< Type of orientation (vertical or horizontal).
 	);
@@ -105,7 +105,7 @@ struct CALGLInfoBar* calglCreateRelativeInfoBar3Dr(
 struct CALGLInfoBar* calglCreateInfoBar2Db(
 	const char* substateName, 						//!< Infomation bar's name.
 	enum CALGL_TYPE_INFO_USE infoUse, 				//!< Color gradient that must be used.
-	struct CALDrawModel2D* calDrawModel, 			//!< Pointer to the structure for which retrive the substate. 
+	struct CALGLDrawModel2D* calDrawModel, 			//!< Pointer to the structure for which retrive the substate. 
 	struct CALSubstate2Db* substate, 				//!< Pointer to the substate for which display information.
 	GLfloat xPosition,								//!< X position value of the bar.
 	GLfloat yPosition, 								//!< Y position value of the bar.
@@ -118,7 +118,7 @@ struct CALGLInfoBar* calglCreateInfoBar2Db(
 struct CALGLInfoBar* calglCreateInfoBar2Di(
 	const char* substateName, 						//!< Infomation bar's name.
 	enum CALGL_TYPE_INFO_USE infoUse, 				//!< Color gradient that must be used.
-	struct CALDrawModel2D* calDrawModel, 			//!< Pointer to the structure for which retrive the substate. 
+	struct CALGLDrawModel2D* calDrawModel, 			//!< Pointer to the structure for which retrive the substate. 
 	struct CALSubstate2Di* substate,				//!< Pointer to the substate for which display information.
 	GLfloat xPosition, 								//!< X position value of the bar.
 	GLfloat yPosition, 								//!< Y position value of the bar. 
@@ -131,7 +131,7 @@ struct CALGLInfoBar* calglCreateInfoBar2Di(
 struct CALGLInfoBar* calglCreateInfoBar2Dr(
 	const char* substateName, 						//!< Infomation bar's name.
 	enum CALGL_TYPE_INFO_USE infoUse, 				//!< Color gradient that must be used.
-	struct CALDrawModel2D* calDrawModel, 			//!< Pointer to the structure for which retrive the substate. 
+	struct CALGLDrawModel2D* calDrawModel, 			//!< Pointer to the structure for which retrive the substate. 
 	struct CALSubstate2Dr* substate, 				//!< Pointer to the substate for which display information.
 	GLfloat xPosition, 								//!< X position value of the bar.
 	GLfloat yPosition, 								//!< Y position value of the bar.
@@ -144,7 +144,7 @@ struct CALGLInfoBar* calglCreateInfoBar2Dr(
 struct CALGLInfoBar* calglCreateInfoBar3Db(
 	const char* substateName, 						//!< Infomation bar's name.
 	enum CALGL_TYPE_INFO_USE infoUse, 				//!< Color gradient that must be used.
-	struct CALDrawModel3D* calDrawModel, 			//!< Pointer to the structure for which retrive the substate. 
+	struct CALGLDrawModel3D* calDrawModel, 			//!< Pointer to the structure for which retrive the substate. 
 	struct CALSubstate3Db* substate, 				//!< Pointer to the substate for which display information.
 	GLfloat xPosition, 								//!< X position value of the bar.
 	GLfloat yPosition, 								//!< Y position value of the bar.
@@ -157,7 +157,7 @@ struct CALGLInfoBar* calglCreateInfoBar3Db(
 struct CALGLInfoBar* calglCreateInfoBar3Di(
 	const char* substateName, 						//!< Infomation bar's name.
 	enum CALGL_TYPE_INFO_USE infoUse, 				//!< Color gradient that must be used.
-	struct CALDrawModel3D* calDrawModel, 			//!< Pointer to the structure for which retrive the substate. 
+	struct CALGLDrawModel3D* calDrawModel, 			//!< Pointer to the structure for which retrive the substate. 
 	struct CALSubstate3Di* substate, 				//!< Pointer to the substate for which display information.
 	GLfloat xPosition, 								//!< X position value of the bar.
 	GLfloat yPosition, 								//!< Y position value of the bar.
@@ -170,7 +170,7 @@ struct CALGLInfoBar* calglCreateInfoBar3Di(
 struct CALGLInfoBar* calglCreateInfoBar3Dr(
 	const char* substateName, 						//!< Infomation bar's name.
 	enum CALGL_TYPE_INFO_USE infoUse, 				//!< Color gradient that must be used.
-	struct CALDrawModel3D* calDrawModel, 			//!< Pointer to the structure for which retrive the substate. 
+	struct CALGLDrawModel3D* calDrawModel, 			//!< Pointer to the structure for which retrive the substate. 
 	struct CALSubstate3Dr* substate, 				//!< Pointer to the substate for which display information.
 	GLfloat xPosition, 								//!< X position value of the bar.
 	GLfloat yPosition, 								//!< Y position value of the bar.

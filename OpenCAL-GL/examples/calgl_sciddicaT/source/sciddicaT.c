@@ -154,7 +154,7 @@ CALbyte sciddicaTSimulationStopCondition(struct CALModel2D* sciddicaT)
 }
 
 // SciddicaT exit function
-void exitFunction()
+void exitFunction(void)
 {
 	// saving configuration
 	calSaveSubstate2Dr (sciddicaT, Q.h, FINAL);
@@ -167,8 +167,8 @@ void exitFunction()
 
 int main(int argc, char** argv)
 {
-	struct CALDrawModel2D* draw_model3D = NULL;
-	struct CALDrawModel2D* draw_model2D;
+	struct CALGLDrawModel2D* draw_model3D = NULL;
+	struct CALGLDrawModel2D* draw_model2D;
 
 	atexit(exitFunction);
 
@@ -199,13 +199,13 @@ int main(int argc, char** argv)
 	// draw_model3D definition
 	draw_model3D = calglDefDrawModel2D(CALGL_DRAW_MODE_SURFACE, "SciddicaT 3D view", sciddicaT, sciddicaTsimulation);
 	// Add nodes
-	calglAddToDrawModel2Dr(draw_model3D, NULL, &Q.z, CALGL_TYPE_INFO_VERTEX_DATA, CALGL_TYPE_INFO_USE_DEFAULT, CALGL_DATA_TYPE_STATIC);
+	calglAddToDrawModel2Dr(draw_model3D, NULL, &Q.z, CALGL_TYPE_INFO_VERTEX_DATA, CALGL_TYPE_INFO_USE_NO_COLOR, CALGL_DATA_TYPE_STATIC);
 	calglColor2D(draw_model3D, 0.5, 0.5, 0.5, 1.0);
-	calglAddToDrawModel2Dr(draw_model3D, Q.z, &Q.z, CALGL_TYPE_INFO_COLOR_DATA, CALGL_TYPE_INFO_USE_CONST_VALUE, CALGL_DATA_TYPE_DYNAMIC);
-	calglAddToDrawModel2Dr(draw_model3D, Q.z, &Q.z, CALGL_TYPE_INFO_NORMAL_DATA, CALGL_TYPE_INFO_USE_DEFAULT, CALGL_DATA_TYPE_DYNAMIC);
-	calglAddToDrawModel2Dr(draw_model3D, Q.z, &Q.h, CALGL_TYPE_INFO_VERTEX_DATA, CALGL_TYPE_INFO_USE_DEFAULT, CALGL_DATA_TYPE_DYNAMIC);
-	calglAddToDrawModel2Dr(draw_model3D, Q.h, &Q.h, CALGL_TYPE_INFO_COLOR_DATA, CALGL_TYPE_INFO_USE_RED_SCALE, CALGL_DATA_TYPE_DYNAMIC);
-	calglAddToDrawModel2Dr(draw_model3D, Q.h, &Q.h, CALGL_TYPE_INFO_NORMAL_DATA, CALGL_TYPE_INFO_USE_DEFAULT, CALGL_DATA_TYPE_DYNAMIC);
+	calglAddToDrawModel2Dr(draw_model3D, Q.z, &Q.z, CALGL_TYPE_INFO_COLOR_DATA, CALGL_TYPE_INFO_USE_CURRENT_COLOR, CALGL_DATA_TYPE_DYNAMIC);
+	calglAddToDrawModel2Dr(draw_model3D, Q.z, &Q.z, CALGL_TYPE_INFO_NORMAL_DATA, CALGL_TYPE_INFO_USE_NO_COLOR, CALGL_DATA_TYPE_DYNAMIC);
+	calglAddToDrawModel2Dr(draw_model3D, Q.z, &Q.h, CALGL_TYPE_INFO_VERTEX_DATA, CALGL_TYPE_INFO_USE_NO_COLOR, CALGL_DATA_TYPE_DYNAMIC);
+	calglAddToDrawModel2Dr(draw_model3D, Q.h, &Q.h, CALGL_TYPE_INFO_COLOR_DATA, CALGL_TYPE_INFO_USE_LAVA_GRADIENT, CALGL_DATA_TYPE_DYNAMIC);
+	calglAddToDrawModel2Dr(draw_model3D, Q.h, &Q.h, CALGL_TYPE_INFO_NORMAL_DATA, CALGL_TYPE_INFO_USE_NO_COLOR, CALGL_DATA_TYPE_DYNAMIC);
 	// InfoBar
 	//calglRelativeInfoBar2Dr(draw_model3D, Q.h, "Debris thickness", CALGL_TYPE_INFO_USE_RED_SCALE, CALGL_INFO_BAR_ORIENTATION_VERTICAL);
 	calglInfoBar2Dr(draw_model3D, Q.h, "Debris thickness", CALGL_TYPE_INFO_USE_RED_SCALE, 20, 120, 300, 40);
