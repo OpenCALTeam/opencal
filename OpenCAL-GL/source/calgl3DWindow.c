@@ -511,14 +511,14 @@ void calglPrintfInfoCommand3D(){
 	system("clear");
 #endif
 	printf("*---------------------  Command  ---------------------*\n");
-	printf("* Point mouse over a sub window                       *\n");
-	printf("* Keep T key down and move mouse -> translate model   *\n");
-	printf("* Use arrows -> translate model						  *\n");
-	printf("* Left click and move mouse -> rotate model           *\n");
-	printf("* Right click and move mouse -> zoom in/out model     *\n");
-	printf("* Press X/S key -> Start/Stop Simulation              *\n");
-	printf("* Press H key -> Toggle on/off Information Bar Draw   *\n");
-	printf("* Press R key -> Reset models positions			      *\n");
+	printf(" Point mouse over a sub window                       \n");
+	printf(" Keep T key down and move mouse -> translate model   \n");
+	printf(" Use arrows -> translate model						  \n");
+	printf(" Left click and move mouse -> rotate model           \n");
+	printf(" Right click and move mouse -> zoom in/out model     \n");
+	printf(" Press X/S key -> Start/Stop Simulation              \n");
+	printf(" Press H key -> Toggle on/off Information Bar Draw   \n");
+	printf(" Press R key -> Reset models positions			      \n");
 	printf("*-----------------------------------------------------*\n");
 }
 
