@@ -152,7 +152,7 @@ void exitFunction()
 }
 
 int main (int argc, char** argv) {
-	struct CALDrawModel2D* drawModel = NULL;
+	struct CALGLDrawModel2D* drawModel = NULL;
 
 	atexit(exitFunction);
 
@@ -182,18 +182,20 @@ int main (int argc, char** argv) {
 	// model1 definition
 	drawModel = calglDefDrawModel2D (CALGL_DRAW_MODE_SURFACE, "SciddicaT", sciddicaT, sciddicaT_simulation);
 	// Add nodes
-	calglAddToDrawModel2Dr (drawModel, NULL, &Q.z, CALGL_TYPE_INFO_VERTEX_DATA, CALGL_TYPE_INFO_USE_DEFAULT, CALGL_DATA_TYPE_STATIC);
+	calglAddToDrawModel2Dr (drawModel, NULL, &Q.z, CALGL_TYPE_INFO_VERTEX_DATA, CALGL_TYPE_INFO_USE_NO_COLOR, CALGL_DATA_TYPE_STATIC);
 	calglColor2D (drawModel, 0.5, 0.5, 0.5, 1.0);
-	calglAddToDrawModel2Dr (drawModel, Q.z, &Q.z, CALGL_TYPE_INFO_COLOR_DATA, CALGL_TYPE_INFO_USE_CONST_VALUE, CALGL_DATA_TYPE_DYNAMIC);
-	calglAddToDrawModel2Dr (drawModel, Q.z, &Q.z, CALGL_TYPE_INFO_NORMAL_DATA, CALGL_TYPE_INFO_USE_DEFAULT, CALGL_DATA_TYPE_DYNAMIC);
-	calglAddToDrawModel2Dr (drawModel, Q.z, &Q.h, CALGL_TYPE_INFO_VERTEX_DATA, CALGL_TYPE_INFO_USE_DEFAULT, CALGL_DATA_TYPE_DYNAMIC);
-	calglAddToDrawModel2Dr (drawModel, Q.h, &Q.h, CALGL_TYPE_INFO_COLOR_DATA, CALGL_TYPE_INFO_USE_RED_SCALE, CALGL_DATA_TYPE_DYNAMIC);
-	calglAddToDrawModel2Dr (drawModel, Q.h, &Q.h, CALGL_TYPE_INFO_NORMAL_DATA, CALGL_TYPE_INFO_USE_DEFAULT, CALGL_DATA_TYPE_DYNAMIC);
+	calglAddToDrawModel2Dr (drawModel, Q.z, &Q.z, CALGL_TYPE_INFO_COLOR_DATA, CALGL_TYPE_INFO_USE_CURRENT_COLOR, CALGL_DATA_TYPE_DYNAMIC);
+	calglAddToDrawModel2Dr (drawModel, Q.z, &Q.z, CALGL_TYPE_INFO_NORMAL_DATA, CALGL_TYPE_INFO_USE_NO_COLOR, CALGL_DATA_TYPE_DYNAMIC);
+	calglAddToDrawModel2Dr (drawModel, Q.z, &Q.h, CALGL_TYPE_INFO_VERTEX_DATA, CALGL_TYPE_INFO_USE_NO_COLOR, CALGL_DATA_TYPE_DYNAMIC);
+	calglAddToDrawModel2Dr (drawModel, Q.h, &Q.h, CALGL_TYPE_INFO_COLOR_DATA, CALGL_TYPE_INFO_USE_GREEN_SCALE, CALGL_DATA_TYPE_DYNAMIC);
+	calglAddToDrawModel2Dr (drawModel, Q.h, &Q.h, CALGL_TYPE_INFO_NORMAL_DATA, CALGL_TYPE_INFO_USE_NO_COLOR, CALGL_DATA_TYPE_DYNAMIC);
 	// InfoBar
 	calglInfoBar2Dr (drawModel, Q.h, "Debris thickness", CALGL_TYPE_INFO_USE_RED_SCALE, 20, 120, 300, 80);
 	//calglSetLayoutOrientation2D(CALGL_LAYOUT_ORIENTATION_HORIZONTAL);
 	//calglSetLayoutOrientation2D(CALGL_LAYOUT_ORIENTATION_VERTICAL);
 
+	calglSetDisplayStep(100);
+	
 	calglMainLoop2D(argc, argv);
 
 	return 0;

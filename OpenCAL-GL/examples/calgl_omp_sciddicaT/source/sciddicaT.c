@@ -34,10 +34,10 @@ struct sciddicaTParameters {
 	CALParameterr r;
 };
 
-struct CALModel2D* sciddicaT;						//the cellular automaton
-struct sciddicaTSubstates Q;						//the substates
-struct sciddicaTParameters P;						//the parameters
-struct CALRun2D* sciddicaTsimulation;				//the simulartion run
+struct CALModel2D* sciddicaT;		//the cellular automaton
+struct sciddicaTSubstates Q;		//the substates
+struct sciddicaTParameters P;		//the parameters
+struct CALRun2D* sciddicaTsimulation;	//the simulartion run
 
 
 //------------------------------------------------------------------------------
@@ -181,8 +181,8 @@ void exitFunction()
 
 int main(int argc, char** argv)
 {
-	struct CALDrawModel2D* model1 = NULL;
-	struct CALDrawModel2D* model2;
+	struct CALGLDrawModel2D* model1 = NULL;
+	struct CALGLDrawModel2D* model2;
 
 	atexit(exitFunction);
 
@@ -215,13 +215,13 @@ int main(int argc, char** argv)
 	// model1 definition
 	model1 = calglDefDrawModel2D(CALGL_DRAW_MODE_SURFACE, "SciddicaT", sciddicaT, sciddicaTsimulation);
 	// Add nodes
-	calglAddToDrawModel2Dr(model1, NULL, &Q.z, CALGL_TYPE_INFO_VERTEX_DATA, CALGL_TYPE_INFO_USE_DEFAULT, CALGL_DATA_TYPE_STATIC);
+	calglAddToDrawModel2Dr(model1, NULL, &Q.z, CALGL_TYPE_INFO_VERTEX_DATA, CALGL_TYPE_INFO_USE_NO_COLOR, CALGL_DATA_TYPE_STATIC);
 	calglColor2D(model1, 0.5, 0.5, 0.5, 1.0);
-	calglAddToDrawModel2Dr(model1, Q.z, &Q.z, CALGL_TYPE_INFO_COLOR_DATA, CALGL_TYPE_INFO_USE_CONST_VALUE, CALGL_DATA_TYPE_DYNAMIC);
-	calglAddToDrawModel2Dr(model1, Q.z, &Q.z, CALGL_TYPE_INFO_NORMAL_DATA, CALGL_TYPE_INFO_USE_DEFAULT, CALGL_DATA_TYPE_DYNAMIC);
-	calglAddToDrawModel2Dr(model1, Q.z, &Q.h, CALGL_TYPE_INFO_VERTEX_DATA, CALGL_TYPE_INFO_USE_DEFAULT, CALGL_DATA_TYPE_DYNAMIC);
-	calglAddToDrawModel2Dr(model1, Q.h, &Q.h, CALGL_TYPE_INFO_COLOR_DATA, CALGL_TYPE_INFO_USE_RED_SCALE, CALGL_DATA_TYPE_DYNAMIC);
-	calglAddToDrawModel2Dr(model1, Q.h, &Q.h, CALGL_TYPE_INFO_NORMAL_DATA, CALGL_TYPE_INFO_USE_DEFAULT, CALGL_DATA_TYPE_DYNAMIC);
+	calglAddToDrawModel2Dr(model1, Q.z, &Q.z, CALGL_TYPE_INFO_COLOR_DATA, CALGL_TYPE_INFO_USE_CURRENT_COLOR, CALGL_DATA_TYPE_DYNAMIC);
+	calglAddToDrawModel2Dr(model1, Q.z, &Q.z, CALGL_TYPE_INFO_NORMAL_DATA, CALGL_TYPE_INFO_USE_NO_COLOR, CALGL_DATA_TYPE_DYNAMIC);
+	calglAddToDrawModel2Dr(model1, Q.z, &Q.h, CALGL_TYPE_INFO_VERTEX_DATA, CALGL_TYPE_INFO_USE_NO_COLOR, CALGL_DATA_TYPE_DYNAMIC);
+	calglAddToDrawModel2Dr(model1, Q.h, &Q.h, CALGL_TYPE_INFO_COLOR_DATA, CALGL_TYPE_INFO_USE_GREEN_SCALE, CALGL_DATA_TYPE_DYNAMIC);
+	calglAddToDrawModel2Dr(model1, Q.h, &Q.h, CALGL_TYPE_INFO_NORMAL_DATA, CALGL_TYPE_INFO_USE_NO_COLOR, CALGL_DATA_TYPE_DYNAMIC);
 	// InfoBar
 	//calglRelativeInfoBar2Dr(model1, Q.h, "Debris thickness", CALGL_TYPE_INFO_USE_RED_SCALE, CALGL_INFO_BAR_ORIENTATION_VERTICAL);
 	calglInfoBar2Dr(model1, Q.h, "Debris thickness", CALGL_TYPE_INFO_USE_RED_SCALE, 20, 120, 300, 80);
@@ -238,6 +238,8 @@ int main(int argc, char** argv)
 	//calglSetLayoutOrientation2D(CALGL_LAYOUT_ORIENTATION_HORIZONTAL);
 	//calglSetLayoutOrientation2D(CALGL_LAYOUT_ORIENTATION_VERTICAL);
 
+	calglSetDisplayStep(100);
+	
 	calglMainLoop2D(argc, argv);
 
 	return 0;

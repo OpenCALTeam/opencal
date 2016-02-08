@@ -221,6 +221,8 @@ int main(int argc, char** argv)
 
 	calglSetLayoutOrientation2D(CALGL_LAYOUT_ORIENTATION_VERTICAL);
 
+	calglSetDisplayStep(100);
+	
 	calglMainLoop2D(argc, argv);
 
 	return 0;
