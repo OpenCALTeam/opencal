@@ -1,6 +1,7 @@
 # opencal/OpenCAL/CMakeLists.txt
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 
+
 # add a target to generate API documentation with Doxygen
 if(BUILD_DOCUMENTATION)
     if(NOT DOXYGEN_FOUND)
@@ -41,7 +42,7 @@ file(GLOB HEADERS
 
 add_library(opencal ${SHAREDORSTATIC} ${SRC})
 install(TARGETS opencal DESTINATION  ${INSTALL_LIB_DIR})
-install(FILES ${HEADERS} DESTINATION ${INSTALL_INCLUDE_DIR}/OpenCAL)
+install(FILES ${HEADERS} DESTINATION ${INSTALL_INCLUDE_DIR}/OpenCAL-${OPENCAL_VERSION}/)
 
 if(${BUILD_EXAMPLES} STREQUAL "ON")
 	add_subdirectory(examples)
