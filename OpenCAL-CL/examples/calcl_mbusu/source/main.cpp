@@ -74,7 +74,7 @@ int main(int argc, char** argv) {
 	simulationInitialize();
 	CALCLToolkit3D * mbusuToolkit = NULL;
 
-	mbusuToolkit = calclCreateToolkit3D(mbusu->model,context,program,device,CAL_NO_OPT);
+	mbusuToolkit = calclCreateToolkit3D(mbusu->model,context,program,device);
 
 	CALCLkernel kernel_elementary_process_one = calclGetKernelFromProgram(&program, (char *)KER_SCIARA_ELEMENTARY_PROCESS_ONE);
 	CALCLkernel kernel_stop_condition = calclGetKernelFromProgram(&program, (char *)KER_SCIARA_STOP_CONDITION);

@@ -145,11 +145,7 @@ int main(int argc, char** argv) {
 	calUpdate2D(sciddicaT);
 
 	//calcl toolkit
-#ifdef ACTIVE_CELLS
-	sciddicaToolkit = calclCreateToolkit2D(sciddicaT, context, program, device, CAL_OPT_ACTIVE_CELLS);
-#else
-	sciddicaToolkit = calclCreateToolkit2D(sciddicaT, context, program, device, CAL_NO_OPT);
-#endif
+	sciddicaToolkit = calclCreateToolkit2D(sciddicaT, context, program, device);
 
 
 	//calcl kernels

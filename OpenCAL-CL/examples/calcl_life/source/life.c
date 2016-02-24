@@ -60,7 +60,7 @@ int main()
 	calInit2Di(life, Q, 2, 2, 1);
 
 	// define Toolkit object
-    lifeToolkit = calclCreateToolkit2D(life, context, program, device, CAL_NO_OPT);
+    lifeToolkit = calclCreateToolkit2D(life, context, program, device);
 	
 	//create kernel
 	kernel_life_transition_function = calclGetKernelFromProgram(&program, KERNEL_LIFE_TRANSITION_FUNCTION);

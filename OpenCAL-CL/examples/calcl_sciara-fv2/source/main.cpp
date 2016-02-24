@@ -103,10 +103,7 @@ int main(int argc, char** argv) {
 	simulationInitialize(sciara->model);
 	CALCLToolkit2D * sciaraToolkit = NULL;
 
-	if (active == 0)
-		sciaraToolkit = calclCreateToolkit2D(sciara->model, context, program, device, CAL_NO_OPT);
-	else
-		sciaraToolkit = calclCreateToolkit2D(sciara->model, context, program, device, CAL_OPT_ACTIVE_CELLS);
+	sciaraToolkit = calclCreateToolkit2D(sciara->model, context, program, device);
 
 	CALCLkernel kernel_elementary_process_one = calclGetKernelFromProgram(&program,(char*) KER_SCIARA_ELEMENTARY_PROCESS_ONE);
 	CALCLkernel kernel_elementary_process_two = calclGetKernelFromProgram(&program,(char*) KER_SCIARA_ELEMENTARY_PROCESS_TWO);

@@ -266,10 +266,10 @@ CALCLqueue calclCreateQueue2D(CALCLToolkit2D * toolkit, struct CALModel2D * mode
  * 							PUBLIC FUNCTIONS
  ******************************************************************************/
 
-CALCLToolkit2D * calclCreateToolkit2D(struct CALModel2D *model, CALCLcontext context, CALCLprogram program, CALCLdevice device, enum CALOptimization opt) {
+CALCLToolkit2D * calclCreateToolkit2D(struct CALModel2D *model, CALCLcontext context, CALCLprogram program, CALCLdevice device) {
 
 	CALCLToolkit2D * toolkit = (CALCLToolkit2D*) malloc(sizeof(CALCLToolkit2D));
-	toolkit->opt = opt;
+	toolkit->opt = model->OPTIMIZATION;
 	toolkit->cl_update_substates = NULL;
 	toolkit->kernelInitSubstates = NULL;
 	toolkit->kernelSteering = NULL;

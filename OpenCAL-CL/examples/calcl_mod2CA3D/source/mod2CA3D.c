@@ -57,8 +57,8 @@ int main()
 	calSaveSubstate3Db(mod2, Q, "./mod2_0000.txt");
 
 	// define Toolkit object
-    mod2Toolkit = calclCreateToolkit3D(mod2, context, program, device, CAL_NO_OPT);
-
+	mod2Toolkit = calclCreateToolkit3D(mod2, context, program, device);
+    
     //create kernel
 	kernel_transition_function = calclGetKernelFromProgram(&program, KERNEL_LIFE_TRANSITION_FUNCTION);
 

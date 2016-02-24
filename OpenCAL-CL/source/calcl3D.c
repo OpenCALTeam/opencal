@@ -268,11 +268,11 @@ CALCLqueue calclCreateQueue3D(CALCLToolkit3D * toolkit, struct CALModel3D * mode
  * 							PUBLIC FUNCTIONS
  ******************************************************************************/
 
-CALCLToolkit3D * calclCreateToolkit3D(struct CALModel3D *model, CALCLcontext context, CALCLprogram program,CALCLdevice device,enum CALOptimization opt) {
+CALCLToolkit3D * calclCreateToolkit3D(struct CALModel3D *model, CALCLcontext context, CALCLprogram program,CALCLdevice device) {
 
 	CALCLToolkit3D * toolkit = (CALCLToolkit3D*) malloc(sizeof(CALCLToolkit3D));
 	//initialize toolkit stuff
-	toolkit->opt = opt;
+	toolkit->opt = model->OPTIMIZATION;
 	toolkit->cl_update_substates = NULL;
 	toolkit->kernelInitSubstates = NULL;
 	toolkit->kernelSteering = NULL;

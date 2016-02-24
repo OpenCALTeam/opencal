@@ -137,8 +137,7 @@ typedef struct CALCLToolkit2D {
 CALCLToolkit2D * calclCreateToolkit2D(struct CALModel2D *model,		//!< Pointer to a CALModel2D
 		CALCLcontext context,										//!< Opencl context
 		CALCLprogram program,										//!< Opencl program containing library source and user defined source
-		CALCLdevice device,											//!< Opencl device
-		enum CALOptimization opt											//!< Optimization strategies (CAL_NO_OPT, CAL_OPT_ACTIVE_CELL)
+		CALCLdevice device											//!< Opencl device
 		);
 
 /*! \brief Main simulation cycle. It can become a loop if maxStep == CALCL_RUN_LOOP */
