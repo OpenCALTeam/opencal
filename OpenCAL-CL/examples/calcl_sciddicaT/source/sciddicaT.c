@@ -117,7 +117,7 @@ int main(int argc, char** argv) {
 	calclPrintAllPlatformAndDevices(calOpenCL);
 
 	device = calclGetDevice(calOpenCL, platformNum, deviceNum);
-	context = calclcreateContext(&device, 1);
+	context = calclCreateContext(&device, 1);
 	program = calclLoadProgramLib2D(context, device, kernelSrc, kernelInc);
 
 

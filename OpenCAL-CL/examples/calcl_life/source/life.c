@@ -35,10 +35,11 @@ int main()
 
 	calOpenCL = calclCreateCALOpenCL();
 	calclInitializePlatforms(calOpenCL);
+	printf("ciao\n");
 	calclInitializeDevices(calOpenCL);
 	calclPrintAllPlatformAndDevices(calOpenCL);
 	device = calclGetDevice(calOpenCL, platformNum, deviceNum);
-	context = calclcreateContext(&device, 1);
+	context = calclCreateContext(&device, 1);
 	program = calclLoadProgramLib2D(context, device, kernelSrc, kernelInc);
 
 

@@ -66,7 +66,7 @@ int main(int argc, char** argv) {
 
 	CALCLdevice device = calclGetDevice(calOpenCL, platformNum, deviceNum);
 
-	CALCLcontext context = calclcreateContext(&device, 1);
+	CALCLcontext context = calclCreateContext(&device, 1);
 
 	CALCLprogram program = calclLoadProgramLib3D(context, device, (char *)kernelSrc, (char *)kernelInc);
 	initMbusu();

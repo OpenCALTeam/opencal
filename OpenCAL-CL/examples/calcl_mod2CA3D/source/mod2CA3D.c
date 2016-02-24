@@ -37,7 +37,7 @@ int main()
 	calclInitializeDevices(calOpenCL);
 	calclPrintAllPlatformAndDevices(calOpenCL);
 	device = calclGetDevice(calOpenCL, platformNum, deviceNum);
-	context = calclcreateContext(&device, 1);
+	context = calclCreateContext(&device, 1);
 	program = calclLoadProgramLib3D(context, device, kernelSrc, kernelInc);
 
 

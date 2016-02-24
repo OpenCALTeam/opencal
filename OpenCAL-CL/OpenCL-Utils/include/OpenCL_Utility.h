@@ -75,7 +75,7 @@ void calclInitializeDevices(CALOpenCL * opencl //!< Pointer to CALOpenCL structu
 		);
 
 /*! \brief Creates an Opencl context */
-CALCLcontext calclcreateContext(CALCLdevice * devices,	//!< Array containing the devices used to create the context
+CALCLcontext calclCreateContext(CALCLdevice * devices,	//!< Array containing the devices used to create the context
 		CALCLuint num_devices							//!< Number of devices used to create the context
 		);
 
