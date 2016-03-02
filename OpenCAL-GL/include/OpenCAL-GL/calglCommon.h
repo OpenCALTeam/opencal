@@ -30,7 +30,7 @@ enum CALGL_TYPE_INFO_USE {
 	CALGL_TYPE_INFO_USE_RED_SCALE,		//!< Enumerator used for specify a red gradient to use on the node.
 	CALGL_TYPE_INFO_USE_GREEN_SCALE,	//!< Enumerator used for specify a green gradient to use on the node.
 	CALGL_TYPE_INFO_USE_BLUE_SCALE,		//!< Enumerator used for specify a blu gradient to use on the node.
-	CALGL_TYPE_INFO_USE_LAVA_GRADIENT,	//!< Enumerator used for specify a Red and Yellow gradient to use on the node.
+	CALGL_TYPE_INFO_USE_RED_YELLOW_SCALE,	//!< Enumerator used for specify a Red and Yellow gradient to use on the node.
 	CALGL_TYPE_INFO_USE_ALL_COLOR		//!< Enumerator used for specify a special color combination to use on the node.
 };
 

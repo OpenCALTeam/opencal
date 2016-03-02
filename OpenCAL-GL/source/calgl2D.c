@@ -1036,7 +1036,7 @@ GLboolean calglSetColorData2Db(struct CALGLDrawModel2D* calDrawModel, struct CAL
 					doubleColor[1] = 0.0;
 					doubleColor[2] = 0.0;
 					break;
-				case CALGL_TYPE_INFO_USE_LAVA_GRADIENT:
+				case CALGL_TYPE_INFO_USE_RED_YELLOW_SCALE:
 					entered = CAL_TRUE;
 					doubleColor[1] = (tmp-calNode->nodes[k]->min)/(calNode->nodes[k]->max-calNode->nodes[k]->min);
 					doubleColor[0] = 1.0;
@@ -1106,7 +1106,7 @@ GLboolean calglSetColorData2Di(struct CALGLDrawModel2D* calDrawModel, struct CAL
 					doubleColor[1] = 0.0;
 					doubleColor[2] = 0.0;
 					break;
-				case CALGL_TYPE_INFO_USE_LAVA_GRADIENT:
+				case CALGL_TYPE_INFO_USE_RED_YELLOW_SCALE:
 					entered = CAL_TRUE;
 					doubleColor[1] = (tmp-calNode->nodes[k]->min)/(calNode->nodes[k]->max-calNode->nodes[k]->min);
 					doubleColor[0] = 1.0;
@@ -1176,7 +1176,7 @@ GLboolean calglSetColorData2Dr(struct CALGLDrawModel2D* calDrawModel, struct CAL
 					doubleColor[1] = 0.0;
 					doubleColor[2] = 0.0;
 					break;
-				case CALGL_TYPE_INFO_USE_LAVA_GRADIENT:
+				case CALGL_TYPE_INFO_USE_RED_YELLOW_SCALE:
 					entered = CAL_TRUE;
 					doubleColor[1] = (tmp-calNode->nodes[k]->min)/(calNode->nodes[k]->max-calNode->nodes[k]->min);
 					doubleColor[0] = 1.0;

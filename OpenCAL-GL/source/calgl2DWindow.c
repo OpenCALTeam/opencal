@@ -380,8 +380,7 @@ void calglKeyboardEventWindow2D(unsigned char key, int x, int y) {
 	if(key=='r') {
 		for(i = 0; i<window2D->noModels; i++) {
 			xPos[i] = 0.0f;	yPos[i] = 0.0f;	zPos[i] = 0.0f;
-			xRot[i] = 0.0f; yRot[i] = 0.0f; zRot[i] = 0.0f;
-			xRot[i] = 90.0f;
+			xRot[i] = 90.0f; yRot[i] = 0.0f; zRot[i] = 0.0f;
 		}
 	}
 
