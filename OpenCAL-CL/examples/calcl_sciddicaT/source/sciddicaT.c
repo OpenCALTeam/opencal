@@ -159,14 +159,14 @@ int main(int argc, char** argv) {
 	bufferEpsilonParameter = calclCreateBuffer(context, &P.epsilon, sizeof(CALParameterr));
 	bufferRParameter = calclCreateBuffer(context, &P.r, sizeof(CALParameterr));
 
-	calclSetKernelArg(&kernel_elem_proc_flow_computation, 0, sizeof(CALCLmem), &bufferEpsilonParameter);
-	calclSetKernelArg(&kernel_elem_proc_flow_computation, 1, sizeof(CALCLmem), &bufferRParameter);
+	calclSetKernelArg2D(&kernel_elem_proc_flow_computation, 0, sizeof(CALCLmem), &bufferEpsilonParameter);
+	calclSetKernelArg2D(&kernel_elem_proc_flow_computation, 1, sizeof(CALCLmem), &bufferRParameter);
 
 	calclAddElementaryProcessKernel2D(sciddicaToolkit, sciddicaT, &kernel_elem_proc_flow_computation);
 	calclAddElementaryProcessKernel2D(sciddicaToolkit, sciddicaT, &kernel_elem_proc_width_update);
 	calclSetSteeringKernel2D(sciddicaToolkit, sciddicaT, &kernel_steering);
 #ifdef ACTIVE_CELLS
-	calclSetKernelArg(&kernel_elem_proc_rm_act_cells, 0, sizeof(CALCLmem), &bufferEpsilonParameter);
+	calclSetKernelArg2D(&kernel_elem_proc_rm_act_cells, 0, sizeof(CALCLmem), &bufferEpsilonParameter);
 	calclAddElementaryProcessKernel2D(sciddicaToolkit, sciddicaT, &kernel_elem_proc_rm_act_cells);
 #endif
 

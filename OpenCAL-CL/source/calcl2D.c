@@ -680,7 +680,7 @@ CALCLprogram calclLoadProgram2D(CALCLcontext context, CALCLdevice device, char* 
 	return program;
 }
 
-int calclSetKernelArg(CALCLkernel* kernel, cl_uint arg_index,size_t arg_size,const void *arg_value){
+int calclSetKernelArg2D(CALCLkernel* kernel, cl_uint arg_index,size_t arg_size,const void *arg_value){
 	return  clSetKernelArg(*kernel,MODEL_ARGS_NUM + arg_index, arg_size,arg_value);
 }
 

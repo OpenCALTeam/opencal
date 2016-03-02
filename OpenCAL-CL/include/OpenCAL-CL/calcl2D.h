@@ -250,10 +250,11 @@ CALCLprogram calclLoadProgram2D(CALCLcontext context,		//!< Opencl context
 		);
 
 /*! \brief Set a kernel argument   */
-int calclSetKernelArg(CALCLkernel* kernel,			//!< Opencl kernel
-		      cl_uint arg_index,			//!< Index argument
-		      size_t arg_size,				//!< Size argument
-		      const void *arg_value);			//!< Value argument
+int calclSetKernelArg2D(CALCLkernel* kernel,			//!< Opencl kernel
+			cl_uint arg_index,			//!< Index argument
+			size_t arg_size,			//!< Size argument
+			const void *arg_value                   //!< Value argument
+			);			
 
 
 #endif /* CALCL_H_ */

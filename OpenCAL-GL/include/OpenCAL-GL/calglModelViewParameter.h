@@ -21,7 +21,6 @@
 #include <OpenCAL-GL/calgl2D.h>
 #include <OpenCAL-GL/calgl3D.h>
 
-struct CalGlDrawModel2D;
 
 /*! \brief Structure that contains informations about the model view matrix.
 	It contains translations information.
