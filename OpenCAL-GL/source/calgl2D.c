@@ -49,6 +49,8 @@ struct CALGLDrawModel2D* calglDefDrawModel2D(enum CALGL_DRAW_MODE mode, const ch
 
 	drawModel->moving = CAL_FALSE;
 
+	drawModel->heightOffset = 0.0f;
+
 	calglShowModel2D(drawModel);
 
 	return drawModel;
@@ -758,7 +760,8 @@ void calglDrawRealModelDisplayCurrentNodeSetVertexData2Db(struct CALGLDrawModel2
 	}
 
 	while(father!=NULL && father->typeInfoSubstate==CALGL_TYPE_INFO_VERTEX_DATA) {
-		intVertex[1] += calGet2Db(calDrawModel->calModel, father->substate, i, j);
+		intVertex[1] += (GLint) (calGet2Db(calDrawModel->calModel, father->substate, i, j)
+			+calDrawModel->heightOffset);
 		father = calglGetFatherNode2Db(father);
 	};
 	intVertex[2] = (int) (j * calglGetGlobalSettings()->cellSize);
@@ -778,7 +781,8 @@ void calglDrawRealModelDisplayCurrentNodeSetVertexData2Di(struct CALGLDrawModel2
 	}
 
 	while(father!=NULL && father->typeInfoSubstate==CALGL_TYPE_INFO_VERTEX_DATA) {
-		intVertex[1] += calGet2Di(calDrawModel->calModel, father->substate, i, j);
+		intVertex[1] += (GLint) (calGet2Di(calDrawModel->calModel, father->substate, i, j)
+			+calDrawModel->heightOffset);
 		father = calglGetFatherNode2Di(father);
 	};
 	intVertex[2] = (int) (j * calglGetGlobalSettings()->cellSize);
@@ -798,7 +802,8 @@ void calglDrawRealModelDisplayCurrentNodeSetVertexData2Dr(struct CALGLDrawModel2
 	}
 
 	while(father!=NULL && father->typeInfoSubstate==CALGL_TYPE_INFO_VERTEX_DATA) {
-		doubleVertex[1] += calGet2Dr(calDrawModel->calModel, father->substate, i, j);
+		doubleVertex[1] += (calGet2Dr(calDrawModel->calModel, father->substate, i, j)
+			+calDrawModel->heightOffset);
 		father = calglGetFatherNode2Dr(father);
 	};
 	doubleVertex[2] = i * calglGetGlobalSettings()->cellSize;
@@ -1392,3 +1397,7 @@ void calglHideDrawJBound2D(struct CALGLDrawModel2D* calDrawModel, GLint min, GLi
 	}
 }
 #pragma endregion
+
+void calglSetHeightOffset2D(struct CALGLDrawModel2D* calDrawModel, float heightOffset) {
+	calDrawModel->heightOffset = heightOffset;
+}

@@ -416,13 +416,14 @@ void calglMouseWindow2D(int button, int state, int x, int y) {
 		models2D[glutGetWindow()-2]->moving = CAL_FALSE;
 	} else {
 		calglRedisplayAllWindow2D();
+		models2D[glutGetWindow()-2]->moving = CAL_FALSE;
 	}
 }
 
 void calglMotionMouseWindow2D(int x, int y) {
 	GLfloat rot_x = 0.0f, rot_y = 0.0f;
 	GLfloat transY = 0;
-
+	
 	if(leftPressed) {
 		x -= window2D->sub_width/2;
 		y -= window2D->sub_height/2;
@@ -443,6 +444,7 @@ void calglMotionMouseWindow2D(int x, int y) {
 		window2D->models[glutGetWindow()-2]->modelView->yRotation += rot_x;*/
 
 		calglRedisplayAllWindow2D();
+		models2D[glutGetWindow()-2]->moving = CAL_TRUE;
 	} else if(rightPressed) {
 		y -= window2D->sub_height/2;
 		transY = -(y-oldestY) * mouseSensitivity;
@@ -451,6 +453,9 @@ void calglMotionMouseWindow2D(int x, int y) {
 		zPos[glutGetWindow()-2] += transY;
 
 		calglRedisplayAllWindow2D();
+		models2D[glutGetWindow()-2]->moving = CAL_TRUE;
+	} else {
+		models2D[glutGetWindow()-2]->moving = CAL_FALSE;
 	}
 }
 
