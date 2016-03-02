@@ -40,7 +40,7 @@ int main()
 	calclPrintAllPlatformAndDevices(calOpenCL);
 	device = calclGetDevice(calOpenCL, platformNum, deviceNum);
 	context = calclCreateContext(&device, 1);
-	program = calclLoadProgramLib2D(context, device, kernelSrc, kernelInc);
+	program = calclLoadProgram2D(context, device, kernelSrc, kernelInc);
 
 
 	// define of the life CA and life_simulation simulation objects

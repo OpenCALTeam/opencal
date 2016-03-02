@@ -36,7 +36,7 @@ enum CALNeighborhood3D {
  * i j k to a constant value in the current and next matrices.
  *
  * */
-void calInitSubstate3Db(MODEL_DEFINITION3D,		//!< Defines model parameters
+void calInitSubstate3Db(__CALCL_MODEL_3D,		//!< Defines model parameters
 		CALint substateNum,						//!< Indicates the number of the substate
 		int i, 									//!< Row coordinate of the cell to be initialized
 		int j,									//!< Column coordinate of the cell to be initialized
@@ -50,7 +50,7 @@ void calInitSubstate3Db(MODEL_DEFINITION3D,		//!< Defines model parameters
  * i j k to a constant value in the current and next matrices.
  *
  * */
-void calInitSubstate3Di(MODEL_DEFINITION3D,		//!< Defines model parameters
+void calInitSubstate3Di(__CALCL_MODEL_3D,		//!< Defines model parameters
 		CALint substateNum,						//!< Indicates the number of the substate
 		int i, 									//!< Row coordinate of the cell to be initialized
 		int j,									//!< Column coordinate of the cell to be initialized
@@ -64,7 +64,7 @@ void calInitSubstate3Di(MODEL_DEFINITION3D,		//!< Defines model parameters
  * i j k to a constant value in the current and next matrices.
  *
  * */
-void calInitSubstate3Dr(MODEL_DEFINITION3D,		//!< Defines model parameters
+void calInitSubstate3Dr(__CALCL_MODEL_3D,		//!< Defines model parameters
 		CALint substateNum,						//!< Indicates the number of the substate
 		int i, 									//!< Row coordinate of the cell to be initialized
 		int j,									//!< Column coordinate of the cell to be initialized
@@ -73,37 +73,37 @@ void calInitSubstate3Dr(MODEL_DEFINITION3D,		//!< Defines model parameters
 		);
 
 /*! \brief Gets a pointer to the current byte matrix of the substate corresponding to substateNum */
-__global CALbyte * calGetCurrentSubstate3Db(MODEL_DEFINITION3D,		//!< Defines model parameters
+__global CALbyte * calGetCurrentSubstate3Db(__CALCL_MODEL_3D,		//!< Defines model parameters
 		CALint substateNum											//!< Indicates the number of the substate
 		);
 
 /*! \brief Gets a pointer to the current integer matrix of the substate corresponding to substateNum */
-__global CALreal * calGetCurrentSubstate3Dr(MODEL_DEFINITION3D,		//!< Defines model parameters
+__global CALreal * calGetCurrentSubstate3Dr(__CALCL_MODEL_3D,		//!< Defines model parameters
 		CALint substateNum											//!< Indicates the number of the substate
 		);
 
 /*! \brief Gets a pointer to the current real (floating-point) matrix of the substate corresponding to substateNum */
-__global CALint * calGetCurrentSubstate3Di(MODEL_DEFINITION3D,		//!< Defines model parameters
+__global CALint * calGetCurrentSubstate3Di(__CALCL_MODEL_3D,		//!< Defines model parameters
 		CALint substateNum											//!< Indicates the number of the substate
 		);
 
 /*! \brief Gets a pointer to the next byte matrix of the substate corresponding to substateNum */
-__global CALbyte * calGetNextSubstate3Db(MODEL_DEFINITION3D,		//!< Defines model parameters
+__global CALbyte * calGetNextSubstate3Db(__CALCL_MODEL_3D,		//!< Defines model parameters
 		CALint substateNum											//!< Indicates the number of the substate
 		);
 
 /*! \brief Gets a pointer to the next integer matrix of the substate corresponding to substateNum */
-__global CALreal * calGetNextSubstate3Dr(MODEL_DEFINITION3D,		//!< Defines model parameters
+__global CALreal * calGetNextSubstate3Dr(__CALCL_MODEL_3D,		//!< Defines model parameters
 		CALint substateNum											//!< Indicates the number of the substate
 		);
 
 /*! \brief Gets a pointer to the next real (floating-point) matrix of the substate corresponding to substateNum */
-__global CALint * calGetNextSubstate3Di(MODEL_DEFINITION3D,			//!< Defines model parameters
+__global CALint * calGetNextSubstate3Di(__CALCL_MODEL_3D,			//!< Defines model parameters
 		CALint substateNum											//!< Indicates the number of the substate
 		);
 
 /*! \brief Returns the cell (i, j, k) value of a byte substate.*/
-CALbyte calGet3Db(MODEL_DEFINITION3D,	//!< Defines model parameters
+CALbyte calGet3Db(__CALCL_MODEL_3D,	//!< Defines model parameters
 		CALint substateNum,				//!< Indicates the number of the substate
 		int i, 							//!< Row coordinate of the cell
 		int j,							//!< Column coordinate of the cell
@@ -111,7 +111,7 @@ CALbyte calGet3Db(MODEL_DEFINITION3D,	//!< Defines model parameters
 		);
 
 /*! \brief Returns the cell (i, j, k) value of a integer substate.*/
-CALint calGet3Di(MODEL_DEFINITION3D,	//!< Defines model parameters
+CALint calGet3Di(__CALCL_MODEL_3D,	//!< Defines model parameters
 		CALint substateNum,				//!< Indicates the number of the substate
 		int i, 							//!< Row coordinate of the cell
 		int j,							//!< Column coordinate of the cell
@@ -119,7 +119,7 @@ CALint calGet3Di(MODEL_DEFINITION3D,	//!< Defines model parameters
 		);
 
 /*! \brief Returns the cell (i, j, k) value of a real (floating point) substate.*/
-CALreal calGet3Dr(MODEL_DEFINITION3D,	//!< Defines model parameters
+CALreal calGet3Dr(__CALCL_MODEL_3D,	//!< Defines model parameters
 		CALint substateNum,				//!< Indicates the number of the substate
 		int i, 							//!< Row coordinate of the cell
 		int j,							//!< Column coordinate of the cell
@@ -127,7 +127,7 @@ CALreal calGet3Dr(MODEL_DEFINITION3D,	//!< Defines model parameters
 		);
 
 /*! \brief Returns the n-th neighbor of the cell (i, j, k) value of a byte substate.*/
-CALbyte calGetX3Db(MODEL_DEFINITION3D,	//!< Defines model parameters
+CALbyte calGetX3Db(__CALCL_MODEL_3D,	//!< Defines model parameters
 		CALint substateNum,				//!< Indicates the number of the substate
 		int i, 							//!< Row coordinate of the cell
 		int j,							//!< Column coordinate of the cell
@@ -136,7 +136,7 @@ CALbyte calGetX3Db(MODEL_DEFINITION3D,	//!< Defines model parameters
 		);
 
 /*! \brief Returns the n-th neighbor of the cell (i, j, k) value of a integer substate.*/
-CALint calGetX3Di(MODEL_DEFINITION3D,	//!< Defines model parameters
+CALint calGetX3Di(__CALCL_MODEL_3D,	//!< Defines model parameters
 		CALint substateNum,				//!< Indicates the number of the substate
 		int i, 							//!< Row coordinate of the cell
 		int j,							//!< Column coordinate of the cell
@@ -145,7 +145,7 @@ CALint calGetX3Di(MODEL_DEFINITION3D,	//!< Defines model parameters
 		);
 
 /*! \brief Returns the n-th neighbor of the cell (i, j, k) value of a real (floating point) substate.*/
-CALreal calGetX3Dr(MODEL_DEFINITION3D,	//!< Defines model parameters
+CALreal calGetX3Dr(__CALCL_MODEL_3D,	//!< Defines model parameters
 		CALint substateNum,				//!< Indicates the number of the substate
 		int i, 							//!< Row coordinate of the cell
 		int j,							//!< Column coordinate of the cell
@@ -154,7 +154,7 @@ CALreal calGetX3Dr(MODEL_DEFINITION3D,	//!< Defines model parameters
 		);
 
 /*! \brief Sets the cell (i, j, k) value of a byte substate.  */
-void calSet3Db(MODEL_DEFINITION3D,		//!< Defines model parameters
+void calSet3Db(__CALCL_MODEL_3D,		//!< Defines model parameters
 		CALint substateNum,				//!< Indicates the number of the substate
 		int i, 							//!< Row coordinate of the cell
 		int j,							//!< Column coordinate of the cell
@@ -163,7 +163,7 @@ void calSet3Db(MODEL_DEFINITION3D,		//!< Defines model parameters
 		);
 
 /*! \brief Sets the cell (i, j, k) value of a integer substate.  */
-void calSet3Di(MODEL_DEFINITION3D,		//!< Defines model parameters
+void calSet3Di(__CALCL_MODEL_3D,		//!< Defines model parameters
 		CALint substateNum,				//!< Indicates the number of the substate
 		int i, 							//!< Row coordinate of the cell
 		int j,							//!< Column coordinate of the cell
@@ -172,7 +172,7 @@ void calSet3Di(MODEL_DEFINITION3D,		//!< Defines model parameters
 		);
 
 /*! \brief Sets the cell (i, j, k) value of a real (floating point) substate.  */
-void calSet3Dr(MODEL_DEFINITION3D,		//!< Defines model parameters
+void calSet3Dr(__CALCL_MODEL_3D,		//!< Defines model parameters
 		CALint substateNum,				//!< Indicates the number of the substate
 		int i, 							//!< Row coordinate of the cell
 		int j,							//!< Column coordinate of the cell

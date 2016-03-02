@@ -7,7 +7,7 @@
 
 #include <life.h>
 
-__kernel void life_transition_function(MODEL_DEFINITION2D) {
+__kernel void life_transition_function(__CALCL_MODEL_2D) {
 
 	initThreads2D();
 
@@ -20,11 +20,11 @@ __kernel void life_transition_function(MODEL_DEFINITION2D) {
   	int sum = 0, n;
 	
 	for (n=1; n<sizeOfX_; n++)
-		sum += calGetX2Di(MODEL2D, Q, i, j, n);
+		sum += calGetX2Di(MODEL_2D, Q, i, j, n);
 
-	if ((sum == 3) || (sum == 2 && calGet2Di(MODEL2D, Q, i, j) == 1))
-		calSet2Di(MODEL2D, Q, i, j, 1);
+	if ((sum == 3) || (sum == 2 && calGet2Di(MODEL_2D, Q, i, j) == 1))
+		calSet2Di(MODEL_2D, Q, i, j, 1);
 	else
-		calSet2Di(MODEL2D, Q, i, j, 0);
+		calSet2Di(MODEL_2D, Q, i, j, 0);
 
 }

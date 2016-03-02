@@ -539,7 +539,7 @@ void calclComputeStreamCompaction2D(CALCLToolkit2D * toolkit) {
 	calclKernelCall2D(toolkit, toolkit->kernelCompact, 1, &toolkit->streamCompactionThreadsNum, NULL);
 }
 
-void calclSetCALKernelArgs2D(CALCLkernel * kernel, CALCLmem * args, cl_uint numArgs) {
+void calclSetKernelArgs2D(CALCLkernel * kernel, CALCLmem * args, cl_uint numArgs) {
 	unsigned int i;
 	for (i = 0; i < numArgs; i++)
 		clSetKernelArg(*kernel, MODEL_ARGS_NUM + i, sizeof(CALCLmem), &args[i]);
@@ -636,7 +636,7 @@ void calclFinalizeToolkit2D(CALCLToolkit2D * toolkit) {
 
 }
 
-CALCLprogram calclLoadProgramLib2D(CALCLcontext context, CALCLdevice device, char* path_user_kernel, char* path_user_include) {
+CALCLprogram calclLoadProgram2D(CALCLcontext context, CALCLdevice device, char* path_user_kernel, char* path_user_include) {
 	char* u = " -cl-denorms-are-zero -cl-finite-math-only ";
 	char* pathOpenCALCL= getenv("OPENCALCL_PATH");
 	if (pathOpenCALCL == NULL) {
@@ -679,3 +679,8 @@ CALCLprogram calclLoadProgramLib2D(CALCLcontext context, CALCLdevice device, cha
 	free(tmp);
 	return program;
 }
+
+int calclSetKernelArg(CALCLkernel* kernel, cl_uint arg_index,size_t arg_size,const void *arg_value){
+	return  clSetKernelArg(*kernel,MODEL_ARGS_NUM + arg_index, arg_size,arg_value);
+}
+

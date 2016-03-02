@@ -32,7 +32,7 @@ int active;
 time_t start_time, end_time;
 
 void setParameters(){
-	mbusu->parameters.ascii_output_time_step = 864000;				//[s] in seconds
+	mbusu->parameters.ascii_output_time_step = 8;				//[s] in seconds
 	mbusu->parameters.lato = 5.0;
 	mbusu->parameters.delta_t = 10.0;
 	mbusu->parameters.delta_t_cum = 0.0;
@@ -68,7 +68,7 @@ int main(int argc, char** argv) {
 
 	CALCLcontext context = calclCreateContext(&device, 1);
 
-	CALCLprogram program = calclLoadProgramLib3D(context, device, (char *)kernelSrc, (char *)kernelInc);
+	CALCLprogram program = calclLoadProgram3D(context, device, (char *)kernelSrc, (char *)kernelInc);
 	initMbusu();
 	setParameters();
 	simulationInitialize();
@@ -98,30 +98,35 @@ int main(int argc, char** argv) {
 	CALreal moist_print;
 	CALint k_inv;
 	int j = YOUT/2;
+	
 	for (int k = 0; k < mbusu->layers; k++)
 		for (int i = 0; i < mbusu->rows; i++)
 			{
+				
 				k_inv = (mbusu->layers - 1) - k;
 				moist_print = calGet3Dr(mbusu->model, mbusu->Q->moist_cont, i, j, k);
+				printf("%.3Lf\n",moist_print);
 				if (i == XW && k_inv == ZSUP)
 				{
-					stream = fopen(SAVE_PATH, "w+");
+					stream = fopen("ris10g.txt", "w+");
 					fprintf(stream, "%f\t", moist_print);
 				}
 				else if (i == XE && k_inv == ZFONDO)
 				{
-					fprintf(stream, "%f\n", moist_print);
+					fprintf(stream, "%f\n",moist_print);
 					fclose(stream);
 				}
 				else if (i == XE)
 					fprintf(stream, "%f\n", moist_print);
 				else
 					fprintf(stream, "%f\t", moist_print);
+
 			}
 
 	calclFinalizeCALOpencl(calOpenCL);
 	calclFinalizeToolkit3D(mbusuToolkit);
 	exit();
+	
 
 	printf("%d", end_time - start_time);
 

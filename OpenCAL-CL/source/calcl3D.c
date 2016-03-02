@@ -541,7 +541,7 @@ void calclComputeStreamCompaction3D(CALCLToolkit3D * toolkit) {
 
 
 
-void calclSetCALKernelArgs3D(CALCLkernel * kernel, CALCLmem * args, cl_uint numArgs) {
+void calclSetKernelArgs3D(CALCLkernel * kernel, CALCLmem * args, cl_uint numArgs) {
 	unsigned int i;
 	for (i = 0; i < numArgs; i++)
 		clSetKernelArg(*kernel, MODEL_ARGS_NUM + i, sizeof(CALCLmem), &args[i]);
@@ -641,7 +641,7 @@ void calclFinalizeToolkit3D(CALCLToolkit3D * toolkit) {
 
 }
 
-CALCLprogram calclLoadProgramLib3D(CALCLcontext context, CALCLdevice device, char* path_user_kernel, char* path_user_include) {
+CALCLprogram calclLoadProgram3D(CALCLcontext context, CALCLdevice device, char* path_user_kernel, char* path_user_include) {
 	char* u = " -cl-denorms-are-zero -cl-finite-math-only ";
 	char* pathOpenCALCL= getenv("OPENCALCL_PATH");
 	if (pathOpenCALCL == NULL) {
@@ -682,4 +682,8 @@ CALCLprogram calclLoadProgramLib3D(CALCLcontext context, CALCLdevice device, cha
 	free(filesNames);
 	free(tmp);
 	return program;
+}
+
+int calclSetKernelArg(CALCLkernel kernel, cl_uint arg_index,size_t arg_size,const void *arg_value){
+	return  clSetKernelArg(kernel,MODEL_ARGS_NUM + arg_index, arg_size,arg_value);
 }

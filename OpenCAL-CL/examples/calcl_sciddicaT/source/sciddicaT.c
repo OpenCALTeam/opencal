@@ -20,7 +20,7 @@
 #define KERNEL_INC_AC "./kernelActive/include/"
 #define OUTPUT_PATH "./data/width_final.txt"
 
-#define ACTIVE_CELLS
+//#define ACTIVE_CELLS
 
 #define NUMBER_OF_OUTFLOWS 4
 struct sciddicaTSubstates {
@@ -118,7 +118,7 @@ int main(int argc, char** argv) {
 
 	device = calclGetDevice(calOpenCL, platformNum, deviceNum);
 	context = calclCreateContext(&device, 1);
-	program = calclLoadProgramLib2D(context, device, kernelSrc, kernelInc);
+	program = calclLoadProgram2D(context, device, kernelSrc, kernelInc);
 
 
 	//cadef
@@ -156,19 +156,17 @@ int main(int argc, char** argv) {
 #endif
 	kernel_steering = calclGetKernelFromProgram(&program, KERNEL_STEERING);
 
-
-	buffersKernelFlowComp = (CALCLmem *) malloc(sizeof(CALCLmem) * 2);
 	bufferEpsilonParameter = calclCreateBuffer(context, &P.epsilon, sizeof(CALParameterr));
 	bufferRParameter = calclCreateBuffer(context, &P.r, sizeof(CALParameterr));
-	buffersKernelFlowComp[0] = bufferEpsilonParameter;
-	buffersKernelFlowComp[1] = bufferRParameter;
 
-	calclSetCALKernelArgs2D(&kernel_elem_proc_flow_computation, buffersKernelFlowComp, 2);
+	calclSetKernelArg(&kernel_elem_proc_flow_computation, 0, sizeof(CALCLmem), &bufferEpsilonParameter);
+	calclSetKernelArg(&kernel_elem_proc_flow_computation, 1, sizeof(CALCLmem), &bufferRParameter);
+
 	calclAddElementaryProcessKernel2D(sciddicaToolkit, sciddicaT, &kernel_elem_proc_flow_computation);
 	calclAddElementaryProcessKernel2D(sciddicaToolkit, sciddicaT, &kernel_elem_proc_width_update);
 	calclSetSteeringKernel2D(sciddicaToolkit, sciddicaT, &kernel_steering);
 #ifdef ACTIVE_CELLS
-	calclSetCALKernelArgs2D(&kernel_elem_proc_rm_act_cells, &bufferEpsilonParameter, 1);
+	calclSetKernelArg(&kernel_elem_proc_rm_act_cells, 0, sizeof(CALCLmem), &bufferEpsilonParameter);
 	calclAddElementaryProcessKernel2D(sciddicaToolkit, sciddicaT, &kernel_elem_proc_rm_act_cells);
 #endif
 

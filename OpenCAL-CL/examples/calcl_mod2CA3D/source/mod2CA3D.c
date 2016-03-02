@@ -38,7 +38,7 @@ int main()
 	calclPrintAllPlatformAndDevices(calOpenCL);
 	device = calclGetDevice(calOpenCL, platformNum, deviceNum);
 	context = calclCreateContext(&device, 1);
-	program = calclLoadProgramLib3D(context, device, kernelSrc, kernelInc);
+	program = calclLoadProgram3D(context, device, kernelSrc, kernelInc);
 
 
 	// define of the mod2 CA object

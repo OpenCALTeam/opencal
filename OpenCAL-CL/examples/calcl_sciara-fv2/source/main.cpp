@@ -91,7 +91,7 @@ int main(int argc, char** argv) {
 
 	CALCLcontext context = calclCreateContext(&device, 1);
 
-	CALCLprogram program = calclLoadProgramLib2D(context, device,(char*) kernelSrc,(char*) kernelInc);
+	CALCLprogram program = calclLoadProgram2D(context, device,(char*) kernelSrc,(char*) kernelInc);
 
 	char path[1024] = CONFIG_PATH;
 	initSciara((char*)DEM_PATH);

@@ -8,7 +8,7 @@
 #define Q 0
 #include <cal3D.h>
 
-__kernel void mod2_transition_function(MODEL_DEFINITION3D) {
+__kernel void mod2_transition_function(__CALCL_MODEL_3D) {
 
 	initThreads3D();
 
@@ -21,8 +21,8 @@ __kernel void mod2_transition_function(MODEL_DEFINITION3D) {
 	CALint sizeOf_X = get_neighborhoods_size();
 
 	for (n=0; n<sizeOf_X; n++)
-		sum += calGetX3Db(MODEL3D, Q, i, j, k, n);
+		sum += calGetX3Db(MODEL_3D, Q, i, j, k, n);
 
-	calSet3Db(MODEL3D, Q, i, j, k, sum%2);
+	calSet3Db(MODEL_3D, Q, i, j, k, sum%2);
 
 }

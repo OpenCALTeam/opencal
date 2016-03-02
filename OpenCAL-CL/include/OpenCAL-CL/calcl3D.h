@@ -175,7 +175,7 @@ void calclComputeStreamCompaction3D(CALCLToolkit3D * toolkit		//!< Pointer to a 
  * after the default argument provided by the library.
  *
  *  */
-void calclSetCALKernelArgs3D(CALCLkernel * kernel,			//!< Opencl kernel
+void calclSetKernelArgs3D(CALCLkernel * kernel,			//!< Opencl kernel
 		CALCLmem * args,									//!< Array of Opencl buffers that represents kernel additional arguments
 		cl_uint numArgs										//!< Number of Opencl kernel additional arguments
 		);
@@ -247,10 +247,16 @@ void calclFinalizeToolkit3D(CALCLToolkit3D * toolkit			//!< Pointer to a CALCLTo
  *	is compiled using library source files and user defined source files.
  *
  *  */
-CALCLprogram calclLoadProgramLib3D(CALCLcontext context, 		//!< Opencl context
+CALCLprogram calclLoadProgram3D(CALCLcontext context, 		//!< Opencl context
 		CALCLdevice device, 									//!< Opencl device
 		char* path_user_kernel,									//!< Kernel source files path
 		char* path_user_include								//!< Kernel include files path
 		);
+
+/*! \brief Set a kernel argument   */
+int calclSetKernelArg(CALCLkernel kernel,			//!< Opencl kernel
+		      cl_uint arg_index,			//!< Index argument
+		      size_t arg_size,				//!< Size argument
+		      const void *arg_value);			//!< Value argument
 
 #endif /* CALCL_H_ */
