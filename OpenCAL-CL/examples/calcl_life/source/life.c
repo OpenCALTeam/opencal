@@ -40,7 +40,7 @@ int main()
 	calclPrintAllPlatformAndDevices(calOpenCL);
 	device = calclGetDevice(calOpenCL, platformNum, deviceNum);
 	context = calclCreateContext(&device, 1);
-	program = calclLoadProgram2D(context, device, kernelSrc, kernelInc);
+	program = calclLoadProgram2D(context, device, kernelSrc, NULL);
 
 
 	// define of the life CA and life_simulation simulation objects
@@ -61,7 +61,7 @@ int main()
 
 	// define Toolkit object
     lifeToolkit = calclCreateToolkit2D(life, context, program, device);
-	
+
 	//create kernel
 	kernel_life_transition_function = calclGetKernelFromProgram(&program, KERNEL_LIFE_TRANSITION_FUNCTION);
 

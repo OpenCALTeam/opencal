@@ -5,7 +5,10 @@
 #define get_global_id (int)
 #endif
 
-#include <life.h>
+//#include <life.h>
+#define Q 0
+#include <cal2D.h>
+
 
 __kernel void life_transition_function(__CALCL_MODEL_2D) {
 
@@ -18,7 +21,7 @@ __kernel void life_transition_function(__CALCL_MODEL_2D) {
 	int j = getCol();
  	CALint sizeOfX_ = get_neighborhoods_size();
   	int sum = 0, n;
-	
+
 	for (n=1; n<sizeOfX_; n++)
 		sum += calGetX2Di(MODEL_2D, Q, i, j, n);
 

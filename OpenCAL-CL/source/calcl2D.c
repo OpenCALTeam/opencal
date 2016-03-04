@@ -645,7 +645,7 @@ CALCLprogram calclLoadProgram2D(CALCLcontext context, CALCLdevice device, char* 
 	}
 	char* tmp;
 	if (path_user_include == NULL) {
-		tmp = (char*) malloc(sizeof(char) * (strlen(KERNEL_INCLUDE_DIR) + strlen(" -I ") + strlen(u) + 1));
+		tmp = (char*) malloc(sizeof(char) * (strlen(pathOpenCALCL) + strlen(KERNEL_INCLUDE_DIR) + strlen(" -I ") + strlen(u) + 1));
 		strcpy(tmp, " -I ");
 	} else {
 		tmp = (char*) malloc(sizeof(char) * (strlen(path_user_include) + strlen(pathOpenCALCL) + strlen(KERNEL_INCLUDE_DIR) + strlen(" -I ") * 2 + strlen(u) + 1));
@@ -683,4 +683,3 @@ CALCLprogram calclLoadProgram2D(CALCLcontext context, CALCLdevice device, char* 
 int calclSetKernelArg2D(CALCLkernel* kernel, cl_uint arg_index,size_t arg_size,const void *arg_value){
 	return  clSetKernelArg(*kernel,MODEL_ARGS_NUM + arg_index, arg_size,arg_value);
 }
-
