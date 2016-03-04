@@ -1,6 +1,5 @@
 #ifndef __OPENCL_VERSION__
-#define __kernel
-#define __global
+#define __kerneldeine __global
 #define __local
 #define get_global_id (int)
 #endif
@@ -8,14 +7,9 @@
 #include <kernel.h>
 
 //first elementary process
-__kernel void sciddicaT_flows_computation(__CALCL_MODEL_2D, __global CALParameterr * Pepsilon, __global CALParameterr * Pr
-
-) {
-
+__kernel void sciddicaT_flows_computation(__CALCL_MODEL_2D, __private CALParameterr Pepsilon, __private CALParameterr Pr)
+{
 	initThreads2D();
-
-	//__global CALbyte * activeCellsFlags = get_active_cells_flags();
-	CALint cols_ = get_columns();
 
 	int i = getRow();
 	int j = getCol();
@@ -29,7 +23,7 @@ __kernel void sciddicaT_flows_computation(__CALCL_MODEL_2D, __global CALParamete
 	CALint n;
 	CALreal z, h;
 	CALint sizeOfX_ = get_neighborhoods_size();
-	CALParameterr eps = *Pepsilon;
+	CALParameterr eps = Pepsilon;
 
 	if (calGet2Dr(MODEL_2D, H, i, j) <= eps)
 		return;
@@ -68,16 +62,13 @@ __kernel void sciddicaT_flows_computation(__CALCL_MODEL_2D, __global CALParamete
 		if (eliminated_cells[n])
 			calSet2Dr(MODEL_2D, n-1, i, j, 0.0);
 		else
-			calSet2Dr(MODEL_2D, n-1, i, j,(average - u[n]) * (*Pr));
+			calSet2Dr(MODEL_2D, n-1, i, j,(average - u[n]) * (Pr));
 	}
 }
 
 __kernel void sciddicaT_width_update(__CALCL_MODEL_2D) {
 
 	initThreads2D();
-
-	//__global CALbyte * activeCellsFlags = get_active_cells_flags();
-	CALint cols_ = get_columns();
 
 	int i = getRow();
 	int j = getCol();
@@ -98,17 +89,11 @@ __kernel void sciddicaTSteering(__CALCL_MODEL_2D) {
 
 	initThreads2D();
 
-	//__global CALbyte * activeCellsFlags = get_active_cells_flags();
-	CALint cols_ = get_columns();
-	CALint rows_ = get_rows();
-
 	int i = getRow();
 	int j = getCol();
 
-	int dim = cols_ * rows_;
 	int s;
 	for (s = 0; s < NUMBER_OF_OUTFLOWS; ++s)
 		calInitSubstate2Dr(MODEL_2D, s, i, j, 0);
 
 }
-
