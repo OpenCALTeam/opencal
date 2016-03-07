@@ -7,27 +7,27 @@
 
 //#include <life.h>
 #define Q 0
-#include <cal2D.h>
+#include <OpenCAL-CL/calcl2D.h>
 
 
 __kernel void life_transition_function(__CALCL_MODEL_2D) {
 
-	initThreads2D();
+	calclThreadCheck2D();
 
-	CALint cols_ = get_columns();
-	CALint rows_ = get_rows();
+	CALint cols_ = calclGetColumns();
+	CALint rows_ = calclGetRows();
 
-	int i = getRow();
-	int j = getCol();
- 	CALint sizeOfX_ = get_neighborhoods_size();
+	int i = calclGlobalRow();
+	int j = calclGlobalColumns();
+ 	CALint sizeOfX_ = calclGetNeighborhoodSize();
   	int sum = 0, n;
 
 	for (n=1; n<sizeOfX_; n++)
-		sum += calGetX2Di(MODEL_2D, Q, i, j, n);
+		sum += calclGetX2Di(MODEL_2D, Q, i, j, n);
 
-	if ((sum == 3) || (sum == 2 && calGet2Di(MODEL_2D, Q, i, j) == 1))
-		calSet2Di(MODEL_2D, Q, i, j, 1);
+	if ((sum == 3) || (sum == 2 && calclGet2Di(MODEL_2D, Q, i, j) == 1))
+		calclSet2Di(MODEL_2D, Q, i, j, 1);
 	else
-		calSet2Di(MODEL_2D, Q, i, j, 0);
+		calclSet2Di(MODEL_2D, Q, i, j, 0);
 
 }

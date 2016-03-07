@@ -1,7 +1,7 @@
 #ifndef kernel_h
 #define kernel_h
 
-#include <cal2DActive.h>
+#include <OpenCAL-CL/calcl2DActive.h>
 #define F(i) (i+3)
 #define SZ 0
 #define SLT 1
@@ -45,6 +45,3 @@ typedef struct{
 
 
 #endif
-
-
-

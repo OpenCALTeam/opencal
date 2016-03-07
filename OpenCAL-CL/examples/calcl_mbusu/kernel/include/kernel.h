@@ -6,7 +6,7 @@
 #define MOORE_NEIGHBORS 9
 #define VON_NEUMANN_NEIGHBORS 7
 
-#include <cal3DActive.h>
+#include <OpenCAL-CL/calcl3DActive.h>
 
 #define YOUT 29
 #define YIN 0
@@ -49,6 +49,3 @@ typedef struct {
 } Parameters;
 
 #endif
-
-
-

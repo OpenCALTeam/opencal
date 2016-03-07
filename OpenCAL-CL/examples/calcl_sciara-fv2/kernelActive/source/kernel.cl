@@ -19,11 +19,11 @@ CALreal thickness(CALreal sim_elapsed_time, CALreal Pt, unsigned int emission_ti
 
 __kernel void updateVentsEmission(__CALCL_MODEL_2D, __global Vent* vents, __global CALreal * emissionRates, __global CALreal * elapsed_time, int sizeVents, int sizeEmissionRate, Parameters parameters) {
 
-	initActiveThreads2D();
+	calclActiveThreadCheck2D();
 
-	int threadID = getRow();
-	int i = getActiveCellRow(threadID);
-	int j = getActiveCellCol(threadID);
+	int threadID = calclGlobalRow();
+	int i = calclActiveCellRow(threadID);
+	int j = calclActiveCellColumns(threadID);
 
 	CALreal emitted_lava = 0;
 
@@ -34,9 +34,9 @@ __kernel void updateVentsEmission(__CALCL_MODEL_2D, __global Vent* vents, __glob
 		if (i == iVent && j == jVent) {
 			emitted_lava = thickness(*elapsed_time, parameters.Pclock, parameters.emission_time, parameters.Pac, emissionRates + k * sizeEmissionRate, sizeEmissionRate);
 			if (emitted_lava > 0) {
-				CALreal slt = calGet2Dr(MODEL_2D, SLT, iVent, jVent) + emitted_lava;
-				calSet2Dr(MODEL_2D, SLT, iVent, jVent, slt);
-				calSet2Dr(MODEL_2D, ST, iVent, jVent, parameters.PTvent);
+				CALreal slt = calclGet2Dr(MODEL_2D, SLT, iVent, jVent) + emitted_lava;
+				calclSet2Dr(MODEL_2D, SLT, iVent, jVent, slt);
+				calclSet2Dr(MODEL_2D, ST, iVent, jVent, parameters.PTvent);
 			}
 		}
 	}
@@ -58,7 +58,7 @@ void outflowsMin(__CALCL_MODEL_2D, int i, int j, CALreal *f, Parameters paramete
 	int counter;
 	CALreal avg, _w, _Pr, hc;
 
-	CALreal t = calGet2Dr(MODEL_2D, ST, i, j);
+	CALreal t = calclGet2Dr(MODEL_2D, ST, i, j);
 
 	_w = parameters.Pc;
 	_Pr = powerLaw(parameters.a, parameters.b, t);
@@ -66,10 +66,10 @@ void outflowsMin(__CALCL_MODEL_2D, int i, int j, CALreal *f, Parameters paramete
 
 	for (int k = 0; k < MOORE_NEIGHBORS; k++) {
 
-		h[k] = calGetX2Dr(MODEL_2D, SLT, i, j, k);
+		h[k] = calclGetX2Dr(MODEL_2D, SLT, i, j, k);
 		H[k] = f[k] = theta[k] = 0;
-		CALreal sz = calGetX2Dr(MODEL_2D, SZ, i, j, k);
-		CALreal sz0 = calGet2Dr(MODEL_2D, SZ, i, j);
+		CALreal sz = calclGetX2Dr(MODEL_2D, SZ, i, j, k);
+		CALreal sz0 = calclGet2Dr(MODEL_2D, SZ, i, j);
 		if (k < VON_NEUMANN_NEIGHBORS)
 			z[k] = sz;
 		else
@@ -115,36 +115,36 @@ void outflowsMin(__CALCL_MODEL_2D, int i, int j, CALreal *f, Parameters paramete
 
 __kernel void empiricalFlows(__CALCL_MODEL_2D, Parameters parameters) {
 
-	initActiveThreads2D();
+	calclActiveThreadCheck2D();
 
-	int threadID = getRow();
-	int i = getActiveCellRow(threadID);
-	int j = getActiveCellCol(threadID);
+	int threadID = calclGlobalRow();
+	int i = calclActiveCellRow(threadID);
+	int j = calclActiveCellColumns(threadID);
 
-	if (calGet2Dr(MODEL_2D, SLT, i, j) > 0) {
+	if (calclGet2Dr(MODEL_2D, SLT, i, j) > 0) {
 		CALreal f[MOORE_NEIGHBORS];
 		outflowsMin(MODEL_2D, i, j, f, parameters);
 
 		for (int k = 1; k < MOORE_NEIGHBORS; k++)
 			if (f[k] > 0) {
-				calSet2Dr(MODEL_2D, F(k-1), i, j, f[k]);
-				calAddActiveCellX2D(MODEL_2D, i, j, k);
+				calclSet2Dr(MODEL_2D, F(k-1), i, j, f[k]);
+				calclAddActiveCellX2D(MODEL_2D, i, j, k);
 			}
 	}
 }
 
 __kernel void width_update(__CALCL_MODEL_2D) {
 
-	initActiveThreads2D();
+	calclActiveThreadCheck2D();
 
-	int threadID = getRow();
-	int i = getActiveCellRow(threadID);
-	int j = getActiveCellCol(threadID);
+	int threadID = calclGlobalRow();
+	int i = calclActiveCellRow(threadID);
+	int j = calclActiveCellColumns(threadID);
 
 	CALint outFlowsIndexes[NUMBER_OF_OUTFLOWS] = { 3, 2, 1, 0, 6, 7, 4, 5 };
 	CALint n;
-	CALreal initial_h = calGet2Dr(MODEL_2D, SLT, i, j);
-	CALreal initial_t = calGet2Dr(MODEL_2D, ST, i, j);
+	CALreal initial_h = calclGet2Dr(MODEL_2D, SLT, i, j);
+	CALreal initial_t = calclGet2Dr(MODEL_2D, ST, i, j);
 	CALreal residualTemperature = initial_h * initial_t;
 	CALreal residualLava = initial_h;
 	CALreal h_next = initial_h;
@@ -154,96 +154,96 @@ __kernel void width_update(__CALCL_MODEL_2D) {
 	CALreal inSum = 0;
 	CALreal outSum = 0;
 
-	for (n = 1; n < get_neighborhoods_size(); n++) {
-		CALreal inFlow = calGetX2Dr(MODEL_2D, F(outFlowsIndexes[n - 1]), i, j, n);
-		CALreal outFlow = calGet2Dr(MODEL_2D, F(n - 1), i, j);
-		CALreal neigh_t = calGetX2Dr(MODEL_2D, ST, i, j, n);
+	for (n = 1; n < calclGetNeighborhoodSize(); n++) {
+		CALreal inFlow = calclGetX2Dr(MODEL_2D, F(outFlowsIndexes[n - 1]), i, j, n);
+		CALreal outFlow = calclGet2Dr(MODEL_2D, F(n - 1), i, j);
+		CALreal neigh_t = calclGetX2Dr(MODEL_2D, ST, i, j, n);
 		ht =(inFlow*neigh_t)+ht;
 		inSum += inFlow;
 		outSum += outFlow;
 	}
 	h_next += inSum - outSum;
-	calSet2Dr(MODEL_2D, SLT, i, j, h_next);
+	calclSet2Dr(MODEL_2D, SLT, i, j, h_next);
 	if (inSum > 0 || outSum > 0) {
 		residualLava -= outSum;
 		t_next = (residualLava*initial_t+ht) / (residualLava + inSum);
-		calSet2Dr(MODEL_2D, ST, i, j, t_next);
+		calclSet2Dr(MODEL_2D, ST, i, j, t_next);
 	}
 }
 
 __kernel void updateTemperature(__CALCL_MODEL_2D, __global CALbyte * Mb, __global CALreal * Msl, Parameters parameters) {
 
-	initActiveThreads2D();
+	calclActiveThreadCheck2D();
 
-	int threadID = getRow();
-	int i = getActiveCellRow(threadID);
-	int j = getActiveCellCol(threadID);
+	int threadID = calclGlobalRow();
+	int i = calclActiveCellRow(threadID);
+	int j = calclActiveCellColumns(threadID);
 
 	CALreal aus = 0;
-	CALreal sh = calGet2Dr(MODEL_2D, SLT, i, j);
-	CALreal st = calGet2Dr(MODEL_2D, ST, i, j);
-	CALreal sz = calGet2Dr(MODEL_2D, SZ, i, j);
+	CALreal sh = calclGet2Dr(MODEL_2D, SLT, i, j);
+	CALreal st = calclGet2Dr(MODEL_2D, ST, i, j);
+	CALreal sz = calclGet2Dr(MODEL_2D, SZ, i, j);
 
-	if (sh > 0 && calGetBufferElement2D(Mb, get_columns(), i, j) == CAL_FALSE) {
+	if (sh > 0 && calclGetBufferElement2D(Mb, calclGetColumns(), i, j) == CAL_FALSE) {
 		aus = 1.0 + (3 * pow(st, 3.0) * parameters.Pepsilon * parameters.Psigma * parameters.Pclock * parameters.Pcool) / (parameters.Prho * parameters.Pcv * sh * parameters.Pac);
 		st = st / pow(aus, (1.0 / 3.0));
-		calSet2Dr(MODEL_2D, ST, i, j, st);
+		calclSet2Dr(MODEL_2D, ST, i, j, st);
 
 		//solidification
 		if (st <= parameters.PTsol) {
-			calSet2Dr(MODEL_2D, SZ, i, j, sz + sh);
-			calSetBufferElement2D(Msl, get_columns(), i, j, calGetBufferElement2D(Msl, get_columns(), i, j) + sh);
-			calSet2Dr(MODEL_2D, SLT, i, j, 0);
-			calSet2Dr(MODEL_2D, ST, i, j, parameters.PTsol);
+			calclSet2Dr(MODEL_2D, SZ, i, j, sz + sh);
+			calclSetBufferElement2D(Msl, calclGetColumns(), i, j, calclGetBufferElement2D(Msl, calclGetColumns(), i, j) + sh);
+			calclSet2Dr(MODEL_2D, SLT, i, j, 0);
+			calclSet2Dr(MODEL_2D, ST, i, j, parameters.PTsol);
 		}
 	}
 }
 
 __kernel void removeActiveCells(__CALCL_MODEL_2D, __global CALbyte * Mb, Parameters parameters){
 
-	initActiveThreads2D();
+	calclActiveThreadCheck2D();
 
-	int threadID = getRow();
-	int i = getActiveCellRow(threadID);
-	int j = getActiveCellCol(threadID);;
+	int threadID = calclGlobalRow();
+	int i = calclActiveCellRow(threadID);
+	int j = calclActiveCellColumns(threadID);;
 
-	CALreal st = calGet2Dr(MODEL_2D, ST, i, j);
-	if (st <= parameters.PTsol && calGetBufferElement2D(Mb, get_columns(), i, j) == CAL_FALSE)
-		calSetBufferElement2D(get_active_cells_flags(),get_columns(),i,j,CAL_FALSE);
+	CALreal st = calclGet2Dr(MODEL_2D, ST, i, j);
+	if (st <= parameters.PTsol && calclGetBufferElement2D(Mb, calclGetColumns(), i, j) == CAL_FALSE)
+		//calclSetBufferElement2D(calclGetActiveCellsFlags(),calclGetColumns(),i,j,CAL_FALSE);
+		calclRemoveActiveCell2D(MODEL_2D,i,j);
 }
 
 
 __kernel void stopCondition(__CALCL_MODEL_2D, Parameters parameters, __global CALreal* elapsed_time) {
 
-	initActiveThreads2D();
+	calclActiveThreadCheck2D();
 
-	int threadID = getRow();
-	int i = getActiveCellRow(threadID);
-	int j = getActiveCellCol(threadID);
+	int threadID = calclGlobalRow();
+	int i = calclActiveCellRow(threadID);
+	int j = calclActiveCellColumns(threadID);
 
 	if (threadID == 0){
 		if (*elapsed_time >= parameters.effusion_duration)
-			stopExecution();
+			calclRunStop();
 	}
 }
 
 __kernel void steering(__CALCL_MODEL_2D, __global CALbyte * Mb, Parameters parameters, __global CALreal* elapsed_time) {
 
-	initActiveThreads2D();
+	calclActiveThreadCheck2D();
 
-	int threadID = getRow();
-	int i = getActiveCellRow(threadID);
-	int j = getActiveCellCol(threadID);
+	int threadID = calclGlobalRow();
+	int i = calclActiveCellRow(threadID);
+	int j = calclActiveCellColumns(threadID);
 
 	for (int k = 0; k < NUMBER_OF_OUTFLOWS; ++k)
-		calInitSubstate2Dr(MODEL_2D, F(k), i, j,0);
+		calclInitSubstate2Dr(MODEL_2D, F(k), i, j,0);
 
-	if (calGetBufferElement2D(Mb, get_columns(), i, j) == CAL_TRUE) {
-		calSet2Dr(MODEL_2D, SLT, i, j, 0);
-		calSet2Dr(MODEL_2D, ST, i, j, 0);
+	if (calclGetBufferElement2D(Mb, calclGetColumns(), i, j) == CAL_TRUE) {
+		calclSet2Dr(MODEL_2D, SLT, i, j, 0);
+		calclSet2Dr(MODEL_2D, ST, i, j, 0);
 	}
 	if (threadID == 0)
 		*elapsed_time += parameters.Pclock;
 
 }
-

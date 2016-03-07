@@ -16,11 +16,11 @@
 
 __kernel void mbusuTransitionFunction(__CALCL_MODEL_3D, __global Parameters* parameters) {
 
-	initThreads3D();
+	calclThreadCheck3D();
 
-	int _i = getRow();
-	int _j = getCol();
-	int _k = getSlice();
+	int _i = calclGlobalRow();
+	int _j = calclGlobalColumns();
+	int _k = calclGlobalSlice();
 	int _k_inv;
 
 	double quota, teta, satur, psi, h, k, uno_su_dqdh, teta_pioggia; //
@@ -34,9 +34,9 @@ __kernel void mbusuTransitionFunction(__CALCL_MODEL_3D, __global Parameters* par
 	double temp_value;
 
 	volume = parameters->lato*parameters->lato*parameters->lato;
-	_k_inv = (get_slices() - 1) - _k;
+	_k_inv = (calclGetSlices() - 1) - _k;
 	quota = parameters->lato*_k_inv;
-	h = calGet3Dr(MODEL_3D,H, _i, _j, _k);
+	h = calclGet3Dr(MODEL_3D,H, _i, _j, _k);
 
 	//---- PARAMETRI SUOLO
 
@@ -77,7 +77,7 @@ __kernel void mbusuTransitionFunction(__CALCL_MODEL_3D, __global Parameters* par
 
 	for (i = 1; i < VON_NEUMANN_NEIGHBORS; i++)
 	{
-		Delta_h = h - calGetX3Dr(MODEL_3D,H, _i, _j, _k, i);
+		Delta_h = h - calclGetX3Dr(MODEL_3D,H, _i, _j, _k, i);
 
 		if (_k_inv == ZSUP && i == 5)	//6
 		Delta_h = 0;
@@ -92,7 +92,7 @@ __kernel void mbusuTransitionFunction(__CALCL_MODEL_3D, __global Parameters* par
 		if (_j == YIN && i == 2)//4
 		Delta_h = 0;
 
-		temp_value = ((calGet3Dr(MODEL_3D,K, _i, _j, _k) + calGetX3Dr(MODEL_3D,K, _i, _j, _k, i)) / 2.0) * calGet3Dr(MODEL_3D,DQDH, _i, _j, _k);
+		temp_value = ((calclGet3Dr(MODEL_3D,K, _i, _j, _k) + calclGetX3Dr(MODEL_3D,K, _i, _j, _k, i)) / 2.0) * calclGet3Dr(MODEL_3D,DQDH, _i, _j, _k);
 		h = h - ((Delta_h / (parameters->lato*parameters->lato))*parameters->delta_t*temp_value);
 
 	}
@@ -103,7 +103,7 @@ __kernel void mbusuTransitionFunction(__CALCL_MODEL_3D, __global Parameters* par
 	if (_k_inv == ZSUP && _i<45 && _j>(Ymid - 20) && _j < (Ymid + 20))
 	{
 		teta_pioggia = parameters->lato*parameters->rain*parameters->delta_t / volume;
-		h = h + teta_pioggia*calGet3Dr(MODEL_3D,DQDH, _i, _j, _k);
+		h = h + teta_pioggia*calclGet3Dr(MODEL_3D,DQDH, _i, _j, _k);
 
 	}
 
@@ -149,32 +149,32 @@ __kernel void mbusuTransitionFunction(__CALCL_MODEL_3D, __global Parameters* par
 
 	//---Update
 
-	calSet3Dr(MODEL_3D,DQDH, _i, _j, _k,uno_su_dqdh);
-	calSet3Dr(MODEL_3D,PSI, _i, _j, _k,psi);
-	calSet3Dr(MODEL_3D,K, _i, _j, _k,k);
-	calSet3Dr(MODEL_3D,H, _i, _j, _k,h);
-	calSet3Dr(MODEL_3D,TETA, _i, _j, _k,teta);
-	calSet3Dr(MODEL_3D,MOIST_CONT, _i, _j, _k,moist_cont);
-	calSet3Dr(MODEL_3D,MOIST_DIFF, _i, _j, _k,moist_diff);
-	calSet3Dr(MODEL_3D,CONVERGENCE,_i, _j, _k,convergence);
+	calclSet3Dr(MODEL_3D,DQDH, _i, _j, _k,uno_su_dqdh);
+	calclSet3Dr(MODEL_3D,PSI, _i, _j, _k,psi);
+	calclSet3Dr(MODEL_3D,K, _i, _j, _k,k);
+	calclSet3Dr(MODEL_3D,H, _i, _j, _k,h);
+	calclSet3Dr(MODEL_3D,TETA, _i, _j, _k,teta);
+	calclSet3Dr(MODEL_3D,MOIST_CONT, _i, _j, _k,moist_cont);
+	calclSet3Dr(MODEL_3D,MOIST_DIFF, _i, _j, _k,moist_diff);
+	calclSet3Dr(MODEL_3D,CONVERGENCE,_i, _j, _k,convergence);
 
 }
 
 __kernel void steering(__CALCL_MODEL_3D, __global Parameters* parameters) {
 
-	initThreads3D();
+	calclThreadCheck3D();
 
-	int i = getRow();
-	int j = getCol();
-	int k = getSlice();
+	int i = calclGlobalRow();
+	int j = calclGlobalColumns();
+	int k = calclGlobalSlice();
 
 	if(i==0 && j==0 && k==0) {
-		/*double min = calGet3Dr(MODEL_3D,CONVERGENCE, 0, 0,0);
+	/*	double min = calclGet3Dr(MODEL_3D,CONVERGENCE, 0, 0,0);
 
-		for(int s =0; s < get_slices(); s++)
-		for(int x =0; x < get_rows(); x++)
-		for(int y =0; y < get_columns(); y++) {
-			double tempMin = calGet3Dr(MODEL_3D,CONVERGENCE, s, x, y);
+		for(int s =0; s < calclGetSlices(); s++)
+		for(int x =0; x < calclGetRows(); x++)
+		for(int y =0; y < calclGetColumns(); y++) {
+			double tempMin = calclGet3Dr(MODEL_3D,CONVERGENCE, s, x, y);
 			if (min > tempMin)
 			min = tempMin;
 		}
@@ -192,18 +192,17 @@ __kernel void steering(__CALCL_MODEL_3D, __global Parameters* parameters) {
 
 __kernel void stopCondition(__CALCL_MODEL_3D, __global Parameters* parameters) {
 
-	initThreads3D();
+	calclThreadCheck3D();
 
-	int i = getRow();
-	int j = getCol();
-	int k = getSlice();
+	int _i = calclGlobalRow();
+	int _j = calclGlobalColumns();
+	int _k = calclGlobalSlice();
 
 	//Stop condition
 	if ((parameters->delta_t_cum >= parameters->ascii_output_time_step && parameters->delta_t_cum_prec <= parameters->ascii_output_time_step))
 	{
 
-		stopExecution();
+		calclRunStop();
 	}
 
 }
-

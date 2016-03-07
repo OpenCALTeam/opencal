@@ -38,7 +38,8 @@ int main()
 	calclPrintAllPlatformAndDevices(calOpenCL);
 	device = calclGetDevice(calOpenCL, platformNum, deviceNum);
 	context = calclCreateContext(&device, 1);
-	program = calclLoadProgram3D(context, device, kernelSrc, kernelInc);
+	
+	program = calclLoadProgram3D(context, device, kernelSrc, NULL);
 
 
 	// define of the mod2 CA object
@@ -58,7 +59,7 @@ int main()
 
 	// define Toolkit object
 	mod2Toolkit = calclCreateToolkit3D(mod2, context, program, device);
-    
+
     //create kernel
 	kernel_transition_function = calclGetKernelFromProgram(&program, KERNEL_LIFE_TRANSITION_FUNCTION);
 

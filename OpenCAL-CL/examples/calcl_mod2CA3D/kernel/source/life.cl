@@ -6,23 +6,24 @@
 #endif
 
 #define Q 0
-#include <cal3D.h>
+#include <OpenCAL-CL/calcl3D.h>
 
 __kernel void mod2_transition_function(__CALCL_MODEL_3D) {
 
-	initThreads3D();
+	calclThreadCheck3D();
 
 
-	int i = getRow();
-	int j = getCol();
-	int k = getSlice();
+	int i = calclGlobalRow();
+	int j = calclGlobalColumns();
+	int k = calclGlobalSlice();
 
 	int sum = 0, n;
-	CALint sizeOf_X = get_neighborhoods_size();
+	CALint sizeOf_X = calclGetNeighborhoodSize();
 
 	for (n=0; n<sizeOf_X; n++)
-		sum += calGetX3Db(MODEL_3D, Q, i, j, k, n);
+		sum += calclGetX3Db(MODEL_3D, Q, i, j, k, n);
 
-	calSet3Db(MODEL_3D, Q, i, j, k, sum%2);
+	calclSet3Db(MODEL_3D, Q, i, j, k, sum%2);
+
 
 }

@@ -9,7 +9,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 // Lesser General Public License for more details.
 
-#include <cal2DActive.h>
+#include <OpenCAL-CL/calcl2DActive.h>
 #ifndef __OPENCL_VERSION__
 #define __kernel
 #define __global

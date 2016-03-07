@@ -9,15 +9,15 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 // Lesser General Public License for more details.
 
-/*! \file cal2D.h
- *	\brief cal2D contains function to perform operations on substates
+/*! \file calcl2D.h
+ *	\brief calcl2D contains function to perform operations on substates
  */
 
-#ifndef cal2D_h
-#define cal2D_h
+#ifndef calcl2D_h
+#define calcl2D_h
 
-#include "cal2DBuffer.h"
-#include "calclKernel2D.h"
+#include "OpenCAL-CL/calcl2DBuffer.h"
+#include "OpenCAL-CL/calclKernel2D.h"
 
 /*! \brief Enumeration of 2D neighbourhood.
 
@@ -39,7 +39,7 @@ enum CALNeighborhood2D {
  * i j to a constant value in the current and next matrices.
  *
  * */
-void calInitSubstate2Db(__CALCL_MODEL_2D, 	//!< Defines model parameters
+void calclInitSubstate2Db(__CALCL_MODEL_2D, 	//!< Defines model parameters
 		CALint substateNum,						//!< Indicates the number of the substate
 		int i, 									//!< Row coordinate of the cell to be initialized
 		int j,									//!< Column coordinate of the cell to be initialized
@@ -52,7 +52,7 @@ void calInitSubstate2Db(__CALCL_MODEL_2D, 	//!< Defines model parameters
  * i j to a constant value in the current and next matrices.
  *
  * */
-void calInitSubstate2Di(__CALCL_MODEL_2D,		//!< Defines model parameters
+void calclInitSubstate2Di(__CALCL_MODEL_2D,		//!< Defines model parameters
 		CALint substateNum,						//!< Indicates the number of the substate
 		int i, 									//!< Row coordinate of the cell to be initialized
 		int j,									//!< Column coordinate of the cell to be initialized
@@ -65,7 +65,7 @@ void calInitSubstate2Di(__CALCL_MODEL_2D,		//!< Defines model parameters
  * i j to a constant value in the current and next matrices.
  *
  * */
-void calInitSubstate2Dr(__CALCL_MODEL_2D,		//!< Defines model parameters
+void calclInitSubstate2Dr(__CALCL_MODEL_2D,		//!< Defines model parameters
 		CALint substateNum,						//!< Indicates the number of the substate
 		int i, 									//!< Row coordinate of the cell to be initialized
 		int j,									//!< Column coordinate of the cell to be initialized
@@ -73,58 +73,58 @@ void calInitSubstate2Dr(__CALCL_MODEL_2D,		//!< Defines model parameters
 		);
 
 /*! \brief Gets a pointer to the current byte matrix of the substate corresponding to substateNum */
-__global CALbyte * calGetCurrentSubstate2Db(__CALCL_MODEL_2D,	//!< Defines model parameters
+__global CALbyte * calclGetCurrentSubstate2Db(__CALCL_MODEL_2D,	//!< Defines model parameters
 		CALint substateNum										//!< Indicates the number of the substate
 		);
 
 /*! \brief Gets a pointer to the current integer matrix of the substate corresponding to substateNum */
-__global CALint * calGetCurrentSubstate2Di(__CALCL_MODEL_2D,	//!< Defines model parameters
+__global CALint * calclGetCurrentSubstate2Di(__CALCL_MODEL_2D,	//!< Defines model parameters
 		CALint substateNum										//!< Indicates the number of the substate
 		);
 
 /*! \brief Gets a pointer to the current real (floating-point) matrix of the substate corresponding to substateNum */
-__global CALreal * calGetCurrentSubstate2Dr(__CALCL_MODEL_2D,	//!< Defines model parameters
+__global CALreal * calclGetCurrentSubstate2Dr(__CALCL_MODEL_2D,	//!< Defines model parameters
 		CALint substateNum										//!< Indicates the number of the substate
 		);
 
 /*! \brief Gets a pointer to the current byte matrix of the substate corresponding to substateNum */
-__global CALbyte * calGetNextSubstate2Db(__CALCL_MODEL_2D,	//!< Defines model parameters
+__global CALbyte * calclGetNextSubstate2Db(__CALCL_MODEL_2D,	//!< Defines model parameters
 		CALint substateNum										//!< Indicates the number of the substate
 		);
 
 /*! \brief Gets a pointer to the current integer matrix of the substate corresponding to substateNum */
-__global CALint * calGetNextSubstate2Di(__CALCL_MODEL_2D,		//!< Defines model parameters
+__global CALint * calclGetNextSubstate2Di(__CALCL_MODEL_2D,		//!< Defines model parameters
 		CALint substateNum										//!< Indicates the number of the substate
 		);
 
 /*! \brief Gets a pointer to the current real (floating-point) matrix of the substate corresponding to substateNum */
-__global CALreal * calGetNextSubstate2Dr(__CALCL_MODEL_2D,	//!< Defines model parameters
+__global CALreal * calclGetNextSubstate2Dr(__CALCL_MODEL_2D,	//!< Defines model parameters
 		CALint substateNum										//!< Indicates the number of the substate
 		);
 
 /*! \brief Returns the cell (i, j) value of a byte substate.*/
-CALbyte calGet2Db(__CALCL_MODEL_2D,	//!< Defines model parameters
+CALbyte calclGet2Db(__CALCL_MODEL_2D,	//!< Defines model parameters
 		CALint substateNum,				//!< Indicates the number of the substate
 		int i, 							//!< Row coordinate of the cell
 		int j							//!< Column coordinate of the cell
 		);
 
 /*! \brief Returns the cell (i, j) value of an integer substate.*/
-CALint calGet2Di(__CALCL_MODEL_2D,	//!< Defines model parameters
+CALint calclGet2Di(__CALCL_MODEL_2D,	//!< Defines model parameters
 		CALint substateNum,				//!< Indicates the number of the substate
 		int i, 							//!< Row coordinate of the cell
 		int j							//!< Column coordinate of the cell
 		);
 
 /*! \brief Returns the cell (i, j) value of a real (floating point) substate.*/
-CALreal calGet2Dr(__CALCL_MODEL_2D,	//!< Defines model parameters
+CALreal calclGet2Dr(__CALCL_MODEL_2D,	//!< Defines model parameters
 		CALint substateNum,				//!< Indicates the number of the substate
 		int i, 							//!< Row coordinate of the cell
 		int j							//!< Column coordinate of the cell
 		);
 
 /*! \brief Returns the n-th neighbor of the cell (i, j) value of a byte substate.*/
-CALbyte calGetX2Db(__CALCL_MODEL_2D,	//!< Defines model parameters
+CALbyte calclGetX2Db(__CALCL_MODEL_2D,	//!< Defines model parameters
 		CALint substateNum,				//!< Indicates the number of the substate
 		int i,							//!< Row coordinate of the central cell.
 		int j,							//!< Column coordinate of the central cell.
@@ -132,7 +132,7 @@ CALbyte calGetX2Db(__CALCL_MODEL_2D,	//!< Defines model parameters
 		);
 
 /*! \brief Returns the n-th neighbor of the cell (i, j) value of a integer substate.*/
-CALint calGetX2Di(__CALCL_MODEL_2D,	//!< Defines model parameters
+CALint calclGetX2Di(__CALCL_MODEL_2D,	//!< Defines model parameters
 		CALint substateNum,				//!< Indicates the number of the substate
 		int i,							//!< Row coordinate of the central cell.
 		int j,							//!< Column coordinate of the central cell.
@@ -140,7 +140,7 @@ CALint calGetX2Di(__CALCL_MODEL_2D,	//!< Defines model parameters
 		);
 
 /*! \brief Returns the n-th neighbor of the cell (i, j) value of a real (floating point) substate.*/
-CALreal calGetX2Dr(__CALCL_MODEL_2D,	//!< Defines model parameters
+CALreal calclGetX2Dr(__CALCL_MODEL_2D,	//!< Defines model parameters
 		CALint substateNum,				//!< Indicates the number of the substate
 		int i,							//!< Row coordinate of the central cell.
 		int j,							//!< Column coordinate of the central cell.
@@ -148,7 +148,7 @@ CALreal calGetX2Dr(__CALCL_MODEL_2D,	//!< Defines model parameters
 		);
 
 /*! \brief Sets the cell (i, j) value of a real (floating point) substate.  */
-void calSet2Dr(__CALCL_MODEL_2D,		//!< Defines model parameters
+void calclSet2Dr(__CALCL_MODEL_2D,		//!< Defines model parameters
 		CALint substateNum,				//!< Indicates the number of the substate
 		int i,							//!< Row coordinate of the cell.
 		int j,							//!< Column coordinate of the cell.
@@ -156,7 +156,7 @@ void calSet2Dr(__CALCL_MODEL_2D,		//!< Defines model parameters
 		);
 
 /*! \brief Sets the cell (i, j) value of a integer substate.  */
-void calSet2Di(__CALCL_MODEL_2D,		//!< Defines model parameters
+void calclSet2Di(__CALCL_MODEL_2D,		//!< Defines model parameters
 		CALint substateNum,				//!< Indicates the number of the substate
 		int i,							//!< Row coordinate of the cell.
 		int j,							//!< Column coordinate of the cell.
@@ -164,7 +164,7 @@ void calSet2Di(__CALCL_MODEL_2D,		//!< Defines model parameters
 		);
 
 /*! \brief Sets the cell (i, j) value of a byte substate.  */
-void calSet2Db(__CALCL_MODEL_2D,		//!< Defines model parameters
+void calclSet2Db(__CALCL_MODEL_2D,		//!< Defines model parameters
 		CALint substateNum,				//!< Indicates the number of the substate
 		int i,							//!< Row coordinate of the cell.
 		int j,							//!< Column coordinate of the cell.

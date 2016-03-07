@@ -9,7 +9,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 // Lesser General Public License for more details.
 
-#include <cal2DActive.h>
+#include <OpenCAL-CL/calcl2DActive.h>
 #ifndef __OPENCL_VERSION__
 #define __kernel
 #define __global
@@ -45,11 +45,9 @@ __kernel void calclkernelUpdateSubstates2D(
 
 
 	for (k = 0; k < byteSubstateNum; k++)
-		calCopyBufferActiveCells2Db(nextByteSubstate + rows * columns * k, currentByteSubstate + rows * columns * k, columns, activeCells, threadID);
+		calclCopyBufferActiveCells2Db(nextByteSubstate + rows * columns * k, currentByteSubstate + rows * columns * k, columns, activeCells, threadID);
 	for (k = 0; k < intSubstateNum; k++)
-		calCopyBufferActiveCells2Di(nextIntSubstate + rows * columns * k, currentIntSubstate + rows * columns * k, columns, activeCells, threadID);
+		calclCopyBufferActiveCells2Di(nextIntSubstate + rows * columns * k, currentIntSubstate + rows * columns * k, columns, activeCells, threadID);
 	for (k = 0; k < realSubstateNum; k++)
-		calCopyBufferActiveCells2Dr(nextRealSubstate + rows * columns * k, currentRealSubstate + rows * columns * k, columns, activeCells, threadID);
+		calclCopyBufferActiveCells2Dr(nextRealSubstate + rows * columns * k, currentRealSubstate + rows * columns * k, columns, activeCells, threadID);
 }
-
-

@@ -9,19 +9,19 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 // Lesser General Public License for more details.
 
-/*! \file cal2DBuffer.h
- *	\brief cal2DBuffer contains function to perform common operations on matrices
+/*! \file calcl2DBuffer.h
+ *	\brief calcl2DBuffer contains function to perform common operations on matrices
  *
- *	cal2DBuffer contains function to perform common operations on matrices. Each function works on
+ *	calcl2DBuffer contains function to perform common operations on matrices. Each function works on
  *	a single element of the matrix because functions are thought to be used in a parallel context
  *	using a thread for each cell (or active cell) of the matrix.
  *
  */
 
-#ifndef cal2DBuffer_h
-#define cal2DBuffer_h
+#ifndef calcl2DBuffer_h
+#define calcl2DBuffer_h
 
-#include "calCommon.h"
+#include "OpenCAL-CL/calclCommon.h"
 
 /*!	\brief Byte linearized matrix copy function.
  *
@@ -29,7 +29,7 @@
  *	its content in the cell i j of the matrix M_dest
  *
  */
-void calCopyBuffer2Db(__global CALbyte* M_src, __global CALbyte* M_dest, int columns, int i, int j);
+void calclCopyBuffer2Db(__global CALbyte* M_src, __global CALbyte* M_dest, int columns, int i, int j);
 
 /*!	\brief Integer linearized matrix copy function.
  *
@@ -37,7 +37,7 @@ void calCopyBuffer2Db(__global CALbyte* M_src, __global CALbyte* M_dest, int col
  *	its content in the cell i j of the matrix M_dest
  *
  */
-void calCopyBuffer2Di(__global CALint* M_src, __global CALint* M_dest, int columns, int i, int j);
+void calclCopyBuffer2Di(__global CALint* M_src, __global CALint* M_dest, int columns, int i, int j);
 
 /*!	\brief Real linearized matrix copy function.
  *
@@ -45,7 +45,7 @@ void calCopyBuffer2Di(__global CALint* M_src, __global CALint* M_dest, int colum
  *	its content in the cell i j of the matrix M_dest
  *
  */
-void calCopyBuffer2Dr(__global CALreal* M_src, __global CALreal* M_dest, int columns, int i, int j);
+void calclCopyBuffer2Dr(__global CALreal* M_src, __global CALreal* M_dest, int columns, int i, int j);
 
 /*!	\brief Active cells byte linearized matrix copy function.
  *
@@ -53,7 +53,7 @@ void calCopyBuffer2Dr(__global CALreal* M_src, __global CALreal* M_dest, int col
  *	its content in the active cell n of the matrix M_dest
  *
  */
-void calCopyBufferActiveCells2Db(__global CALbyte* M_src, __global CALbyte* M_dest, int columns, __global struct CALCell2D* active_cells, int n);
+void calclCopyBufferActiveCells2Db(__global CALbyte* M_src, __global CALbyte* M_dest, int columns, __global struct CALCell2D* active_cells, int n);
 
 /*!	\brief Active cells integer linearized matrix copy function.
  *
@@ -61,7 +61,7 @@ void calCopyBufferActiveCells2Db(__global CALbyte* M_src, __global CALbyte* M_de
  *	its content in the active cell n of the matrix M_dest
  *
  */
-void calCopyBufferActiveCells2Di(__global CALint* M_src, __global CALint* M_dest, int columns, __global struct CALCell2D* active_cells, int n);
+void calclCopyBufferActiveCells2Di(__global CALint* M_src, __global CALint* M_dest, int columns, __global struct CALCell2D* active_cells, int n);
 
 /*!	\brief Active cells real linearized matrix copy function.
  *
@@ -69,7 +69,7 @@ void calCopyBufferActiveCells2Di(__global CALint* M_src, __global CALint* M_dest
  *	its content in the active cell n of the matrix M_dest
  *
  */
-void calCopyBufferActiveCells2Dr(__global CALreal* M_src, __global CALreal* M_dest, int columns, __global struct CALCell2D* active_cells, int n);
+void calclCopyBufferActiveCells2Dr(__global CALreal* M_src, __global CALreal* M_dest, int columns, __global struct CALCell2D* active_cells, int n);
 
 /*!	\brief Byte linearized matrix addition function.
  *
@@ -77,7 +77,7 @@ void calCopyBufferActiveCells2Dr(__global CALreal* M_src, __global CALreal* M_de
  *	the cell i j of the matrix M_op2. The result is put in the cell i j of the matrix M_dest
  *
  */
-void calAddMatrices2Db(__global CALbyte* M_op1, __global CALbyte* M_op2, __global CALbyte* M_dest, int i, int j, int columns);
+void calclAddMatrices2Db(__global CALbyte* M_op1, __global CALbyte* M_op2, __global CALbyte* M_dest, int i, int j, int columns);
 
 /*!	\brief Integer linearized matrix addition function.
  *
@@ -85,7 +85,7 @@ void calAddMatrices2Db(__global CALbyte* M_op1, __global CALbyte* M_op2, __globa
  *	the cell i j of the matrix M_op2. The result is put in the cell i j of the matrix M_dest
  *
  */
-void calAddMatrices2Di(__global CALint* M_op1, __global CALint* M_op2, __global CALint* M_dest, int i, int j, int columns);
+void calclAddMatrices2Di(__global CALint* M_op1, __global CALint* M_op2, __global CALint* M_dest, int i, int j, int columns);
 
 /*!	\brief Real linearized matrix addition function.
  *
@@ -93,7 +93,7 @@ void calAddMatrices2Di(__global CALint* M_op1, __global CALint* M_op2, __global 
  *	the cell i j of the matrix M_op2. The result is put in the cell i j of the matrix M_dest
  *
  */
-void calAddMatrices2Dr(__global CALreal* M_op1, __global CALreal* M_op2, __global CALreal* M_dest, int i, int j, int columns);
+void calclAddMatrices2Dr(__global CALreal* M_op1, __global CALreal* M_op2, __global CALreal* M_dest, int i, int j, int columns);
 
 /*!	\brief Byte linearized matrix subtraction function.
  *
@@ -101,7 +101,7 @@ void calAddMatrices2Dr(__global CALreal* M_op1, __global CALreal* M_op2, __globa
  *	the cell i j of the matrix M_op2. The result is put in the cell i j of the matrix M_dest
  *
  */
-void calSubtractMatrices2Db(__global CALbyte* M_op1, __global CALbyte* M_op2, __global CALbyte* M_dest, int i, int j, int columns);
+void calclSubtractMatrices2Db(__global CALbyte* M_op1, __global CALbyte* M_op2, __global CALbyte* M_dest, int i, int j, int columns);
 
 /*!	\brief Integer linearized matrix subtraction function.
  *
@@ -109,7 +109,7 @@ void calSubtractMatrices2Db(__global CALbyte* M_op1, __global CALbyte* M_op2, __
  *	the cell i j of the matrix M_op2. The result is put in the cell i j of the matrix M_dest
  *
  */
-void calSubtractMatrices2Di(__global CALint* M_op1, __global CALint* M_op2, __global CALint* M_dest, int i, int j, int columns);
+void calclSubtractMatrices2Di(__global CALint* M_op1, __global CALint* M_op2, __global CALint* M_dest, int i, int j, int columns);
 
 /*!	\brief Real linearized matrix subtraction function.
  *
@@ -117,22 +117,22 @@ void calSubtractMatrices2Di(__global CALint* M_op1, __global CALint* M_op2, __gl
  *	the cell i j of the matrix M_op2. The result is put in the cell i j of the matrix M_dest
  *
  */
-void calSubtractMatrices2Dr(__global CALreal* M_op1, __global CALreal* M_op2, __global CALreal* M_dest, int i, int j, int columns);
+void calclSubtractMatrices2Dr(__global CALreal* M_op1, __global CALreal* M_op2, __global CALreal* M_dest, int i, int j, int columns);
 
 /*! \brief Sets an active cell of a byte matrix to a constant value.*/
-void calSetBufferActiveCells2Db(__global CALbyte* M, int columns, CALbyte value, __global struct CALCell2D* active_cells, int n);
+void calclSetBufferActiveCells2Db(__global CALbyte* M, int columns, CALbyte value, __global struct CALCell2D* active_cells, int n);
 
 /*! \brief Sets an active cell of a integer matrix to a constant value.*/
-void calSetBufferActiveCells2Di(__global CALint* M, int columns, CALint value, __global struct CALCell2D* active_cells, int n);
+void calclSetBufferActiveCells2Di(__global CALint* M, int columns, CALint value, __global struct CALCell2D* active_cells, int n);
 
 /*! \brief Sets an active cell of a real matrix to a constant value.*/
-void calSetBufferActiveCells2Dr(__global CALreal* M, int columns, CALreal value, __global struct CALCell2D* active_cells, int n);
+void calclSetBufferActiveCells2Dr(__global CALreal* M, int columns, CALreal value, __global struct CALCell2D* active_cells, int n);
 
 
 /*! \brief Sets an element of a matrix to a constant value.*/
-#define calSetBufferElement2D(M, columns, i, j, value) ( M[(i)*(columns)+(j)]) = (value)
+#define calclSetBufferElement2D(M, columns, i, j, value) ( M[(i)*(columns)+(j)]) = (value)
 
 /*! \brief Gets an element of a matrix.*/
-#define calGetBufferElement2D(M, columns, i, j) ( M[(i)*(columns)+(j)] )
+#define calclGetBufferElement2D(M, columns, i, j) ( M[(i)*(columns)+(j)] )
 
 #endif

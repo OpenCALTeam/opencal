@@ -9,7 +9,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 // Lesser General Public License for more details.
 
-#include <cal3DActive.h>
+#include <OpenCAL-CL/calcl3DActive.h>
 #ifndef __OPENCL_VERSION__
 #define __kernel
 #define __global
@@ -45,11 +45,9 @@ __kernel void calclkernelUpdateSubstates3D(
 		return;
 
 	for (k = 0; k < byteSubstateNum; k++)
-		calCopyBufferActiveCells3Db(nextByteSubstate + rows * columns * slices * k, currentByteSubstate + rows * columns * slices * k, columns,rows, activeCells, threadID);
+		calclCopyBufferActiveCells3Db(nextByteSubstate + rows * columns * slices * k, currentByteSubstate + rows * columns * slices * k, columns,rows, activeCells, threadID);
 	for (k = 0; k < intSubstateNum; k++)
-		calCopyBufferActiveCells3Di(nextIntSubstate + rows * columns * slices * k, currentIntSubstate + rows * columns * slices * k, columns,rows, activeCells, threadID);
+		calclCopyBufferActiveCells3Di(nextIntSubstate + rows * columns * slices * k, currentIntSubstate + rows * columns * slices * k, columns,rows, activeCells, threadID);
 	for (k = 0; k < realSubstateNum; k++)
-		calCopyBufferActiveCells3Dr(nextRealSubstate + rows * columns * slices * k, currentRealSubstate + rows * columns * slices * k, columns,rows, activeCells, threadID);
+		calclCopyBufferActiveCells3Dr(nextRealSubstate + rows * columns * slices * k, currentRealSubstate + rows * columns * slices * k, columns,rows, activeCells, threadID);
 }
-
-

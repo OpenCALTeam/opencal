@@ -9,8 +9,8 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 // Lesser General Public License for more details.
 
-#ifndef calCommon_h
-#define calCommon_h
+#ifndef calclCommon_h
+#define calclCommon_h
 
 #ifndef __OPENCL_VERSION__
 #define __kernel
@@ -49,7 +49,7 @@ enum CALSpaceBoundaryCondition {
 
 /*! \brief Macro recomputing the out of bound neighborhood indexes in case of toroidal cellular space.
  */
-#define calGetToroidalX(index, size) (   (index)<0?((size)+(index)):( (index)>((size)-1)?((index)-(size)):(index) )   )
+#define calclGetToroidalX(index, size) (   (index)<0?((size)+(index)):( (index)>((size)-1)?((index)-(size)):(index) )   )
 
 /*! \brief Cell's coordinates structure.
 
@@ -78,4 +78,3 @@ struct CALCell3D {
 };
 
 #endif
-
