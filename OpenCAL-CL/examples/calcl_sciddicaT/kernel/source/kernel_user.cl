@@ -1,6 +1,5 @@
 #ifndef __OPENCL_VERSION__
-#define __kernel
-#define __global
+#define __kerneldeine __global
 #define __local
 #define get_global_id (int)
 #endif
@@ -16,6 +15,7 @@ __kernel void sciddicaT_flows_computation(__CALCL_MODEL_2D, __global CALParamete
 	int i = calclGlobalRow();
 	int j = calclGlobalColumns();
 
+
 	CALbyte eliminated_cells[5] = { CAL_FALSE, CAL_FALSE, CAL_FALSE, CAL_FALSE, CAL_FALSE };
 	CALbyte again;
 	CALint cells_count;
@@ -24,6 +24,7 @@ __kernel void sciddicaT_flows_computation(__CALCL_MODEL_2D, __global CALParamete
 	CALreal u[5];
 	CALint n;
 	CALreal z, h;
+
 	CALint sizeOfX_ = calclGetNeighborhoodSize();
 	CALParameterr eps = *Pepsilon;
 
@@ -65,6 +66,7 @@ __kernel void sciddicaT_flows_computation(__CALCL_MODEL_2D, __global CALParamete
 			calclSet2Dr(MODEL_2D, n-1, i, j, 0.0);
 		else
 			calclSet2Dr(MODEL_2D, n-1, i, j,(average - u[n]) * (*Pr));
+
 	}
 }
 
@@ -97,7 +99,6 @@ __kernel void sciddicaTSteering(__CALCL_MODEL_2D) {
 	int i = calclGlobalRow();
 	int j = calclGlobalColumns();
 
-	int dim = cols_ * rows_;
 	int s;
 	for (s = 0; s < NUMBER_OF_OUTFLOWS; ++s)
 		calclInitSubstate2Dr(MODEL_2D, s, i, j, 0);
