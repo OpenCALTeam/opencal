@@ -59,10 +59,10 @@ int main(int argc, char** argv) {
 
 	//---------------------------------OPENCL INIT----------------------------------/
 
-	CALOpenCL * calOpenCL = calclCreateCALOpenCL();
+	CALCLManager * calOpenCL = calclCreateManager();
 	calclInitializePlatforms(calOpenCL);
 	calclInitializeDevices(calOpenCL);
-	calclPrintAllPlatformAndDevices(calOpenCL);
+	calclPrintPlatformsAndDevices(calOpenCL);
 
 	CALCLdevice device = calclGetDevice(calOpenCL, platformNum, deviceNum);
 
@@ -72,9 +72,9 @@ int main(int argc, char** argv) {
 	initMbusu();
 	setParameters();
 	simulationInitialize();
-	CALCLToolkit3D * mbusuToolkit = NULL;
+	CALCLModel3D * deviceCA = NULL;
 
-	mbusuToolkit = calclCreateToolkit3D(mbusu->model,context,program,device);
+	deviceCA = calclCADef3D(mbusu->hostCA,context,program,device);
 
 	CALCLkernel kernel_elementary_process_one = calclGetKernelFromProgram(&program, (char *)KER_SCIARA_ELEMENTARY_PROCESS_ONE);
 	CALCLkernel kernel_stop_condition = calclGetKernelFromProgram(&program, (char *)KER_SCIARA_STOP_CONDITION);
@@ -87,25 +87,26 @@ int main(int argc, char** argv) {
 	//steering
 	clSetKernelArg(kernel_steering, MODEL_ARGS_NUM, sizeof(CALCLmem), &parametersBuff);
 
-	calclAddElementaryProcessKernel3D(mbusuToolkit,mbusu->model,&kernel_elementary_process_one);
+	calclAddElementaryProcess3D(deviceCA,mbusu->hostCA,&kernel_elementary_process_one);
 
-	calclSetSteeringKernel3D(mbusuToolkit, mbusu->model, &kernel_steering);
-	calclSetStopConditionKernel3D(mbusuToolkit, mbusu->model, &kernel_stop_condition);
+	calclAddSteeringFunc3D(deviceCA, mbusu->hostCA, &kernel_steering);
+	calclAddStopConditionFunc3D(deviceCA, mbusu->hostCA, &kernel_stop_condition);
+
 	start_time = time(NULL);
-	calclRun3D(mbusuToolkit, mbusu->model, 1, STEPS);
+	calclRun3D(deviceCA, mbusu->hostCA, 1, STEPS);
 	end_time = time(NULL);
 
 	CALreal moist_print;
 	CALint k_inv;
 	int j = YOUT/2;
-	
+
 	for (int k = 0; k < mbusu->layers; k++)
 		for (int i = 0; i < mbusu->rows; i++)
 			{
-				
+
 				k_inv = (mbusu->layers - 1) - k;
-				moist_print = calGet3Dr(mbusu->model, mbusu->Q->moist_cont, i, j, k);
-				printf("%.3Lf\n",moist_print);
+				moist_print = calGet3Dr(mbusu->hostCA, mbusu->Q->moist_cont, i, j, k);
+				//printf("%.3Lf\n",moist_print);
 				if (i == XW && k_inv == ZSUP)
 				{
 					stream = fopen("ris10g.txt", "w+");
@@ -124,9 +125,9 @@ int main(int argc, char** argv) {
 			}
 
 	calclFinalizeCALOpencl(calOpenCL);
-	calclFinalizeToolkit3D(mbusuToolkit);
+	calclFinalizeToolkit3D(deviceCA);
 	exit();
-	
+
 
 	printf("%d", end_time - start_time);
 

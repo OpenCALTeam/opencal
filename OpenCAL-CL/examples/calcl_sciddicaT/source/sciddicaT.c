@@ -35,7 +35,7 @@ struct sciddicaTParameters {
 };
 
 //cadef
-struct CALModel2D* sciddicaT;						//the cellular automaton
+struct CALModel2D* hostCA;						//the cellular automaton
 struct sciddicaTSubstates Q;						//the substates
 struct sciddicaTParameters P;						//the parameters
 
@@ -49,32 +49,32 @@ struct sciddicaTParameters P;						//the parameters
 
 
 
-void sciddicaTSimulationInit(struct CALModel2D* sciddicaT) {
+void sciddicaTSimulationInit(struct CALModel2D* hostCA) {
 	CALreal z, h;
 	CALint i, j;
 
 	//initializing substates to 0
-	calInitSubstate2Dr(sciddicaT, Q.f[0], 0);
-	calInitSubstate2Dr(sciddicaT, Q.f[1], 0);
-	calInitSubstate2Dr(sciddicaT, Q.f[2], 0);
-	calInitSubstate2Dr(sciddicaT, Q.f[3], 0);
+	calInitSubstate2Dr(hostCA, Q.f[0], 0);
+	calInitSubstate2Dr(hostCA, Q.f[1], 0);
+	calInitSubstate2Dr(hostCA, Q.f[2], 0);
+	calInitSubstate2Dr(hostCA, Q.f[3], 0);
 
 	//sciddicaT parameters setting
 	P.r = P_R;
 	P.epsilon = P_EPSILON;
 
 	//sciddicaT source initialization
-	for (i = 0; i < sciddicaT->rows; i++)
-		for (j = 0; j < sciddicaT->columns; j++) {
-			h = calGet2Dr(sciddicaT, Q.h, i, j);
+	for (i = 0; i < hostCA->rows; i++)
+		for (j = 0; j < hostCA->columns; j++) {
+			h = calGet2Dr(hostCA, Q.h, i, j);
 
 			if (h > 0.0) {
-				z = calGet2Dr(sciddicaT, Q.z, i, j);
-				calSet2Dr(sciddicaT, Q.z, i, j, z - h);
+				z = calGet2Dr(hostCA, Q.z, i, j);
+				calSet2Dr(hostCA, Q.z, i, j, z - h);
 
 #ifdef ACTIVE_CELLS
 				//adds the cell (i, j) to the set of active ones
-				calAddActiveCell2D(sciddicaT, i, j);
+				calAddActiveCell2D(hostCA, i, j);
 #endif
 			}
 		}
@@ -89,11 +89,11 @@ int main(int argc, char** argv) {
 	int platformNum = 0;
 	int deviceNum = 0;
 
-	CALOpenCL * calOpenCL;
+	CALCLManager * calOpenCL;
 	CALCLcontext context;
 	CALCLdevice device;
 	CALCLprogram program;
-	CALCLToolkit2D * sciddicaToolkit;
+	CALCLModel2D * deviceCA;
 #ifdef ACTIVE_CELLS
 	char * kernelSrc = KERNEL_SRC_AC;
 	char * kernelInc = KERNEL_INC_AC;
@@ -111,10 +111,10 @@ int main(int argc, char** argv) {
 
 
 
-	calOpenCL = calclCreateCALOpenCL();
+	calOpenCL = calclCreateManager();
 	calclInitializePlatforms(calOpenCL);
 	calclInitializeDevices(calOpenCL);
-	calclPrintAllPlatformAndDevices(calOpenCL);
+	calclPrintPlatformsAndDevices(calOpenCL);
 
 	device = calclGetDevice(calOpenCL, platformNum, deviceNum);
 	context = calclCreateContext(&device, 1);
@@ -123,30 +123,29 @@ int main(int argc, char** argv) {
 
 	//cadef
 #ifdef ACTIVE_CELLS
-	sciddicaT = calCADef2D(ROWS, COLS, CAL_VON_NEUMANN_NEIGHBORHOOD_2D, CAL_SPACE_TOROIDAL, CAL_OPT_ACTIVE_CELLS);
+	hostCA = calCADef2D(ROWS, COLS, CAL_VON_NEUMANN_NEIGHBORHOOD_2D, CAL_SPACE_TOROIDAL, CAL_OPT_ACTIVE_CELLS);
 #else
-	sciddicaT = calCADef2D(ROWS, COLS, CAL_VON_NEUMANN_NEIGHBORHOOD_2D, CAL_SPACE_TOROIDAL, CAL_NO_OPT);
+	hostCA = calCADef2D(ROWS, COLS, CAL_VON_NEUMANN_NEIGHBORHOOD_2D, CAL_SPACE_TOROIDAL, CAL_NO_OPT);
 #endif
 
 	//add substates
-	Q.f[0] = calAddSubstate2Dr(sciddicaT);
-	Q.f[1] = calAddSubstate2Dr(sciddicaT);
-	Q.f[2] = calAddSubstate2Dr(sciddicaT);
-	Q.f[3] = calAddSubstate2Dr(sciddicaT);
-	Q.z = calAddSubstate2Dr(sciddicaT);
-	Q.h = calAddSubstate2Dr(sciddicaT);
+	Q.f[0] = calAddSubstate2Dr(hostCA);
+	Q.f[1] = calAddSubstate2Dr(hostCA);
+	Q.f[2] = calAddSubstate2Dr(hostCA);
+	Q.f[3] = calAddSubstate2Dr(hostCA);
+	Q.z = calAddSubstate2Dr(hostCA);
+	Q.h = calAddSubstate2Dr(hostCA);
 
 	//load configuration
-	calLoadSubstate2Dr(sciddicaT, Q.z, DEM_PATH);
-	calLoadSubstate2Dr(sciddicaT, Q.h, SOURCE_PATH);
+	calLoadSubstate2Dr(hostCA, Q.z, DEM_PATH);
+	calLoadSubstate2Dr(hostCA, Q.h, SOURCE_PATH);
 
 	//initialization
-	sciddicaTSimulationInit(sciddicaT);
-	calUpdate2D(sciddicaT);
+	sciddicaTSimulationInit(hostCA);
+	calUpdate2D(hostCA);
 
 	//calcl toolkit
-	sciddicaToolkit = calclCreateToolkit2D(sciddicaT, context, program, device);
-
+	deviceCA = calclCADef2D(hostCA, context, program, device);
 
 	//calcl kernels
 	kernel_elem_proc_flow_computation = calclGetKernelFromProgram(&program, KERNEL_ELEM_PROC_FLOW_COMPUTATION);
@@ -156,37 +155,37 @@ int main(int argc, char** argv) {
 #endif
 	kernel_steering = calclGetKernelFromProgram(&program, KERNEL_STEERING);
 
-	// bufferEpsilonParameter = calclCreateBuffer(context, &P.epsilon, sizeof(CALParameterr));
-	// bufferRParameter = calclCreateBuffer(context, &P.r, sizeof(CALParameterr));
-	//
-	// calclSetKernelArg2D(&kernel_elem_proc_flow_computation, 0, sizeof(CALCLmem), &bufferEpsilonParameter);
-	// calclSetKernelArg2D(&kernel_elem_proc_flow_computation, 1, sizeof(CALCLmem), &bufferRParameter);
+	bufferEpsilonParameter = calclCreateBuffer(context, &P.epsilon, sizeof(CALParameterr));
+	bufferRParameter = calclCreateBuffer(context, &P.r, sizeof(CALParameterr));
 
-	calclSetKernelArg2D(&kernel_elem_proc_flow_computation, 0, sizeof(CALParameterr), &P.epsilon);
-	calclSetKernelArg2D(&kernel_elem_proc_flow_computation, 1, sizeof(CALParameterr), &P.r);
+	 calclSetKernelArg2D(&kernel_elem_proc_flow_computation, 0, sizeof(CALCLmem), &bufferEpsilonParameter);
+	 calclSetKernelArg2D(&kernel_elem_proc_flow_computation, 1, sizeof(CALCLmem), &bufferRParameter);
 
-	calclAddElementaryProcessKernel2D(sciddicaToolkit, sciddicaT, &kernel_elem_proc_flow_computation);
-	calclAddElementaryProcessKernel2D(sciddicaToolkit, sciddicaT, &kernel_elem_proc_width_update);
-	calclSetSteeringKernel2D(sciddicaToolkit, sciddicaT, &kernel_steering);
+//	calclSetKernelArg2D(&kernel_elem_proc_flow_computation, 0, sizeof(CALParameterr), &P.epsilon);
+//	calclSetKernelArg2D(&kernel_elem_proc_flow_computation, 1, sizeof(CALParameterr), &P.r);
+
+	calclAddElementaryProcess2D(deviceCA, hostCA, &kernel_elem_proc_flow_computation);
+	calclAddElementaryProcess2D(deviceCA, hostCA, &kernel_elem_proc_width_update);
+	calclAddSteeringFunc2D(deviceCA, hostCA, &kernel_steering);
 #ifdef ACTIVE_CELLS
-	//calclSetKernelArg2D(&kernel_elem_proc_rm_act_cells, 0, sizeof(CALCLmem), &bufferEpsilonParameter);
-	calclSetKernelArg2D(&kernel_elem_proc_rm_act_cells, 0, sizeof(CALParameterr), &P.epsilon);
-	calclAddElementaryProcessKernel2D(sciddicaToolkit, sciddicaT, &kernel_elem_proc_rm_act_cells);
+	calclSetKernelArg2D(&kernel_elem_proc_rm_act_cells, 0, sizeof(CALCLmem), &bufferEpsilonParameter);
+	//calclSetKernelArg2D(&kernel_elem_proc_rm_act_cells, 0, sizeof(CALParameterr), &P.epsilon);
+	calclAddElementaryProcess2D(deviceCA, hostCA, &kernel_elem_proc_rm_act_cells);
 #endif
 
 	//simulation execution
 	start_time = time(NULL);
-	calclRun2D(sciddicaToolkit, sciddicaT, 1, STEPS);
+	calclRun2D(deviceCA, hostCA, 1, STEPS);
 	end_time = time(NULL);
 	printf("%d", end_time - start_time);
 
 	//saving results
-	calSaveSubstate2Dr(sciddicaT, Q.h, OUTPUT_PATH);
+	calSaveSubstate2Dr(hostCA, Q.h, OUTPUT_PATH);
 
 	//finalizations
-	calFinalize2D(sciddicaT);
+	calFinalize2D(hostCA);
 	calclFinalizeCALOpencl(calOpenCL);
-	calclFinalizeToolkit2D(sciddicaToolkit);
+	calclFinalizeToolkit2D(deviceCA);
 
 	return 0;
 }

@@ -11,12 +11,12 @@
 
 #include "OpenCL_Utility.h"
 
-CALOpenCL * calclCreateCALOpenCL() {
-	CALOpenCL * calOpenCL = (CALOpenCL*) malloc(sizeof(CALOpenCL));
+CALCLManager * calclCreateManager() {
+	CALCLManager * calOpenCL = (CALCLManager*) malloc(sizeof(CALCLManager));
 	return calOpenCL;
 }
 
-void calclInitializePlatforms(CALOpenCL * opencl) {
+void calclInitializePlatforms(CALCLManager * opencl) {
 
 	opencl->num_platforms = 0;
 	CALCLint err = clGetPlatformIDs(0, NULL, &opencl->num_platforms);
@@ -26,7 +26,7 @@ void calclInitializePlatforms(CALOpenCL * opencl) {
 	calclHandleError(err);
 }
 
-void calclInitializeDevices(CALOpenCL * opencl) {
+void calclInitializeDevices(CALCLManager * opencl) {
 	opencl->devices = (CALCLdevice**) malloc(sizeof(CALCLdevice*) * opencl->num_platforms);
 	opencl->num_platforms_devices = (int*) malloc(sizeof(int) * opencl->num_platforms);
 	CALCLuint num_devices;
@@ -63,11 +63,11 @@ CALCLqueue calclCreateCommandQueue(CALCLcontext context, CALCLdevice device) {
 	return out;
 }
 
-CALCLdevice calclGetDevice(CALOpenCL * calOpenCL, int platformIndex, int deviceIndex) {
+CALCLdevice calclGetDevice(CALCLManager * calOpenCL, int platformIndex, int deviceIndex) {
 	return calOpenCL->devices[platformIndex][deviceIndex];
 }
 
-void calclFinalizeCALOpencl(CALOpenCL * opencl) {
+void calclFinalizeCALOpencl(CALCLManager * opencl) {
 	free(opencl->platforms);
 	unsigned i = 0;
 	for (i = 0; i < opencl->num_platforms; i++)
@@ -385,7 +385,7 @@ void calclHandleError(CALCLint err) {
 	}
 }
 
-void calclPrintAllPlatformAndDevices(CALOpenCL * opencl){
+void calclPrintPlatformsAndDevices(CALCLManager * opencl){
 	unsigned int i;
 	int j;
 	for (i = 0; i < opencl->num_platforms; i++) {
@@ -407,8 +407,8 @@ void calclPrintAllPlatformAndDevices(CALOpenCL * opencl){
 		    }
 }
 
-void calclGetPlatformAndDeviceFromStandardInput(CALOpenCL * opencl,CALCLdevice * device){
-	calclPrintAllPlatformAndDevices(opencl);
+void calclGetPlatformAndDeviceFromStdIn(CALCLManager * opencl,CALCLdevice * device){
+	calclPrintPlatformsAndDevices(opencl);
 	CALCLuint num_platform;
 	CALCLuint num_device;
 	char line[256];
@@ -528,18 +528,18 @@ const char * calclGetErrorString(CALCLint err) {
 		return "CL_INVALID_GLOBAL_WORK_SIZE";
 	case -101:
 	  return "FILE_NOT_FOUND";
-        case -1000:
-	        return "CL_INVALID_GL_SHAREGROUP_REFERENCE_KHR";
-        case -1001:
-	        return "CL_PLATFORM_NOT_FOUND_KHR";
-        case -1002:
-                return "CL_INVALID_D3D10_DEVICE_KHR";
-        case -1003:
-                return "CL_INVALID_D3D10_RESOURCE_KHR";
-        case -1004:
-                return "CL_D3D10_RESOURCE_ALREADY_ACQUIRED_KHR";
-        case -1005:
-                return "CL_D3D10_RESOURCE_NOT_ACQUIRED_KHR";	
+  case -1000:
+	  return "CL_INVALID_GL_SHAREGROUP_REFERENCE_KHR";
+  case -1001:
+	  return "CL_PLATFORM_NOT_FOUND_KHR";
+  case -1002:
+    return "CL_INVALID_D3D10_DEVICE_KHR";
+  case -1003:
+    return "CL_INVALID_D3D10_RESOURCE_KHR";
+  case -1004:
+    return "CL_D3D10_RESOURCE_ALREADY_ACQUIRED_KHR";
+  case -1005:
+    return "CL_D3D10_RESOURCE_NOT_ACQUIRED_KHR";
 	default:
 		return "Unknown OpenCL error";
 	}

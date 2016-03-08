@@ -8,7 +8,7 @@
 #define LAYERS 3
 
 // declare CA, substate and simulation objects
-struct CALModel3D* mod2;
+struct CALModel3D* hostCA;
 struct CALSubstate3Db* Q;
 
 #define KERNEL_SRC "./kernel/source/"
@@ -23,60 +23,60 @@ int main()
 	int platformNum = 0;
 	int deviceNum = 0;
 
-	CALOpenCL * calOpenCL;
+	CALCLManager * calOpenCL;
 	CALCLcontext context;
 	CALCLdevice device;
 	CALCLprogram program;
-	CALCLToolkit3D * mod2Toolkit;
+	CALCLModel3D * deviceCA;
 	char * kernelSrc = KERNEL_SRC;
 	char * kernelInc = KERNEL_INC;
 	CALCLkernel kernel_transition_function;
 
-	calOpenCL = calclCreateCALOpenCL();
+	calOpenCL = calclCreateManager();
 	calclInitializePlatforms(calOpenCL);
 	calclInitializeDevices(calOpenCL);
-	calclPrintAllPlatformAndDevices(calOpenCL);
+	calclPrintPlatformsAndDevices(calOpenCL);
 	device = calclGetDevice(calOpenCL, platformNum, deviceNum);
 	context = calclCreateContext(&device, 1);
-	
+
 	program = calclLoadProgram3D(context, device, kernelSrc, NULL);
 
 
 	// define of the mod2 CA object
-	mod2 = calCADef3D(ROWS, COLS, LAYERS, CAL_MOORE_NEIGHBORHOOD_3D, CAL_SPACE_TOROIDAL, CAL_NO_OPT);
+	hostCA = calCADef3D(ROWS, COLS, LAYERS, CAL_MOORE_NEIGHBORHOOD_3D, CAL_SPACE_TOROIDAL, CAL_NO_OPT);
 
-	// add the Q substate to the mod2 CA
-	Q = calAddSubstate3Db(mod2);
+	// add the Q substate to the hostCA CA
+	Q = calAddSubstate3Db(hostCA);
 
 	// set the whole substate to 0
-	calInitSubstate3Db(mod2, Q, 0);
+	calInitSubstate3Db(hostCA, Q, 0);
 
 	// set a seed at position (2, 3, 1)
-	calInit3Db(mod2, Q, 2, 3, 1, 1);
+	calInit3Db(hostCA, Q, 2, 3, 1, 1);
 
 	// save the Q substate to file
-	calSaveSubstate3Db(mod2, Q, "./mod2_0000.txt");
+	calSaveSubstate3Db(hostCA, Q, "./mod2_0000.txt");
 
 	// define Toolkit object
-	mod2Toolkit = calclCreateToolkit3D(mod2, context, program, device);
+	deviceCA = calclCADef3D(hostCA, context, program, device);
 
     //create kernel
 	kernel_transition_function = calclGetKernelFromProgram(&program, KERNEL_LIFE_TRANSITION_FUNCTION);
 
 	// add transition function's elementary process
-	calclAddElementaryProcessKernel3D(mod2Toolkit, mod2, &kernel_transition_function);
+	calclAddElementaryProcess3D(deviceCA, hostCA, &kernel_transition_function);
 
 	start_time = time(NULL);
 	// simulation run
-	calclRun3D(mod2Toolkit, mod2, 1, 1);
+	calclRun3D(deviceCA, hostCA, 1, 1);
 	end_time = time(NULL);
 	printf("%d", end_time - start_time);
 
 	// save the Q substate to file
-	calSaveSubstate3Db(mod2, Q, "./mod2_LAST.txt");
+	calSaveSubstate3Db(hostCA, Q, "./mod2_LAST.txt");
 
 	// finalize simulation and CA objects
-	calFinalize3D(mod2);
+	calFinalize3D(hostCA);
 
 	return 0;
 }

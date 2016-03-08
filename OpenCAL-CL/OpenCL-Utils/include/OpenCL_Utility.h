@@ -14,11 +14,11 @@
  *
  * OpenCL_Utility contains structures and functions to simplify OpenCL coding. Functions allow
  * to query available platforms and devices. It's also possible to obtain all available platforms
- * and devices with fews functions calls and having them together in the structure CALOpenCL.
+ * and devices with fews functions calls and having them together in the structure CALCLManager.
  *
  * Example:
  *
- * CALOpenCL * calOpenCL = calclCreateCALOpenCL();
+ * CALCLManager * calOpenCL = calclCreateCALCLManager();
  * calclInitializePlatforms(calOpenCL);
  * calclInitializeDevices(calOpenCL);
  *
@@ -29,7 +29,7 @@
 #define OPENCL_UTILITY_H_
 
 #ifdef _WIN32
-#define _CRT_SECURE_NO_WARNINGS 1 
+#define _CRT_SECURE_NO_WARNINGS 1
 #endif
 
 #include <dirent.h>
@@ -55,23 +55,23 @@ typedef cl_device_type CALCLdeviceType; 	//!< Redefinition of type cl_device_typ
 typedef cl_ulong CALCLulong; 				//!< Redefinition of type cl_ulong
 typedef cl_long CALCLlong; 					//!< Redefinition of type cl_long
 
-/*!\brief CALOpenCL contains Opencl platforms and devices */
+/*!\brief CALCLManager contains Opencl platforms and devices */
 typedef struct {
 	CALCLplatform *platforms; 				//!< Array of Opencl available platforms
 	CALCLuint num_platforms; 				//!< Number of Opencl available platforms
 	CALCLdevice ** devices; 				//!< Matrix containing Opencl devices. Each row represents a platform and contains all its devices.
 	int * num_platforms_devices; 			//!< Array containing the number of devices for each platform.
-} CALOpenCL;
+} CALCLManager;
 
 /*! \brief Allocates and returns an instance of CALOpencCL structure. */
-CALOpenCL * calclCreateCALOpenCL();
+CALCLManager * calclCreateManager();
 
 /*! \brief Allocates and initializes available Opencl platforms */
-void calclInitializePlatforms(CALOpenCL * opencl	//!< Pointer to CALOpenCL structure
+void calclInitializePlatforms(CALCLManager * opencl	//!< Pointer to CALCLManager structure
 		);
 
 /*! \brief For each available platform allocates and initializes its Opencl devices */
-void calclInitializeDevices(CALOpenCL * opencl //!< Pointer to CALOpenCL structure
+void calclInitializeDevices(CALCLManager * opencl //!< Pointer to CALCLManager structure
 		);
 
 /*! \brief Creates an Opencl context */
@@ -91,13 +91,13 @@ CALCLqueue calclCreateCommandQueue(CALCLcontext context, 	//!< Opencl context
 		);
 
 /*! \brief Gets one of the allocated device */
-CALCLdevice calclGetDevice(CALOpenCL * calOpenCL, 	//!< Pointer to CALOpenCL structure
+CALCLdevice calclGetDevice(CALCLManager * calOpenCL, 	//!< Pointer to CALCLManager structure
 		int platformIndex, 							//!< Index referring the platform associated to the device (indexes go from zero to the number of available platforms)
 		int deviceIndex 							//!< Index referring the device (indexes go from zero to the number of available devices in the selected platform)
 		);
 
 /*! \brief Deallocates the structure CALOpencl */
-void calclFinalizeCALOpencl(CALOpenCL * opencl 	//!< Pointer to CALOpenCL structure
+void calclFinalizeCALOpencl(CALCLManager * opencl 	//!< Pointer to CALCLManager structure
 		);
 
 /*! \brief Given some paths returns the number of files in the paths and the names of the files  */
@@ -106,10 +106,10 @@ void calclGetDirFiles(char ** paths, 	//!< Array of strings. Each string is a pa
 		char *** files_names, 			//!< Pointer to an array of strings. The function allocates the array and initializes it with paths files names
 		int * num_files 				//!< Pointer to int. The function assigns to it the number of file contained in the paths
 		);/*! \brief Print on standard output informations about all platforms and devices*/
-void calclPrintAllPlatformAndDevices(CALOpenCL * opencl);
+void calclPrintPlatformsAndDevices(CALCLManager * opencl);
 
 /*! \brief Print on standard output informations about all platforms and devices*/
-void calclGetPlatformAndDeviceFromStandardInput(CALOpenCL * opencl,CALCLdevice * device);
+void calclGetPlatformAndDeviceFromStdIn(CALCLManager * opencl,CALCLdevice * device);
 
 /*! \brief Reads a file and return its content  */
 void calclReadFile(char * fileName, 	//!< File path
@@ -241,9 +241,9 @@ void calclPrintAllDeviceInfo(CALCLdevice device 	//!< Opencl device
 		);
 
 /*! \brief Print on standard output informations about all platforms and devices*/
-void calclPrintAllPlatformAndDevices(CALOpenCL * opencl);
+void calclPrintAllPlatformAndDevices(CALCLManager * opencl);
 
 /*! \brief Print on standard output informations about all platforms and devices*/
-void calclGetPlatformAndDeviceFromStandardInput(CALOpenCL * opencl,CALCLdevice * device);
+void calclGetPlatformAndDeviceFromStandardInput(CALCLManager * opencl,CALCLdevice * device);
 
-#endif /* CALOpenCL_H_ */
+#endif /* CALCLManager_H_ */

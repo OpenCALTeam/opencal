@@ -65,13 +65,13 @@ typedef struct CALCLSubstateMapper {
 
 } CALCLSubstateMapper;
 
-/*! \brief CALCLToolkit3D contains necessary data to run 3D cellular automaton elementary processes on gpu.
+/*! \brief CALCLModel3D contains necessary data to run 3D cellular automaton elementary processes on gpu.
  *
- * CALCLToolkit3D contains necessary data to run 3D cellular automata elementary processes on GPU. In particular,
+ * CALCLModel3D contains necessary data to run 3D cellular automata elementary processes on GPU. In particular,
  * it contains Opencl buffers to transfer CA data to the gpu, and Opencl kernels to setup a CA simulation.
  *
  */
-typedef struct CALCLToolkit3D {
+typedef struct CALCLModel3D {
 	enum CALOptimization opt;							//!< Enumeration used for optimization strategies (CAL_NO_OPT, CAL_OPT_ACTIVE_CELL).
 	int callbackSteps;									//!< Define how many steps must be executed before call the function cl_update_substates.
 	int steps;											//!< Simulation current step.
@@ -130,35 +130,35 @@ typedef struct CALCLToolkit3D {
 
 	CALCLqueue queue;									//!< Opencl command queue
 
-} CALCLToolkit3D;
+} CALCLModel3D;
 
-/*! \brief Allocate, initialize and return a pointer to a CALCLToolkit3D.
+/*! \brief Allocate, initialize and return a pointer to a CALCLModel3D.
  *
- * Allocate, initialize and return a pointer to a CALCLToolkit3D. Opencl buffers are initialized using data from a CALModel3D instance.
+ * Allocate, initialize and return a pointer to a CALCLModel3D. Opencl buffers are initialized using data from a CALModel3D instance.
  * Moreover, the function receive an Opencl program used to initialize library kernels.
  */
-CALCLToolkit3D * calclCreateToolkit3D(struct CALModel3D *model,		//!< Pointer to a CALModel3D
+CALCLModel3D * calclCADef3D(struct CALModel3D *model,		//!< Pointer to a CALModel3D
 		CALCLcontext context,										//!< Opencl context
 		CALCLprogram program,										//!< Opencl program containing library source and user defined source
 		CALCLdevice device 										//!< Opencl device
 		);
 
 /*! \brief Main simulation cycle. It can become a loop if maxStep == CALCL_RUN_LOOP */
-void calclRun3D(CALCLToolkit3D* toolkit3d,			//!< Pointer to a CALCLToolkit3D
+void calclRun3D(CALCLModel3D* calclmodel3D,			//!< Pointer to a CALCLModel3D
 		struct CALModel3D * model,					//!< Pointer to a CALModel3D
 		unsigned int initialStep,				//!< Initial simulation step
 		unsigned maxStep							//!< Maximum number of CA steps. Simulation can become a loop if maxStep == CALCL_RUN_LOOP
 		);
 
 /*! \brief A single step of CA. It executes the transition function, the steering and check the stop condition */
-CALbyte calclSingleStep3D(CALCLToolkit3D* toolkit3d, 		//!< Pointer to a CALCLToolkit3D
+CALbyte calclSingleStep3D(CALCLModel3D* calclmodel3D, 		//!< Pointer to a CALCLModel3D
 		struct CALModel3D * model, 							//!< Pointer to a CALModel3D
 		size_t * dimSize,									//!< Array of size_t containing the number of threads for each used Opencl dimension (CALCL_NO_OPT 3 dimensions, CALCL_OPT_ACTIVE_CELL 1 dimension)
 		int dimNum											//!< Number of Opencl dimensions (CALCL_NO_OPT 3 dimensions, CALCL_OPT_ACTIVE_CELL 1 dimension)
 		);
 
 /*! \brief Execute an Opencl kernel */
-void calclKernelCall3D(CALCLToolkit3D * toolkit3d,		//!< Pointer to a CALCLToolkit3D
+void calclKernelCall3D(CALCLModel3D * calclmodel3D,		//!< Pointer to a CALCLModel3D
 		CALCLkernel ker,								//!< Opencl kernel
 		int numDim,										//!< Number of Opencl dimensions (CALCL_NO_OPT 3 dimensions, CALCL_OPT_ACTIVE_CELL 1 dimension)
 		size_t * dimSize,								//!< Array of size_t containing the number of threads for each used Opencl dimension (CALCL_NO_OPT 3 dimensions, CALCL_OPT_ACTIVE_CELL 1 dimension)
@@ -166,7 +166,7 @@ void calclKernelCall3D(CALCLToolkit3D * toolkit3d,		//!< Pointer to a CALCLToolk
 		);
 
 /*! \brief Execute stream compaction kernels to compact and order CA active cells */
-void calclComputeStreamCompaction3D(CALCLToolkit3D * toolkit		//!< Pointer to a CALCLToolkit3D
+void calclComputeStreamCompaction3D(CALCLModel3D * calclmodel3D		//!< Pointer to a CALCLModel3D
 		);
 
 /*! \brief Add arguments to the given Opencl kernel defined by the user
@@ -187,7 +187,7 @@ void calclSetKernelArgs3D(CALCLkernel * kernel,			//!< Opencl kernel
  * to stop the simulation.
  *
  *  */
-void calclSetStopConditionKernel3D(CALCLToolkit3D * toolkit3d,		//!< Pointer to a CALCLToolkit3D
+void calclAddStopConditionFunc3D(CALCLModel3D * calclmodel3D,		//!< Pointer to a CALCLModel3D
 		struct CALModel3D * model,									//!< Pointer to a CALModel3D
 		CALCLkernel * kernel										//!< Opencl kernel
 		);
@@ -198,7 +198,7 @@ void calclSetStopConditionKernel3D(CALCLToolkit3D * toolkit3d,		//!< Pointer to 
  * at the beginning of the simulation
  *
  *  */
-void calclSetInitSubstatesKernel3D(CALCLToolkit3D * toolkit3d, 		//!< Pointer to a CALCLToolkit3D
+void calclAddInitFunc3D(CALCLModel3D * calclmodel3D, 		//!< Pointer to a CALCLModel3D
 		struct CALModel3D * model,									//!< Pointer to a CALModel3D
 		CALCLkernel * kernel										//!< Opencl kernel
 		);
@@ -209,7 +209,7 @@ void calclSetInitSubstatesKernel3D(CALCLToolkit3D * toolkit3d, 		//!< Pointer to
  * each time the function calclSingleStep3D is called.
  *
  *  */
-void calclSetSteeringKernel3D(CALCLToolkit3D * toolkit3d,			//!< Pointer to a CALCLToolkit3D
+void calclAddSteeringFunc3D(CALCLModel3D * calclmodel3D,			//!< Pointer to a CALCLModel3D
 		struct CALModel3D * model,									//!< Pointer to a CALModel3D
 		CALCLkernel * kernel										//!< Opencl kernel
 		);
@@ -220,7 +220,7 @@ void calclSetSteeringKernel3D(CALCLToolkit3D * toolkit3d,			//!< Pointer to a CA
  *	could decrease the performance because of the transfer of data between host and GPU.
  *
  *  */
-void calclSetUpdateSubstatesFunction3D(CALCLToolkit3D* toolkit3d,		//!< Pointer to a CALCLToolkit3D
+void calclBackToHostFunc3D(CALCLModel3D* calclmodel3D,		//!< Pointer to a CALCLModel3D
 		void (*cl_update_substates)(struct CALModel3D*), 				//!< Callback function executed each callbackSteps steps
 		int callbackSteps												//!< Define how many steps must be executed before call the callback functions
 		);
@@ -232,13 +232,13 @@ void calclSetUpdateSubstatesFunction3D(CALCLToolkit3D* toolkit3d,		//!< Pointer 
  *	is executed each time the function calclSingleStep3D is called.
  *
  *  */
-void calclAddElementaryProcessKernel3D(CALCLToolkit3D* toolkit3d, 		//!< Pointer to a CALCLToolkit3D
+void calclAddElementaryProcess3D(CALCLModel3D* calclmodel3D, 		//!< Pointer to a CALCLModel3D
 		struct CALModel3D * model,										//!< Pointer to a CALModel3D
 		CALCLkernel * kernel											//!< Opencl kernel
 		);
 
-/*! \brief Deallcate a CALCLToolkit3D instance */
-void calclFinalizeToolkit3D(CALCLToolkit3D * toolkit			//!< Pointer to a CALCLToolkit3D
+/*! \brief Deallcate a CALCLModel3D instance */
+void calclFinalizeToolkit3D(CALCLModel3D * calclmodel3D			//!< Pointer to a CALCLModel3D
 		);
 
 /*! \brief Allocate, initialize and return an Opencl program
@@ -258,6 +258,6 @@ int calclSetKernelArg3D(CALCLkernel kernel,			//!< Opencl kernel
 			cl_uint arg_index,			//!< Index argument
 			size_t arg_size,			//!< Size argument
 			const void *arg_value                   //!< Value argument
-			);			
+			);
 
 #endif /* CALCL_H_ */

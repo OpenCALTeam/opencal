@@ -66,7 +66,6 @@ __kernel void sciddicaT_flows_computation(__CALCL_MODEL_2D, __global CALParamete
 			calclSet2Dr(MODEL_2D, n-1, i, j, 0.0);
 		else
 			calclSet2Dr(MODEL_2D, n-1, i, j,(average - u[n]) * (*Pr));
-
 	}
 }
 
@@ -98,7 +97,6 @@ __kernel void sciddicaTSteering(__CALCL_MODEL_2D) {
 
 	int i = calclGlobalRow();
 	int j = calclGlobalColumns();
-
 	int s;
 	for (s = 0; s < NUMBER_OF_OUTFLOWS; ++s)
 		calclInitSubstate2Dr(MODEL_2D, s, i, j, 0);

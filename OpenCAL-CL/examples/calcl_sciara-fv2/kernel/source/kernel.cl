@@ -207,7 +207,7 @@ __kernel void steering(__CALCL_MODEL_2D, __global CALbyte * Mb, Parameters param
 	calclThreadCheck2D();
 
 	int i = calclGlobalRow();
-	int j = calclGlobalCol();
+	int j = calclGlobalColumns();
 	for (int k = 0; k < NUMBER_OF_OUTFLOWS; ++k)
 		calclInitSubstate2Dr(MODEL_2D, F(k), i, j, 0);
 

@@ -28,7 +28,7 @@ Sciara *sciara;
 int active;
 time_t start_time, end_time;
 
-void ventsMapper(CALCLToolkit2D * sciddicaToolkit, CALCLcontext &context, cl_kernel &updateVentsEmissionKernel) {
+void ventsMapper(CALCLModel2D * sciddicaToolkit, CALCLcontext &context, cl_kernel &updateVentsEmissionKernel) {
 	typedef struct {
 		int x;
 		int y;
@@ -83,7 +83,7 @@ int main(int argc, char** argv) {
 
 	//---------------------------------OPENCL INIT----------------------------------/
 
-	CALOpenCL * calOpenCL = calclCreateCALOpenCL();
+	CALCLManager * calOpenCL = calclCreateManager();
 	calclInitializePlatforms(calOpenCL);
 	calclInitializeDevices(calOpenCL);
 
@@ -100,10 +100,10 @@ int main(int argc, char** argv) {
 		perror("cannot load configuration\n");
 		exit(EXIT_FAILURE);
 	}
-	simulationInitialize(sciara->model);
-	CALCLToolkit2D * sciaraToolkit = NULL;
+	simulationInitialize(sciara->hostCA);
+	CALCLModel2D * deviceCA = NULL;
 
-	sciaraToolkit = calclCreateToolkit2D(sciara->model, context, program, device);
+	deviceCA = calclCADef2D(sciara->hostCA, context, program, device);
 
 	CALCLkernel kernel_elementary_process_one = calclGetKernelFromProgram(&program,(char*) KER_SCIARA_ELEMENTARY_PROCESS_ONE);
 	CALCLkernel kernel_elementary_process_two = calclGetKernelFromProgram(&program,(char*) KER_SCIARA_ELEMENTARY_PROCESS_TWO);
@@ -118,7 +118,7 @@ int main(int argc, char** argv) {
 	CALCLmem mslBuffer = calclCreateBuffer(context, sciara->substates->Msl->current, sizeof(CALreal) * (sciara->rows * sciara->cols));
 
 	// first kernel
-	ventsMapper(sciaraToolkit, context, kernel_elementary_process_one);
+	ventsMapper(deviceCA, context, kernel_elementary_process_one);
 
 	clSetKernelArg(kernel_elementary_process_one, MODEL_ARGS_NUM + 2, sizeof(CALCLmem), &elapsed_timeBuffer);
 	clSetKernelArg(kernel_elementary_process_one, MODEL_ARGS_NUM + 5, sizeof(Parameters), &sciara->parameters);
@@ -140,24 +140,24 @@ int main(int argc, char** argv) {
 	clSetKernelArg(kernel_stop_condition, MODEL_ARGS_NUM, sizeof(Parameters), &sciara->parameters);
 	clSetKernelArg(kernel_stop_condition, MODEL_ARGS_NUM + 1, sizeof(CALCLmem), &elapsed_timeBuffer);
 
-	calclAddElementaryProcessKernel2D(sciaraToolkit, sciara->model, &kernel_elementary_process_one);
-	calclAddElementaryProcessKernel2D(sciaraToolkit, sciara->model, &kernel_elementary_process_two);
-	calclAddElementaryProcessKernel2D(sciaraToolkit, sciara->model, &kernel_elementary_process_three);
-	calclAddElementaryProcessKernel2D(sciaraToolkit, sciara->model, &kernel_elementary_process_four);
+	calclAddElementaryProcess2D(deviceCA, sciara->hostCA, &kernel_elementary_process_one);
+	calclAddElementaryProcess2D(deviceCA, sciara->hostCA, &kernel_elementary_process_two);
+	calclAddElementaryProcess2D(deviceCA, sciara->hostCA, &kernel_elementary_process_three);
+	calclAddElementaryProcess2D(deviceCA, sciara->hostCA, &kernel_elementary_process_four);
 
 	if (active) {
 		CALCLkernel kernel_elementary_process_five = calclGetKernelFromProgram(&program,(char*) KER_SCIARA_ELEMENTARY_PROCESS_FIVE);
 		clSetKernelArg(kernel_elementary_process_five, MODEL_ARGS_NUM, sizeof(CALCLmem), &mbBuffer);
 		clSetKernelArg(kernel_elementary_process_five, MODEL_ARGS_NUM + 1, sizeof(Parameters), &sciara->parameters);
-		calclAddElementaryProcessKernel2D(sciaraToolkit, sciara->model, &kernel_elementary_process_five);
+		calclAddElementaryProcess2D(deviceCA, sciara->hostCA, &kernel_elementary_process_five);
 	}
 
-	calclSetSteeringKernel2D(sciaraToolkit, sciara->model, &kernel_steering);
-	calclSetStopConditionKernel2D(sciaraToolkit, sciara->model, &kernel_stop_condition);
+	calclAddSteeringFunc2D(deviceCA, sciara->hostCA, &kernel_steering);
+	calclAddStopConditionFunc2D(deviceCA, sciara->hostCA, &kernel_stop_condition);
 
-	calclRun2D(sciaraToolkit, sciara->model, 1, steps);
+	calclRun2D(deviceCA, sciara->hostCA, 1, steps);
 
-	clEnqueueReadBuffer(sciaraToolkit->queue,mslBuffer,CAL_TRUE,0,sizeof(CALreal)*sciara->rows*sciara->cols,sciara->substates->Msl->current,0,NULL,NULL);
+	clEnqueueReadBuffer(deviceCA->queue,mslBuffer,CAL_TRUE,0,sizeof(CALreal)*sciara->rows*sciara->cols,sciara->substates->Msl->current,0,NULL,NULL);
 
 	err = saveConfiguration((char*)outputPath, sciara);
 
@@ -167,7 +167,7 @@ int main(int argc, char** argv) {
 	}
 
 	calclFinalizeCALOpencl(calOpenCL);
-	calclFinalizeToolkit2D(sciaraToolkit);
+	calclFinalizeToolkit2D(deviceCA);
 	exitSciara();
 
 	end_time = time(NULL);
