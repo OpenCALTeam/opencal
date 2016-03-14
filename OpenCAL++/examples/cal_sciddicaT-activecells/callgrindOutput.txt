@@ -1,0 +1,14 @@
+==22232== Callgrind, a call-graph generating cache profiler
+==22232== Copyright (C) 2002-2013, and GNU GPL'd, by Josef Weidendorfer et al.
+==22232== Using Valgrind-3.10.1 and LibVEX; rerun with -h for copyright info
+==22232== Command: ./bin/calpp_sciddicaT-activecells-alternative
+==22232== 
+==22232== For interactive control, run 'callgrind_control -h'.
+Starting simulation...
+Simulation terminated.
+Elapsed time: 5043
+==22232== 
+==22232== Events    : Ir
+==22232== Collected : 558251773284
+==22232== 
+==22232== I   refs:      558,251,773,284

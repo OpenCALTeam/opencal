@@ -1,4 +1,4 @@
-# opencal/OpenCAL++/CMakeLists.txt
+# opencal/OpenCAL++14/CMakeLists.txt
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 
 include(CheckCXXCompilerFlag)
@@ -23,7 +23,7 @@ if(BUILD_DOCUMENTATION)
 
     configure_file(${doxyfile_in} ${doxyfile} @ONLY)
 
-    add_custom_target(opencalpp-doc ALL
+    add_custom_target(opencalpp14-doc ALL
         COMMAND ${DOXYGEN_EXECUTABLE} ${doxyfile}
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
         COMMENT "Generating API documentation with Doxygen for for OpenCAL++"
@@ -50,17 +50,20 @@ file(GLOB SRC
     "include/*.h"
     "source/*.cpp"
     "source/*.c"
+    "include/OpenCAL++11/*.h"
+    
 )
 
 file(GLOB HEADERS
     "include/*.h"
-    "include/OpenCAL++/*.h"
+    "include/OpenCAL++11/*.h"
 )
-add_library(opencalpp ${SHAREDORSTATIC} ${SRC})
-install(TARGETS opencalpp DESTINATION ${INSTALL_LIB_DIR})
-install(FILES ${HEADERS} DESTINATION ${INSTALL_INCLUDE_DIR}/OpenCAL++)
+add_library(opencalpp11 ${SHAREDORSTATIC} ${SRC})
+install(TARGETS opencalpp11 DESTINATION ${INSTALL_LIB_DIR})
+install(FILES ${HEADERS} DESTINATION ${INSTALL_INCLUDE_DIR}/OpenCAL++11)
+
 
 if(${BUILD_EXAMPLES} STREQUAL "ON")
 	add_subdirectory(examples)
-	install(DIRECTORY examples DESTINATION ${INSTALL_EXAMPLE_DIR}/OpenCAL++)
+	install(DIRECTORY examples DESTINATION ${INSTALL_EXAMPLE_DIR}/OpenCAL++11)
 endif()

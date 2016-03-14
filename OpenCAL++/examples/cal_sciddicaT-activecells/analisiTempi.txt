@@ -1,0 +1,1023 @@
+Flat profile:
+
+Each sample counts as 0.01 seconds.
+  %   cumulative   self              self     total           
+ time   seconds   seconds    calls   s/call   s/call  name    
+ 34.22      7.71     7.71 562143906     0.00     0.00  CALBuffer<bool>::operator[](int)
+ 17.80     11.72     4.01    16001     0.00     0.00  CALActiveCells::update()
+  7.28     13.36     1.64 14806155     0.00     0.00  SciddicaT_flows_computation::run(CALModel*, int*)
+  6.88     14.92     1.55    16001     0.00     0.00  CALBuffer<bool>::getSize()
+  6.75     16.44     1.52    80005     0.00     0.00  CALBuffer<double>::copyActiveCellsBuffer(CALBuffer<double>*, int*, int)
+  5.24     17.62     1.18 693734428     0.00     0.00  CALBuffer<double>::operator[](int)
+  3.37     18.38     0.76 193622432     0.00     0.00  CALNeighborhoodPool::getNeighbor(int, int)
+  3.06     19.07     0.69 44610490     0.00     0.00  calCommon::cellLinearIndex(int*, int*, unsigned long)
+  2.64     19.66     0.60 177873720     0.00     0.00  double CALModel::calGetX<double>(CALSubstate<double>*&, int, int)
+  1.93     20.10     0.44 177873720     0.00     0.00  CALSubstate<double>::getElementCurrentBuffer(int)
+  1.55     20.45     0.35    32008     0.00     0.00  CALBuffer<double>::setActiveCellsBuffer(int*, int, double)
+  1.20     20.72     0.27 46031832     0.00     0.00  CALIndexesPool::getMultidimensionalIndexes(int)
+  1.04     20.95     0.24 119002262     0.00     0.00  double CALModel::calGet<double>(CALSubstate<double>*&, int)
+  1.02     21.18     0.23 119002267     0.00     0.00  CALSubstate<double>::getCurrent()
+  0.80     21.36     0.18 14856120     0.00     0.00  SciddicaT_width_update::run(CALModel*, int*)
+  0.58     21.49     0.13 74080740     0.00     0.00  void CALModel::calSet<double>(CALSubstate<double>*&, int, double)
+  0.49     21.60     0.11 14856120     0.00     0.00  CALBuffer<double>::getElement(int*, int*, int)
+  0.40     21.69     0.09 15748712     0.00     0.00  CALActiveCells::getFlag(int)
+  0.40     21.78     0.09    12000     0.00     0.00  CALModel::calApplyElementaryProcess(ElementaryProcessFunctor*)
+  0.31     21.85     0.07        1     0.07     0.07  CALNeighborhoodPool::~CALNeighborhoodPool()
+  0.27     21.91     0.06 15748712     0.00     0.00  CALUnsafe::calAddActiveCellX(int, int)
+  0.27     21.97     0.06 14856120     0.00     0.00  double CALModel::calGet<double>(CALSubstate<double>*&, int*)
+  0.22     22.02     0.05 14856120     0.00     0.00  CALSubstate<double>::getElementCurrentBuffer(int*, int*, int)
+  0.22     22.07     0.05        3     0.02     0.02  CALRealConverterInputOutput::CALRealConverterInputOutput()
+  0.18     22.11     0.04 29662275     0.00     0.00  CALModel::getNeighborhoodSize()
+  0.18     22.15     0.04  1512800     0.00     0.00  calCommon::getNeighborNLinear(int*, int*, int*, unsigned long, calCommon::CALSpaceBoundaryCondition)
+  0.16     22.19     0.04 74096749     0.00     0.00  CALSubstate<double>::getNext()
+  0.13     22.22     0.03 46031832     0.00     0.00  calCommon::cellMultidimensionalIndexes(int)
+  0.13     22.25     0.03 44630408     0.00     0.00  CALActiveCells::getCells()
+  0.13     22.28     0.03 29662278     0.00     0.00  CALModel::getCoordinates()
+  0.13     22.31     0.03 15798677     0.00     0.00  CALModel::getActiveCells()
+  0.13     22.34     0.03 14856120     0.00     0.00  SciddicaT_remove_inactive_cells::run(CALModel*, int*)
+  0.13     22.37     0.03  1512816     0.00     0.00  calCommon::multiplier(int*, int, unsigned long)
+  0.13     22.40     0.03        5     0.01     0.02  CALNeighborhoodPool::addNeighbor(int*)
+  0.13     22.43     0.03                             CALActiveCells::setSizeNext(int)
+  0.09     22.45     0.02        1     0.02     0.04  CALSubstate<double>::saveSubstate(int*, unsigned long, CALConverterInputOutput*, char*)
+  0.09     22.47     0.02        1     0.02     0.02  CALIndexesPool::initIndexes()
+  0.07     22.48     0.02 29662279     0.00     0.00  CALModel::getDimension()
+  0.04     22.49     0.01   605120     0.00     0.00  CALRealConverterInputOutput::convertInput(std::string)
+  0.04     22.50     0.01        1     0.01     0.01  _GLOBAL__sub_I__ZN19CALNeighborhoodPoolC2EiPimN9calCommon25CALSpaceBoundaryConditionE
+  0.04     22.51     0.01        1     0.01     0.03  CALIndexesPool::init(int, int*, unsigned long)
+  0.04     22.52     0.01        1     0.01     0.01  SciddicaT_width_update::SciddicaT_width_update(SciddicaTSubstates*)
+  0.04     22.53     0.01        1     0.01     0.02  void CALConverterInputOutput::calSaveBuffer<double>(double*, int, int*, unsigned long, char*)
+  0.02     22.54     0.01   605120     0.00     0.00  float __gnu_cxx::__stoa<float, float, char>(float (*)(char const*, char**), char const*, char const*, unsigned long*)
+  0.02     22.54     0.01   302560     0.00     0.00  std::to_string(double)
+  0.02     22.55     0.01    16001     0.00     0.00  CALModel::calUpdate()
+  0.00     22.55     0.00 15748712     0.00     0.00  CALModel::getNeighborhoodPool()
+  0.00     22.55     0.00   605120     0.00     0.00  std::stof(std::string const&, unsigned long*)
+  0.00     22.55     0.00   302560     0.00     0.00  CALRealConverterInputOutput::convertOutput(void*)
+  0.00     22.55     0.00   302560     0.00     0.00  std::string __gnu_cxx::__to_xstring<std::string, char>(int (*)(char*, unsigned long, char const*, __va_list_tag*), unsigned long, char const*, ...)
+  0.00     22.55     0.00   302560     0.00     0.00  bool __gnu_cxx::__is_null_pointer<char>(char*)
+  0.00     22.55     0.00   302560     0.00     0.00  char* std::string::_S_construct<char*>(char*, char*, std::allocator<char> const&)
+  0.00     22.55     0.00   302560     0.00     0.00  char* std::string::_S_construct<char*>(char*, char*, std::allocator<char> const&, std::forward_iterator_tag)
+  0.00     22.55     0.00   302560     0.00     0.00  char* std::string::_S_construct_aux<char*>(char*, char*, std::allocator<char> const&, std::__false_type)
+  0.00     22.55     0.00   302560     0.00     0.00  std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string<char*>(char*, char*, std::allocator<char> const&)
+  0.00     22.55     0.00   302560     0.00     0.00  std::iterator_traits<char*>::difference_type std::__distance<char*>(char*, char*, std::random_access_iterator_tag)
+  0.00     22.55     0.00   302560     0.00     0.00  std::iterator_traits<char*>::iterator_category std::__iterator_category<char*>(char* const&)
+  0.00     22.55     0.00   302560     0.00     0.00  std::iterator_traits<char*>::difference_type std::distance<char*>(char*, char*)
+  0.00     22.55     0.00   124013     0.00     0.00  CALActiveCells::getSizeCurrent()
+  0.00     22.55     0.00    80005     0.00     0.00  CALSubstate<double>::update(CALActiveCells*)
+  0.00     22.55     0.00    49965     0.00     0.00  CALActiveCells::setFlag(int, bool)
+  0.00     22.55     0.00    45729     0.00     0.00  CALActiveCells::setElementFlags(int*, int*, int, bool)
+  0.00     22.55     0.00    45729     0.00     0.00  CALBuffer<bool>::getElement(int*, int*, int)
+  0.00     22.55     0.00    45729     0.00     0.00  CALBuffer<bool>::setElement(int*, int*, int, bool)
+  0.00     22.55     0.00    45092     0.00     0.00  CALModel::calRemoveActiveCell(int*)
+  0.00     22.55     0.00    32008     0.00     0.00  CALSubstate<double>::setActiveCellsBuffer(CALSubstateWrapper::CALSubstateBuffer, CALActiveCells*, double)
+  0.00     22.55     0.00    16004     0.00     0.00  void CALModel::calInitSubstate<double>(CALSubstate<double>*&, double)
+  0.00     22.55     0.00    16001     0.00     0.00  CALModel::calUpdateActiveCells()
+  0.00     22.55     0.00     4000     0.00     0.00  SciddicaTSteering::run(CALModel*)
+  0.00     22.55     0.00     4000     0.00     0.01  CALRun::calRunCAStep()
+  0.00     22.55     0.00     4000     0.00     0.00  CALModel::calGlobalTransitionFunction()
+  0.00     22.55     0.00     1221     0.00     0.00  std::operator|(std::_Ios_Openmode, std::_Ios_Openmode)
+  0.00     22.55     0.00      637     0.00     0.00  CALSubstate<double>::setElementCurrentBuffer(int*, int*, int, double)
+  0.00     22.55     0.00      637     0.00     0.00  void CALModel::calSetCurrent<double>(CALSubstate<double>*&, int*, double)
+  0.00     22.55     0.00      637     0.00     0.00  CALModel::calAddActiveCell(int*)
+  0.00     22.55     0.00      637     0.00     0.00  CALBuffer<double>::setElement(int*, int*, int, double)
+  0.00     22.55     0.00       13     0.00     0.00  CALBuffer<double>::~CALBuffer()
+  0.00     22.55     0.00       11     0.00     0.00  CALBuffer<double>::CALBuffer(int*, unsigned long)
+  0.00     22.55     0.00        6     0.00     0.00  CALSubstate<double>::CALSubstate(CALBuffer<double>*, CALBuffer<double>*)
+  0.00     22.55     0.00        6     0.00     0.00  CALSubstate<double>::~CALSubstate()
+  0.00     22.55     0.00        6     0.00     0.00  CALSubstate<double>::~CALSubstate()
+  0.00     22.55     0.00        6     0.00     0.00  CALSubstateWrapper::CALSubstateWrapper()
+  0.00     22.55     0.00        6     0.00     0.00  CALSubstateWrapper::~CALSubstateWrapper()
+  0.00     22.55     0.00        5     0.00     0.02  CALModel::calAddNeighbor(int*)
+  0.00     22.55     0.00        5     0.00     0.00  CALSubstate<double>* CALModel::calAddSubstate<double>()
+  0.00     22.55     0.00        5     0.00     0.00  bool CALModel::calAllocSubstate<double>(CALSubstate<double>*&)
+  0.00     22.55     0.00        3     0.00     0.00  CALConverterInputOutput::CALConverterInputOutput()
+  0.00     22.55     0.00        3     0.00     0.00  ElementaryProcessFunctor::ElementaryProcessFunctor()
+  0.00     22.55     0.00        3     0.00     0.00  CALModel::calAddElementaryProcess(ElementaryProcessFunctor*)
+  0.00     22.55     0.00        2     0.00     0.01  CALSubstate<double>::loadSubstate(int*, unsigned long, CALConverterInputOutput*, char*)
+  0.00     22.55     0.00        2     0.00     0.00  CalModelFunctor<CALModel, void>::CalModelFunctor()
+  0.00     22.55     0.00        2     0.00     0.01  double* CALConverterInputOutput::loadBuffer<double>(int, char*)
+  0.00     22.55     0.00        2     0.00     0.01  CALBuffer<double>::CALBuffer(int*, unsigned long, char*, CALConverterInputOutput*)
+  0.00     22.55     0.00        1     0.00     0.00  _GLOBAL__sub_I__ZN14CALActiveCellsC2Ev
+  0.00     22.55     0.00        1     0.00     0.00  _GLOBAL__sub_I__ZN14CALIndexesPoolC2EiPim
+  0.00     22.55     0.00        1     0.00     0.00  _GLOBAL__sub_I__ZN14SciddicaTModelC2EPim
+  0.00     22.55     0.00        1     0.00     0.00  _GLOBAL__sub_I__ZN25CALVonNeumannNeighborhood21calDefineNeighborhoodEP8CALModel
+  0.00     22.55     0.00        1     0.00     0.00  _GLOBAL__sub_I__ZN27CALRealConverterInputOutput12convertInputESs
+  0.00     22.55     0.00        1     0.00     0.00  _GLOBAL__sub_I__ZN6CALRunC2EP8CALModeliiN9calCommon13CALUpdateModeE
+  0.00     22.55     0.00        1     0.00     0.00  _GLOBAL__sub_I__ZN8CALModelC2EPimP15CALNeighborhoodN9calCommon25CALSpaceBoundaryConditionENS3_15CALOptimizationE
+  0.00     22.55     0.00        1     0.00     0.00  _GLOBAL__sub_I__ZN9CALUnsafeC2EP8CALModel
+  0.00     22.55     0.00        1     0.00     0.00  _GLOBAL__sub_I_start_time
+  0.00     22.55     0.00        1     0.00     0.00  __static_initialization_and_destruction_0(int, int)
+  0.00     22.55     0.00        1     0.00     0.00  __static_initialization_and_destruction_0(int, int)
+  0.00     22.55     0.00        1     0.00     0.00  __static_initialization_and_destruction_0(int, int)
+  0.00     22.55     0.00        1     0.00     0.00  __static_initialization_and_destruction_0(int, int)
+  0.00     22.55     0.00        1     0.00     0.00  __static_initialization_and_destruction_0(int, int)
+  0.00     22.55     0.00        1     0.00     0.00  __static_initialization_and_destruction_0(int, int)
+  0.00     22.55     0.00        1     0.00     0.00  __static_initialization_and_destruction_0(int, int)
+  0.00     22.55     0.00        1     0.00     0.00  __static_initialization_and_destruction_0(int, int)
+  0.00     22.55     0.00        1     0.00     0.00  __static_initialization_and_destruction_0(int, int)
+  0.00     22.55     0.00        1     0.00     0.00  __static_initialization_and_destruction_0(int, int)
+  0.00     22.55     0.00        1     0.00     0.00  CALActiveCells::CALActiveCells(CALBuffer<bool>*, int)
+  0.00     22.55     0.00        1     0.00     0.00  CALActiveCells::~CALActiveCells()
+  0.00     22.55     0.00        1     0.00     0.00  CALIndexesPool::destroy()
+  0.00     22.55     0.00        1     0.00     0.00  CALIndexesPool::CALIndexesPool(int, int*, unsigned long)
+  0.00     22.55     0.00        1     0.00    22.19  SciddicaTModel::sciddicaTRun()
+  0.00     22.55     0.00        1     0.00     0.05  SciddicaTModel::sciddicaTLoadConfig()
+  0.00     22.55     0.00        1     0.00     0.05  SciddicaTModel::sciddicaTSaveConfig()
+  0.00     22.55     0.00        1     0.00     0.20  SciddicaTModel::SciddicaTModel(int*, unsigned long)
+  0.00     22.55     0.00        1     0.00     0.07  SciddicaTModel::~SciddicaTModel()
+  0.00     22.55     0.00        1     0.00     0.00  CALNeighborhood::CALNeighborhood()
+  0.00     22.55     0.00        1     0.00     0.00  Simulation_Init::run(CALModel*)
+  0.00     22.55     0.00        1     0.00     0.00  Simulation_Init::Simulation_Init(SciddicaTParameters*, SciddicaTSubstates*)
+  0.00     22.55     0.00        1     0.00     0.00  SciddicaTSteering::SciddicaTSteering(SciddicaTSubstates*)
+  0.00     22.55     0.00        1     0.00     0.00  CALNeighborhoodPool::CALNeighborhoodPool(int, int*, unsigned long, calCommon::CALSpaceBoundaryCondition)
+  0.00     22.55     0.00        1     0.00     0.11  CALVonNeumannNeighborhood::calDefineNeighborhood(CALModel*)
+  0.00     22.55     0.00        1     0.00     0.00  CALVonNeumannNeighborhood::CALVonNeumannNeighborhood()
+  0.00     22.55     0.00        1     0.00     0.00  SciddicaT_flows_computation::SciddicaT_flows_computation(SciddicaTSubstates*, SciddicaTParameters*, CALUnsafe*)
+  0.00     22.55     0.00        1     0.00     0.00  SciddicaT_remove_inactive_cells::SciddicaT_remove_inactive_cells(SciddicaTSubstates*, SciddicaTParameters*)
+  0.00     22.55     0.00        1     0.00     0.00  CALRun::calRunAddInitFunc(CalModelFunctor<CALModel, void>*)
+  0.00     22.55     0.00        1     0.00     0.00  CALRun::calRunInitSimulation()
+  0.00     22.55     0.00        1     0.00     0.00  CALRun::calRunAddSteeringFunc(CalModelFunctor<CALModel, void>*)
+  0.00     22.55     0.00        1     0.00     0.00  CALRun::calRunFinalizeSimulation()
+  0.00     22.55     0.00        1     0.00    22.19  CALRun::calRun()
+  0.00     22.55     0.00        1     0.00     0.00  CALRun::CALRun(CALModel*, int, int, calCommon::CALUpdateMode)
+  0.00     22.55     0.00        1     0.00     0.00  CALRun::~CALRun()
+  0.00     22.55     0.00        1     0.00     0.00  CALSubstate<double>* CALModel::calAddSingleLayerSubstate<double>()
+  0.00     22.55     0.00        1     0.00     0.00  CALModel::getSize()
+  0.00     22.55     0.00        1     0.00     0.14  CALModel::CALModel(int*, unsigned long, CALNeighborhood*, calCommon::CALSpaceBoundaryCondition, calCommon::CALOptimization)
+  0.00     22.55     0.00        1     0.00     0.07  CALModel::~CALModel()
+  0.00     22.55     0.00        1     0.00     0.00  CALBuffer<bool>::setBuffer(bool)
+  0.00     22.55     0.00        1     0.00     0.00  CALBuffer<bool>::CALBuffer(int*, unsigned long)
+  0.00     22.55     0.00        1     0.00     0.00  CALBuffer<bool>::~CALBuffer()
+  0.00     22.55     0.00        1     0.00     0.02  CALBuffer<double>::saveBuffer(int*, unsigned long, CALConverterInputOutput*, char*)
+  0.00     22.55     0.00        1     0.00     0.00  CALBuffer<double>::operator=(CALBuffer<double> const&)
+  0.00     22.55     0.00        1     0.00     0.00  CALUnsafe::CALUnsafe(CALModel*)
+
+ %         the percentage of the total running time of the
+time       program used by this function.
+
+cumulative a running sum of the number of seconds accounted
+ seconds   for by this function and those listed above it.
+
+ self      the number of seconds accounted for by this
+seconds    function alone.  This is the major sort for this
+           listing.
+
+calls      the number of times this function was invoked, if
+           this function is profiled, else blank.
+ 
+ self      the average number of milliseconds spent in this
+ms/call    function per call, if this function is profiled,
+	   else blank.
+
+ total     the average number of milliseconds spent in this
+ms/call    function and its descendents per call, if this 
+	   function is profiled, else blank.
+
+name       the name of the function.  This is the minor sort
+           for this listing. The index shows the location of
+	   the function in the gprof listing. If the index is
+	   in parenthesis it shows where it would appear in
+	   the gprof listing if it were to be printed.
+
+Copyright (C) 2012-2014 Free Software Foundation, Inc.
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.
+
+		     Call graph (explanation follows)
+
+
+granularity: each sample hit covers 2 byte(s) for 0.04% of 22.55 seconds
+
+index % time    self  children    called     name
+                                                 <spontaneous>
+[1]     99.8    0.00   22.51                 main [1]
+                0.00   22.19       1/1           SciddicaTModel::sciddicaTRun() [2]
+                0.00    0.20       1/1           SciddicaTModel::SciddicaTModel(int*, unsigned long) [36]
+                0.00    0.07       1/1           SciddicaTModel::~SciddicaTModel() [41]
+                0.00    0.05       1/1           SciddicaTModel::sciddicaTSaveConfig() [45]
+-----------------------------------------------
+                0.00   22.19       1/1           main [1]
+[2]     98.4    0.00   22.19       1         SciddicaTModel::sciddicaTRun() [2]
+                0.00   22.19       1/1           CALRun::calRun() [3]
+-----------------------------------------------
+                0.00   22.19       1/1           SciddicaTModel::sciddicaTRun() [2]
+[3]     98.4    0.00   22.19       1         CALRun::calRun() [3]
+                0.00   22.19    4000/4000        CALRun::calRunCAStep() [4]
+                0.00    0.00       1/1           CALRun::calRunInitSimulation() [72]
+                0.00    0.00       1/1           CALRun::calRunFinalizeSimulation() [148]
+-----------------------------------------------
+                0.00   22.19    4000/4000        CALRun::calRun() [3]
+[4]     98.4    0.00   22.19    4000         CALRun::calRunCAStep() [4]
+                0.00   18.05    4000/4000        CALModel::calGlobalTransitionFunction() [5]
+                0.00    3.78    4000/16001       CALModel::calUpdate() [6]
+                0.00    0.35    4000/4000        SciddicaTSteering::run(CALModel*) [29]
+-----------------------------------------------
+                0.00   18.05    4000/4000        CALRun::calRunCAStep() [4]
+[5]     80.1    0.00   18.05    4000         CALModel::calGlobalTransitionFunction() [5]
+                0.00   11.34   12000/16001       CALModel::calUpdate() [6]
+                0.09    6.61   12000/12000       CALModel::calApplyElementaryProcess(ElementaryProcessFunctor*) [10]
+-----------------------------------------------
+                0.00    0.00       1/16001       CALRun::calRunInitSimulation() [72]
+                0.00    3.78    4000/16001       CALRun::calRunCAStep() [4]
+                0.00   11.34   12000/16001       CALModel::calGlobalTransitionFunction() [5]
+[6]     67.1    0.01   15.13   16001         CALModel::calUpdate() [6]
+                0.00   13.06   16001/16001       CALModel::calUpdateActiveCells() [8]
+                0.00    2.07   80005/80005       CALSubstate<double>::update(CALActiveCells*) [12]
+-----------------------------------------------
+                4.01    9.05   16001/16001       CALModel::calUpdateActiveCells() [8]
+[7]     57.9    4.01    9.05   16001         CALActiveCells::update() [7]
+                7.50    0.00 546295264/562143906     CALBuffer<bool>::operator[](int) [9]
+                1.55    0.00   16001/16001       CALBuffer<bool>::getSize() [16]
+-----------------------------------------------
+                0.00   13.06   16001/16001       CALModel::calUpdate() [6]
+[8]     57.9    0.00   13.06   16001         CALModel::calUpdateActiveCells() [8]
+                4.01    9.05   16001/16001       CALActiveCells::update() [7]
+-----------------------------------------------
+                0.00    0.00   99930/562143906     CALActiveCells::setFlag(int, bool) [76]
+                0.22    0.00 15748712/562143906     CALActiveCells::getFlag(int) [31]
+                7.50    0.00 546295264/562143906     CALActiveCells::update() [7]
+[9]     34.2    7.71    0.00 562143906         CALBuffer<bool>::operator[](int) [9]
+-----------------------------------------------
+                0.09    6.61   12000/12000       CALModel::calGlobalTransitionFunction() [5]
+[10]    29.7    0.09    6.61   12000         CALModel::calApplyElementaryProcess(ElementaryProcessFunctor*) [10]
+                1.64    2.57 14806155/14806155     SciddicaT_flows_computation::run(CALModel*, int*) [11]
+                0.18    1.43 14856120/14856120     SciddicaT_width_update::run(CALModel*, int*) [15]
+                0.03    0.45 14856120/14856120     SciddicaT_remove_inactive_cells::run(CALModel*, int*) [22]
+                0.03    0.26 44518395/46031832     calCommon::cellMultidimensionalIndexes(int) [32]
+                0.03    0.00 44518395/44630408     CALActiveCells::getCells() [51]
+                0.00    0.00   12000/124013      CALActiveCells::getSizeCurrent() [104]
+-----------------------------------------------
+                1.64    2.57 14806155/14806155     CALModel::calApplyElementaryProcess(ElementaryProcessFunctor*) [10]
+[11]    18.7    1.64    2.57 14806155         SciddicaT_flows_computation::run(CALModel*, int*) [11]
+                0.40    0.96 118449240/177873720     double CALModel::calGetX<double>(CALSubstate<double>*&, int, int) [14]
+                0.06    0.40 15748712/15748712     CALUnsafe::calAddActiveCellX(int, int) [23]
+                0.09    0.16 44418465/119002262     double CALModel::calGet<double>(CALSubstate<double>*&, int) [21]
+                0.10    0.13 59224620/74080740     void CALModel::calSet<double>(CALSubstate<double>*&, int, double) [33]
+                0.23    0.00 14806155/44610490     calCommon::cellLinearIndex(int*, int*, unsigned long) [20]
+                0.02    0.00 14806155/29662275     CALModel::getNeighborhoodSize() [48]
+                0.01    0.00 14806155/29662278     CALModel::getCoordinates() [52]
+                0.01    0.00 14806155/29662279     CALModel::getDimension() [60]
+-----------------------------------------------
+                0.00    2.07   80005/80005       CALModel::calUpdate() [6]
+[12]     9.2    0.00    2.07   80005         CALSubstate<double>::update(CALActiveCells*) [12]
+                1.52    0.55   80005/80005       CALBuffer<double>::copyActiveCellsBuffer(CALBuffer<double>*, int*, int) [13]
+                0.00    0.00   80005/44630408     CALActiveCells::getCells() [51]
+                0.00    0.00   80005/124013      CALActiveCells::getSizeCurrent() [104]
+-----------------------------------------------
+                1.52    0.55   80005/80005       CALSubstate<double>::update(CALActiveCells*) [12]
+[13]     9.2    1.52    0.55   80005         CALBuffer<double>::copyActiveCellsBuffer(CALBuffer<double>*, int*, int) [13]
+                0.55    0.00 322777706/693734428     CALBuffer<double>::operator[](int) [17]
+-----------------------------------------------
+                0.20    0.48 59424480/177873720     SciddicaT_width_update::run(CALModel*, int*) [15]
+                0.40    0.96 118449240/177873720     SciddicaT_flows_computation::run(CALModel*, int*) [11]
+[14]     9.0    0.60    1.44 177873720         double CALModel::calGetX<double>(CALSubstate<double>*&, int, int) [14]
+                0.44    0.30 177873720/177873720     CALSubstate<double>::getElementCurrentBuffer(int) [19]
+                0.70    0.00 177873720/193622432     CALNeighborhoodPool::getNeighbor(int, int) [18]
+-----------------------------------------------
+                0.18    1.43 14856120/14856120     CALModel::calApplyElementaryProcess(ElementaryProcessFunctor*) [10]
+[15]     7.1    0.18    1.43 14856120         SciddicaT_width_update::run(CALModel*, int*) [15]
+                0.20    0.48 59424480/177873720     double CALModel::calGetX<double>(CALSubstate<double>*&, int, int) [14]
+                0.15    0.27 74280600/119002262     double CALModel::calGet<double>(CALSubstate<double>*&, int) [21]
+                0.23    0.00 14856120/44610490     calCommon::cellLinearIndex(int*, int*, unsigned long) [20]
+                0.03    0.03 14856120/74080740     void CALModel::calSet<double>(CALSubstate<double>*&, int, double) [33]
+                0.02    0.00 14856120/29662275     CALModel::getNeighborhoodSize() [48]
+                0.02    0.00 14856120/29662278     CALModel::getCoordinates() [52]
+                0.01    0.00 14856120/29662279     CALModel::getDimension() [60]
+-----------------------------------------------
+                1.55    0.00   16001/16001       CALActiveCells::update() [7]
+[16]     6.9    1.55    0.00   16001         CALBuffer<bool>::getSize() [16]
+-----------------------------------------------
+                0.13    0.00 74080740/693734428     void CALModel::calSet<double>(CALSubstate<double>*&, int, double) [33]
+                0.20    0.00 119002262/693734428     double CALModel::calGet<double>(CALSubstate<double>*&, int) [21]
+                0.30    0.00 177873720/693734428     CALSubstate<double>::getElementCurrentBuffer(int) [19]
+                0.55    0.00 322777706/693734428     CALBuffer<double>::copyActiveCellsBuffer(CALBuffer<double>*, int*, int) [13]
+[17]     5.2    1.18    0.00 693734428         CALBuffer<double>::operator[](int) [17]
+-----------------------------------------------
+                0.06    0.00 15748712/193622432     CALUnsafe::calAddActiveCellX(int, int) [23]
+                0.70    0.00 177873720/193622432     double CALModel::calGetX<double>(CALSubstate<double>*&, int, int) [14]
+[18]     3.4    0.76    0.00 193622432         CALNeighborhoodPool::getNeighbor(int, int) [18]
+-----------------------------------------------
+                0.44    0.30 177873720/177873720     double CALModel::calGetX<double>(CALSubstate<double>*&, int, int) [14]
+[19]     3.3    0.44    0.30 177873720         CALSubstate<double>::getElementCurrentBuffer(int) [19]
+                0.30    0.00 177873720/693734428     CALBuffer<double>::operator[](int) [17]
+-----------------------------------------------
+                0.00    0.00     637/44610490     CALBuffer<double>::setElement(int*, int*, int, double) [82]
+                0.00    0.00   45729/44610490     CALBuffer<bool>::getElement(int*, int*, int) [77]
+                0.00    0.00   45729/44610490     CALBuffer<bool>::setElement(int*, int*, int, bool) [78]
+                0.23    0.00 14806155/44610490     SciddicaT_flows_computation::run(CALModel*, int*) [11]
+                0.23    0.00 14856120/44610490     SciddicaT_width_update::run(CALModel*, int*) [15]
+                0.23    0.00 14856120/44610490     CALBuffer<double>::getElement(int*, int*, int) [30]
+[20]     3.1    0.69    0.00 44610490         calCommon::cellLinearIndex(int*, int*, unsigned long) [20]
+-----------------------------------------------
+                0.00    0.00  303197/119002262     Simulation_Init::run(CALModel*) [73]
+                0.09    0.16 44418465/119002262     SciddicaT_flows_computation::run(CALModel*, int*) [11]
+                0.15    0.27 74280600/119002262     SciddicaT_width_update::run(CALModel*, int*) [15]
+[21]     3.0    0.24    0.43 119002262         double CALModel::calGet<double>(CALSubstate<double>*&, int) [21]
+                0.23    0.00 119002262/119002267     CALSubstate<double>::getCurrent() [35]
+                0.20    0.00 119002262/693734428     CALBuffer<double>::operator[](int) [17]
+-----------------------------------------------
+                0.03    0.45 14856120/14856120     CALModel::calApplyElementaryProcess(ElementaryProcessFunctor*) [10]
+[22]     2.1    0.03    0.45 14856120         SciddicaT_remove_inactive_cells::run(CALModel*, int*) [22]
+                0.06    0.39 14856120/14856120     double CALModel::calGet<double>(CALSubstate<double>*&, int*) [24]
+                0.00    0.00   45092/45092       CALModel::calRemoveActiveCell(int*) [75]
+-----------------------------------------------
+                0.06    0.40 15748712/15748712     SciddicaT_flows_computation::run(CALModel*, int*) [11]
+[23]     2.0    0.06    0.40 15748712         CALUnsafe::calAddActiveCellX(int, int) [23]
+                0.09    0.22 15748712/15748712     CALActiveCells::getFlag(int) [31]
+                0.06    0.00 15748712/193622432     CALNeighborhoodPool::getNeighbor(int, int) [18]
+                0.03    0.00 15798677/15798677     CALModel::getActiveCells() [53]
+                0.00    0.00   49965/49965       CALActiveCells::setFlag(int, bool) [76]
+                0.00    0.00 15748712/15748712     CALModel::getNeighborhoodPool() [94]
+-----------------------------------------------
+                0.06    0.39 14856120/14856120     SciddicaT_remove_inactive_cells::run(CALModel*, int*) [22]
+[24]     2.0    0.06    0.39 14856120         double CALModel::calGet<double>(CALSubstate<double>*&, int*) [24]
+                0.05    0.34 14856120/14856120     CALSubstate<double>::getElementCurrentBuffer(int*, int*, int) [25]
+-----------------------------------------------
+                0.05    0.34 14856120/14856120     double CALModel::calGet<double>(CALSubstate<double>*&, int*) [24]
+[25]     1.7    0.05    0.34 14856120         CALSubstate<double>::getElementCurrentBuffer(int*, int*, int) [25]
+                0.11    0.23 14856120/14856120     CALBuffer<double>::getElement(int*, int*, int) [30]
+-----------------------------------------------
+                0.00    0.00       4/16004       Simulation_Init::run(CALModel*) [73]
+                0.00    0.35   16000/16004       SciddicaTSteering::run(CALModel*) [29]
+[26]     1.6    0.00    0.35   16004         void CALModel::calInitSubstate<double>(CALSubstate<double>*&, double) [26]
+                0.00    0.35   32008/32008       CALSubstate<double>::setActiveCellsBuffer(CALSubstateWrapper::CALSubstateBuffer, CALActiveCells*, double) [27]
+                0.00    0.00   16004/74096749     CALSubstate<double>::getNext() [49]
+-----------------------------------------------
+                0.00    0.35   32008/32008       void CALModel::calInitSubstate<double>(CALSubstate<double>*&, double) [26]
+[27]     1.6    0.00    0.35   32008         CALSubstate<double>::setActiveCellsBuffer(CALSubstateWrapper::CALSubstateBuffer, CALActiveCells*, double) [27]
+                0.35    0.00   32008/32008       CALBuffer<double>::setActiveCellsBuffer(int*, int, double) [28]
+                0.00    0.00   32008/44630408     CALActiveCells::getCells() [51]
+                0.00    0.00   32008/124013      CALActiveCells::getSizeCurrent() [104]
+-----------------------------------------------
+                0.35    0.00   32008/32008       CALSubstate<double>::setActiveCellsBuffer(CALSubstateWrapper::CALSubstateBuffer, CALActiveCells*, double) [27]
+[28]     1.6    0.35    0.00   32008         CALBuffer<double>::setActiveCellsBuffer(int*, int, double) [28]
+-----------------------------------------------
+                0.00    0.35    4000/4000        CALRun::calRunCAStep() [4]
+[29]     1.6    0.00    0.35    4000         SciddicaTSteering::run(CALModel*) [29]
+                0.00    0.35   16000/16004       void CALModel::calInitSubstate<double>(CALSubstate<double>*&, double) [26]
+-----------------------------------------------
+                0.11    0.23 14856120/14856120     CALSubstate<double>::getElementCurrentBuffer(int*, int*, int) [25]
+[30]     1.5    0.11    0.23 14856120         CALBuffer<double>::getElement(int*, int*, int) [30]
+                0.23    0.00 14856120/44610490     calCommon::cellLinearIndex(int*, int*, unsigned long) [20]
+-----------------------------------------------
+                0.09    0.22 15748712/15748712     CALUnsafe::calAddActiveCellX(int, int) [23]
+[31]     1.4    0.09    0.22 15748712         CALActiveCells::getFlag(int) [31]
+                0.22    0.00 15748712/562143906     CALBuffer<bool>::operator[](int) [9]
+-----------------------------------------------
+                0.00    0.00     637/46031832     Simulation_Init::run(CALModel*) [73]
+                0.00    0.01 1512800/46031832     CALNeighborhoodPool::addNeighbor(int*) [39]
+                0.03    0.26 44518395/46031832     CALModel::calApplyElementaryProcess(ElementaryProcessFunctor*) [10]
+[32]     1.3    0.03    0.27 46031832         calCommon::cellMultidimensionalIndexes(int) [32]
+                0.27    0.00 46031832/46031832     CALIndexesPool::getMultidimensionalIndexes(int) [34]
+-----------------------------------------------
+                0.03    0.03 14856120/74080740     SciddicaT_width_update::run(CALModel*, int*) [15]
+                0.10    0.13 59224620/74080740     SciddicaT_flows_computation::run(CALModel*, int*) [11]
+[33]     1.3    0.13    0.16 74080740         void CALModel::calSet<double>(CALSubstate<double>*&, int, double) [33]
+                0.13    0.00 74080740/693734428     CALBuffer<double>::operator[](int) [17]
+                0.04    0.00 74080740/74096749     CALSubstate<double>::getNext() [49]
+-----------------------------------------------
+                0.27    0.00 46031832/46031832     calCommon::cellMultidimensionalIndexes(int) [32]
+[34]     1.2    0.27    0.00 46031832         CALIndexesPool::getMultidimensionalIndexes(int) [34]
+-----------------------------------------------
+                0.00    0.00       5/119002267     bool CALModel::calAllocSubstate<double>(CALSubstate<double>*&) [85]
+                0.23    0.00 119002262/119002267     double CALModel::calGet<double>(CALSubstate<double>*&, int) [21]
+[35]     1.0    0.23    0.00 119002267         CALSubstate<double>::getCurrent() [35]
+-----------------------------------------------
+                0.00    0.20       1/1           main [1]
+[36]     0.9    0.00    0.20       1         SciddicaTModel::SciddicaTModel(int*, unsigned long) [36]
+                0.00    0.14       1/1           CALModel::CALModel(int*, unsigned long, CALNeighborhood*, calCommon::CALSpaceBoundaryCondition, calCommon::CALOptimization) [37]
+                0.00    0.05       1/1           SciddicaTModel::sciddicaTLoadConfig() [47]
+                0.01    0.00       1/1           SciddicaT_width_update::SciddicaT_width_update(SciddicaTSubstates*) [66]
+                0.00    0.00       5/5           CALSubstate<double>* CALModel::calAddSubstate<double>() [84]
+                0.00    0.00       1/1           CALSubstate<double>* CALModel::calAddSingleLayerSubstate<double>() [87]
+                0.00    0.00       3/3           CALModel::calAddElementaryProcess(ElementaryProcessFunctor*) [114]
+                0.00    0.00       1/1           CALVonNeumannNeighborhood::CALVonNeumannNeighborhood() [143]
+                0.00    0.00       1/1           CALRun::CALRun(CALModel*, int, int, calCommon::CALUpdateMode) [149]
+                0.00    0.00       1/1           CALUnsafe::CALUnsafe(CALModel*) [155]
+                0.00    0.00       1/1           SciddicaT_flows_computation::SciddicaT_flows_computation(SciddicaTSubstates*, SciddicaTParameters*, CALUnsafe*) [144]
+                0.00    0.00       1/1           SciddicaT_remove_inactive_cells::SciddicaT_remove_inactive_cells(SciddicaTSubstates*, SciddicaTParameters*) [145]
+                0.00    0.00       1/1           Simulation_Init::Simulation_Init(SciddicaTParameters*, SciddicaTSubstates*) [140]
+                0.00    0.00       1/1           CALRun::calRunAddInitFunc(CalModelFunctor<CALModel, void>*) [146]
+                0.00    0.00       1/1           SciddicaTSteering::SciddicaTSteering(SciddicaTSubstates*) [141]
+                0.00    0.00       1/1           CALRun::calRunAddSteeringFunc(CalModelFunctor<CALModel, void>*) [147]
+-----------------------------------------------
+                0.00    0.14       1/1           SciddicaTModel::SciddicaTModel(int*, unsigned long) [36]
+[37]     0.6    0.00    0.14       1         CALModel::CALModel(int*, unsigned long, CALNeighborhood*, calCommon::CALSpaceBoundaryCondition, calCommon::CALOptimization) [37]
+                0.00    0.11       1/1           CALVonNeumannNeighborhood::calDefineNeighborhood(CALModel*) [38]
+                0.01    0.02       1/1           CALIndexesPool::init(int, int*, unsigned long) [55]
+                0.00    0.00       2/1512816     calCommon::multiplier(int*, int, unsigned long) [54]
+                0.00    0.00       1/1           CALBuffer<bool>::CALBuffer(int*, unsigned long) [86]
+                0.00    0.00       1/1           CALNeighborhoodPool::CALNeighborhoodPool(int, int*, unsigned long, calCommon::CALSpaceBoundaryCondition) [142]
+                0.00    0.00       1/1           CALBuffer<bool>::setBuffer(bool) [152]
+                0.00    0.00       1/1           CALActiveCells::CALActiveCells(CALBuffer<bool>*, int) [135]
+-----------------------------------------------
+                0.00    0.11       1/1           CALModel::CALModel(int*, unsigned long, CALNeighborhood*, calCommon::CALSpaceBoundaryCondition, calCommon::CALOptimization) [37]
+[38]     0.5    0.00    0.11       1         CALVonNeumannNeighborhood::calDefineNeighborhood(CALModel*) [38]
+                0.00    0.11       5/5           CALModel::calAddNeighbor(int*) [40]
+                0.00    0.00       1/29662279     CALModel::getDimension() [60]
+-----------------------------------------------
+                0.03    0.08       5/5           CALModel::calAddNeighbor(int*) [40]
+[39]     0.5    0.03    0.08       5         CALNeighborhoodPool::addNeighbor(int*) [39]
+                0.04    0.03 1512800/1512800     calCommon::getNeighborNLinear(int*, int*, int*, unsigned long, calCommon::CALSpaceBoundaryCondition) [44]
+                0.00    0.01 1512800/46031832     calCommon::cellMultidimensionalIndexes(int) [32]
+-----------------------------------------------
+                0.00    0.11       5/5           CALVonNeumannNeighborhood::calDefineNeighborhood(CALModel*) [38]
+[40]     0.5    0.00    0.11       5         CALModel::calAddNeighbor(int*) [40]
+                0.03    0.08       5/5           CALNeighborhoodPool::addNeighbor(int*) [39]
+-----------------------------------------------
+                0.00    0.07       1/1           main [1]
+[41]     0.3    0.00    0.07       1         SciddicaTModel::~SciddicaTModel() [41]
+                0.00    0.07       1/1           CALModel::~CALModel() [43]
+                0.00    0.00       1/1           CALRun::~CALRun() [150]
+                0.00    0.00       1/6           CALSubstate<double>::~CALSubstate() [108]
+-----------------------------------------------
+                0.07    0.00       1/1           CALModel::~CALModel() [43]
+[42]     0.3    0.07    0.00       1         CALNeighborhoodPool::~CALNeighborhoodPool() [42]
+-----------------------------------------------
+                0.00    0.07       1/1           SciddicaTModel::~SciddicaTModel() [41]
+[43]     0.3    0.00    0.07       1         CALModel::~CALModel() [43]
+                0.07    0.00       1/1           CALNeighborhoodPool::~CALNeighborhoodPool() [42]
+                0.00    0.00       5/6           CALSubstate<double>::~CALSubstate() [108]
+                0.00    0.00       1/1           CALIndexesPool::destroy() [137]
+                0.00    0.00       1/1           CALActiveCells::~CALActiveCells() [136]
+-----------------------------------------------
+                0.04    0.03 1512800/1512800     CALNeighborhoodPool::addNeighbor(int*) [39]
+[44]     0.3    0.04    0.03 1512800         calCommon::getNeighborNLinear(int*, int*, int*, unsigned long, calCommon::CALSpaceBoundaryCondition) [44]
+                0.03    0.00 1512800/1512816     calCommon::multiplier(int*, int, unsigned long) [54]
+-----------------------------------------------
+                0.00    0.05       1/1           main [1]
+[45]     0.2    0.00    0.05       1         SciddicaTModel::sciddicaTSaveConfig() [45]
+                0.02    0.02       1/1           CALSubstate<double>::saveSubstate(int*, unsigned long, CALConverterInputOutput*, char*) [50]
+                0.02    0.00       1/3           CALRealConverterInputOutput::CALRealConverterInputOutput() [46]
+                0.00    0.00       1/29662278     CALModel::getCoordinates() [52]
+                0.00    0.00       1/29662279     CALModel::getDimension() [60]
+-----------------------------------------------
+                0.02    0.00       1/3           SciddicaTModel::sciddicaTSaveConfig() [45]
+                0.03    0.00       2/3           SciddicaTModel::sciddicaTLoadConfig() [47]
+[46]     0.2    0.05    0.00       3         CALRealConverterInputOutput::CALRealConverterInputOutput() [46]
+                0.00    0.00       3/3           CALConverterInputOutput::CALConverterInputOutput() [112]
+-----------------------------------------------
+                0.00    0.05       1/1           SciddicaTModel::SciddicaTModel(int*, unsigned long) [36]
+[47]     0.2    0.00    0.05       1         SciddicaTModel::sciddicaTLoadConfig() [47]
+                0.03    0.00       2/3           CALRealConverterInputOutput::CALRealConverterInputOutput() [46]
+                0.00    0.02       2/2           CALSubstate<double>::loadSubstate(int*, unsigned long, CALConverterInputOutput*, char*) [58]
+                0.00    0.00       2/29662278     CALModel::getCoordinates() [52]
+                0.00    0.00       2/29662279     CALModel::getDimension() [60]
+-----------------------------------------------
+                0.02    0.00 14806155/29662275     SciddicaT_flows_computation::run(CALModel*, int*) [11]
+                0.02    0.00 14856120/29662275     SciddicaT_width_update::run(CALModel*, int*) [15]
+[48]     0.2    0.04    0.00 29662275         CALModel::getNeighborhoodSize() [48]
+-----------------------------------------------
+                0.00    0.00       5/74096749     bool CALModel::calAllocSubstate<double>(CALSubstate<double>*&) [85]
+                0.00    0.00   16004/74096749     void CALModel::calInitSubstate<double>(CALSubstate<double>*&, double) [26]
+                0.04    0.00 74080740/74096749     void CALModel::calSet<double>(CALSubstate<double>*&, int, double) [33]
+[49]     0.2    0.04    0.00 74096749         CALSubstate<double>::getNext() [49]
+-----------------------------------------------
+                0.02    0.02       1/1           SciddicaTModel::sciddicaTSaveConfig() [45]
+[50]     0.2    0.02    0.02       1         CALSubstate<double>::saveSubstate(int*, unsigned long, CALConverterInputOutput*, char*) [50]
+                0.00    0.02       1/1           CALBuffer<double>::saveBuffer(int*, unsigned long, CALConverterInputOutput*, char*) [64]
+-----------------------------------------------
+                0.00    0.00   32008/44630408     CALSubstate<double>::setActiveCellsBuffer(CALSubstateWrapper::CALSubstateBuffer, CALActiveCells*, double) [27]
+                0.00    0.00   80005/44630408     CALSubstate<double>::update(CALActiveCells*) [12]
+                0.03    0.00 44518395/44630408     CALModel::calApplyElementaryProcess(ElementaryProcessFunctor*) [10]
+[51]     0.1    0.03    0.00 44630408         CALActiveCells::getCells() [51]
+-----------------------------------------------
+                0.00    0.00       1/29662278     SciddicaTModel::sciddicaTSaveConfig() [45]
+                0.00    0.00       2/29662278     SciddicaTModel::sciddicaTLoadConfig() [47]
+                0.01    0.00 14806155/29662278     SciddicaT_flows_computation::run(CALModel*, int*) [11]
+                0.02    0.00 14856120/29662278     SciddicaT_width_update::run(CALModel*, int*) [15]
+[52]     0.1    0.03    0.00 29662278         CALModel::getCoordinates() [52]
+-----------------------------------------------
+                0.03    0.00 15798677/15798677     CALUnsafe::calAddActiveCellX(int, int) [23]
+[53]     0.1    0.03    0.00 15798677         CALModel::getActiveCells() [53]
+-----------------------------------------------
+                0.00    0.00       1/1512816     CALBuffer<bool>::CALBuffer(int*, unsigned long) [86]
+                0.00    0.00       2/1512816     CALBuffer<double>::CALBuffer(int*, unsigned long, char*, CALConverterInputOutput*) [59]
+                0.00    0.00       2/1512816     CALModel::CALModel(int*, unsigned long, CALNeighborhood*, calCommon::CALSpaceBoundaryCondition, calCommon::CALOptimization) [37]
+                0.00    0.00      11/1512816     CALBuffer<double>::CALBuffer(int*, unsigned long) [83]
+                0.03    0.00 1512800/1512816     calCommon::getNeighborNLinear(int*, int*, int*, unsigned long, calCommon::CALSpaceBoundaryCondition) [44]
+[54]     0.1    0.03    0.00 1512816         calCommon::multiplier(int*, int, unsigned long) [54]
+-----------------------------------------------
+                0.01    0.02       1/1           CALModel::CALModel(int*, unsigned long, CALNeighborhood*, calCommon::CALSpaceBoundaryCondition, calCommon::CALOptimization) [37]
+[55]     0.1    0.01    0.02       1         CALIndexesPool::init(int, int*, unsigned long) [55]
+                0.02    0.00       1/1           CALIndexesPool::initIndexes() [57]
+                0.00    0.00       1/1           CALIndexesPool::CALIndexesPool(int, int*, unsigned long) [138]
+-----------------------------------------------
+                                                 <spontaneous>
+[56]     0.1    0.03    0.00                 CALActiveCells::setSizeNext(int) [56]
+-----------------------------------------------
+                0.02    0.00       1/1           CALIndexesPool::init(int, int*, unsigned long) [55]
+[57]     0.1    0.02    0.00       1         CALIndexesPool::initIndexes() [57]
+-----------------------------------------------
+                0.00    0.02       2/2           SciddicaTModel::sciddicaTLoadConfig() [47]
+[58]     0.1    0.00    0.02       2         CALSubstate<double>::loadSubstate(int*, unsigned long, CALConverterInputOutput*, char*) [58]
+                0.00    0.02       2/2           CALBuffer<double>::CALBuffer(int*, unsigned long, char*, CALConverterInputOutput*) [59]
+                0.00    0.00       2/13          CALBuffer<double>::~CALBuffer() [106]
+                0.00    0.00       1/1           CALBuffer<double>::operator=(CALBuffer<double> const&) [154]
+-----------------------------------------------
+                0.00    0.02       2/2           CALSubstate<double>::loadSubstate(int*, unsigned long, CALConverterInputOutput*, char*) [58]
+[59]     0.1    0.00    0.02       2         CALBuffer<double>::CALBuffer(int*, unsigned long, char*, CALConverterInputOutput*) [59]
+                0.00    0.02       2/2           double* CALConverterInputOutput::loadBuffer<double>(int, char*) [62]
+                0.00    0.00       2/1512816     calCommon::multiplier(int*, int, unsigned long) [54]
+-----------------------------------------------
+                0.00    0.00       1/29662279     SciddicaTModel::sciddicaTSaveConfig() [45]
+                0.00    0.00       1/29662279     CALVonNeumannNeighborhood::calDefineNeighborhood(CALModel*) [38]
+                0.00    0.00       2/29662279     SciddicaTModel::sciddicaTLoadConfig() [47]
+                0.01    0.00 14806155/29662279     SciddicaT_flows_computation::run(CALModel*, int*) [11]
+                0.01    0.00 14856120/29662279     SciddicaT_width_update::run(CALModel*, int*) [15]
+[60]     0.1    0.02    0.00 29662279         CALModel::getDimension() [60]
+-----------------------------------------------
+                0.01    0.01  605120/605120      double* CALConverterInputOutput::loadBuffer<double>(int, char*) [62]
+[61]     0.1    0.01    0.01  605120         CALRealConverterInputOutput::convertInput(std::string) [61]
+                0.00    0.01  605120/605120      std::stof(std::string const&, unsigned long*) [69]
+-----------------------------------------------
+                0.00    0.02       2/2           CALBuffer<double>::CALBuffer(int*, unsigned long, char*, CALConverterInputOutput*) [59]
+[62]     0.1    0.00    0.02       2         double* CALConverterInputOutput::loadBuffer<double>(int, char*) [62]
+                0.01    0.01  605120/605120      CALRealConverterInputOutput::convertInput(std::string) [61]
+                0.00    0.00    1220/1221        std::operator|(std::_Ios_Openmode, std::_Ios_Openmode) [105]
+-----------------------------------------------
+                0.01    0.01       1/1           CALBuffer<double>::saveBuffer(int*, unsigned long, CALConverterInputOutput*, char*) [64]
+[63]     0.1    0.01    0.01       1         void CALConverterInputOutput::calSaveBuffer<double>(double*, int, int*, unsigned long, char*) [63]
+                0.00    0.01  302560/302560      CALRealConverterInputOutput::convertOutput(void*) [70]
+                0.00    0.00       1/1221        std::operator|(std::_Ios_Openmode, std::_Ios_Openmode) [105]
+-----------------------------------------------
+                0.00    0.02       1/1           CALSubstate<double>::saveSubstate(int*, unsigned long, CALConverterInputOutput*, char*) [50]
+[64]     0.1    0.00    0.02       1         CALBuffer<double>::saveBuffer(int*, unsigned long, CALConverterInputOutput*, char*) [64]
+                0.01    0.01       1/1           void CALConverterInputOutput::calSaveBuffer<double>(double*, int, int*, unsigned long, char*) [63]
+-----------------------------------------------
+                0.01    0.00       1/1           __libc_csu_init [67]
+[65]     0.0    0.01    0.00       1         _GLOBAL__sub_I__ZN19CALNeighborhoodPoolC2EiPimN9calCommon25CALSpaceBoundaryConditionE [65]
+                0.00    0.00       1/1           __static_initialization_and_destruction_0(int, int) [130]
+-----------------------------------------------
+                0.01    0.00       1/1           SciddicaTModel::SciddicaTModel(int*, unsigned long) [36]
+[66]     0.0    0.01    0.00       1         SciddicaT_width_update::SciddicaT_width_update(SciddicaTSubstates*) [66]
+                0.00    0.00       1/3           ElementaryProcessFunctor::ElementaryProcessFunctor() [113]
+-----------------------------------------------
+                                                 <spontaneous>
+[67]     0.0    0.00    0.01                 __libc_csu_init [67]
+                0.01    0.00       1/1           _GLOBAL__sub_I__ZN19CALNeighborhoodPoolC2EiPimN9calCommon25CALSpaceBoundaryConditionE [65]
+                0.00    0.00       1/1           _GLOBAL__sub_I__ZN8CALModelC2EPimP15CALNeighborhoodN9calCommon25CALSpaceBoundaryConditionENS3_15CALOptimizationE [122]
+                0.00    0.00       1/1           _GLOBAL__sub_I__ZN6CALRunC2EP8CALModeliiN9calCommon13CALUpdateModeE [121]
+                0.00    0.00       1/1           _GLOBAL__sub_I__ZN27CALRealConverterInputOutput12convertInputESs [120]
+                0.00    0.00       1/1           _GLOBAL__sub_I__ZN9CALUnsafeC2EP8CALModel [123]
+                0.00    0.00       1/1           _GLOBAL__sub_I__ZN14CALActiveCellsC2Ev [116]
+                0.00    0.00       1/1           _GLOBAL__sub_I__ZN25CALVonNeumannNeighborhood21calDefineNeighborhoodEP8CALModel [119]
+                0.00    0.00       1/1           _GLOBAL__sub_I__ZN14CALIndexesPoolC2EiPim [117]
+                0.00    0.00       1/1           _GLOBAL__sub_I__ZN14SciddicaTModelC2EPim [118]
+                0.00    0.00       1/1           _GLOBAL__sub_I_start_time [124]
+-----------------------------------------------
+                0.01    0.00  605120/605120      std::stof(std::string const&, unsigned long*) [69]
+[68]     0.0    0.01    0.00  605120         float __gnu_cxx::__stoa<float, float, char>(float (*)(char const*, char**), char const*, char const*, unsigned long*) [68]
+-----------------------------------------------
+                0.00    0.01  605120/605120      CALRealConverterInputOutput::convertInput(std::string) [61]
+[69]     0.0    0.00    0.01  605120         std::stof(std::string const&, unsigned long*) [69]
+                0.01    0.00  605120/605120      float __gnu_cxx::__stoa<float, float, char>(float (*)(char const*, char**), char const*, char const*, unsigned long*) [68]
+-----------------------------------------------
+                0.00    0.01  302560/302560      void CALConverterInputOutput::calSaveBuffer<double>(double*, int, int*, unsigned long, char*) [63]
+[70]     0.0    0.00    0.01  302560         CALRealConverterInputOutput::convertOutput(void*) [70]
+                0.01    0.00  302560/302560      std::to_string(double) [71]
+-----------------------------------------------
+                0.01    0.00  302560/302560      CALRealConverterInputOutput::convertOutput(void*) [70]
+[71]     0.0    0.01    0.00  302560         std::to_string(double) [71]
+                0.00    0.00  302560/302560      std::string __gnu_cxx::__to_xstring<std::string, char>(int (*)(char*, unsigned long, char const*, __va_list_tag*), unsigned long, char const*, ...) [95]
+-----------------------------------------------
+                0.00    0.00       1/1           CALRun::calRun() [3]
+[72]     0.0    0.00    0.00       1         CALRun::calRunInitSimulation() [72]
+                0.00    0.00       1/1           Simulation_Init::run(CALModel*) [73]
+                0.00    0.00       1/16001       CALModel::calUpdate() [6]
+-----------------------------------------------
+                0.00    0.00       1/1           CALRun::calRunInitSimulation() [72]
+[73]     0.0    0.00    0.00       1         Simulation_Init::run(CALModel*) [73]
+                0.00    0.00  303197/119002262     double CALModel::calGet<double>(CALSubstate<double>*&, int) [21]
+                0.00    0.00       4/16004       void CALModel::calInitSubstate<double>(CALSubstate<double>*&, double) [26]
+                0.00    0.00     637/637         CALModel::calAddActiveCell(int*) [79]
+                0.00    0.00     637/637         void CALModel::calSetCurrent<double>(CALSubstate<double>*&, int*, double) [81]
+                0.00    0.00     637/46031832     calCommon::cellMultidimensionalIndexes(int) [32]
+                0.00    0.00       1/1           CALModel::getSize() [151]
+-----------------------------------------------
+                0.00    0.00     637/45729       CALModel::calAddActiveCell(int*) [79]
+                0.00    0.00   45092/45729       CALModel::calRemoveActiveCell(int*) [75]
+[74]     0.0    0.00    0.00   45729         CALActiveCells::setElementFlags(int*, int*, int, bool) [74]
+                0.00    0.00   45729/45729       CALBuffer<bool>::getElement(int*, int*, int) [77]
+                0.00    0.00   45729/45729       CALBuffer<bool>::setElement(int*, int*, int, bool) [78]
+-----------------------------------------------
+                0.00    0.00   45092/45092       SciddicaT_remove_inactive_cells::run(CALModel*, int*) [22]
+[75]     0.0    0.00    0.00   45092         CALModel::calRemoveActiveCell(int*) [75]
+                0.00    0.00   45092/45729       CALActiveCells::setElementFlags(int*, int*, int, bool) [74]
+-----------------------------------------------
+                0.00    0.00   49965/49965       CALUnsafe::calAddActiveCellX(int, int) [23]
+[76]     0.0    0.00    0.00   49965         CALActiveCells::setFlag(int, bool) [76]
+                0.00    0.00   99930/562143906     CALBuffer<bool>::operator[](int) [9]
+-----------------------------------------------
+                0.00    0.00   45729/45729       CALActiveCells::setElementFlags(int*, int*, int, bool) [74]
+[77]     0.0    0.00    0.00   45729         CALBuffer<bool>::getElement(int*, int*, int) [77]
+                0.00    0.00   45729/44610490     calCommon::cellLinearIndex(int*, int*, unsigned long) [20]
+-----------------------------------------------
+                0.00    0.00   45729/45729       CALActiveCells::setElementFlags(int*, int*, int, bool) [74]
+[78]     0.0    0.00    0.00   45729         CALBuffer<bool>::setElement(int*, int*, int, bool) [78]
+                0.00    0.00   45729/44610490     calCommon::cellLinearIndex(int*, int*, unsigned long) [20]
+-----------------------------------------------
+                0.00    0.00     637/637         Simulation_Init::run(CALModel*) [73]
+[79]     0.0    0.00    0.00     637         CALModel::calAddActiveCell(int*) [79]
+                0.00    0.00     637/45729       CALActiveCells::setElementFlags(int*, int*, int, bool) [74]
+-----------------------------------------------
+                0.00    0.00     637/637         void CALModel::calSetCurrent<double>(CALSubstate<double>*&, int*, double) [81]
+[80]     0.0    0.00    0.00     637         CALSubstate<double>::setElementCurrentBuffer(int*, int*, int, double) [80]
+                0.00    0.00     637/637         CALBuffer<double>::setElement(int*, int*, int, double) [82]
+-----------------------------------------------
+                0.00    0.00     637/637         Simulation_Init::run(CALModel*) [73]
+[81]     0.0    0.00    0.00     637         void CALModel::calSetCurrent<double>(CALSubstate<double>*&, int*, double) [81]
+                0.00    0.00     637/637         CALSubstate<double>::setElementCurrentBuffer(int*, int*, int, double) [80]
+-----------------------------------------------
+                0.00    0.00     637/637         CALSubstate<double>::setElementCurrentBuffer(int*, int*, int, double) [80]
+[82]     0.0    0.00    0.00     637         CALBuffer<double>::setElement(int*, int*, int, double) [82]
+                0.00    0.00     637/44610490     calCommon::cellLinearIndex(int*, int*, unsigned long) [20]
+-----------------------------------------------
+                0.00    0.00       1/11          CALSubstate<double>* CALModel::calAddSingleLayerSubstate<double>() [87]
+                0.00    0.00      10/11          bool CALModel::calAllocSubstate<double>(CALSubstate<double>*&) [85]
+[83]     0.0    0.00    0.00      11         CALBuffer<double>::CALBuffer(int*, unsigned long) [83]
+                0.00    0.00      11/1512816     calCommon::multiplier(int*, int, unsigned long) [54]
+-----------------------------------------------
+                0.00    0.00       5/5           SciddicaTModel::SciddicaTModel(int*, unsigned long) [36]
+[84]     0.0    0.00    0.00       5         CALSubstate<double>* CALModel::calAddSubstate<double>() [84]
+                0.00    0.00       5/5           bool CALModel::calAllocSubstate<double>(CALSubstate<double>*&) [85]
+-----------------------------------------------
+                0.00    0.00       5/5           CALSubstate<double>* CALModel::calAddSubstate<double>() [84]
+[85]     0.0    0.00    0.00       5         bool CALModel::calAllocSubstate<double>(CALSubstate<double>*&) [85]
+                0.00    0.00      10/11          CALBuffer<double>::CALBuffer(int*, unsigned long) [83]
+                0.00    0.00       5/119002267     CALSubstate<double>::getCurrent() [35]
+                0.00    0.00       5/74096749     CALSubstate<double>::getNext() [49]
+                0.00    0.00       5/6           CALSubstate<double>::CALSubstate(CALBuffer<double>*, CALBuffer<double>*) [107]
+-----------------------------------------------
+                0.00    0.00       1/1           CALModel::CALModel(int*, unsigned long, CALNeighborhood*, calCommon::CALSpaceBoundaryCondition, calCommon::CALOptimization) [37]
+[86]     0.0    0.00    0.00       1         CALBuffer<bool>::CALBuffer(int*, unsigned long) [86]
+                0.00    0.00       1/1512816     calCommon::multiplier(int*, int, unsigned long) [54]
+-----------------------------------------------
+                0.00    0.00       1/1           SciddicaTModel::SciddicaTModel(int*, unsigned long) [36]
+[87]     0.0    0.00    0.00       1         CALSubstate<double>* CALModel::calAddSingleLayerSubstate<double>() [87]
+                0.00    0.00       1/11          CALBuffer<double>::CALBuffer(int*, unsigned long) [83]
+                0.00    0.00       1/6           CALSubstate<double>::CALSubstate(CALBuffer<double>*, CALBuffer<double>*) [107]
+-----------------------------------------------
+                0.00    0.00 15748712/15748712     CALUnsafe::calAddActiveCellX(int, int) [23]
+[94]     0.0    0.00    0.00 15748712         CALModel::getNeighborhoodPool() [94]
+-----------------------------------------------
+                0.00    0.00  302560/302560      std::to_string(double) [71]
+[95]     0.0    0.00    0.00  302560         std::string __gnu_cxx::__to_xstring<std::string, char>(int (*)(char*, unsigned long, char const*, __va_list_tag*), unsigned long, char const*, ...) [95]
+                0.00    0.00  302560/302560      std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string<char*>(char*, char*, std::allocator<char> const&) [100]
+-----------------------------------------------
+                0.00    0.00  302560/302560      char* std::string::_S_construct<char*>(char*, char*, std::allocator<char> const&, std::forward_iterator_tag) [98]
+[96]     0.0    0.00    0.00  302560         bool __gnu_cxx::__is_null_pointer<char>(char*) [96]
+-----------------------------------------------
+                0.00    0.00  302560/302560      std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string<char*>(char*, char*, std::allocator<char> const&) [100]
+[97]     0.0    0.00    0.00  302560         char* std::string::_S_construct<char*>(char*, char*, std::allocator<char> const&) [97]
+                0.00    0.00  302560/302560      char* std::string::_S_construct_aux<char*>(char*, char*, std::allocator<char> const&, std::__false_type) [99]
+-----------------------------------------------
+                0.00    0.00  302560/302560      char* std::string::_S_construct_aux<char*>(char*, char*, std::allocator<char> const&, std::__false_type) [99]
+[98]     0.0    0.00    0.00  302560         char* std::string::_S_construct<char*>(char*, char*, std::allocator<char> const&, std::forward_iterator_tag) [98]
+                0.00    0.00  302560/302560      bool __gnu_cxx::__is_null_pointer<char>(char*) [96]
+                0.00    0.00  302560/302560      std::iterator_traits<char*>::difference_type std::distance<char*>(char*, char*) [103]
+-----------------------------------------------
+                0.00    0.00  302560/302560      char* std::string::_S_construct<char*>(char*, char*, std::allocator<char> const&) [97]
+[99]     0.0    0.00    0.00  302560         char* std::string::_S_construct_aux<char*>(char*, char*, std::allocator<char> const&, std::__false_type) [99]
+                0.00    0.00  302560/302560      char* std::string::_S_construct<char*>(char*, char*, std::allocator<char> const&, std::forward_iterator_tag) [98]
+-----------------------------------------------
+                0.00    0.00  302560/302560      std::string __gnu_cxx::__to_xstring<std::string, char>(int (*)(char*, unsigned long, char const*, __va_list_tag*), unsigned long, char const*, ...) [95]
+[100]    0.0    0.00    0.00  302560         std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string<char*>(char*, char*, std::allocator<char> const&) [100]
+                0.00    0.00  302560/302560      char* std::string::_S_construct<char*>(char*, char*, std::allocator<char> const&) [97]
+-----------------------------------------------
+                0.00    0.00  302560/302560      std::iterator_traits<char*>::difference_type std::distance<char*>(char*, char*) [103]
+[101]    0.0    0.00    0.00  302560         std::iterator_traits<char*>::difference_type std::__distance<char*>(char*, char*, std::random_access_iterator_tag) [101]
+-----------------------------------------------
+                0.00    0.00  302560/302560      std::iterator_traits<char*>::difference_type std::distance<char*>(char*, char*) [103]
+[102]    0.0    0.00    0.00  302560         std::iterator_traits<char*>::iterator_category std::__iterator_category<char*>(char* const&) [102]
+-----------------------------------------------
+                0.00    0.00  302560/302560      char* std::string::_S_construct<char*>(char*, char*, std::allocator<char> const&, std::forward_iterator_tag) [98]
+[103]    0.0    0.00    0.00  302560         std::iterator_traits<char*>::difference_type std::distance<char*>(char*, char*) [103]
+                0.00    0.00  302560/302560      std::iterator_traits<char*>::iterator_category std::__iterator_category<char*>(char* const&) [102]
+                0.00    0.00  302560/302560      std::iterator_traits<char*>::difference_type std::__distance<char*>(char*, char*, std::random_access_iterator_tag) [101]
+-----------------------------------------------
+                0.00    0.00   12000/124013      CALModel::calApplyElementaryProcess(ElementaryProcessFunctor*) [10]
+                0.00    0.00   32008/124013      CALSubstate<double>::setActiveCellsBuffer(CALSubstateWrapper::CALSubstateBuffer, CALActiveCells*, double) [27]
+                0.00    0.00   80005/124013      CALSubstate<double>::update(CALActiveCells*) [12]
+[104]    0.0    0.00    0.00  124013         CALActiveCells::getSizeCurrent() [104]
+-----------------------------------------------
+                0.00    0.00       1/1221        void CALConverterInputOutput::calSaveBuffer<double>(double*, int, int*, unsigned long, char*) [63]
+                0.00    0.00    1220/1221        double* CALConverterInputOutput::loadBuffer<double>(int, char*) [62]
+[105]    0.0    0.00    0.00    1221         std::operator|(std::_Ios_Openmode, std::_Ios_Openmode) [105]
+-----------------------------------------------
+                0.00    0.00       2/13          CALSubstate<double>::loadSubstate(int*, unsigned long, CALConverterInputOutput*, char*) [58]
+                0.00    0.00      11/13          CALSubstate<double>::~CALSubstate() [109]
+[106]    0.0    0.00    0.00      13         CALBuffer<double>::~CALBuffer() [106]
+-----------------------------------------------
+                0.00    0.00       1/6           CALSubstate<double>* CALModel::calAddSingleLayerSubstate<double>() [87]
+                0.00    0.00       5/6           bool CALModel::calAllocSubstate<double>(CALSubstate<double>*&) [85]
+[107]    0.0    0.00    0.00       6         CALSubstate<double>::CALSubstate(CALBuffer<double>*, CALBuffer<double>*) [107]
+                0.00    0.00       6/6           CALSubstateWrapper::CALSubstateWrapper() [110]
+-----------------------------------------------
+                0.00    0.00       1/6           SciddicaTModel::~SciddicaTModel() [41]
+                0.00    0.00       5/6           CALModel::~CALModel() [43]
+[108]    0.0    0.00    0.00       6         CALSubstate<double>::~CALSubstate() [108]
+                0.00    0.00       6/6           CALSubstate<double>::~CALSubstate() [109]
+-----------------------------------------------
+                0.00    0.00       6/6           CALSubstate<double>::~CALSubstate() [108]
+[109]    0.0    0.00    0.00       6         CALSubstate<double>::~CALSubstate() [109]
+                0.00    0.00      11/13          CALBuffer<double>::~CALBuffer() [106]
+                0.00    0.00       6/6           CALSubstateWrapper::~CALSubstateWrapper() [111]
+-----------------------------------------------
+                0.00    0.00       6/6           CALSubstate<double>::CALSubstate(CALBuffer<double>*, CALBuffer<double>*) [107]
+[110]    0.0    0.00    0.00       6         CALSubstateWrapper::CALSubstateWrapper() [110]
+-----------------------------------------------
+                0.00    0.00       6/6           CALSubstate<double>::~CALSubstate() [109]
+[111]    0.0    0.00    0.00       6         CALSubstateWrapper::~CALSubstateWrapper() [111]
+-----------------------------------------------
+                0.00    0.00       3/3           CALRealConverterInputOutput::CALRealConverterInputOutput() [46]
+[112]    0.0    0.00    0.00       3         CALConverterInputOutput::CALConverterInputOutput() [112]
+-----------------------------------------------
+                0.00    0.00       1/3           SciddicaT_flows_computation::SciddicaT_flows_computation(SciddicaTSubstates*, SciddicaTParameters*, CALUnsafe*) [144]
+                0.00    0.00       1/3           SciddicaT_width_update::SciddicaT_width_update(SciddicaTSubstates*) [66]
+                0.00    0.00       1/3           SciddicaT_remove_inactive_cells::SciddicaT_remove_inactive_cells(SciddicaTSubstates*, SciddicaTParameters*) [145]
+[113]    0.0    0.00    0.00       3         ElementaryProcessFunctor::ElementaryProcessFunctor() [113]
+-----------------------------------------------
+                0.00    0.00       3/3           SciddicaTModel::SciddicaTModel(int*, unsigned long) [36]
+[114]    0.0    0.00    0.00       3         CALModel::calAddElementaryProcess(ElementaryProcessFunctor*) [114]
+-----------------------------------------------
+                0.00    0.00       1/2           Simulation_Init::Simulation_Init(SciddicaTParameters*, SciddicaTSubstates*) [140]
+                0.00    0.00       1/2           SciddicaTSteering::SciddicaTSteering(SciddicaTSubstates*) [141]
+[115]    0.0    0.00    0.00       2         CalModelFunctor<CALModel, void>::CalModelFunctor() [115]
+-----------------------------------------------
+                0.00    0.00       1/1           __libc_csu_init [67]
+[116]    0.0    0.00    0.00       1         _GLOBAL__sub_I__ZN14CALActiveCellsC2Ev [116]
+                0.00    0.00       1/1           __static_initialization_and_destruction_0(int, int) [129]
+-----------------------------------------------
+                0.00    0.00       1/1           __libc_csu_init [67]
+[117]    0.0    0.00    0.00       1         _GLOBAL__sub_I__ZN14CALIndexesPoolC2EiPim [117]
+                0.00    0.00       1/1           __static_initialization_and_destruction_0(int, int) [127]
+-----------------------------------------------
+                0.00    0.00       1/1           __libc_csu_init [67]
+[118]    0.0    0.00    0.00       1         _GLOBAL__sub_I__ZN14SciddicaTModelC2EPim [118]
+                0.00    0.00       1/1           __static_initialization_and_destruction_0(int, int) [126]
+-----------------------------------------------
+                0.00    0.00       1/1           __libc_csu_init [67]
+[119]    0.0    0.00    0.00       1         _GLOBAL__sub_I__ZN25CALVonNeumannNeighborhood21calDefineNeighborhoodEP8CALModel [119]
+                0.00    0.00       1/1           __static_initialization_and_destruction_0(int, int) [128]
+-----------------------------------------------
+                0.00    0.00       1/1           __libc_csu_init [67]
+[120]    0.0    0.00    0.00       1         _GLOBAL__sub_I__ZN27CALRealConverterInputOutput12convertInputESs [120]
+                0.00    0.00       1/1           __static_initialization_and_destruction_0(int, int) [132]
+-----------------------------------------------
+                0.00    0.00       1/1           __libc_csu_init [67]
+[121]    0.0    0.00    0.00       1         _GLOBAL__sub_I__ZN6CALRunC2EP8CALModeliiN9calCommon13CALUpdateModeE [121]
+                0.00    0.00       1/1           __static_initialization_and_destruction_0(int, int) [133]
+-----------------------------------------------
+                0.00    0.00       1/1           __libc_csu_init [67]
+[122]    0.0    0.00    0.00       1         _GLOBAL__sub_I__ZN8CALModelC2EPimP15CALNeighborhoodN9calCommon25CALSpaceBoundaryConditionENS3_15CALOptimizationE [122]
+                0.00    0.00       1/1           __static_initialization_and_destruction_0(int, int) [134]
+-----------------------------------------------
+                0.00    0.00       1/1           __libc_csu_init [67]
+[123]    0.0    0.00    0.00       1         _GLOBAL__sub_I__ZN9CALUnsafeC2EP8CALModel [123]
+                0.00    0.00       1/1           __static_initialization_and_destruction_0(int, int) [131]
+-----------------------------------------------
+                0.00    0.00       1/1           __libc_csu_init [67]
+[124]    0.0    0.00    0.00       1         _GLOBAL__sub_I_start_time [124]
+                0.00    0.00       1/1           __static_initialization_and_destruction_0(int, int) [125]
+-----------------------------------------------
+                0.00    0.00       1/1           _GLOBAL__sub_I_start_time [124]
+[125]    0.0    0.00    0.00       1         __static_initialization_and_destruction_0(int, int) [125]
+-----------------------------------------------
+                0.00    0.00       1/1           _GLOBAL__sub_I__ZN14SciddicaTModelC2EPim [118]
+[126]    0.0    0.00    0.00       1         __static_initialization_and_destruction_0(int, int) [126]
+-----------------------------------------------
+                0.00    0.00       1/1           _GLOBAL__sub_I__ZN14CALIndexesPoolC2EiPim [117]
+[127]    0.0    0.00    0.00       1         __static_initialization_and_destruction_0(int, int) [127]
+-----------------------------------------------
+                0.00    0.00       1/1           _GLOBAL__sub_I__ZN25CALVonNeumannNeighborhood21calDefineNeighborhoodEP8CALModel [119]
+[128]    0.0    0.00    0.00       1         __static_initialization_and_destruction_0(int, int) [128]
+-----------------------------------------------
+                0.00    0.00       1/1           _GLOBAL__sub_I__ZN14CALActiveCellsC2Ev [116]
+[129]    0.0    0.00    0.00       1         __static_initialization_and_destruction_0(int, int) [129]
+-----------------------------------------------
+                0.00    0.00       1/1           _GLOBAL__sub_I__ZN19CALNeighborhoodPoolC2EiPimN9calCommon25CALSpaceBoundaryConditionE [65]
+[130]    0.0    0.00    0.00       1         __static_initialization_and_destruction_0(int, int) [130]
+-----------------------------------------------
+                0.00    0.00       1/1           _GLOBAL__sub_I__ZN9CALUnsafeC2EP8CALModel [123]
+[131]    0.0    0.00    0.00       1         __static_initialization_and_destruction_0(int, int) [131]
+-----------------------------------------------
+                0.00    0.00       1/1           _GLOBAL__sub_I__ZN27CALRealConverterInputOutput12convertInputESs [120]
+[132]    0.0    0.00    0.00       1         __static_initialization_and_destruction_0(int, int) [132]
+-----------------------------------------------
+                0.00    0.00       1/1           _GLOBAL__sub_I__ZN6CALRunC2EP8CALModeliiN9calCommon13CALUpdateModeE [121]
+[133]    0.0    0.00    0.00       1         __static_initialization_and_destruction_0(int, int) [133]
+-----------------------------------------------
+                0.00    0.00       1/1           _GLOBAL__sub_I__ZN8CALModelC2EPimP15CALNeighborhoodN9calCommon25CALSpaceBoundaryConditionENS3_15CALOptimizationE [122]
+[134]    0.0    0.00    0.00       1         __static_initialization_and_destruction_0(int, int) [134]
+-----------------------------------------------
+                0.00    0.00       1/1           CALModel::CALModel(int*, unsigned long, CALNeighborhood*, calCommon::CALSpaceBoundaryCondition, calCommon::CALOptimization) [37]
+[135]    0.0    0.00    0.00       1         CALActiveCells::CALActiveCells(CALBuffer<bool>*, int) [135]
+-----------------------------------------------
+                0.00    0.00       1/1           CALModel::~CALModel() [43]
+[136]    0.0    0.00    0.00       1         CALActiveCells::~CALActiveCells() [136]
+                0.00    0.00       1/1           CALBuffer<bool>::~CALBuffer() [153]
+-----------------------------------------------
+                0.00    0.00       1/1           CALModel::~CALModel() [43]
+[137]    0.0    0.00    0.00       1         CALIndexesPool::destroy() [137]
+-----------------------------------------------
+                0.00    0.00       1/1           CALIndexesPool::init(int, int*, unsigned long) [55]
+[138]    0.0    0.00    0.00       1         CALIndexesPool::CALIndexesPool(int, int*, unsigned long) [138]
+-----------------------------------------------
+                0.00    0.00       1/1           CALVonNeumannNeighborhood::CALVonNeumannNeighborhood() [143]
+[139]    0.0    0.00    0.00       1         CALNeighborhood::CALNeighborhood() [139]
+-----------------------------------------------
+                0.00    0.00       1/1           SciddicaTModel::SciddicaTModel(int*, unsigned long) [36]
+[140]    0.0    0.00    0.00       1         Simulation_Init::Simulation_Init(SciddicaTParameters*, SciddicaTSubstates*) [140]
+                0.00    0.00       1/2           CalModelFunctor<CALModel, void>::CalModelFunctor() [115]
+-----------------------------------------------
+                0.00    0.00       1/1           SciddicaTModel::SciddicaTModel(int*, unsigned long) [36]
+[141]    0.0    0.00    0.00       1         SciddicaTSteering::SciddicaTSteering(SciddicaTSubstates*) [141]
+                0.00    0.00       1/2           CalModelFunctor<CALModel, void>::CalModelFunctor() [115]
+-----------------------------------------------
+                0.00    0.00       1/1           CALModel::CALModel(int*, unsigned long, CALNeighborhood*, calCommon::CALSpaceBoundaryCondition, calCommon::CALOptimization) [37]
+[142]    0.0    0.00    0.00       1         CALNeighborhoodPool::CALNeighborhoodPool(int, int*, unsigned long, calCommon::CALSpaceBoundaryCondition) [142]
+-----------------------------------------------
+                0.00    0.00       1/1           SciddicaTModel::SciddicaTModel(int*, unsigned long) [36]
+[143]    0.0    0.00    0.00       1         CALVonNeumannNeighborhood::CALVonNeumannNeighborhood() [143]
+                0.00    0.00       1/1           CALNeighborhood::CALNeighborhood() [139]
+-----------------------------------------------
+                0.00    0.00       1/1           SciddicaTModel::SciddicaTModel(int*, unsigned long) [36]
+[144]    0.0    0.00    0.00       1         SciddicaT_flows_computation::SciddicaT_flows_computation(SciddicaTSubstates*, SciddicaTParameters*, CALUnsafe*) [144]
+                0.00    0.00       1/3           ElementaryProcessFunctor::ElementaryProcessFunctor() [113]
+-----------------------------------------------
+                0.00    0.00       1/1           SciddicaTModel::SciddicaTModel(int*, unsigned long) [36]
+[145]    0.0    0.00    0.00       1         SciddicaT_remove_inactive_cells::SciddicaT_remove_inactive_cells(SciddicaTSubstates*, SciddicaTParameters*) [145]
+                0.00    0.00       1/3           ElementaryProcessFunctor::ElementaryProcessFunctor() [113]
+-----------------------------------------------
+                0.00    0.00       1/1           SciddicaTModel::SciddicaTModel(int*, unsigned long) [36]
+[146]    0.0    0.00    0.00       1         CALRun::calRunAddInitFunc(CalModelFunctor<CALModel, void>*) [146]
+-----------------------------------------------
+                0.00    0.00       1/1           SciddicaTModel::SciddicaTModel(int*, unsigned long) [36]
+[147]    0.0    0.00    0.00       1         CALRun::calRunAddSteeringFunc(CalModelFunctor<CALModel, void>*) [147]
+-----------------------------------------------
+                0.00    0.00       1/1           CALRun::calRun() [3]
+[148]    0.0    0.00    0.00       1         CALRun::calRunFinalizeSimulation() [148]
+-----------------------------------------------
+                0.00    0.00       1/1           SciddicaTModel::SciddicaTModel(int*, unsigned long) [36]
+[149]    0.0    0.00    0.00       1         CALRun::CALRun(CALModel*, int, int, calCommon::CALUpdateMode) [149]
+-----------------------------------------------
+                0.00    0.00       1/1           SciddicaTModel::~SciddicaTModel() [41]
+[150]    0.0    0.00    0.00       1         CALRun::~CALRun() [150]
+-----------------------------------------------
+                0.00    0.00       1/1           Simulation_Init::run(CALModel*) [73]
+[151]    0.0    0.00    0.00       1         CALModel::getSize() [151]
+-----------------------------------------------
+                0.00    0.00       1/1           CALModel::CALModel(int*, unsigned long, CALNeighborhood*, calCommon::CALSpaceBoundaryCondition, calCommon::CALOptimization) [37]
+[152]    0.0    0.00    0.00       1         CALBuffer<bool>::setBuffer(bool) [152]
+-----------------------------------------------
+                0.00    0.00       1/1           CALActiveCells::~CALActiveCells() [136]
+[153]    0.0    0.00    0.00       1         CALBuffer<bool>::~CALBuffer() [153]
+-----------------------------------------------
+                0.00    0.00       1/1           CALSubstate<double>::loadSubstate(int*, unsigned long, CALConverterInputOutput*, char*) [58]
+[154]    0.0    0.00    0.00       1         CALBuffer<double>::operator=(CALBuffer<double> const&) [154]
+-----------------------------------------------
+                0.00    0.00       1/1           SciddicaTModel::SciddicaTModel(int*, unsigned long) [36]
+[155]    0.0    0.00    0.00       1         CALUnsafe::CALUnsafe(CALModel*) [155]
+-----------------------------------------------
+
+ This table describes the call tree of the program, and was sorted by
+ the total amount of time spent in each function and its children.
+
+ Each entry in this table consists of several lines.  The line with the
+ index number at the left hand margin lists the current function.
+ The lines above it list the functions that called this function,
+ and the lines below it list the functions this one called.
+ This line lists:
+     index	A unique number given to each element of the table.
+		Index numbers are sorted numerically.
+		The index number is printed next to every function name so
+		it is easier to look up where the function is in the table.
+
+     % time	This is the percentage of the `total' time that was spent
+		in this function and its children.  Note that due to
+		different viewpoints, functions excluded by options, etc,
+		these numbers will NOT add up to 100%.
+
+     self	This is the total amount of time spent in this function.
+
+     children	This is the total amount of time propagated into this
+		function by its children.
+
+     called	This is the number of times the function was called.
+		If the function called itself recursively, the number
+		only includes non-recursive calls, and is followed by
+		a `+' and the number of recursive calls.
+
+     name	The name of the current function.  The index number is
+		printed after it.  If the function is a member of a
+		cycle, the cycle number is printed between the
+		function's name and the index number.
+
+
+ For the function's parents, the fields have the following meanings:
+
+     self	This is the amount of time that was propagated directly
+		from the function into this parent.
+
+     children	This is the amount of time that was propagated from
+		the function's children into this parent.
+
+     called	This is the number of times this parent called the
+		function `/' the total number of times the function
+		was called.  Recursive calls to the function are not
+		included in the number after the `/'.
+
+     name	This is the name of the parent.  The parent's index
+		number is printed after it.  If the parent is a
+		member of a cycle, the cycle number is printed between
+		the name and the index number.
+
+ If the parents of the function cannot be determined, the word
+ `<spontaneous>' is printed in the `name' field, and all the other
+ fields are blank.
+
+ For the function's children, the fields have the following meanings:
+
+     self	This is the amount of time that was propagated directly
+		from the child into the function.
+
+     children	This is the amount of time that was propagated from the
+		child's children to the function.
+
+     called	This is the number of times the function called
+		this child `/' the total number of times the child
+		was called.  Recursive calls by the child are not
+		listed in the number after the `/'.
+
+     name	This is the name of the child.  The child's index
+		number is printed after it.  If the child is a
+		member of a cycle, the cycle number is printed
+		between the name and the index number.
+
+ If there are any cycles (circles) in the call graph, there is an
+ entry for the cycle-as-a-whole.  This entry shows who called the
+ cycle (as parents) and the members of the cycle (as children.)
+ The `+' recursive calls entry shows the number of function calls that
+ were internal to the cycle, and the calls entry for each member shows,
+ for that member, how many times it was called from other members of
+ the cycle.
+
+Copyright (C) 2012-2014 Free Software Foundation, Inc.
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.
+
+Index by function name
+
+ [116] _GLOBAL__sub_I__ZN14CALActiveCellsC2Ev [36] SciddicaTModel::SciddicaTModel(int*, unsigned long) [8] CALModel::calUpdateActiveCells()
+ [117] _GLOBAL__sub_I__ZN14CALIndexesPoolC2EiPim [41] SciddicaTModel::~SciddicaTModel() [114] CALModel::calAddElementaryProcess(ElementaryProcessFunctor*)
+ [118] _GLOBAL__sub_I__ZN14SciddicaTModelC2EPim [139] CALNeighborhood::CALNeighborhood() [87] CALSubstate<double>* CALModel::calAddSingleLayerSubstate<double>()
+  [65] _GLOBAL__sub_I__ZN19CALNeighborhoodPoolC2EiPimN9calCommon25CALSpaceBoundaryConditionE [115] CalModelFunctor<CALModel, void>::CalModelFunctor() [10] CALModel::calApplyElementaryProcess(ElementaryProcessFunctor*)
+ [119] _GLOBAL__sub_I__ZN25CALVonNeumannNeighborhood21calDefineNeighborhoodEP8CALModel [73] Simulation_Init::run(CALModel*) [5] CALModel::calGlobalTransitionFunction()
+ [120] _GLOBAL__sub_I__ZN27CALRealConverterInputOutput12convertInputESs [140] Simulation_Init::Simulation_Init(SciddicaTParameters*, SciddicaTSubstates*) [24] double CALModel::calGet<double>(CALSubstate<double>*&, int*)
+ [121] _GLOBAL__sub_I__ZN6CALRunC2EP8CALModeliiN9calCommon13CALUpdateModeE [29] SciddicaTSteering::run(CALModel*) [21] double CALModel::calGet<double>(CALSubstate<double>*&, int)
+ [122] _GLOBAL__sub_I__ZN8CALModelC2EPimP15CALNeighborhoodN9calCommon25CALSpaceBoundaryConditionENS3_15CALOptimizationE [141] SciddicaTSteering::SciddicaTSteering(SciddicaTSubstates*) [33] void CALModel::calSet<double>(CALSubstate<double>*&, int, double)
+ [123] _GLOBAL__sub_I__ZN9CALUnsafeC2EP8CALModel [110] CALSubstateWrapper::CALSubstateWrapper() [14] double CALModel::calGetX<double>(CALSubstate<double>*&, int, int)
+ [124] _GLOBAL__sub_I_start_time [111] CALSubstateWrapper::~CALSubstateWrapper() [151] CALModel::getSize()
+ [125] __static_initialization_and_destruction_0(int, int) [39] CALNeighborhoodPool::addNeighbor(int*) [6] CALModel::calUpdate()
+ [126] __static_initialization_and_destruction_0(int, int) [18] CALNeighborhoodPool::getNeighbor(int, int) [37] CALModel::CALModel(int*, unsigned long, CALNeighborhood*, calCommon::CALSpaceBoundaryCondition, calCommon::CALOptimization)
+ [127] __static_initialization_and_destruction_0(int, int) [142] CALNeighborhoodPool::CALNeighborhoodPool(int, int*, unsigned long, calCommon::CALSpaceBoundaryCondition) [43] CALModel::~CALModel()
+ [128] __static_initialization_and_destruction_0(int, int) [42] CALNeighborhoodPool::~CALNeighborhoodPool() [77] CALBuffer<bool>::getElement(int*, int*, int)
+ [129] __static_initialization_and_destruction_0(int, int) [15] SciddicaT_width_update::run(CALModel*, int*) [78] CALBuffer<bool>::setElement(int*, int*, int, bool)
+ [130] __static_initialization_and_destruction_0(int, int) [66] SciddicaT_width_update::SciddicaT_width_update(SciddicaTSubstates*) [16] CALBuffer<bool>::getSize()
+ [131] __static_initialization_and_destruction_0(int, int) [62] double* CALConverterInputOutput::loadBuffer<double>(int, char*) [152] CALBuffer<bool>::setBuffer(bool)
+ [132] __static_initialization_and_destruction_0(int, int) [63] void CALConverterInputOutput::calSaveBuffer<double>(double*, int, int*, unsigned long, char*) [86] CALBuffer<bool>::CALBuffer(int*, unsigned long)
+ [133] __static_initialization_and_destruction_0(int, int) [112] CALConverterInputOutput::CALConverterInputOutput() [153] CALBuffer<bool>::~CALBuffer()
+ [134] __static_initialization_and_destruction_0(int, int) [113] ElementaryProcessFunctor::ElementaryProcessFunctor() [9] CALBuffer<bool>::operator[](int)
+  [35] CALSubstate<double>::getCurrent() [38] CALVonNeumannNeighborhood::calDefineNeighborhood(CALModel*) [30] CALBuffer<double>::getElement(int*, int*, int)
+  [58] CALSubstate<double>::loadSubstate(int*, unsigned long, CALConverterInputOutput*, char*) [143] CALVonNeumannNeighborhood::CALVonNeumannNeighborhood() [64] CALBuffer<double>::saveBuffer(int*, unsigned long, CALConverterInputOutput*, char*)
+  [50] CALSubstate<double>::saveSubstate(int*, unsigned long, CALConverterInputOutput*, char*) [61] CALRealConverterInputOutput::convertInput(std::string) [82] CALBuffer<double>::setElement(int*, int*, int, double)
+  [27] CALSubstate<double>::setActiveCellsBuffer(CALSubstateWrapper::CALSubstateBuffer, CALActiveCells*, double) [70] CALRealConverterInputOutput::convertOutput(void*) [28] CALBuffer<double>::setActiveCellsBuffer(int*, int, double)
+  [25] CALSubstate<double>::getElementCurrentBuffer(int*, int*, int) [46] CALRealConverterInputOutput::CALRealConverterInputOutput() [13] CALBuffer<double>::copyActiveCellsBuffer(CALBuffer<double>*, int*, int)
+  [19] CALSubstate<double>::getElementCurrentBuffer(int) [11] SciddicaT_flows_computation::run(CALModel*, int*) [83] CALBuffer<double>::CALBuffer(int*, unsigned long)
+  [80] CALSubstate<double>::setElementCurrentBuffer(int*, int*, int, double) [144] SciddicaT_flows_computation::SciddicaT_flows_computation(SciddicaTSubstates*, SciddicaTParameters*, CALUnsafe*) [59] CALBuffer<double>::CALBuffer(int*, unsigned long, char*, CALConverterInputOutput*)
+  [12] CALSubstate<double>::update(CALActiveCells*) [22] SciddicaT_remove_inactive_cells::run(CALModel*, int*) [106] CALBuffer<double>::~CALBuffer()
+  [49] CALSubstate<double>::getNext() [145] SciddicaT_remove_inactive_cells::SciddicaT_remove_inactive_cells(SciddicaTSubstates*, SciddicaTParameters*) [154] CALBuffer<double>::operator=(CALBuffer<double> const&)
+ [107] CALSubstate<double>::CALSubstate(CALBuffer<double>*, CALBuffer<double>*) [4] CALRun::calRunCAStep() [17] CALBuffer<double>::operator[](int)
+ [108] CALSubstate<double>::~CALSubstate() [146] CALRun::calRunAddInitFunc(CalModelFunctor<CALModel, void>*) [23] CALUnsafe::calAddActiveCellX(int, int)
+ [109] CALSubstate<double>::~CALSubstate() [72] CALRun::calRunInitSimulation() [155] CALUnsafe::CALUnsafe(CALModel*)
+  [56] CALActiveCells::setSizeNext(int) [147] CALRun::calRunAddSteeringFunc(CalModelFunctor<CALModel, void>*) [95] std::string __gnu_cxx::__to_xstring<std::string, char>(int (*)(char*, unsigned long, char const*, __va_list_tag*), unsigned long, char const*, ...)
+ [104] CALActiveCells::getSizeCurrent() [148] CALRun::calRunFinalizeSimulation() [96] bool __gnu_cxx::__is_null_pointer<char>(char*)
+  [74] CALActiveCells::setElementFlags(int*, int*, int, bool) [3] CALRun::calRun() [68] float __gnu_cxx::__stoa<float, float, char>(float (*)(char const*, char**), char const*, char const*, unsigned long*)
+   [7] CALActiveCells::update() [149] CALRun::CALRun(CALModel*, int, int, calCommon::CALUpdateMode) [54] calCommon::multiplier(int*, int, unsigned long)
+  [31] CALActiveCells::getFlag(int) [150] CALRun::~CALRun() [20] calCommon::cellLinearIndex(int*, int*, unsigned long)
+  [76] CALActiveCells::setFlag(int, bool) [60] CALModel::getDimension() [44] calCommon::getNeighborNLinear(int*, int*, int*, unsigned long, calCommon::CALSpaceBoundaryCondition)
+  [51] CALActiveCells::getCells() [81] void CALModel::calSetCurrent<double>(CALSubstate<double>*&, int*, double) [32] calCommon::cellMultidimensionalIndexes(int)
+ [135] CALActiveCells::CALActiveCells(CALBuffer<bool>*, int) [40] CALModel::calAddNeighbor(int*) [97] char* std::string::_S_construct<char*>(char*, char*, std::allocator<char> const&)
+ [136] CALActiveCells::~CALActiveCells() [84] CALSubstate<double>* CALModel::calAddSubstate<double>() [98] char* std::string::_S_construct<char*>(char*, char*, std::allocator<char> const&, std::forward_iterator_tag)
+  [57] CALIndexesPool::initIndexes() [53] CALModel::getActiveCells() [99] char* std::string::_S_construct_aux<char*>(char*, char*, std::allocator<char> const&, std::__false_type)
+  [34] CALIndexesPool::getMultidimensionalIndexes(int) [52] CALModel::getCoordinates() [100] std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string<char*>(char*, char*, std::allocator<char> const&)
+  [55] CALIndexesPool::init(int, int*, unsigned long) [26] void CALModel::calInitSubstate<double>(CALSubstate<double>*&, double) [101] std::iterator_traits<char*>::difference_type std::__distance<char*>(char*, char*, std::random_access_iterator_tag)
+ [137] CALIndexesPool::destroy() [79] CALModel::calAddActiveCell(int*) [102] std::iterator_traits<char*>::iterator_category std::__iterator_category<char*>(char* const&)
+ [138] CALIndexesPool::CALIndexesPool(int, int*, unsigned long) [85] bool CALModel::calAllocSubstate<double>(CALSubstate<double>*&) [69] std::stof(std::string const&, unsigned long*)
+   [2] SciddicaTModel::sciddicaTRun() [75] CALModel::calRemoveActiveCell(int*) [103] std::iterator_traits<char*>::difference_type std::distance<char*>(char*, char*)
+  [47] SciddicaTModel::sciddicaTLoadConfig() [94] CALModel::getNeighborhoodPool() [71] std::to_string(double)
+  [45] SciddicaTModel::sciddicaTSaveConfig() [48] CALModel::getNeighborhoodSize() [105] std::operator|(std::_Ios_Openmode, std::_Ios_Openmode)
