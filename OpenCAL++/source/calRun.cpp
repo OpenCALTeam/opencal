@@ -9,7 +9,15 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 // Lesser General Public License for more details.
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+#include <OpenCAL++/calRun.h>
+=======
 #include <OpenCAL++11/calRun.h>
+>>>>>>> e44630b317eeb506eac14bb3076f71487fe5ed2d
+=======
+#include <OpenCAL++11/calRun.h>
+>>>>>>> e44630b317eeb506eac14bb3076f71487fe5ed2d
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>

@@ -1,10 +1,24 @@
 // Conway's game of Life Cellular Automaton
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+#include <OpenCAL++/calModel.h>
+#include <OpenCAL++/calIntConverterIO.h>
+#include <OpenCAL++/calMooreNeighborhood.h>
+#include <OpenCAL++/calRun.h>
+#include<OpenCAL++/calSubstate.h>
+=======
+=======
+>>>>>>> e44630b317eeb506eac14bb3076f71487fe5ed2d
 #include <OpenCAL++11/calModel.h>
 #include <OpenCAL++11/calIntConverterIO.h>
 #include <OpenCAL++11/calMooreNeighborhood.h>
 #include <OpenCAL++11/calRun.h>
 #include<OpenCAL++11/calSubstate.h>
+<<<<<<< HEAD
+>>>>>>> e44630b317eeb506eac14bb3076f71487fe5ed2d
+=======
+>>>>>>> e44630b317eeb506eac14bb3076f71487fe5ed2d
 #include <stdlib.h>
 #include <iostream>
 

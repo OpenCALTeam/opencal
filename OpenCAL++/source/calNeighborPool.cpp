@@ -1,4 +1,12 @@
+<<<<<<< HEAD
+<<<<<<< HEAD
+#include <OpenCAL++/calNeighborPool.h>
+=======
 #include <OpenCAL++11/calNeighborPool.h>
+>>>>>>> e44630b317eeb506eac14bb3076f71487fe5ed2d
+=======
+#include <OpenCAL++11/calNeighborPool.h>
+>>>>>>> e44630b317eeb506eac14bb3076f71487fe5ed2d
 
 
 CALNeighborPool :: CALNeighborPool (int size, int* coordinates, size_t dimension, enum calCommon::CALSpaceBoundaryCondition CAL_TOROIDALITY)
