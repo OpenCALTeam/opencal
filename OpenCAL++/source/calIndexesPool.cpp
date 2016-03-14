@@ -1,12 +1,6 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
+
 #include <OpenCAL++/calIndexesPool.h>
-=======
-#include <OpenCAL++11/calIndexesPool.h>
->>>>>>> e44630b317eeb506eac14bb3076f71487fe5ed2d
-=======
-#include <OpenCAL++11/calIndexesPool.h>
->>>>>>> e44630b317eeb506eac14bb3076f71487fe5ed2d
+
 
 CALIndexesPool :: CALIndexesPool (int size, int* coordinates, size_t dimension)
 {

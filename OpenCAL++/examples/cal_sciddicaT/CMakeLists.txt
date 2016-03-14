@@ -14,12 +14,6 @@ file(GLOB SRC
 )
 
 add_executable(calpp11_sciddicaT ${SRC})
-<<<<<<< HEAD
-<<<<<<< HEAD
+
 target_link_libraries(calpp11_sciddicaT opencalpp)
-=======
-target_link_libraries(calpp11_sciddicaT opencalpp11)
->>>>>>> e44630b317eeb506eac14bb3076f71487fe5ed2d
-=======
-target_link_libraries(calpp11_sciddicaT opencalpp11)
->>>>>>> e44630b317eeb506eac14bb3076f71487fe5ed2d
+

@@ -1,12 +1,6 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
+
 #include <OpenCAL++/calMooreNeighborhood.h>
-=======
-#include <OpenCAL++11/calMooreNeighborhood.h>
->>>>>>> e44630b317eeb506eac14bb3076f71487fe5ed2d
-=======
-#include <OpenCAL++11/calMooreNeighborhood.h>
->>>>>>> e44630b317eeb506eac14bb3076f71487fe5ed2d
+
 
 void CALMooreNeighborhood :: defineNeighborhood (CALModel* calModel)
 {

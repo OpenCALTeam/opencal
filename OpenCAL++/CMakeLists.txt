@@ -50,32 +50,21 @@ file(GLOB SRC
     "include/*.h"
     "source/*.cpp"
     "source/*.c"
-<<<<<<< HEAD
-<<<<<<< HEAD
     "include/OpenCAL++/*.h"
-=======
-    "include/OpenCAL++11/*.h"
->>>>>>> e44630b317eeb506eac14bb3076f71487fe5ed2d
-=======
-    "include/OpenCAL++11/*.h"
->>>>>>> e44630b317eeb506eac14bb3076f71487fe5ed2d
+
     
 )
 
 file(GLOB HEADERS
     "include/*.h"
-    "include/OpenCAL++11/*.h"
+    "include/OpenCAL++ /*.h"
 )
-add_library(opencalpp11 ${SHAREDORSTATIC} ${SRC})
-install(TARGETS opencalpp11 DESTINATION ${INSTALL_LIB_DIR})
-install(FILES ${HEADERS} DESTINATION ${INSTALL_INCLUDE_DIR}/OpenCAL++11)
+add_library(opencalpp ${SHAREDORSTATIC} ${SRC})
+install(TARGETS opencalpp DESTINATION ${INSTALL_LIB_DIR})
+install(FILES ${HEADERS} DESTINATION ${INSTALL_INCLUDE_DIR}/OpenCAL++)
 
-<<<<<<< HEAD
-
-=======
->>>>>>> e44630b317eeb506eac14bb3076f71487fe5ed2d
 
 if(${BUILD_EXAMPLES} STREQUAL "ON")
 	add_subdirectory(examples)
-	install(DIRECTORY examples DESTINATION ${INSTALL_EXAMPLE_DIR}/OpenCAL++11)
+	install(DIRECTORY examples DESTINATION ${INSTALL_EXAMPLE_DIR}/OpenCAL++)
 endif()

@@ -1,22 +1,11 @@
 // mod2 3D Cellular Automaton
 
-<<<<<<< HEAD
-<<<<<<< HEAD
+
 #include <OpenCAL++/calModel.h>
 #include <OpenCAL++/calRun.h>
 #include <OpenCAL++/calMooreNeighborhood.h>
 #include <OpenCAL++/calIntConverterIO.h>
-=======
-=======
->>>>>>> e44630b317eeb506eac14bb3076f71487fe5ed2d
-#include <OpenCAL++11/calModel.h>
-#include <OpenCAL++11/calRun.h>
-#include <OpenCAL++11/calMooreNeighborhood.h>
-#include <OpenCAL++11/calIntConverterIO.h>
-<<<<<<< HEAD
->>>>>>> e44630b317eeb506eac14bb3076f71487fe5ed2d
-=======
->>>>>>> e44630b317eeb506eac14bb3076f71487fe5ed2d
+
 
 #define ROWS 5
 #define COLS 7

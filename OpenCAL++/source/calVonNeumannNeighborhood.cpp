@@ -1,12 +1,6 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
+
 #include <OpenCAL++/calVonNeumannNeighborhood.h>
-=======
-#include <OpenCAL++11/calVonNeumannNeighborhood.h>
->>>>>>> e44630b317eeb506eac14bb3076f71487fe5ed2d
-=======
-#include <OpenCAL++11/calVonNeumannNeighborhood.h>
->>>>>>> e44630b317eeb506eac14bb3076f71487fe5ed2d
+
 
 void CALVonNeumannNeighborhood :: defineNeighborhood (CALModel* calModel)
 {

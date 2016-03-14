@@ -1,12 +1,6 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
+
 #include <OpenCAL++/calAlternativeHexagonalNeighborhood.h>
-=======
-#include <OpenCAL++11/calAlternativeHexagonalNeighborhood.h>
->>>>>>> e44630b317eeb506eac14bb3076f71487fe5ed2d
-=======
-#include <OpenCAL++11/calAlternativeHexagonalNeighborhood.h>
->>>>>>> e44630b317eeb506eac14bb3076f71487fe5ed2d
+
 
 void CALAlternativeHexagonalNeighborhood :: defineNeighborhood (CALModel* calModel)
 {

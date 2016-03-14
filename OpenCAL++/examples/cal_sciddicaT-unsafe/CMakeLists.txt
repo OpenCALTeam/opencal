@@ -14,13 +14,6 @@ file(GLOB SRC
 )
 
 add_executable(calpp_sciddicaT-unsafe ${SRC})
-<<<<<<< HEAD
-<<<<<<< HEAD
+
 target_link_libraries(calpp_sciddicaT-unsafe opencalpp)
-=======
-target_link_libraries(calpp_sciddicaT-unsafe opencalpp11)
->>>>>>> e44630b317eeb506eac14bb3076f71487fe5ed2d
-=======
-target_link_libraries(calpp_sciddicaT-unsafe opencalpp11)
->>>>>>> e44630b317eeb506eac14bb3076f71487fe5ed2d
 

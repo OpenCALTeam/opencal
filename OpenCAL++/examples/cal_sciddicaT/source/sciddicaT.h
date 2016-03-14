@@ -1,25 +1,12 @@
 #ifndef sciddicaTModel_h
 #define sciddicaTModel_h
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 #include <OpenCAL++/calModel.h>
 #include <OpenCAL++/calVonNeumannNeighborhood.h>
 #include <OpenCAL++/calRun.h>
 #include <OpenCAL++/calRealConverterIO.h>
 #include <OpenCAL++/calModelFunctor.h>
-=======
-=======
->>>>>>> e44630b317eeb506eac14bb3076f71487fe5ed2d
-#include <OpenCAL++11/calModel.h>
-#include <OpenCAL++11/calVonNeumannNeighborhood.h>
-#include <OpenCAL++11/calRun.h>
-#include <OpenCAL++11/calRealConverterIO.h>
-#include <OpenCAL++11/calModelFunctor.h>
-<<<<<<< HEAD
->>>>>>> e44630b317eeb506eac14bb3076f71487fe5ed2d
-=======
->>>>>>> e44630b317eeb506eac14bb3076f71487fe5ed2d
+
 #include <stdlib.h>
 #include <time.h>
 
