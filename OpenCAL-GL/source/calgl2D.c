@@ -450,14 +450,15 @@ void calglDrawRealModel2D(struct CALGLDrawModel2D* calDrawModel) {
 	glPushMatrix(); {
 		glPushAttrib(GL_LIGHTING_BIT); {
 			// Apply Light
-			//if(calDrawModel->modelLight){
-			//	calglApplyLightParameter(calDrawModel->modelLight);
-			//} else if(calglAreLightsEnable()){
-			//	calDrawModel->modelLight = calglCreateLightParameter(calglGetPositionLight(), calglGetAmbientLight(), calglGetDiffuseLight(), calglGetSpecularLight(), 1, NULL, 0.0f);
-			//}
-			if(!calDrawModel->modelLight && calglAreLightsEnable()) {
+			if(calDrawModel->modelLight){
+				calglApplyLightParameter(calDrawModel->modelLight);
+			} else if(calglAreLightsEnable()){
 				calDrawModel->modelLight = calglCreateLightParameter(calglGetPositionLight(), calglGetAmbientLight(), calglGetDiffuseLight(), calglGetSpecularLight(), 1, NULL, 0.0f);
 			}
+			//if(!calDrawModel->modelLight && calglAreLightsEnable()) {
+			//	calDrawModel->modelLight = calglCreateLightParameter(calglGetPositionLight(), calglGetAmbientLight(), calglGetDiffuseLight(), calglGetSpecularLight(), 1, NULL, 0.0f);
+			//}
+
 			// Apply model view transformation
 			if(calDrawModel->modelView) {
 				calglApplyModelViewParameter(calDrawModel->modelView);

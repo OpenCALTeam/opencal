@@ -27,10 +27,10 @@ unsigned int Sleep(unsigned int usecond) {
 static struct CALGLGlobalSettings* globalSettings = NULL;
 
 // Light 
-static float pos[] = {0.0f, 10.0f, 0.0f, 1.0f};
+static float pos[] = {0.0f, 5.0f, 0.0f, 1.0f};
 static float diff[] = {0.8f, 0.8f, 0.8f};
-static float spec[] = {1.0f, 1.0f, 1.0f};
-static float amb[] =  {0.2f, 0.2f, 0.2f};
+static float spec[] = {0.0f, 0.0f, 0.0f};
+static float amb[] =  {0.4f, 0.4f, 0.4f};
 static float spot[] = {0.1f, 0.1f, 0.1f};
 
 struct CALGLGlobalSettings* calglCreateGlobalSettings(){

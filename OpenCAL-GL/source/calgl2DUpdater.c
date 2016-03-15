@@ -48,7 +48,7 @@ void* calglFuncThreadUpdate2D(void* arg){
 
 	while (!calUpdater->stop){
 		calglUpdate2D(calUpdater);
-		Sleep(10);
+		//Sleep(10);
 	}
 
 	return (void *)0;
