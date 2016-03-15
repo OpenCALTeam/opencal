@@ -190,7 +190,7 @@ int main(int argc, char** argv) {
 	// draw_model3D definition
 	draw_model3D = calglDefDrawModel2D(CALGL_DRAW_MODE_SURFACE, "SciddicaT 3D view", sciddicaT, sciddicaTsimulation);
 	// Add nodes
-	calglAddToDrawModel2Dr(draw_model3D, NULL, &Q.z, CALGL_TYPE_INFO_VERTEX_DATA, CALGL_TYPE_INFO_USE_NO_COLOR, CALGL_DATA_TYPE_DYNAMIC); //CALGL_DATA_TYPE_STATIC
+	calglAddToDrawModel2Dr(draw_model3D, NULL, &Q.z, CALGL_TYPE_INFO_VERTEX_DATA, CALGL_TYPE_INFO_USE_NO_COLOR, CALGL_DATA_TYPE_STATIC); 
 	calglColor2D(draw_model3D, 0.5, 0.5, 0.5, 1.0);
 	calglAddToDrawModel2Dr(draw_model3D, Q.z, &Q.z, CALGL_TYPE_INFO_COLOR_DATA, CALGL_TYPE_INFO_USE_CURRENT_COLOR, CALGL_DATA_TYPE_DYNAMIC);
 	calglAddToDrawModel2Dr(draw_model3D, Q.z, &Q.z, CALGL_TYPE_INFO_NORMAL_DATA, CALGL_TYPE_INFO_USE_NO_COLOR, CALGL_DATA_TYPE_DYNAMIC);
@@ -209,11 +209,11 @@ int main(int argc, char** argv) {
 	//	calglDisplayDrawJBound2D(draw_model3D, 300, draw_model3D->calModel->columns);
 	//	calglHideDrawIBound2D(draw_model3D, 100, 150);
 
-	//draw_model2D = calglDefDrawModel2D(CALGL_DRAW_MODE_FLAT, "SciddicaT 2D view", sciddicaT, sciddicaTsimulation);
-	//draw_model2D->realModel = draw_model3D->realModel;
-	//calglInfoBar2Dr(draw_model2D, Q.h, "Debris thickness", CALGL_TYPE_INFO_USE_RED_SCALE, 20, 200, 50, 150);
+	draw_model2D = calglDefDrawModel2D(CALGL_DRAW_MODE_FLAT, "SciddicaT 2D view", sciddicaT, sciddicaTsimulation);
+	draw_model2D->realModel = draw_model3D->realModel;
+	calglInfoBar2Dr(draw_model2D, Q.h, "Debris thickness", CALGL_TYPE_INFO_USE_RED_SCALE, 20, 200, 50, 150);
 
-	//calglSetLayoutOrientation2D(CALGL_LAYOUT_ORIENTATION_VERTICAL);
+	calglSetLayoutOrientation2D(CALGL_LAYOUT_ORIENTATION_VERTICAL);
 
 	calglSetDisplayStep(100);
 
