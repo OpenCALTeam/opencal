@@ -402,18 +402,21 @@ void calglMouseWindow3D(int button, int state, int x, int y){
 		leftPressed = CAL_TRUE;
 		old_x = x - window3D->sub_width / 2;
 		old_y = y-window3D->sub_height/2;
-		models3D[glutGetWindow()-2]->moving = CAL_TRUE;
+		
+		//models3D[glutGetWindow()-2]->moving = CAL_TRUE;
 	}
 	else if (button == 2) { // Right click
 		rightPressed = CAL_TRUE;
 		oldestY = y-window3D->sub_height/2;
-		models3D[glutGetWindow()-2]->moving = CAL_TRUE;
+		
+		//models3D[glutGetWindow()-2]->moving = CAL_TRUE;
 	}
 
 	if (state == GLUT_UP){
 		leftPressed = CAL_FALSE;
 		rightPressed = CAL_FALSE;
-		models3D[glutGetWindow()-2]->moving = CAL_FALSE;
+		
+		//models3D[glutGetWindow()-2]->moving = CAL_FALSE;
 	}
 	else {
 		calglRedisplayAllWindow3D();

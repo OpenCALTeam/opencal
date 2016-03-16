@@ -185,8 +185,8 @@ void calglSubDisplayWindow2D(void) {
 
 	currentModel2D = glutGetWindow()-2;
 
-	if(window2D->models[currentModel2D]->modelLight)
-		calglApplyLightParameter(window2D->models[currentModel2D]->modelLight);
+	//if(window2D->models[currentModel2D]->modelLight)
+	//	calglApplyLightParameter(window2D->models[currentModel2D]->modelLight);
 
 	glPushMatrix();	{
 		glTranslatef(xPos[currentModel2D], yPos[currentModel2D], zPos[currentModel2D]);
@@ -403,19 +403,24 @@ void calglMouseWindow2D(int button, int state, int x, int y) {
 		leftPressed = CAL_TRUE;
 		old_x = x-window2D->sub_width/2;
 		old_y = y-window2D->sub_height/2;
-		models2D[glutGetWindow()-2]->moving = CAL_TRUE;
+		
+		//models2D[glutGetWindow()-2]->moving = CAL_TRUE;
 	} else if(button==2) { // Right click
 		rightPressed = CAL_TRUE;
 		oldestY = y-window2D->sub_height/2;
-		models2D[glutGetWindow()-2]->moving = CAL_TRUE;
+		
+		//models2D[glutGetWindow()-2]->moving = CAL_TRUE;
 	}
 
 	if(state==GLUT_UP) {
 		leftPressed = CAL_FALSE;
 		rightPressed = CAL_FALSE;
-		models2D[glutGetWindow()-2]->moving = CAL_FALSE;
+		
+		//models2D[glutGetWindow()-2]->moving = CAL_FALSE;
 	} else {
 		calglRedisplayAllWindow2D();
+		
+		//models2D[glutGetWindow()-2]->moving = CAL_FALSE;
 	}
 }
 
@@ -443,6 +448,8 @@ void calglMotionMouseWindow2D(int x, int y) {
 		window2D->models[glutGetWindow()-2]->modelView->yRotation += rot_x;*/
 
 		calglRedisplayAllWindow2D();
+		
+		//models2D[glutGetWindow()-2]->moving = CAL_TRUE;
 	} else if(rightPressed) {
 		y -= window2D->sub_height/2;
 		transY = -(y-oldestY) * mouseSensitivity;
@@ -451,6 +458,11 @@ void calglMotionMouseWindow2D(int x, int y) {
 		zPos[glutGetWindow()-2] += transY;
 
 		calglRedisplayAllWindow2D();
+		
+		//models2D[glutGetWindow()-2]->moving = CAL_TRUE;
+	} else {
+		
+		//models2D[glutGetWindow()-2]->moving = CAL_FALSE;
 	}
 }
 

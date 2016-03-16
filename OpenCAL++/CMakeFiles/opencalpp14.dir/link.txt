@@ -1,0 +1,2 @@
+/usr/bin/ar cr lib/libopencalpp14.a  CMakeFiles/opencalpp14.dir/source/calBuffer.cpp.o CMakeFiles/opencalpp14.dir/source/ElementaryProcessFunctor.cpp.o
+/usr/bin/ranlib lib/libopencalpp14.a

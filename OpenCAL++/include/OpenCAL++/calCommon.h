@@ -11,8 +11,11 @@
 
 #ifndef calCommon_h
 #define calCommon_h
+#include <stdlib.h>
+#include <OpenCAL++/calIndexesPool.h>
 
-
+namespace calCommon
+{
 
 #define CAL_FALSE false		//!< Boolean alias for false
 #define CAL_TRUE  true		//!< Boolean alias for true
@@ -29,189 +32,147 @@ typedef CALreal CALParameterr;	//!< Redefinition of the type CALreal. It is used
 
 
 /*!	\brief Enumeration used for cellular space toroidality setting.
- */
+     */
 enum CALSpaceBoundaryCondition{
-	CAL_SPACE_FLAT = 0,			//!< Enumerator used for setting non-toroidal cellular space.
-	CAL_SPACE_TOROIDAL			//!< Enumerator used for setting toroidal cellular space.
+    CAL_SPACE_FLAT = 0,			//!< Enumerator used for setting non-toroidal cellular space.
+    CAL_SPACE_TOROIDAL			//!< Enumerator used for setting toroidal cellular space.
 };
 
 
 /*!	\brief Enumeration used for substate updating settings.
- */
-enum CALUpdateMode{ 
-	CAL_UPDATE_EXPLICIT = 0,	//!< Enumerator used for specifying that explicit calls to calUpdateSubstate2D* and calUpdate2D are needed.
-	CAL_UPDATE_IMPLICIT			//!< Enumerator used for specifying that explicit calls to calUpdateSubstate2D* and calUpdate2D are NOT needed.
+     */
+enum CALUpdateMode{
+    CAL_UPDATE_EXPLICIT = 0,	//!< Enumerator used for specifying that explicit calls to calUpdateSubstate2D* and calUpdate2D are needed.
+    CAL_UPDATE_IMPLICIT			//!< Enumerator used for specifying that explicit calls to calUpdateSubstate2D* and calUpdate2D are NOT needed.
 };
 
 
 /*!	\brief Enumeration used for optimization strategies.
- */
-enum CALOptimization{ 
-	CAL_NO_OPT = 0,				//!< Enumerator used for specifying no optimizations.
-	CAL_OPT_ACTIVE_CELLS		//!< Enumerator used for specifying the active cells optimization.
+     */
+enum CALOptimization{
+    CAL_NO_OPT = 0,				//!< Enumerator used for specifying no optimizations.
+    CAL_OPT_ACTIVE_CELLS		//!< Enumerator used for specifying the active cells optimization.
 };
 
 
 /*! \brief Macro recomputing the out of bound neighbourhood indexes in case of toroidal cellular space.
- */
+     */
+
 #define calGetToroidalX(index, size) (   (index)<0?((size)+(index)):( (index)>((size)-1)?((index)-(size)):(index) )   )
 
 
-/*! \brief 2D cell's coordinates structure.
-
-	Structure that defines the cell's coordinates for 2D
-	cellular automata.
-	Here, the first coordinate, i, represents the cell's row coordinate; 
-	the second coordinate, j, represents the cell's column coordinate.
- */
-struct CALCell2D {
-	int i;		//!< Cell row coordinate.
-	int j;		//!< Cell column coordinate.
-};
-
-
-/*! \brief 3D cell's coordinates structure.
-
-	Structure that defines the cell's coordinates for 2D
-	cellular automata.
-	Here, the first coordinate, i, represents the cell's row coordinate; 
-	the second coordinate, j, represents the cell's column coordinate.
- */
-struct CALCell3D {
-	int i;		//!< Cell row coordinate.
-	int j;		//!< Cell column coordinate.
-	int k;		//!< Cell slice coordinate.
-};
-
-
-
-/*! \brief 8 bit (256 values) 2D integer substate; it can also be used for 1 bit boolean substates.
-
-	Structure that defines the abstraction of 2D cellular automaton
-	8 bit (256 values) integer substates. It can be also used for 
-	1 bit (0, 1 or false, true) boolean substates.
-	It consists of two linearised matrices: the first, current, represents 
-	the (linearised) matrix used for reading the substates values; 
-	the last, next, is used to write the new computed values. 
-	In this way, implicit parallelism is obtained, since the changes 
-	to the values of the substates do not affect the current values
-	inside the cells.
- */
-struct CALSubstate2Db {
-	CALbyte* current;	//!< Current linearised matrix of the substate, used for reading purposes.
-	CALbyte* next;		//!< Next linearised matrix of the substate, used for writing purposes.
-};
-
-/*! \brief 2D integer substate.
-
-	Structure that defines the abstraction of 2D cellular automaton
-	integer substates.
-	It consists of two linearised matrices: the first, current, represents 
-	the (linearised) matrix used for reading the substates values; 
-	the last, next, is used to write the new computed values. 
-	In this way, implicit parallelism is obtained, since the changes 
-	to the values of the substates do not affect the current values
-	inside the cells.
- */
-struct CALSubstate2Di {
-	CALint* current;	//!< Current linearised matrix of the substate, used for reading purposes.
-	CALint* next;		//!< Next linearised matrix of the substate, used for writing purposes.
-};
-
-/*! \brief 2D real (floating point) substate.
-
-	Structure that defines the abstraction of 2D cellular automaton
-	floating point substates.
-	It consists of two linearised matrices: the first, current, represents 
-	the (linearised) matrix used for reading the substates values; 
-	the last, next, is used to write the new computed values. 
-	In this way, implicit parallelism is obtained, since the changes 
-	to the values of the substates do not affect the current values
-	inside the cells.
- */
-struct CALSubstate2Dr {
-	CALreal* current;	//!< Current linearised matrix of the substate, used for reading purposes.
-	CALreal* next;		//!< Next linearised matrix of the substate, used for writing purposes.
-};
-
-
-
-/*! \brief 8 bit (256 values) 3D integer substate; it can also be used for 1 bit boolean substates.
-
-	Structure that defines the abstraction of 3D cellular automaton
-	8 bit (256 values) integer substates. It can be also used for 
-	1 bit (0, 1 or false, true) boolean substates.
-	It consists of two linearised 3D buffers: the first, current, represents 
-	the (linearised) 3D buffer used for reading the substate's values; 
-	the last, next, is used to write the new computed values. 
-	In this way, implicit parallelism is obtained, since the changes 
-	to the values of the substates do not affect the current values
-	inside the cells.
- */
-struct CALSubstate3Db {
-	CALbyte* current;	//!< Current linearised 3D buffer of the substate, used for reading purposes.
-	CALbyte* next;		//!< Next linearised 3D buffer of the substate, used for writing purposes.
-};
-
-/*! \brief 3D integer substate.
-
-	Structure that defines the abstraction of 3D cellular automaton
-	integer substates.
-	It consists of two linearised 3D buffers: the first, current, represents 
-	the (linearised) buffer used for reading the substates values;
-	the last, next, is used to write the new computed values.
-	In this way, implicit parallelism is obtained, since the changes 
-	to the values of the substates do not affect the current values
-	inside the cells.
- */
-struct CALSubstate3Di {
-	CALint* current;	//!< Current linearised 3D buffer of the substate, used for reading purposes.
-	CALint* next;		//!< Next linearised 3D buffer of the substate, used for writing purposes.
-};
-
-/*! \brief 3D real (floating point) substate.
-
-	Structure that defines the abstraction of 3D cellular automaton
-	floating point substates.
-	It consists of two linearised 3D buffers: the first, current, represents 
-	the (linearised) 3D buffer used for reading the substates values; 
-	the last, next, is used to write the new computed values. 
-	In this way, implicit parallelism is obtained, since the changes 
-	to the values of the substates do not affect the current values
-	inside the cells.
- */
-struct CALSubstate3Dr {
-	CALreal* current;	//!< Current linearised 3D buffer of the substate, used for reading purposes.
-	CALreal* next;		//!< Next linearised 3D buffer of the substate, used for writing purposes.
-};
-
-
-
 /*! Constant used to set the run final step to 0, correspondig to a loop condition.
-	In this case, a stop condition should be defined.
- */
+        In this case, a stop condition should be defined.
+     */
 #define CAL_RUN_LOOP 0
-
 
 
 /*! \brief Enumeration defining global reduction operations.
 
-Enumeration defining global reduction operations inside the 
-steering function.
- */
+    Enumeration defining global reduction operations inside the
+    steering function.
+     */
 enum REDUCTION_OPERATION {
-	REDUCTION_NONE = 0,
-	REDUCTION_MAX,
-	REDUCTION_MIN,
-	REDUCTION_SUM,
-	REDUCTION_PROD,
-	REDUCTION_LOGICAL_AND,
-	REDUCTION_BINARY_AND,
-	REDUCTION_LOGICAL_OR,
-	REDUCTION_BINARY_OR,
-	REDUCTION_LOGICAL_XOR,
-	REDUCTION_BINARY_XOR
+    REDUCTION_NONE = 0,
+    REDUCTION_MAX,
+    REDUCTION_MIN,
+    REDUCTION_SUM,
+    REDUCTION_PROD,
+    REDUCTION_LOGICAL_AND,
+    REDUCTION_BINARY_AND,
+    REDUCTION_LOGICAL_OR,
+    REDUCTION_BINARY_OR,
+    REDUCTION_LOGICAL_XOR,
+    REDUCTION_BINARY_XOR
 };
 
+/*! \brief Multiply cordinates array's element from startingIndex to dimension.
+     */
+inline unsigned int multiplier (int * coordinates, int startingIndex, size_t dimension) {
+    int n;
+    int m = 1;
+    for (n=startingIndex; n<dimension; n++)
+        m*= coordinates[n];
+    return m;
+}
+
+/*! \brief Return the linearIndex of the cell with coordinates indexes.
+     */
+inline unsigned int cellLinearIndex (int* indexes, int* coordinates, size_t dimension) {
+    int c = 0;
+    int multiplier = 1;
+    int n;
+    for (int i = 0;i < dimension;i++)
+    {
+        if (i== 1)
+            n=0;
+        else if (i==0)
+            n=1;
+        else
+            n=i;
+        c += indexes[n] * multiplier;
+        multiplier *= coordinates[n];
+    }
+
+    return c;
+}
+
+/*! \brief Return multidimensional indexes of a certain cell.
+     */
+inline int* cellMultidimensionalIndexes (int index)
+{
+    return CALIndexesPool:: getMultidimensionalIndexes(index);
+}
+
+
+/*! \brief Return multidimensional indexes of n^th neighbour of a certain cell.
+     */
+inline int* getNeighborN (int* indexes, int* neighbor,int* coordinates, size_t dimension, enum CALSpaceBoundaryCondition CAL_TOROIDALITY)
+{
+    int i;
+    int* newIndexes = new int [dimension];
+    if (CAL_TOROIDALITY == CAL_SPACE_FLAT)
+        for (i = 0; i < dimension; ++i)
+        {
+            newIndexes[i] = indexes[i] + neighbor[i];
+        }
+    else
+    {
+        for (i=0; i< dimension; i++)
+            newIndexes[i] = calGetToroidalX(indexes[i] + neighbor[i], coordinates[i]);
+    }
+    return newIndexes;
+}
+
+
+/*! \brief Return linear index of n^th neighbour of a certain cell.
+     */
+inline int getNeighborNLinear (int* indexes, int* neighbor,int* coordinates, size_t dimension, enum CALSpaceBoundaryCondition CAL_TOROIDALITY)
+{
+    int i;
+    int c = 0;
+    int t = multiplier (coordinates, 0, dimension);
+    if (CAL_TOROIDALITY == CAL_SPACE_FLAT)
+        for (i = 0; i < dimension; ++i)
+        {
+            t= t/coordinates[i];
+            c+=(indexes[i] + neighbor[i])*t;
+        }
+    else
+    {
+        for (i=0; i< dimension; i++)
+        {
+            t= t/coordinates[i];
+            c+=(calGetToroidalX(indexes[i] + neighbor[i], coordinates[i]))*t;
+
+        }
+
+    }
+    return c;
+}
+
+
+
+}
 
 #endif
