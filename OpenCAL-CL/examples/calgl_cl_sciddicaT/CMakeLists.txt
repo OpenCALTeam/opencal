@@ -1,4 +1,4 @@
-# opencal/OpenCAL-GL/examples/calgl_cl_sciddicaT-calgl/CMakeLists.txt
+# opencal/OpenCAL-CL/examples/calgl_cl_sciddicaT-calgl/CMakeLists.txt
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 
 find_package(OpenCL  REQUIRED)
