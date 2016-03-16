@@ -1,17 +1,12 @@
-#ifndef __OPENCL_VERSION__
-#define __kernel
-#define __global
-#define __local
-#define get_global_id (int)
-#endif
+// Conway's game of Life transition function kernel
 
-//#include <life.h>
-#define Q 0
 #include <OpenCAL-CL/calcl2D.h>
 
+#define Q 0
 
-__kernel void life_transition_function(__CALCL_MODEL_2D) {
 
+__kernel void life_transition_function(__CALCL_MODEL_2D)
+{
 	calclThreadCheck2D();
 
 	CALint cols_ = calclGetColumns();
@@ -29,5 +24,4 @@ __kernel void life_transition_function(__CALCL_MODEL_2D) {
 		calclSet2Di(MODEL_2D, Q, i, j, 1);
 	else
 		calclSet2Di(MODEL_2D, Q, i, j, 0);
-
 }
