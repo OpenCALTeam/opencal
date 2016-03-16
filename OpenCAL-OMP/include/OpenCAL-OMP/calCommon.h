@@ -19,7 +19,7 @@
 
 typedef char CALbyte;	//!< Redefinition of the type char.
 typedef int CALint;		//!< Redefinition of the type int.
-typedef long double CALreal;	//!< Redefinition of the type double.
+typedef double CALreal;	//!< Redefinition of the type double.
 
 
 typedef CALbyte CALParameterb;	//!< Redefinition of the type CALbyte. It is used for the automaton's parameters.
@@ -37,7 +37,7 @@ enum CALSpaceBoundaryCondition{
 
 /*!	\brief Enumeration used for substate updating settings.
 */
-enum CALUpdateMode{ 
+enum CALUpdateMode{
 	CAL_UPDATE_EXPLICIT = 0,	//!< Enumerator used for specifying that explicit calls to calUpdateSubstate2D* and calUpdate2D are needed.
 	CAL_UPDATE_IMPLICIT			//!< Enumerator used for specifying that explicit calls to calUpdateSubstate2D* and calUpdate2D are NOT needed.
 };
@@ -45,7 +45,7 @@ enum CALUpdateMode{
 
 /*!	\brief Enumeration used for optimization strategies.
 */
-enum CALOptimization{ 
+enum CALOptimization{
 	CAL_NO_OPT = 0,				//!< Enumerator used for specifying no optimizations.
 	CAL_OPT_ACTIVE_CELLS		//!< Enumerator used for specifying the active cells optimization.
 };
@@ -60,7 +60,7 @@ enum CALOptimization{
 
 	Structure that defines the cell's coordinates for 2D
 	cellular automata.
-	Here, the first coordinate, i, represents the cell's row coordinate; 
+	Here, the first coordinate, i, represents the cell's row coordinate;
 	the second coordinate, j, represents the cell's column coordinate.
 */
 struct CALCell2D {
@@ -73,7 +73,7 @@ struct CALCell2D {
 
 	Structure that defines the cell's coordinates for 2D
 	cellular automata.
-	Here, the first coordinate, i, represents the cell's row coordinate; 
+	Here, the first coordinate, i, represents the cell's row coordinate;
 	the second coordinate, j, represents the cell's column coordinate.
 */
 struct CALCell3D {
@@ -87,12 +87,12 @@ struct CALCell3D {
 /*! \brief 8 bit (256 values) 2D integer substate; it can also be used for 1 bit boolean substates.
 
 	Structure that defines the abstraction of 2D cellular automaton
-	8 bit (256 values) integer substates. It can be also used for 
+	8 bit (256 values) integer substates. It can be also used for
 	1 bit (0, 1 or false, true) boolean substates.
-	It consists of two linearised matrices: the first, current, represents 
-	the (linearised) matrix used for reading the substates values; 
-	the last, next, is used to write the new computed values. 
-	In this way, implicit parallelism is obtained, since the changes 
+	It consists of two linearised matrices: the first, current, represents
+	the (linearised) matrix used for reading the substates values;
+	the last, next, is used to write the new computed values.
+	In this way, implicit parallelism is obtained, since the changes
 	to the values of the substates do not affect the current values
 	inside the cells.
 */
@@ -105,10 +105,10 @@ struct CALSubstate2Db {
 
 	Structure that defines the abstraction of 2D cellular automaton
 	integer substates.
-	It consists of two linearised matrices: the first, current, represents 
-	the (linearised) matrix used for reading the substates values; 
-	the last, next, is used to write the new computed values. 
-	In this way, implicit parallelism is obtained, since the changes 
+	It consists of two linearised matrices: the first, current, represents
+	the (linearised) matrix used for reading the substates values;
+	the last, next, is used to write the new computed values.
+	In this way, implicit parallelism is obtained, since the changes
 	to the values of the substates do not affect the current values
 	inside the cells.
 */
@@ -121,10 +121,10 @@ struct CALSubstate2Di {
 
 	Structure that defines the abstraction of 2D cellular automaton
 	floating point substates.
-	It consists of two linearised matrices: the first, current, represents 
-	the (linearised) matrix used for reading the substates values; 
-	the last, next, is used to write the new computed values. 
-	In this way, implicit parallelism is obtained, since the changes 
+	It consists of two linearised matrices: the first, current, represents
+	the (linearised) matrix used for reading the substates values;
+	the last, next, is used to write the new computed values.
+	In this way, implicit parallelism is obtained, since the changes
 	to the values of the substates do not affect the current values
 	inside the cells.
 */
@@ -138,12 +138,12 @@ struct CALSubstate2Dr {
 /*! \brief 8 bit (256 values) 3D integer substate; it can also be used for 1 bit boolean substates.
 
 	Structure that defines the abstraction of 3D cellular automaton
-	8 bit (256 values) integer substates. It can be also used for 
+	8 bit (256 values) integer substates. It can be also used for
 	1 bit (0, 1 or false, true) boolean substates.
-	It consists of two linearised 3D buffers: the first, current, represents 
-	the (linearised) 3D buffer used for reading the substate's values; 
-	the last, next, is used to write the new computed values. 
-	In this way, implicit parallelism is obtained, since the changes 
+	It consists of two linearised 3D buffers: the first, current, represents
+	the (linearised) 3D buffer used for reading the substate's values;
+	the last, next, is used to write the new computed values.
+	In this way, implicit parallelism is obtained, since the changes
 	to the values of the substates do not affect the current values
 	inside the cells.
 */
@@ -156,10 +156,10 @@ struct CALSubstate3Db {
 
 	Structure that defines the abstraction of 3D cellular automaton
 	integer substates.
-	It consists of two linearised 3D buffers: the first, current, represents 
+	It consists of two linearised 3D buffers: the first, current, represents
 	the (linearised) buffer used for reading the substates values;
 	the last, next, is used to write the new computed values.
-	In this way, implicit parallelism is obtained, since the changes 
+	In this way, implicit parallelism is obtained, since the changes
 	to the values of the substates do not affect the current values
 	inside the cells.
 */
@@ -172,10 +172,10 @@ struct CALSubstate3Di {
 
 	Structure that defines the abstraction of 3D cellular automaton
 	floating point substates.
-	It consists of two linearised 3D buffers: the first, current, represents 
-	the (linearised) 3D buffer used for reading the substates values; 
-	the last, next, is used to write the new computed values. 
-	In this way, implicit parallelism is obtained, since the changes 
+	It consists of two linearised 3D buffers: the first, current, represents
+	the (linearised) 3D buffer used for reading the substates values;
+	the last, next, is used to write the new computed values.
+	In this way, implicit parallelism is obtained, since the changes
 	to the values of the substates do not affect the current values
 	inside the cells.
 */

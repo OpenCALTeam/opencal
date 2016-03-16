@@ -45,6 +45,43 @@ struct CALGLDrawModel2D* calglDefDrawModel2D(enum CALGL_DRAW_MODE mode, const ch
 	calglDisplayDrawJBound2D(drawModel, 0, calModel->columns);
 
 	drawModel->calUpdater = calglCreateUpdater2D(calRun);
+//  drawModel->calUpdater = calUpdater;
+	drawModel->infoBar = NULL;
+
+	drawModel->moving = CAL_FALSE;
+
+	calglShowModel2D(drawModel);
+
+	return drawModel;
+}
+
+struct CALGLDrawModel2D* calglDefDrawModel2DCL(enum CALGL_DRAW_MODE mode, const char* name, struct CALModel2D* calModel, struct CALUpdater2D* calUpdater) {
+	struct CALGLDrawModel2D* drawModel = (struct CALGLDrawModel2D*) malloc(sizeof(struct CALGLDrawModel2D));
+
+	drawModel->drawMode = mode;
+	drawModel->name = name;
+
+	drawModel->calModel = calModel;
+
+	drawModel->byteModel = NULL;
+	drawModel->intModel = NULL;
+	drawModel->realModel = NULL;
+	drawModel->modelView = NULL;
+	drawModel->modelLight = NULL;
+
+	drawModel->redComponent = 1.0f;
+	drawModel->greenComponent = 1.0f;
+	drawModel->blueComponent = 1.0f;
+	drawModel->alphaComponent = 1.0f;
+
+	drawModel->drawICells = (GLshort*) malloc(sizeof(GLshort)*calModel->rows);
+	drawModel->drawJCells = (GLshort*) malloc(sizeof(GLshort)*calModel->columns);
+
+	calglDisplayDrawIBound2D(drawModel, 0, calModel->rows);
+	calglDisplayDrawJBound2D(drawModel, 0, calModel->columns);
+
+//	drawModel->calUpdater = calglCreateUpdater2D(calRun);
+  drawModel->calUpdater = calUpdater;
 	drawModel->infoBar = NULL;
 
 	drawModel->moving = CAL_FALSE;
@@ -68,7 +105,9 @@ void calglDestoyDrawModel2D(struct CALGLDrawModel2D* drawModel) {
 			free(drawModel->drawJCells);
 		calglDestroyModelViewParameter(drawModel->modelView);
 		calglDestroyLightParameter(drawModel->modelLight);
-		calglDestroyUpdater2D(drawModel->calUpdater);
+		if(drawModel->calUpdater)
+			free(drawModel->calUpdater);
+
 		free(drawModel);
 	}
 }

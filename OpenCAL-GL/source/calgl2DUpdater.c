@@ -48,7 +48,7 @@ void* calglFuncThreadUpdate2D(void* arg){
 
 	while (!calUpdater->stop){
 		calglUpdate2D(calUpdater);
-		Sleep(10);
+		//Sleep(10);
 	}
 
 	return (void *)0;
@@ -68,6 +68,7 @@ void calglUpdate2D(struct CALUpdater2D* calUpdater){
 		}
 		//simulation main loop
 		calUpdater->calRun->step++;
+		calUpdater->step=calUpdater->calRun->step;
 		//exectutes the global transition function, the steering function and check for the stop condition.
 		calUpdater->terminated = calRunCAStep2D(calUpdater->calRun);
 		//graphic rendering
@@ -125,5 +126,3 @@ void calglSaveStateUpdater2D(struct CALUpdater2D* calUpdater){
 		calSaveSubstate2Dr(calModel, calModel->pQr_array[i], tmpString);
 	}
 }
-
-

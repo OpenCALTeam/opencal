@@ -455,7 +455,7 @@ void calglMotionMouseWindow2D(int x, int y) {
 }
 
 void calglIdleFuncWindow2D(void) {
-	if(calglGetGlobalSettings()->fixedDisplay && window2D->models[0]->calUpdater->calRun->step%calglGetGlobalSettings()->fixedStep==0) {
+	if(calglGetGlobalSettings()->fixedDisplay && window2D->models[0]->calUpdater->step%calglGetGlobalSettings()->fixedStep==0) {
 		calglRedisplayAllWindow2D();
 	}
 }

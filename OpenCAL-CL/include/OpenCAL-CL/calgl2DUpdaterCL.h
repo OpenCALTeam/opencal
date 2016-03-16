@@ -12,7 +12,7 @@
 #ifndef calgl2DUpdater_h
 #define calgl2DUpdater_h
 
-#include <OpenCAL/cal2DRun.h>
+#include <OpenCAL-CL/calcl2D.h>
 #include <time.h>
 #include <pthread.h>
 
@@ -29,42 +29,51 @@ struct CALUpdater2D {
 	pthread_t thread;			//!< Reference to a thread variable.
 	CALbyte stop;				//!< Boolean if it is stopped or not.
 	CALint step;
+	struct CALCLModel2D* deviceCA;	//!< Reference to struct CALCLModel2D.
+	struct CALModel2D*   hostCA;	//!< Reference to struct CALModel2D.
+	CALbyte onlyOneTime;
+	CALint fixedStep;
+	CALint final_step;		//!< Final simulation step; if 0 the simulation becomes a loop.
 
 };
 
 /*! \brief Constructor for create a struct CALUpdater2D.
 */
-struct CALUpdater2D* calglCreateUpdater2D(
-	struct CALRun2D* calRun	//!< Reference to CALRun2D
+struct CALUpdater2D* calglCreateUpdater2DCL(
+	struct CALCLModel2D* deviceCA,	//!< Reference to CALRun2D
+	struct CALModel2D*   hostCA,
+	CALint fixedStep,
+	CALint initial_step,
+	CALint final_step
 	);
 
 /*! \brief Destructor for de-allocate memory.
 */
-void calglDestroyUpdater2D(
+void calglDestroyUpdater2DCL(
 	struct CALUpdater2D* calUpdater //!< Struct to destroy.
 	);
 
 /*! \brief Main update function, it is called by the thread.
 */
-void* calglFuncThreadUpdate2D(
+void* calglFuncThreadUpdate2DCL(
 	void* arg	//!< Argument which is a struct CALUpdater2D.
 	);
 
 /*! \brief Function for starting the thread.
 */
-void calglStartThread2D(
+void calglStartThread2DCL(
 	struct CALUpdater2D* calUpdater	//!< Object which contains the thread to launch.
 	);
 
 /*! \brief Update function for updating the cellular automata computation.
 */
-void calglUpdate2D(
+void calglUpdate2DCL(
 	struct CALUpdater2D* calUpdater	//!< Struct for retrieve the cellular automata to update.
 	);
 
 /*! \brief Update function for saving the final state to disk.
 */
-void calglSaveStateUpdater2D(
+void calglSaveStateUpdater2DCL(
 	struct CALUpdater2D* calUpdater	//!< Struct for retrieve the cellular automata data.
 	);
 
