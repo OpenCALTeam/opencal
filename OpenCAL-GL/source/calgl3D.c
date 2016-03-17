@@ -55,6 +55,44 @@ struct CALGLDrawModel3D* calglDefDrawModel3D(enum CALGL_DRAW_MODE mode, const ch
 	return drawModel;
 }
 
+struct CALGLDrawModel3D* calglDefDrawModel3DCL(enum CALGL_DRAW_MODE mode, const char* name, struct CALModel3D* calModel, struct CALUpdater3D* calUpdater) {
+	struct CALGLDrawModel3D* drawModel = (struct CALGLDrawModel3D*) malloc(sizeof(struct CALGLDrawModel3D));
+	drawModel->drawMode = mode;
+	drawModel->name = name;
+
+	drawModel->calModel = calModel;
+
+	drawModel->byteModel = NULL;
+	drawModel->intModel = NULL;
+	drawModel->realModel = NULL;
+	drawModel->modelView = NULL;
+	drawModel->modelLight = NULL;
+
+	drawModel->redComponent = 1.0f;
+	drawModel->greenComponent = 1.0f;
+	drawModel->blueComponent = 1.0f;
+	drawModel->alphaComponent = 1.0f;
+
+	drawModel->drawKCells = (GLshort*) malloc(sizeof(GLshort)*calModel->slices);
+	drawModel->drawICells = (GLshort*) malloc(sizeof(GLshort)*calModel->rows);
+	drawModel->drawJCells = (GLshort*) malloc(sizeof(GLshort)*calModel->columns);
+
+	calglDisplayDrawKBound3D(drawModel, 0, calModel->slices);
+	calglDisplayDrawIBound3D(drawModel, 0, calModel->rows);
+	calglDisplayDrawJBound3D(drawModel, 0, calModel->columns);
+
+	//drawModel->calUpdater = calglCreateUpdater3D(calRun);
+
+	drawModel->calUpdater = calUpdater;
+	drawModel->infoBar = NULL;
+
+	drawModel->moving = CAL_FALSE;
+
+	calglShowModel3D(drawModel);
+
+	return drawModel;
+}
+
 void calglDestoyDrawModel3D(struct CALGLDrawModel3D* drawModel) {
 	if(drawModel) {
 		if(drawModel->byteModel)

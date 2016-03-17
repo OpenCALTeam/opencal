@@ -1,4 +1,4 @@
-// The SciddicaT debris flows CCA simulation model
+// The SciddicaT debris flows XCA simulation model
 
 #include <OpenCAL/cal2D.h>
 #include <OpenCAL/cal2DIO.h>
@@ -17,7 +17,7 @@
 #define OUTPUT_PATH "./data/width_final.txt"
 #define NUMBER_OF_OUTFLOWS 4
 
-// declare CCA model (sciddicaT), substates (Q), parameters (P),
+// Declare XCA model (sciddicaT), substates (Q), parameters (P),
 // and simulation object (sciddicaT_simulation)
 struct CALModel2D* sciddicaT;
 
@@ -144,7 +144,7 @@ int main()
 	time_t start_time, end_time;
 
 	// define of the sciddicaT CA and sciddicaT_simulation simulation objects
-    sciddicaT = calCADef2D (ROWS, COLS, CAL_VON_NEUMANN_NEIGHBORHOOD_2D, CAL_SPACE_TOROIDAL, CAL_NO_OPT);
+  sciddicaT = calCADef2D (ROWS, COLS, CAL_VON_NEUMANN_NEIGHBORHOOD_2D, CAL_SPACE_TOROIDAL, CAL_NO_OPT);
 	sciddicaT_simulation = calRunDef2D(sciddicaT, 1, STEPS, CAL_UPDATE_IMPLICIT);
 
 	// add transition function's sigma_1 and sigma_2 elementary processes
@@ -170,7 +170,7 @@ int main()
 	start_time = time(NULL);
 	calRun2D(sciddicaT_simulation);
 	end_time = time(NULL);
-	printf ("Simulation terminated.\nElapsed time: %d\n", end_time-start_time);
+	printf ("Simulation terminated.\nElapsed time: %lds\n", end_time-start_time);
 
 	// saving configuration
 	calSaveSubstate2Dr(sciddicaT, Q.h, OUTPUT_PATH);

@@ -69,7 +69,8 @@ typedef struct CALCLSubstateMapper {
  * it contains Opencl buffers to transfer CA data to the gpu, and Opencl kernels to setup a CA simulation.
  *
  */
-typedef struct CALCLModel2D {
+struct CALCLModel2D {
+	struct CALModel2D * host_CA;								//!< Pointer to a host-side CA
 	enum CALOptimization opt;								//!< Enumeration used for optimization strategies (CAL_NO_OPT, CAL_OPT_ACTIVE_CELL).
 	int callbackSteps;									//!< Define how many steps must be executed before call the function cl_update_substates.
 	int steps;											//!< Simulation current step.
@@ -127,35 +128,33 @@ typedef struct CALCLModel2D {
 
 	CALCLqueue queue;									//!< Opencl command queue
 
-} CALCLModel2D;
+};
 
-/*! \brief Allocate, initialize and return a pointer to a CALCLModel2D.
+/*! \brief Allocate, initialize and return a pointer to a struct CALCLModel2D.
  *
- * Allocate, initialize and return a pointer to a CALCLModel2D. Opencl buffers are initialized using data from a CALModel2D instance.
+ * Allocate, initialize and return a pointer to a struct CALCLModel2D. Opencl buffers are initialized using data from a CALModel2D instance.
  * Moreover, the function receive an Opencl program used to initialize library kernels.
  */
-CALCLModel2D * calclCADef2D(struct CALModel2D *model,		//!< Pointer to a CALModel2D
+struct CALCLModel2D * calclCADef2D(struct CALModel2D *host_CA,		//!< Pointer to a CALModel2D
 		CALCLcontext context,										//!< Opencl context
 		CALCLprogram program,										//!< Opencl program containing library source and user defined source
 		CALCLdevice device											//!< Opencl device
 		);
 
 /*! \brief Main simulation cycle. It can become a loop if maxStep == CALCL_RUN_LOOP */
-void calclRun2D(CALCLModel2D* calclmodel2D, 		//!< Pointer to a CALCLModel2D
-		struct CALModel2D * model,				//!< Pointer to a CALModel2D
+void calclRun2D(struct CALCLModel2D* calclmodel2D, 		//!< Pointer to a struct CALCLModel2D
 		unsigned int initialStep,				//!< Initial simulation step
 		unsigned maxStep						//!< Maximum number of CA steps. Simulation can become a loop if maxStep == CALCL_RUN_LOOP
 		);
 
 /*! \brief A single step of CA. It executes the transition function, the steering and check the stop condition */
-CALbyte calclSingleStep2D(CALCLModel2D* calclmodel2D,		//!< Pointer to a CALCLModel2D
-		struct CALModel2D * model,							//!< Pointer to a CALModel2D
+CALbyte calclSingleStep2D(struct CALCLModel2D* calclmodel2D,		//!< Pointer to a struct CALCLModel2D
 		size_t * dimSize,									//!< Array of size_t containing the number of threads for each used Opencl dimension (CALCL_NO_OPT 2 dimensions, CALCL_OPT_ACTIVE_CELL 1 dimension)
 		int dimNum											//!< Number of Opencl dimensions (CALCL_NO_OPT 2 dimensions, CALCL_OPT_ACTIVE_CELL 1 dimension)
 		);
 
 /*! \brief Execute an Opencl kernel */
-void calclKernelCall2D(CALCLModel2D* calclmodel2D,		//!< Pointer to a CALCLModel2D
+void calclKernelCall2D(struct CALCLModel2D* calclmodel2D,		//!< Pointer to a struct CALCLModel2D
 		CALCLkernel ker,								//!< Opencl kernel
 		int dimNum,										//!< Number of Opencl dimensions (CALCL_NO_OPT 2 dimensions, CALCL_OPT_ACTIVE_CELL 1 dimension)
 		size_t * dimSize,								//!< Array of size_t containing the number of threads for each used Opencl dimension (CALCL_NO_OPT 2 dimensions, CALCL_OPT_ACTIVE_CELL 1 dimension)
@@ -163,7 +162,7 @@ void calclKernelCall2D(CALCLModel2D* calclmodel2D,		//!< Pointer to a CALCLModel
 		);
 
 /*! \brief Execute stream compaction kernels to compact and order CA active cells */
-void calclComputeStreamCompaction2D(CALCLModel2D * calclmodel2D		//!< Pointer to a CALCLModel2D
+void calclComputeStreamCompaction2D(struct CALCLModel2D * calclmodel2D		//!< Pointer to a struct CALCLModel2D
 		);
 
 /*! \brief Add arguments to the given Opencl kernel defined by the user
@@ -184,8 +183,7 @@ void calclSetKernelArgs2D(CALCLkernel * kernel,		//!< Pointer to Opencl kernel
  * to stop the simulation.
  *
  *  */
-void calclAddStopConditionFunc2D(CALCLModel2D * calclmodel2D,		//!< Pointer to a CALCLModel2D
-		struct CALModel2D *model,									//!< Pointer to a CALModel2D
+void calclAddStopConditionFunc2D(struct CALCLModel2D * calclmodel2D,		//!< Pointer to a struct CALCLModel2D
 		CALCLkernel * kernel										//!< Pointer to Opencl kernel
 		);
 
@@ -195,8 +193,7 @@ void calclAddStopConditionFunc2D(CALCLModel2D * calclmodel2D,		//!< Pointer to a
  * at the beginning of the simulation
  *
  *  */
-void calclAddInitFunc2D(CALCLModel2D * calclmodel2D,		//!< Pointer to a CALCLModel2D
-		struct CALModel2D *model,									//!< Pointer to a CALModel2D
+void calclAddInitFunc2D(struct CALCLModel2D * calclmodel2D,		//!< Pointer to a struct CALCLModel2D
 		CALCLkernel * kernel										//!< Pointer to Opencl kernel
 		);
 
@@ -206,8 +203,7 @@ void calclAddInitFunc2D(CALCLModel2D * calclmodel2D,		//!< Pointer to a CALCLMod
  * each time the function calclSingleStep2D is called.
  *
  *  */
-void calclAddSteeringFunc2D(CALCLModel2D * calclmodel2D,		//!< Pointer to a CALCLModel2D
-		struct CALModel2D *model,								//!< Pointer to a CALModel2D
+void calclAddSteeringFunc2D(struct CALCLModel2D * calclmodel2D,		//!< Pointer to a struct CALCLModel2D
 		CALCLkernel * kernel									//!< Pointer to Opencl kernel
 		);
 
@@ -217,7 +213,7 @@ void calclAddSteeringFunc2D(CALCLModel2D * calclmodel2D,		//!< Pointer to a CALC
  *	could decrease the performance because of the transfer of data between host and GPU.
  *
  *  */
-void calclBackToHostFunc2D(CALCLModel2D* calclmodel2D,		//!< Pointer to a CALCLModel2D
+void calclBackToHostFunc2D(struct CALCLModel2D* calclmodel2D,		//!< Pointer to a struct CALCLModel2D
 		void (*cl_update_substates)(struct CALModel2D*),				//!< Callback function executed each callbackSteps steps
 		int callbackSteps												//!< Define how many steps must be executed before call the callback functions
 		);
@@ -228,13 +224,12 @@ void calclBackToHostFunc2D(CALCLModel2D* calclmodel2D,		//!< Pointer to a CALCLM
  *	is executed each time the function calclSingleStep2D is called.
  *
  *  */
-void calclAddElementaryProcess2D(CALCLModel2D * calclmodel2D,		//!< Pointer to a CALCLModel2D
-		struct CALModel2D *model,										//!< Pointer to a CALModel2D
+void calclAddElementaryProcess2D(struct CALCLModel2D * calclmodel2D,		//!< Pointer to a struct CALCLModel2D
 		CALCLkernel * kernel											//!< Pointer to Opencl kernel
 		);
 
-/*! \brief Deallcate a CALCLModel2D instance */
-void calclFinalizeToolkit2D(CALCLModel2D * calclmodel2D		//!< Pointer to a CALCLModel2D
+/*! \brief Deallcate a struct CALCLModel2D instance */
+void calclFinalize2D(struct CALCLModel2D * calclmodel2D	//!< Pointer to a struct CALCLModel2D
 		);
 
 /*! \brief Allocate, initialize and return an Opencl program
@@ -256,5 +251,8 @@ int calclSetKernelArg2D(CALCLkernel* kernel,			//!< Opencl kernel
 			const void *arg_value                   //!< Value argument
 			);
 
+/*! \brief Copy all the substates device memory to host memory   */
+void calclGetSubstatesDeviceToHost2D(struct CALCLModel2D* calclmodel2D //!< Pointer to a CALCLModel3D
+			);
 
 #endif /* CALCL_H_ */

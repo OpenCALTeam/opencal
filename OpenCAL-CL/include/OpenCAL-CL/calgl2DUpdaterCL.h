@@ -30,7 +30,6 @@ struct CALUpdater2D {
 	CALbyte stop;				//!< Boolean if it is stopped or not.
 	CALint step;
 	struct CALCLModel2D* deviceCA;	//!< Reference to struct CALCLModel2D.
-	struct CALModel2D*   hostCA;	//!< Reference to struct CALModel2D.
 	CALbyte onlyOneTime;
 	CALint fixedStep;
 	CALint final_step;		//!< Final simulation step; if 0 the simulation becomes a loop.
@@ -41,7 +40,6 @@ struct CALUpdater2D {
 */
 struct CALUpdater2D* calglCreateUpdater2DCL(
 	struct CALCLModel2D* deviceCA,	//!< Reference to CALRun2D
-	struct CALModel2D*   hostCA,
 	CALint fixedStep,
 	CALint initial_step,
 	CALint final_step

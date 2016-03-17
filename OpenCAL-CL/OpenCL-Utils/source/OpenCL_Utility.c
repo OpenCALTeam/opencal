@@ -11,12 +11,10 @@
 
 #include "OpenCL_Utility.h"
 
-CALCLManager * calclCreateManager() {
-	CALCLManager * calOpenCL = (CALCLManager*) malloc(sizeof(CALCLManager));
-	return calOpenCL;
-}
-
-void calclInitializePlatforms(CALCLManager * opencl) {
+// PRIVATE FUNCTIONS
+/*! \brief Allocates and initializes available Opencl platforms */
+void calclInitializePlatforms(struct CALCLDeviceManager * opencl	//!< Pointer to struct CALCLDeviceManager structure
+		){
 
 	opencl->num_platforms = 0;
 	CALCLint err = clGetPlatformIDs(0, NULL, &opencl->num_platforms);
@@ -26,7 +24,9 @@ void calclInitializePlatforms(CALCLManager * opencl) {
 	calclHandleError(err);
 }
 
-void calclInitializeDevices(CALCLManager * opencl) {
+/*! \brief For each available platform allocates and initializes its Opencl devices */
+void calclInitializeDevices(struct CALCLDeviceManager * opencl //!< Pointer to struct CALCLDeviceManager structure
+		){
 	opencl->devices = (CALCLdevice**) malloc(sizeof(CALCLdevice*) * opencl->num_platforms);
 	opencl->num_platforms_devices = (int*) malloc(sizeof(int) * opencl->num_platforms);
 	CALCLuint num_devices;
@@ -41,8 +41,20 @@ void calclInitializeDevices(CALCLManager * opencl) {
 	}
 }
 
-CALCLcontext calclCreateContext(CALCLdevice * devices, CALCLuint num_devices) {
+// PUBLIC FUNCTIONS
+
+struct CALCLDeviceManager * calclCreateManager() {
+	struct CALCLDeviceManager * calOpenCL = (struct CALCLDeviceManager*) malloc(sizeof(struct CALCLDeviceManager));
+	calclInitializePlatforms(calOpenCL);
+	calclInitializeDevices(calOpenCL);
+	return calOpenCL;
+}
+
+
+
+CALCLcontext calclCreateContext(CALCLdevice * devices) {
 	CALCLint err;
+	CALCLuint num_devices=1;
 	CALCLcontext context = clCreateContext(NULL, num_devices, devices, NULL, NULL, &err);
 	calclHandleError(err);
 	return context;
@@ -63,11 +75,11 @@ CALCLqueue calclCreateCommandQueue(CALCLcontext context, CALCLdevice device) {
 	return out;
 }
 
-CALCLdevice calclGetDevice(CALCLManager * calOpenCL, int platformIndex, int deviceIndex) {
+CALCLdevice calclGetDevice(struct CALCLDeviceManager * calOpenCL, int platformIndex, int deviceIndex) {
 	return calOpenCL->devices[platformIndex][deviceIndex];
 }
 
-void calclFinalizeCALOpencl(CALCLManager * opencl) {
+void calclFinalizeManager(struct CALCLDeviceManager * opencl) {
 	free(opencl->platforms);
 	unsigned i = 0;
 	for (i = 0; i < opencl->num_platforms; i++)
@@ -129,7 +141,8 @@ void calclReadFile(char * fileName, char ** programBuffer, size_t * program_size
 		char * errorMessage = (char*) malloc(strlen(error) + strlen(fileName) + 1);
 		strcpy(errorMessage, error);
 		strcat(errorMessage, fileName);
-		strcat(errorMessage, '\0');
+		//strcat(errorMessage, '\0');
+		errorMessage[strlen(error) + strlen(fileName)]='\0';
 		perror(errorMessage);
 		exit(EXIT_FAILURE);
 	}
@@ -375,7 +388,7 @@ CALCLuint calclGetDeviceMaxWorkItemDimensions(CALCLdevice device) {
 
 void calclPrintAllDeviceInfo(CALCLdevice device) {
 
-	printf("--------DEVICE------- \n  Name: %s\n	Vendor: %s\nExtentions: %s \nGlobal Memory: %lu bytes\n MaxDim: %u \n--------------------- \n", calclGetDeviceName(device), calclGetDeviceVendor(device), calclGetDeviceExtensions(device), calclGetDeviceGlobalMemSize(device), calclGetDeviceMaxWorkItemDimensions);
+	printf("--------DEVICE------- \n  Name: %s\n	Vendor: %s\nExtentions: %s \nGlobal Memory: %lu bytes\n MaxDim: %u \n--------------------- \n", calclGetDeviceName(device), calclGetDeviceVendor(device), calclGetDeviceExtensions(device), calclGetDeviceGlobalMemSize(device), calclGetDeviceMaxWorkItemDimensions(device));
 }
 
 void calclHandleError(CALCLint err) {
@@ -385,7 +398,7 @@ void calclHandleError(CALCLint err) {
 	}
 }
 
-void calclPrintPlatformsAndDevices(CALCLManager * opencl){
+void calclPrintPlatformsAndDevices(struct CALCLDeviceManager * opencl){
 	unsigned int i;
 	int j;
 	for (i = 0; i < opencl->num_platforms; i++) {
@@ -407,7 +420,7 @@ void calclPrintPlatformsAndDevices(CALCLManager * opencl){
 		    }
 }
 
-void calclGetPlatformAndDeviceFromStdIn(CALCLManager * opencl,CALCLdevice * device){
+void calclGetPlatformAndDeviceFromStdIn(struct CALCLDeviceManager * opencl,CALCLdevice * device){
 	calclPrintPlatformsAndDevices(opencl);
 	CALCLuint num_platform;
 	CALCLuint num_device;

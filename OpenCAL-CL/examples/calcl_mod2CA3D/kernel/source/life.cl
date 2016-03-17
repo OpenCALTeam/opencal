@@ -8,7 +8,7 @@
 #define Q 0
 #include <OpenCAL-CL/calcl3D.h>
 
-__kernel void mod2_transition_function(__CALCL_MODEL_3D) {
+__kernel void mod2TransitionFunction(__CALCL_MODEL_3D) {
 
 	calclThreadCheck3D();
 

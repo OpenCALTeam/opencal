@@ -17,29 +17,29 @@ int LeggiGISInfo(TGISInfo &gis_info, FILE* f)
     fpos_t position;
 
     //ncols
-    fscanf(f,"%s",&str); if (strcmp(str, ncols_str))        return GIS_FILE_GENERIC_ERROR;
-    fscanf(f,"%s",&str); gis_info.ncols = atoi(str);
+    fscanf(f,"%s",str); if (strcmp(str, ncols_str))        return GIS_FILE_GENERIC_ERROR;
+    fscanf(f,"%s",str); gis_info.ncols = atoi(str);
     //nrows
-    fscanf(f,"%s",&str); if (strcmp(str, nrows_str))        return GIS_FILE_GENERIC_ERROR;
-    fscanf(f,"%s",&str); gis_info.nrows = atoi(str);
+    fscanf(f,"%s",str); if (strcmp(str, nrows_str))        return GIS_FILE_GENERIC_ERROR;
+    fscanf(f,"%s",str); gis_info.nrows = atoi(str);
     //xll_corner
-    fscanf(f,"%s",&str); if (strcmp(str, xllcorner_str))    return GIS_FILE_GENERIC_ERROR;
-    fscanf(f,"%s",&str); gis_info.xllcorner = atof(str);
+    fscanf(f,"%s",str); if (strcmp(str, xllcorner_str))    return GIS_FILE_GENERIC_ERROR;
+    fscanf(f,"%s",str); gis_info.xllcorner = atof(str);
     //yll_corner
-    fscanf(f,"%s",&str); if (strcmp(str, yllcorner_str))    return GIS_FILE_GENERIC_ERROR;
-    fscanf(f,"%s",&str); gis_info.yllcorner = atof(str);
+    fscanf(f,"%s",str); if (strcmp(str, yllcorner_str))    return GIS_FILE_GENERIC_ERROR;
+    fscanf(f,"%s",str); gis_info.yllcorner = atof(str);
     //aphothem
-    fscanf(f,"%s",&str); if (strcmp(str, cell_size_str))    return GIS_FILE_TASSELATION_ERROR;
-	fscanf(f,"%s",&str); gis_info.cell_size = atof(str);
+    fscanf(f,"%s",str); if (strcmp(str, cell_size_str))    return GIS_FILE_TASSELATION_ERROR;
+	fscanf(f,"%s",str); gis_info.cell_size = atof(str);
     //NODATA_value
-    fscanf(f,"%s",&str); if (strcmp(str, NODATA_value_str)) return GIS_FILE_GENERIC_ERROR;
-    fscanf(f,"%s",&str); gis_info.NODATA_value = atof(str);
+    fscanf(f,"%s",str); if (strcmp(str, NODATA_value_str)) return GIS_FILE_GENERIC_ERROR;
+    fscanf(f,"%s",str); gis_info.NODATA_value = atof(str);
 
-    //verifica se il numero di elementi è consistente rispetto a ncols e nrows
+    //verifica se il numero di elementi ï¿½ consistente rispetto a ncols e nrows
     fgetpos (f, &position);
     while (!feof(f))
     {
-        fscanf(f,"%s",&str);
+        fscanf(f,"%s",str);
         cont ++;
     }
     fsetpos (f, &position);
@@ -63,7 +63,7 @@ int VerificaGISInfo(TGISInfo gis_info, TGISInfo gis_info_morfologia)
 int SalvaGISInfo(const TGISInfo &gis_info, FILE* f)
 {
     char str[255];
-    
+
     //ncols
     fprintf(f,"%s\t\t", ncols_str);
     sprintf(str,"%d", gis_info.ncols);

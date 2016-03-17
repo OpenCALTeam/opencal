@@ -1,17 +1,10 @@
-#ifndef __OPENCL_VERSION__
-#define __kernel
-#define __global
-#define __localcl
-#define get_global_id (int)
-#endif
+// The SciddicaT debris flows XCA transition function kernels
 
 #include <kernel.h>
 
 //first elementary process
-__kernel void sciddicaT_flows_computation(__CALCL_MODEL_2D, __global CALParameterr * Pepsilon, __global CALParameterr * Pr
-
-) {
-
+__kernel void flowsComputation(__CALCL_MODEL_2D, __global CALParameterr * Pepsilon, __global CALParameterr * Pr)
+{
 	calclActiveThreadCheck2D();
 
 	int threadID = calclGlobalRow();
@@ -75,8 +68,8 @@ __kernel void sciddicaT_flows_computation(__CALCL_MODEL_2D, __global CALParamete
 }
 
 
-__kernel void sciddicaT_width_update(__CALCL_MODEL_2D) {
-
+__kernel void widthUpdate(__CALCL_MODEL_2D)
+{
 	calclActiveThreadCheck2D();
 
 	CALint neighborhoodSize = calclGetNeighborhoodSize();
@@ -95,11 +88,10 @@ __kernel void sciddicaT_width_update(__CALCL_MODEL_2D) {
 		h_next += ( calclGetX2Dr(MODEL_2D, NUMBER_OF_OUTFLOWS-n, i, j, n) - calclGet2Dr(MODEL_2D, n-1, i, j) );
 
 	calclSet2Dr(MODEL_2D, H, i, j, h_next);
-
 }
 
-__kernel void sciddicaT_remove_inactive_cells(__CALCL_MODEL_2D, __global CALParameterr * Pepsilon) {
-
+__kernel void removeInactiveCells(__CALCL_MODEL_2D, __global CALParameterr * Pepsilon)
+{
 	calclActiveThreadCheck2D();
 
 	int threadID = calclGlobalRow();
@@ -110,8 +102,8 @@ __kernel void sciddicaT_remove_inactive_cells(__CALCL_MODEL_2D, __global CALPara
 		calclRemoveActiveCell2D(MODEL_2D,i,j);
 }
 
-__kernel void sciddicaTSteering(__CALCL_MODEL_2D) {
-
+__kernel void steering(__CALCL_MODEL_2D)
+{
 	calclActiveThreadCheck2D();
 
 	int threadID = calclGlobalRow();
@@ -120,5 +112,4 @@ __kernel void sciddicaTSteering(__CALCL_MODEL_2D) {
 	int i;
 	for (i = 0; i < NUMBER_OF_OUTFLOWS; ++i)
 		calclInitSubstateActiveCell2Dr(MODEL_2D, i, threadID, 0);
-
 }

@@ -99,7 +99,7 @@ void simulationRun(void)
 		glutIdleFunc(NULL);
 		printf("\n");
 		printf("Simulation terminated\n");
-		printf("Elapsed time: %ds\n", end_time - start_time);
+		printf("Elapsed time: %lds\n", end_time - start_time);
 
 		//saving configuration
 		printf("Saving final state to %s\n", OUTPUT_PATH);

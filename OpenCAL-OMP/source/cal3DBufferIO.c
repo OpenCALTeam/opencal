@@ -23,7 +23,7 @@ void calfLoadBuffer3Db(CALbyte* M, int rows, int columns, int slices, FILE* f)
 {
 	char str[STRLEN];
 	int i, j, k;
-	
+
 	for (k=0; k<slices; k++)
 		for (i=0; i<rows; i++)
 			for (j=0; j<columns; j++){
@@ -36,7 +36,7 @@ void calfLoadBuffer3Di(CALint* M, int rows, int columns, int slices, FILE* f)
 {
 	char str[STRLEN];
 	int i, j, k;
-	
+
 	for (k=0; k<slices; k++)
 		for (i=0; i<rows; i++)
 			for (j=0; j<columns; j++){
@@ -49,7 +49,7 @@ void calfLoadBuffer3Dr(CALreal* M, int rows, int columns, int slices, FILE* f)
 {
 	char str[STRLEN];
 	int i, j, k;
-	
+
 	for (k=0; k<slices; k++)
 		for (i=0; i<rows; i++)
 			for (j=0; j<columns; j++){
@@ -71,7 +71,7 @@ CALbyte calLoadBuffer3Db(CALbyte* M, int rows, int columns, int slices, char* pa
 	calfLoadBuffer3Db(M, rows, columns, slices, f);
 
 	fclose(f);
-	
+
 	return CAL_TRUE;
 }
 
@@ -86,7 +86,7 @@ CALbyte calLoadBuffer3Di(CALint* M, int rows, int columns, int slices, char* pat
 	calfLoadBuffer3Di(M, rows, columns, slices, f);
 
 	fclose(f);
-	
+
 	return CAL_TRUE;
 }
 
@@ -101,7 +101,7 @@ CALbyte calLoadBuffer3Dr(CALreal* M, int rows, int columns, int slices, char* pa
 	calfLoadBuffer3Dr(M, rows, columns, slices, f);
 
 	fclose(f);
-	
+
 	return CAL_TRUE;
 }
 
@@ -149,7 +149,7 @@ void calfSaveBuffer3Dr(CALreal* M, int rows, int columns, int slices, FILE* f)
 	for (k=0; k<slices; k++) {
 		for (i=0; i<rows; i++) {
 			for (j=0; j<columns; j++) {
-				sprintf(str, "%Lf ", calGetBuffer3DElement(M, rows, columns, i, j, k));
+				sprintf(str, "%f ", calGetBuffer3DElement(M, rows, columns, i, j, k));
 				fprintf(f,"%s ",str);
 			}
 			fprintf(f,"\n");
@@ -165,13 +165,13 @@ CALbyte calSaveBuffer3Db(CALbyte* M, int rows, int columns, int slices, char* pa
 	FILE *f;
 	f = fopen(path, "w");
 
-	if ( !f ) 
+	if ( !f )
 		return CAL_FALSE;
 
 	calfSaveBuffer3Db(M, rows, columns, slices, f);
 
 	fclose(f);
-	
+
 	return CAL_TRUE;
 }
 
@@ -180,13 +180,13 @@ CALbyte calSaveBuffer3Di(CALint* M, int rows, int columns, int slices, char* pat
 	FILE *f;
 	f = fopen(path, "w");
 
-	if ( !f ) 
+	if ( !f )
 		return CAL_FALSE;
 
 	calfSaveBuffer3Di(M, rows, columns, slices, f);
 
 	fclose(f);
-	
+
 	return CAL_TRUE;
 }
 
@@ -195,12 +195,12 @@ CALbyte calSaveBuffer3Dr(CALreal* M, int rows, int columns, int slices, char* pa
 	FILE *f;
 	f = fopen(path, "w");
 
-	if ( !f ) 
+	if ( !f )
 		return CAL_FALSE;
 
 	calfSaveBuffer3Dr(M, rows, columns, slices, f);
 
 	fclose(f);
-	
+
 	return CAL_TRUE;
 }

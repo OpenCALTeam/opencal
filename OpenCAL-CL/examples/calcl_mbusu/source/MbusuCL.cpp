@@ -6,23 +6,23 @@ void initMbusu() {
 	mbusu->cols = COLS;
 	mbusu->layers = LAYERS;
 
-	mbusu->hostCA = calCADef3D(mbusu->rows,mbusu->cols,mbusu->layers,CAL_VON_NEUMANN_NEIGHBORHOOD_3D, CAL_SPACE_TOROIDAL, CAL_NO_OPT);
+	mbusu->host_CA = calCADef3D(mbusu->rows,mbusu->cols,mbusu->layers,CAL_VON_NEUMANN_NEIGHBORHOOD_3D, CAL_SPACE_TOROIDAL, CAL_NO_OPT);
 
 	mbusu->Q = new mbusuSubstates();
 
-	mbusu->Q->teta = calAddSubstate3Dr(mbusu->hostCA);
-	mbusu->Q->moist_cont = calAddSubstate3Dr(mbusu->hostCA);
-	mbusu->Q->psi = calAddSubstate3Dr(mbusu->hostCA);
-	mbusu->Q->k = calAddSubstate3Dr(mbusu->hostCA);
-	mbusu->Q->h = calAddSubstate3Dr(mbusu->hostCA);
-	mbusu->Q->dqdh = calAddSubstate3Dr(mbusu->hostCA);
-	mbusu->Q->convergence = calAddSubstate3Dr(mbusu->hostCA);
-	mbusu->Q->moist_diff = calAddSubstate3Dr(mbusu->hostCA);
+	mbusu->Q->teta = calAddSubstate3Dr(mbusu->host_CA);
+	mbusu->Q->moist_cont = calAddSubstate3Dr(mbusu->host_CA);
+	mbusu->Q->psi = calAddSubstate3Dr(mbusu->host_CA);
+	mbusu->Q->k = calAddSubstate3Dr(mbusu->host_CA);
+	mbusu->Q->h = calAddSubstate3Dr(mbusu->host_CA);
+	mbusu->Q->dqdh = calAddSubstate3Dr(mbusu->host_CA);
+	mbusu->Q->convergence = calAddSubstate3Dr(mbusu->host_CA);
+	mbusu->Q->moist_diff = calAddSubstate3Dr(mbusu->host_CA);
 
 
-//	calInitSubstate2Dr(sciara->hostCA, sciara->substates->Sz, 0);
-//	calInitSubstate2Dr(sciara->hostCA, sciara->substates->Slt, 0);
-//	calInitSubstate2Dr(sciara->hostCA, sciara->substates->St, 0);
+//	calInitSubstate2Dr(sciara->host_CA, sciara->substates->Sz, 0);
+//	calInitSubstate2Dr(sciara->host_CA, sciara->substates->Slt, 0);
+//	calInitSubstate2Dr(sciara->host_CA, sciara->substates->St, 0);
 //
 //	//TODO single layer initialization
 //	for (int i = 0; i < sciara->rows * sciara->cols; ++i) {
@@ -33,8 +33,8 @@ void initMbusu() {
 //	}
 //
 //	for (int i = 0; i < NUMBER_OF_OUTFLOWS; ++i) {
-//		sciara->substates->f[i] = calAddSubstate2Dr(sciara->hostCA);
-//		calInitSubstate2Dr(sciara->hostCA, sciara->substates->f[i], 0);
+//		sciara->substates->f[i] = calAddSubstate2Dr(sciara->host_CA);
+//		calInitSubstate2Dr(sciara->host_CA, sciara->substates->f[i], 0);
 //	}
 
 }
@@ -119,19 +119,19 @@ void simulationInitialize() {
 				satur_expd = pow((1 - satur_expc), exp_d);
 				k = ks* pow(satur, 0.5) *pow((1 - satur_expd), 2);
 
-				calSet3Dr(mbusu->hostCA, mbusu->Q->dqdh, _i, _j, _k, uno_su_dqdh);
-				calSet3Dr(mbusu->hostCA, mbusu->Q->psi, _i, _j, _k, psi);
-				calSet3Dr(mbusu->hostCA, mbusu->Q->k, _i, _j, _k, k);
-				calSet3Dr(mbusu->hostCA, mbusu->Q->h, _i, _j, _k, h);
-				calSet3Dr(mbusu->hostCA, mbusu->Q->teta, _i, _j, _k, teta);
-				calSet3Dr(mbusu->hostCA, mbusu->Q->moist_cont, _i, _j, _k, moist_cont);
-				calSet3Dr(mbusu->hostCA, mbusu->Q->moist_diff, _i, _j, _k, moist_diff);
+				calSet3Dr(mbusu->host_CA, mbusu->Q->dqdh, _i, _j, _k, uno_su_dqdh);
+				calSet3Dr(mbusu->host_CA, mbusu->Q->psi, _i, _j, _k, psi);
+				calSet3Dr(mbusu->host_CA, mbusu->Q->k, _i, _j, _k, k);
+				calSet3Dr(mbusu->host_CA, mbusu->Q->h, _i, _j, _k, h);
+				calSet3Dr(mbusu->host_CA, mbusu->Q->teta, _i, _j, _k, teta);
+				calSet3Dr(mbusu->host_CA, mbusu->Q->moist_cont, _i, _j, _k, moist_cont);
+				calSet3Dr(mbusu->host_CA, mbusu->Q->moist_diff, _i, _j, _k, moist_diff);
 				//--------------------------------- PEDOFUNZIONI
 
 			}
-	calUpdate3D(mbusu->hostCA);
+	calUpdate3D(mbusu->host_CA);
 }
 
 void exit() {
-	calFinalize3D(mbusu->hostCA);
+	calFinalize3D(mbusu->host_CA);
 }

@@ -74,7 +74,7 @@ typedef struct {
 	CALint layers;
 	Parameters parameters;
 	mbusuSubstates* Q;
-	CALModel3D * hostCA;
+	CALModel3D * host_CA;
 
 } Mbusu;
 

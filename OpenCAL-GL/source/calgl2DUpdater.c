@@ -89,7 +89,7 @@ void calglUpdate2D(struct CALUpdater2D* calUpdater){
 			//breaking the simulation
 			calUpdater->end_time = time(NULL);
 			printf("\nSimulation terminated\n");
-			printf(" Elapsed time: %ds\n", calUpdater->end_time - calUpdater->start_time);
+			printf(" Elapsed time: %d\n", (int)(calUpdater->end_time - calUpdater->start_time));
 			printf("*-----------------------------------------------------*\n");
 			//saving configuration
 			calglSaveStateUpdater2D(calUpdater);

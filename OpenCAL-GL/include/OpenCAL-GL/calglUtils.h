@@ -11,7 +11,7 @@
 
 #ifndef calglUtils_h
 #define calglUtils_h
-
+#include <math.h>
 typedef float CALGLVector3[3];      // Three component floating point vector
 
 /*! \brief Function that given three points calculate their normal vector

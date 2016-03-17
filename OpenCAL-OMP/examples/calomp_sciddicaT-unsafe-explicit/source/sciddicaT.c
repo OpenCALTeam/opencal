@@ -196,7 +196,7 @@ int main()
 	start_time = time(NULL);
 	run(sciddicaT_simulation);
 	end_time = time(NULL);
-	printf ("Simulation terminated.\nElapsed time: %d\n", end_time-start_time);
+	printf ("Simulation terminated.\nElapsed time: %lds\n", end_time-start_time);
 
 	// saving configuration
 	calSaveSubstate2Dr(sciddicaT, Q.h, OUTPUT_PATH);

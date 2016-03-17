@@ -127,7 +127,7 @@ __kernel void empiricalFlows(__CALCL_MODEL_2D, Parameters parameters) {
 	}
 }
 
-__kernel void width_update(__CALCL_MODEL_2D) {
+__kernel void widthUpdate(__CALCL_MODEL_2D) {
 
 	calclThreadCheck2D();
 

@@ -176,10 +176,10 @@ void calglSubDisplayWindow3D(void){
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	currentModel3D = glutGetWindow() - 2;
-	
+
 	if(window3D->models[currentModel3D]->modelLight)
 		calglApplyLightParameter(window3D->models[currentModel3D]->modelLight);
-	
+
 	glPushMatrix();	{
 		glTranslatef(xPos[currentModel3D], yPos[currentModel3D], zPos[currentModel3D]);
 
@@ -402,20 +402,20 @@ void calglMouseWindow3D(int button, int state, int x, int y){
 		leftPressed = CAL_TRUE;
 		old_x = x - window3D->sub_width / 2;
 		old_y = y-window3D->sub_height/2;
-		
+
 		//models3D[glutGetWindow()-2]->moving = CAL_TRUE;
 	}
 	else if (button == 2) { // Right click
 		rightPressed = CAL_TRUE;
 		oldestY = y-window3D->sub_height/2;
-		
+
 		//models3D[glutGetWindow()-2]->moving = CAL_TRUE;
 	}
 
 	if (state == GLUT_UP){
 		leftPressed = CAL_FALSE;
 		rightPressed = CAL_FALSE;
-		
+
 		//models3D[glutGetWindow()-2]->moving = CAL_FALSE;
 	}
 	else {
@@ -460,7 +460,7 @@ void calglMotionMouseWindow3D(int x, int y){
 }
 
 void calglIdleFuncWindow3D(void){
-	if (calglGetGlobalSettings()->fixedDisplay && window3D->models[0]->calUpdater->calRun->step%calglGetGlobalSettings()->fixedStep == 0){
+	if (calglGetGlobalSettings()->fixedDisplay && window3D->models[0]->calUpdater->step%calglGetGlobalSettings()->fixedStep == 0){
 		calglRedisplayAllWindow3D();
 	}
 }

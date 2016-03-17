@@ -31,6 +31,7 @@ struct CALUpdater3D* calglCreateUpdater3D(struct CALRun3D* calRun){
 	calUpdater->terminated = CAL_FALSE;
 	calUpdater->calRun = calRun;
 	calUpdater->stop = CAL_FALSE;
+	calUpdater->step = calRun->initial_step;
 
 	calglStartThread3D(calUpdater);
 
@@ -67,7 +68,7 @@ void calglUpdate3D(struct CALUpdater3D* calUpdater){
 				calRunInitSimulation3D (calUpdater->calRun);
 		}
 		//simulation main loop
-		calUpdater->calRun->step++;
+		calUpdater->step=calUpdater->calRun->step++;
 		//exectutes the global transition function, the steering function and check for the stop condition.
 		calUpdater->terminated = calRunCAStep3D(calUpdater->calRun);
 		//graphic rendering
@@ -88,7 +89,7 @@ void calglUpdate3D(struct CALUpdater3D* calUpdater){
 			//breaking the simulation
 			calUpdater->end_time = time(NULL);
 			printf("\nSimulation terminated\n");
-			printf(" Elapsed time: %ds\n", calUpdater->end_time - calUpdater->start_time);
+			printf(" Elapsed time: %d\n", (int)(calUpdater->end_time - calUpdater->start_time));
 			printf("*-----------------------------------------------------*\n");
 			//saving configuration
 			calglSaveStateUpdater3D(calUpdater);

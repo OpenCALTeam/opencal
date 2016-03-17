@@ -67,128 +67,128 @@ int loadParameters(char const * path, Sciara* sciara) {
 
 	fgetpos(f, &position);
 
-	fscanf(f, "%s", &str);
+	fscanf(f, "%s", str);
 	if (strcmp(str, "maximum_steps_(0_for_loop)") != 0)
 		return FILE_ERROR;
-	fscanf(f, "%s", &str);
+	fscanf(f, "%s", str);
 
-	fscanf(f, "%s", &str);
+	fscanf(f, "%s", str);
 	if (strcmp(str, "stopping_threshold_(height)") != 0)
 		return FILE_ERROR;
-	fscanf(f, "%s", &str);
-	fscanf(f, "%s", &str);
+	fscanf(f, "%s", str);
+	fscanf(f, "%s", str);
 	if (strcmp(str, "refreshing_step") != 0)
 		return FILE_ERROR;
-	fscanf(f, "%s", &str);
-	fscanf(f, "%s", &str);
+	fscanf(f, "%s", str);
+	fscanf(f, "%s", str);
 	if (strcmp(str, "thickness_visual_threshold") != 0)
 		return FILE_ERROR;
-	fscanf(f, "%s", &str);
-	fscanf(f, "%s", &str);
+	fscanf(f, "%s", str);
+	fscanf(f, "%s", str);
 	if (strcmp(str, "Pclock") != 0)
 		return FILE_ERROR;
-	fscanf(f, "%s", &str);
-	fscanf(f, "%s", &str);
+	fscanf(f, "%s", str);
+	fscanf(f, "%s", str);
 	if (strcmp(str, "PTsol") != 0)
 		return FILE_ERROR;
-	fscanf(f, "%s", &str);
-	fscanf(f, "%s", &str);
+	fscanf(f, "%s", str);
+	fscanf(f, "%s", str);
 	if (strcmp(str, "PTvent") != 0)
 		return FILE_ERROR;
-	fscanf(f, "%s", &str);
-	fscanf(f, "%s", &str);
+	fscanf(f, "%s", str);
+	fscanf(f, "%s", str);
 	if (strcmp(str, "Pr(Tsol)") != 0)
 		return FILE_ERROR;
-	fscanf(f, "%s", &str);
-	fscanf(f, "%s", &str);
+	fscanf(f, "%s", str);
+	fscanf(f, "%s", str);
 	if (strcmp(str, "Pr(Tvent)") != 0)
 		return FILE_ERROR;
-	fscanf(f, "%s", &str);
-	fscanf(f, "%s", &str);
+	fscanf(f, "%s", str);
+	fscanf(f, "%s", str);
 	if (strcmp(str, "Phc(Tsol)") != 0)
 		return FILE_ERROR;
-	fscanf(f, "%s", &str);
-	fscanf(f, "%s", &str);
+	fscanf(f, "%s", str);
+	fscanf(f, "%s", str);
 	if (strcmp(str, "Phc(Tvent)") != 0)
 		return FILE_ERROR;
-	fscanf(f, "%s", &str);
-	fscanf(f, "%s", &str);
+	fscanf(f, "%s", str);
+	fscanf(f, "%s", str);
 	if (strcmp(str, "Pcool") != 0)
 		return FILE_ERROR;
-	fscanf(f, "%s", &str);
-	fscanf(f, "%s", &str);
+	fscanf(f, "%s", str);
+	fscanf(f, "%s", str);
 	if (strcmp(str, "Prho") != 0)
 		return FILE_ERROR;
-	fscanf(f, "%s", &str);
-	fscanf(f, "%s", &str);
+	fscanf(f, "%s", str);
+	fscanf(f, "%s", str);
 	if (strcmp(str, "Pepsilon") != 0)
 		return FILE_ERROR;
-	fscanf(f, "%s", &str);
-	fscanf(f, "%s", &str);
+	fscanf(f, "%s", str);
+	fscanf(f, "%s", str);
 	if (strcmp(str, "Psigma") != 0)
 		return FILE_ERROR;
-	fscanf(f, "%s", &str);
-	fscanf(f, "%s", &str);
+	fscanf(f, "%s", str);
+	fscanf(f, "%s", str);
 	if (strcmp(str, "Pcv") != 0)
 		return FILE_ERROR;
-	fscanf(f, "%s", &str);
-	fscanf(f, "%s", &str);
+	fscanf(f, "%s", str);
+	fscanf(f, "%s", str);
 	if (strcmp(str, "algorithm") != 0)
 		return FILE_ERROR;
-	fscanf(f, "%s", &str);
+	fscanf(f, "%s", str);
 	if (strcmp(str, "MIN") != 0 && strcmp(str, "PROP") != 0)
 		return FILE_ERROR;
 
 	fsetpos(f, &position);
 
 	//fake readings
-	fscanf(f, "%s", &str);
-	fscanf(f, "%s", &str);
-	fscanf(f, "%s", &str);
-	fscanf(f, "%s", &str);
-	fscanf(f, "%s", &str);
-	fscanf(f, "%s", &str);
-	fscanf(f, "%s", &str);
-	fscanf(f, "%s", &str);
+	fscanf(f, "%s", str);
+	fscanf(f, "%s", str);
+	fscanf(f, "%s", str);
+	fscanf(f, "%s", str);
+	fscanf(f, "%s", str);
+	fscanf(f, "%s", str);
+	fscanf(f, "%s", str);
+	fscanf(f, "%s", str);
 
-	fscanf(f, "%s", &str);
-	fscanf(f, "%s", &str);
+	fscanf(f, "%s", str);
+	fscanf(f, "%s", str);
 	sciara->Pclock = atof(str);
-	fscanf(f, "%s", &str);
-	fscanf(f, "%s", &str);
+	fscanf(f, "%s", str);
+	fscanf(f, "%s", str);
 	sciara->PTsol = atof(str);
-	fscanf(f, "%s", &str);
-	fscanf(f, "%s", &str);
+	fscanf(f, "%s", str);
+	fscanf(f, "%s", str);
 	sciara->PTvent = atof(str);
-	fscanf(f, "%s", &str);
-	fscanf(f, "%s", &str);
+	fscanf(f, "%s", str);
+	fscanf(f, "%s", str);
 	sciara->Pr_Tsol = atof(str);
-	fscanf(f, "%s", &str);
-	fscanf(f, "%s", &str);
+	fscanf(f, "%s", str);
+	fscanf(f, "%s", str);
 	sciara->Pr_Tvent = atof(str);
-	fscanf(f, "%s", &str);
-	fscanf(f, "%s", &str);
+	fscanf(f, "%s", str);
+	fscanf(f, "%s", str);
 	sciara->Phc_Tsol = atof(str);
-	fscanf(f, "%s", &str);
-	fscanf(f, "%s", &str);
+	fscanf(f, "%s", str);
+	fscanf(f, "%s", str);
 	sciara->Phc_Tvent = atof(str);
-	fscanf(f, "%s", &str);
-	fscanf(f, "%s", &str);
+	fscanf(f, "%s", str);
+	fscanf(f, "%s", str);
 	sciara->Pcool = atof(str);
-	fscanf(f, "%s", &str);
-	fscanf(f, "%s", &str);
+	fscanf(f, "%s", str);
+	fscanf(f, "%s", str);
 	sciara->Prho = atof(str);
-	fscanf(f, "%s", &str);
-	fscanf(f, "%s", &str);
+	fscanf(f, "%s", str);
+	fscanf(f, "%s", str);
 	sciara->Pepsilon = atof(str);
-	fscanf(f, "%s", &str);
-	fscanf(f, "%s", &str);
+	fscanf(f, "%s", str);
+	fscanf(f, "%s", str);
 	sciara->Psigma = atof(str);
-	fscanf(f, "%s", &str);
-	fscanf(f, "%s", &str);
+	fscanf(f, "%s", str);
+	fscanf(f, "%s", str);
 	sciara->Pcv = atof(str);
-	fscanf(f, "%s", &str);
-	fscanf(f, "%s", &str);
+	fscanf(f, "%s", str);
+	fscanf(f, "%s", str);
 
 	fclose(f);
 	return FILE_OK;

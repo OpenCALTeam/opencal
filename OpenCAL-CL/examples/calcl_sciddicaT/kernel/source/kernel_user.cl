@@ -1,20 +1,13 @@
-#ifndef __OPENCL_VERSION__
-#define __kerneldeine __global
-#define __local
-#define get_global_id (int)
-#endif
+// The SciddicaT debris flows XCA transition function kernels
 
 #include <kernel.h>
 
-//first elementary process
-__kernel void sciddicaT_flows_computation(__CALCL_MODEL_2D, __global CALParameterr * Pepsilon, __global CALParameterr * Pr) {
-
+__kernel void flowsComputation(__CALCL_MODEL_2D, __global CALParameterr * Pepsilon, __global CALParameterr * Pr)
+{
 	calclThreadCheck2D();
-
 
 	int i = calclGlobalRow();
 	int j = calclGlobalColumns();
-
 
 	CALbyte eliminated_cells[5] = { CAL_FALSE, CAL_FALSE, CAL_FALSE, CAL_FALSE, CAL_FALSE };
 	CALbyte again;
@@ -69,8 +62,8 @@ __kernel void sciddicaT_flows_computation(__CALCL_MODEL_2D, __global CALParamete
 	}
 }
 
-__kernel void sciddicaT_width_update(__CALCL_MODEL_2D) {
-
+__kernel void widthUpdate(__CALCL_MODEL_2D)
+{
 	calclThreadCheck2D();
 
 	int i = calclGlobalRow();
@@ -88,8 +81,8 @@ __kernel void sciddicaT_width_update(__CALCL_MODEL_2D) {
 
 }
 
-__kernel void sciddicaTSteering(__CALCL_MODEL_2D) {
-
+__kernel void steering(__CALCL_MODEL_2D)
+{
 	calclThreadCheck2D();
 
 	CALint cols_ = calclGetColumns();
@@ -100,5 +93,4 @@ __kernel void sciddicaTSteering(__CALCL_MODEL_2D) {
 	int s;
 	for (s = 0; s < NUMBER_OF_OUTFLOWS; ++s)
 		calclInitSubstate2Dr(MODEL_2D, s, i, j, 0);
-
 }

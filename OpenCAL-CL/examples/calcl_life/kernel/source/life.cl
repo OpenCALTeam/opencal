@@ -4,8 +4,7 @@
 
 #define Q 0
 
-
-__kernel void life_transition_function(__CALCL_MODEL_2D)
+__kernel void lifeTransitionFunction(__CALCL_MODEL_2D)
 {
 	calclThreadCheck2D();
 

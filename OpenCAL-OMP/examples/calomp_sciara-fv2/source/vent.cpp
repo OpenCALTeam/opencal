@@ -56,10 +56,10 @@ int loadEmissionRates(FILE *f, unsigned int& emission_time, vector<TEmissionRate
         er_vec.resize(0);
     }
 
-    fscanf(f,"%s",&str);
+    fscanf(f,"%s",str);
     if (!strcmp(str, time_str))
     {
-        fscanf(f,"%s",&str);
+        fscanf(f,"%s",str);
         if (atoi(str) < 0)
             return EMISSION_RATE_FILE_ERROR;
         emission_time = atoi(str);
@@ -67,16 +67,16 @@ int loadEmissionRates(FILE *f, unsigned int& emission_time, vector<TEmissionRate
     else
         return EMISSION_RATE_FILE_ERROR;
 
-    fscanf(f,"%s",&str);
+    fscanf(f,"%s",str);
     do{
         if (!strcmp(str, vent_str))
         {
             TEmissionRate er;
 
-            fscanf(f,"%s",&str);
+            fscanf(f,"%s",str);
             if (atoi(str) < 0)
                 return EMISSION_RATE_FILE_ERROR;
-                
+
             ok = false;
             for (unsigned int i=0; i<vent.size(); i++)
                 if (vent[i].vent_id() == atoi(str))
@@ -88,16 +88,16 @@ int loadEmissionRates(FILE *f, unsigned int& emission_time, vector<TEmissionRate
             if (!ok)
                 return EMISSION_RATE_FILE_ERROR;
 
-            fscanf(f,"%s",&str);
+            fscanf(f,"%s",str);
             if (!strcmp(str, emission_str))
             {
-                fscanf(f,"%s",&str);
+                fscanf(f,"%s",str);
                 if (atof(str) < 0)
                     return EMISSION_RATE_FILE_ERROR;
                 while(strcmp(str, vent_str))
                 {
                     er.emission_rate().push_back(atof(str));
-                    fscanf(f,"%s",&str);
+                    fscanf(f,"%s",str);
                     if (!strcmp(str, end_str))
                     {
                         er_vec.push_back(er);
@@ -140,16 +140,16 @@ int loadOneEmissionRates(FILE *f, unsigned int vent_id, vector<TEmissionRate>& e
     TEmissionRate er;
     er.set_vent_id(vent_id);
     do{
-        fscanf(f,"%s",&str);
+        fscanf(f,"%s",str);
         if (!strcmp(str, emission_str))
         {
-            fscanf(f,"%s",&str);
+            fscanf(f,"%s",str);
             if (atof(str) < 0)
                 return EMISSION_RATE_FILE_ERROR;
             while(strcmp(str, end_str))
             {
                 er.emission_rate().push_back(atof(str));
-                fscanf(f,"%s",&str);
+                fscanf(f,"%s",str);
                 if (!strcmp(str, end_str))
                 {
                     er_vec.push_back(er);
@@ -163,7 +163,7 @@ int loadOneEmissionRates(FILE *f, unsigned int vent_id, vector<TEmissionRate>& e
             return EMISSION_RATE_FILE_ERROR;
         er_vec.push_back(er);
     } while(!feof(f));
-    
+
     return EMISSION_RATE_FILE_OK;
 }
 

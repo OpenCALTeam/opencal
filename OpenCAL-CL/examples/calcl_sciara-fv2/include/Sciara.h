@@ -87,7 +87,7 @@ typedef struct{
 	int step;
 
 	SciaraSubstates * substates;
-	CALModel2D * hostCA;
+	CALModel2D * host_CA;
 
 } Sciara;
 
@@ -98,7 +98,7 @@ extern int active;
 void initSciara(char * demPath);
 void exitSciara();
 void saveConfigSciara();
-void simulationInitialize(struct CALModel2D* hostCA);
+void simulationInitialize(struct CALModel2D* host_CA);
 
 
 #endif /* CA_H_ */

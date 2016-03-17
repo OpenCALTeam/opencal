@@ -50,9 +50,8 @@ int main(int argc, char** argv) {
 		exit(EXIT_FAILURE);
 	}
 	end_time = time(NULL);
-	printf("%d", end_time - start_time);
+	printf("%ld", end_time - start_time);
 
 	return 0;
 
 }
-

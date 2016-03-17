@@ -78,7 +78,7 @@ void sciddicaT_flows_computation(struct CALModel2D* sciddicaT, int i, int j)
 					eliminated_cells[n]=CAL_TRUE;
 					again=CAL_TRUE;
 				}
-	}while (again); 
+	}while (again);
 
 	for (n=1; n<sciddicaT->sizeof_X; n++)
 		if (eliminated_cells[n])
@@ -162,7 +162,7 @@ int main()
 	//load configuration
 	calLoadSubstate2Dr(sciddicaT, Q.z, DEM_PATH);
 	calLoadSubstate2Dr(sciddicaT, Q.h, SOURCE_PATH);
-	
+
 	//simulation run
 	calRunAddInitFunc2D(sciddicaT_simulation, sciddicaT_simulation_init);
 	calRunAddSteeringFunc2D(sciddicaT_simulation, sciddicaTSteering);
@@ -170,15 +170,14 @@ int main()
 	start_time = time(NULL);
 	calRun2D(sciddicaT_simulation);
 	end_time = time(NULL);
-	printf ("Simulation terminated.\nElapsed time: %d\n", end_time-start_time);
-	
+	printf ("Simulation terminated.\nElapsed time: %lds\n", end_time-start_time);
+
 	//saving configuration
 	calSaveSubstate2Dr(sciddicaT, Q.h, OUTPUT_PATH);
-	
+
 	//finalizations
 	calRunFinalize2D(sciddicaT_simulation);
 	calFinalize2D(sciddicaT);
 
 	return 0;
 }
-

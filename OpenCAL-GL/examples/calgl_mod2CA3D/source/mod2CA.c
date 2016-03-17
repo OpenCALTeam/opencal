@@ -62,7 +62,7 @@ int main(int argc, char** argv)
 
 	//cadef and rundef
 	mod2 = calCADef3D(ROWS, COLS, LAYERS, CAL_MOORE_NEIGHBORHOOD_3D, CAL_SPACE_TOROIDAL, CAL_NO_OPT);
-	mod2simulation = calRunDef3D(mod2, 1, CAL_RUN_LOOP, CAL_UPDATE_IMPLICIT);
+	mod2simulation = calRunDef3D(mod2, 1, 4001, CAL_UPDATE_IMPLICIT);
 	//add substates
 	Q = calAddSubstate3Db(mod2);
 	//add transition function's elementary processes

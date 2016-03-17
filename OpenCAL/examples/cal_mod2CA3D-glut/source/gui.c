@@ -79,7 +79,7 @@ void simulationRun(void)
 		glutIdleFunc(NULL);
 		printf("\n");
 		printf("Simulation terminated\n");
-		printf("Elapsed time: %ds\n", end_time - start_time);
+		printf("Elapsed time: %lds\n", end_time - start_time);
 
 		//graphic rendering
 		printf("step: %d; \tactive cells: %d\r", life3Dsimulation->step, life3Dsimulation->ca3D->A.size_current);

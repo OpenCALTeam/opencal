@@ -28,6 +28,7 @@ struct CALUpdater3D {
 	time_t end_time;			//!< Time for which the computation is ended.
 	pthread_t thread;			//!< Reference to a thread variable.
 	CALbyte stop;				//!< Boolean if it is stopped or not.
+	CALint step;
 };
 
 /*! \brief Constructor for create a struct CALUpdater3D.
