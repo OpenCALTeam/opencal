@@ -8,13 +8,12 @@ __kernel void lifeTransitionFunction(__CALCL_MODEL_2D)
 {
 	calclThreadCheck2D();
 
-	CALint cols_ = calclGetColumns();
-	CALint rows_ = calclGetRows();
-
 	int i = calclGlobalRow();
 	int j = calclGlobalColumns();
+
  	CALint sizeOfX_ = calclGetNeighborhoodSize();
-  	int sum = 0, n;
+
+	int sum = 0, n;
 
 	for (n=1; n<sizeOfX_; n++)
 		sum += calclGetX2Di(MODEL_2D, Q, i, j, n);
