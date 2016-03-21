@@ -10,7 +10,7 @@
 // Lesser General Public License for more details.
 
 #include <OpenCAL/cal2DIO.h>
-#include <OpenCAL-GL/calgl2DUpdater.h>
+#include <OpenCAL-GL/calgl2DRun.h>
 #include <OpenCAL-GL/calgl2DWindow.h>
 #include <OpenCAL-GL/calglGlobalSettings.h>
 #include <stdio.h>
@@ -23,54 +23,54 @@
 #include <GL/glut.h>
 #endif
 
-struct CALUpdater2D* calglCreateUpdater2D(struct CALRun2D* calRun){
-	struct CALUpdater2D* calUpdater = (struct CALUpdater2D*) malloc(sizeof(struct CALUpdater2D));
+struct CALGLRun2D* calglRunDef2D(struct CALRun2D* calRun){
+	struct CALGLRun2D* calglRun = (struct CALGLRun2D*) malloc(sizeof(struct CALGLRun2D));
 
-	calUpdater->firstRun = CAL_TRUE;
-	calUpdater->active = CAL_FALSE;
-	calUpdater->terminated = CAL_FALSE;
-	calUpdater->calRun = calRun;
-	calUpdater->stop = CAL_FALSE;
+	calglRun->firstRun = CAL_TRUE;
+	calglRun->active = CAL_FALSE;
+	calglRun->terminated = CAL_FALSE;
+	calglRun->calRun = calRun;
+	calglRun->stop = CAL_FALSE;
 
-	calglStartThread2D(calUpdater);
+	calglStartThread2D(calglRun);
 
-	return calUpdater;
+	return calglRun;
 }
 
-void calglDestroyUpdater2D(struct CALUpdater2D* calUpdater){
-	if (calUpdater){
-		free(calUpdater);
+void calglDestroyUpdater2D(struct CALGLRun2D* calglRun){
+	if (calglRun){
+		free(calglRun);
 	}
 }
 
 void* calglFuncThreadUpdate2D(void* arg){
-	struct CALUpdater2D* calUpdater = (struct CALUpdater2D*) arg;
+	struct CALGLRun2D* calglRun = (struct CALGLRun2D*) arg;
 
-	while (!calUpdater->stop){
-		calglUpdate2D(calUpdater);
+	while (!calglRun->stop){
+		calglUpdate2D(calglRun);
 		//Sleep(10);
 	}
 
 	return (void *)0;
 }
 
-void calglStartThread2D(struct CALUpdater2D* calUpdater){
-	pthread_create(&calUpdater->thread, NULL, calglFuncThreadUpdate2D, (void *)calUpdater);
+void calglStartThread2D(struct CALGLRun2D* calglRun){
+	pthread_create(&calglRun->thread, NULL, calglFuncThreadUpdate2D, (void *)calglRun);
 }
 
-void calglUpdate2D(struct CALUpdater2D* calUpdater){
-	if (calUpdater->active){
-		if (calUpdater->firstRun){
-			calUpdater->firstRun = CAL_FALSE;
-			calUpdater->start_time = time(NULL);
-			if (calUpdater->calRun->init)
-				calRunInitSimulation2D (calUpdater->calRun);
+void calglUpdate2D(struct CALGLRun2D* calglRun){
+	if (calglRun->active){
+		if (calglRun->firstRun){
+			calglRun->firstRun = CAL_FALSE;
+			calglRun->start_time = time(NULL);
+			if (calglRun->calRun->init)
+				calRunInitSimulation2D (calglRun->calRun);
 		}
 		//simulation main loop
-		calUpdater->calRun->step++;
-		calUpdater->step=calUpdater->calRun->step;
+		calglRun->calRun->step++;
+		calglRun->step=calglRun->calRun->step;
 		//exectutes the global transition function, the steering function and check for the stop condition.
-		calUpdater->terminated = calRunCAStep2D(calUpdater->calRun);
+		calglRun->terminated = calRunCAStep2D(calglRun->calRun);
 		//graphic rendering
 		//#ifdef WIN32
 		//		system("cls");
@@ -79,29 +79,29 @@ void calglUpdate2D(struct CALUpdater2D* calUpdater){
 		//#endif
 		//printf("*----------------  Cellular Automata  ----------------*\n");
 		//printf(" Rows: %d, Columns: %d\n", calglGetGlobalSettings()->rows, calglGetGlobalSettings()->columns);
-		//printf(" Current Step: %d/%d; Active cells: %d\n", calUpdater->calRun->step, calglGetGlobalSettings()->step, calUpdater->calRun->ca2D->A.size_current);
-		printf ("Cellular Automata: Current Step: %d/%d; Active cells: %d\r", calUpdater->calRun->step, calUpdater->calRun->final_step, calUpdater->calRun->ca2D->A.size_current);
+		//printf(" Current Step: %d/%d; Active cells: %d\n", calglRun->calRun->step, calglGetGlobalSettings()->step, calglRun->calRun->ca2D->A.size_current);
+		printf ("Cellular Automata: Current Step: %d/%d; Active cells: %d\r", calglRun->calRun->step, calglRun->calRun->final_step, calglRun->calRun->ca2D->A.size_current);
 		//printf ("*-----------------------------------------------------*\n");
 		//check for the stop condition
-		if (!calUpdater->terminated)
+		if (!calglRun->terminated)
 		{
-			calUpdater->active = CAL_FALSE;
+			calglRun->active = CAL_FALSE;
 			//breaking the simulation
-			calUpdater->end_time = time(NULL);
+			calglRun->end_time = time(NULL);
 			printf("\nSimulation terminated\n");
-			printf(" Elapsed time: %d\n", (int)(calUpdater->end_time - calUpdater->start_time));
+			printf(" Elapsed time: %d\n", (int)(calglRun->end_time - calglRun->start_time));
 			printf("*-----------------------------------------------------*\n");
 			//saving configuration
-			calglSaveStateUpdater2D(calUpdater);
-			calUpdater->stop = CAL_TRUE;
+			calglSaveStateUpdater2D(calglRun);
+			calglRun->stop = CAL_TRUE;
 		}
 	}
 }
 
-void calglSaveStateUpdater2D(struct CALUpdater2D* calUpdater){
+void calglSaveStateUpdater2D(struct CALGLRun2D* calglRun){
 	int i = 0;
 	char tmpString[50];
-	struct CALModel2D* calModel = calUpdater->calRun->ca2D;
+	struct CALModel2D* calModel = calglRun->calRun->ca2D;
 
 	printf("Saving final state to folder \"./data/\"\n");
 

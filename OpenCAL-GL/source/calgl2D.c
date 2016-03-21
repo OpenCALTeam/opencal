@@ -44,8 +44,8 @@ struct CALGLDrawModel2D* calglDefDrawModel2D(enum CALGL_DRAW_MODE mode, const ch
 	calglDisplayDrawIBound2D(drawModel, 0, calModel->rows);
 	calglDisplayDrawJBound2D(drawModel, 0, calModel->columns);
 
-	drawModel->calUpdater = calglCreateUpdater2D(calRun);
-//  drawModel->calUpdater = calUpdater;
+	drawModel->calglRun = calglRunDef2D(calRun);
+//  drawModel->calglRun = calglRun;
 	drawModel->infoBar = NULL;
 
 	drawModel->moving = CAL_FALSE;
@@ -55,7 +55,7 @@ struct CALGLDrawModel2D* calglDefDrawModel2D(enum CALGL_DRAW_MODE mode, const ch
 	return drawModel;
 }
 
-struct CALGLDrawModel2D* calglDefDrawModel2DCL(enum CALGL_DRAW_MODE mode, const char* name, struct CALModel2D* calModel, struct CALUpdater2D* calUpdater) {
+struct CALGLDrawModel2D* calglDefDrawModelCL2D(enum CALGL_DRAW_MODE mode, const char* name, struct CALModel2D* calModel, struct CALGLRun2D* calglRun) {
 	struct CALGLDrawModel2D* drawModel = (struct CALGLDrawModel2D*) malloc(sizeof(struct CALGLDrawModel2D));
 
 	drawModel->drawMode = mode;
@@ -80,8 +80,8 @@ struct CALGLDrawModel2D* calglDefDrawModel2DCL(enum CALGL_DRAW_MODE mode, const 
 	calglDisplayDrawIBound2D(drawModel, 0, calModel->rows);
 	calglDisplayDrawJBound2D(drawModel, 0, calModel->columns);
 
-//	drawModel->calUpdater = calglCreateUpdater2D(calRun);
-  drawModel->calUpdater = calUpdater;
+//	drawModel->calglRun = calglCreateUpdater2D(calRun);
+  drawModel->calglRun = calglRun;
 	drawModel->infoBar = NULL;
 
 	drawModel->moving = CAL_FALSE;
@@ -107,15 +107,15 @@ void calglDestoyDrawModel2D(struct CALGLDrawModel2D* drawModel) {
 			free(drawModel->drawJCells);
 		calglDestroyModelViewParameter(drawModel->modelView);
 		calglDestroyLightParameter(drawModel->modelLight);
-		if(drawModel->calUpdater)
-			free(drawModel->calUpdater);
+		if(drawModel->calglRun)
+			free(drawModel->calglRun);
 
 		free(drawModel);
 	}
 }
 
 #pragma region AddData
-void calglAddToDrawModel2Db(struct CALGLDrawModel2D* drawModel, struct CALSubstate2Db* substateFather, struct CALSubstate2Db** substateToAdd, enum CALGL_TYPE_INFO typeInfo, enum CALGL_TYPE_INFO_USE typeInfoUseSubstate, enum CALGL_DATA_TYPE dataType) {
+void calglAdd2Db(struct CALGLDrawModel2D* drawModel, struct CALSubstate2Db* substateFather, struct CALSubstate2Db** substateToAdd, enum CALGL_TYPE_INFO typeInfo, enum CALGL_TYPE_INFO_USE typeInfoUseSubstate, enum CALGL_DATA_TYPE dataType) {
 	struct CALNode2Db* toReturn = NULL;
 	struct CALNode2Db* nodeFather = NULL;
 
@@ -138,7 +138,7 @@ void calglAddToDrawModel2Db(struct CALGLDrawModel2D* drawModel, struct CALSubsta
 		toReturn->alphaComponent = drawModel->alphaComponent;
 	}
 }
-void calglAddToDrawModel2Di(struct CALGLDrawModel2D* drawModel, struct CALSubstate2Di* substateFather, struct CALSubstate2Di** substateToAdd, enum CALGL_TYPE_INFO typeInfo, enum CALGL_TYPE_INFO_USE typeInfoUseSubstate, enum CALGL_DATA_TYPE dataType) {
+void calglAdd2Di(struct CALGLDrawModel2D* drawModel, struct CALSubstate2Di* substateFather, struct CALSubstate2Di** substateToAdd, enum CALGL_TYPE_INFO typeInfo, enum CALGL_TYPE_INFO_USE typeInfoUseSubstate, enum CALGL_DATA_TYPE dataType) {
 	struct CALNode2Di* toReturn = NULL;
 	struct CALNode2Di* nodeFather = NULL;
 
@@ -161,7 +161,7 @@ void calglAddToDrawModel2Di(struct CALGLDrawModel2D* drawModel, struct CALSubsta
 		toReturn->alphaComponent = drawModel->alphaComponent;
 	}
 }
-void calglAddToDrawModel2Dr(struct CALGLDrawModel2D* drawModel, struct CALSubstate2Dr* substateFather, struct CALSubstate2Dr** substateToAdd, enum CALGL_TYPE_INFO typeInfo, enum CALGL_TYPE_INFO_USE typeInfoUseSubstate, enum CALGL_DATA_TYPE dataType) {
+void calglAdd2Dr(struct CALGLDrawModel2D* drawModel, struct CALSubstate2Dr* substateFather, struct CALSubstate2Dr** substateToAdd, enum CALGL_TYPE_INFO typeInfo, enum CALGL_TYPE_INFO_USE typeInfoUseSubstate, enum CALGL_DATA_TYPE dataType) {
 	struct CALNode2Dr* toReturn = NULL;
 	struct CALNode2Dr* nodeFather = NULL;
 	int i = 0;

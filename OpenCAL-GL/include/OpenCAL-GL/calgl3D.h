@@ -22,7 +22,7 @@
 #include <OpenCAL-GL/calgl3DNodeData.h>
 #include <OpenCAL-GL/calglModelViewParameter.h>
 #include <OpenCAL-GL/calglLightParameter.h>
-#include <OpenCAL-GL/calgl3DUpdater.h>
+#include <OpenCAL-GL/calgl3DRun.h>
 #include <OpenCAL-GL/calglInfoBar.h>
 #include <OpenCAL-GL/calglGlobalSettings.h>
 
@@ -40,7 +40,7 @@ struct CALGLDrawModel3D{
 	struct CALModel3D* calModel;				//!< Pointer to the cellular automata.
 	struct CALGLModelViewParameter* modelView;	//!< Pointer to the model view matrix transformation.
 	struct CALGLLightParameter* modelLight;		//!< Pointer to the lights parameters.
-	struct CALUpdater3D* calUpdater;			//!< Pointer to the object that update the cellular automata
+	struct CALGLRun3D* calglRun;			//!< Pointer to the object that update the cellular automata
 	struct CALGLInfoBar* infoBar;				//!< Pointer to the information bar that contains informations releated to the reference sub-state.
 	GLshort* drawKCells;						//!< Array of value for the design of the automaton slices, in this case the slices.
 	GLshort* drawICells;						//!< Array of value for the design of the automaton slices, in this case the rows.
@@ -63,11 +63,11 @@ struct CALGLDrawModel3D* calglDefDrawModel3D(
 
 /*! \brief Constructor for creating the drawing model
 */
-struct CALGLDrawModel3D* calglDefDrawModel3DCL(
+struct CALGLDrawModel3D* calglDefDrawModelCL3D(
 	enum CALGL_DRAW_MODE mode, 			//!< Type of drawing (es. FLAT, SURFACE).
 	const char* name,					//!< Name of the drawing model.
 	struct CALModel3D* calModel,		//!< Pointer to the cellular automata.
-	struct CALUpdater3D* calUpdater				//!< Pointer to the struct CALUpdater3D.
+	struct CALGLRun3D* calglRun				//!< Pointer to the struct CALGLRun3D.
 	);
 
 /*! \brief Destructor for destroying the drawing model
@@ -79,7 +79,7 @@ struct CALGLDrawModel3D* drawModel	//!< Pointer to the CALDrawModel to destroy.
 #pragma region AddData
 /*! \brief Add data to the byte drawing model.
 */
-void calglAddToDrawModel3Db(
+void calglAdd3Db(
 struct CALGLDrawModel3D* drawModel,
 struct CALSubstate3Db* substateFather,
 struct CALSubstate3Db** substateToAdd,
@@ -89,7 +89,7 @@ enum CALGL_DATA_TYPE dataType
 	);
 /*! \brief Add data to the int drawing model.
 */
-void calglAddToDrawModel3Di(
+void calglAdd3Di(
 	struct CALGLDrawModel3D* drawModel,				//!< The CALDrawModel to which adding data.
 	struct CALSubstate3Di* substateFather,			//!< The substate father to which add the new data.
 	struct CALSubstate3Di** substateToAdd,			//!< The new data to add.
@@ -99,7 +99,7 @@ void calglAddToDrawModel3Di(
 	);
 /*! \brief Add data to the real drawing model.
 */
-void calglAddToDrawModel3Dr(
+void calglAdd3Dr(
 	struct CALGLDrawModel3D* drawModel, 				//!< The CALDrawModel to which adding data.
 	struct CALSubstate3Dr* substateFather,			//!< The substate father to which add the new data.
 	struct CALSubstate3Dr** substateToAdd, 			//!< The new data to add.

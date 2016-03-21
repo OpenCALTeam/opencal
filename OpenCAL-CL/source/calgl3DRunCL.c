@@ -10,7 +10,7 @@
 // Lesser General Public License for more details.
 
 #include <OpenCAL/cal3DIO.h>
-#include <OpenCAL-CL/calgl3DUpdaterCL.h>
+#include <OpenCAL-CL/calgl3DRunCL.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -64,10 +64,10 @@ char* calglGetString3DCL(GLdouble number){
 }
 
 
-void calglSaveStateUpdater3DCL(struct CALUpdater3D* calUpdater){
+void calglSaveStateUpdater3DCL(struct CALGLRun3D* calglRun){
 	int i = 0;
 	char tmpString[50];
-	struct CALModel3D* calModel = calUpdater->device_CA->host_CA;
+	struct CALModel3D* calModel = calglRun->device_CA->host_CA;
 
 	printf("Saving final state to folder \"./data/\"\n");
 
@@ -93,58 +93,58 @@ void calglSaveStateUpdater3DCL(struct CALUpdater3D* calUpdater){
 	}
 }
 
-struct CALUpdater3D* calglCreateUpdater3DCL(struct CALCLModel3D* device_CA, CALint fixedStep, CALint initial_step, CALint final_step){
-	struct CALUpdater3D* calUpdater = (struct CALUpdater3D*) malloc(sizeof(struct CALUpdater3D));
+struct CALGLRun3D* calglRunCLDef3D(struct CALCLModel3D* device_CA, CALint fixedStep, CALint initial_step, CALint final_step){
+	struct CALGLRun3D* calglRun = (struct CALGLRun3D*) malloc(sizeof(struct CALGLRun3D));
 
-	calUpdater->firstRun = CAL_TRUE;
-	calUpdater->active = CAL_FALSE;
-	calUpdater->terminated = CAL_FALSE;
-	calUpdater->stop = CAL_FALSE;
-	calUpdater->device_CA = device_CA;
-	calUpdater->onlyOneTime=CAL_FALSE;
-	calUpdater->fixedStep=fixedStep;
-	calUpdater->device_CA->steps=initial_step;
-	calUpdater->step = initial_step;
-	calUpdater->final_step=final_step;
+	calglRun->firstRun = CAL_TRUE;
+	calglRun->active = CAL_FALSE;
+	calglRun->terminated = CAL_FALSE;
+	calglRun->stop = CAL_FALSE;
+	calglRun->device_CA = device_CA;
+	calglRun->onlyOneTime=CAL_FALSE;
+	calglRun->fixedStep=fixedStep;
+	calglRun->device_CA->steps=initial_step;
+	calglRun->step = initial_step;
+	calglRun->final_step=final_step;
 
-	calglStartThread3DCL(calUpdater);
+	calglStartThread3DCL(calglRun);
 
-	return calUpdater;
+	return calglRun;
 }
 
-void calglDestroyUpdater3DCL(struct CALUpdater3D* calUpdater){
-	if (calUpdater){
-		free(calUpdater);
+void calglDestroyUpdater3DCL(struct CALGLRun3D* calglRun){
+	if (calglRun){
+		free(calglRun);
 	}
 }
 
 void* calglFuncThreadUpdate3DCL(void* arg){
-	struct CALUpdater3D* calUpdater = (struct CALUpdater3D*) arg;
+	struct CALGLRun3D* calglRun = (struct CALGLRun3D*) arg;
 
-	while (!calUpdater->stop){
-		calglUpdate3DCL(calUpdater);
+	while (!calglRun->stop){
+		calglUpdate3DCL(calglRun);
 		//Sleep(10);
 	}
 
 	return (void *)0;
 }
 
-void calglStartThread3DCL(struct CALUpdater3D* calUpdater){
-		pthread_create(&calUpdater->thread, NULL, calglFuncThreadUpdate3DCL, (void *)calUpdater);
+void calglStartThread3DCL(struct CALGLRun3D* calglRun){
+		pthread_create(&calglRun->thread, NULL, calglFuncThreadUpdate3DCL, (void *)calglRun);
 }
 
-void calglUpdate3DCL(struct CALUpdater3D* calUpdater){
-	if (calUpdater->active){
+void calglUpdate3DCL(struct CALGLRun3D* calglRun){
+	if (calglRun->active){
 		  //	cl_int err;
 			CALbyte stop;
 			size_t * threadNumMax = (size_t*) malloc(sizeof(size_t) * 3);
-			threadNumMax[0] = calUpdater->device_CA->host_CA->rows;
-			threadNumMax[1] = calUpdater->device_CA->host_CA->columns;
-			threadNumMax[2] = calUpdater->device_CA->host_CA->slices;
+			threadNumMax[0] = calglRun->device_CA->host_CA->rows;
+			threadNumMax[1] = calglRun->device_CA->host_CA->columns;
+			threadNumMax[2] = calglRun->device_CA->host_CA->slices;
 			size_t * singleStepThreadNum;
 			int dimNum;
 
-			if (calUpdater->device_CA->opt == CAL_NO_OPT) {
+			if (calglRun->device_CA->opt == CAL_NO_OPT) {
 				singleStepThreadNum = (size_t*) malloc(sizeof(size_t) * 3);
 				singleStepThreadNum[0] = threadNumMax[0];
 				singleStepThreadNum[1] = threadNumMax[1];
@@ -152,20 +152,20 @@ void calglUpdate3DCL(struct CALUpdater3D* calUpdater){
 				dimNum = 3;
 			} else {
 				singleStepThreadNum = (size_t*) malloc(sizeof(size_t));
-				singleStepThreadNum[0] = calUpdater->device_CA->host_CA->A.size_current;
+				singleStepThreadNum[0] = calglRun->device_CA->host_CA->A.size_current;
 				dimNum = 1;
 			}
 		//	calclRoundThreadsNum(singleStepThreadNum, dimNum);
-		if (calUpdater->firstRun){
-			calUpdater->firstRun = CAL_FALSE;
-			calUpdater->start_time = time(NULL);
-			if (calUpdater->device_CA->kernelInitSubstates != NULL)
-				calclKernelCall3D(calUpdater->device_CA, calUpdater->device_CA->kernelInitSubstates, dimNum, threadNumMax, NULL);
+		if (calglRun->firstRun){
+			calglRun->firstRun = CAL_FALSE;
+			calglRun->start_time = time(NULL);
+			if (calglRun->device_CA->kernelInitSubstates != NULL)
+				calclKernelCall3D(calglRun->device_CA, calglRun->device_CA->kernelInitSubstates, dimNum, threadNumMax, NULL);
 		}
 		//simulation main loop
-		calUpdater->step=calUpdater->device_CA->steps;
+		calglRun->step=calglRun->device_CA->steps;
 		//exectutes the global transition function, the steering function and check for the stop condition.
-		calUpdater->terminated = calclSingleStep3D(calUpdater->device_CA, singleStepThreadNum, dimNum);
+		calglRun->terminated = calclSingleStep3D(calglRun->device_CA, singleStepThreadNum, dimNum);
 		//graphic rendering
 		//#ifdef WIN32
 		//		system("cls");
@@ -174,31 +174,31 @@ void calglUpdate3DCL(struct CALUpdater3D* calUpdater){
 		//#endif
 		//		printf("*----------------  Cellular Automata  ----------------*\n");
 		//		printf(" Rows: %d, Columns: %d\n", calglGetGlobalSettings()->rows, calglGetGlobalSettings()->columns);
-		//		printf(" Current Step: %d/%d; Active cells: %d\n", calUpdater->calRun->step, calglGetGlobalSettings()->step, calUpdater->calRun->ca3D->A.size_current);
-		printf ("Cellular Automata: Current Step: %d\r", calUpdater->device_CA->steps);
+		//		printf(" Current Step: %d/%d; Active cells: %d\n", calglRun->calRun->step, calglGetGlobalSettings()->step, calglRun->calRun->ca3D->A.size_current);
+		printf ("Cellular Automata: Current Step: %d\r", calglRun->device_CA->steps);
 		//		printf("*-----------------------------------------------------*\n");
 		//check for the stop condition
-		if (calUpdater->step%calUpdater->fixedStep==0){
-			calclGetSubstatesDeviceToHost3D(calUpdater->device_CA);
+		if (calglRun->step%calglRun->fixedStep==0){
+			calclGetSubstatesDeviceToHost3D(calglRun->device_CA);
 		}
-		if (calUpdater->terminated || calUpdater->step%calUpdater->final_step==0)
+		if (calglRun->terminated || calglRun->step%calglRun->final_step==0)
 		{
-			calclGetSubstatesDeviceToHost3D(calUpdater->device_CA);
-			calUpdater->active = CAL_FALSE;
+			calclGetSubstatesDeviceToHost3D(calglRun->device_CA);
+			calglRun->active = CAL_FALSE;
 			//breaking the simulation
-			calUpdater->end_time = time(NULL);
+			calglRun->end_time = time(NULL);
 			printf("\nSimulation terminated\n");
-			printf(" Elapsed time: %d\n",(int)( calUpdater->end_time - calUpdater->start_time));
+			printf(" Elapsed time: %d\n",(int)( calglRun->end_time - calglRun->start_time));
 			printf("*-----------------------------------------------------*\n");
 			//saving configuration
-			calglSaveStateUpdater3DCL(calUpdater);
+			calglSaveStateUpdater3DCL(calglRun);
 		}
 	}else{
-		if(calUpdater->onlyOneTime ){
-			calUpdater->onlyOneTime=CAL_FALSE;
+		if(calglRun->onlyOneTime ){
+			calglRun->onlyOneTime=CAL_FALSE;
 			printf("\nSimulation Pause\n");
-				calclGetSubstatesDeviceToHost3D(calUpdater->device_CA);
-				calglSaveStateUpdater3DCL(calUpdater);
+				calclGetSubstatesDeviceToHost3D(calglRun->device_CA);
+				calglSaveStateUpdater3DCL(calglRun);
 		}
 
 	}

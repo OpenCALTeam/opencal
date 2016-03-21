@@ -371,8 +371,8 @@ void calglKeyboardEventWindow3D(unsigned char key, int x, int y){
 	}
 
 	if (key == 'x' || key == 's'){
-		if (window3D->models[0]->calUpdater){
-			window3D->models[0]->calUpdater->active = !window3D->models[0]->calUpdater->active;
+		if (window3D->models[0]->calglRun){
+			window3D->models[0]->calglRun->active = !window3D->models[0]->calglRun->active;
 		}
 	}
 
@@ -460,7 +460,7 @@ void calglMotionMouseWindow3D(int x, int y){
 }
 
 void calglIdleFuncWindow3D(void){
-	if (calglGetGlobalSettings()->fixedDisplay && window3D->models[0]->calUpdater->step%calglGetGlobalSettings()->fixedStep == 0){
+	if (calglGetGlobalSettings()->fixedDisplay && window3D->models[0]->calglRun->step%calglGetGlobalSettings()->fixedStep == 0){
 		calglRedisplayAllWindow3D();
 	}
 }

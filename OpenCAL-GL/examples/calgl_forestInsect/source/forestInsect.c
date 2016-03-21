@@ -278,7 +278,7 @@ void forestInsectMoveBettle(struct CALModel2D* forestInsect, CALint i, CALint j)
 			break;
 		}
 	}
-	else 
+	else
 	{
 		calSet2Dr(forestInsect, Q.movementFemale, i, j, MOVEMENT_NONE);
 	}
@@ -319,7 +319,7 @@ void forestInsectMoveBettle(struct CALModel2D* forestInsect, CALint i, CALint j)
 			break;
 		}
 	}
-	else 
+	else
 	{
 		calSet2Dr(forestInsect, Q.movementMale, i, j, MOVEMENT_NONE);
 	}
@@ -337,7 +337,7 @@ CALint getNextNeighboorhoodWithWind_Female(struct CALModel2D* forestInsect, CALi
 	CALreal valueMaxSusceptibility = 0.0;
 
 	switch(P.windType){
-	case NORTH_WIND: 
+	case NORTH_WIND:
 #pragma region NORTH_WIND
 		if (calGet2Dr(forestInsect, Q.pineForest, i, j) > 0.0 && calGet2Dr(forestInsect, Q.pineHealth, i, j) <= P.minimumTreeEnergy)
 		{
@@ -361,12 +361,12 @@ CALint getNextNeighboorhoodWithWind_Female(struct CALModel2D* forestInsect, CALi
 						indexMaxSusceptibility = northWind[n];
 						notFound = 0;
 					}
-				}		
+				}
 			}
 		}
 #pragma endregion
 		break;
-	case EAST_WIND: 
+	case EAST_WIND:
 #pragma region EAST_WIND
 		if (calGet2Dr(forestInsect, Q.pineForest, i, j) > 0.0 && calGet2Dr(forestInsect, Q.pineHealth, i, j) <= P.minimumTreeEnergy)
 		{
@@ -390,12 +390,12 @@ CALint getNextNeighboorhoodWithWind_Female(struct CALModel2D* forestInsect, CALi
 						indexMaxSusceptibility = eastWind[n];
 						notFound = 0;
 					}
-				}		
+				}
 			}
 		}
 #pragma endregion
 		break;
-	case SOUTH_WIND: 
+	case SOUTH_WIND:
 #pragma region SOUTH_WIND
 		if (calGet2Dr(forestInsect, Q.pineForest, i, j) > 0.0 && calGet2Dr(forestInsect, Q.pineHealth, i, j) <= P.minimumTreeEnergy)
 		{
@@ -419,12 +419,12 @@ CALint getNextNeighboorhoodWithWind_Female(struct CALModel2D* forestInsect, CALi
 						indexMaxSusceptibility = southWind[n];
 						notFound = 0;
 					}
-				}		
+				}
 			}
 		}
 #pragma endregion
 		break;
-	case WEAST_WIND: 
+	case WEAST_WIND:
 #pragma region WEAST_WIND
 		if (calGet2Dr(forestInsect, Q.pineForest, i, j) > 0.0 && calGet2Dr(forestInsect, Q.pineHealth, i, j) <= P.minimumTreeEnergy)
 		{
@@ -448,12 +448,12 @@ CALint getNextNeighboorhoodWithWind_Female(struct CALModel2D* forestInsect, CALi
 						indexMaxSusceptibility = weastWind[n];
 						notFound = 0;
 					}
-				}		
+				}
 			}
 		}
 #pragma endregion
 		break;
-	default: 
+	default:
 #pragma region NO_WIND
 		if (calGet2Dr(forestInsect, Q.pineForest, i, j) > 0.0 && calGet2Dr(forestInsect, Q.pineHealth, i, j) <= P.minimumTreeEnergy)
 		{
@@ -477,10 +477,10 @@ CALint getNextNeighboorhoodWithWind_Female(struct CALModel2D* forestInsect, CALi
 						indexMaxSusceptibility = n;
 						notFound = 0;
 					}
-				}		
+				}
 			}
 		}
-#pragma endregion		
+#pragma endregion
 		break;
 	}
 
@@ -497,14 +497,14 @@ CALint getNextNeighboorhoodWithWind_Male(struct CALModel2D* forestInsect, CALint
 	CALreal valueFemale = 0.0, valueTmpFemale = 0.0;
 
 	switch(P.windType){
-	case NORTH_WIND: 
+	case NORTH_WIND:
 #pragma region NORTH_WIND
 		if (calGet2Dr(forestInsect, Q.pineForest, i, j) > 0.0 && calGet2Dr(forestInsect, Q.pineHealth, i, j) <= P.minimumTreeEnergy)
 		{
 			for (n = 0; n < WIND_DIMENSION; n++)
 			{
 				if (calGetX2Dr(forestInsect, Q.pineForest, i, j, northWind[n]) > 0.0 && calGetX2Dr(forestInsect, Q.pineHealth, i, j, northWind[n]) > P.minimumTreeEnergy)
-				{ 
+				{
 					valueTmpFemale = calGetX2Dr(forestInsect, Q.femaleBettle, i, j, northWind[n]) + calGetX2Dr(forestInsect, Q.femalePremetureBettle, i, j, northWind[n]);
 					if (valueTmpFemale > valueFemale)
 					{
@@ -522,19 +522,19 @@ CALint getNextNeighboorhoodWithWind_Male(struct CALModel2D* forestInsect, CALint
 						indexFemale = northWind[n];
 						notFound = 0;
 					}
-				}		
+				}
 			}
 		}
 #pragma endregion
 		break;
-	case EAST_WIND: 
+	case EAST_WIND:
 #pragma region EAST_WIND
 		if (calGet2Dr(forestInsect, Q.pineForest, i, j) > 0.0 && calGet2Dr(forestInsect, Q.pineHealth, i, j) <= P.minimumTreeEnergy)
 		{
 			for (n = 0; n < WIND_DIMENSION; n++)
 			{
 				if (calGetX2Dr(forestInsect, Q.pineForest, i, j, eastWind[n]) > 0.0 && calGetX2Dr(forestInsect, Q.pineHealth, i, j, eastWind[n]) > P.minimumTreeEnergy)
-				{ 
+				{
 					valueTmpFemale = calGetX2Dr(forestInsect, Q.femaleBettle, i, j, eastWind[n]) + calGetX2Dr(forestInsect, Q.femalePremetureBettle, i, j, eastWind[n]);
 					if (valueTmpFemale > valueFemale)
 					{
@@ -552,19 +552,19 @@ CALint getNextNeighboorhoodWithWind_Male(struct CALModel2D* forestInsect, CALint
 						indexFemale = eastWind[n];
 						notFound = 0;
 					}
-				}		
+				}
 			}
 		}
 #pragma endregion
 		break;
-	case SOUTH_WIND: 
+	case SOUTH_WIND:
 #pragma region SOUTH_WIND
 		if (calGet2Dr(forestInsect, Q.pineForest, i, j) > 0.0 && calGet2Dr(forestInsect, Q.pineHealth, i, j) <= P.minimumTreeEnergy)
 		{
 			for (n = 0; n < WIND_DIMENSION; n++)
 			{
 				if (calGetX2Dr(forestInsect, Q.pineForest, i, j, southWind[n]) > 0.0 && calGetX2Dr(forestInsect, Q.pineHealth, i, j, southWind[n]) > P.minimumTreeEnergy)
-				{ 
+				{
 					valueTmpFemale = calGetX2Dr(forestInsect, Q.femaleBettle, i, j, southWind[n]) + calGetX2Dr(forestInsect, Q.femalePremetureBettle, i, j, southWind[n]);
 					if (valueTmpFemale > valueFemale)
 					{
@@ -582,19 +582,19 @@ CALint getNextNeighboorhoodWithWind_Male(struct CALModel2D* forestInsect, CALint
 						indexFemale = southWind[n];
 						notFound = 0;
 					}
-				}		
+				}
 			}
 		}
 #pragma endregion
 		break;
-	case WEAST_WIND: 
+	case WEAST_WIND:
 #pragma region WEAST_WIND
 		if (calGet2Dr(forestInsect, Q.pineForest, i, j) > 0.0 && calGet2Dr(forestInsect, Q.pineHealth, i, j) <= P.minimumTreeEnergy)
 		{
 			for (n = 0; n < WIND_DIMENSION; n++)
 			{
 				if (calGetX2Dr(forestInsect, Q.pineForest, i, j, weastWind[n]) > 0.0 && calGetX2Dr(forestInsect, Q.pineHealth, i, j, weastWind[n]) > P.minimumTreeEnergy)
-				{ 
+				{
 					valueTmpFemale = calGetX2Dr(forestInsect, Q.femaleBettle, i, j, weastWind[n]) + calGetX2Dr(forestInsect, Q.femalePremetureBettle, i, j, weastWind[n]);
 					if (valueTmpFemale > valueFemale)
 					{
@@ -612,19 +612,19 @@ CALint getNextNeighboorhoodWithWind_Male(struct CALModel2D* forestInsect, CALint
 						indexFemale = weastWind[n];
 						notFound = 0;
 					}
-				}		
+				}
 			}
 		}
 #pragma endregion
 		break;
-	default: 
+	default:
 #pragma region NO_WIND
 		if (calGet2Dr(forestInsect, Q.pineForest, i, j) > 0.0 && calGet2Dr(forestInsect, Q.pineHealth, i, j) <= P.minimumTreeEnergy)
 		{
 			for (n = 1; n <= 8; n++)
 			{
 				if (calGetX2Dr(forestInsect, Q.pineForest, i, j, n) > 0.0 && calGetX2Dr(forestInsect, Q.pineHealth, i, j, n) > P.minimumTreeEnergy)
-				{ 
+				{
 					valueTmpFemale = calGetX2Dr(forestInsect, Q.femaleBettle, i, j, n) + calGetX2Dr(forestInsect, Q.femalePremetureBettle, i, j, n);
 					if (valueTmpFemale > valueFemale)
 					{
@@ -642,10 +642,10 @@ CALint getNextNeighboorhoodWithWind_Male(struct CALModel2D* forestInsect, CALint
 						indexFemale = n;
 						notFound = 0;
 					}
-				}		
+				}
 			}
 		}
-#pragma endregion		
+#pragma endregion
 		break;
 	}
 
@@ -799,7 +799,7 @@ void forestInsectCADef() {
 	P.treesholdWheaterEffects = 10;
 	P.startDay = 1;
 	P.currentDay = 1;
-	P.dayForDeposingEggs = 150;			// In 150 year's day bettles deposes eggs 
+	P.dayForDeposingEggs = 150;			// In 150 year's day bettles deposes eggs
 	P.dayForUnlockingEggs = 210;		// In 210 year's day bettles' eggs are unlocking
 	P.eggsDeposedByBettle = 1000;		// Eggs deposed by one bettle
 	P.dayToChangeTreeForBettle = 250;	// Day for bettles to change tree
@@ -864,27 +864,27 @@ void forestInsectCADef() {
 	// draw model definition
 	drawModel = calglDefDrawModel2D(CALGL_DRAW_MODE_SURFACE, "ForestInsect", forestInsect, forestInsectSimulation);
 	// Add Terrain
-	calglAddToDrawModel2Dr(drawModel, NULL, &Q.terrain, CALGL_TYPE_INFO_VERTEX_DATA, CALGL_TYPE_INFO_USE_NO_COLOR, CALGL_DATA_TYPE_STATIC);
+	calglAdd2Dr(drawModel, NULL, &Q.terrain, CALGL_TYPE_INFO_VERTEX_DATA, CALGL_TYPE_INFO_USE_NO_COLOR, CALGL_DATA_TYPE_STATIC);
 	calglColor2D(drawModel, 0.5, 0.5, 0.5, 1.0);
-	calglAddToDrawModel2Dr(drawModel, Q.terrain, &Q.terrain, CALGL_TYPE_INFO_COLOR_DATA, CALGL_TYPE_INFO_USE_CURRENT_COLOR, CALGL_DATA_TYPE_DYNAMIC);
-	calglAddToDrawModel2Dr(drawModel, Q.terrain, &Q.terrain, CALGL_TYPE_INFO_NORMAL_DATA, CALGL_TYPE_INFO_USE_NO_COLOR, CALGL_DATA_TYPE_DYNAMIC);
+	calglAdd2Dr(drawModel, Q.terrain, &Q.terrain, CALGL_TYPE_INFO_COLOR_DATA, CALGL_TYPE_INFO_USE_CURRENT_COLOR, CALGL_DATA_TYPE_DYNAMIC);
+	calglAdd2Dr(drawModel, Q.terrain, &Q.terrain, CALGL_TYPE_INFO_NORMAL_DATA, CALGL_TYPE_INFO_USE_NO_COLOR, CALGL_DATA_TYPE_DYNAMIC);
 	// Add Pine Forest
-	calglAddToDrawModel2Dr(drawModel, Q.terrain, &Q.pineForest, CALGL_TYPE_INFO_VERTEX_DATA, CALGL_TYPE_INFO_USE_NO_COLOR, CALGL_DATA_TYPE_DYNAMIC);
-	calglAddToDrawModel2Dr(drawModel, Q.pineForest, &Q.pineHealth, CALGL_TYPE_INFO_COLOR_DATA, CALGL_TYPE_INFO_USE_GREEN_SCALE, CALGL_DATA_TYPE_DYNAMIC);
-	calglAddToDrawModel2Dr(drawModel, Q.pineForest, &Q.pineForest, CALGL_TYPE_INFO_NORMAL_DATA, CALGL_TYPE_INFO_USE_NO_COLOR, CALGL_DATA_TYPE_DYNAMIC);
+	calglAdd2Dr(drawModel, Q.terrain, &Q.pineForest, CALGL_TYPE_INFO_VERTEX_DATA, CALGL_TYPE_INFO_USE_NO_COLOR, CALGL_DATA_TYPE_DYNAMIC);
+	calglAdd2Dr(drawModel, Q.pineForest, &Q.pineHealth, CALGL_TYPE_INFO_COLOR_DATA, CALGL_TYPE_INFO_USE_GREEN_SCALE, CALGL_DATA_TYPE_DYNAMIC);
+	calglAdd2Dr(drawModel, Q.pineForest, &Q.pineForest, CALGL_TYPE_INFO_NORMAL_DATA, CALGL_TYPE_INFO_USE_NO_COLOR, CALGL_DATA_TYPE_DYNAMIC);
 	// Add Other Trees
-	calglAddToDrawModel2Dr(drawModel, Q.terrain, &Q.otherTrees, CALGL_TYPE_INFO_VERTEX_DATA, CALGL_TYPE_INFO_USE_NO_COLOR, CALGL_DATA_TYPE_DYNAMIC);
+	calglAdd2Dr(drawModel, Q.terrain, &Q.otherTrees, CALGL_TYPE_INFO_VERTEX_DATA, CALGL_TYPE_INFO_USE_NO_COLOR, CALGL_DATA_TYPE_DYNAMIC);
 	calglColor2D(drawModel, 159.0f / 255, 76.0f / 255, 0.1f, 1.0);
-	calglAddToDrawModel2Dr(drawModel, Q.otherTrees, &Q.otherTrees, CALGL_TYPE_INFO_COLOR_DATA, CALGL_TYPE_INFO_USE_CURRENT_COLOR, CALGL_DATA_TYPE_DYNAMIC);
-	calglAddToDrawModel2Dr(drawModel, Q.otherTrees, &Q.otherTrees, CALGL_TYPE_INFO_NORMAL_DATA, CALGL_TYPE_INFO_USE_NO_COLOR, CALGL_DATA_TYPE_DYNAMIC);
+	calglAdd2Dr(drawModel, Q.otherTrees, &Q.otherTrees, CALGL_TYPE_INFO_COLOR_DATA, CALGL_TYPE_INFO_USE_CURRENT_COLOR, CALGL_DATA_TYPE_DYNAMIC);
+	calglAdd2Dr(drawModel, Q.otherTrees, &Q.otherTrees, CALGL_TYPE_INFO_NORMAL_DATA, CALGL_TYPE_INFO_USE_NO_COLOR, CALGL_DATA_TYPE_DYNAMIC);
 	// Add Female Bettle to drawing
-	calglAddToDrawModel2Dr(drawModel, Q.terrain, &Q.boolFemaleBettle, CALGL_TYPE_INFO_VERTEX_DATA, CALGL_TYPE_INFO_USE_NO_COLOR, CALGL_DATA_TYPE_DYNAMIC);
-	calglAddToDrawModel2Dr(drawModel, Q.boolFemaleBettle, &Q.totalFemaleBettle, CALGL_TYPE_INFO_COLOR_DATA, CALGL_TYPE_INFO_USE_BLUE_SCALE, CALGL_DATA_TYPE_DYNAMIC);
-	calglAddToDrawModel2Dr(drawModel, Q.boolFemaleBettle, &Q.boolFemaleBettle, CALGL_TYPE_INFO_NORMAL_DATA, CALGL_TYPE_INFO_USE_NO_COLOR, CALGL_DATA_TYPE_DYNAMIC);
+	calglAdd2Dr(drawModel, Q.terrain, &Q.boolFemaleBettle, CALGL_TYPE_INFO_VERTEX_DATA, CALGL_TYPE_INFO_USE_NO_COLOR, CALGL_DATA_TYPE_DYNAMIC);
+	calglAdd2Dr(drawModel, Q.boolFemaleBettle, &Q.totalFemaleBettle, CALGL_TYPE_INFO_COLOR_DATA, CALGL_TYPE_INFO_USE_BLUE_SCALE, CALGL_DATA_TYPE_DYNAMIC);
+	calglAdd2Dr(drawModel, Q.boolFemaleBettle, &Q.boolFemaleBettle, CALGL_TYPE_INFO_NORMAL_DATA, CALGL_TYPE_INFO_USE_NO_COLOR, CALGL_DATA_TYPE_DYNAMIC);
 	// Add Male Bettle to drawing
-	calglAddToDrawModel2Dr(drawModel, Q.terrain, &Q.boolMaleBettle, CALGL_TYPE_INFO_VERTEX_DATA, CALGL_TYPE_INFO_USE_NO_COLOR, CALGL_DATA_TYPE_DYNAMIC);
-	calglAddToDrawModel2Dr(drawModel, Q.boolMaleBettle, &Q.totalMaleBettle, CALGL_TYPE_INFO_COLOR_DATA, CALGL_TYPE_INFO_USE_RED_SCALE, CALGL_DATA_TYPE_DYNAMIC);
-	calglAddToDrawModel2Dr(drawModel, Q.boolMaleBettle, &Q.boolMaleBettle, CALGL_TYPE_INFO_NORMAL_DATA, CALGL_TYPE_INFO_USE_NO_COLOR, CALGL_DATA_TYPE_DYNAMIC);
+	calglAdd2Dr(drawModel, Q.terrain, &Q.boolMaleBettle, CALGL_TYPE_INFO_VERTEX_DATA, CALGL_TYPE_INFO_USE_NO_COLOR, CALGL_DATA_TYPE_DYNAMIC);
+	calglAdd2Dr(drawModel, Q.boolMaleBettle, &Q.totalMaleBettle, CALGL_TYPE_INFO_COLOR_DATA, CALGL_TYPE_INFO_USE_RED_SCALE, CALGL_DATA_TYPE_DYNAMIC);
+	calglAdd2Dr(drawModel, Q.boolMaleBettle, &Q.boolMaleBettle, CALGL_TYPE_INFO_NORMAL_DATA, CALGL_TYPE_INFO_USE_NO_COLOR, CALGL_DATA_TYPE_DYNAMIC);
 
 	forestInsectLoadConfig();
 }
@@ -941,7 +941,7 @@ void forestInsectCalculateTotalBettle(){
 		for (j = 0; j<forestInsect->columns; j++)
 		{
 			k = 0.0;
-			k = calGet2Dr(forestInsect, Q.femaleBettle, i, j); 
+			k = calGet2Dr(forestInsect, Q.femaleBettle, i, j);
 			if (k > 0.0){
 				calSet2Dr(forestInsect, Q.boolFemaleBettle, i, j, 1.0 + calGet2Dr(forestInsect, Q.pineForest, i, j));
 			}

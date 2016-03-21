@@ -1,7 +1,7 @@
 // mod2 3D Cellular Automaton
 
 #include <OpenCAL-CL/calcl3D.h>
-#include <OpenCAL-CL/calgl3DUpdaterCL.h>
+#include <OpenCAL-CL/calgl3DRunCL.h>
 #include <OpenCAL-GL/calgl3D.h>
 #include <OpenCAL-GL/calgl3DWindow.h>
 #include <OpenCAL/cal3DIO.h>
@@ -84,12 +84,12 @@ int main(int argc, char** argv)
 	calglInitViewer("mod2 3D CA viewer", 1.0f, 400, 400, 40, 40, CAL_TRUE, 100);
 
 	//drawModel definition
-	struct CALUpdater3D * calUpdater = calglCreateUpdater3DCL(device_CA,100,1,4000);
-	drawModel = calglDefDrawModel3DCL(CALGL_DRAW_MODE_FLAT, "3D view", host_CA, calUpdater);
-	calglAddToDrawModel3Db(drawModel, NULL, &Q, CALGL_TYPE_INFO_VERTEX_DATA, CALGL_TYPE_INFO_USE_NO_COLOR, CALGL_DATA_TYPE_DYNAMIC);
+	struct CALGLRun3D * calUpdater = calglRunCLDef3D(device_CA,100,1,4000);
+	drawModel = calglDefDrawModelCL3D(CALGL_DRAW_MODE_FLAT, "3D view", host_CA, calUpdater);
+	calglAdd3Db(drawModel, NULL, &Q, CALGL_TYPE_INFO_VERTEX_DATA, CALGL_TYPE_INFO_USE_NO_COLOR, CALGL_DATA_TYPE_DYNAMIC);
 	calglColor3D(drawModel, 0.5f, 0.5f, 0.5f, 1.0f);
-	calglAddToDrawModel3Db(drawModel, Q, &Q, CALGL_TYPE_INFO_COLOR_DATA, CALGL_TYPE_INFO_USE_CURRENT_COLOR, CALGL_DATA_TYPE_DYNAMIC);
-	calglAddToDrawModel3Db(drawModel, Q, &Q, CALGL_TYPE_INFO_NORMAL_DATA, CALGL_TYPE_INFO_USE_NO_COLOR, CALGL_DATA_TYPE_DYNAMIC);
+	calglAdd3Db(drawModel, Q, &Q, CALGL_TYPE_INFO_COLOR_DATA, CALGL_TYPE_INFO_USE_CURRENT_COLOR, CALGL_DATA_TYPE_DYNAMIC);
+	calglAdd3Db(drawModel, Q, &Q, CALGL_TYPE_INFO_NORMAL_DATA, CALGL_TYPE_INFO_USE_NO_COLOR, CALGL_DATA_TYPE_DYNAMIC);
 
 	// New functions for hide/display intervals of cells
 	//calglHideDrawKBound3D(drawModel, 0, drawModel->calModel->slices);

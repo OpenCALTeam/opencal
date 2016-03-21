@@ -1,7 +1,7 @@
 // The SciddicaT debris flows CCA simulation model width_final
 // a 3D graphic visualizer in OpenCAL-GL
 #include <OpenCAL-CL/calcl2D.h>
-#include <OpenCAL-CL/calgl2DUpdaterCL.h>
+#include <OpenCAL-CL/calgl2DRunCL.h>
 #include <OpenCAL/cal2DIO.h>
 #include <OpenCAL-GL/calgl2D.h>
 #include <OpenCAL-GL/calgl2DWindow.h>
@@ -204,16 +204,16 @@ int main(int argc, char** argv)
 
 
 	// draw_model3D definition
-	struct CALUpdater2D * calUpdater= calglCreateUpdater2DCL(device_CA,100,1,4000);
-	draw_model3D = calglDefDrawModel2DCL(CALGL_DRAW_MODE_SURFACE, "SciddicaT 3D view", host_CA, calUpdater);
+	struct CALGLRun2D * calUpdater= calglRunCLDef2D(device_CA,100,1,4000);
+	draw_model3D = calglDefDrawModelCL2D(CALGL_DRAW_MODE_SURFACE, "SciddicaT 3D view", host_CA, calUpdater);
 	// Add nodes
-	calglAddToDrawModel2Dr(draw_model3D, NULL, &Q.z, CALGL_TYPE_INFO_VERTEX_DATA, CALGL_TYPE_INFO_USE_NO_COLOR, CALGL_DATA_TYPE_STATIC);
+	calglAdd2Dr(draw_model3D, NULL, &Q.z, CALGL_TYPE_INFO_VERTEX_DATA, CALGL_TYPE_INFO_USE_NO_COLOR, CALGL_DATA_TYPE_STATIC);
 	calglColor2D(draw_model3D, 0.5, 0.5, 0.5, 1.0);
-	calglAddToDrawModel2Dr(draw_model3D, Q.z, &Q.z, CALGL_TYPE_INFO_COLOR_DATA, CALGL_TYPE_INFO_USE_CURRENT_COLOR, CALGL_DATA_TYPE_DYNAMIC);
-	calglAddToDrawModel2Dr(draw_model3D, Q.z, &Q.z, CALGL_TYPE_INFO_NORMAL_DATA, CALGL_TYPE_INFO_USE_NO_COLOR, CALGL_DATA_TYPE_DYNAMIC);
-	calglAddToDrawModel2Dr(draw_model3D, Q.z, &Q.h, CALGL_TYPE_INFO_VERTEX_DATA, CALGL_TYPE_INFO_USE_NO_COLOR, CALGL_DATA_TYPE_DYNAMIC);
-	calglAddToDrawModel2Dr(draw_model3D, Q.h, &Q.h, CALGL_TYPE_INFO_COLOR_DATA, CALGL_TYPE_INFO_USE_RED_YELLOW_SCALE, CALGL_DATA_TYPE_DYNAMIC);
-	calglAddToDrawModel2Dr(draw_model3D, Q.h, &Q.h, CALGL_TYPE_INFO_NORMAL_DATA, CALGL_TYPE_INFO_USE_NO_COLOR, CALGL_DATA_TYPE_DYNAMIC);
+	calglAdd2Dr(draw_model3D, Q.z, &Q.z, CALGL_TYPE_INFO_COLOR_DATA, CALGL_TYPE_INFO_USE_CURRENT_COLOR, CALGL_DATA_TYPE_DYNAMIC);
+	calglAdd2Dr(draw_model3D, Q.z, &Q.z, CALGL_TYPE_INFO_NORMAL_DATA, CALGL_TYPE_INFO_USE_NO_COLOR, CALGL_DATA_TYPE_DYNAMIC);
+	calglAdd2Dr(draw_model3D, Q.z, &Q.h, CALGL_TYPE_INFO_VERTEX_DATA, CALGL_TYPE_INFO_USE_NO_COLOR, CALGL_DATA_TYPE_DYNAMIC);
+	calglAdd2Dr(draw_model3D, Q.h, &Q.h, CALGL_TYPE_INFO_COLOR_DATA, CALGL_TYPE_INFO_USE_RED_YELLOW_SCALE, CALGL_DATA_TYPE_DYNAMIC);
+	calglAdd2Dr(draw_model3D, Q.h, &Q.h, CALGL_TYPE_INFO_NORMAL_DATA, CALGL_TYPE_INFO_USE_NO_COLOR, CALGL_DATA_TYPE_DYNAMIC);
 	calglSetHeightOffset2D(draw_model3D,100);
 
 	// InfoBar
@@ -226,7 +226,7 @@ int main(int argc, char** argv)
 //	calglHideDrawIBound2D(draw_model3D, 100, 150);
 
 	//struct CALUpdater2D * calUpdater = calglCreateUpdater2DCL(sciddicaTsimulation);
-	draw_model2D = calglDefDrawModel2DCL(CALGL_DRAW_MODE_FLAT, "SciddicaT 2D view", host_CA,calUpdater);
+	draw_model2D = calglDefDrawModelCL2D(CALGL_DRAW_MODE_FLAT, "SciddicaT 2D view", host_CA,calUpdater);
 	draw_model2D->realModel = draw_model3D->realModel;
 	calglInfoBar2Dr(draw_model2D, Q.h, "Debris thickness", CALGL_TYPE_INFO_USE_RED_SCALE, 20, 200, 50, 150);
 

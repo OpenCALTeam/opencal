@@ -23,7 +23,7 @@
 #include <OpenCAL-GL/calgl2DNodeData.h>
 #include <OpenCAL-GL/calglModelViewParameter.h>
 #include <OpenCAL-GL/calglLightParameter.h>
-#include <OpenCAL-GL/calgl2DUpdater.h>
+#include <OpenCAL-GL/calgl2DRun.h>
 #include <OpenCAL-GL/calglInfoBar.h>
 #include <OpenCAL-GL/calglGlobalSettings.h>
 
@@ -41,7 +41,7 @@ struct CALGLDrawModel2D {
 	struct CALModel2D* calModel;				//!< Pointer to the cellular automata.
 	struct CALGLModelViewParameter* modelView;	//!< Pointer to the model view matrix transformation.
 	struct CALGLLightParameter* modelLight;		//!< Pointer to the lights parameters.
-	struct CALUpdater2D* calUpdater;			//!< Pointer to the object that update the cellular automata
+	struct CALGLRun2D* calglRun;			//!< Pointer to the object that update the cellular automata
 	struct CALGLInfoBar* infoBar;				//!< Pointer to the information bar that contains informations releated to the reference sub-state.
 	GLshort* drawICells;						//!< Array of value for the design of the automaton slices, in this case the rows.
 	GLshort* drawJCells;						//!< Array of value for the design of the automaton slices, in this case the columns.
@@ -65,11 +65,11 @@ struct CALGLDrawModel2D* calglDefDrawModel2D(
 
 	/*! \brief Constructor for creating the drawing model
 	*/
-	struct CALGLDrawModel2D* calglDefDrawModel2DCL(
+	struct CALGLDrawModel2D* calglDefDrawModelCL2D(
 		enum CALGL_DRAW_MODE mode,		//!< Type of drawing (es. FLAT, SURFACE).
 		const char* name,				//!< Name of the drawing model.
 		struct CALModel2D* calModel,	//!< Pointer to the cellular automata.
-		struct CALUpdater2D* calUpdater  //!< Pointer to the struct CALUpdater2D.
+		struct CALGLRun2D* calglRun  //!< Pointer to the struct CALGLRun2D.
 		);
 
 /*! \brief Destructor for destroying the drawing model
@@ -81,7 +81,7 @@ void calglDestoyDrawModel2D(
 #pragma region AddData
 /*! \brief Add data to the byte drawing model.
 */
-void calglAddToDrawModel2Db(
+void calglAdd2Db(
 	struct CALGLDrawModel2D* drawModel,				//!< The CALDrawModel to which adding data.
 	struct CALSubstate2Db* substateFather,			//!< The substate father to which add the new data.
 	struct CALSubstate2Db** substateToAdd,			//!< The new data to add.
@@ -91,7 +91,7 @@ void calglAddToDrawModel2Db(
 	);
 /*! \brief Add data to the int drawing model.
 */
-void calglAddToDrawModel2Di(
+void calglAdd2Di(
 	struct CALGLDrawModel2D* drawModel,				//!< The CALDrawModel to which adding data.
 	struct CALSubstate2Di* substateFather,			//!< The substate father to which add the new data.
 	struct CALSubstate2Di** substateToAdd,			//!< The new data to add.
@@ -101,7 +101,7 @@ void calglAddToDrawModel2Di(
 	);
 /*! \brief Add data to the real drawing model.
 */
-void calglAddToDrawModel2Dr(
+void calglAdd2Dr(
 	struct CALGLDrawModel2D* drawModel,				//!< The CALDrawModel to which adding data.
 	struct CALSubstate2Dr* substateFather,			//!< The substate father to which add the new data.
 	struct CALSubstate2Dr** substateToAdd,			//!< The new data to add.
@@ -554,7 +554,7 @@ void calglHideDrawJBound2D(
 #pragma endregion
 
 void calglSetHeightOffset2D(
-	struct CALGLDrawModel2D* calDrawModel,		//!< The pointer to CALDrawModel.  
+	struct CALGLDrawModel2D* calDrawModel,		//!< The pointer to CALDrawModel.
 	float heightOffset							//!< The offset between two substates.
 	);
 

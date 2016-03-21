@@ -9,8 +9,8 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 // Lesser General Public License for more details.
 
-#ifndef calgl2DUpdater_h
-#define calgl2DUpdater_h
+#ifndef calgl2DRun_h
+#define calgl2DRun_h
 
 #include <OpenCAL-CL/calcl2D.h>
 #include <time.h>
@@ -19,7 +19,7 @@
 /*! \brief Structure that task is to update the cellular automata computation.
 	This version is for 2D cellular automata.
 */
-struct CALUpdater2D {
+struct CALGLRun2D {
 	CALbyte firstRun;			//!< Boolean for a first launch.
 	CALbyte active;				//!< Boolean if it is active or not.
 	CALbyte terminated;			//!< Boolean if it is terminated.
@@ -36,9 +36,9 @@ struct CALUpdater2D {
 
 };
 
-/*! \brief Constructor for create a struct CALUpdater2D.
+/*! \brief Constructor for create a struct CALGLRun2D.
 */
-struct CALUpdater2D* calglCreateUpdater2DCL(
+struct CALGLRun2D* calglRunCLDef2D(
 	struct CALCLModel2D* deviceCA,	//!< Reference to CALRun2D
 	CALint fixedStep,
 	CALint initial_step,
@@ -48,31 +48,31 @@ struct CALUpdater2D* calglCreateUpdater2DCL(
 /*! \brief Destructor for de-allocate memory.
 */
 void calglDestroyUpdater2DCL(
-	struct CALUpdater2D* calUpdater //!< Struct to destroy.
+	struct CALGLRun2D* calglRun //!< Struct to destroy.
 	);
 
 /*! \brief Main update function, it is called by the thread.
 */
 void* calglFuncThreadUpdate2DCL(
-	void* arg	//!< Argument which is a struct CALUpdater2D.
+	void* arg	//!< Argument which is a struct CALGLRun2D.
 	);
 
 /*! \brief Function for starting the thread.
 */
 void calglStartThread2DCL(
-	struct CALUpdater2D* calUpdater	//!< Object which contains the thread to launch.
+	struct CALGLRun2D* calglRun	//!< Object which contains the thread to launch.
 	);
 
 /*! \brief Update function for updating the cellular automata computation.
 */
 void calglUpdate2DCL(
-	struct CALUpdater2D* calUpdater	//!< Struct for retrieve the cellular automata to update.
+	struct CALGLRun2D* calglRun	//!< Struct for retrieve the cellular automata to update.
 	);
 
 /*! \brief Update function for saving the final state to disk.
 */
 void calglSaveStateUpdater2DCL(
-	struct CALUpdater2D* calUpdater	//!< Struct for retrieve the cellular automata data.
+	struct CALGLRun2D* calglRun	//!< Struct for retrieve the cellular automata data.
 	);
 
 #endif

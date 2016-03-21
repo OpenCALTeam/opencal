@@ -372,8 +372,8 @@ void calglKeyboardEventWindow2D(unsigned char key, int x, int y) {
 	}
 
 	if(key=='x'||key=='s') {
-		if(window2D->models[0]->calUpdater) {
-			window2D->models[0]->calUpdater->active = !window2D->models[0]->calUpdater->active;
+		if(window2D->models[0]->calglRun) {
+			window2D->models[0]->calglRun->active = !window2D->models[0]->calglRun->active;
 		}
 	}
 
@@ -403,23 +403,23 @@ void calglMouseWindow2D(int button, int state, int x, int y) {
 		leftPressed = CAL_TRUE;
 		old_x = x-window2D->sub_width/2;
 		old_y = y-window2D->sub_height/2;
-		
+
 		//models2D[glutGetWindow()-2]->moving = CAL_TRUE;
 	} else if(button==2) { // Right click
 		rightPressed = CAL_TRUE;
 		oldestY = y-window2D->sub_height/2;
-		
+
 		//models2D[glutGetWindow()-2]->moving = CAL_TRUE;
 	}
 
 	if(state==GLUT_UP) {
 		leftPressed = CAL_FALSE;
 		rightPressed = CAL_FALSE;
-		
+
 		//models2D[glutGetWindow()-2]->moving = CAL_FALSE;
 	} else {
 		calglRedisplayAllWindow2D();
-		
+
 		//models2D[glutGetWindow()-2]->moving = CAL_FALSE;
 	}
 }
@@ -448,7 +448,7 @@ void calglMotionMouseWindow2D(int x, int y) {
 		window2D->models[glutGetWindow()-2]->modelView->yRotation += rot_x;*/
 
 		calglRedisplayAllWindow2D();
-		
+
 		//models2D[glutGetWindow()-2]->moving = CAL_TRUE;
 	} else if(rightPressed) {
 		y -= window2D->sub_height/2;
@@ -458,16 +458,16 @@ void calglMotionMouseWindow2D(int x, int y) {
 		zPos[glutGetWindow()-2] += transY;
 
 		calglRedisplayAllWindow2D();
-		
+
 		//models2D[glutGetWindow()-2]->moving = CAL_TRUE;
 	} else {
-		
+
 		//models2D[glutGetWindow()-2]->moving = CAL_FALSE;
 	}
 }
 
 void calglIdleFuncWindow2D(void) {
-	if(calglGetGlobalSettings()->fixedDisplay && window2D->models[0]->calUpdater->step%calglGetGlobalSettings()->fixedStep==0) {
+	if(calglGetGlobalSettings()->fixedDisplay && window2D->models[0]->calglRun->step%calglGetGlobalSettings()->fixedStep==0) {
 		calglRedisplayAllWindow2D();
 	}
 }

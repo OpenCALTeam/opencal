@@ -10,7 +10,7 @@
 // Lesser General Public License for more details.
 
 #include <OpenCAL/cal2DIO.h>
-#include <OpenCAL-CL/calgl2DUpdaterCL.h>
+#include <OpenCAL-CL/calgl2DRunCL.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -62,112 +62,112 @@ char* GetString2D(GLdouble number) {
 	return toReturn;
 }
 
-struct CALUpdater2D* calglCreateUpdater2DCL(struct CALCLModel2D* deviceCA,CALint fixedStep,CALint initial_step,CALint final_step){
-	struct CALUpdater2D* calUpdater = (struct CALUpdater2D*) malloc(sizeof(struct CALUpdater2D));
+struct CALGLRun2D* calglRunCLDef2D(struct CALCLModel2D* deviceCA,CALint fixedStep,CALint initial_step,CALint final_step){
+	struct CALGLRun2D* calglRun = (struct CALGLRun2D*) malloc(sizeof(struct CALGLRun2D));
 
-	calUpdater->firstRun = CAL_TRUE;
-	calUpdater->active = CAL_FALSE;
-	calUpdater->terminated = CAL_FALSE;
-	calUpdater->deviceCA = deviceCA;
-	calUpdater->stop = CAL_FALSE;
-	calUpdater->onlyOneTime=CAL_FALSE;
-	calUpdater->fixedStep=fixedStep;
-	calUpdater->deviceCA->steps=initial_step;
-	calUpdater->final_step=final_step;
-	calglStartThread2DCL(calUpdater);
+	calglRun->firstRun = CAL_TRUE;
+	calglRun->active = CAL_FALSE;
+	calglRun->terminated = CAL_FALSE;
+	calglRun->deviceCA = deviceCA;
+	calglRun->stop = CAL_FALSE;
+	calglRun->onlyOneTime=CAL_FALSE;
+	calglRun->fixedStep=fixedStep;
+	calglRun->deviceCA->steps=initial_step;
+	calglRun->final_step=final_step;
+	calglStartThread2DCL(calglRun);
 
-	return calUpdater;
+	return calglRun;
 }
 
-void calglDestroyUpdater2DCL(struct CALUpdater2D* calUpdater){
-	if (calUpdater){
-		free(calUpdater);
+void calglDestroyUpdater2DCL(struct CALGLRun2D* calglRun){
+	if (calglRun){
+		free(calglRun);
 	}
 }
 
 void* calglFuncThreadUpdate2DCL(void* arg){
-	struct CALUpdater2D* calUpdater = (struct CALUpdater2D*) arg;
+	struct CALGLRun2D* calglRun = (struct CALGLRun2D*) arg;
 
-	while (!calUpdater->stop){
-		calglUpdate2DCL(calUpdater);
+	while (!calglRun->stop){
+		calglUpdate2DCL(calglRun);
 		//Sleep(10);
 	}
 
 	return (void *)0;
 }
 
-void calglStartThread2DCL(struct CALUpdater2D* calUpdater){
-	pthread_create(&calUpdater->thread, NULL, calglFuncThreadUpdate2DCL, (void *)calUpdater);
+void calglStartThread2DCL(struct CALGLRun2D* calglRun){
+	pthread_create(&calglRun->thread, NULL, calglFuncThreadUpdate2DCL, (void *)calglRun);
 }
 
-void calglUpdate2DCL(struct CALUpdater2D* calUpdater){
+void calglUpdate2DCL(struct CALGLRun2D* calglRun){
 
-	if (calUpdater->active){
-		calUpdater->onlyOneTime=CAL_TRUE;
+	if (calglRun->active){
+		calglRun->onlyOneTime=CAL_TRUE;
 		size_t * threadNumMax = (size_t*) malloc(sizeof(size_t) * 2);
-		threadNumMax[0] = calUpdater->deviceCA->host_CA->rows;
-		threadNumMax[1] = calUpdater->deviceCA->host_CA->columns;
+		threadNumMax[0] = calglRun->deviceCA->host_CA->rows;
+		threadNumMax[1] = calglRun->deviceCA->host_CA->columns;
 		size_t * singleStepThreadNum;
 		int dimNum;
 
-		if (calUpdater->deviceCA->opt == CAL_NO_OPT) {
+		if (calglRun->deviceCA->opt == CAL_NO_OPT) {
 			singleStepThreadNum = (size_t*) malloc(sizeof(size_t) * 2);
 			singleStepThreadNum[0] = threadNumMax[0];
 			singleStepThreadNum[1] = threadNumMax[1];
 			dimNum = 2;
 		} else {
 			singleStepThreadNum = (size_t*) malloc(sizeof(size_t));
-			singleStepThreadNum[0] = calUpdater->deviceCA->host_CA->A.size_current;
+			singleStepThreadNum[0] = calglRun->deviceCA->host_CA->A.size_current;
 			dimNum = 1;
 		}
 		//system("clear");
 
 
-		if (calUpdater->firstRun){
-			calUpdater->firstRun = CAL_FALSE;
-			calUpdater->start_time = time(NULL);
-			if (calUpdater->deviceCA->kernelInitSubstates != NULL)
-				calclKernelCall2D(calUpdater->deviceCA, calUpdater->deviceCA->kernelInitSubstates, 1, threadNumMax, NULL);
+		if (calglRun->firstRun){
+			calglRun->firstRun = CAL_FALSE;
+			calglRun->start_time = time(NULL);
+			if (calglRun->deviceCA->kernelInitSubstates != NULL)
+				calclKernelCall2D(calglRun->deviceCA, calglRun->deviceCA->kernelInitSubstates, 1, threadNumMax, NULL);
 		}
 
-		//calUpdater->deviceCA->steps++;
-		calUpdater->step=calUpdater->deviceCA->steps;
-		//printf("%d\n",calUpdater->step);
+		//calglRun->deviceCA->steps++;
+		calglRun->step=calglRun->deviceCA->steps;
+		//printf("%d\n",calglRun->step);
 		//printf ("VEROOOOOOOOOOO \n");
-		calUpdater->terminated = calclSingleStep2D(calUpdater->deviceCA, singleStepThreadNum, dimNum);
-		printf ("Cellular Automata: Current Step: %d \r", calUpdater->step);
+		calglRun->terminated = calclSingleStep2D(calglRun->deviceCA, singleStepThreadNum, dimNum);
+		printf ("Cellular Automata: Current Step: %d \r", calglRun->step);
 
 
 
-    //calclGetSubstateKernel2D(calUpdater->deviceCA, calUpdater->host_CA);
-		//printf("calUpdater->step = %d\n",calUpdater->step);
-		//printf("calUpdater->fixedStep = %d\n",calUpdater->fixedStep);
-		//printf("calUpdater->step%calUpdater->fixedStep==0  %d\n",calUpdater->step%calUpdater->fixedStep);
-		if (calUpdater->step%calUpdater->fixedStep==0){
-			calclGetSubstatesDeviceToHost2D(calUpdater->deviceCA);
+    //calclGetSubstateKernel2D(calglRun->deviceCA, calglRun->host_CA);
+		//printf("calglRun->step = %d\n",calglRun->step);
+		//printf("calglRun->fixedStep = %d\n",calglRun->fixedStep);
+		//printf("calglRun->step%calglRun->fixedStep==0  %d\n",calglRun->step%calglRun->fixedStep);
+		if (calglRun->step%calglRun->fixedStep==0){
+			calclGetSubstatesDeviceToHost2D(calglRun->deviceCA);
 		}
-			if (calUpdater->terminated || calUpdater->step%calUpdater->final_step==0)
+			if (calglRun->terminated || calglRun->step%calglRun->final_step==0)
 			{
-				calclGetSubstatesDeviceToHost2D(calUpdater->deviceCA);
+				calclGetSubstatesDeviceToHost2D(calglRun->deviceCA);
 
-				calUpdater->active = CAL_FALSE;
+				calglRun->active = CAL_FALSE;
 				//breaking the simulation
-				calUpdater->end_time = time(NULL);
+				calglRun->end_time = time(NULL);
 				printf("\nSimulation terminated\n");
-				printf(" Elapsed time: %d\n", (int)(calUpdater->end_time - calUpdater->start_time));
+				printf(" Elapsed time: %d\n", (int)(calglRun->end_time - calglRun->start_time));
 				printf("*-----------------------------------------------------*\n");
 				//saving configuration
-				calglSaveStateUpdater2DCL(calUpdater);
-				calUpdater->stop = CAL_TRUE;
+				calglSaveStateUpdater2DCL(calglRun);
+				calglRun->stop = CAL_TRUE;
 			}
 
 
 	}else{
-		if(calUpdater->onlyOneTime ){
-			calUpdater->onlyOneTime=CAL_FALSE;
+		if(calglRun->onlyOneTime ){
+			calglRun->onlyOneTime=CAL_FALSE;
 			printf("\nSimulation Pause\n");
-				calclGetSubstatesDeviceToHost2D(calUpdater->deviceCA);
-				calglSaveStateUpdater2DCL(calUpdater);
+				calclGetSubstatesDeviceToHost2D(calglRun->deviceCA);
+				calglSaveStateUpdater2DCL(calglRun);
 		}
 
 	}
@@ -175,10 +175,10 @@ void calglUpdate2DCL(struct CALUpdater2D* calUpdater){
 
 }
 
-void calglSaveStateUpdater2DCL(struct CALUpdater2D* calUpdater){
+void calglSaveStateUpdater2DCL(struct CALGLRun2D* calglRun){
 	int i = 0;
 	char tmpString[50];
-	struct CALModel2D* calModel = calUpdater->deviceCA->host_CA;
+	struct CALModel2D* calModel = calglRun->deviceCA->host_CA;
 
 	printf("Saving final state to folder \"./data/\"\n");
 
