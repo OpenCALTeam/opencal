@@ -1,17 +1,8 @@
-#ifndef __OPENCL_VERSION__
-#define __kernel
-#define __global
-#define __localcl
-#define get_global_id (int)
-#endif
-
 #include <kernel.h>
 
 //first elementary process
-__kernel void flowsComputation(__CALCL_MODEL_2D, __global CALParameterr * Pepsilon, __global CALParameterr * Pr
-
-) {
-
+__kernel void flowsComputation(__CALCL_MODEL_2D, __global CALParameterr * Pepsilon, __global CALParameterr * Pr)
+{
 	calclActiveThreadCheck2D();
 
 	int threadID = calclGlobalRow();
@@ -74,9 +65,8 @@ __kernel void flowsComputation(__CALCL_MODEL_2D, __global CALParameterr * Pepsil
 	}
 }
 
-
-__kernel void widthUpdate(__CALCL_MODEL_2D) {
-
+__kernel void widthUpdate(__CALCL_MODEL_2D)
+{
 	calclActiveThreadCheck2D();
 
 	CALint neighborhoodSize = calclGetNeighborhoodSize();
@@ -98,8 +88,8 @@ __kernel void widthUpdate(__CALCL_MODEL_2D) {
 
 }
 
-__kernel void removeInactiveCells(__CALCL_MODEL_2D, __global CALParameterr * Pepsilon) {
-
+__kernel void removeInactiveCells(__CALCL_MODEL_2D, __global CALParameterr * Pepsilon)
+{
 	calclActiveThreadCheck2D();
 
 	int threadID = calclGlobalRow();
@@ -110,8 +100,8 @@ __kernel void removeInactiveCells(__CALCL_MODEL_2D, __global CALParameterr * Pep
 		calclRemoveActiveCell2D(MODEL_2D,i,j);
 }
 
-__kernel void steering(__CALCL_MODEL_2D) {
-
+__kernel void steering(__CALCL_MODEL_2D)
+{
 	calclActiveThreadCheck2D();
 
 	int threadID = calclGlobalRow();
@@ -120,5 +110,4 @@ __kernel void steering(__CALCL_MODEL_2D) {
 	int i;
 	for (i = 0; i < NUMBER_OF_OUTFLOWS; ++i)
 		calclInitSubstateActiveCell2Dr(MODEL_2D, i, threadID, 0);
-
 }

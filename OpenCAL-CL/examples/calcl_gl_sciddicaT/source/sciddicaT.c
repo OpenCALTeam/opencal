@@ -1,5 +1,6 @@
-// The SciddicaT debris flows CCA simulation model width_final
-// a 3D graphic visualizer in OpenCAL-GL
+// The SciddicaT debris flows XCA simulation model with
+// a 3D graphic viewer in OpenCAL-GL
+
 #include <OpenCAL-CL/calcl2D.h>
 #include <OpenCAL-CL/calgl2DRunCL.h>
 #include <OpenCAL/cal2DIO.h>
@@ -7,57 +8,57 @@
 #include <OpenCAL-GL/calgl2DWindow.h>
 #include <stdlib.h>
 
-
 // Some definitions...
+#define ROWS 610
+#define COLUMNS 496
 #define P_R 0.5
 #define P_EPSILON 0.001
 #define NUMBER_OF_OUTFLOWS 4
-#define DEM "./data/dem.txt"
-#define SOURCE "./data/source.txt"
-#define FINAL "./data/width_final.txt"
-#define ROWS 610
-#define COLUMNS 496
 #define STEPS 4000
 #define DEM_PATH "./data/dem.txt"
 #define SOURCE_PATH "./data/source.txt"
+#define OUTPUT_PATH "./data/width_final.txt"
+#define GRAPHIC_UPDATE_INTERVAL 100
+
+// kernels' names definitions
 #define KERNEL_SRC "./kernel/source/"
 #define KERNEL_INC "./kernel/include/"
 #define KERNEL_SRC_AC "./kernelActive/source/"
 #define KERNEL_INC_AC "./kernelActive/include/"
-#define OUTPUT_PATH "./data/width_final.txt"
+#define KERNEL_ELEM_PROC_FLOW_COMPUTATION "flowsComputation"
+#define KERNEL_ELEM_PROC_WIDTH_UPDATE "widthUpdate"
+#define KERNEL_STEERING  "steering"
+#define ACTIVE_CELLS
+#ifdef ACTIVE_CELLS
+#define KERNEL_ELEM_PROC_RM_ACT_CELLS "removeInactiveCells"
+#endif
 
-// declare CCA model (sciddicaT), substates (Q), parameters (P),
-// and simulation object (sciddicaT_simulation)
+// The set of CA substates
 struct sciddicaTSubstates {
 	struct CALSubstate2Dr *z;
 	struct CALSubstate2Dr *h;
 	struct CALSubstate2Dr *f[NUMBER_OF_OUTFLOWS];
 };
 
+// The set of CA parameters
 struct sciddicaTParameters {
 	CALParameterr epsilon;
 	CALParameterr r;
 };
 
-struct CALModel2D* host_CA;						//the cellular automaton
-struct sciddicaTSubstates Q;						//the substates
-struct sciddicaTParameters P;						//the parameters
-struct CALCLDeviceManager * calcl_device_manager;
-struct CALCLModel2D * device_CA;
+// Objects declaration
+struct CALCLDeviceManager * calcl_device_manager; //the device manager object
+struct CALModel2D* host_CA;						 						//the host-side CA
+struct sciddicaTSubstates Q;											//the CA substates object
+struct sciddicaTParameters P;											//the CA parameters object
+struct CALCLModel2D * device_CA;									//the device-side CA
 
-//defining kernels' names
-#define KERNEL_ELEM_PROC_FLOW_COMPUTATION "flowsComputation"
-#define KERNEL_ELEM_PROC_WIDTH_UPDATE "widthUpdate"
-#define KERNEL_STEERING  "steering"
-#ifdef ACTIVE_CELLS
-#define KERNEL_ELEM_PROC_RM_ACT_CELLS "removeInactiveCells"
-#endif
 
 // SciddicaT exit function
 void exitFunction(void)
 {
 	// saving configuration
-	calSaveSubstate2Dr (host_CA, Q.h, FINAL);
+	calSaveSubstate2Dr (host_CA, Q.h, OUTPUT_PATH);
 
 	// finalizations
 	//calRunFinalize2D (sciddicaTsimulation);
@@ -66,7 +67,7 @@ void exitFunction(void)
 	calFinalize2D (host_CA);
 }
 
-
+// SciddicaT init function
 void sciddicaTSimulationInit(struct CALModel2D* host_CA) {
 	CALreal z, h;
 	CALint i, j;
@@ -97,23 +98,15 @@ void sciddicaTSimulationInit(struct CALModel2D* host_CA) {
 			}
 		}
 }
-void callback(struct CALModel2D* host_CA) {
-	system("clear");
-printf("********************************************************************");
-}
-
-
 
 int main(int argc, char** argv)
 {
-	//OpenCL definition
-	int platformNum = 0;
-	int deviceNum = 0;
-
-	CALCLcontext context;
+	// OpenCL device, context and program declaration
 	CALCLdevice device;
+	CALCLcontext context;
 	CALCLprogram program;
 
+	// kernels paths, names and buffers (for kernel parameters)
 #ifdef ACTIVE_CELLS
 	char * kernelSrc = KERNEL_SRC_AC;
 	char * kernelInc = KERNEL_INC_AC;
@@ -125,35 +118,25 @@ int main(int argc, char** argv)
 	CALCLkernel kernel_elem_proc_width_update;
 	CALCLkernel kernel_elem_proc_rm_act_cells;
 	CALCLkernel kernel_steering;
-	CALCLmem * buffersKernelFlowComp;
 	CALCLmem bufferEpsilonParameter;
 	CALCLmem bufferRParameter;
 
+	//OpenCL device selection from stdin and context definition
 	calcl_device_manager = calclCreateManager();
-	calclPrintPlatformsAndDevices(calcl_device_manager);
-
-	device = calclGetDevice(calcl_device_manager, platformNum, deviceNum);
+	calclGetPlatformAndDeviceFromStdIn(calcl_device_manager, &device);
 	context = calclCreateContext(&device);
+
+	// Load kernels and return a compiled program
 	program = calclLoadProgram2D(context, device, kernelSrc, kernelInc);
-	//OpenCL definition end
 
-
-	struct CALGLDrawModel2D* draw_model3D;
-	struct CALGLDrawModel2D* draw_model2D;
-
-	atexit(exitFunction);
-
-	calglInitViewer("SciddicaT OpenCAL-GL visualizer", 5, 800, 600, 10, 10, CAL_TRUE, 0);
-
-	//cadef and rundef
-	//cadef
+	// host-side CA definition
 #ifdef ACTIVE_CELLS
 	host_CA = calCADef2D(ROWS, COLUMNS, CAL_VON_NEUMANN_NEIGHBORHOOD_2D, CAL_SPACE_TOROIDAL, CAL_OPT_ACTIVE_CELLS);
 #else
 	host_CA = calCADef2D(ROWS, COLUMNS, CAL_VON_NEUMANN_NEIGHBORHOOD_2D, CAL_SPACE_TOROIDAL, CAL_NO_OPT);
 #endif
 
-	//add substates
+	// Add substates to the host-side CA
 	Q.f[0] = calAddSubstate2Dr(host_CA);
 	Q.f[1] = calAddSubstate2Dr(host_CA);
 	Q.f[2] = calAddSubstate2Dr(host_CA);
@@ -161,22 +144,17 @@ int main(int argc, char** argv)
 	Q.z = calAddSubstate2Dr(host_CA);
 	Q.h = calAddSubstate2Dr(host_CA);
 
-	//load configuration
-	calLoadSubstate2Dr(host_CA, Q.z, DEM);
-	calLoadSubstate2Dr(host_CA, Q.h, SOURCE);
-
-	//initialization
+	// Load data from file
+	calLoadSubstate2Dr(host_CA, Q.z, DEM_PATH);
+	calLoadSubstate2Dr(host_CA, Q.h, SOURCE_PATH);
+	// Host-side CA initialization
 	sciddicaTSimulationInit(host_CA);
 	calUpdate2D(host_CA);
 
-
-
-	//calcl device CA
+	//device-side CA definition
 	device_CA = calclCADef2D(host_CA, context, program, device);
 
-
-  //calclBackToHostFunc2D(device_CA,callback,1000);
-	//calcl kernels
+	// Extract kernels from program
 	kernel_elem_proc_flow_computation = calclGetKernelFromProgram(&program, KERNEL_ELEM_PROC_FLOW_COMPUTATION);
 	kernel_elem_proc_width_update = calclGetKernelFromProgram(&program, KERNEL_ELEM_PROC_WIDTH_UPDATE);
 #ifdef ACTIVE_CELLS
@@ -184,57 +162,74 @@ int main(int argc, char** argv)
 #endif
 	kernel_steering = calclGetKernelFromProgram(&program, KERNEL_STEERING);
 
+	// Setting kernel parameters
 	bufferEpsilonParameter = calclCreateBuffer(context, &P.epsilon, sizeof(CALParameterr));
 	bufferRParameter = calclCreateBuffer(context, &P.r, sizeof(CALParameterr));
+ 	calclSetKernelArg2D(&kernel_elem_proc_flow_computation, 0, sizeof(CALCLmem), &bufferEpsilonParameter);
+	calclSetKernelArg2D(&kernel_elem_proc_flow_computation, 1, sizeof(CALCLmem), &bufferRParameter);
 
-	 calclSetKernelArg2D(&kernel_elem_proc_flow_computation, 0, sizeof(CALCLmem), &bufferEpsilonParameter);
-	 calclSetKernelArg2D(&kernel_elem_proc_flow_computation, 1, sizeof(CALCLmem), &bufferRParameter);
-
-//	calclSetKernelArg2D(&kernel_elem_proc_flow_computation, 0, sizeof(CALParameterr), &P.epsilon);
-//	calclSetKernelArg2D(&kernel_elem_proc_flow_computation, 1, sizeof(CALParameterr), &P.r);
-
+	// Register transition function’s elementary processes to the device-side CA
 	calclAddElementaryProcess2D(device_CA, &kernel_elem_proc_flow_computation);
 	calclAddElementaryProcess2D(device_CA, &kernel_elem_proc_width_update);
+	#ifdef ACTIVE_CELLS
+		calclSetKernelArg2D(&kernel_elem_proc_rm_act_cells, 0, sizeof(CALCLmem), &bufferEpsilonParameter);
+		calclAddElementaryProcess2D(device_CA, &kernel_elem_proc_rm_act_cells);
+	#endif
+	// Register a steering function to the device-side CA
 	calclAddSteeringFunc2D(device_CA, &kernel_steering);
-#ifdef ACTIVE_CELLS
-	calclSetKernelArg2D(&kernel_elem_proc_rm_act_cells, 0, sizeof(CALCLmem), &bufferEpsilonParameter);
-	//calclSetKernelArg2D(&kernel_elem_proc_rm_act_cells, 0, sizeof(CALParameterr), &P.epsilon);
-	calclAddElementaryProcess2D(device_CA, &kernel_elem_proc_rm_act_cells);
-#endif
+
+	// Register a function to be executed before program termination
+	atexit(exitFunction);
 
 
-	// draw_model3D definition
-	struct CALGLRun2D * calUpdater= calglRunCLDef2D(device_CA,100,1,4000);
-	draw_model3D = calglDefDrawModelCL2D(CALGL_DRAW_MODE_SURFACE, "SciddicaT 3D view", host_CA, calUpdater);
-	// Add nodes
-	calglAdd2Dr(draw_model3D, NULL, &Q.z, CALGL_TYPE_INFO_VERTEX_DATA, CALGL_TYPE_INFO_USE_NO_COLOR, CALGL_DATA_TYPE_STATIC);
-	calglColor2D(draw_model3D, 0.5, 0.5, 0.5, 1.0);
-	calglAdd2Dr(draw_model3D, Q.z, &Q.z, CALGL_TYPE_INFO_COLOR_DATA, CALGL_TYPE_INFO_USE_CURRENT_COLOR, CALGL_DATA_TYPE_DYNAMIC);
-	calglAdd2Dr(draw_model3D, Q.z, &Q.z, CALGL_TYPE_INFO_NORMAL_DATA, CALGL_TYPE_INFO_USE_NO_COLOR, CALGL_DATA_TYPE_DYNAMIC);
-	calglAdd2Dr(draw_model3D, Q.z, &Q.h, CALGL_TYPE_INFO_VERTEX_DATA, CALGL_TYPE_INFO_USE_NO_COLOR, CALGL_DATA_TYPE_DYNAMIC);
-	calglAdd2Dr(draw_model3D, Q.h, &Q.h, CALGL_TYPE_INFO_COLOR_DATA, CALGL_TYPE_INFO_USE_RED_YELLOW_SCALE, CALGL_DATA_TYPE_DYNAMIC);
-	calglAdd2Dr(draw_model3D, Q.h, &Q.h, CALGL_TYPE_INFO_NORMAL_DATA, CALGL_TYPE_INFO_USE_NO_COLOR, CALGL_DATA_TYPE_DYNAMIC);
-	calglSetHeightOffset2D(draw_model3D,100);
+	// Rendering objects declaration
+	struct CALGLDrawModel2D* render_3D;
+	struct CALGLDrawModel2D* render_2D;
 
-	// InfoBar
-	//calglRelativeInfoBar2Dr(draw_model3D, Q.h, "Debris thickness", CALGL_TYPE_INFO_USE_RED_SCALE, CALGL_INFO_BAR_ORIENTATION_VERTICAL);
-	calglInfoBar2Dr(draw_model3D, Q.h, "Debris thickness", CALGL_TYPE_INFO_USE_RED_SCALE, 20, 120, 300, 40);
-
-	// Hide/display intervals of cells
-//	calglHideDrawJBound2D(draw_model3D, 0, draw_model3D->calModel->columns);
-//	calglDisplayDrawJBound2D(draw_model3D, 300, draw_model3D->calModel->columns);
-//	calglHideDrawIBound2D(draw_model3D, 100, 150);
-
-	//struct CALUpdater2D * calUpdater = calglCreateUpdater2DCL(sciddicaTsimulation);
-	draw_model2D = calglDefDrawModelCL2D(CALGL_DRAW_MODE_FLAT, "SciddicaT 2D view", host_CA,calUpdater);
-	draw_model2D->realModel = draw_model3D->realModel;
-	calglInfoBar2Dr(draw_model2D, Q.h, "Debris thickness", CALGL_TYPE_INFO_USE_RED_SCALE, 20, 200, 50, 150);
-
+	// Graphic viewer initialization
+	calglInitViewer("SciddicaT OpenCAL-GL visualizer", 5, 800, 600, 10, 10, CAL_TRUE, 0);
 	calglSetLayoutOrientation2D(CALGL_LAYOUT_ORIENTATION_VERTICAL);
 
-	calglSetDisplayStep(100);
+	// render_3D definition
+	struct CALGLRun2D * calgl_run= calglRunCLDef2D(device_CA, GRAPHIC_UPDATE_INTERVAL, 1, 4000);
+	calglSetDisplayStep(GRAPHIC_UPDATE_INTERVAL);
 
+	// 3D view rendering object
+	render_3D = calglDefDrawModelCL2D(CALGL_DRAW_MODE_SURFACE, "SciddicaT 3D view", host_CA, calgl_run);
+	// Add nodes
+	calglAdd2Dr(render_3D, NULL, &Q.z, CALGL_TYPE_INFO_VERTEX_DATA, CALGL_TYPE_INFO_USE_NO_COLOR, CALGL_DATA_TYPE_STATIC);
+	calglColor2D(render_3D, 0.5, 0.5, 0.5, 1.0);
+	calglAdd2Dr(render_3D, Q.z, &Q.z, CALGL_TYPE_INFO_COLOR_DATA, CALGL_TYPE_INFO_USE_CURRENT_COLOR, CALGL_DATA_TYPE_DYNAMIC);
+	calglAdd2Dr(render_3D, Q.z, &Q.z, CALGL_TYPE_INFO_NORMAL_DATA, CALGL_TYPE_INFO_USE_NO_COLOR, CALGL_DATA_TYPE_DYNAMIC);
+	calglAdd2Dr(render_3D, Q.z, &Q.h, CALGL_TYPE_INFO_VERTEX_DATA, CALGL_TYPE_INFO_USE_NO_COLOR, CALGL_DATA_TYPE_DYNAMIC);
+	calglAdd2Dr(render_3D, Q.h, &Q.h, CALGL_TYPE_INFO_COLOR_DATA, CALGL_TYPE_INFO_USE_RED_YELLOW_SCALE, CALGL_DATA_TYPE_DYNAMIC);
+	calglAdd2Dr(render_3D, Q.h, &Q.h, CALGL_TYPE_INFO_NORMAL_DATA, CALGL_TYPE_INFO_USE_NO_COLOR, CALGL_DATA_TYPE_DYNAMIC);
+	calglSetHeightOffset2D(render_3D,100);
+
+	// Scalar bar
+	calglInfoBar2Dr(render_3D, Q.h, "Debris thickness", CALGL_TYPE_INFO_USE_RED_SCALE, 20, 120, 300, 40);
+
+	// 2D view rendering object
+	render_2D = calglDefDrawModelCL2D(CALGL_DRAW_MODE_FLAT, "SciddicaT 2D view", host_CA, calgl_run);
+	render_2D->realModel = render_3D->realModel;
+	calglInfoBar2Dr(render_2D, Q.h, "Debris thickness", CALGL_TYPE_INFO_USE_RED_SCALE, 20, 200, 50, 150);
+
+	// calgl main loop
 	calglMainLoop2D(argc, argv);
 
 	return 0;
 }
+
+
+// void callback(struct CALModel2D* host_CA) {
+// 	system("clear");
+// printf("********************************************************************");
+// }
+
+//calclBackToHostFunc2D(device_CA,callback,1000);
+
+
+
+//	calclSetKernelArg2D(&kernel_elem_proc_flow_computation, 0, sizeof(CALParameterr), &P.epsilon);
+//	calclSetKernelArg2D(&kernel_elem_proc_flow_computation, 1, sizeof(CALParameterr), &P.r);
+		//calclSetKernelArg2D(&kernel_elem_proc_rm_act_cells, 0, sizeof(CALParameterr), &P.epsilon);
