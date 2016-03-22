@@ -1,9 +1,9 @@
 // The SciddicaT debris flows XCA simulation model with
 // a 3D graphic viewer in OpenCAL-GL
 
+#include <OpenCAL/cal2DIO.h>
 #include <OpenCAL-CL/calcl2D.h>
 #include <OpenCAL-CL/calgl2DRunCL.h>
-#include <OpenCAL/cal2DIO.h>
 #include <OpenCAL-GL/calgl2D.h>
 #include <OpenCAL-GL/calgl2DWindow.h>
 #include <stdlib.h>
@@ -21,6 +21,7 @@
 #define GRAPHIC_UPDATE_INTERVAL 100
 
 // kernels' names definitions
+#define ACTIVE_CELLS
 #define KERNEL_SRC "./kernel/source/"
 #define KERNEL_INC "./kernel/include/"
 #define KERNEL_SRC_AC "./kernelActive/source/"
@@ -28,7 +29,6 @@
 #define KERNEL_ELEM_PROC_FLOW_COMPUTATION "flowsComputation"
 #define KERNEL_ELEM_PROC_WIDTH_UPDATE "widthUpdate"
 #define KERNEL_STEERING  "steering"
-#define ACTIVE_CELLS
 #ifdef ACTIVE_CELLS
 #define KERNEL_ELEM_PROC_RM_ACT_CELLS "removeInactiveCells"
 #endif
@@ -182,13 +182,13 @@ int main(int argc, char** argv)
 	atexit(exitFunction);
 
 
+	// Graphic viewer initialization
+	calglInitViewer("SciddicaT OpenCAL-GL visualizer", 5, 800, 600, 10, 10, CAL_TRUE, 0);
+	//calglSetLayoutOrientation2D(CALGL_LAYOUT_ORIENTATION_VERTICAL);
+
 	// Rendering objects declaration
 	struct CALGLDrawModel2D* render_3D;
 	struct CALGLDrawModel2D* render_2D;
-
-	// Graphic viewer initialization
-	calglInitViewer("SciddicaT OpenCAL-GL visualizer", 5, 800, 600, 10, 10, CAL_TRUE, 0);
-	calglSetLayoutOrientation2D(CALGL_LAYOUT_ORIENTATION_VERTICAL);
 
 	// render_3D definition
 	struct CALGLRun2D * calgl_run= calglRunCLDef2D(device_CA, GRAPHIC_UPDATE_INTERVAL, 1, 4000);
