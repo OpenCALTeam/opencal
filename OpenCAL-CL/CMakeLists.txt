@@ -1,6 +1,7 @@
 # opencal/OpenCAL-CL/CMakeLists.txt
 cmake_minimum_required(VERSION 3.1 FATAL_ERROR)
 
+set(OPENCAL-CL_LIBRARY_NAME OpenCAL-CL CACHE PATH "Name of the specific version of opencal (OPENCAL CL)")
 # add a target to generate API documentation with Doxygen
 if(BUILD_DOCUMENTATION)
     if(NOT DOXYGEN_FOUND)
@@ -18,7 +19,7 @@ if(BUILD_DOCUMENTATION)
         COMMENT "Generating API documentation with Doxygen for for OpenCAL-CL"
         VERBATIM)
 
-    	install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html DESTINATION share/doc/OpenCAL/OpenCAL-CL)
+    	install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html DESTINATION ${INSTALL_DOCS_DIR}/${OPENCAL-CL_LIBRARY_NAME})
 endif()
 
 
@@ -55,7 +56,7 @@ file(GLOB HEADERS
 )
 
 file(GLOB KERNELS_HEADERS
-    "kernel/include/*.h"
+    "kernel/include/OpenCAL-CL/*.h"
 )
 
 file(GLOB KERNELS_SRC
@@ -64,14 +65,15 @@ file(GLOB KERNELS_SRC
 )
 
 add_library(opencal-cl ${SHAREDORSTATIC} ${SRC})
+target_link_libraries(opencal-cl pthread)
 install(TARGETS opencal-cl DESTINATION ${INSTALL_LIB_DIR})
-install(FILES ${HEADERS} DESTINATION ${INSTALL_INCLUDE_DIR}/OpenCAL-CL)
+install(FILES ${HEADERS} DESTINATION ${INSTALL_INCLUDE_DIR}/${OPENCAL-CL_LIBRARY_NAME})
 
-install(FILES ${KERNELS_HEADERS} DESTINATION ${INSTALL_SHARE_DIR}/OpenCAL-CL/kernel/include)
-install(FILES ${KERNELS_SRC} DESTINATION ${INSTALL_SHARE_DIR}/OpenCAL-CL/kernel/source)
+install(FILES ${KERNELS_HEADERS} DESTINATION ${INSTALL_INCLUDE_DIR}/${OPENCAL-CL_LIBRARY_NAME}/kernel/include/${OPENCAL-CL_LIBRARY_NAME})
+install(FILES ${KERNELS_SRC} DESTINATION ${INSTALL_INCLUDE_DIR}/${OPENCAL-CL_LIBRARY_NAME}/kernel/source)
 
 
 if(${BUILD_EXAMPLES} STREQUAL "ON")
         add_subdirectory(examples)
-		install(DIRECTORY examples DESTINATION ${INSTALL_EXAMPLE_DIR}/OpenCAL-CL)
+		install(DIRECTORY examples DESTINATION  ${INSTALL_EXAMPLE_DIR}/${OPENCAL-CL_LIBRARY_NAME})
 endif()

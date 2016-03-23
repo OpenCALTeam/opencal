@@ -1,6 +1,9 @@
 # opencal/OpenCAL-OMP/CMakeLists.txt
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 
+set(OPENCAL-OMP_LIBRARY_NAME OpenCAL-OMP CACHE PATH "Name of the specific version of opencal (OMP)")
+
+
 # add a target to generate API documentation with Doxygen
 if(BUILD_DOCUMENTATION)
     if(NOT DOXYGEN_FOUND)
@@ -18,7 +21,7 @@ if(BUILD_DOCUMENTATION)
         COMMENT "Generating API documentation with Doxygen for for OpenCAL-OMP"
         VERBATIM)
 
-    	install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html DESTINATION share/doc/OpenCAL/OpenCAL-OMP)
+    install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html DESTINATION ${INSTALL_DOCS_DIR}/${OPENCAL-OMP_LIBRARY_NAME})
 endif()
 
 
@@ -42,7 +45,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 file(GLOB SRC
     "include/*.h"
-     "include/OpenCAL-OMP/*.h"    
+     "include/OpenCAL-OMP/*.h"
     "source/*.c"
 )
 file(GLOB HEADERS
@@ -52,9 +55,8 @@ file(GLOB HEADERS
 
 add_library(opencal-omp ${SHAREDORSTATIC} ${SRC})
 install(TARGETS opencal-omp DESTINATION ${INSTALL_LIB_DIR})
-install(FILES ${HEADERS} DESTINATION ${INSTALL_INCLUDE_DIR}/OpenCAL-OMP)
+install(FILES ${HEADERS} DESTINATION ${INSTALL_INCLUDE_DIR}/${OPENCAL-OMP_LIBRARY_NAME})
 
 if(${BUILD_EXAMPLES} STREQUAL "ON")
 	add_subdirectory(examples)
 endif()
-

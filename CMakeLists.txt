@@ -4,9 +4,24 @@ cmake_policy(SET CMP0048 NEW)
 
 include(configure.cmake)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
-project(OpenCAL-ALL 
+project(OpenCAL-ALL
 		VERSION ${OPENCAL_VERSION}
 		LANGUAGES C CXX)
+
+
+
+set(INSTALL_ROOT_DIR opencal-${OPENCAL_VERSION})
+set(INSTALL_DOCS_DIR "${INSTALL_ROOT_DIR}/doc" )
+set(INSTALL_INCLUDE_DIR  "${INSTALL_ROOT_DIR}/include")
+set(INSTALL_LIB_DIR "${INSTALL_ROOT_DIR}/lib" )
+get_filename_component(INSTALL_EXAMPLE_DIR $ENV{HOME}/opencal-${OPENCAL_VERSION}-examples ABSOLUTE)
+
+set(INSTALL_BIN_DIR bin CACHE PATH "Installation directory for executables")
+
+message(STATUS ${INSTALL_EXAMPLE_DIR})
+
+
+
 
 
 if ( ENABLE_SHARED )
