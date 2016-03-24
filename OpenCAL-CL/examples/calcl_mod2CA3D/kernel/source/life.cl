@@ -1,17 +1,10 @@
-#ifndef __OPENCL_VERSION__
-#define __kernel
-#define __global
-#define __local
-#define get_global_id (int)
-#endif
+#include <OpenCAL-CL/calcl3D.h>
 
 #define Q 0
-#include <OpenCAL-CL/calcl3D.h>
 
 __kernel void mod2TransitionFunction(__CALCL_MODEL_3D) {
 
 	calclThreadCheck3D();
-
 
 	int i = calclGlobalRow();
 	int j = calclGlobalColumns();

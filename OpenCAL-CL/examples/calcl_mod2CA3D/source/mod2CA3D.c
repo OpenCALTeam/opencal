@@ -12,9 +12,6 @@
 #define PLATFORM_NUM 0
 #define DEVICE_NUM 0
 
-
-
-
 int main()
 {
 	// Select a compliant device

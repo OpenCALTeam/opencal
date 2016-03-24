@@ -15,8 +15,8 @@
 #define PLATFORM_NUM 0
 #define DEVICE_NUM 0
 
-struct CALModel3D* host_CA;							//the cellular automaton
-struct CALSubstate3Db *Q;							//the substate Q
+struct CALModel3D* host_CA;					//the cellular automaton
+struct CALSubstate3Db *Q;						//the substate Q
 struct CALCLModel3D* device_CA;			//the simulartion run
 struct CALCLDeviceManager * calcl_device_manager;
 
@@ -91,16 +91,7 @@ int main(int argc, char** argv)
 	calglAdd3Db(drawModel, Q, &Q, CALGL_TYPE_INFO_COLOR_DATA, CALGL_TYPE_INFO_USE_CURRENT_COLOR, CALGL_DATA_TYPE_DYNAMIC);
 	calglAdd3Db(drawModel, Q, &Q, CALGL_TYPE_INFO_NORMAL_DATA, CALGL_TYPE_INFO_USE_NO_COLOR, CALGL_DATA_TYPE_DYNAMIC);
 
-	// New functions for hide/display intervals of cells
-	//calglHideDrawKBound3D(drawModel, 0, drawModel->calModel->slices);
-	//calglDisplayDrawKBound3D(drawModel, 4, 10);
-	//calglDisplayDrawKBound3D(drawModel, 20, 25);
-	//calglHideDrawJBound3D(drawModel, 0, drawModel->calModel->columns);
-	//calglDisplayDrawJBound3D(drawModel, 2, 6);
-	//calglDisplayDrawJBound3D(drawModel, 18, 21);
-
 	calglMainLoop3D(argc, argv);
-
 
 	return 0;
 }
