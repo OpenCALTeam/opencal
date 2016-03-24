@@ -114,6 +114,7 @@ void simulationRun(void)
 #ifdef VERBOSE
 	//graphic rendering
 	printf("step: %d; \tactive cells: %d\r", sciddicaTsimulation->step, sciddicaTsimulation->ca2D->A.size_current);
+	if (sciddicaTsimulation->step % REFRESH == 0)
 	glutPostRedisplay();
 #endif
 }

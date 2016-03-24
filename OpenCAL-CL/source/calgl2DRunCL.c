@@ -21,46 +21,46 @@
 #include <GL/glut.h>
 #endif
 
-char* GetString2D(GLdouble number) {
-	char* toReturn = NULL;
-	GLint tmp = (GLint) (number*100);
-	GLint tmpSave = tmp;
-	GLint dimension = 0;
-	GLint i = 0;
-
-	while(tmp>0) {
-		tmp /= 10;
-		dimension++;
-	}
-	dimension += 2;
-	tmp = tmpSave;
-
-	toReturn = (char*) malloc(sizeof(char)*dimension);
-
-	toReturn[dimension-1] = '\0';
-	for(i = dimension-2; i>=0; i--) {
-		if(i==dimension-4) {
-			toReturn[i] = ',';
-		} else {
-			switch(tmp%10) {
-			case 0: toReturn[i] = '0'; break;
-			case 1: toReturn[i] = '1'; break;
-			case 2: toReturn[i] = '2'; break;
-			case 3: toReturn[i] = '3'; break;
-			case 4: toReturn[i] = '4'; break;
-			case 5: toReturn[i] = '5'; break;
-			case 6: toReturn[i] = '6'; break;
-			case 7: toReturn[i] = '7'; break;
-			case 8: toReturn[i] = '8'; break;
-			case 9: toReturn[i] = '9'; break;
-			default: toReturn[i] = ' '; break;
-			}
-			tmp /= 10;
-		}
-	}
-
-	return toReturn;
-}
+// char* GetString2D(GLdouble number) {
+// 	char* toReturn = NULL;
+// 	GLint tmp = (GLint) (number*100);
+// 	GLint tmpSave = tmp;
+// 	GLint dimension = 0;
+// 	GLint i = 0;
+//
+// 	while(tmp>0) {
+// 		tmp /= 10;
+// 		dimension++;
+// 	}
+// 	dimension += 2;
+// 	tmp = tmpSave;
+//
+// 	toReturn = (char*) malloc(sizeof(char)*dimension);
+//
+// 	toReturn[dimension-1] = '\0';
+// 	for(i = dimension-2; i>=0; i--) {
+// 		if(i==dimension-4) {
+// 			toReturn[i] = ',';
+// 		} else {
+// 			switch(tmp%10) {
+// 			case 0: toReturn[i] = '0'; break;
+// 			case 1: toReturn[i] = '1'; break;
+// 			case 2: toReturn[i] = '2'; break;
+// 			case 3: toReturn[i] = '3'; break;
+// 			case 4: toReturn[i] = '4'; break;
+// 			case 5: toReturn[i] = '5'; break;
+// 			case 6: toReturn[i] = '6'; break;
+// 			case 7: toReturn[i] = '7'; break;
+// 			case 8: toReturn[i] = '8'; break;
+// 			case 9: toReturn[i] = '9'; break;
+// 			default: toReturn[i] = ' '; break;
+// 			}
+// 			tmp /= 10;
+// 		}
+// 	}
+//
+// 	return toReturn;
+// }
 
 struct CALGLRun2D* calglRunCLDef2D(struct CALCLModel2D* deviceCA,CALint fixedStep,CALint initial_step,CALint final_step){
 	struct CALGLRun2D* calglRun = (struct CALGLRun2D*) malloc(sizeof(struct CALGLRun2D));
@@ -157,7 +157,7 @@ void calglUpdate2DCL(struct CALGLRun2D* calglRun){
 				printf(" Elapsed time: %d\n", (int)(calglRun->end_time - calglRun->start_time));
 				printf("*-----------------------------------------------------*\n");
 				//saving configuration
-				calglSaveStateUpdater2DCL(calglRun);
+				//calglSaveStateUpdater2DCL(calglRun);
 				calglRun->stop = CAL_TRUE;
 			}
 
@@ -167,7 +167,7 @@ void calglUpdate2DCL(struct CALGLRun2D* calglRun){
 			calglRun->onlyOneTime=CAL_FALSE;
 			printf("\nSimulation Pause\n");
 				calclGetSubstatesDeviceToHost2D(calglRun->deviceCA);
-				calglSaveStateUpdater2DCL(calglRun);
+				//calglSaveStateUpdater2DCL(calglRun);
 		}
 
 	}
@@ -175,33 +175,33 @@ void calglUpdate2DCL(struct CALGLRun2D* calglRun){
 
 }
 
-void calglSaveStateUpdater2DCL(struct CALGLRun2D* calglRun){
-	int i = 0;
-	char tmpString[50];
-	struct CALModel2D* calModel = calglRun->deviceCA->host_CA;
-
-	printf("Saving final state to folder \"./data/\"\n");
-
-	for (i = 0; i < calModel->sizeof_pQb_array; i++){
-
-		strcpy(tmpString, "./data/byteSubstate");
-		strcat(tmpString, GetString2D(i));
-		strcat(tmpString, ".txt");
-
-		calSaveSubstate2Db(calModel, calModel->pQb_array[i], tmpString);
-	}
-
-	for (i = 0; i < calModel->sizeof_pQi_array; i++){
-		strcpy(tmpString, "./data/intSubstate");
-		strcat(tmpString, GetString2D(i));
-		strcat(tmpString, ".txt");
-		calSaveSubstate2Di(calModel, calModel->pQi_array[i], tmpString);
-	}
-
-	for (i = 0; i < calModel->sizeof_pQr_array; i++){
-		strcpy(tmpString, "./data/realSubstate");
-		strcat(tmpString, GetString2D(i));
-		strcat(tmpString, ".txt");
-		calSaveSubstate2Dr(calModel, calModel->pQr_array[i], tmpString);
-	}
-}
+// void calglSaveStateUpdater2DCL(struct CALGLRun2D* calglRun){
+// 	int i = 0;
+// 	char tmpString[50];
+// 	struct CALModel2D* calModel = calglRun->deviceCA->host_CA;
+//
+// 	printf("Saving final state to folder \"./data/\"\n");
+//
+// 	for (i = 0; i < calModel->sizeof_pQb_array; i++){
+//
+// 		strcpy(tmpString, "./data/byteSubstate");
+// 		strcat(tmpString, GetString2D(i));
+// 		strcat(tmpString, ".txt");
+//
+// 		calSaveSubstate2Db(calModel, calModel->pQb_array[i], tmpString);
+// 	}
+//
+// 	for (i = 0; i < calModel->sizeof_pQi_array; i++){
+// 		strcpy(tmpString, "./data/intSubstate");
+// 		strcat(tmpString, GetString2D(i));
+// 		strcat(tmpString, ".txt");
+// 		calSaveSubstate2Di(calModel, calModel->pQi_array[i], tmpString);
+// 	}
+//
+// 	for (i = 0; i < calModel->sizeof_pQr_array; i++){
+// 		strcpy(tmpString, "./data/realSubstate");
+// 		strcat(tmpString, GetString2D(i));
+// 		strcat(tmpString, ".txt");
+// 		calSaveSubstate2Dr(calModel, calModel->pQr_array[i], tmpString);
+// 	}
+// }

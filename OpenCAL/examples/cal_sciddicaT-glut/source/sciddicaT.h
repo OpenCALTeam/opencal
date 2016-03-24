@@ -15,8 +15,8 @@
 #define SOURCE_PATH "./data/source.txt"
 #define OUTPUT_PATH "./data/width_final.txt"
 
-
-//#define VERBOSE
+#define REFRESH 100
+#define VERBOSE
 
 
 //cadef and rundef

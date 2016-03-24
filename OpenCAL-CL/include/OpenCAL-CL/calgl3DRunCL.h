@@ -68,10 +68,10 @@ void calglUpdate3DCL(
 	struct CALGLRun3D* calglRun	//!< Struct for retrieve the cellular automata to update.
 	);
 
-/*! \brief Update function for saving the final state to disk.
-*/
-void calglSaveStateUpdater3DCL(
-	struct CALGLRun3D* calglRun	//!< Struct for retrieve the cellular automata data.
-	);
+// /*! \brief Update function for saving the final state to disk.
+// */
+// void calglSaveStateUpdater3DCL(
+// 	struct CALGLRun3D* calglRun	//!< Struct for retrieve the cellular automata data.
+// 	);
 
 #endif

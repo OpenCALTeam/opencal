@@ -9,7 +9,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 // Lesser General Public License for more details.
 
-#include <OpenCAL-CL/calcl3DActive.h>
+#include <OpenCAL-CL/calcl3D.h>
 #ifndef __OPENCL_VERSION__
 #define __kernel
 #define __global

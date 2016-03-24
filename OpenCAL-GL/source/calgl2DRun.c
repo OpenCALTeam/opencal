@@ -92,37 +92,37 @@ void calglUpdate2D(struct CALGLRun2D* calglRun){
 			printf(" Elapsed time: %d\n", (int)(calglRun->end_time - calglRun->start_time));
 			printf("*-----------------------------------------------------*\n");
 			//saving configuration
-			calglSaveStateUpdater2D(calglRun);
+			//calglSaveStateUpdater2D(calglRun);
 			calglRun->stop = CAL_TRUE;
 		}
 	}
 }
 
-void calglSaveStateUpdater2D(struct CALGLRun2D* calglRun){
-	int i = 0;
-	char tmpString[50];
-	struct CALModel2D* calModel = calglRun->calRun->ca2D;
-
-	printf("Saving final state to folder \"./data/\"\n");
-
-	for (i = 0; i < calModel->sizeof_pQb_array; i++){
-		strcpy(tmpString, "./data/byteSubstate");
-		strcat(tmpString, calglGetString2D(i));
-		strcat(tmpString, ".txt");
-		calSaveSubstate2Db(calModel, calModel->pQb_array[i], tmpString);
-	}
-
-	for (i = 0; i < calModel->sizeof_pQi_array; i++){
-		strcpy(tmpString, "./data/intSubstate");
-		strcat(tmpString, calglGetString2D(i));
-		strcat(tmpString, ".txt");
-		calSaveSubstate2Di(calModel, calModel->pQi_array[i], tmpString);
-	}
-
-	for (i = 0; i < calModel->sizeof_pQr_array; i++){
-		strcpy(tmpString, "./data/realSubstate");
-		strcat(tmpString, calglGetString2D(i));
-		strcat(tmpString, ".txt");
-		calSaveSubstate2Dr(calModel, calModel->pQr_array[i], tmpString);
-	}
-}
+// void calglSaveStateUpdater2D(struct CALGLRun2D* calglRun){
+// 	int i = 0;
+// 	char tmpString[50];
+// 	struct CALModel2D* calModel = calglRun->calRun->ca2D;
+//
+// 	printf("Saving final state to folder \"./data/\"\n");
+//
+// 	for (i = 0; i < calModel->sizeof_pQb_array; i++){
+// 		strcpy(tmpString, "./data/byteSubstate");
+// 		strcat(tmpString, calglGetString2D(i));
+// 		strcat(tmpString, ".txt");
+// 		calSaveSubstate2Db(calModel, calModel->pQb_array[i], tmpString);
+// 	}
+//
+// 	for (i = 0; i < calModel->sizeof_pQi_array; i++){
+// 		strcpy(tmpString, "./data/intSubstate");
+// 		strcat(tmpString, calglGetString2D(i));
+// 		strcat(tmpString, ".txt");
+// 		calSaveSubstate2Di(calModel, calModel->pQi_array[i], tmpString);
+// 	}
+//
+// 	for (i = 0; i < calModel->sizeof_pQr_array; i++){
+// 		strcpy(tmpString, "./data/realSubstate");
+// 		strcat(tmpString, calglGetString2D(i));
+// 		strcat(tmpString, ".txt");
+// 		calSaveSubstate2Dr(calModel, calModel->pQr_array[i], tmpString);
+// 	}
+// }

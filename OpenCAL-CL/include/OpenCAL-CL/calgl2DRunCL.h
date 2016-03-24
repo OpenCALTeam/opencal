@@ -69,10 +69,10 @@ void calglUpdate2DCL(
 	struct CALGLRun2D* calglRun	//!< Struct for retrieve the cellular automata to update.
 	);
 
-/*! \brief Update function for saving the final state to disk.
-*/
-void calglSaveStateUpdater2DCL(
-	struct CALGLRun2D* calglRun	//!< Struct for retrieve the cellular automata data.
-	);
+// /*! \brief Update function for saving the final state to disk.
+// */
+// void calglSaveStateUpdater2DCL(
+// 	struct CALGLRun2D* calglRun	//!< Struct for retrieve the cellular automata data.
+// 	);
 
 #endif

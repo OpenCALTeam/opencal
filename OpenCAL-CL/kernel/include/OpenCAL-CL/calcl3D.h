@@ -181,4 +181,53 @@ void calclSet3Dr(__CALCL_MODEL_3D,		//!< Defines model parameters
 		);
 
 
+		/*! \brief Sets the cell (i,j) of the linearized matrix flags to CAL_TRUE.
+		*/
+		void calclAddActiveCell3D(__CALCL_MODEL_3D,				//!< Defines model parameters.
+				int i,											//!< Row coordinate of the cell to be added.
+				int j,											//!< Column coordinate of the cell to be added.
+				int k											//!< Slice coordinate of the cell to be added.
+				);
+
+		/*! \brief Sets the n-th neighbor of the cell (i,j) of the linearized matrix flags to
+			CAL_TRUE.
+		*/
+		void calclAddActiveCellX3D(__CALCL_MODEL_3D,			//!< Defines model parameters.
+				int i,											//!< Row coordinate of the central cell.
+				int j,											//!< Column coordinate of the central cell.
+				int k,											//!< Slice coordinate of the central cell.
+				int n											//!< Index of the n-th neighbor to be added.
+				);
+
+		/*! \brief \brief Sets the cell (i,j) of the linearized matrix flags to CAL_FALSE.
+		*/
+		void calclRemoveActiveCell3D(__CALCL_MODEL_3D,			//!< Defines model parameters.
+				int i,											//!< Row coordinate of the cell to be removed.
+				int j,											//!< Column coordinate of the cell to be removed.
+				int k											//!< Slice coordinate of the cell to be removed.
+				);
+
+		/*! \brief Initializes the n-th byte active cell to a constant value.
+		*/
+		void calclInitSubstateActiveCell3Db(__CALCL_MODEL_3D,	//!< Defines model parameters.
+				int substateNum,								//!< Indicates the number of the substate.
+				int n,											//!< Index of the n-th neighbor to be initialized.
+				CALbyte value									//!< Value to which the cell of the substate is set.
+				);
+		/*! \brief Initializes the n-th int active cell to a constant value.
+		*/
+		void calclInitSubstateActiveCell3Di(__CALCL_MODEL_3D,	//!< Defines model parameters.
+				int substateNum,									//!< Indicates the number of the substate.
+				int n,											//!< Index of the n-th neighbor to be initialized.
+				CALint value									//!< Value to which the cell of the substate is set.
+				);
+		/*! \brief Initializes the n-th real (floating point) active cell to a constant value.
+		*/
+		void calclInitSubstateActiveCell3Dr(__CALCL_MODEL_3D,	//!< Defines model parameters.
+				int substateNum,									//!< Indicates the number of the substate.
+				int n,											//!< Index of the n-th neighbor to be initialized.
+				CALreal value									//!< Value to which the cell of the substate is set.
+				);
+
+
 #endif

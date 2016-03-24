@@ -1,7 +1,7 @@
 #ifndef kernel_h
 #define kernel_h
 
-#include <OpenCAL-CL/calcl2DActive.h>
+#include <OpenCAL-CL/calcl2D.h>
 #define F(i) (i+3)
 #define SZ 0
 #define SLT 1
