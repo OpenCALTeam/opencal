@@ -31,15 +31,20 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 # Lesser General Public License for more details.
 
+message(COMPONENTSacasdfsd ${OpenCAL_FIND_COMPONENTS} )
+# Use find_package( OpenCAL COMPONENTS ... ) to enable modules
+if( OpenCAL_FIND_COMPONENTS )
+  foreach( component ${OpenCAL_FIND_COMPONENTS} )
+    string( TOUPPER ${component} _COMPONENT )
+    list(APPEND OPENCAL_USE_COMPONENTS OPENCAL_USE_${_COMPONENT} 1 )
+  endforeach()
+endif()
+
 
 function(_OPENCAL_FIND)
   # Released versions of OPENCAL, including generic short forms
-  set(opencal_versions
-      1.0.0
-      1.0
-      1.1
-      0.1)
-  list(APPEND opencal_versions ${})
+  list(APPEND opencal_version ${OpenCAL_FIND_VERSION_MAJOR}.${OpenCAL_FIND_VERSION_MINOR})
+
 # Set up search paths, taking compiler into account.  Search Ice_HOME,
 # with ICE_HOME in the environment as a fallback if unset.
 if(OPENCAL_HOME)
@@ -55,10 +60,6 @@ endif()
 
 
 
-  list(APPEND OPENCAL_ROOTS "/usr/local/")
-
-
-
 if(CMAKE_SIZEOF_VOID_P EQUAL 8)
   # 64-bit path suffix
   set(_x64 "/x64")
@@ -70,22 +71,38 @@ list(APPEND opencal_library_suffixes "${_lib64}" "lib${_x64}" "lib")
 #include suffixes
 list(APPEND opencal_include_suffixes "include/")
 #add search path for each version released
-foreach(opencal_version ${opencal_versions})
-  list(APPEND opencal_include_suffixes "include/OpenCAL-${opencal_version}/")
-  list(APPEND opencal_include_suffixes "include/OpenCAL-${opencal_version}/")
-endforeach()
 
-if(OPENCAL_DEBUG)
-  message(STATUS "--------FindOpenCAL.cmake search debug--------")
-  message(STATUS "OPENCAL_DEBUG binary path search order: ${OPENCAL_ROOTS}")
-  message(STATUS "OPENCAL_DEBUG include  suffixes order: ${opencal_include_suffixes}")
-  message(STATUS "OPENCAL_DEBUG library suffixes order: ${opencal_library_suffixes}")
-  message(STATUS "----------------")
-endif()
+list(APPEND opencal_include_suffixes "include")
 
-find_path(OPENCAL_INCLUDE_DIR
+
+
+
+ if(OPENCAL_HOME)
+   list(APPEND OPENCAL_ROOTS "${OPENCAL_HOME}")
+ endif()
+list(APPEND OPENCAL_ROOTS "/usr/local/opencal-${opencal_version}")
+
+
+    foreach( component ${OpenCAL_FIND_COMPONENTS} )
+
+string( TOLOWER ${component} _COMPONENT )
+
+      if(OPENCAL_DEBUG)
+        message(STATUS "--------FindOpenCAL.cmake search debug--------")
+        message(STATUS "OPENCAL_DEBUG binary path search order: ${_COMPONENT}")
+        message(STATUS "OPENCAL_DEBUG binary path search order: ${OPENCAL_ROOTS}")
+        message(STATUS "OPENCAL_DEBUG include  suffixes order: ${opencal_include_suffixes}")
+        message(STATUS "OPENCAL_DEBUG library suffixes order: ${opencal_library_suffixes}")
+         #message(STATUS "OPENCAL_DEBUG library suffixes order: ${OPENCAL_ROOTS}")
+        message(STATUS "----------------")
+      endif()
+
+
+
+find_path(PATH_INCLUDE_COMPONENT_${_COMPONENT}
           NAMES
-              "cal2D.h"
+              "${component}/cal2D.h"
+              "${component}/calcl2D.h"
           HINTS
               ${OPENCAL_ROOTS}
           PATH_SUFFIXES
@@ -93,18 +110,39 @@ find_path(OPENCAL_INCLUDE_DIR
           DOC
               "OpenCAL include directory")
 
-set(OPENCAL_INCLUDE_DIRS ${OPENCAL_INCLUDE_DIR} PARENT_SCOPE)
+list(APPEND OPENCAL_INCLUDE_DIR ${PATH_INCLUDE_COMPONENT_${_COMPONENT}} )
 
-find_library(OPENCAL_LIBRARIES
+
+find_library(PATH_LIBRARY_COMPONENT_${_COMPONENT}
     NAMES
-        opencal libopencal
+        ${_COMPONENT} lib${_COMPONENT}
     HINTS
         ${OPENCAL_ROOTS}
     PATH_SUFFIXES
         ${opencal_library_suffixes}
         )
 
-  set(OPENCAL_LIBRARIES ${OPENCAL_LIBRARIES} PARENT_SCOPE)
+
+  list(APPEND OPENCAL_LIBRARIES ${PATH_LIBRARY_COMPONENT_${_COMPONENT}} )
+
+  set(OPENCAL_${_COMPONENT}_LIBRARY 1)
+
+  list(APPEND _OPENCAL_FOUND_REQUIRED_VARS  PATH_INCLUDE_COMPONENT_${_COMPONENT})
+  list(APPEND _OPENCAL_FOUND_REQUIRED_VARS  PATH_LIBRARY_COMPONENT_${_COMPONENT})
+
+set(PATH_INCLUDE_COMPONENT)
+set(PATH_LIBRARY_COMPONENT)
+
+  endforeach() #components
+
+list(REMOVE_DUPLICATES OPENCAL_LIBRARIES)
+
+list(REMOVE_DUPLICATES OPENCAL_INCLUDE_DIR)
+
+
+#export variables
+set(OPENCAL_INCLUDE_DIR ${OPENCAL_INCLUDE_DIR} PARENT_SCOPE)
+set(OPENCAL_LIBRARIES ${OPENCAL_LIBRARIES} PARENT_SCOPE)
 
 
 
@@ -122,10 +160,12 @@ FIND_PACKAGE_HANDLE_STANDARD_ARGS(OPENCAL
                                   FOUND_VAR OPENCAL_FOUND
                                   REQUIRED_VARS OPENCAL_INCLUDE_DIR
                                                 OPENCAL_LIBRARIES
+                                                ${_OPENCAL_FOUND_REQUIRED_VARS}
                                   VERSION_VAR OPENCAL_VERSION
                                 FAIL_MESSAGE "Failed to find all OPENCAL components")
 
 
 endfunction()
+
 
 _OPENCAL_FIND()
