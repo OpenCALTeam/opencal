@@ -26,14 +26,13 @@ endif()
 find_package( OpenCL REQUIRED )
 
 #compile opencl-utils first
-add_subdirectory(OpenCL-Utils)
+#add_subdirectory(OpenCL-Utils)
 
-set (OPENCL-UTILS_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/OpenCL-Utils/include")
+#set (OPENCL-UTILS_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/OpenCL-Utils/include")
 set (OPENCAL_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/OpenCAL/include")
 
 include_directories(
 	${OpenCL_INCLUDE_DIRS}
-	${OPENCL-UTILS_INCLUDE_DIR}
 	${OPENCAL_INCLUDE_DIR}
 	${OPENGL_INCLUDE_DIRS}
 	${GLUT_INCLUDE_DIR}
