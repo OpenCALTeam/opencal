@@ -63,23 +63,31 @@ void calclSubtractMatrices2Db(__global CALbyte* M_op1, __global CALbyte* M_op2, 
 	sub -= calclGetBufferElement2D(M_op2, columns, i, j);
 	calclSetBufferElement2D(M_dest, columns, i, j, sub);
 }
+
 void calclSubtractMatrices2Di(__global CALint* M_op1, __global CALint* M_op2, __global CALint* M_dest, int i, int j, int columns) {
 	CALint sub = calclGetBufferElement2D(M_op1, columns, i, j);
 	sub -= calclGetBufferElement2D(M_op2, columns, i, j);
 	calclSetBufferElement2D(M_dest, columns, i, j, sub);
 }
+
 void calclSubtractMatrices2Dr(__global CALreal* M_op1, __global CALreal* M_op2, __global CALreal* M_dest, int i, int j, int columns) {
 	CALreal sub = calclGetBufferElement2D(M_op1, columns, i, j);
 	sub -= calclGetBufferElement2D(M_op2, columns, i, j);
 	calclSetBufferElement2D(M_dest, columns, i, j, sub);
 }
 
-void calclSetBufferActiveCells2Db(__global CALbyte* M, int columns, CALbyte value, __global struct CALCell2D* active_cells, int n) {
+void calclSetBufferActiveCells2Db(__global CALbyte* M, int columns, CALbyte value, __global struct CALCell2D* active_cells, int n) 
+{
 	calclSetBufferElement2D(M, columns, active_cells[n].i, active_cells[n].j, value);
 }
-void calclSetBufferActiveCells2Di(__global CALint* M, int columns, CALint value, __global struct CALCell2D* active_cells, int n) {
+
+void calclSetBufferActiveCells2Di(__global CALint* M, int columns, CALint value, __global struct CALCell2D* active_cells, int n) 
+{
 	calclSetBufferElement2D(M, columns, active_cells[n].i, active_cells[n].j, value);
 }
-void calclSetBufferActiveCells2Dr(__global CALreal* M, int columns, CALreal value, __global struct CALCell2D* active_cells, int n) {
+
+void calclSetBufferActiveCells2Dr(__global CALreal* M, int columns, CALreal value, __global struct CALCell2D* active_cells, int n) 
+{
 	calclSetBufferElement2D(M, columns, active_cells[n].i, active_cells[n].j, value);
 }
+

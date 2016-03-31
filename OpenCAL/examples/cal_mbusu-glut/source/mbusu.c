@@ -1,4 +1,5 @@
 #include <math.h>
+#include <OpenCAL/cal3DReduction.h>
 #include "mbusu.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -267,20 +268,8 @@ void mbusuSimulationInit(struct CALModel3D* mbusu)
 
 void mbusuSimulationSteering(struct CALModel3D* mbusu)
 {
-	int i, j, k;
-	double min = calGet3Dr(mbusu, Q.convergence, 0, 0, 0);
-
-	CALreal moist_print;
-	CALint Ymid = YOUT / 2;
-	CALint k_inv;
-
-
-#pragma omp parallel for private (k, i, j)
-	for (k = 0; k < mbusu->slices; k++)
-		for (i = 0; i < mbusu->rows; i++)
-			for (j = 0; j<mbusu->columns; j++)
-				if (min > calGet3Dr(mbusu, Q.convergence, i, j, k))
-					min = calGet3Dr(mbusu, Q.convergence, i, j, k);
+        double min;
+        min = calReductionComputeMin3Dr(mbusu, Q.convergence);
 
 	if (min > 105.0)
 		min = 105.0;
@@ -292,17 +281,6 @@ void mbusuSimulationSteering(struct CALModel3D* mbusu)
 	stream = fopen("deltat.txt", "a");
 	fprintf(stream, "%f, %f\n", delta_t, delta_t_cum);
 	fclose(stream);
-
-	/*
-	calSetBuffer3Dr(Q.teta->next, mbusu->rows, mbusu->columns, mbusu->layers, 0.0);
-	calSetBuffer3Dr(Q.moist_cont->next, mbusu->rows, mbusu->columns, mbusu->layers, 0.0);
-	calSetBuffer3Dr(Q.psi->next, mbusu->rows, mbusu->columns, mbusu->layers, 0.0);
-	calSetBuffer3Dr(Q.k->next, mbusu->rows, mbusu->columns, mbusu->layers, 0.0);
-	calSetBuffer3Dr(Q.h->next, mbusu->rows, mbusu->columns, mbusu->layers, 0.0);
-	calSetBuffer3Dr(Q.dqdh->next, mbusu->rows, mbusu->columns, mbusu->layers, 0.0);
-	calSetBuffer3Dr(Q.convergence->next, mbusu->rows, mbusu->columns, mbusu->layers, 0.0);
-	calSetBuffer3Dr(Q.moist_diff->next, mbusu->rows, mbusu->columns, mbusu->layers, 0.0);
-	*/
 }
 
 CALbyte mbusuSimulationStopCondition(struct CALModel3D* mbusu)

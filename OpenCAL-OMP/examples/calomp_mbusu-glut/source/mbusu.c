@@ -1,5 +1,6 @@
 #include <math.h>
 #include "mbusu.h"
+#include <OpenCAL-OMP/cal3DReduction.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -267,20 +268,8 @@ void mbusuSimulationInit(struct CALModel3D* mbusu)
 
 void mbusuSimulationSteering(struct CALModel3D* mbusu)
 {
-	int i, j, k;
-	double min = calGet3Dr(mbusu, Q.convergence, 0, 0, 0);
-
-	CALreal moist_print;
-	CALint Ymid = YOUT / 2;
-	CALint k_inv;
-
-
-#pragma omp parallel for private (k, i, j)
-	for (k = 0; k < mbusu->slices; k++)
-		for (i = 0; i < mbusu->rows; i++)
-			for (j = 0; j<mbusu->columns; j++)
-				if (min > calGet3Dr(mbusu, Q.convergence, i, j, k))
-					min = calGet3Dr(mbusu, Q.convergence, i, j, k);
+        double min=0;
+        min = calReductionComputeMin3Dr(mbusu, Q.convergence);
 
 	if (min > 105.0)
 		min = 105.0;
