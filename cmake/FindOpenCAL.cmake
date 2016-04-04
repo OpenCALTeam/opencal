@@ -31,7 +31,6 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 # Lesser General Public License for more details.
 
-message(COMPONENTSacasdfsd ${OpenCAL_FIND_COMPONENTS} )
 # Use find_package( OpenCAL COMPONENTS ... ) to enable modules
 if( OpenCAL_FIND_COMPONENTS )
   foreach( component ${OpenCAL_FIND_COMPONENTS} )
@@ -103,6 +102,7 @@ find_path(PATH_INCLUDE_COMPONENT_${_COMPONENT}
           NAMES
               "${component}/cal2D.h"
               "${component}/calcl2D.h"
+              "${component}/calgl2D.h"
           HINTS
               ${OPENCAL_ROOTS}
           PATH_SUFFIXES
