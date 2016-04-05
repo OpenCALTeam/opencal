@@ -103,6 +103,7 @@ find_path(PATH_INCLUDE_COMPONENT_${_COMPONENT}
               "${component}/cal2D.h"
               "${component}/calcl2D.h"
               "${component}/calgl2D.h"
+              "${component}/calModel.h"
           HINTS
               ${OPENCAL_ROOTS}
           PATH_SUFFIXES

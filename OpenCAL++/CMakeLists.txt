@@ -1,6 +1,8 @@
 # opencal/OpenCAL++14/CMakeLists.txt
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 
+set(OPENCAL++_LIBRARY_NAME OpenCAL++ CACHE PATH "Name of the specific version of opencal (OPENCAL GL)")
+
 include(CheckCXXCompilerFlag)
 CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
 CHECK_CXX_COMPILER_FLAG("-std=c++0x" COMPILER_SUPPORTS_CXX0X)
@@ -57,8 +59,8 @@ file(GLOB SRC
 
 file(GLOB HEADERS
     "include/*.h"
-    "include/OpenCAL++ /*.h"
+    "include/OpenCAL++/*.h"
 )
-add_library(opencalpp ${SHAREDORSTATIC} ${SRC})
-install(TARGETS opencalpp DESTINATION ${INSTALL_LIB_DIR})
-install(FILES ${HEADERS} DESTINATION ${INSTALL_INCLUDE_DIR}/OpenCAL++)
+add_library(opencal++ ${SHAREDORSTATIC} ${SRC})
+install(TARGETS opencal++ DESTINATION ${INSTALL_LIB_DIR})
+install(FILES ${HEADERS} DESTINATION ${INSTALL_INCLUDE_DIR}/${OPENCAL++_LIBRARY_NAME})
