@@ -55,6 +55,7 @@ endif(BUILD_OPENCAL_GL)
 
 if(BUILD_OPENCAL_PP)
 	add_subdirectory(OpenCAL++)
+	add_subdirectory(gtests/OpenCAL++)
 endif(BUILD_OPENCAL_PP)
 
 if(BUILD_OPENCAL_TESTS)
