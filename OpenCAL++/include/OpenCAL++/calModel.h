@@ -15,6 +15,7 @@
 #include<memory>
 #include<array>
 #include <OpenCAL++/calCommon.h>
+#include <OpenCAL++/calBuffer.h>
 
 
 
@@ -42,10 +43,22 @@ namespace opencal {
                  NEIGHBORHOOD_pointer _calNeighborhood, //!< Class that identifies the type of neighbourhood relation to be used.
                  enum opencal::calCommon::CALSpaceBoundaryCondition _CAL_TOROIDALITY, //!< Enumerator that identifies the type of cellular space: toroidal or non-toroidal.
                  enum opencal::calCommon::CALOptimization _CAL_OPTIMIZATION //!< Enumerator used for specifying the active cells optimization or no optimization.
-        ): coordinates(_coordinates) , CAL_TOROIDALITY(_CAL_TOROIDALITY)
+        ): coordinates(_coordinates) , CAL_TOROIDALITY(_CAL_TOROIDALITY) , CAL_OPTIMIZATION(_CAL_OPTIMIZATION)
         {
 
-        this->size = opencal::calCommon::multiplier<DIMENSION,uint>(coordinates,0);
+            this->size = opencal::calCommon::multiplier<DIMENSION,uint>(coordinates,0);
+
+            //initialize indexpool and neighbor pool
+
+
+            if (this->CAL_OPTIMIZATION == calCommon::CAL_OPT_ACTIVE_CELLS) {
+                CALBuffer<bool , DIMENSION , COORDINATE_TYPE>* flags = new CALBuffer<bool , DIMENSION , COORDINATE_TYPE> (this->coordinates);
+                flags->setBuffer(false);
+               // this->activeCells = new CALActiveCells (flags, 0);
+            }
+
+            //else
+                //this->activeCells = NULL;
         }
 
         uint getDimension() {
@@ -54,7 +67,7 @@ namespace opencal {
 
     private:
         enum opencal::calCommon::CALSpaceBoundaryCondition CAL_TOROIDALITY;    //!< Type of cellular space: toroidal or non-toroidal.
-        enum opencal::calCommon::CALOptimization OPTIMIZATION;    //!< Type of optimization used. It can be CAL_NO_OPT or CAL_OPT_ACTIVE_CELLS.
+        enum opencal::calCommon::CALOptimization CAL_OPTIMIZATION;    //!< Type of optimization used. It can be CAL_NO_OPT or CAL_OPT_ACTIVE_CELLS.
 
         std::array <COORDINATE_TYPE, DIMENSION> coordinates;
         uint size;
