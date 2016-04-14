@@ -10,34 +10,48 @@
 //#include<OpenCAL++/calNeighborPool.h>
 #include <OpenCAL++/calActiveCells.h>
 #include <OpenCAL++/calConverterIO.h>
+
 namespace opencal {
-    template<class PAYLOAD, uint DIMENSION, typename COORDINATE_TYPE = uint>
+
+    template<uint DIMENSION, typename COORDINATE_TYPE = uint>
     class CALSubstateWrapper {
 
     public:
+        typedef CALConverterIO<DIMENSION , COORDINATE_TYPE> CALCONVERTERIO_type;
+        typedef CALConverterIO<DIMENSION , COORDINATE_TYPE> CALCONVERTERIO_reference;
+        typedef CALConverterIO<DIMENSION , COORDINATE_TYPE> CALCONVERTERIO_pointer;
+
         virtual ~ CALSubstateWrapper() { }
 
         virtual void update(opencal::CALActiveCells<DIMENSION, COORDINATE_TYPE> *activeCells) = 0;
 
-        virtual void saveSubstate(int *coordinates, size_t dimension, CALConverterIO *calConverterInputOutput,
+        virtual void saveSubstate(int *coordinates, size_t dimension, CALCONVERTERIO_pointer calConverterInputOutput,
                                   char *path) = 0;
 
-        virtual void loadSubstate(int *coordinates, size_t dimension, CALConverterIO *calConverterInputOutput,
+        virtual void loadSubstate(int *coordinates, size_t dimension, CALCONVERTERIO_pointer calConverterInputOutput,
                                   char *path) = 0;
     };
 
-
     template<class PAYLOAD, uint DIMENSION, typename COORDINATE_TYPE = uint>
-    class CALSubstate : public CALSubstateWrapper {
+    class CALSubstate : public CALSubstateWrapper<DIMENSION , COORDINATE_TYPE> {
 
         typedef CALBuffer <PAYLOAD, DIMENSION, COORDINATE_TYPE> BUFFER_TYPE;
         typedef CALBuffer <PAYLOAD, DIMENSION, COORDINATE_TYPE>& BUFFER_TYPE_REF;
         typedef CALBuffer <PAYLOAD, DIMENSION, COORDINATE_TYPE>* BUFFER_TYPE_PTR;
         typedef CALBuffer <PAYLOAD, DIMENSION, COORDINATE_TYPE>* BUFFER_TYPE_REF_TO_PTR;
 
+
+        typedef CALActiveCells<DIMENSION , COORDINATE_TYPE> CALACTIVECELLS_type;
+        typedef CALActiveCells<DIMENSION , COORDINATE_TYPE> CALACTIVECELLS_reference;
+        typedef CALActiveCells<DIMENSION , COORDINATE_TYPE> CALACTIVECELLS_pointer;
+
+        typedef CALConverterIO<DIMENSION , COORDINATE_TYPE> CALCONVERTERIO_pointer;
+
+
     private:
         BUFFER_TYPE_PTR current;    //!< Current linearised matrix of the substate, used for reading purposes.
         BUFFER_TYPE_PTR next;        //!< Next linearised matrix of the substate, used for writing purposes.
+
     public:
 
 
@@ -81,18 +95,18 @@ namespace opencal {
             this->next = next;
         }
 
-        void setActiveCellsBufferCurrent(CALActiveCells* activeCells, PAYLOAD value){
+        void setActiveCellsBufferCurrent(CALACTIVECELLS_pointer activeCells, PAYLOAD value){
             this->current->setActiveCellsBuffer(activeCells->getCells(), activeCells->getSizeCurrent(), value);
         }
 
-        void setActiveCellsBufferNext(CALActiveCells* activeCells, PAYLOAD value){
+        void setActiveCellsBufferNext(CALACTIVECELLS_pointer activeCells, PAYLOAD value){
             this->next->setActiveCellsBuffer(activeCells->getCells(), activeCells->getSizeCurrent(), value);
         }
 
         /*! \brief Copies the next 3D buffer of a byte substate to the current one: current = next.
                 If the active cells optimization is considered, it only updates the active cells.
             */
-        virtual void update(CALActiveCells *activeCells){
+        virtual void update(CALACTIVECELLS_pointer activeCells){
             if (activeCells)
                 this->current->copyActiveCellsBuffer(next, activeCells->getCells(), activeCells->getSizeCurrent());
             else
@@ -101,37 +115,37 @@ namespace opencal {
             }
         }
 
-        virtual void saveSubstate(int *coordinates, size_t dimension, CALConverterIO *calConverterInputOutput,
+        virtual void saveSubstate(int *coordinates, size_t dimension, CALCONVERTERIO_pointer calConverterInputOutput,
                                   char *path);
 
-        virtual void loadSubstate(int *coordinates, size_t dimension, CALConverterIO *calConverterInputOutput,
+        virtual void loadSubstate(int *coordinates, size_t dimension, CALCONVERTERIO_pointer calConverterInputOutput,
                                   char *path);
 
-        void setElementCurrent(int *indexes, int *coordinates, int dimension, T value);
+        void setElementCurrent(int *indexes, int *coordinates, int dimension, PAYLOAD value);
 
-        void setElement(int *indexes, int *coordinates, int dimension, T value);
+        void setElement(int *indexes, int *coordinates, int dimension, PAYLOAD value);
 
-        T getElement(int *indexes, int *coordinates, int dimension);
+        PAYLOAD getElement(int *indexes, int *coordinates, int dimension);
 
-        T getElementNext(int *indexes, int *coordinates, int dimension);
+        PAYLOAD getElementNext(int *indexes, int *coordinates, int dimension);
 
-        T getX(int linearIndex, int n);
+        PAYLOAD getX(int linearIndex, int n);
 
-        T getX(int *indexes, int *coordinates, int dimension, int n);
+        PAYLOAD getX(int *indexes, int *coordinates, int dimension, int n);
 
-        T getElement(int linearIndex);
+        PAYLOAD getElement(int linearIndex);
 
-        T getElementNext(int linearIndex);
+        PAYLOAD getElementNext(int linearIndex);
 
-        void setElementCurrent(int linearIndex, T value);
+        void setElementCurrent(int linearIndex, PAYLOAD value);
 
-        void setElement(int linearIndex, T value);
+        void setElement(int linearIndex, PAYLOAD value);
 
-        void setCurrentBuffer(T value);
+        void setCurrentBuffer(PAYLOAD value);
 
-        void setNextBuffer(T value);
+        void setNextBuffer(PAYLOAD value);
 
-        CALSubstate<T> &operator=(const CALSubstate<T> &b);
+        CALSubstate& operator=(const CALSubstate &b);
 
 
     };

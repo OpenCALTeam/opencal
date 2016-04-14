@@ -65,20 +65,21 @@ namespace opencal {
         /*! \brief saves a certain matrix to file.
         */
         template<class T>
-        void calSaveBuffer(T *buffer, int size, std::array <COORDINATE_TYPE, DIMENSION>& coordinates, char *path)
-        std::ofstream out;
-        out.open(path);
-        for (int i = 0; i < size; ++i) {
-            void *toConvert = &buffer[i];
-            out << convertOutput(toConvert);
+        void calSaveBuffer(T *buffer, int size, std::array <COORDINATE_TYPE, DIMENSION>& coordinates, char *path) {
+            std::ofstream out;
+            out.open(path);
+            for (int i = 0; i < size; ++i) {
+                void *toConvert = &buffer[i];
+                out << convertOutput(toConvert);
 
-            if ((i + 1) % coordinates[1] == 0)
-                out << '\n';
-            else {
-                out << "  ";
+                if ((i + 1) % coordinates[1] == 0)
+                    out << '\n';
+                else {
+                    out << "  ";
+                }
             }
+            out.close();
         }
-        out.close();
 
     protected:
 

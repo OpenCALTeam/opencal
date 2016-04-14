@@ -15,6 +15,7 @@
 
 #include "functional_utilities.h"
 #include <array>
+#include <OpenCAL++/calIndicesPool.h>
 namespace opencal {
 
     namespace calCommon {
@@ -23,6 +24,8 @@ namespace opencal {
 
 #define CAL_FALSE false        //!< Boolean alias for false
 #define CAL_TRUE  true        //!< Boolean alias for true
+
+        typedef bool CALbyte;	//!< Redefinition of the type char.
 
 
         /*!	\brief Enumeration used for cellular space toroidality setting.
@@ -111,6 +114,43 @@ namespace opencal {
             return c;
         }
 
+
+
+        /*! \brief Return multidimensional indexes of a certain cell.
+        */
+        template<uint DIMENSION, typename COORDINATE_TYPE>
+        inline int* cellMultidimensionalIndices (int index)
+        {
+            return CALIndicesPool<DIMENSION , COORDINATE_TYPE>:: getMultidimensionalIndexes(index);
+        }
+
+
+        /*! \brief Return linear index of n^th neighbour of a certain cell.
+     */
+        template<uint DIMENSION, typename COORDINATE_TYPE>
+        inline int getNeighborNLinear (int* indexes, int* neighbor,std::array<COORDINATE_TYPE,DIMENSION>& coordinates, enum CALSpaceBoundaryCondition CAL_TOROIDALITY)
+        {
+            int i;
+            int c = 0;
+            int t = multiplier (coordinates, 0, DIMENSION);
+            if (CAL_TOROIDALITY == CAL_SPACE_FLAT)
+                for (i = 0; i < DIMENSION; ++i)
+                {
+                    t= t/coordinates[i];
+                    c+=(indexes[i] + neighbor[i])*t;
+                }
+            else
+            {
+                for (i=0; i< DIMENSION; i++)
+                {
+                    t= t/coordinates[i];
+                    c+=(calGetToroidalX(indexes[i] + neighbor[i], coordinates[i]))*t;
+
+                }
+
+            }
+            return c;
+        }
 
 
     }//namespace calCommon
