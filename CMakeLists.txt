@@ -9,18 +9,12 @@ project(OpenCAL-ALL
 		LANGUAGES C CXX)
 
 
-
 set(INSTALL_ROOT_DIR opencal-${OPENCAL_VERSION})
 set(INSTALL_DOCS_DIR "${INSTALL_ROOT_DIR}/doc" )
 set(INSTALL_INCLUDE_DIR  "${INSTALL_ROOT_DIR}/include")
 set(INSTALL_LIB_DIR "${INSTALL_ROOT_DIR}/lib" )
-get_filename_component(INSTALL_EXAMPLE_DIR $ENV{HOME}/opencal-${OPENCAL_VERSION}-examples ABSOLUTE)
 
 set(INSTALL_BIN_DIR bin CACHE PATH "Installation directory for executables")
-
-message(STATUS ${INSTALL_EXAMPLE_DIR})
-
-
 
 
 
@@ -66,8 +60,8 @@ if(BUILD_OPENCAL_CL)
 	set(Red         "${Esc}[31m")
 	set(ColourReset "${Esc}[m")
 	set(ColourBold  "${Esc}[1m")
-	get_filename_component(KERNELPATH "${CMAKE_INSTALL_PREFIX}/${INSTALL_SHARE_DIR}/OpenCAL-CL/" ABSOLUTE)
-	MESSAGE(STATUS "${Red}(*AFTER MAKE INSTALL*) PLEASE EXPORT THE FOLLOWING ENVIRONMENT VARIABLE...${ColourReset}")
+	get_filename_component(KERNELPATH "${CMAKE_INSTALL_PREFIX}/${INSTALL_ROOT_DIR}/include/OpenCAL-CL/kernel/" ABSOLUTE)
+	MESSAGE(STATUS "${Red}AFTER INSTALLATION, PLEASE EXPORT THE FOLLOWING ENVIRONMENT VARIABLE...${ColourReset}")
 	MESSAGE(STATUS "${ColourBold}${Red}export OPENCALCL_PATH=${KERNELPATH}${ColourReset}")
 endif(BUILD_OPENCAL_CL)
 
