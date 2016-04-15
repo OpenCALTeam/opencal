@@ -141,7 +141,11 @@ void calSetBuffer2Db(CALbyte* M, int rows, int columns, CALbyte value)
 }
 void calSetBuffer2Di(CALint* M, int rows, int columns, CALint value)
 {
-	memset(M, value, sizeof(CALint)*rows*columns);
+	int size = rows * columns;
+	int i;
+
+	for (i=0; i<size; i++)
+			M[i] = value;
 }
 void calSetBuffer2Dr(CALreal* M, int rows, int columns, CALreal value)
 {
