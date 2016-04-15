@@ -8,6 +8,7 @@
 #include "functional_tests.h"
 #include <OpenCAL++/calCommon.h>
 #include <OpenCAL++/calModel.h>
+#include <OpenCAL++/calRun.h>
 #include <OpenCAL++/CALVonNeumannNeighborhood.h>
 
 int main(int argc, char** argv){
@@ -16,6 +17,7 @@ int main(int argc, char** argv){
     std::array<COORD_TYPE,2> coords  = {10,10};
     opencal::CALVonNeumannNeighborhood neighbor;
     opencal::CALModel<2,opencal::CALVonNeumannNeighborhood,COORD_TYPE> calmodel(coords,&neighbor , opencal::calCommon::CAL_SPACE_FLAT , opencal::calCommon::CAL_NO_OPT );
+    opencal::CALRun<opencal::CALModel<2,opencal::CALVonNeumannNeighborhood,COORD_TYPE>> calrun();
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 

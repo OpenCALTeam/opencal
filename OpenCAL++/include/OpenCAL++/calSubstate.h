@@ -18,17 +18,17 @@ namespace opencal {
 
     public:
         typedef CALConverterIO<DIMENSION , COORDINATE_TYPE> CALCONVERTERIO_type;
-        typedef CALConverterIO<DIMENSION , COORDINATE_TYPE> CALCONVERTERIO_reference;
-        typedef CALConverterIO<DIMENSION , COORDINATE_TYPE> CALCONVERTERIO_pointer;
+        typedef CALConverterIO<DIMENSION , COORDINATE_TYPE>& CALCONVERTERIO_reference;
+        typedef CALConverterIO<DIMENSION , COORDINATE_TYPE>* CALCONVERTERIO_pointer;
 
         virtual ~ CALSubstateWrapper() { }
 
         virtual void update(opencal::CALActiveCells<DIMENSION, COORDINATE_TYPE> *activeCells) = 0;
 
-        virtual void saveSubstate(int *coordinates, size_t dimension, CALCONVERTERIO_pointer calConverterInputOutput,
+        virtual void saveSubstate(std::array<COORDINATE_TYPE, DIMENSION>& _coordinates, CALCONVERTERIO_pointer calConverterInputOutput,
                                   char *path) = 0;
 
-        virtual void loadSubstate(int *coordinates, size_t dimension, CALCONVERTERIO_pointer calConverterInputOutput,
+        virtual void loadSubstate(std::array<COORDINATE_TYPE, DIMENSION>& coordinates, CALCONVERTERIO_pointer calConverterInputOutput,
                                   char *path) = 0;
     };
 
@@ -42,10 +42,10 @@ namespace opencal {
 
 
         typedef CALActiveCells<DIMENSION , COORDINATE_TYPE> CALACTIVECELLS_type;
-        typedef CALActiveCells<DIMENSION , COORDINATE_TYPE> CALACTIVECELLS_reference;
-        typedef CALActiveCells<DIMENSION , COORDINATE_TYPE> CALACTIVECELLS_pointer;
+        typedef CALActiveCells<DIMENSION , COORDINATE_TYPE>& CALACTIVECELLS_reference;
+        typedef CALActiveCells<DIMENSION , COORDINATE_TYPE>* CALACTIVECELLS_pointer;
 
-        typedef CALConverterIO<DIMENSION , COORDINATE_TYPE> CALCONVERTERIO_pointer;
+        typedef CALConverterIO<DIMENSION , COORDINATE_TYPE>* CALCONVERTERIO_pointer;
 
 
     private:
@@ -115,23 +115,27 @@ namespace opencal {
             }
         }
 
-        virtual void saveSubstate(int *coordinates, size_t dimension, CALCONVERTERIO_pointer calConverterInputOutput,
+        virtual void saveSubstate(std::array<COORDINATE_TYPE, DIMENSION>& _coordinates, CALCONVERTERIO_pointer calConverterInputOutput,
                                   char *path);
 
-        virtual void loadSubstate(int *coordinates, size_t dimension, CALCONVERTERIO_pointer calConverterInputOutput,
+        virtual void loadSubstate(std::array<COORDINATE_TYPE, DIMENSION>& _coordinates, CALCONVERTERIO_pointer calConverterInputOutput,
                                   char *path);
 
-        void setElementCurrent(int *indexes, int *coordinates, int dimension, PAYLOAD value);
+        void setElementCurrent(int *indexes, std::array<COORDINATE_TYPE, DIMENSION>& _coordinates, PAYLOAD value);
 
-        void setElement(int *indexes, int *coordinates, int dimension, PAYLOAD value);
+        void setElement(int *indexes, std::array<COORDINATE_TYPE, DIMENSION>& _coordinates, PAYLOAD value);
 
-        PAYLOAD getElement(int *indexes, int *coordinates, int dimension);
+        PAYLOAD getElement(int *indexes, std::array<COORDINATE_TYPE, DIMENSION>& _coordinates);
 
-        PAYLOAD getElementNext(int *indexes, int *coordinates, int dimension);
+        PAYLOAD getElementNext(int *indexes, std::array<COORDINATE_TYPE, DIMENSION>& _coordinates);
 
-        PAYLOAD getX(int linearIndex, int n);
+        PAYLOAD getX(int linearIndex, int n){
 
-        PAYLOAD getX(int *indexes, int *coordinates, int dimension, int n);
+        }
+
+        PAYLOAD getX(int *indexes, std::array<COORDINATE_TYPE, DIMENSION>& _coordinates, int n){
+
+        }
 
         PAYLOAD getElement(int linearIndex);
 

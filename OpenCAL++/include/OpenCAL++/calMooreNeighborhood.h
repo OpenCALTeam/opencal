@@ -1,13 +1,15 @@
 
 
 #ifndef OPENCAL_CALMOORENEIGHBORHOOD_H
-#ifndef OPENCAL_CALMOORENEIGHBORHOOD_H
+#define OPENCAL_CALMOORENEIGHBORHOOD_H
+
+#include <cmath>
 
 namespace opencal {
 class CALMooreNeighborhood {
 
     template<class CALMODEL>
-    void defineNeighborhood(CALMODEL calModel) {
+    void defineNeighborhood(CALMODEL* calModel) {
         int n = calModel->getDimension();
         assert (n>1);
         int alphabet []= {0, -1, 1};
@@ -29,4 +31,5 @@ class CALMooreNeighborhood {
 };
 
 }//namespace opencal
+
 #endif //OPENCAL_CALMOORENEIGHBORHOOD_H
