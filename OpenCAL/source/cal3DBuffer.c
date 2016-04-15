@@ -141,7 +141,11 @@ void calSetBuffer3Db(CALbyte* M, int rows, int columns, int slices, CALbyte valu
 }
 void calSetBuffer3Di(CALint* M, int rows, int columns, int slices, CALint value)
 {
-	memset(M, value, sizeof(CALint)*rows*columns*slices);
+	int size = rows * columns * slices;
+	int i;
+
+	for (i=0; i<size; i++)
+		M[i] = value;
 }
 void calSetBuffer3Dr(CALreal* M, int rows, int columns, int slices, CALreal value)
 {
