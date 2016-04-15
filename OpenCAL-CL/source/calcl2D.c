@@ -437,8 +437,8 @@ CALCLqueue calclCreateQueue2D(struct CALCLModel2D * calclmodel2D, CALCLcontext c
 }
 
 CALbyte existOneTrue2D(struct CALCLModel2D* calclmodel2D, CALbyte * tmp, CALint dim) {
-
-	for (int i = 0; i < dim; i++) {
+	int i;
+	for (i = 0; i < dim; i++) {
 		if (tmp[i])
 			return 1;
 	}
@@ -802,8 +802,8 @@ struct CALCLModel2D * calclCADef2D(struct CALModel2D *host_CA, CALCLcontext cont
 	calclmodel2D->binaryXOrsb = (CALint*) malloc(sizeof(CALint) * (calclmodel2D->host_CA->sizeof_pQb_array + 1));
 	calclmodel2D->binaryXOrsi = (CALint*) malloc(sizeof(CALint) * (calclmodel2D->host_CA->sizeof_pQi_array + 1));
 	calclmodel2D->binaryXOrsr = (CALint*) malloc(sizeof(CALint) * (calclmodel2D->host_CA->sizeof_pQr_array + 1));
-
-	for (int i = 0; i < calclmodel2D->host_CA->sizeof_pQb_array; i++) {
+	int i;
+	for (i = 0; i < calclmodel2D->host_CA->sizeof_pQb_array; i++) {
 		calclmodel2D->reductionFlagsMinb[i] = CAL_FALSE;
 		calclmodel2D->reductionFlagsMaxb[i] = CAL_FALSE;
 		calclmodel2D->reductionFlagsSumb[i] = CAL_FALSE;
@@ -823,7 +823,7 @@ struct CALCLModel2D * calclCADef2D(struct CALModel2D *host_CA, CALCLcontext cont
 		calclmodel2D->binaryOrsb[i] = 0;
 		calclmodel2D->binaryXOrsb[i] = 0;
 	}
-	for (int i = 0; i < calclmodel2D->host_CA->sizeof_pQi_array; i++) {
+	for ( i = 0; i < calclmodel2D->host_CA->sizeof_pQi_array; i++) {
 		calclmodel2D->reductionFlagsMini[i] = CAL_FALSE;
 		calclmodel2D->reductionFlagsMaxi[i] = CAL_FALSE;
 		calclmodel2D->reductionFlagsSumi[i] = CAL_FALSE;
@@ -844,7 +844,7 @@ struct CALCLModel2D * calclCADef2D(struct CALModel2D *host_CA, CALCLcontext cont
 		calclmodel2D->binaryXOrsi[i] = 0;
 
 	}
-	for (int i = 0; i < calclmodel2D->host_CA->sizeof_pQr_array; i++) {
+	for ( i = 0; i < calclmodel2D->host_CA->sizeof_pQr_array; i++) {
 		calclmodel2D->reductionFlagsMinr[i] = CAL_FALSE;
 		calclmodel2D->reductionFlagsMaxr[i] = CAL_FALSE;
 		calclmodel2D->reductionFlagsSumr[i] = CAL_FALSE;
@@ -1630,13 +1630,11 @@ CALbyte calclSingleStep2D(struct CALCLModel2D* calclmodel2D, size_t * threadsNum
 	int j;
 	if (activeCells == CAL_TRUE) {
 		for (j = 0; j < calclmodel2D->elementaryProcessesNum; j++) {
-
 			calclKernelCall2D(calclmodel2D, calclmodel2D->elementaryProcesses[j], dimNum, threadsNum,
 			NULL);
 			calclComputeStreamCompaction2D(calclmodel2D);
 			calclResizeThreadsNum2D(calclmodel2D, threadsNum);
 			calclKernelCall2D(calclmodel2D, calclmodel2D->kernelUpdateSubstate, dimNum, threadsNum, NULL);
-
 		}
 
 		calclExecuteReduction2D(calclmodel2D, calclmodel2D->roundedDimensions);
