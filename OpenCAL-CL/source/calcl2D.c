@@ -550,8 +550,6 @@ struct CALCLModel2D * calclCADef2D(struct CALModel2D *host_CA, CALCLcontext cont
 	CALint * nextIntSubstates = (CALint*) malloc(intSubstatesDim);
 	calclIntSubstatesMapper2D(calclmodel2D->host_CA, currentIntSubstates, nextIntSubstates);
 	calclmodel2D->bufferCurrentIntSubstate = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, intSubstatesDim, currentIntSubstates, &err);
-	printf("init1 %d \n", *(currentIntSubstates + calclmodel2D->host_CA->rows * calclmodel2D->host_CA->columns * 0 + 0));
-	printf("init1 %d \n", currentIntSubstates[0]);
 	calclHandleError(err);
 	calclmodel2D->bufferNextIntSubstate = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, intSubstatesDim, nextIntSubstates, &err);
 	calclHandleError(err);
@@ -1094,40 +1092,12 @@ void calclRun2D(struct CALCLModel2D* calclmodel2D, unsigned int initialStep, uns
 	if (calclmodel2D->kernelSteering != NULL)
 		calclSetReductionParameters2D(calclmodel2D, &calclmodel2D->kernelSteering);
 
-
-//	 || existOneTrueMin2D(calclmodel2D, calclmodel2D->reductionFlagsMinb)
-//				|| existOneTrueMin2D(calclmodel2D, calclmodel2D->reductionFlagsMinr)
-//	if (existOneTrue2D(calclmodel2D, calclmodel2D->reductionFlagsMini,calclmodel2D->host_CA->sizeof_pQi_array)) {
-	//printf("Exist True \n");
-
-	//byte
-
-	//int
-	//real
-
-//	}
-
-	//	}
-//	if (existOneTrue2D(calclmodel2D, calclmodel2D->reductionFlagsMaxi,calclmodel2D->host_CA->sizeof_pQi_array)) {
-
-//	}
-	//TODO End Reduction
-//	 || existOneTrueMin2D(calclmodel2D, calclmodel2D->reductionFlagsMinb)
-//				|| existOneTrueMin2D(calclmodel2D, calclmodel2D->reductionFlagsMinr)
-
-//	if (existOneTrue2D(calclmodel2D, calclmodel2D->reductionFlagsMaxi)) {
-//		int offset = calclmodel2D->streamCompactionThreadsNum;
-//		int sizeCA = calclmodel2D->host_CA->rows * calclmodel2D->host_CA->columns;
-//		clSetKernelArg(calclmodel2D->kernelMinReduction, 0, sizeof(CALCLmem), &calclmodel2D->bufferMinimai);
-//		clSetKernelArg(calclmodel2D->kernelMinReduction, 4, sizeof(int), &sizeCA);
-//	}
-
 	int i = 0;
 
 	for (i = 0; i < calclmodel2D->elementaryProcessesNum; i++) {
 		calclSetReductionParameters2D(calclmodel2D, &calclmodel2D->elementaryProcesses[i]);
 	}
-//	cl_int err;
+
 	CALbyte stop;
 	size_t * threadNumMax = (size_t*) malloc(sizeof(size_t) * 2);
 	threadNumMax[0] = calclmodel2D->host_CA->rows;
@@ -1622,7 +1592,7 @@ void calclExecuteReduction2D(struct CALCLModel2D* calclmodel2D, int rounded) {
 			calclHandleError(err);
 			calclComputeReduction2Dr(calclmodel2D, i, REDUCTION_LOGICAL_OR, rounded);
 		}
-		if (calclmodel2D->reductionFlagsLogicalXOrb[i]) {
+		if (calclmodel2D->reductionFlagsLogicalXOrr[i]) {
 			clSetKernelArg(calclmodel2D->kernelLogicalXOrReductionr, 1, sizeof(CALint), &i);
 			clSetKernelArg(calclmodel2D->kernelLogicalXOrCopyr, 2, sizeof(CALint), &i);
 			err = clEnqueueNDRangeKernel(calclmodel2D->queue, calclmodel2D->kernelLogicalXOrCopyr, 1, NULL, &tmp, NULL, 0, NULL, NULL);
@@ -1658,7 +1628,6 @@ CALbyte calclSingleStep2D(struct CALCLModel2D* calclmodel2D, size_t * threadsNum
 
 	CALbyte activeCells = calclmodel2D->opt == CAL_OPT_ACTIVE_CELLS;
 	int j;
-
 	if (activeCells == CAL_TRUE) {
 		for (j = 0; j < calclmodel2D->elementaryProcessesNum; j++) {
 
@@ -1670,7 +1639,7 @@ CALbyte calclSingleStep2D(struct CALCLModel2D* calclmodel2D, size_t * threadsNum
 
 		}
 
-		//calclExecuteReduction2D(calclmodel2D);
+		calclExecuteReduction2D(calclmodel2D, calclmodel2D->roundedDimensions);
 
 		if (calclmodel2D->kernelSteering != NULL) {
 			calclKernelCall2D(calclmodel2D, calclmodel2D->kernelSteering, dimNum, threadsNum, NULL);
@@ -1679,7 +1648,6 @@ CALbyte calclSingleStep2D(struct CALCLModel2D* calclmodel2D, size_t * threadsNum
 
 	} else {
 		for (j = 0; j < calclmodel2D->elementaryProcessesNum; j++) {
-
 			calclKernelCall2D(calclmodel2D, calclmodel2D->elementaryProcesses[j], dimNum, threadsNum,
 			NULL);
 			copySubstatesBuffers2D(calclmodel2D);
