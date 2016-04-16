@@ -106,11 +106,6 @@ struct CALCLModel2D {
 
 	//Reduction
 
-	CALbyte * reductionFlagsMinb; 				//!< Pointer to array of flags that determine if a min reduction have to be compute
-	CALbyte * reductionFlagsMini; 				//!< Pointer to array of flags that determine if a min reduction have to be compute
-	CALbyte * reductionFlagsMinr; 				//!< Pointer to array of flags that determine if a min reduction have to be compute
-	CALreal * minimab;										//!< Array of CALreal that contains the min results
-	CALreal * minimai;										//!< Array of CALreal that contains the min results
 
 	CALCLmem  bufferPartialMini;
 	CALCLmem  bufferPartialMaxi;
@@ -145,6 +140,11 @@ struct CALCLModel2D {
 	CALCLmem  bufferPartialBinaryOrr;
 	CALCLmem  bufferPartialBinaryXOrr;
 
+	CALbyte * reductionFlagsMinb; 				//!< Pointer to array of flags that determine if a min reduction have to be compute
+	CALbyte * reductionFlagsMini; 				//!< Pointer to array of flags that determine if a min reduction have to be compute
+	CALbyte * reductionFlagsMinr; 				//!< Pointer to array of flags that determine if a min reduction have to be compute
+	CALreal * minimab;										//!< Array of CALreal that contains the min results
+	CALreal * minimai;										//!< Array of CALreal that contains the min results
 	CALreal * minimar;										//!< Array of CALreal that contains the min results
 
 	CALbyte * reductionFlagsMaxb;      	//!< Pointer to array of flags that determine if a max reduction have to be compute
@@ -285,48 +285,38 @@ struct CALCLModel2D {
 	CALCLkernel kernelBinaryXOrCopyr;
 
 
-
-	CALCLmem bufferFlagsMin;
 	CALCLmem bufferMinimab;
 	CALCLmem bufferMinimai;
 	CALCLmem bufferMinimar;
 
-	CALCLmem bufferFlagsMax;
 	CALCLmem bufferMiximab;
 	CALCLmem bufferMiximai;
 	CALCLmem bufferMiximar;
 
-	CALCLmem bufferFlagsSum;
 	CALCLmem bufferSumb;
 	CALCLmem bufferSumi;
 	CALCLmem bufferSumr;
 
-	CALCLmem bufferFlagsLogicalAnds;
 	CALCLmem bufferLogicalAndsb;
 	CALCLmem bufferLogicalAndsi;
 	CALCLmem bufferLogicalAndsr;
 
-	CALCLmem bufferFlagsLogicalOr;
 	CALCLmem bufferLogicalOrsb;
 	CALCLmem bufferLogicalOrsi;
 	CALCLmem bufferLogicalOrsr;
 
-	CALCLmem bufferFlagsLogicalXOr;
 	CALCLmem bufferLogicalXOrsb;
 	CALCLmem bufferLogicalXOrsi;
 	CALCLmem bufferLogicalXOrsr;
 
-	CALCLmem bufferFlagsBinaryAnd;
 	CALCLmem bufferBinaryAndsb;
 	CALCLmem bufferBinaryAndsi;
 	CALCLmem bufferBinaryAndsr;
 
-	CALCLmem bufferFlagsBinaryOr;
 	CALCLmem bufferBinaryOrsb;
 	CALCLmem bufferBinaryOrsi;
 	CALCLmem bufferBinaryOrsr;
 
-	CALCLmem bufferFlagsBinaryXOr;
 	CALCLmem bufferBinaryXOrsb;
 	CALCLmem bufferBinaryXOrsi;
 	CALCLmem bufferBinaryXOrsr;
@@ -525,5 +515,7 @@ int calclSetKernelArg2D(CALCLkernel* kernel,			//!< Opencl kernel
 /*! \brief Copy all the substates device memory to host memory   */
 void calclGetSubstatesDeviceToHost2D(struct CALCLModel2D* calclmodel2D //!< Pointer to a CALCLModel3D
 		);
+
+void calclSetReductionParameters2D(struct CALCLModel2D* calclmodel2D, CALCLkernel * kernel);
 
 #endif /* CALCL_H_ */

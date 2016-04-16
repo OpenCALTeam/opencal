@@ -445,6 +445,13 @@ CALbyte existOneTrue2D(struct CALCLModel2D* calclmodel2D, CALbyte * tmp, CALint 
 	return 0;
 }
 
+int upperPowerOfTwo(int n) {
+	int power = 1;
+	while (power < n)
+		power <<= 1;
+	return power;
+}
+
 /******************************************************************************
  * 							PUBLIC FUNCTIONS
  ******************************************************************************/
@@ -873,20 +880,13 @@ struct CALCLModel2D * calclCADef2D(struct CALModel2D *host_CA, CALCLcontext cont
 
 }
 
-int upperPowerOfTwo(int n) {
-	int power = 1;
-	while (power < n)
-		power <<= 1;
-	return power;
-}
+
 
 void calclRun2D(struct CALCLModel2D* calclmodel2D, unsigned int initialStep, unsigned maxStep) {
 
 	//TODO Reduction
 	cl_int err;
 
-	//CALint dimReductionArrays = calclmodel2D->host_CA->sizeof_pQb_array + calclmodel2D->host_CA->sizeof_pQi_array + calclmodel2D->host_CA->sizeof_pQr_array;
-	int offset = calclmodel2D->streamCompactionThreadsNum;
 	int sizeCA = calclmodel2D->host_CA->rows * calclmodel2D->host_CA->columns;
 	//TODO eliminare bufferFlags Urgent
 
@@ -1833,7 +1833,40 @@ void calclFinalize2D(struct CALCLModel2D * calclmodel2D) {
 	clReleaseMemObject(calclmodel2D->bufferSTOffsets1);
 	clReleaseMemObject(calclmodel2D->bufferStop);
 	clReleaseMemObject(calclmodel2D->bufferSTCountsDiff);
+
+	clReleaseMemObject(calclmodel2D->bufferBinaryAndsb);
+	clReleaseMemObject(calclmodel2D->bufferBinaryAndsi);
+	clReleaseMemObject(calclmodel2D->bufferBinaryAndsr);
+	clReleaseMemObject(calclmodel2D->bufferBinaryOrsb);
+	clReleaseMemObject(calclmodel2D->bufferBinaryOrsi);
+	clReleaseMemObject(calclmodel2D->bufferBinaryOrsr);
+	clReleaseMemObject(calclmodel2D->bufferBinaryXOrsb);
+	clReleaseMemObject(calclmodel2D->bufferBinaryXOrsi);
+	clReleaseMemObject(calclmodel2D->bufferBinaryXOrsr);
+
+	clReleaseMemObject(calclmodel2D->bufferLogicalAndsb);
+	clReleaseMemObject(calclmodel2D->bufferLogicalAndsi);
+	clReleaseMemObject(calclmodel2D->bufferLogicalAndsr);
+	clReleaseMemObject(calclmodel2D->bufferLogicalOrsb);
+	clReleaseMemObject(calclmodel2D->bufferLogicalOrsi);
+	clReleaseMemObject(calclmodel2D->bufferLogicalOrsr);
+	clReleaseMemObject(calclmodel2D->bufferLogicalXOrsb);
+	clReleaseMemObject(calclmodel2D->bufferLogicalXOrsi);
+	clReleaseMemObject(calclmodel2D->bufferLogicalXOrsr);
+
+	clReleaseMemObject(calclmodel2D->bufferMinimab);
+	clReleaseMemObject(calclmodel2D->bufferMinimai);
+	clReleaseMemObject(calclmodel2D->bufferMinimar);
+	clReleaseMemObject(calclmodel2D->bufferPartialMaxb);
+	clReleaseMemObject(calclmodel2D->bufferPartialMaxi);
+	clReleaseMemObject(calclmodel2D->bufferPartialMaxr);
+	clReleaseMemObject(calclmodel2D->bufferPartialSumb);
+	clReleaseMemObject(calclmodel2D->bufferPartialSumi);
+	clReleaseMemObject(calclmodel2D->bufferPartialSumr);
+
 	clReleaseCommandQueue(calclmodel2D->queue);
+
+
 
 	free(calclmodel2D->substateMapper.byteSubstate_current_OUT);
 	free(calclmodel2D->substateMapper.intSubstate_current_OUT);
