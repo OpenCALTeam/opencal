@@ -222,6 +222,11 @@ void calclSetReductionParameters2D(struct CALCLModel2D* calclmodel2D, CALCLkerne
 	clSetKernelArg(*kernel, 44, sizeof(CALCLmem), &calclmodel2D->bufferBinaryOrsr);
 	clSetKernelArg(*kernel, 47, sizeof(CALCLmem), &calclmodel2D->bufferBinaryXOrsr);
 
+	clSetKernelArg(*kernel, 48, sizeof(CALCLmem), &calclmodel2D->bufferProdb);
+	clSetKernelArg(*kernel, 49, sizeof(CALCLmem), &calclmodel2D->bufferProdi);
+	clSetKernelArg(*kernel, 50, sizeof(CALCLmem), &calclmodel2D->bufferProdr);
+
+
 }
 
 void calclSetKernelCopyArgsi(struct CALCLModel2D* calclmodel2D) {
@@ -768,6 +773,13 @@ struct CALCLModel2D * calclCADef2D(struct CALModel2D *host_CA, CALCLcontext cont
 	calclmodel2D->sumsi = (CALreal*) malloc(sizeof(CALreal) * (calclmodel2D->host_CA->sizeof_pQi_array + 1));
 	calclmodel2D->sumsr = (CALreal*) malloc(sizeof(CALreal) * (calclmodel2D->host_CA->sizeof_pQr_array + 1));
 
+	calclmodel2D->reductionFlagsProdb = (CALbyte*) malloc(sizeof(CALbyte) * (calclmodel2D->host_CA->sizeof_pQb_array));
+	calclmodel2D->reductionFlagsProdi = (CALbyte*) malloc(sizeof(CALbyte) * (calclmodel2D->host_CA->sizeof_pQi_array));
+	calclmodel2D->reductionFlagsProdr = (CALbyte*) malloc(sizeof(CALbyte) * (calclmodel2D->host_CA->sizeof_pQr_array));
+	calclmodel2D->prodsb = (CALreal*) malloc(sizeof(CALreal) * (calclmodel2D->host_CA->sizeof_pQb_array + 1));
+	calclmodel2D->prodsi = (CALreal*) malloc(sizeof(CALreal) * (calclmodel2D->host_CA->sizeof_pQi_array + 1));
+	calclmodel2D->prodsr = (CALreal*) malloc(sizeof(CALreal) * (calclmodel2D->host_CA->sizeof_pQr_array + 1));
+
 	calclmodel2D->reductionFlagsLogicalAndb = (CALbyte*) malloc(sizeof(CALbyte) * (calclmodel2D->host_CA->sizeof_pQb_array));
 	calclmodel2D->reductionFlagsLogicalAndi = (CALbyte*) malloc(sizeof(CALbyte) * (calclmodel2D->host_CA->sizeof_pQi_array));
 	calclmodel2D->reductionFlagsLogicalAndr = (CALbyte*) malloc(sizeof(CALbyte) * (calclmodel2D->host_CA->sizeof_pQr_array));
@@ -814,6 +826,7 @@ struct CALCLModel2D * calclCADef2D(struct CALModel2D *host_CA, CALCLcontext cont
 		calclmodel2D->reductionFlagsMinb[i] = CAL_FALSE;
 		calclmodel2D->reductionFlagsMaxb[i] = CAL_FALSE;
 		calclmodel2D->reductionFlagsSumb[i] = CAL_FALSE;
+		calclmodel2D->reductionFlagsProdb[i] = CAL_FALSE;
 		calclmodel2D->reductionFlagsLogicalAndb[i] = CAL_FALSE;
 		calclmodel2D->reductionFlagsLogicalOrb[i] = CAL_FALSE;
 		calclmodel2D->reductionFlagsLogicalXOrb[i] = CAL_FALSE;
@@ -823,6 +836,7 @@ struct CALCLModel2D * calclCADef2D(struct CALModel2D *host_CA, CALCLcontext cont
 		calclmodel2D->minimab[i] = 0;
 		calclmodel2D->maximab[i] = 0;
 		calclmodel2D->sumsb[i] = 0;
+		calclmodel2D->prodsb[i] = 0;
 		calclmodel2D->logicalAndsb[i] = 0;
 		calclmodel2D->logicalOrsb[i] = 0;
 		calclmodel2D->logicalXOrsb[i] = 0;
@@ -834,6 +848,7 @@ struct CALCLModel2D * calclCADef2D(struct CALModel2D *host_CA, CALCLcontext cont
 		calclmodel2D->reductionFlagsMini[i] = CAL_FALSE;
 		calclmodel2D->reductionFlagsMaxi[i] = CAL_FALSE;
 		calclmodel2D->reductionFlagsSumi[i] = CAL_FALSE;
+		calclmodel2D->reductionFlagsProdi[i] = CAL_FALSE;
 		calclmodel2D->reductionFlagsLogicalAndi[i] = CAL_FALSE;
 		calclmodel2D->reductionFlagsLogicalOri[i] = CAL_FALSE;
 		calclmodel2D->reductionFlagsLogicalXOri[i] = CAL_FALSE;
@@ -843,6 +858,7 @@ struct CALCLModel2D * calclCADef2D(struct CALModel2D *host_CA, CALCLcontext cont
 		calclmodel2D->minimai[i] = 0;
 		calclmodel2D->maximai[i] = 0;
 		calclmodel2D->sumsi[i] = 0;
+		calclmodel2D->prodsi[i] = 0;
 		calclmodel2D->logicalAndsi[i] = 0;
 		calclmodel2D->logicalOrsi[i] = 0;
 		calclmodel2D->logicalXOrsi[i] = 0;
@@ -855,6 +871,7 @@ struct CALCLModel2D * calclCADef2D(struct CALModel2D *host_CA, CALCLcontext cont
 		calclmodel2D->reductionFlagsMinr[i] = CAL_FALSE;
 		calclmodel2D->reductionFlagsMaxr[i] = CAL_FALSE;
 		calclmodel2D->reductionFlagsSumr[i] = CAL_FALSE;
+		calclmodel2D->reductionFlagsProdr[i] = CAL_FALSE;
 		calclmodel2D->reductionFlagsLogicalAndr[i] = CAL_FALSE;
 		calclmodel2D->reductionFlagsLogicalOrr[i] = CAL_FALSE;
 		calclmodel2D->reductionFlagsLogicalXOrr[i] = CAL_FALSE;
@@ -864,6 +881,7 @@ struct CALCLModel2D * calclCADef2D(struct CALModel2D *host_CA, CALCLcontext cont
 		calclmodel2D->minimar[i] = 0;
 		calclmodel2D->maximar[i] = 0;
 		calclmodel2D->sumsr[i] = 0;
+		calclmodel2D->prodsr[i] = 0;
 		calclmodel2D->logicalAndsr[i] = 0;
 		calclmodel2D->logicalOrsr[i] = 0;
 		calclmodel2D->logicalXOrsr[i] = 0;
@@ -899,6 +917,9 @@ void calclRun2D(struct CALCLModel2D* calclmodel2D, unsigned int initialStep, uns
 	calclmodel2D->bufferSumb = clCreateBuffer(calclmodel2D->context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALreal) * (calclmodel2D->host_CA->sizeof_pQb_array + 1), calclmodel2D->sumsb,
 			&err);
 	calclHandleError(err);
+	calclmodel2D->bufferProdb = clCreateBuffer(calclmodel2D->context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALreal) * (calclmodel2D->host_CA->sizeof_pQb_array + 1), calclmodel2D->prodsb,
+			&err);
+	calclHandleError(err);
 	calclmodel2D->bufferLogicalAndsb = clCreateBuffer(calclmodel2D->context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALint) * (calclmodel2D->host_CA->sizeof_pQb_array + 1),
 			calclmodel2D->logicalAndsb, &err);
 	calclHandleError(err);
@@ -929,6 +950,10 @@ void calclRun2D(struct CALCLModel2D* calclmodel2D, unsigned int initialStep, uns
 	clSetKernelArg(calclmodel2D->kernelSumReductionb, 0, sizeof(CALCLmem), &calclmodel2D->bufferSumb);
 	clSetKernelArg(calclmodel2D->kernelSumReductionb, 2, sizeof(CALCLmem), &calclmodel2D->bufferPartialSumb);
 	clSetKernelArg(calclmodel2D->kernelSumReductionb, 4, sizeof(int), &sizeCA);
+
+	clSetKernelArg(calclmodel2D->kernelProdReductionb, 0, sizeof(CALCLmem), &calclmodel2D->bufferProdb);
+	clSetKernelArg(calclmodel2D->kernelProdReductionb, 2, sizeof(CALCLmem), &calclmodel2D->bufferPartialProdb);
+	clSetKernelArg(calclmodel2D->kernelProdReductionb, 4, sizeof(int), &sizeCA);
 
 	clSetKernelArg(calclmodel2D->kernelLogicalAndReductionb, 0, sizeof(CALCLmem), &calclmodel2D->bufferLogicalAndsb);
 	clSetKernelArg(calclmodel2D->kernelLogicalAndReductionb, 2, sizeof(CALCLmem), &calclmodel2D->bufferPartialLogicalAndb);
@@ -963,6 +988,9 @@ void calclRun2D(struct CALCLModel2D* calclmodel2D, unsigned int initialStep, uns
 	calclmodel2D->bufferSumi = clCreateBuffer(calclmodel2D->context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALreal) * (calclmodel2D->host_CA->sizeof_pQi_array + 1), calclmodel2D->sumsi,
 			&err);
 	calclHandleError(err);
+	calclmodel2D->bufferProdi = clCreateBuffer(calclmodel2D->context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALreal) * (calclmodel2D->host_CA->sizeof_pQi_array + 1), calclmodel2D->prodsi,
+			&err);
+	calclHandleError(err);
 	calclmodel2D->bufferLogicalAndsi = clCreateBuffer(calclmodel2D->context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALint) * (calclmodel2D->host_CA->sizeof_pQi_array + 1),
 			calclmodel2D->logicalAndsi, &err);
 	calclHandleError(err);
@@ -993,6 +1021,10 @@ void calclRun2D(struct CALCLModel2D* calclmodel2D, unsigned int initialStep, uns
 	clSetKernelArg(calclmodel2D->kernelSumReductioni, 0, sizeof(CALCLmem), &calclmodel2D->bufferSumi);
 	clSetKernelArg(calclmodel2D->kernelSumReductioni, 2, sizeof(CALCLmem), &calclmodel2D->bufferPartialSumi);
 	clSetKernelArg(calclmodel2D->kernelSumReductioni, 4, sizeof(int), &sizeCA);
+
+	clSetKernelArg(calclmodel2D->kernelProdReductioni, 0, sizeof(CALCLmem), &calclmodel2D->bufferProdi);
+	clSetKernelArg(calclmodel2D->kernelProdReductioni, 2, sizeof(CALCLmem), &calclmodel2D->bufferPartialProdi);
+	clSetKernelArg(calclmodel2D->kernelProdReductioni, 4, sizeof(int), &sizeCA);
 
 	clSetKernelArg(calclmodel2D->kernelLogicalAndReductioni, 0, sizeof(CALCLmem), &calclmodel2D->bufferLogicalAndsi);
 	clSetKernelArg(calclmodel2D->kernelLogicalAndReductioni, 2, sizeof(CALCLmem), &calclmodel2D->bufferPartialLogicalAndi);
@@ -1025,6 +1057,9 @@ void calclRun2D(struct CALCLModel2D* calclmodel2D, unsigned int initialStep, uns
 			calclmodel2D->maximar, &err);
 	calclHandleError(err);
 	calclmodel2D->bufferSumr = clCreateBuffer(calclmodel2D->context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALreal) * (calclmodel2D->host_CA->sizeof_pQr_array + 1), calclmodel2D->sumsr,
+			&err);
+	calclHandleError(err);
+	calclmodel2D->bufferProdr = clCreateBuffer(calclmodel2D->context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALreal) * (calclmodel2D->host_CA->sizeof_pQr_array + 1), calclmodel2D->prodsr,
 			&err);
 	calclHandleError(err);
 	calclmodel2D->bufferLogicalAndsr = clCreateBuffer(calclmodel2D->context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALint) * (calclmodel2D->host_CA->sizeof_pQr_array + 1),
@@ -1060,6 +1095,10 @@ void calclRun2D(struct CALCLModel2D* calclmodel2D, unsigned int initialStep, uns
 	clSetKernelArg(calclmodel2D->kernelSumReductionr, 0, sizeof(CALCLmem), &calclmodel2D->bufferSumr);
 	clSetKernelArg(calclmodel2D->kernelSumReductionr, 2, sizeof(CALCLmem), &calclmodel2D->bufferPartialSumr);
 	clSetKernelArg(calclmodel2D->kernelSumReductionr, 4, sizeof(int), &sizeCA);
+
+	clSetKernelArg(calclmodel2D->kernelProdReductionr, 0, sizeof(CALCLmem), &calclmodel2D->bufferProdr);
+	clSetKernelArg(calclmodel2D->kernelProdReductionr, 2, sizeof(CALCLmem), &calclmodel2D->bufferPartialProdr);
+	clSetKernelArg(calclmodel2D->kernelProdReductionr, 4, sizeof(int), &sizeCA);
 
 	clSetKernelArg(calclmodel2D->kernelLogicalAndReductionr, 0, sizeof(CALCLmem), &calclmodel2D->bufferLogicalAndsr);
 	clSetKernelArg(calclmodel2D->kernelLogicalAndReductionr, 2, sizeof(CALCLmem), &calclmodel2D->bufferPartialLogicalAndr);
@@ -1443,6 +1482,13 @@ void calclExecuteReduction2D(struct CALCLModel2D* calclmodel2D, int rounded) {
 			calclHandleError(err);
 			calclComputeReduction2Db(calclmodel2D, i, REDUCTION_SUM, rounded);
 		}
+		if (calclmodel2D->reductionFlagsProdb[i]) {
+			clSetKernelArg(calclmodel2D->kernelProdReductionb, 1, sizeof(CALint), &i);
+			clSetKernelArg(calclmodel2D->kernelProdCopyb, 2, sizeof(CALint), &i);
+			err = clEnqueueNDRangeKernel(calclmodel2D->queue, calclmodel2D->kernelProdCopyb, 1, NULL, &tmp, NULL, 0, NULL, NULL);
+			calclHandleError(err);
+			calclComputeReduction2Dr(calclmodel2D, i, REDUCTION_PROD, rounded);
+		}
 		if (calclmodel2D->reductionFlagsLogicalAndb[i]) {
 			clSetKernelArg(calclmodel2D->kernelLogicalAndReductionb, 1, sizeof(CALint), &i);
 			clSetKernelArg(calclmodel2D->kernelLogicalAndCopyb, 2, sizeof(CALint), &i);
@@ -1511,6 +1557,13 @@ void calclExecuteReduction2D(struct CALCLModel2D* calclmodel2D, int rounded) {
 			calclHandleError(err);
 			calclComputeReduction2Di(calclmodel2D, i, REDUCTION_SUM, rounded);
 		}
+		if (calclmodel2D->reductionFlagsProdi[i]) {
+			clSetKernelArg(calclmodel2D->kernelProdReductioni, 1, sizeof(CALint), &i);
+			clSetKernelArg(calclmodel2D->kernelProdCopyi, 2, sizeof(CALint), &i);
+			err = clEnqueueNDRangeKernel(calclmodel2D->queue, calclmodel2D->kernelProdCopyi, 1, NULL, &tmp, NULL, 0, NULL, NULL);
+			calclHandleError(err);
+			calclComputeReduction2Dr(calclmodel2D, i, REDUCTION_PROD, rounded);
+		}
 		if (calclmodel2D->reductionFlagsLogicalAndi[i]) {
 			clSetKernelArg(calclmodel2D->kernelLogicalAndReductioni, 1, sizeof(CALint), &i);
 			clSetKernelArg(calclmodel2D->kernelLogicalAndCopyi, 2, sizeof(CALint), &i);
@@ -1577,6 +1630,13 @@ void calclExecuteReduction2D(struct CALCLModel2D* calclmodel2D, int rounded) {
 			err = clEnqueueNDRangeKernel(calclmodel2D->queue, calclmodel2D->kernelSumCopyr, 1, NULL, &tmp, NULL, 0, NULL, NULL);
 			calclHandleError(err);
 			calclComputeReduction2Dr(calclmodel2D, i, REDUCTION_SUM, rounded);
+		}
+		if (calclmodel2D->reductionFlagsProdr[i]) {
+			clSetKernelArg(calclmodel2D->kernelProdReductionr, 1, sizeof(CALint), &i);
+			clSetKernelArg(calclmodel2D->kernelProdCopyr, 2, sizeof(CALint), &i);
+			err = clEnqueueNDRangeKernel(calclmodel2D->queue, calclmodel2D->kernelProdCopyr, 1, NULL, &tmp, NULL, 0, NULL, NULL);
+			calclHandleError(err);
+			calclComputeReduction2Dr(calclmodel2D, i, REDUCTION_PROD, rounded);
 		}
 		if (calclmodel2D->reductionFlagsLogicalAndr[i]) {
 			clSetKernelArg(calclmodel2D->kernelLogicalAndReductionr, 1, sizeof(CALint), &i);
@@ -1808,6 +1868,8 @@ void calclFinalize2D(struct CALCLModel2D * calclmodel2D) {
 	clReleaseKernel(calclmodel2D->kernelUpdateSubstate);
 	clReleaseKernel(calclmodel2D->kernelStopCondition);
 
+
+
 	for (i = 0; i < calclmodel2D->elementaryProcessesNum; ++i)
 		clReleaseKernel(calclmodel2D->elementaryProcesses[i]);
 
@@ -1833,6 +1895,68 @@ void calclFinalize2D(struct CALCLModel2D * calclmodel2D) {
 	clReleaseMemObject(calclmodel2D->bufferSTOffsets1);
 	clReleaseMemObject(calclmodel2D->bufferStop);
 	clReleaseMemObject(calclmodel2D->bufferSTCountsDiff);
+
+	clReleaseKernel(calclmodel2D->kernelMinReductionb);
+	clReleaseKernel(calclmodel2D->kernelMinReductioni);
+	clReleaseKernel(calclmodel2D->kernelMinReductionr);
+	clReleaseKernel(calclmodel2D->kernelMaxReductionb);
+	clReleaseKernel(calclmodel2D->kernelMaxReductioni);
+	clReleaseKernel(calclmodel2D->kernelMaxReductionr);
+	clReleaseKernel(calclmodel2D->kernelSumReductionb);
+	clReleaseKernel(calclmodel2D->kernelSumReductioni);
+	clReleaseKernel(calclmodel2D->kernelSumReductionr);
+	clReleaseKernel(calclmodel2D->kernelProdReductionb);
+	clReleaseKernel(calclmodel2D->kernelProdReductioni);
+	clReleaseKernel(calclmodel2D->kernelProdReductionr);
+	clReleaseKernel(calclmodel2D->kernelLogicalAndReductionb);
+	clReleaseKernel(calclmodel2D->kernelLogicalAndReductioni);
+	clReleaseKernel(calclmodel2D->kernelLogicalAndReductionr);
+	clReleaseKernel(calclmodel2D->kernelLogicalOrReductionb);
+	clReleaseKernel(calclmodel2D->kernelLogicalOrReductioni);
+	clReleaseKernel(calclmodel2D->kernelLogicalOrReductionr);
+	clReleaseKernel(calclmodel2D->kernelLogicalXOrReductionb);
+	clReleaseKernel(calclmodel2D->kernelLogicalXOrReductioni);
+	clReleaseKernel(calclmodel2D->kernelLogicalXOrReductionr);
+	clReleaseKernel(calclmodel2D->kernelBinaryAndReductionb);
+	clReleaseKernel(calclmodel2D->kernelBinaryAndReductioni);
+	clReleaseKernel(calclmodel2D->kernelBinaryAndReductionr);
+	clReleaseKernel(calclmodel2D->kernelBinaryOrReductionb);
+	clReleaseKernel(calclmodel2D->kernelBinaryOrReductioni);
+	clReleaseKernel(calclmodel2D->kernelBinaryOrReductionr);
+	clReleaseKernel(calclmodel2D->kernelBinaryXorReductionb);
+	clReleaseKernel(calclmodel2D->kernelBinaryXorReductioni);
+	clReleaseKernel(calclmodel2D->kernelBinaryXorReductionr);
+
+	clReleaseKernel(calclmodel2D->kernelMinCopyb);
+	clReleaseKernel(calclmodel2D->kernelMinCopyi);
+	clReleaseKernel(calclmodel2D->kernelMinCopyr);
+	clReleaseKernel(calclmodel2D->kernelMaxCopyb);
+	clReleaseKernel(calclmodel2D->kernelMaxCopyi);
+	clReleaseKernel(calclmodel2D->kernelMaxCopyr);
+	clReleaseKernel(calclmodel2D->kernelSumCopyb);
+	clReleaseKernel(calclmodel2D->kernelSumCopyi);
+	clReleaseKernel(calclmodel2D->kernelSumCopyr);
+	clReleaseKernel(calclmodel2D->kernelProdCopyb);
+	clReleaseKernel(calclmodel2D->kernelProdCopyi);
+	clReleaseKernel(calclmodel2D->kernelProdCopyr);
+	clReleaseKernel(calclmodel2D->kernelLogicalAndCopyb);
+	clReleaseKernel(calclmodel2D->kernelLogicalAndCopyi);
+	clReleaseKernel(calclmodel2D->kernelLogicalAndCopyr);
+	clReleaseKernel(calclmodel2D->kernelLogicalOrCopyb);
+	clReleaseKernel(calclmodel2D->kernelLogicalOrCopyi);
+	clReleaseKernel(calclmodel2D->kernelLogicalOrCopyr);
+	clReleaseKernel(calclmodel2D->kernelLogicalXOrCopyb);
+	clReleaseKernel(calclmodel2D->kernelLogicalXOrCopyi);
+	clReleaseKernel(calclmodel2D->kernelLogicalXOrCopyr);
+	clReleaseKernel(calclmodel2D->kernelBinaryAndCopyb);
+	clReleaseKernel(calclmodel2D->kernelBinaryAndCopyi);
+	clReleaseKernel(calclmodel2D->kernelBinaryAndCopyr);
+	clReleaseKernel(calclmodel2D->kernelBinaryOrCopyb);
+	clReleaseKernel(calclmodel2D->kernelBinaryOrCopyi);
+	clReleaseKernel(calclmodel2D->kernelBinaryOrCopyr);
+	clReleaseKernel(calclmodel2D->kernelBinaryXOrCopyb);
+	clReleaseKernel(calclmodel2D->kernelBinaryXOrCopyi);
+	clReleaseKernel(calclmodel2D->kernelBinaryXOrCopyr);
 
 	clReleaseMemObject(calclmodel2D->bufferBinaryAndsb);
 	clReleaseMemObject(calclmodel2D->bufferBinaryAndsi);
@@ -1863,6 +1987,26 @@ void calclFinalize2D(struct CALCLModel2D * calclmodel2D) {
 	clReleaseMemObject(calclmodel2D->bufferPartialSumb);
 	clReleaseMemObject(calclmodel2D->bufferPartialSumi);
 	clReleaseMemObject(calclmodel2D->bufferPartialSumr);
+
+	clReleaseMemObject(calclmodel2D->bufferPartialLogicalAndb);
+	clReleaseMemObject(calclmodel2D->bufferPartialLogicalAndi);
+	clReleaseMemObject(calclmodel2D->bufferPartialLogicalAndr);
+	clReleaseMemObject(calclmodel2D->bufferPartialLogicalOrb);
+	clReleaseMemObject(calclmodel2D->bufferPartialLogicalOri);
+	clReleaseMemObject(calclmodel2D->bufferPartialLogicalOrr);
+	clReleaseMemObject(calclmodel2D->bufferPartialLogicalXOrb);
+	clReleaseMemObject(calclmodel2D->bufferPartialLogicalXOri);
+	clReleaseMemObject(calclmodel2D->bufferPartialLogicalXOrr);
+
+	clReleaseMemObject(calclmodel2D->bufferPartialBinaryAndb);
+	clReleaseMemObject(calclmodel2D->bufferPartialBinaryAndi);
+	clReleaseMemObject(calclmodel2D->bufferPartialBinaryAndr);
+	clReleaseMemObject(calclmodel2D->bufferPartialBinaryOrb);
+	clReleaseMemObject(calclmodel2D->bufferPartialBinaryOri);
+	clReleaseMemObject(calclmodel2D->bufferPartialBinaryOrr);
+	clReleaseMemObject(calclmodel2D->bufferPartialBinaryXOrb);
+	clReleaseMemObject(calclmodel2D->bufferPartialBinaryXOri);
+	clReleaseMemObject(calclmodel2D->bufferPartialBinaryXOrr);
 
 	clReleaseCommandQueue(calclmodel2D->queue);
 
@@ -1956,6 +2100,16 @@ void calclAddSumReduction2Db(struct CALCLModel2D * calclmodel2D, int numSubstate
 }
 void calclAddSumReduction2Dr(struct CALCLModel2D * calclmodel2D, int numSubstate) {
 	calclmodel2D->reductionFlagsSumr[numSubstate] = CAL_TRUE;
+}
+
+void calclAddProdReduction2Di(struct CALCLModel2D * calclmodel2D, int numSubstate) {
+	calclmodel2D->reductionFlagsProdi[numSubstate] = CAL_TRUE;
+}
+void calclAddProdReduction2Db(struct CALCLModel2D * calclmodel2D, int numSubstate) {
+	calclmodel2D->reductionFlagsProdb[numSubstate] = CAL_TRUE;
+}
+void calclAddProdReduction2Dr(struct CALCLModel2D * calclmodel2D, int numSubstate) {
+	calclmodel2D->reductionFlagsProdr[numSubstate] = CAL_TRUE;
 }
 
 void calclAddLogicalAndReduction2Di(struct CALCLModel2D * calclmodel2D, int numSubstate) {

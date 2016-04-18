@@ -42,7 +42,7 @@
 #define KER_STC_UP_SWEEP "calclkernelUpSweep2D"
 #define KER_STC_DOWN_SWEEP "calclkernelDownSweep2D"
 
-#define MODEL_ARGS_NUM 48	//!< Number of default arguments for each kernel defined by the user
+#define MODEL_ARGS_NUM 51	//!< Number of default arguments for each kernel defined by the user
 #define CALCL_RUN_LOOP 0	//!< Define used by the user to specify an infinite loop simulation
 
 /*! \brief CALCLSubstateMapper contains arrays used to retrieve substates from GPU
@@ -160,6 +160,13 @@ struct CALCLModel2D {
 	CALreal * sumsb;											//!< Array of CALreal that contains the sum results
 	CALreal * sumsi;											//!< Array of CALreal that contains the sum results
 	CALreal * sumsr;											//!< Array of CALreal that contains the sum results
+
+	CALbyte * reductionFlagsProdb;				//!< Pointer to array of flags that determine if a sum reduction have to be compute
+	CALbyte * reductionFlagsProdi;				//!< Pointer to array of flags that determine if a sum reduction have to be compute
+	CALbyte * reductionFlagsProdr;				//!< Pointer to array of flags that determine if a sum reduction have to be compute
+	CALreal * prodsb;											//!< Array of CALreal that contains the sum results
+	CALreal * prodsi;											//!< Array of CALreal that contains the sum results
+	CALreal * prodsr;											//!< Array of CALreal that contains the sum results
 
 	CALbyte * reductionFlagsLogicalAndb; //!< Pointer to array of flags that determine if a logical and reduction have to be compute
 	CALbyte * reductionFlagsLogicalAndi; //!< Pointer to array of flags that determine if a logical and reduction have to be compute
@@ -296,6 +303,10 @@ struct CALCLModel2D {
 	CALCLmem bufferSumb;
 	CALCLmem bufferSumi;
 	CALCLmem bufferSumr;
+
+	CALCLmem bufferProdb;
+	CALCLmem bufferProdi;
+	CALCLmem bufferProdr;
 
 	CALCLmem bufferLogicalAndsb;
 	CALCLmem bufferLogicalAndsi;
@@ -464,6 +475,10 @@ void calclAddMaxReduction2Dr(struct CALCLModel2D * calclmodel2D, int numSubstate
 void calclAddSumReduction2Db(struct CALCLModel2D * calclmodel2D, int numSubstate);
 void calclAddSumReduction2Di(struct CALCLModel2D * calclmodel2D, int numSubstate);
 void calclAddSumReduction2Dr(struct CALCLModel2D * calclmodel2D, int numSubstate);
+
+void calclAddProdReduction2Db(struct CALCLModel2D * calclmodel2D, int numSubstate);
+void calclAddProdReduction2Di(struct CALCLModel2D * calclmodel2D, int numSubstate);
+void calclAddProdReduction2Dr(struct CALCLModel2D * calclmodel2D, int numSubstate);
 
 void calclAddLogicalAndReduction2Db(struct CALCLModel2D * calclmodel2D, int numSubstate);
 void calclAddLogicalAndReduction2Di(struct CALCLModel2D * calclmodel2D, int numSubstate);
