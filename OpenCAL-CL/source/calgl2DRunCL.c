@@ -104,7 +104,8 @@ void calglUpdate2DCL(struct CALGLRun2D* calglRun){
 
 	if (calglRun->active){
 		calglRun->onlyOneTime=CAL_TRUE;
-		int err;
+		cl_int err;
+
 		int sizeCA = calglRun->deviceCA->host_CA->rows * calglRun->deviceCA->host_CA->columns;
 		//TODO eliminare bufferFlags Urgent
 
@@ -115,6 +116,9 @@ void calglUpdate2DCL(struct CALGLRun2D* calglRun){
 				calglRun->deviceCA->maximab, &err);
 		calclHandleError(err);
 		calglRun->deviceCA->bufferSumb = clCreateBuffer(calglRun->deviceCA->context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALreal) * (calglRun->deviceCA->host_CA->sizeof_pQb_array + 1), calglRun->deviceCA->sumsb,
+				&err);
+		calclHandleError(err);
+		calglRun->deviceCA->bufferProdb = clCreateBuffer(calglRun->deviceCA->context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALreal) * (calglRun->deviceCA->host_CA->sizeof_pQb_array + 1), calglRun->deviceCA->prodsb,
 				&err);
 		calclHandleError(err);
 		calglRun->deviceCA->bufferLogicalAndsb = clCreateBuffer(calglRun->deviceCA->context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALint) * (calglRun->deviceCA->host_CA->sizeof_pQb_array + 1),
@@ -147,6 +151,10 @@ void calglUpdate2DCL(struct CALGLRun2D* calglRun){
 		clSetKernelArg(calglRun->deviceCA->kernelSumReductionb, 0, sizeof(CALCLmem), &calglRun->deviceCA->bufferSumb);
 		clSetKernelArg(calglRun->deviceCA->kernelSumReductionb, 2, sizeof(CALCLmem), &calglRun->deviceCA->bufferPartialSumb);
 		clSetKernelArg(calglRun->deviceCA->kernelSumReductionb, 4, sizeof(int), &sizeCA);
+
+		clSetKernelArg(calglRun->deviceCA->kernelProdReductionb, 0, sizeof(CALCLmem), &calglRun->deviceCA->bufferProdb);
+		clSetKernelArg(calglRun->deviceCA->kernelProdReductionb, 2, sizeof(CALCLmem), &calglRun->deviceCA->bufferPartialProdb);
+		clSetKernelArg(calglRun->deviceCA->kernelProdReductionb, 4, sizeof(int), &sizeCA);
 
 		clSetKernelArg(calglRun->deviceCA->kernelLogicalAndReductionb, 0, sizeof(CALCLmem), &calglRun->deviceCA->bufferLogicalAndsb);
 		clSetKernelArg(calglRun->deviceCA->kernelLogicalAndReductionb, 2, sizeof(CALCLmem), &calglRun->deviceCA->bufferPartialLogicalAndb);
@@ -181,6 +189,9 @@ void calglUpdate2DCL(struct CALGLRun2D* calglRun){
 		calglRun->deviceCA->bufferSumi = clCreateBuffer(calglRun->deviceCA->context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALreal) * (calglRun->deviceCA->host_CA->sizeof_pQi_array + 1), calglRun->deviceCA->sumsi,
 				&err);
 		calclHandleError(err);
+		calglRun->deviceCA->bufferProdi = clCreateBuffer(calglRun->deviceCA->context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALreal) * (calglRun->deviceCA->host_CA->sizeof_pQi_array + 1), calglRun->deviceCA->prodsi,
+				&err);
+		calclHandleError(err);
 		calglRun->deviceCA->bufferLogicalAndsi = clCreateBuffer(calglRun->deviceCA->context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALint) * (calglRun->deviceCA->host_CA->sizeof_pQi_array + 1),
 				calglRun->deviceCA->logicalAndsi, &err);
 		calclHandleError(err);
@@ -211,6 +222,10 @@ void calglUpdate2DCL(struct CALGLRun2D* calglRun){
 		clSetKernelArg(calglRun->deviceCA->kernelSumReductioni, 0, sizeof(CALCLmem), &calglRun->deviceCA->bufferSumi);
 		clSetKernelArg(calglRun->deviceCA->kernelSumReductioni, 2, sizeof(CALCLmem), &calglRun->deviceCA->bufferPartialSumi);
 		clSetKernelArg(calglRun->deviceCA->kernelSumReductioni, 4, sizeof(int), &sizeCA);
+
+		clSetKernelArg(calglRun->deviceCA->kernelProdReductioni, 0, sizeof(CALCLmem), &calglRun->deviceCA->bufferProdi);
+		clSetKernelArg(calglRun->deviceCA->kernelProdReductioni, 2, sizeof(CALCLmem), &calglRun->deviceCA->bufferPartialProdi);
+		clSetKernelArg(calglRun->deviceCA->kernelProdReductioni, 4, sizeof(int), &sizeCA);
 
 		clSetKernelArg(calglRun->deviceCA->kernelLogicalAndReductioni, 0, sizeof(CALCLmem), &calglRun->deviceCA->bufferLogicalAndsi);
 		clSetKernelArg(calglRun->deviceCA->kernelLogicalAndReductioni, 2, sizeof(CALCLmem), &calglRun->deviceCA->bufferPartialLogicalAndi);
@@ -243,6 +258,9 @@ void calglUpdate2DCL(struct CALGLRun2D* calglRun){
 				calglRun->deviceCA->maximar, &err);
 		calclHandleError(err);
 		calglRun->deviceCA->bufferSumr = clCreateBuffer(calglRun->deviceCA->context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALreal) * (calglRun->deviceCA->host_CA->sizeof_pQr_array + 1), calglRun->deviceCA->sumsr,
+				&err);
+		calclHandleError(err);
+		calglRun->deviceCA->bufferProdr = clCreateBuffer(calglRun->deviceCA->context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALreal) * (calglRun->deviceCA->host_CA->sizeof_pQr_array + 1), calglRun->deviceCA->prodsr,
 				&err);
 		calclHandleError(err);
 		calglRun->deviceCA->bufferLogicalAndsr = clCreateBuffer(calglRun->deviceCA->context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALint) * (calglRun->deviceCA->host_CA->sizeof_pQr_array + 1),
@@ -278,6 +296,10 @@ void calglUpdate2DCL(struct CALGLRun2D* calglRun){
 		clSetKernelArg(calglRun->deviceCA->kernelSumReductionr, 0, sizeof(CALCLmem), &calglRun->deviceCA->bufferSumr);
 		clSetKernelArg(calglRun->deviceCA->kernelSumReductionr, 2, sizeof(CALCLmem), &calglRun->deviceCA->bufferPartialSumr);
 		clSetKernelArg(calglRun->deviceCA->kernelSumReductionr, 4, sizeof(int), &sizeCA);
+
+		clSetKernelArg(calglRun->deviceCA->kernelProdReductionr, 0, sizeof(CALCLmem), &calglRun->deviceCA->bufferProdr);
+		clSetKernelArg(calglRun->deviceCA->kernelProdReductionr, 2, sizeof(CALCLmem), &calglRun->deviceCA->bufferPartialProdr);
+		clSetKernelArg(calglRun->deviceCA->kernelProdReductionr, 4, sizeof(int), &sizeCA);
 
 		clSetKernelArg(calglRun->deviceCA->kernelLogicalAndReductionr, 0, sizeof(CALCLmem), &calglRun->deviceCA->bufferLogicalAndsr);
 		clSetKernelArg(calglRun->deviceCA->kernelLogicalAndReductionr, 2, sizeof(CALCLmem), &calglRun->deviceCA->bufferPartialLogicalAndr);
@@ -345,7 +367,6 @@ void calglUpdate2DCL(struct CALGLRun2D* calglRun){
 		//calglRun->deviceCA->steps++;
 		calglRun->step=calglRun->deviceCA->steps;
 		//printf("%d\n",calglRun->step);
-		//printf ("VEROOOOOOOOOOO \n");
 		calglRun->terminated = calclSingleStep2D(calglRun->deviceCA, singleStepThreadNum, dimNum);
 		printf ("Cellular Automata: Current Step: %d \r", calglRun->step);
 

@@ -223,9 +223,7 @@ void calclSetReductionParameters2D(struct CALCLModel2D* calclmodel2D, CALCLkerne
 	clSetKernelArg(*kernel, 47, sizeof(CALCLmem), &calclmodel2D->bufferBinaryXOrsr);
 
 	clSetKernelArg(*kernel, 48, sizeof(CALCLmem), &calclmodel2D->bufferProdb);
-	printf ("VEROOOOOOOOOOO1 \n");
 	clSetKernelArg(*kernel, 49, sizeof(CALCLmem), &calclmodel2D->bufferProdi);
-	printf ("VEROOOOOOOOOOO1 \n");
 	clSetKernelArg(*kernel, 50, sizeof(CALCLmem), &calclmodel2D->bufferProdr);
 
 }

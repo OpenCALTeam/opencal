@@ -1,6 +1,6 @@
 #include <OpenCAL-CL/calcl2D.h>
 
-__kernel void calclMinReductionKernel2Db(__global double *  minima, CALint substates,  __global CALbyte * offsets,unsigned offset ,int size,int count){
+__kernel void calclMinReductionKernelb(__global double *  minima, CALint substates,  __global CALbyte * offsets,unsigned offset ,int size,int count){
 
 	int id = get_global_id (0);
 	unsigned i = offset * ((id << 1) + 1) - 1,
@@ -27,7 +27,7 @@ __kernel void calclMinReductionKernel2Db(__global double *  minima, CALint subst
 
 }
 
-__kernel void calclMaxReductionKernel2Db(__global double *  maxima, CALint substates,  __global CALbyte * offsets,unsigned offset ,int size,int count){
+__kernel void calclMaxReductionKernelb(__global double *  maxima, CALint substates,  __global CALbyte * offsets,unsigned offset ,int size,int count){
 
 	int id = get_global_id (0);
 	unsigned i = offset * ((id << 1) + 1) - 1,
@@ -54,7 +54,7 @@ __kernel void calclMaxReductionKernel2Db(__global double *  maxima, CALint subst
 
 }
 
-__kernel void calclSumReductionKernel2Db(__global double *  sum, CALint substates,  __global CALbyte * offsets,unsigned offset ,int size,int count){
+__kernel void calclSumReductionKernelb(__global double *  sum, CALint substates,  __global CALbyte * offsets,unsigned offset ,int size,int count){
 
 	int id = get_global_id (0);
 	unsigned i = offset * ((id << 1) + 1) - 1,
@@ -77,7 +77,7 @@ __kernel void calclSumReductionKernel2Db(__global double *  sum, CALint substate
 
 }
 
-__kernel void calclProdReductionKernel2Db(__global double *  result, CALint substates,  __global CALbyte * offsets,unsigned offset ,int size,int count){
+__kernel void calclProdReductionKernelb(__global double *  result, CALint substates,  __global CALbyte * offsets,unsigned offset ,int size,int count){
 
 	int id = get_global_id (0);
 	unsigned i = offset * ((id << 1) + 1) - 1,
@@ -101,7 +101,7 @@ __kernel void calclProdReductionKernel2Db(__global double *  result, CALint subs
 
 }
 
-__kernel void calclLogicAndReductionKernel2Db(__global double *  result, CALint substates,  __global CALbyte * offsets,unsigned offset ,int size,int count){
+__kernel void calclLogicAndReductionKernelb(__global double *  result, CALint substates,  __global CALbyte * offsets,unsigned offset ,int size,int count){
 
 	int id = get_global_id (0);
 	unsigned i = offset * ((id << 1) + 1) - 1,
@@ -125,7 +125,7 @@ __kernel void calclLogicAndReductionKernel2Db(__global double *  result, CALint 
 
 }
 
-__kernel void calclLogicOrReductionKernel2Db(__global double *  result, CALint substates,  __global CALbyte * offsets,unsigned offset ,int size,int count){
+__kernel void calclLogicOrReductionKernelb(__global double *  result, CALint substates,  __global CALbyte * offsets,unsigned offset ,int size,int count){
 
 	int id = get_global_id (0);
 	unsigned i = offset * ((id << 1) + 1) - 1,
@@ -149,7 +149,7 @@ __kernel void calclLogicOrReductionKernel2Db(__global double *  result, CALint s
 
 }
 
-__kernel void calclLogicXOrReductionKernel2Db(__global double *  result, CALint substates,  __global CALbyte * offsets,unsigned offset ,int size,int count){
+__kernel void calclLogicXOrReductionKernelb(__global double *  result, CALint substates,  __global CALbyte * offsets,unsigned offset ,int size,int count){
 
 	int id = get_global_id (0);
 	unsigned i = offset * ((id << 1) + 1) - 1,
@@ -173,7 +173,7 @@ __kernel void calclLogicXOrReductionKernel2Db(__global double *  result, CALint 
 
 }
 
-__kernel void calclBinaryAndReductionKernel2Db(__global double *  result, CALint substates,  __global CALbyte * offsets,unsigned offset ,int size,int count){
+__kernel void calclBinaryAndReductionKernelb(__global double *  result, CALint substates,  __global CALbyte * offsets,unsigned offset ,int size,int count){
 
 	int id = get_global_id (0);
 	unsigned i = offset * ((id << 1) + 1) - 1,
@@ -197,7 +197,7 @@ __kernel void calclBinaryAndReductionKernel2Db(__global double *  result, CALint
 
 }
 
-__kernel void calclBinaryOrReductionKernel2Db(__global double *  result, CALint substates,  __global CALbyte * offsets,unsigned offset ,int size,int count){
+__kernel void calclBinaryOrReductionKernelb(__global double *  result, CALint substates,  __global CALbyte * offsets,unsigned offset ,int size,int count){
 
 	int id = get_global_id (0);
 	unsigned i = offset * ((id << 1) + 1) - 1,
@@ -221,7 +221,7 @@ __kernel void calclBinaryOrReductionKernel2Db(__global double *  result, CALint 
 
 }
 
-__kernel void calclBinaryXOrReductionKernel2Db(__global double *  result, CALint substates,  __global CALbyte * offsets,unsigned offset ,int size,int count){
+__kernel void calclBinaryXOrReductionKernelb(__global double *  result, CALint substates,  __global CALbyte * offsets,unsigned offset ,int size,int count){
 
 	int id = get_global_id (0);
 	unsigned i = offset * ((id << 1) + 1) - 1,
@@ -249,7 +249,7 @@ __kernel void calclBinaryXOrReductionKernel2Db(__global double *  result, CALint
 
 
 
-__kernel void calclMinReductionKernel2Di(__global double *  minima, CALint substates,  __global CALint * offsets,unsigned offset ,int size,int count){
+__kernel void calclMinReductionKerneli(__global double *  minima, CALint substates,  __global CALint * offsets,unsigned offset ,int size,int count){
 
 	int id = get_global_id (0);
 	unsigned i = offset * ((id << 1) + 1) - 1,
@@ -276,7 +276,7 @@ __kernel void calclMinReductionKernel2Di(__global double *  minima, CALint subst
 
 }
 
-__kernel void calclMaxReductionKernel2Di(__global double *  maxima, CALint substates,  __global CALint * offsets,unsigned offset ,int size,int count){
+__kernel void calclMaxReductionKerneli(__global double *  maxima, CALint substates,  __global CALint * offsets,unsigned offset ,int size,int count){
 
 	int id = get_global_id (0);
 	unsigned i = offset * ((id << 1) + 1) - 1,
@@ -303,7 +303,7 @@ __kernel void calclMaxReductionKernel2Di(__global double *  maxima, CALint subst
 
 }
 
-__kernel void calclSumReductionKernel2Di(__global double *  sum, CALint substates,  __global CALint * offsets,unsigned offset ,int size,int count){
+__kernel void calclSumReductionKerneli(__global double *  sum, CALint substates,  __global CALint * offsets,unsigned offset ,int size,int count){
 
 	int id = get_global_id (0);
 	unsigned i = offset * ((id << 1) + 1) - 1,
@@ -331,7 +331,7 @@ __kernel void calclSumReductionKernel2Di(__global double *  sum, CALint substate
 
 }
 
-__kernel void calclProdReductionKernel2Di(__global double *  result, CALint substates,  __global CALint * offsets,unsigned offset ,int size,int count){
+__kernel void calclProdReductionKerneli(__global double *  result, CALint substates,  __global CALint * offsets,unsigned offset ,int size,int count){
 
 	int id = get_global_id (0);
 	unsigned i = offset * ((id << 1) + 1) - 1,
@@ -355,7 +355,7 @@ __kernel void calclProdReductionKernel2Di(__global double *  result, CALint subs
 
 }
 
-__kernel void calclLogicAndReductionKernel2Di(__global double *  result, CALint substates,  __global CALint * offsets,unsigned offset ,int size,int count){
+__kernel void calclLogicAndReductionKerneli(__global double *  result, CALint substates,  __global CALint * offsets,unsigned offset ,int size,int count){
 
 	int id = get_global_id (0);
 	unsigned i = offset * ((id << 1) + 1) - 1,
@@ -379,7 +379,7 @@ __kernel void calclLogicAndReductionKernel2Di(__global double *  result, CALint 
 
 }
 
-__kernel void calclLogicOrReductionKernel2Di(__global double *  result, CALint substates,  __global CALint * offsets,unsigned offset ,int size,int count){
+__kernel void calclLogicOrReductionKerneli(__global double *  result, CALint substates,  __global CALint * offsets,unsigned offset ,int size,int count){
 
 	int id = get_global_id (0);
 	unsigned i = offset * ((id << 1) + 1) - 1,
@@ -403,7 +403,7 @@ __kernel void calclLogicOrReductionKernel2Di(__global double *  result, CALint s
 
 }
 
-__kernel void calclLogicXOrReductionKernel2Di(__global double *  result, CALint substates,  __global CALint * offsets,unsigned offset ,int size,int count){
+__kernel void calclLogicXOrReductionKerneli(__global double *  result, CALint substates,  __global CALint * offsets,unsigned offset ,int size,int count){
 
 	int id = get_global_id (0);
 	unsigned i = offset * ((id << 1) + 1) - 1,
@@ -427,7 +427,7 @@ __kernel void calclLogicXOrReductionKernel2Di(__global double *  result, CALint 
 
 }
 
-__kernel void calclBinaryAndReductionKernel2Di(__global double *  result, CALint substates,  __global CALint * offsets,unsigned offset ,int size,int count){
+__kernel void calclBinaryAndReductionKerneli(__global double *  result, CALint substates,  __global CALint * offsets,unsigned offset ,int size,int count){
 
 	int id = get_global_id (0);
 	unsigned i = offset * ((id << 1) + 1) - 1,
@@ -451,7 +451,7 @@ __kernel void calclBinaryAndReductionKernel2Di(__global double *  result, CALint
 
 }
 
-__kernel void calclBinaryOrReductionKernel2Di(__global double *  result, CALint substates,  __global CALint * offsets,unsigned offset ,int size,int count){
+__kernel void calclBinaryOrReductionKerneli(__global double *  result, CALint substates,  __global CALint * offsets,unsigned offset ,int size,int count){
 
 	int id = get_global_id (0);
 	unsigned i = offset * ((id << 1) + 1) - 1,
@@ -475,7 +475,7 @@ __kernel void calclBinaryOrReductionKernel2Di(__global double *  result, CALint 
 
 }
 
-__kernel void calclBinaryXOrReductionKernel2Di(__global double *  result, CALint substates,  __global CALint * offsets,unsigned offset ,int size,int count){
+__kernel void calclBinaryXOrReductionKerneli(__global double *  result, CALint substates,  __global CALint * offsets,unsigned offset ,int size,int count){
 
 	int id = get_global_id (0);
 	unsigned i = offset * ((id << 1) + 1) - 1,
@@ -500,7 +500,7 @@ __kernel void calclBinaryXOrReductionKernel2Di(__global double *  result, CALint
 }
 
 
-__kernel void calclMinReductionKernel2Dr(__global CALreal *  minima, CALint substates,  __global CALreal * offsets,unsigned offset ,int size,int count){
+__kernel void calclMinReductionKernelr(__global CALreal *  minima, CALint substates,  __global CALreal * offsets,unsigned offset ,int size,int count){
 
 	int id = get_global_id (0);
 	unsigned i = offset * ((id << 1) + 1) - 1,
@@ -509,11 +509,13 @@ __kernel void calclMinReductionKernel2Dr(__global CALreal *  minima, CALint subs
              	i = i - (count);
             	j = j - (count);
              }
+
 	if((i >= size && j >= size) || (i < size && j >= size))
 		return;
-
-//	printf("offsets[%d] : %f \n",i,offsets[i] );
-//	printf("offsets[%d] : %f \n",j,offsets[j] );
+	printf("(%d , %d) \n",i,j );
+/*
+	printf("offsets[%d] : %f \n",i,offsets[i] );
+	printf("offsets[%d] : %f \n",j,offsets[j] );
 
 	if(offsets[i] > offsets[j])
 		offsets[i] = offsets[j];
@@ -525,10 +527,10 @@ __kernel void calclMinReductionKernel2Dr(__global CALreal *  minima, CALint subs
 		minima[substates] = offsets[i];
 	  }
 	}
-
+*/
 }
 
-__kernel void calclMaxReductionKernel2Dr(__global CALreal *  maxima, CALint substates,  __global CALreal * offsets,unsigned offset ,int size,int count){
+__kernel void calclMaxReductionKernelr(__global CALreal *  maxima, CALint substates,  __global CALreal * offsets,unsigned offset ,int size,int count){
 
 	int id = get_global_id (0);
 	unsigned i = offset * ((id << 1) + 1) - 1,
@@ -555,7 +557,7 @@ __kernel void calclMaxReductionKernel2Dr(__global CALreal *  maxima, CALint subs
 
 }
 
-__kernel void calclSumReductionKernel2Dr(__global CALreal *  sum, CALint substates,  __global CALreal * offsets,unsigned offset ,int size,int count){
+__kernel void calclSumReductionKernelr(__global CALreal *  sum, CALint substates,  __global CALreal * offsets,unsigned offset ,int size,int count){
 
 	int id = get_global_id (0);
 	unsigned i = offset * ((id << 1) + 1) - 1,
@@ -578,7 +580,7 @@ __kernel void calclSumReductionKernel2Dr(__global CALreal *  sum, CALint substat
 
 }
 
-__kernel void calclProdReductionKernel2Dr(__global CALreal *  result, CALint substates,  __global CALreal * offsets,unsigned offset ,int size,int count){
+__kernel void calclProdReductionKernelr(__global CALreal *  result, CALint substates,  __global CALreal * offsets,unsigned offset ,int size,int count){
 
 	int id = get_global_id (0);
 	unsigned i = offset * ((id << 1) + 1) - 1,
@@ -602,7 +604,7 @@ __kernel void calclProdReductionKernel2Dr(__global CALreal *  result, CALint sub
 
 }
 
-__kernel void calclLogicAndReductionKernel2Dr(__global CALreal *  result, CALint substates,  __global CALreal * offsets,unsigned offset ,int size,int count){
+__kernel void calclLogicAndReductionKernelr(__global CALreal *  result, CALint substates,  __global CALreal * offsets,unsigned offset ,int size,int count){
 
 	int id = get_global_id (0);
 	unsigned i = offset * ((id << 1) + 1) - 1,
@@ -626,7 +628,7 @@ __kernel void calclLogicAndReductionKernel2Dr(__global CALreal *  result, CALint
 
 }
 
-__kernel void calclLogicOrReductionKernel2Dr(__global CALreal *  result, CALint substates,  __global CALreal * offsets,unsigned offset ,int size,int count){
+__kernel void calclLogicOrReductionKernelr(__global CALreal *  result, CALint substates,  __global CALreal * offsets,unsigned offset ,int size,int count){
 
 	int id = get_global_id (0);
 	unsigned i = offset * ((id << 1) + 1) - 1,
@@ -650,7 +652,7 @@ __kernel void calclLogicOrReductionKernel2Dr(__global CALreal *  result, CALint 
 
 }
 
-__kernel void calclLogicXOrReductionKernel2Dr(__global CALreal *  result, CALint substates,  __global CALreal * offsets,unsigned offset ,int size,int count){
+__kernel void calclLogicXOrReductionKernelr(__global CALreal *  result, CALint substates,  __global CALreal * offsets,unsigned offset ,int size,int count){
 
 	int id = get_global_id (0);
 	unsigned i = offset * ((id << 1) + 1) - 1,
@@ -674,7 +676,7 @@ __kernel void calclLogicXOrReductionKernel2Dr(__global CALreal *  result, CALint
 
 }
 
-__kernel void calclBinaryAndReductionKernel2Dr(__global double *  result, CALint substates,  __global CALint * offsets,unsigned offset ,int size,int count){
+__kernel void calclBinaryAndReductionKernelr(__global double *  result, CALint substates,  __global CALint * offsets,unsigned offset ,int size,int count){
 
 	int id = get_global_id (0);
 	unsigned i = offset * ((id << 1) + 1) - 1,
@@ -698,7 +700,7 @@ __kernel void calclBinaryAndReductionKernel2Dr(__global double *  result, CALint
 
 }
 
-__kernel void calclBinaryOrReductionKernel2Dr(__global double *  result, CALint substates,  __global CALint * offsets,unsigned offset ,int size,int count){
+__kernel void calclBinaryOrReductionKernelr(__global double *  result, CALint substates,  __global CALint * offsets,unsigned offset ,int size,int count){
 
 	int id = get_global_id (0);
 	unsigned i = offset * ((id << 1) + 1) - 1,
@@ -722,7 +724,7 @@ __kernel void calclBinaryOrReductionKernel2Dr(__global double *  result, CALint 
 
 }
 
-__kernel void calclBinaryXOrReductionKernel2Dr(__global double *  result, CALint substates,  __global CALint * offsets,unsigned offset ,int size,int count){
+__kernel void calclBinaryXOrReductionKernelr(__global double *  result, CALint substates,  __global CALint * offsets,unsigned offset ,int size,int count){
 
 	int id = get_global_id (0);
 	unsigned i = offset * ((id << 1) + 1) - 1,
@@ -747,28 +749,39 @@ __kernel void calclBinaryXOrReductionKernel2Dr(__global double *  result, CALint
 }
 
 
-__kernel void copyi(__global CALint *  end,__global CALint *  start, CALint substateNum, CALint rows, CALint columns){
+__kernel void copy2Di(__global CALint *  end,__global CALint *  start, CALint substateNum, CALint rows, CALint columns){
 		int id = get_global_id (0);
 		//printf("*(start + rows * columns * substateNum + id) %d \n", start[id]);
-		end[id] = *(start + rows * columns * substateNum + id);//  calclGetBufferElement2D((start + rows * columns * substateNum), columns, i, j);
+		end[id] = *(start + rows * columns * substateNum + id);//  calclGetBufferElement((start + rows * columns * substateNum), columns, i, j);
 }
 
-__kernel void copyb(__global CALbyte *  end,__global CALbyte *  start, CALint substateNum, CALint rows, CALint columns){
+__kernel void copy2Db(__global CALbyte *  end,__global CALbyte *  start, CALint substateNum, CALint rows, CALint columns){
 		int id = get_global_id (0);
 		//printf("*(start + rows * columns * substateNum + id) %d \n", start[id]);
-		end[id] = *(start + rows * columns * substateNum + id);//  calclGetBufferElement2D((start + rows * columns * substateNum), columns, i, j);
+		end[id] = *(start + rows * columns * substateNum + id);//  calclGetBufferElement((start + rows * columns * substateNum), columns, i, j);
 }
 
-__kernel void copyr(__global CALreal *  end,__global CALreal *  start, CALint substateNum, CALint rows, CALint columns){
+__kernel void copy2Dr(__global CALreal *  end,__global CALreal *  start, CALint substateNum, CALint rows, CALint columns){
 		int id = get_global_id (0);
 		//printf("*(start + rows * columns * substateNum + id) %d \n", start[id]);
-		end[id] = *(start + rows * columns * substateNum + id);//  calclGetBufferElement2D((start + rows * columns * substateNum), columns, i, j);
+		end[id] = *(start + rows * columns * substateNum + id);//  calclGetBufferElement((start + rows * columns * substateNum), columns, i, j);
 }
 
-__kernel void copySumi(__global CALint *  end,__global CALint *  start, CALint substateNum, CALint rows, CALint columns){
+
+__kernel void copy3Di(__global CALint *  end,__global CALint *  start, CALint substateNum, CALint rows, CALint columns, CALint layers){
 		int id = get_global_id (0);
-//		if(id == 0){
-//		}
-		end[id] = *(start + rows * columns * substateNum + id);//  calclGetBufferElement2D((start + rows * columns * substateNum), columns, i, j);
-		//printf("%d=%d \n", id, end[id]);
+		printf("*(start + rows * columns * layers * substateNum + id) %d \n", start[id]);
+		end[id] = *(start + rows * columns * layers * substateNum + id);
+}
+
+__kernel void copy3Db(__global CALbyte *  end,__global CALbyte *  start, CALint substateNum, CALint rows, CALint columns, CALint layers){
+		int id = get_global_id (0);
+		printf("*(start + rows * columns * layers * substateNum + id) %d \n", start[id]);
+		end[id] = *(start + rows * columns * layers *substateNum + id);
+}
+
+__kernel void copy3Dr(__global CALreal *  end,__global CALreal *  start, CALint substateNum, CALint rows, CALint columns, CALint layers){
+		int id = get_global_id (0);
+		//printf("*(start + rows * columns * layers *substateNum + id) %f \n", start[id]);
+		end[id] = *(start + rows * columns * layers *substateNum + id);
 }
