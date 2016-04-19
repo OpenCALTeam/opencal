@@ -105,8 +105,6 @@ struct CALCLModel2D {
 	CALCLmem bufferActiveCellsFlags;					//!< Opencl buffer used to transfer GPU side CA active cells flags array (CALbyte*)
 
 	//Reduction
-
-
 	CALCLmem  bufferPartialMini;
 	CALCLmem  bufferPartialMaxi;
 	CALCLmem  bufferPartialSumi;
@@ -458,51 +456,51 @@ void calclAddElementaryProcess2D(struct CALCLModel2D * calclmodel2D,		//!< Point
 		CALCLkernel * kernel											//!< Pointer to Opencl kernel
 		);
 
-void calclAddMinReduction2Db(struct CALCLModel2D * calclmodel2D,					//!< Pointer to a struct CALCLModel2D
+void calclAddReductionMin2Db(struct CALCLModel2D * calclmodel2D,					//!< Pointer to a struct CALCLModel2D
 		int numSubstates													//!< Number of the substate
 		);
-void calclAddMinReduction2Di(struct CALCLModel2D * calclmodel2D,					//!< Pointer to a struct CALCLModel2D
+void calclAddReductionMin2Di(struct CALCLModel2D * calclmodel2D,					//!< Pointer to a struct CALCLModel2D
 		int numSubstates													//!< Number of the substate
 		);
-void calclAddMinReduction2Dr(struct CALCLModel2D * calclmodel2D,					//!< Pointer to a struct CALCLModel2D
+void calclAddReductionMin2Dr(struct CALCLModel2D * calclmodel2D,					//!< Pointer to a struct CALCLModel2D
 		int numSubstates													//!< Number of the substate
 		);
 
-void calclAddMaxReduction2Db(struct CALCLModel2D * calclmodel2D, int numSubstate);
-void calclAddMaxReduction2Di(struct CALCLModel2D * calclmodel2D, int numSubstate);
-void calclAddMaxReduction2Dr(struct CALCLModel2D * calclmodel2D, int numSubstate);
+void calclAddReductionMax2Db(struct CALCLModel2D * calclmodel2D, int numSubstate);
+void calclAddReductionMax2Di(struct CALCLModel2D * calclmodel2D, int numSubstate);
+void calclAddReductionMax2Dr(struct CALCLModel2D * calclmodel2D, int numSubstate);
 
-void calclAddSumReduction2Db(struct CALCLModel2D * calclmodel2D, int numSubstate);
-void calclAddSumReduction2Di(struct CALCLModel2D * calclmodel2D, int numSubstate);
-void calclAddSumReduction2Dr(struct CALCLModel2D * calclmodel2D, int numSubstate);
+void calclAddReductionSum2Db(struct CALCLModel2D * calclmodel2D, int numSubstate);
+void calclAddReductionSum2Di(struct CALCLModel2D * calclmodel2D, int numSubstate);
+void calclAddReductionSum2Dr(struct CALCLModel2D * calclmodel2D, int numSubstate);
 
-void calclAddProdReduction2Db(struct CALCLModel2D * calclmodel2D, int numSubstate);
-void calclAddProdReduction2Di(struct CALCLModel2D * calclmodel2D, int numSubstate);
-void calclAddProdReduction2Dr(struct CALCLModel2D * calclmodel2D, int numSubstate);
+void calclAddReductionProd2Db(struct CALCLModel2D * calclmodel2D, int numSubstate);
+void calclAddReductionProd2Di(struct CALCLModel2D * calclmodel2D, int numSubstate);
+void calclAddReductionProd2Dr(struct CALCLModel2D * calclmodel2D, int numSubstate);
 
-void calclAddLogicalAndReduction2Db(struct CALCLModel2D * calclmodel2D, int numSubstate);
-void calclAddLogicalAndReduction2Di(struct CALCLModel2D * calclmodel2D, int numSubstate);
-void calclAddLogicalAndReduction2Dr(struct CALCLModel2D * calclmodel2D, int numSubstate);
+void calclAddReductionLogicalAnd2Db(struct CALCLModel2D * calclmodel2D, int numSubstate);
+void calclAddReductionLogicalAnd2Di(struct CALCLModel2D * calclmodel2D, int numSubstate);
+void calclAddReductionLogicalAnd2Dr(struct CALCLModel2D * calclmodel2D, int numSubstate);
 
-void calclAddLogicalOrReduction2Db(struct CALCLModel2D * calclmodel2D, int numSubstate);
-void calclAddLogicalOrReduction2Di(struct CALCLModel2D * calclmodel2D, int numSubstate);
-void calclAddLogicalOrReduction2Dr(struct CALCLModel2D * calclmodel2D, int numSubstate);
+void calclAddReductionLogicalOr2Db(struct CALCLModel2D * calclmodel2D, int numSubstate);
+void calclAddReductionLogicalOr2Di(struct CALCLModel2D * calclmodel2D, int numSubstate);
+void calclAddReductionLogicalOr2Dr(struct CALCLModel2D * calclmodel2D, int numSubstate);
 
-void calclAddLogicalXOrReduction2Db(struct CALCLModel2D * calclmodel2D, int numSubstate);
-void calclAddLogicalXOrReduction2Di(struct CALCLModel2D * calclmodel2D, int numSubstate);
-void calclAddLogicalXOrReduction2Dr(struct CALCLModel2D * calclmodel2D, int numSubstate);
+void calclAddReductionLogicalXOr2Db(struct CALCLModel2D * calclmodel2D, int numSubstate);
+void calclAddReductionLogicalXOr2Di(struct CALCLModel2D * calclmodel2D, int numSubstate);
+void calclAddReductionLogicalXOr2Dr(struct CALCLModel2D * calclmodel2D, int numSubstate);
 
-void calclAddBinaryAndReduction2Db(struct CALCLModel2D * calclmodel2D, int numSubstate);
-void calclAddBinaryAndReduction2Di(struct CALCLModel2D * calclmodel2D, int numSubstate);
-void calclAddBinaryAndReduction2Dr(struct CALCLModel2D * calclmodel2D, int numSubstate);
+void calclAddReductionBinaryAnd2Db(struct CALCLModel2D * calclmodel2D, int numSubstate);
+void calclAddReductionBinaryAnd2Di(struct CALCLModel2D * calclmodel2D, int numSubstate);
+void calclAddReductionBinaryAnd2Dr(struct CALCLModel2D * calclmodel2D, int numSubstate);
 
-void calclAddBinaryOrReduction2Db(struct CALCLModel2D * calclmodel2D, int numSubstate);
-void calclAddBinaryOrReduction2Di(struct CALCLModel2D * calclmodel2D, int numSubstate);
-void calclAddBinaryOrReduction2Dr(struct CALCLModel2D * calclmodel2D, int numSubstate);
+void calclAddReductionBinaryOr2Db(struct CALCLModel2D * calclmodel2D, int numSubstate);
+void calclAddReductionBinaryOr2Di(struct CALCLModel2D * calclmodel2D, int numSubstate);
+void calclAddReductionBinaryOr2Dr(struct CALCLModel2D * calclmodel2D, int numSubstate);
 
-void calclAddBinaryXOrReduction2Db(struct CALCLModel2D * calclmodel2D, int numSubstate);
-void calclAddBinaryXOrReduction2Di(struct CALCLModel2D * calclmodel2D, int numSubstate);
-void calclAddBinaryXOrReduction2Dr(struct CALCLModel2D * calclmodel2D, int numSubstate);
+void calclAddReductionBinaryXor2Db(struct CALCLModel2D * calclmodel2D, int numSubstate);
+void calclAddReductionBinaryXor2Di(struct CALCLModel2D * calclmodel2D, int numSubstate);
+void calclAddReductionBinaryXor2Dr(struct CALCLModel2D * calclmodel2D, int numSubstate);
 
 /*! \brief Deallcate a struct CALCLModel2D instance */
 void calclFinalize2D(struct CALCLModel2D * calclmodel2D	//!< Pointer to a struct CALCLModel2D

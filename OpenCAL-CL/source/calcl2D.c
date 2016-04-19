@@ -223,9 +223,10 @@ void calclSetReductionParameters2D(struct CALCLModel2D* calclmodel2D, CALCLkerne
 	clSetKernelArg(*kernel, 47, sizeof(CALCLmem), &calclmodel2D->bufferBinaryXOrsr);
 
 	clSetKernelArg(*kernel, 48, sizeof(CALCLmem), &calclmodel2D->bufferProdb);
+	printf ("VEROOOOOOOOOOO1 \n");
 	clSetKernelArg(*kernel, 49, sizeof(CALCLmem), &calclmodel2D->bufferProdi);
+	printf ("VEROOOOOOOOOOO1 \n");
 	clSetKernelArg(*kernel, 50, sizeof(CALCLmem), &calclmodel2D->bufferProdr);
-
 
 }
 
@@ -441,15 +442,6 @@ CALCLqueue calclCreateQueue2D(struct CALCLModel2D * calclmodel2D, CALCLcontext c
 	return queue;
 }
 
-CALbyte existOneTrue2D(struct CALCLModel2D* calclmodel2D, CALbyte * tmp, CALint dim) {
-	int i;
-	for (i = 0; i < dim; i++) {
-		if (tmp[i])
-			return 1;
-	}
-	return 0;
-}
-
 int upperPowerOfTwo(int n) {
 	int power = 1;
 	while (power < n)
@@ -489,38 +481,38 @@ struct CALCLModel2D * calclCADef2D(struct CALModel2D *host_CA, CALCLcontext cont
 	calclmodel2D->kernelUpSweep = calclGetKernelFromProgram(&program, KER_STC_UP_SWEEP);
 	calclmodel2D->kernelDownSweep = calclGetKernelFromProgram(&program, KER_STC_DOWN_SWEEP);
 
-	calclmodel2D->kernelMinReductionb = calclGetKernelFromProgram(&program, "calclMinReductionKernel2Db");
-	calclmodel2D->kernelMaxReductionb = calclGetKernelFromProgram(&program, "calclMaxReductionKernel2Db");
-	calclmodel2D->kernelSumReductionb = calclGetKernelFromProgram(&program, "calclSumReductionKernel2Db");
-	calclmodel2D->kernelProdReductionb = calclGetKernelFromProgram(&program, "calclProdReductionKernel2Db");
-	calclmodel2D->kernelLogicalAndReductionb = calclGetKernelFromProgram(&program, "calclLogicAndReductionKernel2Db");
-	calclmodel2D->kernelLogicalOrReductionb = calclGetKernelFromProgram(&program, "calclLogicOrReductionKernel2Db");
-	calclmodel2D->kernelLogicalXOrReductionb = calclGetKernelFromProgram(&program, "calclLogicXOrReductionKernel2Db");
-	calclmodel2D->kernelBinaryAndReductionb = calclGetKernelFromProgram(&program, "calclBinaryAndReductionKernel2Db");
-	calclmodel2D->kernelBinaryOrReductionb = calclGetKernelFromProgram(&program, "calclBinaryOrReductionKernel2Db");
-	calclmodel2D->kernelBinaryXorReductionb = calclGetKernelFromProgram(&program, "calclBinaryXOrReductionKernel2Db");
+	calclmodel2D->kernelMinReductionb = calclGetKernelFromProgram(&program, "calclMinReductionKernelb");
+	calclmodel2D->kernelMaxReductionb = calclGetKernelFromProgram(&program, "calclMaxReductionKernelb");
+	calclmodel2D->kernelSumReductionb = calclGetKernelFromProgram(&program, "calclSumReductionKernelb");
+	calclmodel2D->kernelProdReductionb = calclGetKernelFromProgram(&program, "calclProdReductionKernelb");
+	calclmodel2D->kernelLogicalAndReductionb = calclGetKernelFromProgram(&program, "calclLogicAndReductionKernelb");
+	calclmodel2D->kernelLogicalOrReductionb = calclGetKernelFromProgram(&program, "calclLogicOrReductionKernelb");
+	calclmodel2D->kernelLogicalXOrReductionb = calclGetKernelFromProgram(&program, "calclLogicXOrReductionKernelb");
+	calclmodel2D->kernelBinaryAndReductionb = calclGetKernelFromProgram(&program, "calclBinaryAndReductionKernelb");
+	calclmodel2D->kernelBinaryOrReductionb = calclGetKernelFromProgram(&program, "calclBinaryOrReductionKernelb");
+	calclmodel2D->kernelBinaryXorReductionb = calclGetKernelFromProgram(&program, "calclBinaryXOrReductionKernelb");
 
-	calclmodel2D->kernelMinReductioni = calclGetKernelFromProgram(&program, "calclMinReductionKernel2Di");
-	calclmodel2D->kernelMaxReductioni = calclGetKernelFromProgram(&program, "calclMaxReductionKernel2Di");
-	calclmodel2D->kernelSumReductioni = calclGetKernelFromProgram(&program, "calclSumReductionKernel2Di");
-	calclmodel2D->kernelProdReductioni = calclGetKernelFromProgram(&program, "calclProdReductionKernel2Di");
-	calclmodel2D->kernelLogicalAndReductioni = calclGetKernelFromProgram(&program, "calclLogicAndReductionKernel2Di");
-	calclmodel2D->kernelLogicalOrReductioni = calclGetKernelFromProgram(&program, "calclLogicOrReductionKernel2Di");
-	calclmodel2D->kernelLogicalXOrReductioni = calclGetKernelFromProgram(&program, "calclLogicXOrReductionKernel2Di");
-	calclmodel2D->kernelBinaryAndReductioni = calclGetKernelFromProgram(&program, "calclBinaryAndReductionKernel2Di");
-	calclmodel2D->kernelBinaryOrReductioni = calclGetKernelFromProgram(&program, "calclBinaryOrReductionKernel2Di");
-	calclmodel2D->kernelBinaryXorReductioni = calclGetKernelFromProgram(&program, "calclBinaryXOrReductionKernel2Di");
+	calclmodel2D->kernelMinReductioni = calclGetKernelFromProgram(&program, "calclMinReductionKerneli");
+	calclmodel2D->kernelMaxReductioni = calclGetKernelFromProgram(&program, "calclMaxReductionKerneli");
+	calclmodel2D->kernelSumReductioni = calclGetKernelFromProgram(&program, "calclSumReductionKerneli");
+	calclmodel2D->kernelProdReductioni = calclGetKernelFromProgram(&program, "calclProdReductionKerneli");
+	calclmodel2D->kernelLogicalAndReductioni = calclGetKernelFromProgram(&program, "calclLogicAndReductionKerneli");
+	calclmodel2D->kernelLogicalOrReductioni = calclGetKernelFromProgram(&program, "calclLogicOrReductionKerneli");
+	calclmodel2D->kernelLogicalXOrReductioni = calclGetKernelFromProgram(&program, "calclLogicXOrReductionKerneli");
+	calclmodel2D->kernelBinaryAndReductioni = calclGetKernelFromProgram(&program, "calclBinaryAndReductionKerneli");
+	calclmodel2D->kernelBinaryOrReductioni = calclGetKernelFromProgram(&program, "calclBinaryOrReductionKerneli");
+	calclmodel2D->kernelBinaryXorReductioni = calclGetKernelFromProgram(&program, "calclBinaryXOrReductionKerneli");
 
-	calclmodel2D->kernelMinReductionr = calclGetKernelFromProgram(&program, "calclMinReductionKernel2Dr");
-	calclmodel2D->kernelMaxReductionr = calclGetKernelFromProgram(&program, "calclMaxReductionKernel2Dr");
-	calclmodel2D->kernelSumReductionr = calclGetKernelFromProgram(&program, "calclSumReductionKernel2Dr");
-	calclmodel2D->kernelProdReductionr = calclGetKernelFromProgram(&program, "calclProdReductionKernel2Dr");
-	calclmodel2D->kernelLogicalAndReductionr = calclGetKernelFromProgram(&program, "calclLogicAndReductionKernel2Dr");
-	calclmodel2D->kernelLogicalOrReductionr = calclGetKernelFromProgram(&program, "calclLogicOrReductionKernel2Dr");
-	calclmodel2D->kernelLogicalXOrReductionr = calclGetKernelFromProgram(&program, "calclLogicXOrReductionKernel2Dr");
-	calclmodel2D->kernelBinaryAndReductionr = calclGetKernelFromProgram(&program, "calclBinaryAndReductionKernel2Dr");
-	calclmodel2D->kernelBinaryOrReductionr = calclGetKernelFromProgram(&program, "calclBinaryOrReductionKernel2Dr");
-	calclmodel2D->kernelBinaryXorReductionr = calclGetKernelFromProgram(&program, "calclBinaryXOrReductionKernel2Dr");
+	calclmodel2D->kernelMinReductionr = calclGetKernelFromProgram(&program, "calclMinReductionKernelr");
+	calclmodel2D->kernelMaxReductionr = calclGetKernelFromProgram(&program, "calclMaxReductionKernelr");
+	calclmodel2D->kernelSumReductionr = calclGetKernelFromProgram(&program, "calclSumReductionKernelr");
+	calclmodel2D->kernelProdReductionr = calclGetKernelFromProgram(&program, "calclProdReductionKernelr");
+	calclmodel2D->kernelLogicalAndReductionr = calclGetKernelFromProgram(&program, "calclLogicAndReductionKernelr");
+	calclmodel2D->kernelLogicalOrReductionr = calclGetKernelFromProgram(&program, "calclLogicOrReductionKernelr");
+	calclmodel2D->kernelLogicalXOrReductionr = calclGetKernelFromProgram(&program, "calclLogicXOrReductionKernelr");
+	calclmodel2D->kernelBinaryAndReductionr = calclGetKernelFromProgram(&program, "calclBinaryAndReductionKernelr");
+	calclmodel2D->kernelBinaryOrReductionr = calclGetKernelFromProgram(&program, "calclBinaryOrReductionKernelr");
+	calclmodel2D->kernelBinaryXorReductionr = calclGetKernelFromProgram(&program, "calclBinaryXOrReductionKernelr");
 
 	struct CALCell2D * activeCells = (struct CALCell2D*) malloc(sizeof(struct CALCell2D) * bufferDim);
 	memcpy(activeCells, calclmodel2D->host_CA->A.cells, sizeof(struct CALCell2D) * calclmodel2D->host_CA->A.size_current);
@@ -581,16 +573,16 @@ struct CALCLModel2D * calclCADef2D(struct CALModel2D *host_CA, CALCLcontext cont
 
 	calclSetKernelsLibArgs2D(calclmodel2D);
 
-	calclmodel2D->kernelMinCopyi = calclGetKernelFromProgram(&program, "copyi");
-	calclmodel2D->kernelMaxCopyi = calclGetKernelFromProgram(&program, "copyi");
-	calclmodel2D->kernelSumCopyi = calclGetKernelFromProgram(&program, "copyi");
-	calclmodel2D->kernelProdCopyi = calclGetKernelFromProgram(&program, "copyi");
-	calclmodel2D->kernelLogicalAndCopyi = calclGetKernelFromProgram(&program, "copyi");
-	calclmodel2D->kernelLogicalOrCopyi = calclGetKernelFromProgram(&program, "copyi");
-	calclmodel2D->kernelLogicalXOrCopyi = calclGetKernelFromProgram(&program, "copyi");
-	calclmodel2D->kernelBinaryAndCopyi = calclGetKernelFromProgram(&program, "copyi");
-	calclmodel2D->kernelBinaryOrCopyi = calclGetKernelFromProgram(&program, "copyi");
-	calclmodel2D->kernelBinaryXOrCopyi = calclGetKernelFromProgram(&program, "copyi");
+	calclmodel2D->kernelMinCopyi = calclGetKernelFromProgram(&program, "copy2Di");
+	calclmodel2D->kernelMaxCopyi = calclGetKernelFromProgram(&program, "copy2Di");
+	calclmodel2D->kernelSumCopyi = calclGetKernelFromProgram(&program, "copy2Di");
+	calclmodel2D->kernelProdCopyi = calclGetKernelFromProgram(&program, "copy2Di");
+	calclmodel2D->kernelLogicalAndCopyi = calclGetKernelFromProgram(&program, "copy2Di");
+	calclmodel2D->kernelLogicalOrCopyi = calclGetKernelFromProgram(&program, "copy2Di");
+	calclmodel2D->kernelLogicalXOrCopyi = calclGetKernelFromProgram(&program, "copy2Di");
+	calclmodel2D->kernelBinaryAndCopyi = calclGetKernelFromProgram(&program, "copy2Di");
+	calclmodel2D->kernelBinaryOrCopyi = calclGetKernelFromProgram(&program, "copy2Di");
+	calclmodel2D->kernelBinaryXOrCopyi = calclGetKernelFromProgram(&program, "copy2Di");
 
 	CALint * partialMini = (CALint*) malloc(calclmodel2D->host_CA->rows * calclmodel2D->host_CA->columns * sizeof(CALint));
 	calclmodel2D->bufferPartialMini = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALint) * calclmodel2D->host_CA->rows * calclmodel2D->host_CA->columns, partialMini,
@@ -629,16 +621,16 @@ struct CALCLModel2D * calclCADef2D(struct CALModel2D *host_CA, CALCLcontext cont
 
 	calclSetKernelCopyArgsi(calclmodel2D);
 
-	calclmodel2D->kernelMinCopyb = calclGetKernelFromProgram(&program, "copyb");
-	calclmodel2D->kernelMaxCopyb = calclGetKernelFromProgram(&program, "copyb");
-	calclmodel2D->kernelSumCopyb = calclGetKernelFromProgram(&program, "copyb");
-	calclmodel2D->kernelProdCopyb = calclGetKernelFromProgram(&program, "copyb");
-	calclmodel2D->kernelLogicalAndCopyb = calclGetKernelFromProgram(&program, "copyb");
-	calclmodel2D->kernelLogicalOrCopyb = calclGetKernelFromProgram(&program, "copyb");
-	calclmodel2D->kernelLogicalXOrCopyb = calclGetKernelFromProgram(&program, "copyb");
-	calclmodel2D->kernelBinaryAndCopyb = calclGetKernelFromProgram(&program, "copyb");
-	calclmodel2D->kernelBinaryOrCopyb = calclGetKernelFromProgram(&program, "copyb");
-	calclmodel2D->kernelBinaryXOrCopyb = calclGetKernelFromProgram(&program, "copyb");
+	calclmodel2D->kernelMinCopyb = calclGetKernelFromProgram(&program, "copy2Db");
+	calclmodel2D->kernelMaxCopyb = calclGetKernelFromProgram(&program, "copy2Db");
+	calclmodel2D->kernelSumCopyb = calclGetKernelFromProgram(&program, "copy2Db");
+	calclmodel2D->kernelProdCopyb = calclGetKernelFromProgram(&program, "copy2Db");
+	calclmodel2D->kernelLogicalAndCopyb = calclGetKernelFromProgram(&program, "copy2Db");
+	calclmodel2D->kernelLogicalOrCopyb = calclGetKernelFromProgram(&program, "copy2Db");
+	calclmodel2D->kernelLogicalXOrCopyb = calclGetKernelFromProgram(&program, "copy2Db");
+	calclmodel2D->kernelBinaryAndCopyb = calclGetKernelFromProgram(&program, "copy2Db");
+	calclmodel2D->kernelBinaryOrCopyb = calclGetKernelFromProgram(&program, "copy2Db");
+	calclmodel2D->kernelBinaryXOrCopyb = calclGetKernelFromProgram(&program, "copy2Db");
 
 	CALbyte * partialMinb = (CALbyte*) malloc(calclmodel2D->host_CA->rows * calclmodel2D->host_CA->columns * sizeof(CALbyte));
 	calclmodel2D->bufferPartialMinb = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALbyte) * calclmodel2D->host_CA->rows * calclmodel2D->host_CA->columns, partialMinb,
@@ -676,16 +668,16 @@ struct CALCLModel2D * calclCADef2D(struct CALModel2D *host_CA, CALCLcontext cont
 	free(partialMinb);
 	calclSetKernelCopyArgsb(calclmodel2D);
 
-	calclmodel2D->kernelMinCopyr = calclGetKernelFromProgram(&program, "copyr");
-	calclmodel2D->kernelMaxCopyr = calclGetKernelFromProgram(&program, "copyr");
-	calclmodel2D->kernelSumCopyr = calclGetKernelFromProgram(&program, "copyr");
-	calclmodel2D->kernelProdCopyr = calclGetKernelFromProgram(&program, "copyr");
-	calclmodel2D->kernelLogicalAndCopyr = calclGetKernelFromProgram(&program, "copyr");
-	calclmodel2D->kernelLogicalOrCopyr = calclGetKernelFromProgram(&program, "copyr");
-	calclmodel2D->kernelLogicalXOrCopyr = calclGetKernelFromProgram(&program, "copyr");
-	calclmodel2D->kernelBinaryAndCopyr = calclGetKernelFromProgram(&program, "copyr");
-	calclmodel2D->kernelBinaryOrCopyr = calclGetKernelFromProgram(&program, "copyr");
-	calclmodel2D->kernelBinaryXOrCopyr = calclGetKernelFromProgram(&program, "copyr");
+	calclmodel2D->kernelMinCopyr = calclGetKernelFromProgram(&program, "copy2Dr");
+	calclmodel2D->kernelMaxCopyr = calclGetKernelFromProgram(&program, "copy2Dr");
+	calclmodel2D->kernelSumCopyr = calclGetKernelFromProgram(&program, "copy2Dr");
+	calclmodel2D->kernelProdCopyr = calclGetKernelFromProgram(&program, "copy2Dr");
+	calclmodel2D->kernelLogicalAndCopyr = calclGetKernelFromProgram(&program, "copy2Dr");
+	calclmodel2D->kernelLogicalOrCopyr = calclGetKernelFromProgram(&program, "copy2Dr");
+	calclmodel2D->kernelLogicalXOrCopyr = calclGetKernelFromProgram(&program, "copy2Dr");
+	calclmodel2D->kernelBinaryAndCopyr = calclGetKernelFromProgram(&program, "copy2Dr");
+	calclmodel2D->kernelBinaryOrCopyr = calclGetKernelFromProgram(&program, "copy2Dr");
+	calclmodel2D->kernelBinaryXOrCopyr = calclGetKernelFromProgram(&program, "copy2Dr");
 
 	CALreal * partialr = (CALreal*) malloc(calclmodel2D->host_CA->rows * calclmodel2D->host_CA->columns * sizeof(CALreal));
 	calclmodel2D->bufferPartialMinr = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALreal) * calclmodel2D->host_CA->rows * calclmodel2D->host_CA->columns, partialr,
@@ -1459,8 +1451,6 @@ void calclExecuteReduction2D(struct CALCLModel2D* calclmodel2D, int rounded) {
 	size_t tmp = calclmodel2D->host_CA->rows * calclmodel2D->host_CA->columns;
 
 	for (i = 0; i < calclmodel2D->host_CA->sizeof_pQb_array; i++) {
-		printf("OK byte \n");
-
 		if (calclmodel2D->reductionFlagsMinb[i]) {
 			clSetKernelArg(calclmodel2D->kernelMinReductionb, 1, sizeof(CALint), &i);
 			clSetKernelArg(calclmodel2D->kernelMinCopyb, 2, sizeof(CALint), &i);
@@ -1535,7 +1525,6 @@ void calclExecuteReduction2D(struct CALCLModel2D* calclmodel2D, int rounded) {
 
 
 	for (i = 0; i < calclmodel2D->host_CA->sizeof_pQi_array; i++) {
-		printf("OK int \n");
 		if (calclmodel2D->reductionFlagsMini[i]) {
 			clSetKernelArg(calclmodel2D->kernelMinReductioni, 1, sizeof(CALint), &i);
 			clSetKernelArg(calclmodel2D->kernelMinCopyi, 2, sizeof(CALint), &i);
@@ -2072,102 +2061,102 @@ int calclSetKernelArg2D(CALCLkernel* kernel, cl_uint arg_index, size_t arg_size,
 	return clSetKernelArg(*kernel, MODEL_ARGS_NUM + arg_index, arg_size, arg_value);
 }
 
-void calclAddMinReduction2Di(struct CALCLModel2D * calclmodel2D, int numSubstate) {
+void calclAddReductionMin2Di(struct CALCLModel2D * calclmodel2D, int numSubstate) {
 	calclmodel2D->reductionFlagsMini[numSubstate] = CAL_TRUE;
 }
-void calclAddMinReduction2Db(struct CALCLModel2D * calclmodel2D, int numSubstate) {
+void calclAddReductionMin2Db(struct CALCLModel2D * calclmodel2D, int numSubstate) {
 	calclmodel2D->reductionFlagsMinb[numSubstate] = CAL_TRUE;
 }
-void calclAddMinReduction2Dr(struct CALCLModel2D * calclmodel2D, int numSubstate) {
+void calclAddReductionMin2Dr(struct CALCLModel2D * calclmodel2D, int numSubstate) {
 	calclmodel2D->reductionFlagsMinr[numSubstate] = CAL_TRUE;
 }
 
-void calclAddMaxReduction2Di(struct CALCLModel2D * calclmodel2D, int numSubstate) {
+void calclAddReductionMax2Di(struct CALCLModel2D * calclmodel2D, int numSubstate) {
 	calclmodel2D->reductionFlagsMaxi[numSubstate] = CAL_TRUE;
 }
-void calclAddMaxReduction2Db(struct CALCLModel2D * calclmodel2D, int numSubstate) {
+void calclAddReductionMax2Db(struct CALCLModel2D * calclmodel2D, int numSubstate) {
 	calclmodel2D->reductionFlagsMaxb[numSubstate] = CAL_TRUE;
 }
-void calclAddMaxReduction2Dr(struct CALCLModel2D * calclmodel2D, int numSubstate) {
+void calclAddReductionMax2Dr(struct CALCLModel2D * calclmodel2D, int numSubstate) {
 	calclmodel2D->reductionFlagsMaxr[numSubstate] = CAL_TRUE;
 }
 
-void calclAddSumReduction2Di(struct CALCLModel2D * calclmodel2D, int numSubstate) {
+void calclAddReductionSum2Di(struct CALCLModel2D * calclmodel2D, int numSubstate) {
 	calclmodel2D->reductionFlagsSumi[numSubstate] = CAL_TRUE;
 }
-void calclAddSumReduction2Db(struct CALCLModel2D * calclmodel2D, int numSubstate) {
+void calclAddReductionSum2Db(struct CALCLModel2D * calclmodel2D, int numSubstate) {
 	calclmodel2D->reductionFlagsSumb[numSubstate] = CAL_TRUE;
 }
-void calclAddSumReduction2Dr(struct CALCLModel2D * calclmodel2D, int numSubstate) {
+void calclAddReductionSum2Dr(struct CALCLModel2D * calclmodel2D, int numSubstate) {
 	calclmodel2D->reductionFlagsSumr[numSubstate] = CAL_TRUE;
 }
 
-void calclAddProdReduction2Di(struct CALCLModel2D * calclmodel2D, int numSubstate) {
+void calclAddReductionProd2Di(struct CALCLModel2D * calclmodel2D, int numSubstate) {
 	calclmodel2D->reductionFlagsProdi[numSubstate] = CAL_TRUE;
 }
-void calclAddProdReduction2Db(struct CALCLModel2D * calclmodel2D, int numSubstate) {
+void calclAddReductionProd2Db(struct CALCLModel2D * calclmodel2D, int numSubstate) {
 	calclmodel2D->reductionFlagsProdb[numSubstate] = CAL_TRUE;
 }
-void calclAddProdReduction2Dr(struct CALCLModel2D * calclmodel2D, int numSubstate) {
+void calclAddReductionProd2Dr(struct CALCLModel2D * calclmodel2D, int numSubstate) {
 	calclmodel2D->reductionFlagsProdr[numSubstate] = CAL_TRUE;
 }
 
-void calclAddLogicalAndReduction2Di(struct CALCLModel2D * calclmodel2D, int numSubstate) {
+void calclAddReductionLogicalAnd2Di(struct CALCLModel2D * calclmodel2D, int numSubstate) {
 	calclmodel2D->reductionFlagsLogicalAndi[numSubstate] = CAL_TRUE;
 }
-void calclAddLogicalAndReduction2Db(struct CALCLModel2D * calclmodel2D, int numSubstate) {
+void calclAddReductionLogicalAnd2Db(struct CALCLModel2D * calclmodel2D, int numSubstate) {
 	calclmodel2D->reductionFlagsLogicalAndb[numSubstate] = CAL_TRUE;
 }
-void calclAddLogicalAndReduction2Dr(struct CALCLModel2D * calclmodel2D, int numSubstate) {
+void calclAddReductionLogicalAnd2Dr(struct CALCLModel2D * calclmodel2D, int numSubstate) {
 	calclmodel2D->reductionFlagsLogicalAndr[numSubstate] = CAL_TRUE;
 }
 
-void calclAddLogicalOrReduction2Di(struct CALCLModel2D * calclmodel2D, int numSubstate) {
+void calclAddReductionLogicalOr2Di(struct CALCLModel2D * calclmodel2D, int numSubstate) {
 	calclmodel2D->reductionFlagsLogicalOri[numSubstate] = CAL_TRUE;
 }
-void calclAddLogicalOrReduction2Db(struct CALCLModel2D * calclmodel2D, int numSubstate) {
+void calclAddReductionLogicalOr2Db(struct CALCLModel2D * calclmodel2D, int numSubstate) {
 	calclmodel2D->reductionFlagsLogicalOrb[numSubstate] = CAL_TRUE;
 }
-void calclAddLogicalOrReduction2Dr(struct CALCLModel2D * calclmodel2D, int numSubstate) {
+void calclAddReductionLogicalOr2Dr(struct CALCLModel2D * calclmodel2D, int numSubstate) {
 	calclmodel2D->reductionFlagsLogicalOrr[numSubstate] = CAL_TRUE;
 }
 
-void calclAddLogicalXOrReduction2Di(struct CALCLModel2D * calclmodel2D, int numSubstate) {
+void calclAddReductionLogicalXOr2Di(struct CALCLModel2D * calclmodel2D, int numSubstate) {
 	calclmodel2D->reductionFlagsLogicalXOri[numSubstate] = CAL_TRUE;
 }
-void calclAddLogicalXOrReduction2Db(struct CALCLModel2D * calclmodel2D, int numSubstate) {
+void calclAddReductionLogicalXOr2Db(struct CALCLModel2D * calclmodel2D, int numSubstate) {
 	calclmodel2D->reductionFlagsLogicalXOrb[numSubstate] = CAL_TRUE;
 }
-void calclAddLogicalXOrReduction2Dr(struct CALCLModel2D * calclmodel2D, int numSubstate) {
+void calclAddReductionLogicalXOr2Dr(struct CALCLModel2D * calclmodel2D, int numSubstate) {
 	calclmodel2D->reductionFlagsLogicalXOrr[numSubstate] = CAL_TRUE;
 }
 
-void calclAddBinaryAndReduction2Di(struct CALCLModel2D * calclmodel2D, int numSubstate) {
+void calclAddReductionBinaryAnd2Di(struct CALCLModel2D * calclmodel2D, int numSubstate) {
 	calclmodel2D->reductionFlagsBinaryAndi[numSubstate] = CAL_TRUE;
 }
-void calclAddBinaryAndReduction2Db(struct CALCLModel2D * calclmodel2D, int numSubstate) {
+void calclAddReductionBinaryAnd2Db(struct CALCLModel2D * calclmodel2D, int numSubstate) {
 	calclmodel2D->reductionFlagsBinaryAndb[numSubstate] = CAL_TRUE;
 }
-void calclAddBinaryAndReduction2Dr(struct CALCLModel2D * calclmodel2D, int numSubstate) {
+void calclAddReductionBinaryAnd2Dr(struct CALCLModel2D * calclmodel2D, int numSubstate) {
 	calclmodel2D->reductionFlagsBinaryAndr[numSubstate] = CAL_TRUE;
 }
 
-void calclAddBinaryOrReduction2Di(struct CALCLModel2D * calclmodel2D, int numSubstate) {
+void calclAddReductionBinaryOr2Di(struct CALCLModel2D * calclmodel2D, int numSubstate) {
 	calclmodel2D->reductionFlagsBinaryOri[numSubstate] = CAL_TRUE;
 }
-void calclAddBinaryOrReduction2Db(struct CALCLModel2D * calclmodel2D, int numSubstate) {
+void calclAddReductionBinaryOr2Db(struct CALCLModel2D * calclmodel2D, int numSubstate) {
 	calclmodel2D->reductionFlagsBinaryOrb[numSubstate] = CAL_TRUE;
 }
-void calclAddBinaryOrReduction2Dr(struct CALCLModel2D * calclmodel2D, int numSubstate) {
+void calclAddReductionBinaryOr2Dr(struct CALCLModel2D * calclmodel2D, int numSubstate) {
 	calclmodel2D->reductionFlagsBinaryOrr[numSubstate] = CAL_TRUE;
 }
 
-void calclAddBinaryXOrReduction2Di(struct CALCLModel2D * calclmodel2D, int numSubstate) {
+void calclAddReductionBinaryXor2Di(struct CALCLModel2D * calclmodel2D, int numSubstate) {
 	calclmodel2D->reductionFlagsBinaryXOri[numSubstate] = CAL_TRUE;
 }
-void calclAddBinaryXOrReduction2Db(struct CALCLModel2D * calclmodel2D, int numSubstate) {
+void calclAddReductionBinaryXor2Db(struct CALCLModel2D * calclmodel2D, int numSubstate) {
 	calclmodel2D->reductionFlagsBinaryXOrb[numSubstate] = CAL_TRUE;
 }
-void calclAddBinaryXOrReduction2Dr(struct CALCLModel2D * calclmodel2D, int numSubstate) {
+void calclAddReductionBinaryXor2Dr(struct CALCLModel2D * calclmodel2D, int numSubstate) {
 	calclmodel2D->reductionFlagsBinaryXOrr[numSubstate] = CAL_TRUE;
 }
