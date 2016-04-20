@@ -33,6 +33,9 @@ struct CALGLRun3D {
 	CALbyte onlyOneTime;
 	CALint fixedStep;
 	CALint final_step;		//!< Final simulation step; if 0 the simulation becomes a loop.
+	size_t * singleStepThreadNum;
+	int dimNum;
+	size_t * threadNumMax;
 };
 
 /*! \brief Constructor for create a struct CALGLRun3D.

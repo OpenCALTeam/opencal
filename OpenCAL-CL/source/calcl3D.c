@@ -53,7 +53,6 @@ void calclMapperToSubstates3D(struct CALModel3D *model, CALCLSubstateMapper * ma
 }
 
 void calclGetSubstatesDeviceToHost3D(struct CALCLModel3D* calclmodel3D) {
-
 	CALCLqueue queue = calclmodel3D->queue;
 
 	cl_int err;
@@ -192,6 +191,45 @@ void calclSetModelParameters3D(struct CALCLModel3D * calclmodel3D, CALCLkernel *
 
 }
 
+void calclSetReductionParameters3D(struct CALCLModel3D* calclmodel3D, CALCLkernel * kernel) {
+
+	clSetKernelArg(*kernel, 22, sizeof(CALCLmem), &calclmodel3D->bufferMinimab);
+	clSetKernelArg(*kernel, 25, sizeof(CALCLmem), &calclmodel3D->bufferMaximab);
+	clSetKernelArg(*kernel, 28, sizeof(CALCLmem), &calclmodel3D->bufferSumb);
+	clSetKernelArg(*kernel, 31, sizeof(CALCLmem), &calclmodel3D->bufferLogicalAndsb);
+	clSetKernelArg(*kernel, 34, sizeof(CALCLmem), &calclmodel3D->bufferLogicalOrsb);
+	clSetKernelArg(*kernel, 37, sizeof(CALCLmem), &calclmodel3D->bufferLogicalXOrsb);
+	clSetKernelArg(*kernel, 40, sizeof(CALCLmem), &calclmodel3D->bufferBinaryAndsb);
+	clSetKernelArg(*kernel, 43, sizeof(CALCLmem), &calclmodel3D->bufferBinaryOrsb);
+	clSetKernelArg(*kernel, 46, sizeof(CALCLmem), &calclmodel3D->bufferBinaryXOrsb);
+
+	clSetKernelArg(*kernel, 23, sizeof(CALCLmem), &calclmodel3D->bufferMinimai);
+	clSetKernelArg(*kernel, 26, sizeof(CALCLmem), &calclmodel3D->bufferMaximai);
+	clSetKernelArg(*kernel, 29, sizeof(CALCLmem), &calclmodel3D->bufferSumi);
+	clSetKernelArg(*kernel, 32, sizeof(CALCLmem), &calclmodel3D->bufferLogicalAndsi);
+	clSetKernelArg(*kernel, 35, sizeof(CALCLmem), &calclmodel3D->bufferLogicalOrsi);
+	clSetKernelArg(*kernel, 38, sizeof(CALCLmem), &calclmodel3D->bufferLogicalXOrsi);
+	clSetKernelArg(*kernel, 41, sizeof(CALCLmem), &calclmodel3D->bufferBinaryAndsi);
+	clSetKernelArg(*kernel, 44, sizeof(CALCLmem), &calclmodel3D->bufferBinaryOrsi);
+	clSetKernelArg(*kernel, 47, sizeof(CALCLmem), &calclmodel3D->bufferBinaryXOrsi);
+
+	clSetKernelArg(*kernel, 24, sizeof(CALCLmem), &calclmodel3D->bufferMinimar);
+	clSetKernelArg(*kernel, 27, sizeof(CALCLmem), &calclmodel3D->bufferMaximar);
+	clSetKernelArg(*kernel, 30, sizeof(CALCLmem), &calclmodel3D->bufferSumr);
+	clSetKernelArg(*kernel, 33, sizeof(CALCLmem), &calclmodel3D->bufferLogicalAndsr);
+	clSetKernelArg(*kernel, 36, sizeof(CALCLmem), &calclmodel3D->bufferLogicalOrsr);
+	clSetKernelArg(*kernel, 39, sizeof(CALCLmem), &calclmodel3D->bufferLogicalXOrsr);
+	clSetKernelArg(*kernel, 42, sizeof(CALCLmem), &calclmodel3D->bufferBinaryAndsr);
+	clSetKernelArg(*kernel, 45, sizeof(CALCLmem), &calclmodel3D->bufferBinaryOrsr);
+	clSetKernelArg(*kernel, 48, sizeof(CALCLmem), &calclmodel3D->bufferBinaryXOrsr);
+
+	clSetKernelArg(*kernel, 49, sizeof(CALCLmem), &calclmodel3D->bufferProdb);
+	clSetKernelArg(*kernel, 50, sizeof(CALCLmem), &calclmodel3D->bufferProdi);
+	clSetKernelArg(*kernel, 51, sizeof(CALCLmem), &calclmodel3D->bufferProdr);
+
+
+}
+
 void calclRealSubstatesMapper3D(struct CALModel3D *model, CALreal * current, CALreal * next) {
 	int ssNum = model->sizeof_pQr_array;
 	size_t elNum = model->columns * model->rows * model->slices;
@@ -264,6 +302,187 @@ CALCLqueue calclCreateQueue3D(struct CALCLModel3D * calclmodel3D, CALCLcontext c
 	return queue;
 }
 
+void calclSetKernelCopyArgs3Di(struct CALCLModel3D* calclmodel3D) {
+	clSetKernelArg(calclmodel3D->kernelMinCopyi, 0, sizeof(CALCLmem), &calclmodel3D->bufferPartialMini);
+	clSetKernelArg(calclmodel3D->kernelMaxCopyi, 0, sizeof(CALCLmem), &calclmodel3D->bufferPartialMaxi);
+	clSetKernelArg(calclmodel3D->kernelSumCopyi, 0, sizeof(CALCLmem), &calclmodel3D->bufferPartialSumi);
+	clSetKernelArg(calclmodel3D->kernelProdCopyi, 0, sizeof(CALCLmem), &calclmodel3D->bufferPartialProdi);
+	clSetKernelArg(calclmodel3D->kernelLogicalAndCopyi, 0, sizeof(CALCLmem), &calclmodel3D->bufferPartialLogicalAndi);
+	clSetKernelArg(calclmodel3D->kernelLogicalOrCopyi, 0, sizeof(CALCLmem), &calclmodel3D->bufferPartialLogicalOri);
+	clSetKernelArg(calclmodel3D->kernelLogicalXOrCopyi, 0, sizeof(CALCLmem), &calclmodel3D->bufferPartialLogicalXOri);
+	clSetKernelArg(calclmodel3D->kernelBinaryAndCopyi, 0, sizeof(CALCLmem), &calclmodel3D->bufferPartialBinaryAndi);
+	clSetKernelArg(calclmodel3D->kernelBinaryOrCopyi, 0, sizeof(CALCLmem), &calclmodel3D->bufferPartialBinaryOri);
+	clSetKernelArg(calclmodel3D->kernelBinaryXOrCopyi, 0, sizeof(CALCLmem), &calclmodel3D->bufferPartialBinaryXOri);
+
+	clSetKernelArg(calclmodel3D->kernelMinCopyi, 1, sizeof(CALCLmem), &calclmodel3D->bufferCurrentIntSubstate);
+	clSetKernelArg(calclmodel3D->kernelMaxCopyi, 1, sizeof(CALCLmem), &calclmodel3D->bufferCurrentIntSubstate);
+	clSetKernelArg(calclmodel3D->kernelSumCopyi, 1, sizeof(CALCLmem), &calclmodel3D->bufferCurrentIntSubstate);
+	clSetKernelArg(calclmodel3D->kernelProdCopyi, 1, sizeof(CALCLmem), &calclmodel3D->bufferCurrentIntSubstate);
+	clSetKernelArg(calclmodel3D->kernelLogicalAndCopyi, 1, sizeof(CALCLmem), &calclmodel3D->bufferCurrentIntSubstate);
+	clSetKernelArg(calclmodel3D->kernelLogicalOrCopyi, 1, sizeof(CALCLmem), &calclmodel3D->bufferCurrentIntSubstate);
+	clSetKernelArg(calclmodel3D->kernelLogicalXOrCopyi, 1, sizeof(CALCLmem), &calclmodel3D->bufferCurrentIntSubstate);
+	clSetKernelArg(calclmodel3D->kernelBinaryAndCopyi, 1, sizeof(CALCLmem), &calclmodel3D->bufferCurrentIntSubstate);
+	clSetKernelArg(calclmodel3D->kernelBinaryOrCopyi, 1, sizeof(CALCLmem), &calclmodel3D->bufferCurrentIntSubstate);
+	clSetKernelArg(calclmodel3D->kernelBinaryXOrCopyi, 1, sizeof(CALCLmem), &calclmodel3D->bufferCurrentIntSubstate);
+
+	clSetKernelArg(calclmodel3D->kernelMinCopyi, 3, sizeof(CALint), &calclmodel3D->host_CA->rows);
+	clSetKernelArg(calclmodel3D->kernelMaxCopyi, 3, sizeof(CALint), &calclmodel3D->host_CA->rows);
+	clSetKernelArg(calclmodel3D->kernelSumCopyi, 3, sizeof(CALint), &calclmodel3D->host_CA->rows);
+	clSetKernelArg(calclmodel3D->kernelProdCopyi, 3, sizeof(CALint), &calclmodel3D->host_CA->rows);
+	clSetKernelArg(calclmodel3D->kernelLogicalAndCopyi, 3, sizeof(CALint), &calclmodel3D->host_CA->rows);
+	clSetKernelArg(calclmodel3D->kernelLogicalOrCopyi, 3, sizeof(CALint), &calclmodel3D->host_CA->rows);
+	clSetKernelArg(calclmodel3D->kernelLogicalXOrCopyi, 3, sizeof(CALint), &calclmodel3D->host_CA->rows);
+	clSetKernelArg(calclmodel3D->kernelBinaryAndCopyi, 3, sizeof(CALint), &calclmodel3D->host_CA->rows);
+	clSetKernelArg(calclmodel3D->kernelBinaryOrCopyi, 3, sizeof(CALint), &calclmodel3D->host_CA->rows);
+	clSetKernelArg(calclmodel3D->kernelBinaryXOrCopyi, 3, sizeof(CALint), &calclmodel3D->host_CA->rows);
+
+	clSetKernelArg(calclmodel3D->kernelMinCopyi, 4, sizeof(CALint), &calclmodel3D->host_CA->columns);
+	clSetKernelArg(calclmodel3D->kernelMaxCopyi, 4, sizeof(CALint), &calclmodel3D->host_CA->columns);
+	clSetKernelArg(calclmodel3D->kernelSumCopyi, 4, sizeof(CALint), &calclmodel3D->host_CA->columns);
+	clSetKernelArg(calclmodel3D->kernelProdCopyi, 4, sizeof(CALint), &calclmodel3D->host_CA->columns);
+	clSetKernelArg(calclmodel3D->kernelLogicalAndCopyi, 4, sizeof(CALint), &calclmodel3D->host_CA->columns);
+	clSetKernelArg(calclmodel3D->kernelLogicalOrCopyi, 4, sizeof(CALint), &calclmodel3D->host_CA->columns);
+	clSetKernelArg(calclmodel3D->kernelLogicalXOrCopyi, 4, sizeof(CALint), &calclmodel3D->host_CA->columns);
+	clSetKernelArg(calclmodel3D->kernelBinaryAndCopyi, 4, sizeof(CALint), &calclmodel3D->host_CA->columns);
+	clSetKernelArg(calclmodel3D->kernelBinaryOrCopyi, 4, sizeof(CALint), &calclmodel3D->host_CA->columns);
+	clSetKernelArg(calclmodel3D->kernelBinaryXOrCopyi, 4, sizeof(CALint), &calclmodel3D->host_CA->columns);
+
+	clSetKernelArg(calclmodel3D->kernelMinCopyi, 5, sizeof(CALint), &calclmodel3D->host_CA->slices);
+	clSetKernelArg(calclmodel3D->kernelMaxCopyi, 5, sizeof(CALint), &calclmodel3D->host_CA->slices);
+	clSetKernelArg(calclmodel3D->kernelSumCopyi, 5, sizeof(CALint), &calclmodel3D->host_CA->slices);
+	clSetKernelArg(calclmodel3D->kernelProdCopyi, 5, sizeof(CALint), &calclmodel3D->host_CA->slices);
+	clSetKernelArg(calclmodel3D->kernelLogicalAndCopyi, 5, sizeof(CALint), &calclmodel3D->host_CA->slices);
+	clSetKernelArg(calclmodel3D->kernelLogicalOrCopyi, 5, sizeof(CALint), &calclmodel3D->host_CA->slices);
+	clSetKernelArg(calclmodel3D->kernelLogicalXOrCopyi, 5, sizeof(CALint), &calclmodel3D->host_CA->slices);
+	clSetKernelArg(calclmodel3D->kernelBinaryAndCopyi, 5, sizeof(CALint), &calclmodel3D->host_CA->slices);
+	clSetKernelArg(calclmodel3D->kernelBinaryOrCopyi, 5, sizeof(CALint), &calclmodel3D->host_CA->slices);
+	clSetKernelArg(calclmodel3D->kernelBinaryXOrCopyi, 5, sizeof(CALint), &calclmodel3D->host_CA->slices);
+}
+
+void calclSetKernelCopyArgs3Db(struct CALCLModel3D* calclmodel3D) {
+	clSetKernelArg(calclmodel3D->kernelMinCopyb, 0, sizeof(CALCLmem), &calclmodel3D->bufferPartialMinb);
+	clSetKernelArg(calclmodel3D->kernelMaxCopyb, 0, sizeof(CALCLmem), &calclmodel3D->bufferPartialMaxb);
+	clSetKernelArg(calclmodel3D->kernelSumCopyb, 0, sizeof(CALCLmem), &calclmodel3D->bufferPartialSumb);
+	clSetKernelArg(calclmodel3D->kernelProdCopyb, 0, sizeof(CALCLmem), &calclmodel3D->bufferPartialProdb);
+	clSetKernelArg(calclmodel3D->kernelLogicalAndCopyb, 0, sizeof(CALCLmem), &calclmodel3D->bufferPartialLogicalAndb);
+	clSetKernelArg(calclmodel3D->kernelLogicalOrCopyb, 0, sizeof(CALCLmem), &calclmodel3D->bufferPartialLogicalOrb);
+	clSetKernelArg(calclmodel3D->kernelLogicalXOrCopyb, 0, sizeof(CALCLmem), &calclmodel3D->bufferPartialLogicalXOrb);
+	clSetKernelArg(calclmodel3D->kernelBinaryAndCopyb, 0, sizeof(CALCLmem), &calclmodel3D->bufferPartialBinaryAndb);
+	clSetKernelArg(calclmodel3D->kernelBinaryOrCopyb, 0, sizeof(CALCLmem), &calclmodel3D->bufferPartialBinaryOrb);
+	clSetKernelArg(calclmodel3D->kernelBinaryXOrCopyb, 0, sizeof(CALCLmem), &calclmodel3D->bufferPartialBinaryXOrb);
+
+	clSetKernelArg(calclmodel3D->kernelMinCopyb, 1, sizeof(CALCLmem), &calclmodel3D->bufferCurrentByteSubstate);
+	clSetKernelArg(calclmodel3D->kernelMaxCopyb, 1, sizeof(CALCLmem), &calclmodel3D->bufferCurrentByteSubstate);
+	clSetKernelArg(calclmodel3D->kernelSumCopyb, 1, sizeof(CALCLmem), &calclmodel3D->bufferCurrentByteSubstate);
+	clSetKernelArg(calclmodel3D->kernelProdCopyb, 1, sizeof(CALCLmem), &calclmodel3D->bufferCurrentByteSubstate);
+	clSetKernelArg(calclmodel3D->kernelLogicalAndCopyb, 1, sizeof(CALCLmem), &calclmodel3D->bufferCurrentByteSubstate);
+	clSetKernelArg(calclmodel3D->kernelLogicalOrCopyb, 1, sizeof(CALCLmem), &calclmodel3D->bufferCurrentByteSubstate);
+	clSetKernelArg(calclmodel3D->kernelLogicalXOrCopyb, 1, sizeof(CALCLmem), &calclmodel3D->bufferCurrentByteSubstate);
+	clSetKernelArg(calclmodel3D->kernelBinaryAndCopyb, 1, sizeof(CALCLmem), &calclmodel3D->bufferCurrentByteSubstate);
+	clSetKernelArg(calclmodel3D->kernelBinaryOrCopyb, 1, sizeof(CALCLmem), &calclmodel3D->bufferCurrentByteSubstate);
+	clSetKernelArg(calclmodel3D->kernelBinaryXOrCopyb, 1, sizeof(CALCLmem), &calclmodel3D->bufferCurrentByteSubstate);
+
+	clSetKernelArg(calclmodel3D->kernelMinCopyb, 3, sizeof(CALint), &calclmodel3D->host_CA->rows);
+	clSetKernelArg(calclmodel3D->kernelMaxCopyb, 3, sizeof(CALint), &calclmodel3D->host_CA->rows);
+	clSetKernelArg(calclmodel3D->kernelSumCopyb, 3, sizeof(CALint), &calclmodel3D->host_CA->rows);
+	clSetKernelArg(calclmodel3D->kernelProdCopyb, 3, sizeof(CALint), &calclmodel3D->host_CA->rows);
+	clSetKernelArg(calclmodel3D->kernelLogicalAndCopyb, 3, sizeof(CALint), &calclmodel3D->host_CA->rows);
+	clSetKernelArg(calclmodel3D->kernelLogicalOrCopyb, 3, sizeof(CALint), &calclmodel3D->host_CA->rows);
+	clSetKernelArg(calclmodel3D->kernelLogicalXOrCopyb, 3, sizeof(CALint), &calclmodel3D->host_CA->rows);
+	clSetKernelArg(calclmodel3D->kernelBinaryAndCopyb, 3, sizeof(CALint), &calclmodel3D->host_CA->rows);
+	clSetKernelArg(calclmodel3D->kernelBinaryOrCopyb, 3, sizeof(CALint), &calclmodel3D->host_CA->rows);
+	clSetKernelArg(calclmodel3D->kernelBinaryXOrCopyb, 3, sizeof(CALint), &calclmodel3D->host_CA->rows);
+
+	clSetKernelArg(calclmodel3D->kernelMinCopyb, 4, sizeof(CALint), &calclmodel3D->host_CA->columns);
+	clSetKernelArg(calclmodel3D->kernelMaxCopyb, 4, sizeof(CALint), &calclmodel3D->host_CA->columns);
+	clSetKernelArg(calclmodel3D->kernelSumCopyb, 4, sizeof(CALint), &calclmodel3D->host_CA->columns);
+	clSetKernelArg(calclmodel3D->kernelProdCopyb, 4, sizeof(CALint), &calclmodel3D->host_CA->columns);
+	clSetKernelArg(calclmodel3D->kernelLogicalAndCopyb, 4, sizeof(CALint), &calclmodel3D->host_CA->columns);
+	clSetKernelArg(calclmodel3D->kernelLogicalOrCopyb, 4, sizeof(CALint), &calclmodel3D->host_CA->columns);
+	clSetKernelArg(calclmodel3D->kernelLogicalXOrCopyb, 4, sizeof(CALint), &calclmodel3D->host_CA->columns);
+	clSetKernelArg(calclmodel3D->kernelBinaryAndCopyb, 4, sizeof(CALint), &calclmodel3D->host_CA->columns);
+	clSetKernelArg(calclmodel3D->kernelBinaryOrCopyb, 4, sizeof(CALint), &calclmodel3D->host_CA->columns);
+	clSetKernelArg(calclmodel3D->kernelBinaryXOrCopyb, 4, sizeof(CALint), &calclmodel3D->host_CA->columns);
+
+	clSetKernelArg(calclmodel3D->kernelMinCopyb, 5, sizeof(CALint), &calclmodel3D->host_CA->slices);
+	clSetKernelArg(calclmodel3D->kernelMaxCopyb, 5, sizeof(CALint), &calclmodel3D->host_CA->slices);
+	clSetKernelArg(calclmodel3D->kernelSumCopyb, 5, sizeof(CALint), &calclmodel3D->host_CA->slices);
+	clSetKernelArg(calclmodel3D->kernelProdCopyb, 5, sizeof(CALint), &calclmodel3D->host_CA->slices);
+	clSetKernelArg(calclmodel3D->kernelLogicalAndCopyb, 5, sizeof(CALint), &calclmodel3D->host_CA->slices);
+	clSetKernelArg(calclmodel3D->kernelLogicalOrCopyb, 5, sizeof(CALint), &calclmodel3D->host_CA->slices);
+	clSetKernelArg(calclmodel3D->kernelLogicalXOrCopyb, 5, sizeof(CALint), &calclmodel3D->host_CA->slices);
+	clSetKernelArg(calclmodel3D->kernelBinaryAndCopyb, 5, sizeof(CALint), &calclmodel3D->host_CA->slices);
+	clSetKernelArg(calclmodel3D->kernelBinaryOrCopyb, 5, sizeof(CALint), &calclmodel3D->host_CA->slices);
+	clSetKernelArg(calclmodel3D->kernelBinaryXOrCopyb, 5, sizeof(CALint), &calclmodel3D->host_CA->slices);
+}
+
+void calclSetKernelCopyArgs3Dr(struct CALCLModel3D* calclmodel3D) {
+	clSetKernelArg(calclmodel3D->kernelMinCopyr, 0, sizeof(CALCLmem), &calclmodel3D->bufferPartialMinr);
+	clSetKernelArg(calclmodel3D->kernelMaxCopyr, 0, sizeof(CALCLmem), &calclmodel3D->bufferPartialMaxr);
+	clSetKernelArg(calclmodel3D->kernelSumCopyr, 0, sizeof(CALCLmem), &calclmodel3D->bufferPartialSumr);
+	clSetKernelArg(calclmodel3D->kernelProdCopyr, 0, sizeof(CALCLmem), &calclmodel3D->bufferPartialProdr);
+	clSetKernelArg(calclmodel3D->kernelLogicalAndCopyr, 0, sizeof(CALCLmem), &calclmodel3D->bufferPartialLogicalAndr);
+	clSetKernelArg(calclmodel3D->kernelLogicalOrCopyr, 0, sizeof(CALCLmem), &calclmodel3D->bufferPartialLogicalOrr);
+	clSetKernelArg(calclmodel3D->kernelLogicalXOrCopyr, 0, sizeof(CALCLmem), &calclmodel3D->bufferPartialLogicalXOrr);
+	clSetKernelArg(calclmodel3D->kernelBinaryAndCopyr, 0, sizeof(CALCLmem), &calclmodel3D->bufferPartialBinaryAndr);
+	clSetKernelArg(calclmodel3D->kernelBinaryOrCopyr, 0, sizeof(CALCLmem), &calclmodel3D->bufferPartialBinaryOrr);
+	clSetKernelArg(calclmodel3D->kernelBinaryXOrCopyr, 0, sizeof(CALCLmem), &calclmodel3D->bufferPartialBinaryXOrr);
+
+	clSetKernelArg(calclmodel3D->kernelMinCopyr, 1, sizeof(CALCLmem), &calclmodel3D->bufferCurrentRealSubstate);
+	clSetKernelArg(calclmodel3D->kernelMaxCopyr, 1, sizeof(CALCLmem), &calclmodel3D->bufferCurrentRealSubstate);
+	clSetKernelArg(calclmodel3D->kernelSumCopyr, 1, sizeof(CALCLmem), &calclmodel3D->bufferCurrentRealSubstate);
+	clSetKernelArg(calclmodel3D->kernelProdCopyr, 1, sizeof(CALCLmem), &calclmodel3D->bufferCurrentRealSubstate);
+	clSetKernelArg(calclmodel3D->kernelLogicalAndCopyr, 1, sizeof(CALCLmem), &calclmodel3D->bufferCurrentRealSubstate);
+	clSetKernelArg(calclmodel3D->kernelLogicalOrCopyr, 1, sizeof(CALCLmem), &calclmodel3D->bufferCurrentRealSubstate);
+	clSetKernelArg(calclmodel3D->kernelLogicalXOrCopyr, 1, sizeof(CALCLmem), &calclmodel3D->bufferCurrentRealSubstate);
+	clSetKernelArg(calclmodel3D->kernelBinaryAndCopyr, 1, sizeof(CALCLmem), &calclmodel3D->bufferCurrentRealSubstate);
+	clSetKernelArg(calclmodel3D->kernelBinaryOrCopyr, 1, sizeof(CALCLmem), &calclmodel3D->bufferCurrentRealSubstate);
+	clSetKernelArg(calclmodel3D->kernelBinaryXOrCopyr, 1, sizeof(CALCLmem), &calclmodel3D->bufferCurrentRealSubstate);
+
+	clSetKernelArg(calclmodel3D->kernelMinCopyr, 3, sizeof(CALint), &calclmodel3D->host_CA->rows);
+	clSetKernelArg(calclmodel3D->kernelMaxCopyr, 3, sizeof(CALint), &calclmodel3D->host_CA->rows);
+	clSetKernelArg(calclmodel3D->kernelSumCopyr, 3, sizeof(CALint), &calclmodel3D->host_CA->rows);
+	clSetKernelArg(calclmodel3D->kernelProdCopyr, 3, sizeof(CALint), &calclmodel3D->host_CA->rows);
+	clSetKernelArg(calclmodel3D->kernelLogicalAndCopyr, 3, sizeof(CALint), &calclmodel3D->host_CA->rows);
+	clSetKernelArg(calclmodel3D->kernelLogicalOrCopyr, 3, sizeof(CALint), &calclmodel3D->host_CA->rows);
+	clSetKernelArg(calclmodel3D->kernelLogicalXOrCopyr, 3, sizeof(CALint), &calclmodel3D->host_CA->rows);
+	clSetKernelArg(calclmodel3D->kernelBinaryAndCopyr, 3, sizeof(CALint), &calclmodel3D->host_CA->rows);
+	clSetKernelArg(calclmodel3D->kernelBinaryOrCopyr, 3, sizeof(CALint), &calclmodel3D->host_CA->rows);
+	clSetKernelArg(calclmodel3D->kernelBinaryXOrCopyr, 3, sizeof(CALint), &calclmodel3D->host_CA->rows);
+
+	clSetKernelArg(calclmodel3D->kernelMinCopyr, 4, sizeof(CALint), &calclmodel3D->host_CA->columns);
+	clSetKernelArg(calclmodel3D->kernelMaxCopyr, 4, sizeof(CALint), &calclmodel3D->host_CA->columns);
+	clSetKernelArg(calclmodel3D->kernelSumCopyr, 4, sizeof(CALint), &calclmodel3D->host_CA->columns);
+	clSetKernelArg(calclmodel3D->kernelProdCopyr, 4, sizeof(CALint), &calclmodel3D->host_CA->columns);
+	clSetKernelArg(calclmodel3D->kernelLogicalAndCopyr, 4, sizeof(CALint), &calclmodel3D->host_CA->columns);
+	clSetKernelArg(calclmodel3D->kernelLogicalOrCopyr, 4, sizeof(CALint), &calclmodel3D->host_CA->columns);
+	clSetKernelArg(calclmodel3D->kernelLogicalXOrCopyr, 4, sizeof(CALint), &calclmodel3D->host_CA->columns);
+	clSetKernelArg(calclmodel3D->kernelBinaryAndCopyr, 4, sizeof(CALint), &calclmodel3D->host_CA->columns);
+	clSetKernelArg(calclmodel3D->kernelBinaryOrCopyr, 4, sizeof(CALint), &calclmodel3D->host_CA->columns);
+	clSetKernelArg(calclmodel3D->kernelBinaryXOrCopyr, 4, sizeof(CALint), &calclmodel3D->host_CA->columns);
+
+	clSetKernelArg(calclmodel3D->kernelMinCopyr, 5, sizeof(CALint), &calclmodel3D->host_CA->slices);
+	clSetKernelArg(calclmodel3D->kernelMaxCopyr, 5, sizeof(CALint), &calclmodel3D->host_CA->slices);
+	clSetKernelArg(calclmodel3D->kernelSumCopyr, 5, sizeof(CALint), &calclmodel3D->host_CA->slices);
+	clSetKernelArg(calclmodel3D->kernelProdCopyr, 5, sizeof(CALint), &calclmodel3D->host_CA->slices);
+	clSetKernelArg(calclmodel3D->kernelLogicalAndCopyr, 5, sizeof(CALint), &calclmodel3D->host_CA->slices);
+	clSetKernelArg(calclmodel3D->kernelLogicalOrCopyr, 5, sizeof(CALint), &calclmodel3D->host_CA->slices);
+	clSetKernelArg(calclmodel3D->kernelLogicalXOrCopyr, 5, sizeof(CALint), &calclmodel3D->host_CA->slices);
+	clSetKernelArg(calclmodel3D->kernelBinaryAndCopyr, 5, sizeof(CALint), &calclmodel3D->host_CA->slices);
+	clSetKernelArg(calclmodel3D->kernelBinaryOrCopyr, 5, sizeof(CALint), &calclmodel3D->host_CA->slices);
+	clSetKernelArg(calclmodel3D->kernelBinaryXOrCopyr, 5, sizeof(CALint), &calclmodel3D->host_CA->slices);
+}
+
+int upperPowerOfTwo3D(int n) {
+	int power = 1;
+	while (power < n)
+		power <<= 1;
+	return power;
+}
+
+
+
+
 /******************************************************************************
  * 							PUBLIC FUNCTIONS
  ******************************************************************************/
@@ -297,6 +516,40 @@ struct CALCLModel3D * calclCADef3D(struct CALModel3D *host_CA, CALCLcontext cont
 	calclmodel3D->kernelComputeCounts = calclGetKernelFromProgram(&program, KER_STC_COMPUTE_COUNTS);
 	calclmodel3D->kernelUpSweep = calclGetKernelFromProgram(&program, KER_STC_UP_SWEEP);
 	calclmodel3D->kernelDownSweep = calclGetKernelFromProgram(&program, KER_STC_DOWN_SWEEP);
+
+	calclmodel3D->kernelMinReductionb = calclGetKernelFromProgram(&program, "calclMinReductionKernelb");
+	calclmodel3D->kernelMaxReductionb = calclGetKernelFromProgram(&program, "calclMaxReductionKernelb");
+	calclmodel3D->kernelSumReductionb = calclGetKernelFromProgram(&program, "calclSumReductionKernelb");
+	calclmodel3D->kernelProdReductionb = calclGetKernelFromProgram(&program, "calclProdReductionKernelb");
+	calclmodel3D->kernelLogicalAndReductionb = calclGetKernelFromProgram(&program, "calclLogicAndReductionKernelb");
+	calclmodel3D->kernelLogicalOrReductionb = calclGetKernelFromProgram(&program, "calclLogicOrReductionKernelb");
+	calclmodel3D->kernelLogicalXOrReductionb = calclGetKernelFromProgram(&program, "calclLogicXOrReductionKernelb");
+	calclmodel3D->kernelBinaryAndReductionb = calclGetKernelFromProgram(&program, "calclBinaryAndReductionKernelb");
+	calclmodel3D->kernelBinaryOrReductionb = calclGetKernelFromProgram(&program, "calclBinaryOrReductionKernelb");
+	calclmodel3D->kernelBinaryXorReductionb = calclGetKernelFromProgram(&program, "calclBinaryXOrReductionKernelb");
+
+	calclmodel3D->kernelMinReductioni = calclGetKernelFromProgram(&program, "calclMinReductionKerneli");
+	calclmodel3D->kernelMaxReductioni = calclGetKernelFromProgram(&program, "calclMaxReductionKerneli");
+	calclmodel3D->kernelSumReductioni = calclGetKernelFromProgram(&program, "calclSumReductionKerneli");
+	calclmodel3D->kernelProdReductioni = calclGetKernelFromProgram(&program, "calclProdReductionKerneli");
+	calclmodel3D->kernelLogicalAndReductioni = calclGetKernelFromProgram(&program, "calclLogicAndReductionKerneli");
+	calclmodel3D->kernelLogicalOrReductioni = calclGetKernelFromProgram(&program, "calclLogicOrReductionKerneli");
+	calclmodel3D->kernelLogicalXOrReductioni = calclGetKernelFromProgram(&program, "calclLogicXOrReductionKerneli");
+	calclmodel3D->kernelBinaryAndReductioni = calclGetKernelFromProgram(&program, "calclBinaryAndReductionKerneli");
+	calclmodel3D->kernelBinaryOrReductioni = calclGetKernelFromProgram(&program, "calclBinaryOrReductionKerneli");
+	calclmodel3D->kernelBinaryXorReductioni = calclGetKernelFromProgram(&program, "calclBinaryXOrReductionKerneli");
+
+	calclmodel3D->kernelMinReductionr = calclGetKernelFromProgram(&program, "calclMinReductionKernelr");
+	calclmodel3D->kernelMaxReductionr = calclGetKernelFromProgram(&program, "calclMaxReductionKernelr");
+	calclmodel3D->kernelSumReductionr = calclGetKernelFromProgram(&program, "calclSumReductionKernelr");
+	calclmodel3D->kernelProdReductionr = calclGetKernelFromProgram(&program, "calclProdReductionKernelr");
+	calclmodel3D->kernelLogicalAndReductionr = calclGetKernelFromProgram(&program, "calclLogicAndReductionKernelr");
+	calclmodel3D->kernelLogicalOrReductionr = calclGetKernelFromProgram(&program, "calclLogicOrReductionKernelr");
+	calclmodel3D->kernelLogicalXOrReductionr = calclGetKernelFromProgram(&program, "calclLogicXOrReductionKernelr");
+	calclmodel3D->kernelBinaryAndReductionr = calclGetKernelFromProgram(&program, "calclBinaryAndReductionKernelr");
+	calclmodel3D->kernelBinaryOrReductionr = calclGetKernelFromProgram(&program, "calclBinaryOrReductionKernelr");
+	calclmodel3D->kernelBinaryXorReductionr = calclGetKernelFromProgram(&program, "calclBinaryXOrReductionKernelr");
+
 
 	struct CALCell3D * activeCells = (struct CALCell3D*) malloc(sizeof(struct CALCell3D) * bufferDim);
 	memcpy(activeCells, host_CA->A.cells, sizeof(struct CALCell3D) * host_CA->A.size_current);
@@ -359,6 +612,152 @@ struct CALCLModel3D * calclCADef3D(struct CALModel3D *host_CA, CALCLcontext cont
 
 	calclSetKernelsLibArgs3D(calclmodel3D);
 
+	calclmodel3D->kernelMinCopyi = calclGetKernelFromProgram(&program, "copy3Di");
+	calclmodel3D->kernelMaxCopyi = calclGetKernelFromProgram(&program, "copy3Di");
+	calclmodel3D->kernelSumCopyi = calclGetKernelFromProgram(&program, "copy3Di");
+	calclmodel3D->kernelProdCopyi = calclGetKernelFromProgram(&program, "copy3Di");
+	calclmodel3D->kernelLogicalAndCopyi = calclGetKernelFromProgram(&program, "copy3Di");
+	calclmodel3D->kernelLogicalOrCopyi = calclGetKernelFromProgram(&program, "copy3Di");
+	calclmodel3D->kernelLogicalXOrCopyi = calclGetKernelFromProgram(&program, "copy3Di");
+	calclmodel3D->kernelBinaryAndCopyi = calclGetKernelFromProgram(&program, "copy3Di");
+	calclmodel3D->kernelBinaryOrCopyi = calclGetKernelFromProgram(&program, "copy3Di");
+	calclmodel3D->kernelBinaryXOrCopyi = calclGetKernelFromProgram(&program, "copy3Di");
+
+	CALint * partiali = (CALint*) malloc(calclmodel3D->host_CA->rows * calclmodel3D->host_CA->columns* calclmodel3D->host_CA->slices * sizeof(CALint));
+	size_t dimCAi =  sizeof(CALint) * calclmodel3D->host_CA->rows * calclmodel3D->host_CA->columns*calclmodel3D->host_CA->slices;
+	calclmodel3D->bufferPartialMini = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, dimCAi , partiali, &err);
+	calclHandleError(err);
+	calclmodel3D->bufferPartialMaxi = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, dimCAi, partiali,
+			&err);
+	calclHandleError(err);
+	calclmodel3D->bufferPartialSumi = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, dimCAi, partiali,
+			&err);
+	calclHandleError(err);
+	calclmodel3D->bufferPartialProdi = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, dimCAi, partiali,
+			&err);
+	calclHandleError(err);
+
+	calclmodel3D->bufferPartialLogicalAndi = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, dimCAi,
+			partiali, &err);
+	calclHandleError(err);
+	calclmodel3D->bufferPartialLogicalOri = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, dimCAi,
+			partiali, &err);
+	calclHandleError(err);
+	calclmodel3D->bufferPartialLogicalXOri = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, dimCAi,
+			partiali, &err);
+	calclHandleError(err);
+
+	calclmodel3D->bufferPartialBinaryAndi = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, dimCAi,
+			partiali, &err);
+	calclHandleError(err);
+	calclmodel3D->bufferPartialBinaryOri = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, dimCAi, partiali,
+			&err);
+	calclHandleError(err);
+	calclmodel3D->bufferPartialBinaryXOri = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, dimCAi,
+			partiali, &err);
+	calclHandleError(err);
+	free(partiali);
+
+	calclSetKernelCopyArgs3Di(calclmodel3D);
+
+	calclmodel3D->kernelMinCopyb = calclGetKernelFromProgram(&program, "copy3Db");
+	calclmodel3D->kernelMaxCopyb = calclGetKernelFromProgram(&program, "copy3Db");
+	calclmodel3D->kernelSumCopyb = calclGetKernelFromProgram(&program, "copy3Db");
+	calclmodel3D->kernelProdCopyb = calclGetKernelFromProgram(&program, "copy3Db");
+	calclmodel3D->kernelLogicalAndCopyb = calclGetKernelFromProgram(&program, "copy3Db");
+	calclmodel3D->kernelLogicalOrCopyb = calclGetKernelFromProgram(&program, "copy3Db");
+	calclmodel3D->kernelLogicalXOrCopyb = calclGetKernelFromProgram(&program, "copy3Db");
+	calclmodel3D->kernelBinaryAndCopyb = calclGetKernelFromProgram(&program, "copy3Db");
+	calclmodel3D->kernelBinaryOrCopyb = calclGetKernelFromProgram(&program, "copy3Db");
+	calclmodel3D->kernelBinaryXOrCopyb = calclGetKernelFromProgram(&program, "copy3Db");
+
+	CALbyte * partialb = (CALbyte*) malloc(calclmodel3D->host_CA->rows * calclmodel3D->host_CA->columns *calclmodel3D->host_CA->slices * sizeof(CALbyte));
+	size_t dimCAb =  sizeof(CALbyte) * calclmodel3D->host_CA->rows * calclmodel3D->host_CA->columns*calclmodel3D->host_CA->slices;
+	calclmodel3D->bufferPartialMinb = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,dimCAb, partialb,
+			&err);
+	calclHandleError(err);
+	calclmodel3D->bufferPartialMaxb = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,dimCAb, partialb,
+			&err);
+	calclHandleError(err);
+	calclmodel3D->bufferPartialSumb = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,dimCAb, partialb,
+			&err);
+	calclHandleError(err);
+	calclmodel3D->bufferPartialProdb = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,dimCAb, partialb,
+			&err);
+	calclHandleError(err);
+
+	calclmodel3D->bufferPartialLogicalAndb = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,dimCAb,
+			partialb, &err);
+	calclHandleError(err);
+	calclmodel3D->bufferPartialLogicalOrb = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,dimCAb,
+			partialb, &err);
+	calclHandleError(err);
+	calclmodel3D->bufferPartialLogicalXOrb = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,dimCAb,
+			partialb, &err);
+	calclHandleError(err);
+
+	calclmodel3D->bufferPartialBinaryAndb = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,dimCAb,
+			partialb, &err);
+	calclHandleError(err);
+	calclmodel3D->bufferPartialBinaryOrb = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,dimCAb, partialb,
+			&err);
+	calclHandleError(err);
+	calclmodel3D->bufferPartialBinaryXOrb = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,dimCAb,
+			partialb, &err);
+	calclHandleError(err);
+	free(partialb);
+	calclSetKernelCopyArgs3Db(calclmodel3D);
+
+	calclmodel3D->kernelMinCopyr = calclGetKernelFromProgram(&program, "copy3Dr");
+	calclmodel3D->kernelMaxCopyr = calclGetKernelFromProgram(&program, "copy3Dr");
+	calclmodel3D->kernelSumCopyr = calclGetKernelFromProgram(&program, "copy3Dr");
+	calclmodel3D->kernelProdCopyr = calclGetKernelFromProgram(&program, "copy3Dr");
+	calclmodel3D->kernelLogicalAndCopyr = calclGetKernelFromProgram(&program, "copy3Dr");
+	calclmodel3D->kernelLogicalOrCopyr = calclGetKernelFromProgram(&program, "copy3Dr");
+	calclmodel3D->kernelLogicalXOrCopyr = calclGetKernelFromProgram(&program, "copy3Dr");
+	calclmodel3D->kernelBinaryAndCopyr = calclGetKernelFromProgram(&program, "copy3Dr");
+	calclmodel3D->kernelBinaryOrCopyr = calclGetKernelFromProgram(&program, "copy3Dr");
+	calclmodel3D->kernelBinaryXOrCopyr = calclGetKernelFromProgram(&program, "copy3Dr");
+
+	CALreal * partialr = (CALreal*) malloc(calclmodel3D->host_CA->rows * calclmodel3D->host_CA->columns *calclmodel3D->host_CA->slices* sizeof(CALreal));
+	size_t dimCAr =  sizeof(CALreal) * calclmodel3D->host_CA->rows * calclmodel3D->host_CA->columns*calclmodel3D->host_CA->slices;
+	calclmodel3D->bufferPartialMinr = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,dimCAr, partialr,
+			&err);
+	calclHandleError(err);
+	calclmodel3D->bufferPartialMaxr = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,dimCAr, partialr,
+			&err);
+	calclHandleError(err);
+	calclmodel3D->bufferPartialSumr = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,dimCAr, partialr,
+			&err);
+	calclHandleError(err);
+	calclmodel3D->bufferPartialProdr = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,dimCAr, partialr,
+			&err);
+	calclHandleError(err);
+
+	calclmodel3D->bufferPartialLogicalAndr = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,dimCAr,partialr,
+			&err);
+	calclHandleError(err);
+	calclmodel3D->bufferPartialLogicalOrr = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,dimCAr, partialr,
+			&err);
+	calclHandleError(err);
+	calclmodel3D->bufferPartialLogicalXOrr = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,dimCAr,partialr,
+			&err);
+	calclHandleError(err);
+
+	calclmodel3D->bufferPartialBinaryAndr = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,dimCAr, partialr,
+			&err);
+	calclHandleError(err);
+	calclmodel3D->bufferPartialBinaryOrr = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,dimCAr, partialr,
+			&err);
+	calclHandleError(err);
+	calclmodel3D->bufferPartialBinaryXOrr = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,dimCAr,partialr,
+			&err);
+	calclHandleError(err);
+	free(partialr);
+	calclSetKernelCopyArgs3Dr(calclmodel3D);
+
+
+
 	//user kernels buffers args
 
 	calclmodel3D->bufferNeighborhood = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(struct CALCell3D) * host_CA->sizeof_X, host_CA->X, &err);
@@ -385,11 +784,392 @@ struct CALCLModel3D * calclCADef3D(struct CALModel3D *host_CA, CALCLcontext cont
 
 	calclmodel3D->queue = calclCreateQueue3D(calclmodel3D, context, device);
 
+	CALint dimReductionArrays = calclmodel3D->host_CA->sizeof_pQb_array + calclmodel3D->host_CA->sizeof_pQi_array + calclmodel3D->host_CA->sizeof_pQr_array;
+
+	calclmodel3D->reductionFlagsMinb = (CALbyte*) malloc(sizeof(CALbyte) * (calclmodel3D->host_CA->sizeof_pQb_array));
+	calclmodel3D->reductionFlagsMini = (CALbyte*) malloc(sizeof(CALbyte) * (calclmodel3D->host_CA->sizeof_pQi_array));
+	calclmodel3D->reductionFlagsMinr = (CALbyte*) malloc(sizeof(CALbyte) * (calclmodel3D->host_CA->sizeof_pQr_array));
+	calclmodel3D->minimab = (CALreal*) malloc(sizeof(CALreal) * (calclmodel3D->host_CA->sizeof_pQb_array + 1));
+	calclmodel3D->minimai = (CALreal*) malloc(sizeof(CALreal) * (calclmodel3D->host_CA->sizeof_pQi_array + 1));
+	calclmodel3D->minimar = (CALreal*) malloc(sizeof(CALreal) * (calclmodel3D->host_CA->sizeof_pQr_array + 1));
+
+	calclmodel3D->reductionFlagsMaxb = (CALbyte*) malloc(sizeof(CALbyte) * (calclmodel3D->host_CA->sizeof_pQb_array));
+	calclmodel3D->reductionFlagsMaxi = (CALbyte*) malloc(sizeof(CALbyte) * (calclmodel3D->host_CA->sizeof_pQi_array));
+	calclmodel3D->reductionFlagsMaxr = (CALbyte*) malloc(sizeof(CALbyte) * (calclmodel3D->host_CA->sizeof_pQr_array));
+	calclmodel3D->maximab = (CALreal*) malloc(sizeof(CALreal) * (calclmodel3D->host_CA->sizeof_pQb_array + 1));
+	calclmodel3D->maximai = (CALreal*) malloc(sizeof(CALreal) * (calclmodel3D->host_CA->sizeof_pQi_array + 1));
+	calclmodel3D->maximar = (CALreal*) malloc(sizeof(CALreal) * (calclmodel3D->host_CA->sizeof_pQr_array + 1));
+
+	calclmodel3D->reductionFlagsSumb = (CALbyte*) malloc(sizeof(CALbyte) * (calclmodel3D->host_CA->sizeof_pQb_array));
+	calclmodel3D->reductionFlagsSumi = (CALbyte*) malloc(sizeof(CALbyte) * (calclmodel3D->host_CA->sizeof_pQi_array));
+	calclmodel3D->reductionFlagsSumr = (CALbyte*) malloc(sizeof(CALbyte) * (calclmodel3D->host_CA->sizeof_pQr_array));
+	calclmodel3D->sumsb = (CALreal*) malloc(sizeof(CALreal) * (calclmodel3D->host_CA->sizeof_pQb_array + 1));
+	calclmodel3D->sumsi = (CALreal*) malloc(sizeof(CALreal) * (calclmodel3D->host_CA->sizeof_pQi_array + 1));
+	calclmodel3D->sumsr = (CALreal*) malloc(sizeof(CALreal) * (calclmodel3D->host_CA->sizeof_pQr_array + 1));
+
+	calclmodel3D->reductionFlagsProdb = (CALbyte*) malloc(sizeof(CALbyte) * (calclmodel3D->host_CA->sizeof_pQb_array));
+	calclmodel3D->reductionFlagsProdi = (CALbyte*) malloc(sizeof(CALbyte) * (calclmodel3D->host_CA->sizeof_pQi_array));
+	calclmodel3D->reductionFlagsProdr = (CALbyte*) malloc(sizeof(CALbyte) * (calclmodel3D->host_CA->sizeof_pQr_array));
+	calclmodel3D->prodsb = (CALreal*) malloc(sizeof(CALreal) * (calclmodel3D->host_CA->sizeof_pQb_array + 1));
+	calclmodel3D->prodsi = (CALreal*) malloc(sizeof(CALreal) * (calclmodel3D->host_CA->sizeof_pQi_array + 1));
+	calclmodel3D->prodsr = (CALreal*) malloc(sizeof(CALreal) * (calclmodel3D->host_CA->sizeof_pQr_array + 1));
+
+	calclmodel3D->reductionFlagsLogicalAndb = (CALbyte*) malloc(sizeof(CALbyte) * (calclmodel3D->host_CA->sizeof_pQb_array));
+	calclmodel3D->reductionFlagsLogicalAndi = (CALbyte*) malloc(sizeof(CALbyte) * (calclmodel3D->host_CA->sizeof_pQi_array));
+	calclmodel3D->reductionFlagsLogicalAndr = (CALbyte*) malloc(sizeof(CALbyte) * (calclmodel3D->host_CA->sizeof_pQr_array));
+	calclmodel3D->logicalAndsb = (CALint*) malloc(sizeof(CALint) * (calclmodel3D->host_CA->sizeof_pQb_array + 1));
+	calclmodel3D->logicalAndsi = (CALint*) malloc(sizeof(CALint) * (calclmodel3D->host_CA->sizeof_pQi_array + 1));
+	calclmodel3D->logicalAndsr = (CALint*) malloc(sizeof(CALint) * (calclmodel3D->host_CA->sizeof_pQr_array + 1));
+
+	calclmodel3D->reductionFlagsLogicalOrb = (CALbyte*) malloc(sizeof(CALbyte) * (calclmodel3D->host_CA->sizeof_pQb_array));
+	calclmodel3D->reductionFlagsLogicalOri = (CALbyte*) malloc(sizeof(CALbyte) * (calclmodel3D->host_CA->sizeof_pQi_array));
+	calclmodel3D->reductionFlagsLogicalOrr = (CALbyte*) malloc(sizeof(CALbyte) * (calclmodel3D->host_CA->sizeof_pQr_array));
+	calclmodel3D->logicalOrsb = (CALint*) malloc(sizeof(CALint) * (calclmodel3D->host_CA->sizeof_pQb_array + 1));
+	calclmodel3D->logicalOrsi = (CALint*) malloc(sizeof(CALint) * (calclmodel3D->host_CA->sizeof_pQi_array + 1));
+	calclmodel3D->logicalOrsr = (CALint*) malloc(sizeof(CALint) * (calclmodel3D->host_CA->sizeof_pQr_array + 1));
+
+	calclmodel3D->reductionFlagsLogicalXOrb = (CALbyte*) malloc(sizeof(CALbyte) * (calclmodel3D->host_CA->sizeof_pQb_array));
+	calclmodel3D->reductionFlagsLogicalXOri = (CALbyte*) malloc(sizeof(CALbyte) * (calclmodel3D->host_CA->sizeof_pQi_array));
+	calclmodel3D->reductionFlagsLogicalXOrr = (CALbyte*) malloc(sizeof(CALbyte) * (calclmodel3D->host_CA->sizeof_pQr_array));
+	calclmodel3D->logicalXOrsb = (CALint*) malloc(sizeof(CALint) * (calclmodel3D->host_CA->sizeof_pQb_array + 1));
+	calclmodel3D->logicalXOrsi = (CALint*) malloc(sizeof(CALint) * (calclmodel3D->host_CA->sizeof_pQi_array + 1));
+	calclmodel3D->logicalXOrsr = (CALint*) malloc(sizeof(CALint) * (calclmodel3D->host_CA->sizeof_pQr_array + 1));
+
+	calclmodel3D->reductionFlagsBinaryAndb = (CALbyte*) malloc(sizeof(CALbyte) * (calclmodel3D->host_CA->sizeof_pQb_array));
+	calclmodel3D->reductionFlagsBinaryAndi = (CALbyte*) malloc(sizeof(CALbyte) * (calclmodel3D->host_CA->sizeof_pQi_array));
+	calclmodel3D->reductionFlagsBinaryAndr = (CALbyte*) malloc(sizeof(CALbyte) * (calclmodel3D->host_CA->sizeof_pQr_array));
+	calclmodel3D->binaryAndsb = (CALint*) malloc(sizeof(CALint) * (calclmodel3D->host_CA->sizeof_pQb_array + 1));
+	calclmodel3D->binaryAndsi = (CALint*) malloc(sizeof(CALint) * (calclmodel3D->host_CA->sizeof_pQi_array + 1));
+	calclmodel3D->binaryAndsr = (CALint*) malloc(sizeof(CALint) * (calclmodel3D->host_CA->sizeof_pQr_array + 1));
+
+	calclmodel3D->reductionFlagsBinaryOrb = (CALbyte*) malloc(sizeof(CALbyte) * (calclmodel3D->host_CA->sizeof_pQb_array));
+	calclmodel3D->reductionFlagsBinaryOri = (CALbyte*) malloc(sizeof(CALbyte) * (calclmodel3D->host_CA->sizeof_pQi_array));
+	calclmodel3D->reductionFlagsBinaryOrr = (CALbyte*) malloc(sizeof(CALbyte) * (calclmodel3D->host_CA->sizeof_pQr_array));
+	calclmodel3D->binaryOrsb = (CALint*) malloc(sizeof(CALint) * (calclmodel3D->host_CA->sizeof_pQb_array + 1));
+	calclmodel3D->binaryOrsi = (CALint*) malloc(sizeof(CALint) * (calclmodel3D->host_CA->sizeof_pQi_array + 1));
+	calclmodel3D->binaryOrsr = (CALint*) malloc(sizeof(CALint) * (calclmodel3D->host_CA->sizeof_pQr_array + 1));
+
+	calclmodel3D->reductionFlagsBinaryXOrb = (CALbyte*) malloc(sizeof(CALbyte) * (calclmodel3D->host_CA->sizeof_pQb_array));
+	calclmodel3D->reductionFlagsBinaryXOri = (CALbyte*) malloc(sizeof(CALbyte) * (calclmodel3D->host_CA->sizeof_pQi_array));
+	calclmodel3D->reductionFlagsBinaryXOrr = (CALbyte*) malloc(sizeof(CALbyte) * (calclmodel3D->host_CA->sizeof_pQr_array));
+	calclmodel3D->binaryXOrsb = (CALint*) malloc(sizeof(CALint) * (calclmodel3D->host_CA->sizeof_pQb_array + 1));
+	calclmodel3D->binaryXOrsi = (CALint*) malloc(sizeof(CALint) * (calclmodel3D->host_CA->sizeof_pQi_array + 1));
+	calclmodel3D->binaryXOrsr = (CALint*) malloc(sizeof(CALint) * (calclmodel3D->host_CA->sizeof_pQr_array + 1));
+	int i;
+	for (i = 0; i < calclmodel3D->host_CA->sizeof_pQb_array; i++) {
+		calclmodel3D->reductionFlagsMinb[i] = CAL_FALSE;
+		calclmodel3D->reductionFlagsMaxb[i] = CAL_FALSE;
+		calclmodel3D->reductionFlagsSumb[i] = CAL_FALSE;
+		calclmodel3D->reductionFlagsProdb[i] = CAL_FALSE;
+		calclmodel3D->reductionFlagsLogicalAndb[i] = CAL_FALSE;
+		calclmodel3D->reductionFlagsLogicalOrb[i] = CAL_FALSE;
+		calclmodel3D->reductionFlagsLogicalXOrb[i] = CAL_FALSE;
+		calclmodel3D->reductionFlagsBinaryAndb[i] = CAL_FALSE;
+		calclmodel3D->reductionFlagsBinaryOrb[i] = CAL_FALSE;
+		calclmodel3D->reductionFlagsBinaryXOrb[i] = CAL_FALSE;
+		calclmodel3D->minimab[i] = 0;
+		calclmodel3D->maximab[i] = 0;
+		calclmodel3D->sumsb[i] = 0;
+		calclmodel3D->prodsb[i] = 0;
+		calclmodel3D->logicalAndsb[i] = 0;
+		calclmodel3D->logicalOrsb[i] = 0;
+		calclmodel3D->logicalXOrsb[i] = 0;
+		calclmodel3D->binaryAndsb[i] = 0;
+		calclmodel3D->binaryOrsb[i] = 0;
+		calclmodel3D->binaryXOrsb[i] = 0;
+	}
+	for ( i = 0; i < calclmodel3D->host_CA->sizeof_pQi_array; i++) {
+		calclmodel3D->reductionFlagsMini[i] = CAL_FALSE;
+		calclmodel3D->reductionFlagsMaxi[i] = CAL_FALSE;
+		calclmodel3D->reductionFlagsSumi[i] = CAL_FALSE;
+		calclmodel3D->reductionFlagsProdi[i] = CAL_FALSE;
+		calclmodel3D->reductionFlagsLogicalAndi[i] = CAL_FALSE;
+		calclmodel3D->reductionFlagsLogicalOri[i] = CAL_FALSE;
+		calclmodel3D->reductionFlagsLogicalXOri[i] = CAL_FALSE;
+		calclmodel3D->reductionFlagsBinaryAndi[i] = CAL_FALSE;
+		calclmodel3D->reductionFlagsBinaryOri[i] = CAL_FALSE;
+		calclmodel3D->reductionFlagsBinaryXOri[i] = CAL_FALSE;
+		calclmodel3D->minimai[i] = 0;
+		calclmodel3D->maximai[i] = 0;
+		calclmodel3D->sumsi[i] = 0;
+		calclmodel3D->prodsi[i] = 0;
+		calclmodel3D->logicalAndsi[i] = 0;
+		calclmodel3D->logicalOrsi[i] = 0;
+		calclmodel3D->logicalXOrsi[i] = 0;
+		calclmodel3D->binaryAndsi[i] = 0;
+		calclmodel3D->binaryOrsi[i] = 0;
+		calclmodel3D->binaryXOrsi[i] = 0;
+
+	}
+	for ( i = 0; i < calclmodel3D->host_CA->sizeof_pQr_array; i++) {
+		calclmodel3D->reductionFlagsMinr[i] = CAL_FALSE;
+		calclmodel3D->reductionFlagsMaxr[i] = CAL_FALSE;
+		calclmodel3D->reductionFlagsSumr[i] = CAL_FALSE;
+		calclmodel3D->reductionFlagsProdr[i] = CAL_FALSE;
+		calclmodel3D->reductionFlagsLogicalAndr[i] = CAL_FALSE;
+		calclmodel3D->reductionFlagsLogicalOrr[i] = CAL_FALSE;
+		calclmodel3D->reductionFlagsLogicalXOrr[i] = CAL_FALSE;
+		calclmodel3D->reductionFlagsBinaryAndr[i] = CAL_FALSE;
+		calclmodel3D->reductionFlagsBinaryOrr[i] = CAL_FALSE;
+		calclmodel3D->reductionFlagsBinaryXOrr[i] = CAL_FALSE;
+		calclmodel3D->minimar[i] = 0;
+		calclmodel3D->maximar[i] = 0;
+		calclmodel3D->sumsr[i] = 0;
+		calclmodel3D->prodsr[i] = 0;
+		calclmodel3D->logicalAndsr[i] = 0;
+		calclmodel3D->logicalOrsr[i] = 0;
+		calclmodel3D->logicalXOrsr[i] = 0;
+		calclmodel3D->binaryAndsr[i] = 0;
+		calclmodel3D->binaryOrsr[i] = 0;
+		calclmodel3D->binaryXOrsr[i] = 0;
+
+	}
+
+	calclmodel3D->roundedDimensions = upperPowerOfTwo3D(calclmodel3D->host_CA->rows * calclmodel3D->host_CA->columns*calclmodel3D->host_CA->slices);
+
+	calclmodel3D->context = context;
+
+
 	return calclmodel3D;
 
 }
 
 void calclRun3D(struct CALCLModel3D* calclmodel3D, unsigned int initialStep, unsigned maxStep) {
+
+	cl_int err;
+
+	int sizeCA = calclmodel3D->host_CA->rows * calclmodel3D->host_CA->columns * calclmodel3D->host_CA->slices;
+	//TODO eliminare bufferFlags Urgent
+
+	calclmodel3D->bufferMinimab = clCreateBuffer(calclmodel3D->context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALreal) * (calclmodel3D->host_CA->sizeof_pQb_array + 1),
+			calclmodel3D->minimab, &err);
+	calclHandleError(err);
+	calclmodel3D->bufferMaximab = clCreateBuffer(calclmodel3D->context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALreal) * (calclmodel3D->host_CA->sizeof_pQb_array + 1),
+			calclmodel3D->maximab, &err);
+	calclHandleError(err);
+	calclmodel3D->bufferSumb = clCreateBuffer(calclmodel3D->context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALreal) * (calclmodel3D->host_CA->sizeof_pQb_array + 1),
+			calclmodel3D->sumsb, &err);
+	calclHandleError(err);
+	calclmodel3D->bufferProdb = clCreateBuffer(calclmodel3D->context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALreal) * (calclmodel3D->host_CA->sizeof_pQb_array + 1),
+			calclmodel3D->prodsb, &err);
+	calclHandleError(err);
+	calclmodel3D->bufferLogicalAndsb = clCreateBuffer(calclmodel3D->context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALint) * (calclmodel3D->host_CA->sizeof_pQb_array + 1),
+			calclmodel3D->logicalAndsb, &err);
+	calclHandleError(err);
+	calclmodel3D->bufferLogicalOrsb = clCreateBuffer(calclmodel3D->context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALint) * (calclmodel3D->host_CA->sizeof_pQb_array + 1),
+			calclmodel3D->logicalOrsb, &err);
+	calclHandleError(err);
+	calclmodel3D->bufferLogicalXOrsb = clCreateBuffer(calclmodel3D->context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALint) * (calclmodel3D->host_CA->sizeof_pQb_array + 1),
+			calclmodel3D->logicalXOrsb, &err);
+	calclHandleError(err);
+	calclmodel3D->bufferBinaryAndsb = clCreateBuffer(calclmodel3D->context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALint) * (calclmodel3D->host_CA->sizeof_pQb_array + 1),
+			calclmodel3D->binaryAndsb, &err);
+	calclHandleError(err);
+	calclmodel3D->bufferBinaryOrsb = clCreateBuffer(calclmodel3D->context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALint) * (calclmodel3D->host_CA->sizeof_pQb_array + 1),
+			calclmodel3D->binaryOrsb, &err);
+	calclHandleError(err);
+	calclmodel3D->bufferBinaryXOrsb = clCreateBuffer(calclmodel3D->context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALint) * (calclmodel3D->host_CA->sizeof_pQb_array + 1),
+			calclmodel3D->binaryXOrsb, &err);
+	calclHandleError(err);
+
+	clSetKernelArg(calclmodel3D->kernelMinReductionb, 0, sizeof(CALCLmem), &calclmodel3D->bufferMinimab);
+	clSetKernelArg(calclmodel3D->kernelMinReductionb, 2, sizeof(CALCLmem), &calclmodel3D->bufferPartialMinb);
+	clSetKernelArg(calclmodel3D->kernelMinReductionb, 4, sizeof(int), &sizeCA);
+
+	clSetKernelArg(calclmodel3D->kernelMaxReductionb, 0, sizeof(CALCLmem), &calclmodel3D->bufferMaximab);
+	clSetKernelArg(calclmodel3D->kernelMaxReductionb, 2, sizeof(CALCLmem), &calclmodel3D->bufferPartialMaxb);
+	clSetKernelArg(calclmodel3D->kernelMaxReductionb, 4, sizeof(int), &sizeCA);
+
+	clSetKernelArg(calclmodel3D->kernelSumReductionb, 0, sizeof(CALCLmem), &calclmodel3D->bufferSumb);
+	clSetKernelArg(calclmodel3D->kernelSumReductionb, 2, sizeof(CALCLmem), &calclmodel3D->bufferPartialSumb);
+	clSetKernelArg(calclmodel3D->kernelSumReductionb, 4, sizeof(int), &sizeCA);
+
+	clSetKernelArg(calclmodel3D->kernelProdReductionb, 0, sizeof(CALCLmem), &calclmodel3D->bufferProdb);
+	clSetKernelArg(calclmodel3D->kernelProdReductionb, 2, sizeof(CALCLmem), &calclmodel3D->bufferPartialProdb);
+	clSetKernelArg(calclmodel3D->kernelProdReductionb, 4, sizeof(int), &sizeCA);
+
+	clSetKernelArg(calclmodel3D->kernelLogicalAndReductionb, 0, sizeof(CALCLmem), &calclmodel3D->bufferLogicalAndsb);
+	clSetKernelArg(calclmodel3D->kernelLogicalAndReductionb, 2, sizeof(CALCLmem), &calclmodel3D->bufferPartialLogicalAndb);
+	clSetKernelArg(calclmodel3D->kernelLogicalAndReductionb, 4, sizeof(int), &sizeCA);
+
+	clSetKernelArg(calclmodel3D->kernelLogicalOrReductionb, 0, sizeof(CALCLmem), &calclmodel3D->bufferLogicalOrsb);
+	clSetKernelArg(calclmodel3D->kernelLogicalOrReductionb, 2, sizeof(CALCLmem), &calclmodel3D->bufferPartialLogicalOrb);
+	clSetKernelArg(calclmodel3D->kernelLogicalOrReductionb, 4, sizeof(int), &sizeCA);
+
+	clSetKernelArg(calclmodel3D->kernelLogicalXOrReductionb, 0, sizeof(CALCLmem), &calclmodel3D->bufferLogicalXOrsb);
+	clSetKernelArg(calclmodel3D->kernelLogicalXOrReductionb, 2, sizeof(CALCLmem), &calclmodel3D->bufferPartialLogicalXOrb);
+	clSetKernelArg(calclmodel3D->kernelLogicalXOrReductionb, 4, sizeof(int), &sizeCA);
+
+	clSetKernelArg(calclmodel3D->kernelBinaryAndReductionb, 0, sizeof(CALCLmem), &calclmodel3D->bufferBinaryAndsb);
+	clSetKernelArg(calclmodel3D->kernelBinaryAndReductionb, 2, sizeof(CALCLmem), &calclmodel3D->bufferPartialBinaryAndb);
+	clSetKernelArg(calclmodel3D->kernelBinaryAndReductionb, 4, sizeof(int), &sizeCA);
+
+	clSetKernelArg(calclmodel3D->kernelBinaryOrReductionb, 0, sizeof(CALCLmem), &calclmodel3D->bufferBinaryOrsb);
+	clSetKernelArg(calclmodel3D->kernelBinaryOrReductionb, 2, sizeof(CALCLmem), &calclmodel3D->bufferBinaryOrsb);
+	clSetKernelArg(calclmodel3D->kernelBinaryOrReductionb, 4, sizeof(int), &sizeCA);
+
+	clSetKernelArg(calclmodel3D->kernelBinaryXorReductionb, 0, sizeof(CALCLmem), &calclmodel3D->bufferBinaryXOrsb);
+	clSetKernelArg(calclmodel3D->kernelBinaryXorReductionb, 2, sizeof(CALCLmem), &calclmodel3D->bufferBinaryXOrsb);
+	clSetKernelArg(calclmodel3D->kernelBinaryXorReductionb, 4, sizeof(int), &sizeCA);
+
+	calclmodel3D->bufferMinimai = clCreateBuffer(calclmodel3D->context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALreal) * (calclmodel3D->host_CA->sizeof_pQi_array + 1),
+			calclmodel3D->minimai, &err);
+	calclHandleError(err);
+	calclmodel3D->bufferMaximai = clCreateBuffer(calclmodel3D->context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALreal) * (calclmodel3D->host_CA->sizeof_pQi_array + 1),
+			calclmodel3D->maximai, &err);
+	calclHandleError(err);
+	calclmodel3D->bufferSumi = clCreateBuffer(calclmodel3D->context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALreal) * (calclmodel3D->host_CA->sizeof_pQi_array + 1), calclmodel3D->sumsi,
+			&err);
+	calclHandleError(err);
+	calclmodel3D->bufferProdi = clCreateBuffer(calclmodel3D->context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALreal) * (calclmodel3D->host_CA->sizeof_pQi_array + 1), calclmodel3D->prodsi,
+			&err);
+	calclHandleError(err);
+	calclmodel3D->bufferLogicalAndsi = clCreateBuffer(calclmodel3D->context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALint) * (calclmodel3D->host_CA->sizeof_pQi_array + 1),
+			calclmodel3D->logicalAndsi, &err);
+	calclHandleError(err);
+	calclmodel3D->bufferLogicalOrsi = clCreateBuffer(calclmodel3D->context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALint) * (calclmodel3D->host_CA->sizeof_pQi_array + 1),
+			calclmodel3D->logicalOrsi, &err);
+	calclHandleError(err);
+	calclmodel3D->bufferLogicalXOrsi = clCreateBuffer(calclmodel3D->context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALint) * (calclmodel3D->host_CA->sizeof_pQi_array + 1),
+			calclmodel3D->logicalXOrsi, &err);
+	calclHandleError(err);
+	calclmodel3D->bufferBinaryAndsi = clCreateBuffer(calclmodel3D->context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALint) * (calclmodel3D->host_CA->sizeof_pQi_array + 1),
+			calclmodel3D->binaryAndsi, &err);
+	calclHandleError(err);
+	calclmodel3D->bufferBinaryOrsi = clCreateBuffer(calclmodel3D->context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALint) * (calclmodel3D->host_CA->sizeof_pQi_array + 1),
+			calclmodel3D->binaryOrsi, &err);
+	calclHandleError(err);
+	calclmodel3D->bufferBinaryXOrsi = clCreateBuffer(calclmodel3D->context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALint) * (calclmodel3D->host_CA->sizeof_pQi_array + 1),
+			calclmodel3D->binaryXOrsi, &err);
+	calclHandleError(err);
+
+	clSetKernelArg(calclmodel3D->kernelMinReductioni, 0, sizeof(CALCLmem), &calclmodel3D->bufferMinimai);
+	clSetKernelArg(calclmodel3D->kernelMinReductioni, 2, sizeof(CALCLmem), &calclmodel3D->bufferPartialMini);
+	clSetKernelArg(calclmodel3D->kernelMinReductioni, 4, sizeof(int), &sizeCA);
+
+	clSetKernelArg(calclmodel3D->kernelMaxReductioni, 0, sizeof(CALCLmem), &calclmodel3D->bufferMaximai);
+	clSetKernelArg(calclmodel3D->kernelMaxReductioni, 2, sizeof(CALCLmem), &calclmodel3D->bufferPartialMaxi);
+	clSetKernelArg(calclmodel3D->kernelMaxReductioni, 4, sizeof(int), &sizeCA);
+
+	clSetKernelArg(calclmodel3D->kernelSumReductioni, 0, sizeof(CALCLmem), &calclmodel3D->bufferSumi);
+	clSetKernelArg(calclmodel3D->kernelSumReductioni, 2, sizeof(CALCLmem), &calclmodel3D->bufferPartialSumi);
+	clSetKernelArg(calclmodel3D->kernelSumReductioni, 4, sizeof(int), &sizeCA);
+
+	clSetKernelArg(calclmodel3D->kernelProdReductioni, 0, sizeof(CALCLmem), &calclmodel3D->bufferProdi);
+	clSetKernelArg(calclmodel3D->kernelProdReductioni, 2, sizeof(CALCLmem), &calclmodel3D->bufferPartialProdi);
+	clSetKernelArg(calclmodel3D->kernelProdReductioni, 4, sizeof(int), &sizeCA);
+
+	clSetKernelArg(calclmodel3D->kernelLogicalAndReductioni, 0, sizeof(CALCLmem), &calclmodel3D->bufferLogicalAndsi);
+	clSetKernelArg(calclmodel3D->kernelLogicalAndReductioni, 2, sizeof(CALCLmem), &calclmodel3D->bufferPartialLogicalAndi);
+	clSetKernelArg(calclmodel3D->kernelLogicalAndReductioni, 4, sizeof(int), &sizeCA);
+
+	clSetKernelArg(calclmodel3D->kernelLogicalOrReductioni, 0, sizeof(CALCLmem), &calclmodel3D->bufferLogicalOrsi);
+	clSetKernelArg(calclmodel3D->kernelLogicalOrReductioni, 2, sizeof(CALCLmem), &calclmodel3D->bufferPartialLogicalOri);
+	clSetKernelArg(calclmodel3D->kernelLogicalOrReductioni, 4, sizeof(int), &sizeCA);
+
+	clSetKernelArg(calclmodel3D->kernelLogicalXOrReductioni, 0, sizeof(CALCLmem), &calclmodel3D->bufferLogicalXOrsi);
+	clSetKernelArg(calclmodel3D->kernelLogicalXOrReductioni, 2, sizeof(CALCLmem), &calclmodel3D->bufferPartialLogicalXOri);
+	clSetKernelArg(calclmodel3D->kernelLogicalXOrReductioni, 4, sizeof(int), &sizeCA);
+
+	clSetKernelArg(calclmodel3D->kernelBinaryAndReductioni, 0, sizeof(CALCLmem), &calclmodel3D->bufferBinaryAndsi);
+	clSetKernelArg(calclmodel3D->kernelBinaryAndReductioni, 2, sizeof(CALCLmem), &calclmodel3D->bufferPartialBinaryAndi);
+	clSetKernelArg(calclmodel3D->kernelBinaryAndReductioni, 4, sizeof(int), &sizeCA);
+
+	clSetKernelArg(calclmodel3D->kernelBinaryOrReductioni, 0, sizeof(CALCLmem), &calclmodel3D->bufferBinaryOrsi);
+	clSetKernelArg(calclmodel3D->kernelBinaryOrReductioni, 2, sizeof(CALCLmem), &calclmodel3D->bufferPartialBinaryOri);
+	clSetKernelArg(calclmodel3D->kernelBinaryOrReductioni, 4, sizeof(int), &sizeCA);
+
+	clSetKernelArg(calclmodel3D->kernelBinaryXorReductioni, 0, sizeof(CALCLmem), &calclmodel3D->bufferBinaryXOrsi);
+	clSetKernelArg(calclmodel3D->kernelBinaryXorReductioni, 2, sizeof(CALCLmem), &calclmodel3D->bufferPartialBinaryXOri);
+	clSetKernelArg(calclmodel3D->kernelBinaryXorReductioni, 4, sizeof(int), &sizeCA);
+
+	calclmodel3D->bufferMinimar = clCreateBuffer(calclmodel3D->context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALreal) * (calclmodel3D->host_CA->sizeof_pQr_array + 1),
+			calclmodel3D->minimar, &err);
+	calclHandleError(err);
+	calclmodel3D->bufferMaximar = clCreateBuffer(calclmodel3D->context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALreal) * (calclmodel3D->host_CA->sizeof_pQr_array + 1),
+			calclmodel3D->maximar, &err);
+	calclHandleError(err);
+	calclmodel3D->bufferSumr = clCreateBuffer(calclmodel3D->context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALreal) * (calclmodel3D->host_CA->sizeof_pQr_array + 1), calclmodel3D->sumsr,
+			&err);
+	calclHandleError(err);
+	calclmodel3D->bufferProdr = clCreateBuffer(calclmodel3D->context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALreal) * (calclmodel3D->host_CA->sizeof_pQr_array + 1), calclmodel3D->prodsr,
+			&err);
+	calclHandleError(err);
+	calclmodel3D->bufferLogicalAndsr = clCreateBuffer(calclmodel3D->context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALint) * (calclmodel3D->host_CA->sizeof_pQr_array + 1),
+			calclmodel3D->logicalAndsr, &err);
+	calclHandleError(err);
+	calclmodel3D->bufferLogicalOrsr = clCreateBuffer(calclmodel3D->context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALint) * (calclmodel3D->host_CA->sizeof_pQr_array + 1),
+			calclmodel3D->logicalOrsr, &err);
+	calclHandleError(err);
+	calclmodel3D->bufferLogicalXOrsr = clCreateBuffer(calclmodel3D->context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALint) * (calclmodel3D->host_CA->sizeof_pQr_array + 1),
+			calclmodel3D->logicalXOrsr, &err);
+	calclHandleError(err);
+
+	calclmodel3D->bufferBinaryAndsr = clCreateBuffer(calclmodel3D->context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALint) * (calclmodel3D->host_CA->sizeof_pQr_array + 1),
+			calclmodel3D->binaryAndsr, &err);
+	calclHandleError(err);
+
+	calclmodel3D->bufferBinaryOrsr = clCreateBuffer(calclmodel3D->context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALint) * (calclmodel3D->host_CA->sizeof_pQr_array + 1),
+			calclmodel3D->binaryOrsr, &err);
+	calclHandleError(err);
+
+	calclmodel3D->bufferBinaryXOrsr = clCreateBuffer(calclmodel3D->context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALint) * (calclmodel3D->host_CA->sizeof_pQr_array + 1),
+			calclmodel3D->binaryXOrsr, &err);
+	calclHandleError(err);
+
+	clSetKernelArg(calclmodel3D->kernelMinReductionr, 0, sizeof(CALCLmem), &calclmodel3D->bufferMinimar);
+	clSetKernelArg(calclmodel3D->kernelMinReductionr, 2, sizeof(CALCLmem), &calclmodel3D->bufferPartialMinr);
+	clSetKernelArg(calclmodel3D->kernelMinReductionr, 4, sizeof(int), &sizeCA);
+
+	clSetKernelArg(calclmodel3D->kernelMaxReductionr, 0, sizeof(CALCLmem), &calclmodel3D->bufferMaximar);
+	clSetKernelArg(calclmodel3D->kernelMaxReductionr, 2, sizeof(CALCLmem), &calclmodel3D->bufferPartialMaxr);
+	clSetKernelArg(calclmodel3D->kernelMaxReductionr, 4, sizeof(int), &sizeCA);
+
+	clSetKernelArg(calclmodel3D->kernelSumReductionr, 0, sizeof(CALCLmem), &calclmodel3D->bufferSumr);
+	clSetKernelArg(calclmodel3D->kernelSumReductionr, 2, sizeof(CALCLmem), &calclmodel3D->bufferPartialSumr);
+	clSetKernelArg(calclmodel3D->kernelSumReductionr, 4, sizeof(int), &sizeCA);
+
+	clSetKernelArg(calclmodel3D->kernelProdReductionr, 0, sizeof(CALCLmem), &calclmodel3D->bufferProdr);
+	clSetKernelArg(calclmodel3D->kernelProdReductionr, 2, sizeof(CALCLmem), &calclmodel3D->bufferPartialProdr);
+	clSetKernelArg(calclmodel3D->kernelProdReductionr, 4, sizeof(int), &sizeCA);
+
+	clSetKernelArg(calclmodel3D->kernelLogicalAndReductionr, 0, sizeof(CALCLmem), &calclmodel3D->bufferLogicalAndsr);
+	clSetKernelArg(calclmodel3D->kernelLogicalAndReductionr, 2, sizeof(CALCLmem), &calclmodel3D->bufferPartialLogicalAndr);
+	clSetKernelArg(calclmodel3D->kernelLogicalAndReductionr, 4, sizeof(int), &sizeCA);
+
+	clSetKernelArg(calclmodel3D->kernelLogicalOrReductionr, 0, sizeof(CALCLmem), &calclmodel3D->bufferLogicalOrsr);
+	clSetKernelArg(calclmodel3D->kernelLogicalOrReductionr, 2, sizeof(CALCLmem), &calclmodel3D->bufferPartialLogicalOrr);
+	clSetKernelArg(calclmodel3D->kernelLogicalOrReductionr, 4, sizeof(int), &sizeCA);
+
+	clSetKernelArg(calclmodel3D->kernelLogicalXOrReductionr, 0, sizeof(CALCLmem), &calclmodel3D->bufferLogicalXOrsr);
+	clSetKernelArg(calclmodel3D->kernelLogicalXOrReductionr, 2, sizeof(CALCLmem), &calclmodel3D->bufferPartialLogicalXOrr);
+	clSetKernelArg(calclmodel3D->kernelLogicalXOrReductionr, 4, sizeof(int), &sizeCA);
+
+	clSetKernelArg(calclmodel3D->kernelBinaryAndReductionr, 0, sizeof(CALCLmem), &calclmodel3D->bufferBinaryAndsr);
+	clSetKernelArg(calclmodel3D->kernelBinaryAndReductionr, 2, sizeof(CALCLmem), &calclmodel3D->bufferPartialBinaryAndr);
+	clSetKernelArg(calclmodel3D->kernelBinaryAndReductionr, 4, sizeof(int), &sizeCA);
+
+	clSetKernelArg(calclmodel3D->kernelBinaryOrReductionr, 0, sizeof(CALCLmem), &calclmodel3D->bufferBinaryOrsr);
+	clSetKernelArg(calclmodel3D->kernelBinaryOrReductionr, 2, sizeof(CALCLmem), &calclmodel3D->bufferPartialBinaryOrr);
+	clSetKernelArg(calclmodel3D->kernelBinaryOrReductionr, 4, sizeof(int), &sizeCA);
+
+	clSetKernelArg(calclmodel3D->kernelBinaryXorReductionr, 0, sizeof(CALCLmem), &calclmodel3D->bufferBinaryXOrsr);
+	clSetKernelArg(calclmodel3D->kernelBinaryXorReductionr, 2, sizeof(CALCLmem), &calclmodel3D->bufferPartialBinaryXOrr);
+	clSetKernelArg(calclmodel3D->kernelBinaryXorReductionr, 4, sizeof(int), &sizeCA);
+
+	if (calclmodel3D->kernelInitSubstates != NULL)
+		calclSetReductionParameters3D(calclmodel3D, &calclmodel3D->kernelInitSubstates);
+	if (calclmodel3D->kernelStopCondition != NULL)
+		calclSetReductionParameters3D(calclmodel3D, &calclmodel3D->kernelStopCondition);
+	if (calclmodel3D->kernelSteering != NULL)
+		calclSetReductionParameters3D(calclmodel3D, &calclmodel3D->kernelSteering);
+
+	int i = 0;
+
+	for (i = 0; i < calclmodel3D->elementaryProcessesNum; i++) {
+		calclSetReductionParameters3D(calclmodel3D, &calclmodel3D->elementaryProcesses[i]);
+	}
+
 
 //	cl_int err;
 	CALbyte stop;
@@ -422,17 +1202,527 @@ void calclRun3D(struct CALCLModel3D* calclmodel3D, unsigned int initialStep, uns
 		if (stop)
 			break;
 	}
-
 	calclGetSubstatesDeviceToHost3D(calclmodel3D);
+
 	free(threadNumMax);
 	free(singleStepThreadNum);
 }
+
+void calclComputeReduction3Di(struct CALCLModel3D * calclmodel3D, int numSubstate, enum REDUCTION_OPERATION operation, int rounded) {
+
+	CALCLqueue queue = calclmodel3D->queue;
+	cl_int err;
+	int iterations = rounded / 2;
+	size_t tmpThreads = iterations;
+	int i;
+
+	int count = 0;
+
+	int offset = 1;
+	for (i = iterations; i > 0; i /= 2) {
+		tmpThreads = i;
+		switch (operation) {
+		case REDUCTION_MAX:
+			clSetKernelArg(calclmodel3D->kernelMaxReductioni, 3, sizeof(CALint), &offset);
+			clSetKernelArg(calclmodel3D->kernelMaxReductioni, 5, sizeof(CALint), &count);
+			err = clEnqueueNDRangeKernel(queue, calclmodel3D->kernelMaxReductioni, 1,
+			NULL, &tmpThreads, NULL, 0, NULL, NULL);
+			calclHandleError(err);
+			break;
+		case REDUCTION_MIN:
+			clSetKernelArg(calclmodel3D->kernelMinReductioni, 3, sizeof(CALint), &offset);
+			clSetKernelArg(calclmodel3D->kernelMinReductioni, 5, sizeof(CALint), &count);
+			err = clEnqueueNDRangeKernel(queue, calclmodel3D->kernelMinReductioni, 1, NULL, &tmpThreads, NULL, 0, NULL, NULL);
+			calclHandleError(err);
+			break;
+		case REDUCTION_SUM:
+			clSetKernelArg(calclmodel3D->kernelSumReductioni, 3, sizeof(CALint), &offset);
+			clSetKernelArg(calclmodel3D->kernelSumReductioni, 5, sizeof(CALint), &count);
+			err = clEnqueueNDRangeKernel(queue, calclmodel3D->kernelSumReductioni, 1,
+			NULL, &tmpThreads, NULL, 0, NULL, NULL);
+			calclHandleError(err);
+			break;
+		case REDUCTION_PROD:
+			clSetKernelArg(calclmodel3D->kernelProdReductioni, 3, sizeof(CALint), &offset);
+			clSetKernelArg(calclmodel3D->kernelProdReductioni, 5, sizeof(CALint), &count);
+			err = clEnqueueNDRangeKernel(queue, calclmodel3D->kernelProdReductioni, 1,
+			NULL, &tmpThreads, NULL, 0, NULL, NULL);
+			calclHandleError(err);
+			break;
+		case REDUCTION_LOGICAL_AND:
+			clSetKernelArg(calclmodel3D->kernelLogicalAndReductioni, 3, sizeof(CALint), &offset);
+			clSetKernelArg(calclmodel3D->kernelLogicalAndReductioni, 5, sizeof(CALint), &count);
+			err = clEnqueueNDRangeKernel(queue, calclmodel3D->kernelLogicalAndReductioni, 1,
+			NULL, &tmpThreads, NULL, 0, NULL, NULL);
+			calclHandleError(err);
+			break;
+		case REDUCTION_BINARY_AND:
+			clSetKernelArg(calclmodel3D->kernelBinaryAndReductioni, 3, sizeof(CALint), &offset);
+			clSetKernelArg(calclmodel3D->kernelBinaryAndReductioni, 5, sizeof(CALint), &count);
+			err = clEnqueueNDRangeKernel(queue, calclmodel3D->kernelBinaryAndReductioni, 1,
+			NULL, &tmpThreads, NULL, 0, NULL, NULL);
+			calclHandleError(err);
+			break;
+		case REDUCTION_LOGICAL_OR:
+			clSetKernelArg(calclmodel3D->kernelLogicalOrReductioni, 3, sizeof(CALint), &offset);
+			clSetKernelArg(calclmodel3D->kernelLogicalOrReductioni, 5, sizeof(CALint), &count);
+			err = clEnqueueNDRangeKernel(queue, calclmodel3D->kernelLogicalOrReductioni, 1,
+			NULL, &tmpThreads, NULL, 0, NULL, NULL);
+			calclHandleError(err);
+			break;
+		case REDUCTION_BINARY_OR:
+			clSetKernelArg(calclmodel3D->kernelBinaryOrReductioni, 3, sizeof(CALint), &offset);
+			clSetKernelArg(calclmodel3D->kernelBinaryOrReductioni, 5, sizeof(CALint), &count);
+			err = clEnqueueNDRangeKernel(queue, calclmodel3D->kernelBinaryOrReductioni, 1,
+			NULL, &tmpThreads, NULL, 0, NULL, NULL);
+			calclHandleError(err);
+			break;
+		case REDUCTION_LOGICAL_XOR:
+			clSetKernelArg(calclmodel3D->kernelLogicalXOrReductioni, 3, sizeof(CALint), &offset);
+			clSetKernelArg(calclmodel3D->kernelLogicalXOrReductioni, 5, sizeof(CALint), &count);
+			err = clEnqueueNDRangeKernel(queue, calclmodel3D->kernelLogicalXOrReductioni, 1,
+			NULL, &tmpThreads, NULL, 0, NULL, NULL);
+			calclHandleError(err);
+			break;
+		case REDUCTION_BINARY_XOR:
+			clSetKernelArg(calclmodel3D->kernelBinaryXorReductioni, 3, sizeof(CALint), &offset);
+			clSetKernelArg(calclmodel3D->kernelBinaryXorReductioni, 5, sizeof(CALint), &count);
+			err = clEnqueueNDRangeKernel(queue, calclmodel3D->kernelBinaryXorReductioni, 1,
+			NULL, &tmpThreads, NULL, 0, NULL, NULL);
+			calclHandleError(err);
+			break;
+		default:
+			break;
+		}
+		offset <<= 1;
+		count = count * 2 + 1;
+
+	}
+
+}
+
+void calclComputeReduction3Db(struct CALCLModel3D * calclmodel3D, int numSubstate, enum REDUCTION_OPERATION operation, int rounded) {
+
+	CALCLqueue queue = calclmodel3D->queue;
+	cl_int err;
+	int iterations = rounded / 2;
+	size_t tmpThreads = iterations;
+	int i;
+
+	int count = 0;
+
+	int offset = 1;
+	for (i = iterations; i > 0; i /= 2) {
+		tmpThreads = i;
+		switch (operation) {
+		case REDUCTION_MAX:
+			clSetKernelArg(calclmodel3D->kernelMaxReductionb, 3, sizeof(CALint), &offset);
+			clSetKernelArg(calclmodel3D->kernelMaxReductionb, 5, sizeof(CALint), &count);
+			err = clEnqueueNDRangeKernel(queue, calclmodel3D->kernelMaxReductionb, 1,
+			NULL, &tmpThreads, NULL, 0, NULL, NULL);
+			calclHandleError(err);
+			break;
+		case REDUCTION_MIN:
+			clSetKernelArg(calclmodel3D->kernelMinReductionb, 3, sizeof(CALint), &offset);
+			clSetKernelArg(calclmodel3D->kernelMinReductionb, 5, sizeof(CALint), &count);
+			err = clEnqueueNDRangeKernel(queue, calclmodel3D->kernelMinReductionb, 1, NULL, &tmpThreads, NULL, 0, NULL, NULL);
+			calclHandleError(err);
+			break;
+		case REDUCTION_SUM:
+			clSetKernelArg(calclmodel3D->kernelSumReductionb, 3, sizeof(CALint), &offset);
+			clSetKernelArg(calclmodel3D->kernelSumReductionb, 5, sizeof(CALint), &count);
+			err = clEnqueueNDRangeKernel(queue, calclmodel3D->kernelSumReductionb, 1,
+			NULL, &tmpThreads, NULL, 0, NULL, NULL);
+			calclHandleError(err);
+			break;
+		case REDUCTION_PROD:
+			clSetKernelArg(calclmodel3D->kernelProdReductionb, 3, sizeof(CALint), &offset);
+			clSetKernelArg(calclmodel3D->kernelProdReductionb, 5, sizeof(CALint), &count);
+			err = clEnqueueNDRangeKernel(queue, calclmodel3D->kernelProdReductionb, 1,
+			NULL, &tmpThreads, NULL, 0, NULL, NULL);
+			calclHandleError(err);
+			break;
+		case REDUCTION_LOGICAL_AND:
+			clSetKernelArg(calclmodel3D->kernelLogicalAndReductionb, 3, sizeof(CALint), &offset);
+			clSetKernelArg(calclmodel3D->kernelLogicalAndReductionb, 5, sizeof(CALint), &count);
+			err = clEnqueueNDRangeKernel(queue, calclmodel3D->kernelLogicalAndReductionb, 1,
+			NULL, &tmpThreads, NULL, 0, NULL, NULL);
+			calclHandleError(err);
+			break;
+		case REDUCTION_BINARY_AND:
+			clSetKernelArg(calclmodel3D->kernelBinaryAndReductionb, 3, sizeof(CALint), &offset);
+			clSetKernelArg(calclmodel3D->kernelBinaryAndReductionb, 5, sizeof(CALint), &count);
+			err = clEnqueueNDRangeKernel(queue, calclmodel3D->kernelBinaryAndReductionb, 1,
+			NULL, &tmpThreads, NULL, 0, NULL, NULL);
+			calclHandleError(err);
+			break;
+		case REDUCTION_LOGICAL_OR:
+			clSetKernelArg(calclmodel3D->kernelLogicalOrReductionb, 3, sizeof(CALint), &offset);
+			clSetKernelArg(calclmodel3D->kernelLogicalOrReductionb, 5, sizeof(CALint), &count);
+			err = clEnqueueNDRangeKernel(queue, calclmodel3D->kernelLogicalOrReductionb, 1,
+			NULL, &tmpThreads, NULL, 0, NULL, NULL);
+			calclHandleError(err);
+			break;
+		case REDUCTION_BINARY_OR:
+			clSetKernelArg(calclmodel3D->kernelBinaryOrReductionb, 3, sizeof(CALint), &offset);
+			clSetKernelArg(calclmodel3D->kernelBinaryOrReductionb, 5, sizeof(CALint), &count);
+			err = clEnqueueNDRangeKernel(queue, calclmodel3D->kernelBinaryOrReductionb, 1,
+			NULL, &tmpThreads, NULL, 0, NULL, NULL);
+			calclHandleError(err);
+			break;
+		case REDUCTION_LOGICAL_XOR:
+			clSetKernelArg(calclmodel3D->kernelLogicalXOrReductionb, 3, sizeof(CALint), &offset);
+			clSetKernelArg(calclmodel3D->kernelLogicalXOrReductionb, 5, sizeof(CALint), &count);
+			err = clEnqueueNDRangeKernel(queue, calclmodel3D->kernelLogicalXOrReductionb, 1,
+			NULL, &tmpThreads, NULL, 0, NULL, NULL);
+			calclHandleError(err);
+			break;
+		case REDUCTION_BINARY_XOR:
+			clSetKernelArg(calclmodel3D->kernelBinaryXorReductionb, 3, sizeof(CALint), &offset);
+			clSetKernelArg(calclmodel3D->kernelBinaryXorReductionb, 5, sizeof(CALint), &count);
+			err = clEnqueueNDRangeKernel(queue, calclmodel3D->kernelBinaryXorReductionb, 1,
+			NULL, &tmpThreads, NULL, 0, NULL, NULL);
+			calclHandleError(err);
+			break;
+		default:
+			break;
+		}
+		offset <<= 1;
+		count = count * 2 + 1;
+
+	}
+
+}
+
+void calclComputeReduction3Dr(struct CALCLModel3D * calclmodel3D, int numSubstate, enum REDUCTION_OPERATION operation, int rounded) {
+
+	CALCLqueue queue = calclmodel3D->queue;
+	cl_int err;
+	int iterations = rounded / 2;
+	size_t tmpThreads = iterations;
+	int i;
+
+	int count = 0;
+
+	int offset = 1;
+	for (i = iterations; i > 0; i /= 2) {
+		tmpThreads = i;
+
+		switch (operation) {
+		case REDUCTION_MAX:
+			clSetKernelArg(calclmodel3D->kernelMaxReductionr, 3, sizeof(CALint), &offset);
+			clSetKernelArg(calclmodel3D->kernelMaxReductionr, 5, sizeof(CALint), &count);
+			err = clEnqueueNDRangeKernel(queue, calclmodel3D->kernelMaxReductionr, 1,
+			NULL, &tmpThreads, NULL, 0, NULL, NULL);
+			calclHandleError(err);
+			break;
+		case REDUCTION_MIN:
+			clSetKernelArg(calclmodel3D->kernelMinReductionr, 3, sizeof(CALint), &offset);
+			clSetKernelArg(calclmodel3D->kernelMinReductionr, 5, sizeof(CALint), &count);
+			err = clEnqueueNDRangeKernel(queue, calclmodel3D->kernelMinReductionr, 1, NULL, &tmpThreads, NULL, 0, NULL, NULL);
+			calclHandleError(err);
+			break;
+		case REDUCTION_SUM:
+			clSetKernelArg(calclmodel3D->kernelSumReductionr, 3, sizeof(CALint), &offset);
+			clSetKernelArg(calclmodel3D->kernelSumReductionr, 5, sizeof(CALint), &count);
+			err = clEnqueueNDRangeKernel(queue, calclmodel3D->kernelSumReductionr, 1,
+			NULL, &tmpThreads, NULL, 0, NULL, NULL);
+			calclHandleError(err);
+			break;
+		case REDUCTION_PROD:
+			clSetKernelArg(calclmodel3D->kernelProdReductionr, 3, sizeof(CALint), &offset);
+			clSetKernelArg(calclmodel3D->kernelProdReductionr, 5, sizeof(CALint), &count);
+			err = clEnqueueNDRangeKernel(queue, calclmodel3D->kernelProdReductionr, 1,
+			NULL, &tmpThreads, NULL, 0, NULL, NULL);
+			calclHandleError(err);
+			break;
+		case REDUCTION_LOGICAL_AND:
+			clSetKernelArg(calclmodel3D->kernelLogicalAndReductionr, 3, sizeof(CALint), &offset);
+			clSetKernelArg(calclmodel3D->kernelLogicalAndReductionr, 5, sizeof(CALint), &count);
+			err = clEnqueueNDRangeKernel(queue, calclmodel3D->kernelLogicalAndReductionr, 1,
+			NULL, &tmpThreads, NULL, 0, NULL, NULL);
+			calclHandleError(err);
+			break;
+		case REDUCTION_BINARY_AND:
+			clSetKernelArg(calclmodel3D->kernelBinaryAndReductionr, 3, sizeof(CALint), &offset);
+			clSetKernelArg(calclmodel3D->kernelBinaryAndReductionr, 5, sizeof(CALint), &count);
+			err = clEnqueueNDRangeKernel(queue, calclmodel3D->kernelBinaryAndReductionr, 1,
+			NULL, &tmpThreads, NULL, 0, NULL, NULL);
+			calclHandleError(err);
+			break;
+		case REDUCTION_LOGICAL_OR:
+			clSetKernelArg(calclmodel3D->kernelLogicalOrReductionr, 3, sizeof(CALint), &offset);
+			clSetKernelArg(calclmodel3D->kernelLogicalOrReductionr, 5, sizeof(CALint), &count);
+			err = clEnqueueNDRangeKernel(queue, calclmodel3D->kernelLogicalOrReductionr, 1,
+			NULL, &tmpThreads, NULL, 0, NULL, NULL);
+			calclHandleError(err);
+			break;
+		case REDUCTION_BINARY_OR:
+			clSetKernelArg(calclmodel3D->kernelBinaryOrReductionr, 3, sizeof(CALint), &offset);
+			clSetKernelArg(calclmodel3D->kernelBinaryOrReductionr, 5, sizeof(CALint), &count);
+			err = clEnqueueNDRangeKernel(queue, calclmodel3D->kernelBinaryOrReductionr, 1,
+			NULL, &tmpThreads, NULL, 0, NULL, NULL);
+			calclHandleError(err);
+			break;
+		case REDUCTION_LOGICAL_XOR:
+			clSetKernelArg(calclmodel3D->kernelLogicalXOrReductionr, 3, sizeof(CALint), &offset);
+			clSetKernelArg(calclmodel3D->kernelLogicalXOrReductionr, 5, sizeof(CALint), &count);
+			err = clEnqueueNDRangeKernel(queue, calclmodel3D->kernelLogicalXOrReductionr, 1,
+			NULL, &tmpThreads, NULL, 0, NULL, NULL);
+			calclHandleError(err);
+			break;
+		case REDUCTION_BINARY_XOR:
+			clSetKernelArg(calclmodel3D->kernelBinaryXorReductionr, 3, sizeof(CALint), &offset);
+			clSetKernelArg(calclmodel3D->kernelBinaryXorReductionr, 5, sizeof(CALint), &count);
+			err = clEnqueueNDRangeKernel(queue, calclmodel3D->kernelBinaryXorReductionr, 1,
+			NULL, &tmpThreads, NULL, 0, NULL, NULL);
+			calclHandleError(err);
+			break;
+		default:
+			break;
+		}
+		offset <<= 1;
+		count = count * 2 + 1;
+
+	}
+
+}
+
+
+void calclExecuteReduction3D(struct CALCLModel3D* calclmodel3D, int rounded) {
+
+	int i = 0;
+	cl_int err;
+	size_t tmp = calclmodel3D->host_CA->rows * calclmodel3D->host_CA->columns * calclmodel3D->host_CA->slices;
+
+	for (i = 0; i < calclmodel3D->host_CA->sizeof_pQb_array; i++) {
+		if (calclmodel3D->reductionFlagsMinb[i]) {
+			clSetKernelArg(calclmodel3D->kernelMinReductionb, 1, sizeof(CALint), &i);
+			clSetKernelArg(calclmodel3D->kernelMinCopyb, 2, sizeof(CALint), &i);
+			err = clEnqueueNDRangeKernel(calclmodel3D->queue, calclmodel3D->kernelMinCopyb, 1, NULL, &tmp, NULL, 0, NULL, NULL);
+			calclHandleError(err);
+			calclComputeReduction3Db(calclmodel3D, i, REDUCTION_MIN, rounded);
+		}
+		if (calclmodel3D->reductionFlagsMaxb[i]) {
+			clSetKernelArg(calclmodel3D->kernelMaxReductionb, 1, sizeof(CALint), &i);
+			clSetKernelArg(calclmodel3D->kernelMaxCopyb, 2, sizeof(CALint), &i);
+			err = clEnqueueNDRangeKernel(calclmodel3D->queue, calclmodel3D->kernelMaxCopyb, 1, NULL, &tmp, NULL, 0, NULL, NULL);
+			calclHandleError(err);
+			calclComputeReduction3Db(calclmodel3D, i, REDUCTION_MAX, rounded);
+		}
+		if (calclmodel3D->reductionFlagsSumb[i]) {
+			clSetKernelArg(calclmodel3D->kernelSumReductionb, 1, sizeof(CALint), &i);
+			clSetKernelArg(calclmodel3D->kernelSumCopyb, 2, sizeof(CALint), &i);
+			err = clEnqueueNDRangeKernel(calclmodel3D->queue, calclmodel3D->kernelSumCopyb, 1, NULL, &tmp, NULL, 0, NULL, NULL);
+			calclHandleError(err);
+			calclComputeReduction3Db(calclmodel3D, i, REDUCTION_SUM, rounded);
+		}
+		if (calclmodel3D->reductionFlagsProdb[i]) {
+			clSetKernelArg(calclmodel3D->kernelProdReductionb, 1, sizeof(CALint), &i);
+			clSetKernelArg(calclmodel3D->kernelProdCopyb, 2, sizeof(CALint), &i);
+			err = clEnqueueNDRangeKernel(calclmodel3D->queue, calclmodel3D->kernelProdCopyb, 1, NULL, &tmp, NULL, 0, NULL, NULL);
+			calclHandleError(err);
+			calclComputeReduction3Dr(calclmodel3D, i, REDUCTION_PROD, rounded);
+		}
+		if (calclmodel3D->reductionFlagsLogicalAndb[i]) {
+			clSetKernelArg(calclmodel3D->kernelLogicalAndReductionb, 1, sizeof(CALint), &i);
+			clSetKernelArg(calclmodel3D->kernelLogicalAndCopyb, 2, sizeof(CALint), &i);
+			err = clEnqueueNDRangeKernel(calclmodel3D->queue, calclmodel3D->kernelLogicalAndCopyb, 1, NULL, &tmp, NULL, 0, NULL, NULL);
+			calclHandleError(err);
+			calclComputeReduction3Db(calclmodel3D, i, REDUCTION_LOGICAL_AND, rounded);
+		}
+		if (calclmodel3D->reductionFlagsLogicalOrb[i]) {
+			clSetKernelArg(calclmodel3D->kernelLogicalOrReductionb, 1, sizeof(CALint), &i);
+			clSetKernelArg(calclmodel3D->kernelLogicalOrCopyb, 2, sizeof(CALint), &i);
+			err = clEnqueueNDRangeKernel(calclmodel3D->queue, calclmodel3D->kernelLogicalOrCopyb, 1, NULL, &tmp, NULL, 0, NULL, NULL);
+			calclHandleError(err);
+			calclComputeReduction3Db(calclmodel3D, i, REDUCTION_LOGICAL_OR, rounded);
+		}
+		if (calclmodel3D->reductionFlagsLogicalXOrb[i]) {
+			clSetKernelArg(calclmodel3D->kernelLogicalXOrReductionb, 1, sizeof(CALint), &i);
+			clSetKernelArg(calclmodel3D->kernelLogicalXOrCopyb, 2, sizeof(CALint), &i);
+			err = clEnqueueNDRangeKernel(calclmodel3D->queue, calclmodel3D->kernelLogicalXOrCopyb, 1, NULL, &tmp, NULL, 0, NULL, NULL);
+			calclHandleError(err);
+			calclComputeReduction3Db(calclmodel3D, i, REDUCTION_LOGICAL_XOR, rounded);
+		}
+		if (calclmodel3D->reductionFlagsBinaryAndb[i]) {
+			clSetKernelArg(calclmodel3D->kernelBinaryAndReductionb, 1, sizeof(CALint), &i);
+			clSetKernelArg(calclmodel3D->kernelBinaryAndCopyb, 2, sizeof(CALint), &i);
+			err = clEnqueueNDRangeKernel(calclmodel3D->queue, calclmodel3D->kernelBinaryAndCopyb, 1, NULL, &tmp, NULL, 0, NULL, NULL);
+			calclHandleError(err);
+			calclComputeReduction3Db(calclmodel3D, i, REDUCTION_BINARY_AND, rounded);
+		}
+		if (calclmodel3D->reductionFlagsBinaryOrb[i]) {
+			clSetKernelArg(calclmodel3D->kernelBinaryOrReductionb, 1, sizeof(CALint), &i);
+			clSetKernelArg(calclmodel3D->kernelBinaryOrCopyb, 2, sizeof(CALint), &i);
+			err = clEnqueueNDRangeKernel(calclmodel3D->queue, calclmodel3D->kernelBinaryOrCopyb, 1, NULL, &tmp, NULL, 0, NULL, NULL);
+			calclHandleError(err);
+			calclComputeReduction3Db(calclmodel3D, i, REDUCTION_BINARY_OR, rounded);
+		}
+		if (calclmodel3D->reductionFlagsBinaryXOrb[i]) {
+			clSetKernelArg(calclmodel3D->kernelBinaryXorReductionb, 1, sizeof(CALint), &i);
+			clSetKernelArg(calclmodel3D->kernelBinaryXOrCopyb, 2, sizeof(CALint), &i);
+			err = clEnqueueNDRangeKernel(calclmodel3D->queue, calclmodel3D->kernelBinaryXOrCopyb, 1, NULL, &tmp, NULL, 0, NULL, NULL);
+			calclHandleError(err);
+			calclComputeReduction3Db(calclmodel3D, i, REDUCTION_BINARY_XOR, rounded);
+		}
+	}
+
+
+	for (i = 0; i < calclmodel3D->host_CA->sizeof_pQi_array; i++) {
+		if (calclmodel3D->reductionFlagsMini[i]) {
+			clSetKernelArg(calclmodel3D->kernelMinReductioni, 1, sizeof(CALint), &i);
+			clSetKernelArg(calclmodel3D->kernelMinCopyi, 2, sizeof(CALint), &i);
+			err = clEnqueueNDRangeKernel(calclmodel3D->queue, calclmodel3D->kernelMinCopyi, 1, NULL, &tmp, NULL, 0, NULL, NULL);
+			calclHandleError(err);
+			calclComputeReduction3Di(calclmodel3D, i, REDUCTION_MIN, rounded);
+		}
+		if (calclmodel3D->reductionFlagsMaxi[i]) {
+			clSetKernelArg(calclmodel3D->kernelMaxReductioni, 1, sizeof(CALint), &i);
+			clSetKernelArg(calclmodel3D->kernelMaxCopyi, 2, sizeof(CALint), &i);
+			err = clEnqueueNDRangeKernel(calclmodel3D->queue, calclmodel3D->kernelMaxCopyi, 1, NULL, &tmp, NULL, 0, NULL, NULL);
+			calclHandleError(err);
+			calclComputeReduction3Di(calclmodel3D, i, REDUCTION_MAX, rounded);
+		}
+		if (calclmodel3D->reductionFlagsSumi[i]) {
+			clSetKernelArg(calclmodel3D->kernelSumReductioni, 1, sizeof(CALint), &i);
+			clSetKernelArg(calclmodel3D->kernelSumCopyi, 2, sizeof(CALint), &i);
+			err = clEnqueueNDRangeKernel(calclmodel3D->queue, calclmodel3D->kernelSumCopyi, 1, NULL, &tmp, NULL, 0, NULL, NULL);
+			calclHandleError(err);
+			calclComputeReduction3Di(calclmodel3D, i, REDUCTION_SUM, rounded);
+		}
+		if (calclmodel3D->reductionFlagsProdi[i]) {
+			clSetKernelArg(calclmodel3D->kernelProdReductioni, 1, sizeof(CALint), &i);
+			clSetKernelArg(calclmodel3D->kernelProdCopyi, 2, sizeof(CALint), &i);
+			err = clEnqueueNDRangeKernel(calclmodel3D->queue, calclmodel3D->kernelProdCopyi, 1, NULL, &tmp, NULL, 0, NULL, NULL);
+			calclHandleError(err);
+			calclComputeReduction3Dr(calclmodel3D, i, REDUCTION_PROD, rounded);
+		}
+		if (calclmodel3D->reductionFlagsLogicalAndi[i]) {
+			clSetKernelArg(calclmodel3D->kernelLogicalAndReductioni, 1, sizeof(CALint), &i);
+			clSetKernelArg(calclmodel3D->kernelLogicalAndCopyi, 2, sizeof(CALint), &i);
+			err = clEnqueueNDRangeKernel(calclmodel3D->queue, calclmodel3D->kernelLogicalAndCopyi, 1, NULL, &tmp, NULL, 0, NULL, NULL);
+			calclHandleError(err);
+			calclComputeReduction3Di(calclmodel3D, i, REDUCTION_LOGICAL_AND, rounded);
+		}
+		if (calclmodel3D->reductionFlagsLogicalOri[i]) {
+			clSetKernelArg(calclmodel3D->kernelLogicalOrReductioni, 1, sizeof(CALint), &i);
+			clSetKernelArg(calclmodel3D->kernelLogicalOrCopyi, 2, sizeof(CALint), &i);
+			err = clEnqueueNDRangeKernel(calclmodel3D->queue, calclmodel3D->kernelLogicalOrCopyi, 1, NULL, &tmp, NULL, 0, NULL, NULL);
+			calclHandleError(err);
+			calclComputeReduction3Di(calclmodel3D, i, REDUCTION_LOGICAL_OR, rounded);
+		}
+		if (calclmodel3D->reductionFlagsLogicalXOri[i]) {
+			clSetKernelArg(calclmodel3D->kernelLogicalXOrReductioni, 1, sizeof(CALint), &i);
+			clSetKernelArg(calclmodel3D->kernelLogicalXOrCopyi, 2, sizeof(CALint), &i);
+			err = clEnqueueNDRangeKernel(calclmodel3D->queue, calclmodel3D->kernelLogicalXOrCopyi, 1, NULL, &tmp, NULL, 0, NULL, NULL);
+			calclHandleError(err);
+			calclComputeReduction3Di(calclmodel3D, i, REDUCTION_LOGICAL_XOR, rounded);
+		}
+		if (calclmodel3D->reductionFlagsBinaryAndi[i]) {
+			clSetKernelArg(calclmodel3D->kernelBinaryAndReductioni, 1, sizeof(CALint), &i);
+			clSetKernelArg(calclmodel3D->kernelBinaryAndCopyi, 2, sizeof(CALint), &i);
+			err = clEnqueueNDRangeKernel(calclmodel3D->queue, calclmodel3D->kernelBinaryAndCopyi, 1, NULL, &tmp, NULL, 0, NULL, NULL);
+			calclHandleError(err);
+			calclComputeReduction3Di(calclmodel3D, i, REDUCTION_BINARY_AND, rounded);
+		}
+		if (calclmodel3D->reductionFlagsBinaryOri[i]) {
+			clSetKernelArg(calclmodel3D->kernelBinaryOrReductioni, 1, sizeof(CALint), &i);
+			clSetKernelArg(calclmodel3D->kernelBinaryOrCopyi, 2, sizeof(CALint), &i);
+			err = clEnqueueNDRangeKernel(calclmodel3D->queue, calclmodel3D->kernelBinaryOrCopyi, 1, NULL, &tmp, NULL, 0, NULL, NULL);
+			calclHandleError(err);
+			calclComputeReduction3Di(calclmodel3D, i, REDUCTION_BINARY_OR, rounded);
+		}
+		if (calclmodel3D->reductionFlagsBinaryXOri[i]) {
+			clSetKernelArg(calclmodel3D->kernelBinaryXorReductioni, 1, sizeof(CALint), &i);
+			clSetKernelArg(calclmodel3D->kernelBinaryXOrCopyi, 2, sizeof(CALint), &i);
+			err = clEnqueueNDRangeKernel(calclmodel3D->queue, calclmodel3D->kernelBinaryXOrCopyi, 1, NULL, &tmp, NULL, 0, NULL, NULL);
+			calclHandleError(err);
+			calclComputeReduction3Di(calclmodel3D, i, REDUCTION_BINARY_XOR, rounded);
+		}
+	}
+
+	for (i = 0; i < calclmodel3D->host_CA->sizeof_pQr_array; i++) {
+
+		if (calclmodel3D->reductionFlagsMinr[i]) {
+			clSetKernelArg(calclmodel3D->kernelMinReductionr, 1, sizeof(CALint), &i);
+			clSetKernelArg(calclmodel3D->kernelMinCopyr, 2, sizeof(CALint), &i);
+			err = clEnqueueNDRangeKernel(calclmodel3D->queue, calclmodel3D->kernelMinCopyr, 1, NULL, &tmp, NULL, 0, NULL, NULL);
+			calclHandleError(err);
+			calclComputeReduction3Dr(calclmodel3D, i, REDUCTION_MIN, rounded);
+		}
+		if (calclmodel3D->reductionFlagsMaxr[i]) {
+			clSetKernelArg(calclmodel3D->kernelMaxReductionr, 1, sizeof(CALint), &i);
+			clSetKernelArg(calclmodel3D->kernelMaxCopyr, 2, sizeof(CALint), &i);
+			err = clEnqueueNDRangeKernel(calclmodel3D->queue, calclmodel3D->kernelMaxCopyr, 1, NULL, &tmp, NULL, 0, NULL, NULL);
+			calclHandleError(err);
+			calclComputeReduction3Dr(calclmodel3D, i, REDUCTION_MAX, rounded);
+		}
+		if (calclmodel3D->reductionFlagsSumr[i]) {
+			clSetKernelArg(calclmodel3D->kernelSumReductionr, 1, sizeof(CALint), &i);
+			clSetKernelArg(calclmodel3D->kernelSumCopyr, 2, sizeof(CALint), &i);
+			err = clEnqueueNDRangeKernel(calclmodel3D->queue, calclmodel3D->kernelSumCopyr, 1, NULL, &tmp, NULL, 0, NULL, NULL);
+			calclHandleError(err);
+			calclComputeReduction3Dr(calclmodel3D, i, REDUCTION_SUM, rounded);
+		}
+		if (calclmodel3D->reductionFlagsProdr[i]) {
+			clSetKernelArg(calclmodel3D->kernelProdReductionr, 1, sizeof(CALint), &i);
+			clSetKernelArg(calclmodel3D->kernelProdCopyr, 2, sizeof(CALint), &i);
+			err = clEnqueueNDRangeKernel(calclmodel3D->queue, calclmodel3D->kernelProdCopyr, 1, NULL, &tmp, NULL, 0, NULL, NULL);
+			calclHandleError(err);
+			calclComputeReduction3Dr(calclmodel3D, i, REDUCTION_PROD, rounded);
+		}
+		if (calclmodel3D->reductionFlagsLogicalAndr[i]) {
+			clSetKernelArg(calclmodel3D->kernelLogicalAndReductionr, 1, sizeof(CALint), &i);
+			clSetKernelArg(calclmodel3D->kernelLogicalAndCopyr, 2, sizeof(CALint), &i);
+			err = clEnqueueNDRangeKernel(calclmodel3D->queue, calclmodel3D->kernelLogicalAndCopyr, 1, NULL, &tmp, NULL, 0, NULL, NULL);
+			calclHandleError(err);
+			calclComputeReduction3Dr(calclmodel3D, i, REDUCTION_LOGICAL_AND, rounded);
+		}
+		if (calclmodel3D->reductionFlagsLogicalOrr[i]) {
+			clSetKernelArg(calclmodel3D->kernelLogicalOrReductionr, 1, sizeof(CALint), &i);
+			clSetKernelArg(calclmodel3D->kernelLogicalOrCopyr, 2, sizeof(CALint), &i);
+			err = clEnqueueNDRangeKernel(calclmodel3D->queue, calclmodel3D->kernelLogicalOrCopyr, 1, NULL, &tmp, NULL, 0, NULL, NULL);
+			calclHandleError(err);
+			calclComputeReduction3Dr(calclmodel3D, i, REDUCTION_LOGICAL_OR, rounded);
+		}
+		if (calclmodel3D->reductionFlagsLogicalXOrr[i]) {
+			clSetKernelArg(calclmodel3D->kernelLogicalXOrReductionr, 1, sizeof(CALint), &i);
+			clSetKernelArg(calclmodel3D->kernelLogicalXOrCopyr, 2, sizeof(CALint), &i);
+			err = clEnqueueNDRangeKernel(calclmodel3D->queue, calclmodel3D->kernelLogicalXOrCopyr, 1, NULL, &tmp, NULL, 0, NULL, NULL);
+			calclHandleError(err);
+			calclComputeReduction3Dr(calclmodel3D, i, REDUCTION_LOGICAL_XOR, rounded);
+		}
+		if (calclmodel3D->reductionFlagsBinaryAndr[i]) {
+			clSetKernelArg(calclmodel3D->kernelBinaryAndReductionr, 1, sizeof(CALint), &i);
+			clSetKernelArg(calclmodel3D->kernelBinaryAndCopyr, 2, sizeof(CALint), &i);
+			err = clEnqueueNDRangeKernel(calclmodel3D->queue, calclmodel3D->kernelBinaryAndCopyr, 1, NULL, &tmp, NULL, 0, NULL, NULL);
+			calclHandleError(err);
+			calclComputeReduction3Dr(calclmodel3D, i, REDUCTION_BINARY_AND, rounded);
+		}
+		if (calclmodel3D->reductionFlagsBinaryOrr[i]) {
+			clSetKernelArg(calclmodel3D->kernelBinaryOrReductionr, 1, sizeof(CALint), &i);
+			clSetKernelArg(calclmodel3D->kernelBinaryOrCopyr, 2, sizeof(CALint), &i);
+			err = clEnqueueNDRangeKernel(calclmodel3D->queue, calclmodel3D->kernelBinaryOrCopyr, 1, NULL, &tmp, NULL, 0, NULL, NULL);
+			calclHandleError(err);
+			calclComputeReduction3Dr(calclmodel3D, i, REDUCTION_BINARY_OR, rounded);
+		}
+		if (calclmodel3D->reductionFlagsBinaryXOrr[i]) {
+			clSetKernelArg(calclmodel3D->kernelBinaryXorReductionr, 1, sizeof(CALint), &i);
+			clSetKernelArg(calclmodel3D->kernelBinaryXOrCopyr, 2, sizeof(CALint), &i);
+			err = clEnqueueNDRangeKernel(calclmodel3D->queue, calclmodel3D->kernelBinaryXOrCopyr, 1, NULL, &tmp, NULL, 0, NULL, NULL);
+			calclHandleError(err);
+			calclComputeReduction3Dr(calclmodel3D, i, REDUCTION_BINARY_XOR, rounded);
+		}
+	}
+
+}
+
 
 CALbyte calclSingleStep3D(struct CALCLModel3D* calclmodel3D, size_t * threadsNum, int dimNum) {
 
 	CALbyte activeCells = calclmodel3D->opt == CAL_OPT_ACTIVE_CELLS;
 	int j;
-
 	if (activeCells) {
 		for (j = 0; j < calclmodel3D->elementaryProcessesNum; j++) {
 
@@ -441,6 +1731,9 @@ CALbyte calclSingleStep3D(struct CALCLModel3D* calclmodel3D, size_t * threadsNum
 			calclResizeThreadsNum3D(calclmodel3D, threadsNum);
 			calclKernelCall3D(calclmodel3D, calclmodel3D->kernelUpdateSubstate, dimNum, threadsNum, NULL);
 		}
+
+		calclExecuteReduction3D(calclmodel3D, calclmodel3D->roundedDimensions);
+
 		if (calclmodel3D->kernelSteering != NULL) {
 			calclKernelCall3D(calclmodel3D, calclmodel3D->kernelSteering, dimNum, threadsNum, NULL);
 			calclKernelCall3D(calclmodel3D, calclmodel3D->kernelUpdateSubstate, dimNum, threadsNum, NULL);
@@ -452,6 +1745,9 @@ CALbyte calclSingleStep3D(struct CALCLModel3D* calclmodel3D, size_t * threadsNum
 			calclCopySubstatesBuffers3D(calclmodel3D);
 
 		}
+
+		calclExecuteReduction3D(calclmodel3D, calclmodel3D->roundedDimensions);
+
 		if (calclmodel3D->kernelSteering != NULL) {
 			calclKernelCall3D(calclmodel3D, calclmodel3D->kernelSteering, dimNum, threadsNum, NULL);
 			calclCopySubstatesBuffers3D(calclmodel3D);
@@ -608,6 +1904,7 @@ void calclFinalize3D(struct CALCLModel3D * calclmodel3D) {
 	for (i = 0; i < calclmodel3D->elementaryProcessesNum; ++i)
 		clReleaseKernel(calclmodel3D->elementaryProcesses[i]);
 
+
 	clReleaseMemObject(calclmodel3D->bufferActiveCells);
 	clReleaseMemObject(calclmodel3D->bufferActiveCellsFlags);
 	clReleaseMemObject(calclmodel3D->bufferActiveCellsNum);
@@ -631,6 +1928,121 @@ void calclFinalize3D(struct CALCLModel3D * calclmodel3D) {
 	clReleaseMemObject(calclmodel3D->bufferSTOffsets1);
 	clReleaseMemObject(calclmodel3D->bufferStop);
 	clReleaseMemObject(calclmodel3D->bufferSTCountsDiff);
+
+	clReleaseKernel(calclmodel3D->kernelMinReductionb);
+	clReleaseKernel(calclmodel3D->kernelMinReductioni);
+	clReleaseKernel(calclmodel3D->kernelMinReductionr);
+	clReleaseKernel(calclmodel3D->kernelMaxReductionb);
+	clReleaseKernel(calclmodel3D->kernelMaxReductioni);
+	clReleaseKernel(calclmodel3D->kernelMaxReductionr);
+	clReleaseKernel(calclmodel3D->kernelSumReductionb);
+	clReleaseKernel(calclmodel3D->kernelSumReductioni);
+	clReleaseKernel(calclmodel3D->kernelSumReductionr);
+	clReleaseKernel(calclmodel3D->kernelProdReductionb);
+	clReleaseKernel(calclmodel3D->kernelProdReductioni);
+	clReleaseKernel(calclmodel3D->kernelProdReductionr);
+	clReleaseKernel(calclmodel3D->kernelLogicalAndReductionb);
+	clReleaseKernel(calclmodel3D->kernelLogicalAndReductioni);
+	clReleaseKernel(calclmodel3D->kernelLogicalAndReductionr);
+	clReleaseKernel(calclmodel3D->kernelLogicalOrReductionb);
+	clReleaseKernel(calclmodel3D->kernelLogicalOrReductioni);
+	clReleaseKernel(calclmodel3D->kernelLogicalOrReductionr);
+	clReleaseKernel(calclmodel3D->kernelLogicalXOrReductionb);
+	clReleaseKernel(calclmodel3D->kernelLogicalXOrReductioni);
+	clReleaseKernel(calclmodel3D->kernelLogicalXOrReductionr);
+	clReleaseKernel(calclmodel3D->kernelBinaryAndReductionb);
+	clReleaseKernel(calclmodel3D->kernelBinaryAndReductioni);
+	clReleaseKernel(calclmodel3D->kernelBinaryAndReductionr);
+	clReleaseKernel(calclmodel3D->kernelBinaryOrReductionb);
+	clReleaseKernel(calclmodel3D->kernelBinaryOrReductioni);
+	clReleaseKernel(calclmodel3D->kernelBinaryOrReductionr);
+	clReleaseKernel(calclmodel3D->kernelBinaryXorReductionb);
+	clReleaseKernel(calclmodel3D->kernelBinaryXorReductioni);
+	clReleaseKernel(calclmodel3D->kernelBinaryXorReductionr);
+
+	clReleaseKernel(calclmodel3D->kernelMinCopyb);
+	clReleaseKernel(calclmodel3D->kernelMinCopyi);
+	clReleaseKernel(calclmodel3D->kernelMinCopyr);
+	clReleaseKernel(calclmodel3D->kernelMaxCopyb);
+	clReleaseKernel(calclmodel3D->kernelMaxCopyi);
+	clReleaseKernel(calclmodel3D->kernelMaxCopyr);
+	clReleaseKernel(calclmodel3D->kernelSumCopyb);
+	clReleaseKernel(calclmodel3D->kernelSumCopyi);
+	clReleaseKernel(calclmodel3D->kernelSumCopyr);
+	clReleaseKernel(calclmodel3D->kernelProdCopyb);
+	clReleaseKernel(calclmodel3D->kernelProdCopyi);
+	clReleaseKernel(calclmodel3D->kernelProdCopyr);
+	clReleaseKernel(calclmodel3D->kernelLogicalAndCopyb);
+	clReleaseKernel(calclmodel3D->kernelLogicalAndCopyi);
+	clReleaseKernel(calclmodel3D->kernelLogicalAndCopyr);
+	clReleaseKernel(calclmodel3D->kernelLogicalOrCopyb);
+	clReleaseKernel(calclmodel3D->kernelLogicalOrCopyi);
+	clReleaseKernel(calclmodel3D->kernelLogicalOrCopyr);
+	clReleaseKernel(calclmodel3D->kernelLogicalXOrCopyb);
+	clReleaseKernel(calclmodel3D->kernelLogicalXOrCopyi);
+	clReleaseKernel(calclmodel3D->kernelLogicalXOrCopyr);
+	clReleaseKernel(calclmodel3D->kernelBinaryAndCopyb);
+	clReleaseKernel(calclmodel3D->kernelBinaryAndCopyi);
+	clReleaseKernel(calclmodel3D->kernelBinaryAndCopyr);
+	clReleaseKernel(calclmodel3D->kernelBinaryOrCopyb);
+	clReleaseKernel(calclmodel3D->kernelBinaryOrCopyi);
+	clReleaseKernel(calclmodel3D->kernelBinaryOrCopyr);
+	clReleaseKernel(calclmodel3D->kernelBinaryXOrCopyb);
+	clReleaseKernel(calclmodel3D->kernelBinaryXOrCopyi);
+	clReleaseKernel(calclmodel3D->kernelBinaryXOrCopyr);
+
+	clReleaseMemObject(calclmodel3D->bufferBinaryAndsb);
+	clReleaseMemObject(calclmodel3D->bufferBinaryAndsi);
+	clReleaseMemObject(calclmodel3D->bufferBinaryAndsr);
+	clReleaseMemObject(calclmodel3D->bufferBinaryOrsb);
+	clReleaseMemObject(calclmodel3D->bufferBinaryOrsi);
+	clReleaseMemObject(calclmodel3D->bufferBinaryOrsr);
+	clReleaseMemObject(calclmodel3D->bufferBinaryXOrsb);
+	clReleaseMemObject(calclmodel3D->bufferBinaryXOrsi);
+	clReleaseMemObject(calclmodel3D->bufferBinaryXOrsr);
+
+	clReleaseMemObject(calclmodel3D->bufferLogicalAndsb);
+	clReleaseMemObject(calclmodel3D->bufferLogicalAndsi);
+	clReleaseMemObject(calclmodel3D->bufferLogicalAndsr);
+	clReleaseMemObject(calclmodel3D->bufferLogicalOrsb);
+	clReleaseMemObject(calclmodel3D->bufferLogicalOrsi);
+	clReleaseMemObject(calclmodel3D->bufferLogicalOrsr);
+	clReleaseMemObject(calclmodel3D->bufferLogicalXOrsb);
+	clReleaseMemObject(calclmodel3D->bufferLogicalXOrsi);
+	clReleaseMemObject(calclmodel3D->bufferLogicalXOrsr);
+
+	clReleaseMemObject(calclmodel3D->bufferMinimab);
+	clReleaseMemObject(calclmodel3D->bufferMinimai);
+	clReleaseMemObject(calclmodel3D->bufferMinimar);
+	clReleaseMemObject(calclmodel3D->bufferPartialMaxb);
+	clReleaseMemObject(calclmodel3D->bufferPartialMaxi);
+	clReleaseMemObject(calclmodel3D->bufferPartialMaxr);
+	clReleaseMemObject(calclmodel3D->bufferPartialSumb);
+	clReleaseMemObject(calclmodel3D->bufferPartialSumi);
+	clReleaseMemObject(calclmodel3D->bufferPartialSumr);
+
+	clReleaseMemObject(calclmodel3D->bufferPartialLogicalAndb);
+	clReleaseMemObject(calclmodel3D->bufferPartialLogicalAndi);
+	clReleaseMemObject(calclmodel3D->bufferPartialLogicalAndr);
+	clReleaseMemObject(calclmodel3D->bufferPartialLogicalOrb);
+	clReleaseMemObject(calclmodel3D->bufferPartialLogicalOri);
+	clReleaseMemObject(calclmodel3D->bufferPartialLogicalOrr);
+	clReleaseMemObject(calclmodel3D->bufferPartialLogicalXOrb);
+	clReleaseMemObject(calclmodel3D->bufferPartialLogicalXOri);
+	clReleaseMemObject(calclmodel3D->bufferPartialLogicalXOrr);
+
+	clReleaseMemObject(calclmodel3D->bufferPartialBinaryAndb);
+	clReleaseMemObject(calclmodel3D->bufferPartialBinaryAndi);
+	clReleaseMemObject(calclmodel3D->bufferPartialBinaryAndr);
+	clReleaseMemObject(calclmodel3D->bufferPartialBinaryOrb);
+	clReleaseMemObject(calclmodel3D->bufferPartialBinaryOri);
+	clReleaseMemObject(calclmodel3D->bufferPartialBinaryOrr);
+	clReleaseMemObject(calclmodel3D->bufferPartialBinaryXOrb);
+	clReleaseMemObject(calclmodel3D->bufferPartialBinaryXOri);
+	clReleaseMemObject(calclmodel3D->bufferPartialBinaryXOrr);
+
+
+
 	clReleaseCommandQueue(calclmodel3D->queue);
 
 	free(calclmodel3D->substateMapper.byteSubstate_current_OUT);
@@ -687,4 +2099,104 @@ CALCLprogram calclLoadProgram3D(CALCLcontext context, CALCLdevice device, char* 
 
 int calclSetKernelArg3D(CALCLkernel kernel, cl_uint arg_index,size_t arg_size,const void *arg_value){
 	return  clSetKernelArg(kernel,MODEL_ARGS_NUM + arg_index, arg_size,arg_value);
+}
+
+void calclAddReductionMin3Di(struct CALCLModel3D * calclmodel3D, int numSubstate) {
+	calclmodel3D->reductionFlagsMini[numSubstate] = CAL_TRUE;
+}
+void calclAddReductionMin3Db(struct CALCLModel3D * calclmodel3D, int numSubstate) {
+	calclmodel3D->reductionFlagsMinb[numSubstate] = CAL_TRUE;
+}
+void calclAddReductionMin3Dr(struct CALCLModel3D * calclmodel3D, int numSubstate) {
+	calclmodel3D->reductionFlagsMinr[numSubstate] = CAL_TRUE;
+}
+
+void calclAddReductionMax3Di(struct CALCLModel3D * calclmodel3D, int numSubstate) {
+	calclmodel3D->reductionFlagsMaxi[numSubstate] = CAL_TRUE;
+}
+void calclAddReductionMax3Db(struct CALCLModel3D * calclmodel3D, int numSubstate) {
+	calclmodel3D->reductionFlagsMaxb[numSubstate] = CAL_TRUE;
+}
+void calclAddReductionMax3Dr(struct CALCLModel3D * calclmodel3D, int numSubstate) {
+	calclmodel3D->reductionFlagsMaxr[numSubstate] = CAL_TRUE;
+}
+
+void calclAddReductionSum3Di(struct CALCLModel3D * calclmodel3D, int numSubstate) {
+	calclmodel3D->reductionFlagsSumi[numSubstate] = CAL_TRUE;
+}
+void calclAddReductionSum3Db(struct CALCLModel3D * calclmodel3D, int numSubstate) {
+	calclmodel3D->reductionFlagsSumb[numSubstate] = CAL_TRUE;
+}
+void calclAddReductionSum3Dr(struct CALCLModel3D * calclmodel3D, int numSubstate) {
+	calclmodel3D->reductionFlagsSumr[numSubstate] = CAL_TRUE;
+}
+
+void calclAddReductionProd3Di(struct CALCLModel3D * calclmodel3D, int numSubstate) {
+	calclmodel3D->reductionFlagsProdi[numSubstate] = CAL_TRUE;
+}
+void calclAddReductionProd3Db(struct CALCLModel3D * calclmodel3D, int numSubstate) {
+	calclmodel3D->reductionFlagsProdb[numSubstate] = CAL_TRUE;
+}
+void calclAddReductionProd3Dr(struct CALCLModel3D * calclmodel3D, int numSubstate) {
+	calclmodel3D->reductionFlagsProdr[numSubstate] = CAL_TRUE;
+}
+
+void calclAddReductionLogicalAnd3Di(struct CALCLModel3D * calclmodel3D, int numSubstate) {
+	calclmodel3D->reductionFlagsLogicalAndi[numSubstate] = CAL_TRUE;
+}
+void calclAddReductionLogicalAnd3Db(struct CALCLModel3D * calclmodel3D, int numSubstate) {
+	calclmodel3D->reductionFlagsLogicalAndb[numSubstate] = CAL_TRUE;
+}
+void calclAddReductionLogicalAnd3Dr(struct CALCLModel3D * calclmodel3D, int numSubstate) {
+	calclmodel3D->reductionFlagsLogicalAndr[numSubstate] = CAL_TRUE;
+}
+
+void calclAddReductionLogicalOr3Di(struct CALCLModel3D * calclmodel3D, int numSubstate) {
+	calclmodel3D->reductionFlagsLogicalOri[numSubstate] = CAL_TRUE;
+}
+void calclAddReductionLogicalOr3Db(struct CALCLModel3D * calclmodel3D, int numSubstate) {
+	calclmodel3D->reductionFlagsLogicalOrb[numSubstate] = CAL_TRUE;
+}
+void calclAddReductionLogicalOr3Dr(struct CALCLModel3D * calclmodel3D, int numSubstate) {
+	calclmodel3D->reductionFlagsLogicalOrr[numSubstate] = CAL_TRUE;
+}
+
+void calclAddReductionLogicalXOr3Di(struct CALCLModel3D * calclmodel3D, int numSubstate) {
+	calclmodel3D->reductionFlagsLogicalXOri[numSubstate] = CAL_TRUE;
+}
+void calclAddReductionLogicalXOr3Db(struct CALCLModel3D * calclmodel3D, int numSubstate) {
+	calclmodel3D->reductionFlagsLogicalXOrb[numSubstate] = CAL_TRUE;
+}
+void calclAddReductionLogicalXOr3Dr(struct CALCLModel3D * calclmodel3D, int numSubstate) {
+	calclmodel3D->reductionFlagsLogicalXOrr[numSubstate] = CAL_TRUE;
+}
+
+void calclAddReductionBinaryAnd3Di(struct CALCLModel3D * calclmodel3D, int numSubstate) {
+	calclmodel3D->reductionFlagsBinaryAndi[numSubstate] = CAL_TRUE;
+}
+void calclAddReductionBinaryAnd3Db(struct CALCLModel3D * calclmodel3D, int numSubstate) {
+	calclmodel3D->reductionFlagsBinaryAndb[numSubstate] = CAL_TRUE;
+}
+void calclAddReductionBinaryAnd3Dr(struct CALCLModel3D * calclmodel3D, int numSubstate) {
+	calclmodel3D->reductionFlagsBinaryAndr[numSubstate] = CAL_TRUE;
+}
+
+void calclAddReductionBinaryOr3Di(struct CALCLModel3D * calclmodel3D, int numSubstate) {
+	calclmodel3D->reductionFlagsBinaryOri[numSubstate] = CAL_TRUE;
+}
+void calclAddReductionBinaryOr3Db(struct CALCLModel3D * calclmodel3D, int numSubstate) {
+	calclmodel3D->reductionFlagsBinaryOrb[numSubstate] = CAL_TRUE;
+}
+void calclAddReductionBinaryOr3Dr(struct CALCLModel3D * calclmodel3D, int numSubstate) {
+	calclmodel3D->reductionFlagsBinaryOrr[numSubstate] = CAL_TRUE;
+}
+
+void calclAddReductionBinaryXOr3Di(struct CALCLModel3D * calclmodel3D, int numSubstate) {
+	calclmodel3D->reductionFlagsBinaryXOri[numSubstate] = CAL_TRUE;
+}
+void calclAddReductionBinaryXOr3Db(struct CALCLModel3D * calclmodel3D, int numSubstate) {
+	calclmodel3D->reductionFlagsBinaryXOrb[numSubstate] = CAL_TRUE;
+}
+void calclAddReductionBinaryXOr3Dr(struct CALCLModel3D * calclmodel3D, int numSubstate) {
+	calclmodel3D->reductionFlagsBinaryXOrr[numSubstate] = CAL_TRUE;
 }

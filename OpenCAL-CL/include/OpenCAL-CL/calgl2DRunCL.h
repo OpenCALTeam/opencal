@@ -33,6 +33,9 @@ struct CALGLRun2D {
 	CALbyte onlyOneTime;
 	CALint fixedStep;
 	CALint final_step;		//!< Final simulation step; if 0 the simulation becomes a loop.
+	size_t * singleStepThreadNum;
+	int dimNum;
+	size_t * threadNumMax;
 
 };
 

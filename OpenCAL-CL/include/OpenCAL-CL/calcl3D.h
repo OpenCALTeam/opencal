@@ -44,7 +44,7 @@
 #define KER_STC_UP_SWEEP "calclkernelUpSweep3D"
 #define KER_STC_DOWN_SWEEP "calclkernelDownSweep3D"
 
-#define MODEL_ARGS_NUM 22		//!< Number of default arguments for each kernel defined by the user
+#define MODEL_ARGS_NUM 52		//!< Number of default arguments for each kernel defined by the user
 #define CALCL_RUN_LOOP 0		//!< Define used by the user to specify an infinite loop simulation
 
 /*! \brief CALCLSubstateMapper contains arrays used to retrieve substates from GPU
@@ -131,6 +131,233 @@ struct CALCLModel3D {
 
 	CALCLqueue queue;									//!< Opencl command queue
 
+	CALCLmem  bufferPartialMini;
+	CALCLmem  bufferPartialMaxi;
+	CALCLmem  bufferPartialSumi;
+	CALCLmem  bufferPartialProdi;
+	CALCLmem  bufferPartialLogicalAndi;
+	CALCLmem  bufferPartialLogicalOri;
+	CALCLmem  bufferPartialLogicalXOri;
+	CALCLmem  bufferPartialBinaryAndi;
+	CALCLmem  bufferPartialBinaryOri;
+	CALCLmem  bufferPartialBinaryXOri;
+
+	CALCLmem  bufferPartialMinb;
+	CALCLmem  bufferPartialMaxb;
+	CALCLmem  bufferPartialSumb;
+	CALCLmem  bufferPartialProdb;
+	CALCLmem  bufferPartialLogicalAndb;
+	CALCLmem  bufferPartialLogicalOrb;
+	CALCLmem  bufferPartialLogicalXOrb;
+	CALCLmem  bufferPartialBinaryAndb;
+	CALCLmem  bufferPartialBinaryOrb;
+	CALCLmem  bufferPartialBinaryXOrb;
+
+	CALCLmem  bufferPartialMinr;
+	CALCLmem  bufferPartialMaxr;
+	CALCLmem  bufferPartialSumr;
+	CALCLmem  bufferPartialProdr;
+	CALCLmem  bufferPartialLogicalAndr;
+	CALCLmem  bufferPartialLogicalOrr;
+	CALCLmem  bufferPartialLogicalXOrr;
+	CALCLmem  bufferPartialBinaryAndr;
+	CALCLmem  bufferPartialBinaryOrr;
+	CALCLmem  bufferPartialBinaryXOrr;
+
+	CALbyte * reductionFlagsMinb; 				//!< Pointer to array of flags that determine if a min reduction have to be compute
+	CALbyte * reductionFlagsMini; 				//!< Pointer to array of flags that determine if a min reduction have to be compute
+	CALbyte * reductionFlagsMinr; 				//!< Pointer to array of flags that determine if a min reduction have to be compute
+	CALreal * minimab;										//!< Array of CALreal that contains the min results
+	CALreal * minimai;										//!< Array of CALreal that contains the min results
+	CALreal * minimar;										//!< Array of CALreal that contains the min results
+
+	CALbyte * reductionFlagsMaxb;      	//!< Pointer to array of flags that determine if a max reduction have to be compute
+	CALbyte * reductionFlagsMaxi;      	//!< Pointer to array of flags that determine if a max reduction have to be compute
+	CALbyte * reductionFlagsMaxr;      	//!< Pointer to array of flags that determine if a max reduction have to be compute
+	CALreal * maximab;										//!< Array of CALreal that contains the max results
+	CALreal * maximai;										//!< Array of CALreal that contains the max results
+	CALreal * maximar;										//!< Array of CALreal that contains the max results
+
+	CALbyte * reductionFlagsSumb;				//!< Pointer to array of flags that determine if a sum reduction have to be compute
+	CALbyte * reductionFlagsSumi;				//!< Pointer to array of flags that determine if a sum reduction have to be compute
+	CALbyte * reductionFlagsSumr;				//!< Pointer to array of flags that determine if a sum reduction have to be compute
+	CALreal * sumsb;											//!< Array of CALreal that contains the sum results
+	CALreal * sumsi;											//!< Array of CALreal that contains the sum results
+	CALreal * sumsr;											//!< Array of CALreal that contains the sum results
+
+	CALbyte * reductionFlagsProdb;				//!< Pointer to array of flags that determine if a sum reduction have to be compute
+	CALbyte * reductionFlagsProdi;				//!< Pointer to array of flags that determine if a sum reduction have to be compute
+	CALbyte * reductionFlagsProdr;				//!< Pointer to array of flags that determine if a sum reduction have to be compute
+	CALreal * prodsb;											//!< Array of CALreal that contains the sum results
+	CALreal * prodsi;											//!< Array of CALreal that contains the sum results
+	CALreal * prodsr;											//!< Array of CALreal that contains the sum results
+
+	CALbyte * reductionFlagsLogicalAndb; //!< Pointer to array of flags that determine if a logical and reduction have to be compute
+	CALbyte * reductionFlagsLogicalAndi; //!< Pointer to array of flags that determine if a logical and reduction have to be compute
+	CALbyte * reductionFlagsLogicalAndr; //!< Pointer to array of flags that determine if a logical and reduction have to be compute
+	CALint * logicalAndsb;							//!< Array of CALreal that contains the logical and results
+	CALint * logicalAndsi;							//!< Array of CALreal that contains the logical and results
+	CALint * logicalAndsr;							//!< Array of CALreal that contains the logical and results
+
+	CALbyte * reductionFlagsLogicalOrb;	//!< Pointer to array of flags that determine if a logical or reduction have to be compute
+	CALbyte * reductionFlagsLogicalOri;	//!< Pointer to array of flags that determine if a logical or reduction have to be compute
+	CALbyte * reductionFlagsLogicalOrr;	//!< Pointer to array of flags that determine if a logical or reduction have to be compute
+	CALint * logicalOrsb;								//!< Array of CALreal that contains the logical or results
+	CALint * logicalOrsi;								//!< Array of CALreal that contains the logical or results
+	CALint * logicalOrsr;								//!< Array of CALreal that contains the logical or results
+
+	CALbyte * reductionFlagsLogicalXOrb;	//!< Pointer to array of flags that determine if a logical xor reduction have to be compute
+	CALbyte * reductionFlagsLogicalXOri;	//!< Pointer to array of flags that determine if a logical xor reduction have to be compute
+	CALbyte * reductionFlagsLogicalXOrr;	//!< Pointer to array of flags that determine if a logical xor reduction have to be compute
+	CALint * logicalXOrsb;							//!< Array of CALreal that contains the logical xor results
+	CALint * logicalXOrsi;							//!< Array of CALreal that contains the logical xor results
+	CALint * logicalXOrsr;							//!< Array of CALreal that contains the logical xor results
+
+	CALbyte * reductionFlagsBinaryAndb;	//!< Pointer to array of flags that determine if a binary and reduction have to be compute
+	CALbyte * reductionFlagsBinaryAndi;	//!< Pointer to array of flags that determine if a binary and reduction have to be compute
+	CALbyte * reductionFlagsBinaryAndr;	//!< Pointer to array of flags that determine if a binary and reduction have to be compute
+	CALint * binaryAndsb;								//!< Array of CALreal that contains the binary amd results
+	CALint * binaryAndsi;								//!< Array of CALreal that contains the binary amd results
+	CALint * binaryAndsr;								//!< Array of CALreal that contains the binary amd results
+
+	CALbyte * reductionFlagsBinaryOrb;		//!< Pointer to array of flags that determine if a binary or reduction have to be compute
+	CALbyte * reductionFlagsBinaryOri;		//!< Pointer to array of flags that determine if a binary or reduction have to be compute
+	CALbyte * reductionFlagsBinaryOrr;		//!< Pointer to array of flags that determine if a binary or reduction have to be compute
+	CALint * binaryOrsb;								//!< Array of CALreal that contains the binary or results
+	CALint * binaryOrsi;								//!< Array of CALreal that contains the binary or results
+	CALint * binaryOrsr;								//!< Array of CALreal that contains the binary or results
+
+	CALbyte * reductionFlagsBinaryXOrb;  //!< Pointer to array of flags that determine if a binary xor reduction have to be compute
+	CALbyte * reductionFlagsBinaryXOri;  //!< Pointer to array of flags that determine if a binary xor reduction have to be compute
+	CALbyte * reductionFlagsBinaryXOrr;  //!< Pointer to array of flags that determine if a binary xor reduction have to be compute
+	CALint * binaryXOrsb;								//!< Array of CALreal that contains the binary xor results
+	CALint * binaryXOrsi;								//!< Array of CALreal that contains the binary xor results
+	CALint * binaryXOrsr;								//!< Array of CALreal that contains the binary xor results
+
+	CALCLkernel kernelMinReductionb;
+	CALCLkernel kernelMinReductioni;
+	CALCLkernel kernelMinReductionr;
+
+	CALCLkernel kernelMaxReductionb;
+	CALCLkernel kernelMaxReductioni;
+	CALCLkernel kernelMaxReductionr;
+
+	CALCLkernel kernelSumReductionb;
+	CALCLkernel kernelSumReductioni;
+	CALCLkernel kernelSumReductionr;
+
+	CALCLkernel kernelProdReductionb;
+	CALCLkernel kernelProdReductioni;
+	CALCLkernel kernelProdReductionr;
+
+	CALCLkernel kernelLogicalAndReductionb;
+	CALCLkernel kernelLogicalAndReductioni;
+	CALCLkernel kernelLogicalAndReductionr;
+
+	CALCLkernel kernelBinaryAndReductionb;
+	CALCLkernel kernelBinaryAndReductioni;
+	CALCLkernel kernelBinaryAndReductionr;
+
+	CALCLkernel kernelLogicalOrReductionb;
+	CALCLkernel kernelLogicalOrReductioni;
+	CALCLkernel kernelLogicalOrReductionr;
+
+	CALCLkernel kernelBinaryOrReductionb;
+	CALCLkernel kernelBinaryOrReductioni;
+	CALCLkernel kernelBinaryOrReductionr;
+
+	CALCLkernel kernelLogicalXOrReductionb;
+	CALCLkernel kernelLogicalXOrReductioni;
+	CALCLkernel kernelLogicalXOrReductionr;
+
+	CALCLkernel kernelBinaryXorReductionb;
+	CALCLkernel kernelBinaryXorReductioni;
+	CALCLkernel kernelBinaryXorReductionr;
+
+	CALCLkernel kernelMinCopyb;
+	CALCLkernel kernelMinCopyi;
+	CALCLkernel kernelMinCopyr;
+
+	CALCLkernel kernelSumCopyb;
+	CALCLkernel kernelSumCopyi;
+	CALCLkernel kernelSumCopyr;
+
+	CALCLkernel kernelProdCopyb;
+	CALCLkernel kernelProdCopyi;
+	CALCLkernel kernelProdCopyr;
+
+
+	CALCLkernel kernelMaxCopyb;
+	CALCLkernel kernelMaxCopyi;
+	CALCLkernel kernelMaxCopyr;
+
+	CALCLkernel kernelLogicalAndCopyb;
+	CALCLkernel kernelLogicalAndCopyi;
+	CALCLkernel kernelLogicalAndCopyr;
+
+	CALCLkernel kernelLogicalOrCopyb;
+	CALCLkernel kernelLogicalOrCopyi;
+	CALCLkernel kernelLogicalOrCopyr;
+
+	CALCLkernel kernelLogicalXOrCopyb;
+	CALCLkernel kernelLogicalXOrCopyi;
+	CALCLkernel kernelLogicalXOrCopyr;
+
+	CALCLkernel kernelBinaryAndCopyb;
+	CALCLkernel kernelBinaryAndCopyi;
+	CALCLkernel kernelBinaryAndCopyr;
+
+	CALCLkernel kernelBinaryOrCopyb;
+	CALCLkernel kernelBinaryOrCopyi;
+	CALCLkernel kernelBinaryOrCopyr;
+
+	CALCLkernel kernelBinaryXOrCopyb;
+	CALCLkernel kernelBinaryXOrCopyi;
+	CALCLkernel kernelBinaryXOrCopyr;
+
+
+	CALCLmem bufferMinimab;
+	CALCLmem bufferMinimai;
+	CALCLmem bufferMinimar;
+
+	CALCLmem bufferMaximab;
+	CALCLmem bufferMaximai;
+	CALCLmem bufferMaximar;
+
+	CALCLmem bufferSumb;
+	CALCLmem bufferSumi;
+	CALCLmem bufferSumr;
+
+	CALCLmem bufferProdb;
+	CALCLmem bufferProdi;
+	CALCLmem bufferProdr;
+
+	CALCLmem bufferLogicalAndsb;
+	CALCLmem bufferLogicalAndsi;
+	CALCLmem bufferLogicalAndsr;
+
+	CALCLmem bufferLogicalOrsb;
+	CALCLmem bufferLogicalOrsi;
+	CALCLmem bufferLogicalOrsr;
+
+	CALCLmem bufferLogicalXOrsb;
+	CALCLmem bufferLogicalXOrsi;
+	CALCLmem bufferLogicalXOrsr;
+
+	CALCLmem bufferBinaryAndsb;
+	CALCLmem bufferBinaryAndsi;
+	CALCLmem bufferBinaryAndsr;
+
+	CALCLmem bufferBinaryOrsb;
+	CALCLmem bufferBinaryOrsi;
+	CALCLmem bufferBinaryOrsr;
+
+	CALCLmem bufferBinaryXOrsb;
+	CALCLmem bufferBinaryXOrsi;
+	CALCLmem bufferBinaryXOrsr;
+
+	int roundedDimensions;
+	CALCLcontext context;
 };
 
 /*! \brief Allocate, initialize and return a pointer to a struct CALCLModel3D.
@@ -258,6 +485,9 @@ int calclSetKernelArg3D(CALCLkernel kernel,			//!< Opencl kernel
 /*! \brief Copy all the substates device memory to host memory   */
 void calclGetSubstatesDeviceToHost3D(struct CALCLModel3D* calclmodel3D //!< Pointer to a struct CALCLModel3D
 			);
+
+void calclSetReductionParameters3D(struct CALCLModel3D* calclmodel3D, CALCLkernel * kernel);
+
 
 
 #endif /* CALCL_H_ */
