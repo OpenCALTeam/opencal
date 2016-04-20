@@ -14,51 +14,138 @@
 
 #include <OpenCAL-CL/calcl2D.h>
 
+/*! \brief Compute min reduction for CALbyte substates   */
 void calclAddReductionMin2Db(struct CALCLModel2D * calclmodel2D,					//!< Pointer to a struct CALCLModel2D
 		int numSubstates													//!< Number of the substate
 		);
+
+/*! \brief Compute min reduction for CALint substates   */
 void calclAddReductionMin2Di(struct CALCLModel2D * calclmodel2D,					//!< Pointer to a struct CALCLModel2D
 		int numSubstates													//!< Number of the substate
 		);
+
+/*! \brief Compute min reduction for CALreal substates   */
 void calclAddReductionMin2Dr(struct CALCLModel2D * calclmodel2D,					//!< Pointer to a struct CALCLModel2D
 		int numSubstates													//!< Number of the substate
 		);
 
-void calclAddReductionMax2Db(struct CALCLModel2D * calclmodel2D, int numSubstate);
-void calclAddReductionMax2Di(struct CALCLModel2D * calclmodel2D, int numSubstate);
-void calclAddReductionMax2Dr(struct CALCLModel2D * calclmodel2D, int numSubstate);
+/*! \brief Compute max reduction for CALbyte substates   */
+void calclAddReductionMax2Db(struct CALCLModel2D * calclmodel2D,					//!< Pointer to a struct CALCLModel2D
+		int numSubstates													//!< Number of the substate
+		);
+/*! \brief Compute max reduction for CALint substates   */
+void calclAddReductionMax2Di(struct CALCLModel2D * calclmodel2D,					//!< Pointer to a struct CALCLModel2D
+		int numSubstates													//!< Number of the substate
+		);
+/*! \brief Compute max reduction for CALreal substates   */
+void calclAddReductionMax2Dr(struct CALCLModel2D * calclmodel2D,					//!< Pointer to a struct CALCLModel2D
+		int numSubstates													//!< Number of the substate
+		);
 
-void calclAddReductionSum2Db(struct CALCLModel2D * calclmodel2D, int numSubstate);
-void calclAddReductionSum2Di(struct CALCLModel2D * calclmodel2D, int numSubstate);
-void calclAddReductionSum2Dr(struct CALCLModel2D * calclmodel2D, int numSubstate);
+/*! \brief Compute sum reduction for CALbyte substates   */
+void calclAddReductionSum2Db(struct CALCLModel2D * calclmodel2D,					//!< Pointer to a struct CALCLModel2D
+		int numSubstates													//!< Number of the substate
+		);
+/*! \brief Compute sum reduction for CALint substates   */
+void calclAddReductionSum2Di(struct CALCLModel2D * calclmodel2D,					//!< Pointer to a struct CALCLModel2D
+		int numSubstates													//!< Number of the substate
+		);
+/*! \brief Compute sum reduction for CALreal substates   */
+void calclAddReductionSum2Dr(struct CALCLModel2D * calclmodel2D,					//!< Pointer to a struct CALCLModel2D
+		int numSubstates													//!< Number of the substate
+		);
 
-void calclAddReductionProd2Db(struct CALCLModel2D * calclmodel2D, int numSubstate);
-void calclAddReductionProd2Di(struct CALCLModel2D * calclmodel2D, int numSubstate);
-void calclAddReductionProd2Dr(struct CALCLModel2D * calclmodel2D, int numSubstate);
+/*! \brief Compute prod reduction for CALbyte substates   */
+void calclAddReductionProd2Db(struct CALCLModel2D * calclmodel2D,					//!< Pointer to a struct CALCLModel2D
+		int numSubstates													//!< Number of the substate
+		);
+/*! \brief Compute prod reduction for CALint substates   */
+void calclAddReductionProd2Di(struct CALCLModel2D * calclmodel2D,					//!< Pointer to a struct CALCLModel2D
+		int numSubstates													//!< Number of the substate
+		);
+/*! \brief Compute prod reduction for CALreal substates   */
+void calclAddReductionProd2Dr(struct CALCLModel2D * calclmodel2D,					//!< Pointer to a struct CALCLModel2D
+		int numSubstates													//!< Number of the substate
+		);
 
-void calclAddReductionLogicalAnd2Db(struct CALCLModel2D * calclmodel2D, int numSubstate);
-void calclAddReductionLogicalAnd2Di(struct CALCLModel2D * calclmodel2D, int numSubstate);
-void calclAddReductionLogicalAnd2Dr(struct CALCLModel2D * calclmodel2D, int numSubstate);
+/*! \brief Compute logical and reduction for CALbyte substates   */
+void calclAddReductionLogicalAnd2Db(struct CALCLModel2D * calclmodel2D,					//!< Pointer to a struct CALCLModel2D
+		int numSubstates													//!< Number of the substate
+		);
+/*! \brief Compute logical and reduction for CALint substates   */
+void calclAddReductionLogicalAnd2Di(struct CALCLModel2D * calclmodel2D,					//!< Pointer to a struct CALCLModel2D
+		int numSubstates													//!< Number of the substate
+		);
+/*! \brief Compute logical and reduction for CALreal substates   */
+void calclAddReductionLogicalAnd2Dr(struct CALCLModel2D * calclmodel2D,					//!< Pointer to a struct CALCLModel2D
+		int numSubstates													//!< Number of the substate
+		);
 
-void calclAddReductionLogicalOr2Db(struct CALCLModel2D * calclmodel2D, int numSubstate);
-void calclAddReductionLogicalOr2Di(struct CALCLModel2D * calclmodel2D, int numSubstate);
-void calclAddReductionLogicalOr2Dr(struct CALCLModel2D * calclmodel2D, int numSubstate);
+/*! \brief Compute logical or reduction for CALbyte substates   */
+void calclAddReductionLogicalOr2Db(struct CALCLModel2D * calclmodel2D,					//!< Pointer to a struct CALCLModel2D
+		int numSubstates													//!< Number of the substate
+		);
+/*! \brief Compute logical or reduction for CALint substates   */
+void calclAddReductionLogicalOr2Di(struct CALCLModel2D * calclmodel2D,					//!< Pointer to a struct CALCLModel2D
+		int numSubstates													//!< Number of the substate
+		);
+/*! \brief Compute logical or reduction for CALreal substates   */
+void calclAddReductionLogicalOr2Dr(struct CALCLModel2D * calclmodel2D,					//!< Pointer to a struct CALCLModel2D
+		int numSubstates													//!< Number of the substate
+		);
 
-void calclAddReductionLogicalXOr2Db(struct CALCLModel2D * calclmodel2D, int numSubstate);
-void calclAddReductionLogicalXOr2Di(struct CALCLModel2D * calclmodel2D, int numSubstate);
-void calclAddReductionLogicalXOr2Dr(struct CALCLModel2D * calclmodel2D, int numSubstate);
+/*! \brief Compute logical xor reduction for CALbyte substates   */
+void calclAddReductionLogicalXOr2Db(struct CALCLModel2D * calclmodel2D,					//!< Pointer to a struct CALCLModel2D
+		int numSubstates													//!< Number of the substate
+		);
+/*! \brief Compute logical xor reduction for CALint substates   */
+void calclAddReductionLogicalXOr2Di(struct CALCLModel2D * calclmodel2D,					//!< Pointer to a struct CALCLModel2D
+		int numSubstates													//!< Number of the substate
+		);
+/*! \brief Compute logical xor reduction for CALreal substates   */
+void calclAddReductionLogicalXOr2Dr(struct CALCLModel2D * calclmodel2D,					//!< Pointer to a struct CALCLModel2D
+		int numSubstates													//!< Number of the substate
+		);
 
-void calclAddReductionBinaryAnd2Db(struct CALCLModel2D * calclmodel2D, int numSubstate);
-void calclAddReductionBinaryAnd2Di(struct CALCLModel2D * calclmodel2D, int numSubstate);
-void calclAddReductionBinaryAnd2Dr(struct CALCLModel2D * calclmodel2D, int numSubstate);
+/*! \brief Compute binary and reduction for CALbyte substates   */
+void calclAddReductionBinaryAnd2Db(struct CALCLModel2D * calclmodel2D,					//!< Pointer to a struct CALCLModel2D
+		int numSubstates													//!< Number of the substate
+		);
+/*! \brief Compute binary and reduction for CALint substates   */
+void calclAddReductionBinaryAnd2Di(struct CALCLModel2D * calclmodel2D,					//!< Pointer to a struct CALCLModel2D
+		int numSubstates													//!< Number of the substate
+		);
+/*! \brief Compute binary and reduction for CALreal substates   */
+void calclAddReductionBinaryAnd2Dr(struct CALCLModel2D * calclmodel2D,					//!< Pointer to a struct CALCLModel2D
+		int numSubstates													//!< Number of the substate
+		);
 
-void calclAddReductionBinaryOr2Db(struct CALCLModel2D * calclmodel2D, int numSubstate);
-void calclAddReductionBinaryOr2Di(struct CALCLModel2D * calclmodel2D, int numSubstate);
-void calclAddReductionBinaryOr2Dr(struct CALCLModel2D * calclmodel2D, int numSubstate);
+/*! \brief Compute binary or reduction for CALbyte substates   */
+void calclAddReductionBinaryOr2Db(struct CALCLModel2D * calclmodel2D,					//!< Pointer to a struct CALCLModel2D
+		int numSubstates													//!< Number of the substate
+		);
+/*! \brief Compute binary or reduction for CALint substates   */
+void calclAddReductionBinaryOr2Di(struct CALCLModel2D * calclmodel2D,					//!< Pointer to a struct CALCLModel2D
+		int numSubstates													//!< Number of the substate
+		);
+/*! \brief Compute binary or reduction for CALreal substates   */
+void calclAddReductionBinaryOr2Dr(struct CALCLModel2D * calclmodel2D,					//!< Pointer to a struct CALCLModel2D
+		int numSubstates													//!< Number of the substate
+		);
 
-void calclAddReductionBinaryXor2Db(struct CALCLModel2D * calclmodel2D, int numSubstate);
-void calclAddReductionBinaryXor2Di(struct CALCLModel2D * calclmodel2D, int numSubstate);
-void calclAddReductionBinaryXor2Dr(struct CALCLModel2D * calclmodel2D, int numSubstate);
+/*! \brief Compute binary xor reduction for CALbyte substates   */
+void calclAddReductionBinaryXor2Db(struct CALCLModel2D * calclmodel2D,					//!< Pointer to a struct CALCLModel2D
+		int numSubstates													//!< Number of the substate
+		);
+/*! \brief Compute binary xor reduction for CALint substates   */
+void calclAddReductionBinaryXor2Di(struct CALCLModel2D * calclmodel2D,					//!< Pointer to a struct CALCLModel2D
+		int numSubstates													//!< Number of the substate
+		);
+/*! \brief Compute binary xor reduction for CALreal substates   */
+void calclAddReductionBinaryXor2Dr(struct CALCLModel2D * calclmodel2D,					//!< Pointer to a struct CALCLModel2D
+		int numSubstates													//!< Number of the substate
+		);
+
 
 
 #endif

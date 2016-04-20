@@ -29,22 +29,22 @@
 	This version is for 2D cellular automata.
 */
 struct CALGLRun2D {
-	CALbyte firstRun;			//!< Boolean for a first launch.
-	CALbyte active;				//!< Boolean if it is active or not.
-	CALbyte terminated;			//!< Boolean if it is terminated.
-	struct CALRun2D* calRun;	//!< Reference to struct CALRun2D.
-	time_t start_time;			//!< Time for which the computation is started.
-	time_t end_time;			//!< Time for which the computation is ended.
-	pthread_t thread;			//!< Reference to a thread variable.
-	CALbyte stop;				//!< Boolean if it is stopped or not.
-	CALint step;
+	CALbyte firstRun;				//!< Boolean for a first launch.
+	CALbyte active;					//!< Boolean if it is active or not.
+	CALbyte terminated;				//!< Boolean if it is terminated.
+	struct CALRun2D* calRun;		//!< Reference to struct CALRun2D.
+	time_t start_time;				//!< Time for which the computation is started.
+	time_t end_time;				//!< Time for which the computation is ended.
+	pthread_t thread;				//!< Reference to a thread variable.
+	CALbyte stop;					//!< Boolean if it is stopped or not.
+	CALint step;					//!< Initial step.
 	struct CALCLModel2D* deviceCA;	//!< Reference to struct CALCLModel2D.
-	CALbyte onlyOneTime;
-	CALint fixedStep;
-	CALint final_step;		//!< Final simulation step; if 0 the simulation becomes a loop.
-	size_t * singleStepThreadNum;
-	int dimNum;
-	size_t * threadNumMax;
+	CALbyte onlyOneTime;			//!< Boolean for a first launch.
+	CALint fixedStep;				//!< Fixed step for transfer memory from device to host.
+	CALint final_step;				//!< Final simulation step; if 0 the simulation becomes a loop.
+	size_t * singleStepThreadNum;	//!< Number of thread for single step
+	int dimNum;						//!< Number of dimensions
+	size_t * threadNumMax;			//!< Pointer a size_t
 
 };
 
@@ -52,9 +52,9 @@ struct CALGLRun2D {
 */
 struct CALGLRun2D* calglRunCLDef2D(
 	struct CALCLModel2D* deviceCA,	//!< Reference to CALRun2D
-	CALint fixedStep,
-	CALint initial_step,
-	CALint final_step
+	CALint fixedStep,				//!< Fixed step for transfer memory from device to host.
+	CALint initial_step,			//!< Initial step.
+	CALint final_step				//!< Final step.
 	);
 
 /*! \brief Destructor for de-allocate memory.

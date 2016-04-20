@@ -14,51 +14,137 @@
 
 #include <OpenCAL-CL/calcl3D.h>
 
+/*! \brief Compute min reduction for CALbyte substates   */
 void calclAddReductionMin3Db(struct CALCLModel3D * calclmodel3D,					//!< Pointer to a struct CALCLModel3D
 		int numSubstates													//!< Number of the substate
 		);
+
+/*! \brief Compute min reduction for CALint substates   */
 void calclAddReductionMin3Di(struct CALCLModel3D * calclmodel3D,					//!< Pointer to a struct CALCLModel3D
 		int numSubstates													//!< Number of the substate
 		);
+
+/*! \brief Compute min reduction for CALreal substates   */
 void calclAddReductionMin3Dr(struct CALCLModel3D * calclmodel3D,					//!< Pointer to a struct CALCLModel3D
 		int numSubstates													//!< Number of the substate
 		);
 
-void calclAddReductionMax3Db(struct CALCLModel3D * calclmodel3D, int numSubstate);
-void calclAddReductionMax3Di(struct CALCLModel3D * calclmodel3D, int numSubstate);
-void calclAddReductionMax3Dr(struct CALCLModel3D * calclmodel3D, int numSubstate);
+/*! \brief Compute max reduction for CALbyte substates   */
+void calclAddReductionMax3Db(struct CALCLModel3D * calclmodel3D,					//!< Pointer to a struct CALCLModel3D
+		int numSubstates													//!< Number of the substate
+		);
+/*! \brief Compute max reduction for CALint substates   */
+void calclAddReductionMax3Di(struct CALCLModel3D * calclmodel3D,					//!< Pointer to a struct CALCLModel3D
+		int numSubstates													//!< Number of the substate
+		);
+/*! \brief Compute max reduction for CALreal substates   */
+void calclAddReductionMax3Dr(struct CALCLModel3D * calclmodel3D,					//!< Pointer to a struct CALCLModel3D
+		int numSubstates													//!< Number of the substate
+		);
 
-void calclAddReductionSum3Db(struct CALCLModel3D * calclmodel3D, int numSubstate);
-void calclAddReductionSum3Di(struct CALCLModel3D * calclmodel3D, int numSubstate);
-void calclAddReductionSum3Dr(struct CALCLModel3D * calclmodel3D, int numSubstate);
+/*! \brief Compute sum reduction for CALbyte substates   */
+void calclAddReductionSum3Db(struct CALCLModel3D * calclmodel3D,					//!< Pointer to a struct CALCLModel3D
+		int numSubstates													//!< Number of the substate
+		);
+/*! \brief Compute sum reduction for CALint substates   */
+void calclAddReductionSum3Di(struct CALCLModel3D * calclmodel3D,					//!< Pointer to a struct CALCLModel3D
+		int numSubstates													//!< Number of the substate
+		);
+/*! \brief Compute sum reduction for CALreal substates   */
+void calclAddReductionSum3Dr(struct CALCLModel3D * calclmodel3D,					//!< Pointer to a struct CALCLModel3D
+		int numSubstates													//!< Number of the substate
+		);
 
-void calclAddReductionProd3Db(struct CALCLModel3D * calclmodel3D, int numSubstate);
-void calclAddReductionProd3Di(struct CALCLModel3D * calclmodel3D, int numSubstate);
-void calclAddReductionProd3Dr(struct CALCLModel3D * calclmodel3D, int numSubstate);
+/*! \brief Compute prod reduction for CALbyte substates   */
+void calclAddReductionProd3Db(struct CALCLModel3D * calclmodel3D,					//!< Pointer to a struct CALCLModel3D
+		int numSubstates													//!< Number of the substate
+		);
+/*! \brief Compute prod reduction for CALint substates   */
+void calclAddReductionProd3Di(struct CALCLModel3D * calclmodel3D,					//!< Pointer to a struct CALCLModel3D
+		int numSubstates													//!< Number of the substate
+		);
+/*! \brief Compute prod reduction for CALreal substates   */
+void calclAddReductionProd3Dr(struct CALCLModel3D * calclmodel3D,					//!< Pointer to a struct CALCLModel3D
+		int numSubstates													//!< Number of the substate
+		);
 
-void calclAddReductionLogicalAnd3Db(struct CALCLModel3D * calclmodel3D, int numSubstate);
-void calclAddReductionLogicalAnd3Di(struct CALCLModel3D * calclmodel3D, int numSubstate);
-void calclAddReductionLogicalAnd3Dr(struct CALCLModel3D * calclmodel3D, int numSubstate);
+/*! \brief Compute logical and reduction for CALbyte substates   */
+void calclAddReductionLogicalAnd3Db(struct CALCLModel3D * calclmodel3D,					//!< Pointer to a struct CALCLModel3D
+		int numSubstates													//!< Number of the substate
+		);
+/*! \brief Compute logical and reduction for CALint substates   */
+void calclAddReductionLogicalAnd3Di(struct CALCLModel3D * calclmodel3D,					//!< Pointer to a struct CALCLModel3D
+		int numSubstates													//!< Number of the substate
+		);
+/*! \brief Compute logical and reduction for CALreal substates   */
+void calclAddReductionLogicalAnd3Dr(struct CALCLModel3D * calclmodel3D,					//!< Pointer to a struct CALCLModel3D
+		int numSubstates													//!< Number of the substate
+		);
 
-void calclAddReductionLogicalOr3Db(struct CALCLModel3D * calclmodel3D, int numSubstate);
-void calclAddReductionLogicalOr3Di(struct CALCLModel3D * calclmodel3D, int numSubstate);
-void calclAddReductionLogicalOr3Dr(struct CALCLModel3D * calclmodel3D, int numSubstate);
+/*! \brief Compute logical or reduction for CALbyte substates   */
+void calclAddReductionLogicalOr3Db(struct CALCLModel3D * calclmodel3D,					//!< Pointer to a struct CALCLModel3D
+		int numSubstates													//!< Number of the substate
+		);
+/*! \brief Compute logical or reduction for CALint substates   */
+void calclAddReductionLogicalOr3Di(struct CALCLModel3D * calclmodel3D,					//!< Pointer to a struct CALCLModel3D
+		int numSubstates													//!< Number of the substate
+		);
+/*! \brief Compute logical or reduction for CALreal substates   */
+void calclAddReductionLogicalOr3Dr(struct CALCLModel3D * calclmodel3D,					//!< Pointer to a struct CALCLModel3D
+		int numSubstates													//!< Number of the substate
+		);
 
-void calclAddReductionLogicalXOr3Db(struct CALCLModel3D * calclmodel3D, int numSubstate);
-void calclAddReductionLogicalXOr3Di(struct CALCLModel3D * calclmodel3D, int numSubstate);
-void calclAddReductionLogicalXOr3Dr(struct CALCLModel3D * calclmodel3D, int numSubstate);
+/*! \brief Compute logical xor reduction for CALbyte substates   */
+void calclAddReductionLogicalXOr3Db(struct CALCLModel3D * calclmodel3D,					//!< Pointer to a struct CALCLModel3D
+		int numSubstates													//!< Number of the substate
+		);
+/*! \brief Compute logical xor reduction for CALint substates   */
+void calclAddReductionLogicalXOr3Di(struct CALCLModel3D * calclmodel3D,					//!< Pointer to a struct CALCLModel3D
+		int numSubstates													//!< Number of the substate
+		);
+/*! \brief Compute logical xor reduction for CALreal substates   */
+void calclAddReductionLogicalXOr3Dr(struct CALCLModel3D * calclmodel3D,					//!< Pointer to a struct CALCLModel3D
+		int numSubstates													//!< Number of the substate
+		);
 
-void calclAddReductionBinaryAnd3Db(struct CALCLModel3D * calclmodel3D, int numSubstate);
-void calclAddReductionBinaryAnd3Di(struct CALCLModel3D * calclmodel3D, int numSubstate);
-void calclAddReductionBinaryAnd3Dr(struct CALCLModel3D * calclmodel3D, int numSubstate);
+/*! \brief Compute binary and reduction for CALbyte substates   */
+void calclAddReductionBinaryAnd3Db(struct CALCLModel3D * calclmodel3D,					//!< Pointer to a struct CALCLModel3D
+		int numSubstates													//!< Number of the substate
+		);
+/*! \brief Compute binary and reduction for CALint substates   */
+void calclAddReductionBinaryAnd3Di(struct CALCLModel3D * calclmodel3D,					//!< Pointer to a struct CALCLModel3D
+		int numSubstates													//!< Number of the substate
+		);
+/*! \brief Compute binary and reduction for CALreal substates   */
+void calclAddReductionBinaryAnd3Dr(struct CALCLModel3D * calclmodel3D,					//!< Pointer to a struct CALCLModel3D
+		int numSubstates													//!< Number of the substate
+		);
 
-void calclAddReductionBinaryOr3Db(struct CALCLModel3D * calclmodel3D, int numSubstate);
-void calclAddReductionBinaryOr3Di(struct CALCLModel3D * calclmodel3D, int numSubstate);
-void calclAddReductionBinaryOr3Dr(struct CALCLModel3D * calclmodel3D, int numSubstate);
+/*! \brief Compute binary or reduction for CALbyte substates   */
+void calclAddReductionBinaryOr3Db(struct CALCLModel3D * calclmodel3D,					//!< Pointer to a struct CALCLModel3D
+		int numSubstates													//!< Number of the substate
+		);
+/*! \brief Compute binary or reduction for CALint substates   */
+void calclAddReductionBinaryOr3Di(struct CALCLModel3D * calclmodel3D,					//!< Pointer to a struct CALCLModel3D
+		int numSubstates													//!< Number of the substate
+		);
+/*! \brief Compute binary or reduction for CALreal substates   */
+void calclAddReductionBinaryOr3Dr(struct CALCLModel3D * calclmodel3D,					//!< Pointer to a struct CALCLModel3D
+		int numSubstates													//!< Number of the substate
+		);
 
-void calclAddReductionBinaryXor3Db(struct CALCLModel3D * calclmodel3D, int numSubstate);
-void calclAddReductionBinaryXor3Di(struct CALCLModel3D * calclmodel3D, int numSubstate);
-void calclAddReductionBinaryXor3Dr(struct CALCLModel3D * calclmodel3D, int numSubstate);
+/*! \brief Compute binary xor reduction for CALbyte substates   */
+void calclAddReductionBinaryXor3Db(struct CALCLModel3D * calclmodel3D,					//!< Pointer to a struct CALCLModel3D
+		int numSubstates													//!< Number of the substate
+		);
+/*! \brief Compute binary xor reduction for CALint substates   */
+void calclAddReductionBinaryXor3Di(struct CALCLModel3D * calclmodel3D,					//!< Pointer to a struct CALCLModel3D
+		int numSubstates													//!< Number of the substate
+		);
+/*! \brief Compute binary xor reduction for CALreal substates   */
+void calclAddReductionBinaryXor3Dr(struct CALCLModel3D * calclmodel3D,					//!< Pointer to a struct CALCLModel3D
+		int numSubstates													//!< Number of the substate
+		);
 
 
 #endif

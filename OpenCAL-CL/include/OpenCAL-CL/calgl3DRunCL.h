@@ -29,31 +29,31 @@
 	This version is for 3D cellular automata.
 */
 struct CALGLRun3D {
-	CALbyte firstRun;			//!< Boolean for a first launch.
-	CALbyte active;				//!< Boolean if it is active or not.
-	CALbyte terminated;			//!< Boolean if it is terminated.
-	struct CALRun3D* calRun;	//!< Reference to struct CALRun3D.
-	time_t start_time;			//!< Time for which the computation is started.
-	time_t end_time;			//!< Time for which the computation is ended.
-	pthread_t thread;			//!< Reference to a thread variable.
-	CALbyte stop;				//!< Boolean if it is stopped or not.
-	CALint step;
+	CALbyte firstRun;				//!< Boolean for a first launch.
+	CALbyte active;					//!< Boolean if it is active or not.
+	CALbyte terminated;				//!< Boolean if it is terminated.
+	struct CALRun3D* calRun;		//!< Reference to struct CALRun3D.
+		time_t start_time;			//!< Time for which the computation is started.
+		time_t end_time;			//!< Time for which the computation is ended.
+	pthread_t thread;				//!< Reference to a thread variable.
+	CALbyte stop;					//!< Boolean if it is stopped or not.
+	CALint step;                    //!< Initial step.
 	struct CALCLModel3D* device_CA;	//!< Reference to struct CALCLModel3D.
-	CALbyte onlyOneTime;
-	CALint fixedStep;
-	CALint final_step;		//!< Final simulation step; if 0 the simulation becomes a loop.
-	size_t * singleStepThreadNum;
-	int dimNum;
-	size_t * threadNumMax;
+	CALbyte onlyOneTime;            //!< Boolean for a first launch.
+	CALint fixedStep;				//!< Fixed step for transfer memory from device to host.
+	CALint final_step;				//!< Final simulation step; if 0 the simulation becomes a loop.
+	size_t * singleStepThreadNum;   //!< Number of thread for single step
+	int dimNum;                     //!< Number of dimensions
+	size_t * threadNumMax;          //!< Pointer a size_t
 };
 
 /*! \brief Constructor for create a struct CALGLRun3D.
 */
 struct CALGLRun3D* calglRunCLDef3D(
-	struct CALCLModel3D* device_CA,	//!< Reference to CALRun3D
-	CALint fixedStep,
-	CALint initial_step,
-	CALint final_step
+	struct CALCLModel3D* device_CA,	//!< Reference to CALRun2D
+	CALint fixedStep,               //!< Fixed step for transfer memory from device to host.
+	CALint initial_step,            //!< Initial step.
+	CALint final_step               //!< Final step.
 	);
 
 /*! \brief Destructor for de-allocate memory.
