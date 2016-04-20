@@ -1,3 +1,23 @@
+/*
+ * Copyright (c) 2016 OpenCALTeam (https://github.com/OpenCALTeam),
+ * University of Calabria, Italy.
+ *
+ * This file is part of OpenCAL (Open Computing Abstraction Layer).
+ *
+ * OpenCAL is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of
+ * the License, or (at your option) any later version.
+ *
+ * OpenCAL is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with OpenCAL. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 
 extern "C" {
 	#include <OpenCAL/cal2DIO.h>
@@ -37,7 +57,7 @@ void life_transition_function(struct CALModel2D* life, int i, int j)
 
 int main(int argc, char** argv)
 {
-	int version=0;	
+	int version=0;
 	if (sscanf (argv[1], "%i", &version)!=1 && version >=0) {
 		printf ("error - not an integer");
 		exit(-1);
@@ -52,10 +72,10 @@ int main(int argc, char** argv)
 	R = calAddSubstate2Dr(life);
 	B = calAddSubstate2Db(life);
 
-	//add transition function's elementary processes. 
+	//add transition function's elementary processes.
 	calAddElementaryProcess2D(life, life_transition_function);
 
-	
+
 	//set the whole substate to 0
 	calInitSubstate2Di(life, I, 12345);
 	calInitSubstate2Dr(life, R, 1.98765432);
@@ -66,7 +86,7 @@ int main(int argc, char** argv)
 	string path;
 	PREFIX_PATH(version,"1.txt",path);
 	calSaveSubstate2Di(life, I, (char*)path.c_str());
-	
+
 	PREFIX_PATH(version,"2.txt",path);
 	calSaveSubstate2Dr(life, R, (char*)path.c_str());
 
@@ -76,9 +96,9 @@ int main(int argc, char** argv)
 
 	//simulation run
 	calRun2D(life_simulation);
-	
+
 	//saving configuration
-	PREFIX_PATH(version,"4.txt",path);	
+	PREFIX_PATH(version,"4.txt",path);
 	calSaveSubstate2Di(life, I, (char*)path.c_str());
 
 	PREFIX_PATH(version,"5.txt",path);

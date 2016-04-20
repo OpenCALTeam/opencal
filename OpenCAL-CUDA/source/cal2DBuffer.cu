@@ -1,13 +1,22 @@
-// (C) Copyright University of Calabria and others.
-// All rights reserved. This program and the accompanying materials
-// are made available under the terms of the GNU Lesser General Public License
-// (LGPL) version 2.1 which accompanies this distribution, and is available at
-// http://www.gnu.org/licenses/lgpl-2.1.html
-//
-// This library is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-// Lesser General Public License for more details.
+/*
+ * Copyright (c) 2016 OpenCALTeam (https://github.com/OpenCALTeam),
+ * University of Calabria, Italy.
+ *
+ * This file is part of OpenCAL (Open Computing Abstraction Layer).
+ *
+ * OpenCAL is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of
+ * the License, or (at your option) any later version.
+ *
+ * OpenCAL is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with OpenCAL. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include ".\..\include\cal2DBuffer.cuh"
 #include <stdlib.h>
@@ -61,7 +70,7 @@ __device__ void calCudaParallelCopyBuffer2Db(CALbyte* M_src, CALbyte* M_dest, in
 }
 
 void calCopyBuffer2Di(CALint* M_src, CALint* M_dest, int rows, int columns)
-{	
+{
 	memcpy(M_dest, M_src, sizeof(CALint)*rows*columns);
 }
 void calCudaCopyBuffer2Di(CALint* M_src, CALint* M_dest, int rows, int columns, int i_substate)
@@ -98,7 +107,7 @@ void calCopyActiveCellsBuffer2Db(CALbyte* M_src, CALbyte* M_dest, int rows, int 
 			M_dest[c] = M_src[c];
 	}
 }
-__host__ __device__ 
+__host__ __device__
 void calCudaCopyActiveCellsBuffer2Db(CALbyte* M_src, CALbyte* M_dest, int rows, int columns, int* i_active_cells, int* j_active_cells, int sizeof_active_cells) {
 	int c, n;
 
@@ -120,7 +129,7 @@ void calCopyActiveCellsBuffer2Di(CALint* M_src, CALint* M_dest, int rows, int co
 			M_dest[c] = M_src[c];
 	}
 }
-__host__ __device__ 
+__host__ __device__
 void calCudaCopyActiveCellsBuffer2Di(CALint* M_src, CALint* M_dest, int rows, int columns, int* i_active_cells, int* j_active_cells, int sizeof_active_cells) {
 	int c, n;
 
@@ -141,7 +150,7 @@ void calCopyActiveCellsBuffer2Dr(CALreal* M_src, CALreal* M_dest, int rows, int 
 			M_dest[c] = M_src[c];
 	}
 }
-__host__ __device__ 
+__host__ __device__
 void calCudaCopyActiveCellsBuffer2Dr(CALreal* M_src, CALreal* M_dest, int rows, int columns, int* i_active_cells, int* j_active_cells, int sizeof_active_cells) {
 	int c, n;
 
@@ -170,7 +179,7 @@ void calAddBuffer2Di(CALint* M_op1, CALint* M_op2,  CALint* M_dest, int rows, in
 void calAddBuffer2Dr(CALreal* M_op1, CALreal* M_op2,  CALreal* M_dest, int rows, int columns) {
 	int size = rows * columns;
 	int i;
-	
+
 	for (i=0; i<size; i++)
 		M_dest[i] = M_op1[i] + M_op2[i];
 }
@@ -194,7 +203,7 @@ void calSubtractBuffer2Di(CALint* M_op1, CALint* M_op2,  CALint* M_dest, int row
 void calSubtractBuffer2Dr(CALreal* M_op1, CALreal* M_op2,  CALreal* M_dest, int rows, int columns) {
 	int size = rows * columns;
 	int i;
-	
+
 	for (i=0; i<size; i++)
 		M_dest[i] = M_op1[i] - M_op2[i];
 }
@@ -213,7 +222,7 @@ void calSetBuffer2Dr(CALreal* M, int rows, int columns, CALreal value)
 {
 	int size = rows * columns;
 	int i;
-	
+
 	for (i=0; i<size; i++)
 		M[i] = value;
 }

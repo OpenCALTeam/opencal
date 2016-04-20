@@ -1,13 +1,22 @@
-// (C) Copyright University of Calabria and others.
-// All rights reserved. This program and the accompanying materials
-// are made available under the terms of the GNU Lesser General Public License
-// (LGPL) version 2.1 which accompanies this distribution, and is available at
-// http://www.gnu.org/licenses/lgpl-2.1.html
-//
-// This library is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-// Lesser General Public License for more details.
+/*
+ * Copyright (c) 2016 OpenCALTeam (https://github.com/OpenCALTeam),
+ * University of Calabria, Italy.
+ *
+ * This file is part of OpenCAL (Open Computing Abstraction Layer).
+ *
+ * OpenCAL is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of
+ * the License, or (at your option) any later version.
+ *
+ * OpenCAL is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with OpenCAL. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #ifndef cal2D_h
 #define cal2D_h
@@ -35,7 +44,7 @@ enum CALNeighborhood2D {
 	CAL_VON_NEUMANN_NEIGHBORHOOD_2D,	//!< Enumerator used for specifying the 2D von Neumann neighbourhood; no calls to calAddNeighbor2D are needed.
 	CAL_MOORE_NEIGHBORHOOD_2D,			//!< Enumerator used for specifying the 2D Moore neighbourhood; no calls to calAddNeighbor2D are needed.
 	CAL_HEXAGONAL_NEIGHBORHOOD_2D,		//!< Enumerator used for specifying the 2D Moore Hexagonal neighbourhood; no calls to calAddNeighbor2D are needed.
-	CAL_HEXAGONAL_NEIGHBORHOOD_ALT_2D	//!< Enumerator used for specifying the alternative 90° rotated 2D Moore Hexagonal neighbourhood; no calls to calAddNeighbor2D are needed.
+	CAL_HEXAGONAL_NEIGHBORHOOD_ALT_2D	//!< Enumerator used for specifying the alternative 90ï¿½ rotated 2D Moore Hexagonal neighbourhood; no calls to calAddNeighbor2D are needed.
 };
 
 #define CAL_HEXAGONAL_SHIFT 7			//<! Shif used for accessing to the correct neighbor in case hexagonal heighbourhood and odd column cell
@@ -50,16 +59,16 @@ struct CudaCALModel2D {
 
 	enum CALOptimization OPTIMIZATION;	//!< Type of optimization used. It can be CAL_NO_OPT or CAL_OPT_ACTIVE_CELLS.
 
-	//struct CALActiveCells2D A;		
+	//struct CALActiveCells2D A;
 	CALbyte* activecell_flags;			//!< Array of flags having the substates' dimension: flag is CAL_TRUE if the corresponding cell is active, CAL_FALSE otherwise.
 	int activecell_size_next;			//!< Number of CAL_TRUE flags.
-	int activecell_size_current;		//!< Number of active cells in the current step.	
+	int activecell_size_current;		//!< Number of active cells in the current step.
 	unsigned int* activecell_index;			//!< Set of index where there are active cells.
 	unsigned int * array_of_index_result;	//!< Support set for stream compaction. This array is populated by the index of active cells
-	
+
 	CALbyte stop; //!< Variable to check if the simulation have to be stopped. CAL_TRUE if the simulation have to be stopped, CAL_FALSE otherwise.
 
-	//struct CALCell2D* X;				
+	//struct CALCell2D* X;
 	int *i;			//!< Array of coordinate "i" defining the cellular automaton neighbourhood relation.
 	int *j;			//!< Array of coordinate "j" defining the cellular automaton neighbourhood relation.
 
@@ -104,7 +113,7 @@ struct CudaCALModel2D* calCudaCADef2D(int rows, //!< Number of rows of the 2D ce
 	enum CALOptimization CAL_OPTIMIZATION //!< Enumerator used for specifying the active cells optimization or no optimization.
 	);
 
-/*! \brief Sets the cell (offset) of the matrix flags to CAL_TRUE and increments the 
+/*! \brief Sets the cell (offset) of the matrix flags to CAL_TRUE and increments the
 couter sizeof_active_flags.
 */
 __device__
@@ -112,7 +121,7 @@ __device__
 	int offset //!< Offset of threads
 	);
 
-/*! \brief Sets the n-th neighbor of the cell (offset) of the matrix flags to 
+/*! \brief Sets the n-th neighbor of the cell (offset) of the matrix flags to
 CAL_TRUE and increments the couter sizeof_active_flags.
 */
 __device__
@@ -121,7 +130,7 @@ __device__
 	int n	//!< Index of the n-th neighbor to be added.
 	);
 
-/*! \brief Sets the cell (offset) of the matrix flags to CAL_FALSE and decrements the 
+/*! \brief Sets the cell (offset) of the matrix flags to CAL_FALSE and decrements the
 couter sizeof_active_flags.
 */
 __device__
@@ -132,8 +141,8 @@ __device__
 __global__ void generateSetOfIndex(CudaCALModel2D *device_ca2D);
 void calCudaApplyStreamCompaction(struct CudaCALRun2D* simulation, dim3 grid, dim3 block);
 
-/*! \brief Puts the cells marked as actives in activecells_flags into the arrays of active cells 
-and sets its dimension, activecells_size, to activecells_size_of_actives, i.e. the actual 
+/*! \brief Puts the cells marked as actives in activecells_flags into the arrays of active cells
+and sets its dimension, activecells_size, to activecells_size_of_actives, i.e. the actual
 number of active cells.
 */
 void calCudaUpdateActiveCells2D(struct CudaCALRun2D* simulation	//!< Pointer to the cellular automaton structure.
@@ -141,7 +150,7 @@ void calCudaUpdateActiveCells2D(struct CudaCALRun2D* simulation	//!< Pointer to 
 
 
 
-/*! \brief 
+/*! \brief
 Adds a neighbour to i and j.
 i and j are two vectors that contain value of neighborhoods.
 The value of CudaCALModel2D::sizeof_X increase after this operation.
@@ -152,21 +161,21 @@ void  calCudaAddNeighbor2D(struct CudaCALModel2D* ca2D, //!< Pointer to the cell
 						   );
 
 /*! \brief Creates and adds a new byte substate to CudaCALModel2D::pQb_array_current and CudaCALModel2D::pQb_array_next
-and return an object that point to last substate. 
+and return an object that point to last substate.
 */
 cudaError_t calCudaAddSubstate2Db(struct CudaCALModel2D* ca2D,	//!< Pointer to the cellular automaton structure.
 								  CALint NUMBER_OF_SUBSTATE	//!< Number of substate (byte) to alloc.
 								  );
 
 /*! \brief Creates and adds a new int substate to CudaCALModel2D::pQb_array_current and CudaCALModel2D::pQb_array_next
-and return an object that point to last substate. 
+and return an object that point to last substate.
 */
 cudaError_t calCudaAddSubstate2Di(struct CudaCALModel2D* ca2D,	//!< Pointer to the cellular automaton structure.
 								  CALint NUMBER_OF_SUBSTATE	//!< Number of substate (integer) to alloc.
 								  );
 
 /*! \brief Creates and adds a new real substate to CudaCALModel2D::pQb_array_current and CudaCALModel2D::pQb_array_next
-and return an object that point to last substate. 
+and return an object that point to last substate.
 */
 cudaError_t calCudaAddSubstate2Dr(struct CudaCALModel2D* ca2D,	//!< Pointer to the cellular automaton structure.
 								  CALint NUMBER_OF_SUBSTATE	//!< Number of substate (real - floating point) to alloc.
@@ -219,13 +228,13 @@ void calCudaGlobalTransitionFunction2D(struct CudaCALRun2D* simulation,	//!< Poi
 									   dim3 block //!< block of threads for GPGPU instruction.
 									   );
 
-/*! \brief Updates all the substates registered in CudaCALModel2D (pQb_array, pQi_array and pQr_array). 
+/*! \brief Updates all the substates registered in CudaCALModel2D (pQb_array, pQi_array and pQr_array).
 It is called by the global transition function.
 Updates the substates allocated in device.
 */
 void calCudaUpdate2D(struct CudaCALRun2D* simulation);
 
-/*! \brief Inits the value of a byte substate in the cell (offset) to value; it updates both the current and next matrices at the position (offset).  
+/*! \brief Inits the value of a byte substate in the cell (offset) to value; it updates both the current and next matrices at the position (offset).
 it's for CUDA version
 */
 __device__
@@ -235,7 +244,7 @@ __device__
 	CALint substate_index		//!< Index of substate that you want to initialize.
 	);
 
-/*! \brief Inits the value of a integer substate in the cell (offset) to value; it updates both the current and next matrices at the position (offset).  
+/*! \brief Inits the value of a integer substate in the cell (offset) to value; it updates both the current and next matrices at the position (offset).
 it's for CUDA version
 */
 __device__
@@ -245,7 +254,7 @@ __device__
 	CALint substate_index		//!< Index of substate that you want to initialize.
 	);
 
-/*! \brief Inits the value of a real (floating point) substate in the cell (offset) to value; it updates both the current and next matrices at the position (offset).  
+/*! \brief Inits the value of a real (floating point) substate in the cell (offset) to value; it updates both the current and next matrices at the position (offset).
 it's for CUDA version
 */
 __device__
@@ -255,7 +264,7 @@ __device__
 	CALint substate_index		//!< Index of substate that you want to initialize.
 	);
 
-/*! \brief Returns the cell (offset) value of a byte substate.  
+/*! \brief Returns the cell (offset) value of a byte substate.
 */
 __device__
 	CALbyte calCudaGet2Db(struct CudaCALModel2D* ca2D,	//!< Pointer to the cellular automaton structure.
@@ -263,7 +272,7 @@ __device__
 	CALint substate_index		//!< Index of substate.
 	);
 
-/*! \brief Returns the cell (offset) value of a integer substate.  
+/*! \brief Returns the cell (offset) value of a integer substate.
 */
 __device__
 	CALint calCudaGet2Di(struct CudaCALModel2D* ca2D,	//!< Pointer to the cellular automaton structure.
@@ -271,7 +280,7 @@ __device__
 	CALint substate_index		//!< Index of substate.
 	);
 
-/*! \brief Returns the cell (offset) value of a real (floating point) substate.  
+/*! \brief Returns the cell (offset) value of a real (floating point) substate.
 */
 __device__
 	CALreal calCudaGet2Dr(struct CudaCALModel2D* ca2D,	//!< Pointer to the cellular automaton structure.
@@ -281,12 +290,12 @@ __device__
 
 
 /*! \brief Return indexes in case of flat cellular spaces.
-return -1 if index is not in matrix, number else.	
+return -1 if index is not in matrix, number else.
 */
 __device__ CALint calGetLinearIndex(int offset, CALint columns, CALint rows, CALint in, CALint jn, CALint substate_index);
 
 /*! \brief Return indexes in case of flat cellular spaces.
-return the index in the matrix.	
+return the index in the matrix.
 */
 __device__ CALint calGetToroidalLinearIndex(int offset, CALint columns, CALint rows, CALint in, CALint jn, CALint substate_index);
 
@@ -302,27 +311,27 @@ __device__ CALint calCudaGetX2Di(struct CudaCALModel2D* ca2D, int offset, int n,
 */
 __device__ CALreal calCudaGetX2Dr(struct CudaCALModel2D* ca2D, int offset, int n, CALint substate_index);
 
-/*! \brief Sets the cell (offset) value of a byte substate for Cuda version.  
+/*! \brief Sets the cell (offset) value of a byte substate for Cuda version.
 */
-__device__ 
+__device__
 	void calCudaSet2Db(struct CudaCALModel2D* ca2D,		//!< Pointer to the cellular automaton structure.
 	int index,					//!< Current thread of index.
 	CALbyte value,				//!< initializing value.
 	CALint substate_index		//!< Index of substate.
 	);
 
-/*! \brief Sets the cell (offset) value of a integer substate for Cuda version.  
+/*! \brief Sets the cell (offset) value of a integer substate for Cuda version.
 */
-__device__ 
+__device__
 	void calCudaSet2Di(struct CudaCALModel2D* ca2D,		//!< Pointer to the cellular automaton structure.
 	int index,					//!< Current thread of index.
 	CALint value,				//!< initializing value.
 	CALint substate_index		//!< Index of substate.
 	);
 
-/*! \brief Sets the cell (offset) value of a real (floating point) substate for Cuda version.  
+/*! \brief Sets the cell (offset) value of a real (floating point) substate for Cuda version.
 */
-__device__ 
+__device__
 	void calCudaSet2Dr(struct CudaCALModel2D* ca2D,		//!< Pointer to the cellular automaton structure.
 	int index,					//!< Current thread of index.
 	CALreal value,				//!< initializing value.

@@ -1,108 +1,105 @@
+#OpenCAL - The Open Computing Abstraction Layer  [![Build Status](https://travis-ci.org/OpenCALTeam/opencal.svg?branch=master)](https://travis-ci.org/OpenCALTeam/opencal)
 
-#OpenCAL - The Cellular Automata Library    [![Build Status](https://travis-ci.org/OpenCALTeam/opencal.svg?branch=master)](https://travis-ci.org/OpenCALTeam/opencal)
+**OpenCAL** is an Open Source, multi-platform parallel software library for performing fast and reliable simulations of numerical models based
+on the Cellular Automata computational paradigm. It also supports
+eXtended Cellular Automata (XCA), the Finite Differences method and,
+in general, all numerical methods based on uniform computational
+grids.
 
-**OpenCAL** is an Open Source, multi-platform library for performing fast and reliable numerical simulations using the Cellular Automata Paradigm. It is support allows ultra-fast execution thanks to OpenCL and CUDA support.
-
-**OpenCAL** is written in C and support the majority such as Linux and FreeBSD out of the box.
-**OpenCAL** is licensed under the *GNU LESSER GENERAL PUBLIC LICENSE v2* license.
-
+**OpenCAL** is written in C and supports the majority such as Linux and FreeBSD out of the box. It also supports Microsoft Windows through MinGW.
 
 <img src="https://github.com/OpenCALTeam/OpenCALTeam.github.io/blob/master/assets/timer_icon.png" width="48">
 Gives you the power to concentrate only on simulation code. No memory or parallelism management required.
 
 <img src="https://github.com/OpenCALTeam/OpenCALTeam.github.io/blob/master/assets/rocket_icon.png" width="48">
-Fast execution on multiple platforms. Exploits GPUs and multicore CPUs power.
+Fast execution on multiple platforms. Exploits multicore CPUs and GPUs power.
 
 <img src="https://github.com/OpenCALTeam/OpenCALTeam.github.io/blob/master/assets/docs_icon.png" width="48">
-Code Documented and mantained
+Code documented and mantained.
 
 <img src="https://github.com/OpenCALTeam/OpenCALTeam.github.io/blob/master/assets/opensource_icon.png" width="48">
-Opensource project released under the LGPLv2 license.
+Open source project released under the LGPLv3 license.
 
 
 ***
 
 
-Developers should read the [DEVELOPER_README.md](DEVELOPER_README.md) file and be sure to have fully absorbed the CODE CONVENCTION before to push any code.
+<!-- Developers should read the [DEVELOPER_README.md](DEVELOPER_README.md) file and be sure to have fully absorbed the CODE CONVENCTION before to push any code.-->
 
 
-#Compiling
+#Requirements and dependencies
+
+<ul>
+	<li> CMake 2.8 (CMake 3.1 is needed to complile OpenCAL-CL).
+	<li> A quite recent C compiler (Full support to OpenMP 4 is needed to compile OpenCAL-OMP).
+	<li> OpenGL/GLUT is also needed to compile OpenCAL-GL, which provides a minimal User Interface and visualization system to OpenCAL applications.
+	<li> Doxygen and Graphviz to build documentation.
+</ul>
+
+
+#Making and installing
+
+
 ```
-mkdir build
-cd build
-cmake ..
-make
+user@machine:~/git/opencal-1.0$ mkdir build
+user@machine:~/git/opencal-1.0$ cd build
+user@machine:~/git/opencal-1.0/build$ cmake ../ [-DBUILD_OPENCAL_SERIAL=ON|OFF] [-DBUILD_OPENCAL_OMP=ON|OFF] [-DBUILD_OPENCAL_CL=OFF|ON] [-DBUILD_OPENCAL_GL=OFF|ON] [-DBUILD_DOCUMENTATION=OFF|ON] [-DCMAKE_INSTALL_PREFIX:PATH=/usr/local | custom_install_path]
+user@machine:~/git/opencal-1.0/build$ make | tee make.log
+user@machine:~/git/opencal-1.0/build$ make install | tee install.log
 ```
+
+Arguments in square brackets are optional. Default value is shown first, other possible values are separated by pipes.
+
+
+
+<!--
 Example compilation can be controlled using  the following argument to cmake:
 -DEXAMPLES:STRING= that takes two possible values: ON or OFF
+-->
+To change compiler use the following CMake variables:
 
-to change compiler use the following cmake variables: 
 ```
 -DCMAKE_C_COMPILER=
 -DCMAKE_CXX_COMPILER=
 ```
-For example, order to compile using clang compiler 
-```cmake  -DCMAKE_C_COMPILER=/usr/bin/clang -DCMAKE_CXX_COMPILER=/usr/bin/clang++ -DEXAMPLES:STRING=ON ... ```
 
-*clang does not fully support OpenMP*
-
-
-OpenCL users. One of the following environment variable have to be  defined.
-
-For example in order to compile with CUDA OpenCL implementation define:
+For example, order to compile using clang
 
 ```
-export CUDA_PATH="root CUDA FOLDER"
-```
-(default: /usr/local/cuda/) 
-```bash
-ENV "PROGRAMFILES(X86)"
-ENV AMDAPPSDKROOT
-ENV INTELOCLSDKROOT
-ENV NVSDKCOMPUTE_ROOT
-ENV CUDA_PATH
-ENV ATISTREAMSDKROOT
-```
-To disable OpenCL (and not compile the corrensponding version of OpenCAL) use the following option (defaulted to YES)
-```
--DBUILD_DOCUMENTATION:STRING=OFF 
+cmake  -DCMAKE_C_COMPILER=/usr/bin/clang -DCMAKE_CXX_COMPILER=/usr/bin/clang++ -DEXAMPLES:STRING=ON ... ```
 ```
 
-Documentation build may be enabled using the cmake option ```-DBUILD_DOCUMENTATION:STRING=ON``` (DOxygen and graphviz are required)
-
-
-
-***developers only***
-in order to generate an eclipse makefile project run cmake using (x.y are major and minor version of eclipse. Use 4.3 for instance)
+***Developers only***
+In order to generate an eclipse makefile project run CMake using (x.y are major and minor version of eclipse. Use 4.3 for instance)
 ```
--G "Eclipse CDT4 - Unix Makefiles" -DCMAKE_ECLIPSE_VERSION:STRING=x.y
+-G "Eclipse CDT4 - Unix Makefiles" -DCMAKE_ECLIPSE_VERSION=x.y
 ```
 For example this:
 ```
-cmake -G "Eclipse CDT4 - Unix Makefiles" -DEXAMPLES:STRING=ON -DBUILD_DOCUMENTATION=OFF ..
+cmake -G "Eclipse CDT4 - Unix Makefiles" -DEXAMPLES=ON -DBUILD_DOCUMENTATION=OFF ..
 ```
-generates an eclipse project into the eclipseproject folder. Import it using the eclipse import menu.
+generates an eclipse project into the eclipse project folder. Import it using the eclipse import menu.
 
-In oder to for cmake to generate dependencies list (internal and to external libraries) use
+In oder to generate dependencies list (internal and to external libraries) use
 
 cmake --graphviz=deps.dot .. && dot -Tps peds.dot -o deps.ps
 
-for example in order to generate deps.ps postscript image that shows dependencies (***inside build directory***)
+For example in order to generate deps.ps postscript image that shows dependencies (***inside build directory***)
 
 ```
 rm -rf * && cmake --graphviz=deps.dot ..  -DEXAMPLES:STRING=ON -DBUILD_DOCUMENTATION=OFF -DBUILD_OPENCL:STRING=ON -DBUILD_GL:STRING=ON -DBUILD_OMP:STRING=ON .. && dot -Tps deps.dot -o deps.ps
 ```
 
-The cmake option ENABLE_SHARED is used to switch from static and shared object output for the library.
+The CMake option ENABLE_SHARED is used to switch from static and shared object output for the library. Default value is ON.
 
 
 
 ***TESTING THE LIBRARY***
-The library comes with a series of performance and correctness tests based on the running of various models with the different implementation of the library. ALl the test files are located in the ***opencal/test*** folder. In order to run the tests do the following.
+The library comes with a series of performance and correctness tests based on the running of various models with the different implementation of the library. All the test files are located in the ***test*** directory. In order to run the tests do the following.
 
-1. Configure using the options: -DBUILD_OPENCAL_TESTS (example: cd build && rm -rf * && cmake -DBUILD_EXAMPLES:STRING=ON -DBUILD_OPENCAL_PP=ON -DBUILD_OPENCAL_SERIAL=ON -DBUILD_OPENCAL_TESTS:STRING=ON -DBUILD_OPENCAL_OMP:STRING=ON )
+1. Configure using the options: -DBUILD_OPENCAL_TESTS (example: cd build && rm -rf * && cmake -DBUILD_EXAMPLES=ON -DBUILD_OPENCAL_PP=ON -DBUILD_OPENCAL_SERIAL=ON -DBUILD_OPENCAL_TESTS=ON -DBUILD_OPENCAL_OMP=ON )
 2. make
 3. cd ../tests && bash runTests.sh
 
 #fixme
-In order to add a new tests one should first create a new folder into  opencal/tests. Into this folder then create a number of directories each containing a particular implementation of the test. Foir instance in the life2D test there is an implementation for the serial version of the test (that is the reference output), and an omp implementation plus all the cmake files needed to compile the tests. Tests executable should output the result of the model run into the testsout folder using the convention that filenames are just incremental number. 
+In order to add a new tests one should first create a new folder into  opencal/tests. Into this folder then create a number of directories each containing a particular implementation of the test. For instance, in the life2D test there is an implementation for the serial version of the test (that is the reference output), and an OpenMP implementation plus all the CMake files needed to compile the tests. Tests executable should output the result of the model run into the testsout folder using the convention that filenames are just incremental number.

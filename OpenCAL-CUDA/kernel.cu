@@ -1,4 +1,24 @@
-﻿#include ".\include\cal2D.cuh"
+/*
+ * Copyright (c) 2016 OpenCALTeam (https://github.com/OpenCALTeam),
+ * University of Calabria, Italy.
+ *
+ * This file is part of OpenCAL (Open Computing Abstraction Layer).
+ *
+ * OpenCAL is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of
+ * the License, or (at your option) any later version.
+ *
+ * OpenCAL is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with OpenCAL. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#include ".\include\cal2D.cuh"
 #include ".\include\cal2DIO.cuh"
 #include ".\include\cal2DRun.cuh"
 #include ".\include\cal2DToolkit.cuh"
@@ -15,7 +35,7 @@
 //-----------------------------------------------------------------------
 //   THE Sciara-FV2 CELLULAR AUTOMATON
 //-----------------------------------------------------------------------
-#define maximum_steps 				0		       
+#define maximum_steps 				0
 #define stopping_threshold			0.00
 #define refreshing_step            	0
 #define thickness_visual_threshold 	0.00
@@ -31,7 +51,7 @@
 #define Pepsilon                  	0.90
 #define Psigma                     	5.68E-08
 #define Pcv                        	1150
-#define algorithm                  	MIN       
+#define algorithm                  	MIN
 #define layers						40
 #define rows						378
 #define cols						517
@@ -109,7 +129,7 @@ __global__
 		//printf("index %d %d %d\n", model->activecell_size_current, i, j);
 		if(calCudaGet2Di(model,offset,VENTS) == 1)
 		{
-			emitted_lava = 1.806732;//1.580890 / (cell_size*cell_size * Pclock); //thickness(); 
+			emitted_lava = 1.806732;//1.580890 / (cell_size*cell_size * Pclock); //thickness();
 			//printf("Emitted lava %f\n", emitted_lava);
 			if (emitted_lava > 0) {
 				calCudaSet2Dr(model, offset, calCudaGet2Dr(model, offset, THICKNESS) + emitted_lava, THICKNESS);
@@ -119,7 +139,7 @@ __global__
 
 		if(calCudaGet2Di(model,offset,VENTS) == 2)
 		{
-			emitted_lava = 1.806732;//0.948534;//1.580890 / (cell_size*cell_size * Pclock); //thickness(); 
+			emitted_lava = 1.806732;//0.948534;//1.580890 / (cell_size*cell_size * Pclock); //thickness();
 
 			if (emitted_lava > 0) {
 				calCudaSet2Dr(model, offset, calCudaGet2Dr(model, offset, THICKNESS) + emitted_lava, THICKNESS);
@@ -129,7 +149,7 @@ __global__
 
 }
 
-__device__ 
+__device__
 	double powerLaw(double k1, double k2, double T) {
 		double log_value = k1 + k2 * T;
 		return pow(10.0, log_value);
@@ -552,7 +572,7 @@ __global__
 
 		//TODO single layer initialization
 		calCudaInit2Db(model, offset, CAL_FALSE, TOPOGRAPHY_BOUND);
-		
+
 		//calCudaInit2Dr(model, offset, 0, SOLIDIFIED);
 		//calCudaInit2Dr(model, offset, 0, PRE_EVENT_TOPOGRAPHY);
 
@@ -600,7 +620,7 @@ int main()
 
 #ifdef ACTIVE_CELLS
 	sciara_fv2 = calCudaCADef2D (rows, cols, CAL_MOORE_NEIGHBORHOOD_2D, CAL_SPACE_TOROIDAL, CAL_OPT_ACTIVE_CELLS);
-#else  
+#else
 	sciara_fv2 = calCudaCADef2D (rows, cols, CAL_MOORE_NEIGHBORHOOD_2D, CAL_SPACE_TOROIDAL, CAL_NO_OPT);
 #endif
 
