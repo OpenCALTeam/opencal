@@ -18,7 +18,7 @@ Fast execution on multiple platforms. Exploits multicore CPUs and GPUs power.
 Code documented and mantained.
 
 <img src="https://github.com/OpenCALTeam/OpenCALTeam.github.io/blob/master/assets/opensource_icon.png" width="48">
-Open source project released under the LGPLv2 license.
+Open source project released under the LGPLv3 license.
 
 
 ***
@@ -42,7 +42,7 @@ Open source project released under the LGPLv2 license.
 
 ```
 user@machine:~/git/opencal-1.0$ mkdir build
-user@machine:~/git/opencal-1.0/build$ cd build
+user@machine:~/git/opencal-1.0$ cd build
 user@machine:~/git/opencal-1.0/build$ cmake ../ [-DBUILD_OPENCAL_SERIAL=ON|OFF] [-DBUILD_OPENCAL_OMP=ON|OFF] [-DBUILD_OPENCAL_CL=OFF|ON] [-DBUILD_OPENCAL_GL=OFF|ON] [-DBUILD_DOCUMENTATION=OFF|ON] [-DCMAKE_INSTALL_PREFIX:PATH=/usr/local | custom_install_path]
 user@machine:~/git/opencal-1.0/build$ make | tee make.log
 user@machine:~/git/opencal-1.0/build$ make install | tee install.log

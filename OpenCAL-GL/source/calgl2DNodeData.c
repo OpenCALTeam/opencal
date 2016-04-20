@@ -1,13 +1,22 @@
-// (C) Copyright University of Calabria and others.
-// All rights reserved. This program and the accompanying materials
-// are made available under the terms of the GNU Lesser General Public License
-// (LGPL) version 2.1 which accompanies this distribution, and is available at
-// http://www.gnu.org/licenses/lgpl-2.1.html
-//
-// This library is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-// Lesser General Public License for more details.
+/*
+ * Copyright (c) 2016 OpenCALTeam (https://github.com/OpenCALTeam),
+ * University of Calabria, Italy.
+ *
+ * This file is part of OpenCAL (Open Computing Abstraction Layer).
+ *
+ * OpenCAL is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of
+ * the License, or (at your option) any later version.
+ *
+ * OpenCAL is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with OpenCAL. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include <OpenCAL-GL/calgl2DNodeData.h>
 #include <stdio.h>
@@ -382,13 +391,13 @@ void calglShiftLeftFromIndexNode2Dr(struct CALNode2Dr* node, int index){
 
 #pragma region GetFather
 struct CALNode2Db* calglGetFatherNode2Db(struct CALNode2Db* node){
-	return node->insertedNode>0 ? node->nodes[0] : NULL; 
+	return node->insertedNode>0 ? node->nodes[0] : NULL;
 }
 struct CALNode2Di* calglGetFatherNode2Di(struct CALNode2Di* node){
-	return node->insertedNode>0 ? node->nodes[0] : NULL; 
+	return node->insertedNode>0 ? node->nodes[0] : NULL;
 }
 struct CALNode2Dr* calglGetFatherNode2Dr(struct CALNode2Dr* node){
-	return node->insertedNode>0 ? node->nodes[0] : NULL; 
+	return node->insertedNode>0 ? node->nodes[0] : NULL;
 }
 #pragma endregion
 
@@ -403,6 +412,3 @@ void calglSetNoDataToNode2Dr(struct CALNode2Dr* node, CALreal noData){
 	node->noData = noData;
 }
 #pragma endregion
-
-
-

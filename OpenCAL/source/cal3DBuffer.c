@@ -1,13 +1,22 @@
-// (C) Copyright University of Calabria and others.
-// All rights reserved. This program and the accompanying materials
-// are made available under the terms of the GNU Lesser General Public License
-// (LGPL) version 2.1 which accompanies this distribution, and is available at
-// http://www.gnu.org/licenses/lgpl-2.1.html
-//
-// This library is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-// Lesser General Public License for more details.
+/*
+ * Copyright (c) 2016 OpenCALTeam (https://github.com/OpenCALTeam),
+ * University of Calabria, Italy.
+ *
+ * This file is part of OpenCAL (Open Computing Abstraction Layer).
+ *
+ * OpenCAL is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of
+ * the License, or (at your option) any later version.
+ *
+ * OpenCAL is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with OpenCAL. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include <OpenCAL/cal3DBuffer.h>
 #include <stdlib.h>
@@ -44,7 +53,7 @@ void calCopyBuffer3Db(CALbyte* M_src, CALbyte* M_dest, int rows, int columns, in
 	memcpy(M_dest, M_src, sizeof(CALbyte)*rows*columns*slices);
 }
 void calCopyBuffer3Di(CALint* M_src, CALint* M_dest, int rows, int columns, int slices)
-{	
+{
 	memcpy(M_dest, M_src, sizeof(CALint)*rows*columns*slices);
 }
 void calCopyBuffer3Dr(CALreal* M_src, CALreal* M_dest, int rows, int columns, int slices)
@@ -104,7 +113,7 @@ void calAddBuffer3Di(CALint* M_op1, CALint* M_op2,  CALint* M_dest, int rows, in
 void calAddBuffer3Dr(CALreal* M_op1, CALreal* M_op2,  CALreal* M_dest, int rows, int columns, int slices) {
 	int size = rows * columns * slices;
 	int i;
-	
+
 	for (i=0; i<size; i++)
 		M_dest[i] = M_op1[i] + M_op2[i];
 }
@@ -128,7 +137,7 @@ void calSubtractBuffer3Di(CALint* M_op1, CALint* M_op2,  CALint* M_dest, int row
 void calSubtractBuffer3Dr(CALreal* M_op1, CALreal* M_op2,  CALreal* M_dest, int rows, int columns, int slices) {
 	int size = rows * columns * slices;
 	int i;
-	
+
 	for (i=0; i<size; i++)
 		M_dest[i] = M_op1[i] - M_op2[i];
 }
@@ -151,7 +160,7 @@ void calSetBuffer3Dr(CALreal* M, int rows, int columns, int slices, CALreal valu
 {
 	int size = rows * columns * slices;
 	int i;
-	
+
 	for (i=0; i<size; i++)
 		M[i] = value;
 }

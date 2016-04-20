@@ -1,13 +1,22 @@
-// (C) Copyright University of Calabria and others.
-// All rights reserved. This program and the accompanying materials
-// are made available under the terms of the GNU Lesser General Public License
-// (LGPL) version 2.1 which accompanies this distribution, and is available at
-// http://www.gnu.org/licenses/lgpl-2.1.html
-//
-// This library is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-// Lesser General Public License for more details.
+/*
+ * Copyright (c) 2016 OpenCALTeam (https://github.com/OpenCALTeam),
+ * University of Calabria, Italy.
+ *
+ * This file is part of OpenCAL (Open Computing Abstraction Layer).
+ *
+ * OpenCAL is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of
+ * the License, or (at your option) any later version.
+ *
+ * OpenCAL is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with OpenCAL. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include ".\..\include\cal2DToolkit.cuh"
 #include <stdio.h>
@@ -98,7 +107,7 @@ void calCudaFinalizeModel(){
 	cudaFree(copy_model->pQi_array_current);
 	cudaFree(copy_model->pQi_array_next);
 	cudaFree(copy_model->pQr_array_current);
-	cudaFree(copy_model->pQr_array_next); 
+	cudaFree(copy_model->pQr_array_next);
 	cudaFreeHost(copy_model);
 }
 
@@ -117,7 +126,7 @@ void calCudaFreeModel2D(struct CudaCALModel2D *copy_model){
 	cudaFree(copy_model->pQi_array_current);
 	cudaFree(copy_model->pQi_array_next);
 	cudaFree(copy_model->pQr_array_current);
-	cudaFree(copy_model->pQr_array_next); 
+	cudaFree(copy_model->pQr_array_next);
 	cudaFreeHost(copy_model);
 }
 
@@ -188,14 +197,14 @@ CALbyte calSendDataGPUtoCPU(struct CudaCALModel2D* model, struct CudaCALModel2D 
 
 	if(model->sizeof_pQb_array > 0){
 		cudaMemcpy(model->pQb_array_current,copy_model->pQb_array_current,model->sizeof_pQb_array*model->rows*model->columns*sizeof(CALbyte), cudaMemcpyDeviceToHost);
-		cudaMemcpy(model->pQb_array_next,copy_model->pQb_array_next,model->sizeof_pQb_array*model->rows*model->columns*sizeof(CALbyte), cudaMemcpyDeviceToHost);		
+		cudaMemcpy(model->pQb_array_next,copy_model->pQb_array_next,model->sizeof_pQb_array*model->rows*model->columns*sizeof(CALbyte), cudaMemcpyDeviceToHost);
 	}
 	if(model->sizeof_pQi_array > 0){
-		cudaMemcpy(model->pQi_array_current,copy_model->pQi_array_current,model->sizeof_pQi_array*model->rows*model->columns*sizeof(CALint), cudaMemcpyDeviceToHost);		
+		cudaMemcpy(model->pQi_array_current,copy_model->pQi_array_current,model->sizeof_pQi_array*model->rows*model->columns*sizeof(CALint), cudaMemcpyDeviceToHost);
 		cudaMemcpy(model->pQi_array_next,copy_model->pQi_array_next,model->sizeof_pQi_array*model->rows*model->columns*sizeof(CALint), cudaMemcpyDeviceToHost);
 	}
 	if(model->sizeof_pQr_array > 0){
-		cudaMemcpy(model->pQr_array_current,copy_model->pQr_array_current,model->sizeof_pQr_array*model->rows*model->columns*sizeof(CALreal), cudaMemcpyDeviceToHost);		
+		cudaMemcpy(model->pQr_array_current,copy_model->pQr_array_current,model->sizeof_pQr_array*model->rows*model->columns*sizeof(CALreal), cudaMemcpyDeviceToHost);
 		cudaMemcpy(model->pQr_array_next,copy_model->pQr_array_next,model->sizeof_pQr_array*model->rows*model->columns*sizeof(CALreal), cudaMemcpyDeviceToHost);
 	}
 
@@ -209,13 +218,13 @@ void printError(cudaError error){
 	printf("Error: %s\n", error);
 }
 
-void cudaErrorCheck(char* message){	
+void cudaErrorCheck(char* message){
 	cudaError_t error = cudaGetLastError();
 	if(error != cudaSuccess)
-	{	
-		printf("\n******************\n*** Attention! *** \n******************\n"); 
+	{
+		printf("\n******************\n*** Attention! *** \n******************\n");
 		printf("\nError: %s \nName: %s\n", cudaGetErrorString(error), cudaGetErrorName(error));
-		printf("\n******************\n\n"); 
+		printf("\n******************\n\n");
 		system("pause");
 		exit(-1);
 	}else{
@@ -223,13 +232,13 @@ void cudaErrorCheck(char* message){
 	}
 }
 
-void cudaErrorCheck(char* message, CALbyte &result){	
+void cudaErrorCheck(char* message, CALbyte &result){
 	cudaError_t error = cudaGetLastError();
 	if(error != cudaSuccess)
-	{	
-		printf("\n******************\n*** Attention! *** \n******************\n"); 
+	{
+		printf("\n******************\n*** Attention! *** \n******************\n");
 		printf("\nError: %s \nName: %s\n", cudaGetErrorString(error), cudaGetErrorName(error));
-		printf("\n******************\n\n"); 
+		printf("\n******************\n\n");
 		result = CAL_FALSE;
 		system("pause");
 		exit(-1);
@@ -244,7 +253,7 @@ void cudaErrorCheck(char* message, CALbyte &result){
 CALbyte calCudaCheckFinalResult2Dr(CALreal* parallel, CALreal* sequential, CALint rows, CALint columns){
 
 	CALint i,j;
-	cudaHostAlloc((void**)&parallel, sizeof(CALreal)*rows*columns, cudaHostAllocDefault); 
+	cudaHostAlloc((void**)&parallel, sizeof(CALreal)*rows*columns, cudaHostAllocDefault);
 	cudaHostAlloc((void**)&sequential,	sizeof(CALreal)*rows*columns, cudaHostAllocDefault);
 
 	calCudaLoadMatrix2Dr(parallel, rows, columns, OUTPUT_PATH,0);
@@ -261,7 +270,7 @@ CALbyte calCudaCheckFinalResult2Dr(CALreal* parallel, CALreal* sequential, CALin
 }
 
 __device__ CALbyte calCudaImAlive(struct CudaCALModel2D* ca2D, CALint offset){
-	return calCudaGetMatrixElement(ca2D->activecell_flags, offset, ca2D->rows, ca2D->columns, 0); 
+	return calCudaGetMatrixElement(ca2D->activecell_flags, offset, ca2D->rows, ca2D->columns, 0);
 }
 
 void calCudaPerformGridAndBlockForStreamCompaction2D(struct CudaCALRun2D* simulation, dim3 grid, dim3 block){

@@ -1,13 +1,22 @@
-// (C) Copyright University of Calabria and others.
-// All rights reserved. This program and the accompanying materials
-// are made available under the terms of the GNU Lesser General Public License
-// (LGPL) version 2.1 which accompanies this distribution, and is available at
-// http://www.gnu.org/licenses/lgpl-2.1.html
-//
-// This library is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-// Lesser General Public License for more details.
+/*
+ * Copyright (c) 2016 OpenCALTeam (https://github.com/OpenCALTeam),
+ * University of Calabria, Italy.
+ *
+ * This file is part of OpenCAL (Open Computing Abstraction Layer).
+ *
+ * OpenCAL is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of
+ * the License, or (at your option) any later version.
+ *
+ * OpenCAL is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with OpenCAL. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #ifndef cal2DToolkit_h
 #define cal2DToolkit_h
@@ -28,8 +37,8 @@
 
  *****************************************************************************/
 
-/*! \brief 
-	Object that help to copy data from CPU to GPU and viceversa. 
+/*! \brief
+	Object that help to copy data from CPU to GPU and viceversa.
 */
 struct Predicate
 {
@@ -96,11 +105,11 @@ CALbyte calInitializeInGPU2D(struct CudaCALModel2D* model, struct CudaCALModel2D
 */
 CALbyte calSendDataGPUtoCPU(struct CudaCALModel2D* model, struct CudaCALModel2D *d_model);
 
-/*! \brief return error with name and code error 
+/*! \brief return error with name and code error
 			if something for cuda function went wrong.
 */
 void cudaErrorCheck(char* message, CALbyte &result);
-/*! \brief return error with name and code error 
+/*! \brief return error with name and code error
 			if something for cuda function went wrong, without return statement
 */
 void cudaErrorCheck(char* message);
@@ -110,7 +119,7 @@ void cudaErrorCheck(char* message);
 CALbyte calCudaCheckFinalResult2Dr(CALreal* parallel, CALreal* sequential, CALint rows, CALint columns);
 
 
-/**  
+/**
 ** Active cells function
 **/
 

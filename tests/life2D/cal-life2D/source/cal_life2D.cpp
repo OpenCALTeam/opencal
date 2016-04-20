@@ -1,3 +1,23 @@
+/*
+ * Copyright (c) 2016 OpenCALTeam (https://github.com/OpenCALTeam),
+ * University of Calabria, Italy.
+ *
+ * This file is part of OpenCAL (Open Computing Abstraction Layer).
+ *
+ * OpenCAL is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of
+ * the License, or (at your option) any later version.
+ *
+ * OpenCAL is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with OpenCAL. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 
 extern "C"{
 #include <OpenCAL/cal2DIO.h>
@@ -76,7 +96,7 @@ void init(CALModel2D* life){
 	setGlider(life,1,1);
 	setGlider(life,94,94);
 	setToad(life,15,22);
-	
+
 }
 
 CALbyte lifeSimulationStopCondition(struct CALModel2D* life)
@@ -86,28 +106,28 @@ CALbyte lifeSimulationStopCondition(struct CALModel2D* life)
 	return CAL_FALSE;
 }
 
-int version=0;	
+int version=0;
 string path;
 string step="";
 CALbyte simulationRun(){
-	
+
 	step=NumberToString( life_simulation->step );
 	PREFIX_PATH(version,"",path);
 	path+=step;
-	path+=".txt";	
-	calSaveSubstate2Di(life, Q, (char*)path.c_str());	
+	path+=".txt";
+	calSaveSubstate2Di(life, Q, (char*)path.c_str());
 
 	CALbyte again;
 
 	//simulation main loop
 	life_simulation->step++;
-	
+
 	//exectutes the global transition function, the steering function and check for the stop 	condition.
 	again = calRunCAStep2D(life_simulation);
 	step=NumberToString( life_simulation->step );
 	PREFIX_PATH(version,"",path);
 	path+=step;
-	path+=".txt";	
+	path+=".txt";
 	calSaveSubstate2Di(life, Q, (char*)path.c_str());
 
 	return again;
@@ -115,8 +135,8 @@ CALbyte simulationRun(){
 
 int main(int argc, char**argv)
 {
-	
-		
+
+
 	if ( sscanf (argv[1], "%i", &version)!=1 && version >=0) {
 		printf ("error");
 		exit(-1);
@@ -129,21 +149,21 @@ int main(int argc, char**argv)
 	//add substates
 	Q = calAddSubstate2Di(life);
 
-	//add transition function's elementary processes. 
+	//add transition function's elementary processes.
 	calAddElementaryProcess2D(life, life_transition_function);
 
-	
+
 	//set the whole substate to 0
 	calInitSubstate2Di(life, Q, 0);
-	
-	calRunAddInitFunc2D(life_simulation, init); 
+
+	calRunAddInitFunc2D(life_simulation, init);
 	calRunInitSimulation2D(life_simulation);
 	calRunAddStopConditionFunc2D(life_simulation, lifeSimulationStopCondition);
 
 	while(simulationRun())	{
 
 	}
-	
+
 	//finalization
 	calRunFinalize2D(life_simulation);
 	calFinalize2D(life);

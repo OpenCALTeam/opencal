@@ -1,13 +1,22 @@
-// (C) Copyright University of Calabria and others.
-// All rights reserved. This program and the accompanying materials
-// are made available under the terms of the GNU Lesser General Public License
-// (LGPL) version 2.1 which accompanies this distribution, and is available at
-// http://www.gnu.org/licenses/lgpl-2.1.html
-//
-// This library is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-// Lesser General Public License for more details.
+/*
+ * Copyright (c) 2016 OpenCALTeam (https://github.com/OpenCALTeam),
+ * University of Calabria, Italy.
+ *
+ * This file is part of OpenCAL (Open Computing Abstraction Layer).
+ *
+ * OpenCAL is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of
+ * the License, or (at your option) any later version.
+ *
+ * OpenCAL is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with OpenCAL. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #ifndef calModel_h
 #define calModel_h
@@ -38,7 +47,7 @@ private:
     enum calCommon:: CALOptimization OPTIMIZATION;	//!< Type of optimization used. It can be CAL_NO_OPT or CAL_OPT_ACTIVE_CELLS.
     CALActiveCells* activeCells;			//!< Computational Active cells object. if activecells==NULL no optimization is applied.
 
-               
+
     int sizeof_X;				//!< Number of cells belonging to the neighbourhood. Note that predefined neighbourhoods include the central cell.
     CALNeighborhood* X_id;		//!< Class that define the Neighbourhood relation.
 
@@ -67,7 +76,7 @@ public:
                );
 
     ~ CALModel ();
-    
+
     /*! \brief Sets a certain cell of the matrix flags to true and increments the
         couter sizeof_active_flags.
     */
@@ -110,26 +119,26 @@ public:
     /*! \brief Adds a transition function's elementary process to the CALModel::elementary_processes array of callbacks function.
         Note that the function globalTransitionFunction calls a substates' update after each elementary process.
     */
-    void addElementaryProcess(CALCallbackFunc elementary_process 
+    void addElementaryProcess(CALCallbackFunc elementary_process
                                                  );
 
     /*! \brief Initializes a substate to a constant value; both the current and next (if not single layer substate) matrices are initialized.
     */
     template <class T>
-    void initSubstate(struct CALSubstate<T>*& Q,	
-                            T value				
+    void initSubstate(struct CALSubstate<T>*& Q,
+                            T value
                             );
 
     /*! \brief Initializes a the next buffer of a substate to a constant value.
     */
     template <class T>
-    void initSubstateNext(CALSubstate<T>*& Q,	
-                                T value	
+    void initSubstateNext(CALSubstate<T>*& Q,
+                                T value
                                 );
 
     /*! \brief Apply an elementary process to all the cellular space.
     */
-    void applyElementaryProcess(CALCallbackFunc elementary_process 
+    void applyElementaryProcess(CALCallbackFunc elementary_process
                                                    );
     /*! \brief The cellular automaton global transition function.
         It applies the transition function to each cell of the cellular space.
@@ -146,9 +155,9 @@ public:
     /*! \brief Inits the value of a substate in a certain cell to value; it updates both the current and next matrices at the specified position.
     */
     template <class T>
-    void init(struct CALSubstate<T>*& Q,	
-                    int* indexes,				
-                    T value		
+    void init(struct CALSubstate<T>*& Q,
+                    int* indexes,
+                    T value
                     );
 
 
@@ -170,9 +179,9 @@ public:
 
 *******************************************************************************/
 private:
-   
+
     template <class T>
-    calCommon :: CALbyte allocSubstate(CALSubstate<T>*& Q	
+    calCommon :: CALbyte allocSubstate(CALSubstate<T>*& Q
                                 );
 
 };
@@ -185,7 +194,7 @@ private:
 
 
 template <class T>
-calCommon :: CALbyte CALModel::allocSubstate(CALSubstate<T>*& Q	
+calCommon :: CALbyte CALModel::allocSubstate(CALSubstate<T>*& Q
                             )
 {
     CALBuffer<T>* current = new CALBuffer<T> (this->coordinates, this->dimension);

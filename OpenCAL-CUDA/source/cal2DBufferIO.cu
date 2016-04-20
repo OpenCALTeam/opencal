@@ -1,13 +1,22 @@
-// (C) Copyright University of Calabria and others.
-// All rights reserved. This program and the accompanying materials
-// are made available under the terms of the GNU Lesser General Public License
-// (LGPL) version 2.1 which accompanies this distribution, and is available at
-// http://www.gnu.org/licenses/lgpl-2.1.html
-//
-// This library is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-// Lesser General Public License for more details.
+/*
+ * Copyright (c) 2016 OpenCALTeam (https://github.com/OpenCALTeam),
+ * University of Calabria, Italy.
+ *
+ * This file is part of OpenCAL (Open Computing Abstraction Layer).
+ *
+ * OpenCAL is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of
+ * the License, or (at your option) any later version.
+ *
+ * OpenCAL is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with OpenCAL. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include ".\..\include\cal2DBuffer.cuh"
 #include ".\..\include\cal2DBufferIO.cuh"
@@ -63,7 +72,7 @@ CALbyte calCudaLoadMatrix2Db(CALbyte* M, int rows, int columns, char* path, int 
 	calfCudaLoadMatrix2Db(M, rows, columns, f, i_substate);
 
 	fclose(f);
-	
+
 	return CAL_TRUE;
 }
 
@@ -78,7 +87,7 @@ CALbyte calCudaLoadMatrix2Di(CALint* M, int rows, int columns, char* path, int i
 	calfCudaLoadMatrix2Di(M, rows, columns, f, i_substate);
 
 	fclose(f);
-	
+
 	return CAL_TRUE;
 }
 
@@ -93,7 +102,7 @@ CALbyte calCudaLoadMatrix2Dr(CALreal* M, int rows, int columns, char* path, int 
 	calfCudaLoadMatrix2Dr(M, rows, columns, f, i_substate);
 
 	fclose(f);
-	
+
 	return CAL_TRUE;
 }
 
@@ -144,13 +153,13 @@ CALbyte calCudaSaveMatrix2Db(CALbyte* M, int rows, int columns, char* path, CALi
 	FILE *f;
 	f = fopen(path, "w");
 
-	if ( !f ) 
+	if ( !f )
 		return CAL_FALSE;
 
 	calCudafSaveMatrix2Db(M, rows, columns, f, index_substate);
 
 	fclose(f);
-	
+
 	return CAL_TRUE;
 }
 
@@ -159,13 +168,13 @@ CALbyte calCudaSaveMatrix2Di(CALint* M, int rows, int columns, char* path, CALin
 	FILE *f;
 	f = fopen(path, "w");
 
-	if ( !f ) 
+	if ( !f )
 		return CAL_FALSE;
 
 	calCudafSaveMatrix2Di(M, rows, columns, f, index_substate);
 
 	fclose(f);
-	
+
 	return CAL_TRUE;
 }
 
@@ -174,12 +183,12 @@ CALbyte calCudaSaveMatrix2Dr(CALreal* M, int rows, int columns, char* path, CALi
 	FILE *f;
 	f = fopen(path, "w");
 
-	if ( !f ) 
+	if ( !f )
 		return CAL_FALSE;
 
 	calCudafSaveMatrix2Dr(M, rows, columns, f, index_substate);
 
 	fclose(f);
-	
+
 	return CAL_TRUE;
 }

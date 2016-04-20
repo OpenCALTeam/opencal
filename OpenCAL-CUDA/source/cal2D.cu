@@ -1,13 +1,22 @@
-// (C) Copyright University of Calabria and others.
-// All rights reserved. This program and the accompanying materials
-// are made available under the terms of the GNU Lesser General Public License
-// (LGPL) version 2.1 which accompanies this distribution, and is available at
-// http://www.gnu.org/licenses/lgpl-2.1.html
-//
-// This library is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-// Lesser General Public License for more details.
+/*
+ * Copyright (c) 2016 OpenCALTeam (https://github.com/OpenCALTeam),
+ * University of Calabria, Italy.
+ *
+ * This file is part of OpenCAL (Open Computing Abstraction Layer).
+ *
+ * OpenCAL is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of
+ * the License, or (at your option) any later version.
+ *
+ * OpenCAL is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with OpenCAL. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -20,14 +29,14 @@ PRIVATE FUNCIONS
 *******************************************************************************/
 
 void calDefineVonNeumannNeighborhood2D(struct CudaCALModel2D* ca2D	//!< Pointer to the cellular automaton structure.
-									   ) 
+									   )
 {
 	/*
-	| 1 |  
+	| 1 |
 	---|---|---
 	2 | 0 | 3
 	---|---|---
-	| 4 |  
+	| 4 |
 	*/
 
 	calCudaAddNeighbor2D(ca2D,   0,   0);
@@ -64,7 +73,7 @@ void calDefineHexagonalNeighborhood2D(struct CudaCALModel2D* ca2D		//!< Pointer 
 {
 	/*
 	cell orientation
-	__	
+	__
 	/  \
 	\__/
 	*/
@@ -73,7 +82,7 @@ void calDefineHexagonalNeighborhood2D(struct CudaCALModel2D* ca2D		//!< Pointer 
 	---|---|---
 	4 | 0 | 6		if (j%2 == 0), i.e. even columns
 	---|---|---
-	| 5 |  
+	| 5 |
 	*/
 
 	calCudaAddNeighbor2D(ca2D,   0,   0);
@@ -85,7 +94,7 @@ void calDefineHexagonalNeighborhood2D(struct CudaCALModel2D* ca2D		//!< Pointer 
 	calCudaAddNeighbor2D(ca2D,   0, + 1);
 
 	/*
-	| 2 |  
+	| 2 |
 	---|---|---
 	3 | 0 | 1		if (j%2 == 1), i.e. odd columns
 	---|---|---
@@ -116,11 +125,11 @@ void calDefineAlternativeHexagonalNeighborhood2D(struct CudaCALModel2D* ca2D	//!
 	\/
 	*/
 	/*
-	2 | 1 |  
+	2 | 1 |
 	---|---|---
 	3 | 0 | 6		if (i%2 == 0), i.e. even rows
 	---|---|---
-	4 | 5 |  
+	4 | 5 |
 	*/
 
 	calCudaAddNeighbor2D(ca2D,   0,   0);
@@ -200,7 +209,7 @@ struct CudaCALModel2D* calCudaCADef2D(int rows,
 	ca2D->sizeof_X = 0;
 
 	ca2D->X_id = CAL_NEIGHBORHOOD_2D;
-	switch (CAL_NEIGHBORHOOD_2D) {	
+	switch (CAL_NEIGHBORHOOD_2D) {
 	case CAL_VON_NEUMANN_NEIGHBORHOOD_2D:
 		calDefineVonNeumannNeighborhood2D(ca2D);
 		break;
@@ -286,9 +295,9 @@ __device__
 }
 
 __global__ void generateSetOfIndex(CudaCALModel2D *device_ca2D){
-	//algoritmo che trasforma la matrice di flag in matrice di index dove è diverso da 0 il valore del flag.
+	//algoritmo che trasforma la matrice di flag in matrice di index dove ï¿½ diverso da 0 il valore del flag.
 
-	CALint index = calCudaGetSimpleOffset(), no_value = -1; 
+	CALint index = calCudaGetSimpleOffset(), no_value = -1;
 	if(calCudaGetMatrixElement_(device_ca2D->activecell_flags, index, device_ca2D->rows, device_ca2D->columns, 0) == CAL_TRUE){
 		calCudaSetMatrixElement(device_ca2D->activecell_index, index, index,device_ca2D->rows, device_ca2D->columns, 0);
 	}
@@ -308,7 +317,7 @@ void calCudaApplyStreamCompaction(struct CudaCALRun2D* simulation, dim3 grid, di
 
 		cudaMemcpy(simulation->h_device_ca2D, simulation->device_ca2D, sizeof(struct CudaCALModel2D), cudaMemcpyDeviceToHost);
 
-		pp::compact( 
+		pp::compact(
 			simulation->h_device_ca2D->activecell_index,              /* Input start pointer */
 			simulation->h_device_ca2D->activecell_index+SIZE,     /* Input end pointer */
 			simulation->h_device_ca2D->array_of_index_result,              /* Output start pointer */
@@ -335,7 +344,7 @@ void calCudaUpdateActiveCells2D(struct CudaCALRun2D* simulation)
 {
 
 	cudaMemcpy(&simulation->h_device_ca2D->activecell_size_next, &simulation->device_ca2D->activecell_size_next, sizeof(int), cudaMemcpyDeviceToHost);
-	simulation->ca2D->activecell_size_current = simulation->h_device_ca2D->activecell_size_next;	
+	simulation->ca2D->activecell_size_current = simulation->h_device_ca2D->activecell_size_next;
 }
 
 
@@ -495,7 +504,7 @@ void calCudaApplyElementaryProcess2D(struct CudaCALRun2D* simulation,	//!< Point
 
 			cudaMemcpy(simulation->h_device_ca2D, simulation->device_ca2D, sizeof(struct CudaCALModel2D), cudaMemcpyDeviceToHost);
 
-			pp::compact( 
+			pp::compact(
 				simulation->h_device_ca2D->activecell_index,              /* Input start pointer */
 				simulation->h_device_ca2D->activecell_index+SIZE,     /* Input end pointer */
 				simulation->h_device_ca2D->array_of_index_result,              /* Output start pointer */
@@ -539,7 +548,7 @@ void calCudaGlobalTransitionFunction2D(struct CudaCALRun2D* simulation, dim3 gri
 
 		//updating substates
 		calCudaUpdate2D(simulation);
-	}   
+	}
 }
 
 //updating substates
@@ -567,19 +576,19 @@ void calCudaUpdate2D(struct CudaCALRun2D* simulation)
 	}
 }
 
-__device__ 
+__device__
 	void calCudaInit2Db(struct CudaCALModel2D* ca2D, int offset, CALbyte value, CALint substate_index) {
 		calCudaSetMatrixElement(ca2D->pQb_array_current, offset, value, ca2D->rows, ca2D->columns, substate_index);
 		calCudaSetMatrixElement(ca2D->pQb_array_next, offset, value, ca2D->rows, ca2D->columns, substate_index);
 }
 
-__device__ 
+__device__
 	void calCudaInit2Di(struct CudaCALModel2D* ca2D, int offset, CALint value, CALint substate_index) {
 		calCudaSetMatrixElement(ca2D->pQi_array_current, offset, value, ca2D->rows, ca2D->columns, substate_index);
 		calCudaSetMatrixElement(ca2D->pQi_array_next, offset, value, ca2D->rows, ca2D->columns, substate_index);
 }
 
-__device__ 
+__device__
 	void calCudaInit2Dr(struct CudaCALModel2D* ca2D, int offset, CALreal value, CALint substate_index) {
 		calCudaSetMatrixElement(ca2D->pQr_array_current, offset, value, ca2D->rows, ca2D->columns, substate_index);
 		calCudaSetMatrixElement(ca2D->pQr_array_next, offset, value, ca2D->rows, ca2D->columns, substate_index);
@@ -646,8 +655,8 @@ __device__
 		int index = calGetLinearIndex(offset, ca2D->columns, ca2D->rows,ca2D->i[n],ca2D->j[n], substate_index);
 		return calCudaGetMatrixElement_(ca2D->pQb_array_current, index, ca2D->rows, ca2D->columns, substate_index);
 	}
-	else{ 
-		//è toroidale
+	else{
+		//ï¿½ toroidale
 		int index = calGetToroidalLinearIndex(offset, ca2D->columns, ca2D->rows,ca2D->i[n],ca2D->j[n], substate_index);
 		return calCudaGetMatrixElement_(ca2D->pQb_array_current, index, ca2D->rows, ca2D->columns, substate_index);
 	}
@@ -666,8 +675,8 @@ __device__
 		int index = calGetLinearIndex(offset, ca2D->columns, ca2D->rows,ca2D->i[n],ca2D->j[n], substate_index);
 		return calCudaGetMatrixElement_(ca2D->pQi_array_current, index, ca2D->rows, ca2D->columns, substate_index);
 	}
-	else{ 
-		//è toroidale
+	else{
+		//ï¿½ toroidale
 		int index = calGetToroidalLinearIndex(offset, ca2D->columns, ca2D->rows,ca2D->i[n],ca2D->j[n], substate_index);
 		return calCudaGetMatrixElement_(ca2D->pQi_array_current, index, ca2D->rows, ca2D->columns, substate_index);
 	}
@@ -686,8 +695,8 @@ __device__
 		int index = calGetLinearIndex(offset, ca2D->columns, ca2D->rows,ca2D->i[n],ca2D->j[n], substate_index);
 		return calCudaGetMatrixElement_(ca2D->pQr_array_current, index, ca2D->rows, ca2D->columns, substate_index);
 	}
-	else{ 
-		//è toroidale
+	else{
+		//ï¿½ toroidale
 		int index = calGetToroidalLinearIndex(offset, ca2D->columns, ca2D->rows,ca2D->i[n],ca2D->j[n], substate_index);
 		return calCudaGetMatrixElement_(ca2D->pQr_array_current, index, ca2D->rows, ca2D->columns, substate_index);
 	}

@@ -1,20 +1,29 @@
-// (C) Copyright University of Calabria and others.
-// All rights reserved. This program and the accompanying materials
-// are made available under the terms of the GNU Lesser General Public License
-// (LGPL) version 2.1 which accompanies this distribution, and is available at
-// http://www.gnu.org/licenses/lgpl-2.1.html
-//
-// This library is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-// Lesser General Public License for more details.
+/*
+ * Copyright (c) 2016 OpenCALTeam (https://github.com/OpenCALTeam),
+ * University of Calabria, Italy.
+ *
+ * This file is part of OpenCAL (Open Computing Abstraction Layer).
+ *
+ * OpenCAL is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of
+ * the License, or (at your option) any later version.
+ *
+ * OpenCAL is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with OpenCAL. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #ifndef cal2DReduction_h
 #define cal2DReduction_h
 
 #include <OpenCAL/cal2D.h>
 
-/*! \brief 
+/*! \brief
 
 	Set of functions that compute the maximum value of a substate.
 */
@@ -22,7 +31,7 @@ CALbyte calReductionComputeMax2Db(struct CALModel2D* model, struct CALSubstate2D
 CALint calReductionComputeMax2Di(struct CALModel2D* model, struct CALSubstate2Di* substate);
 CALreal calReductionComputeMax2Dr(struct CALModel2D* model, struct CALSubstate2Dr* substate);
 
-/*! \brief 
+/*! \brief
 
 	Set of functions that compute the minimum value of a substate.
 */
@@ -30,7 +39,7 @@ CALbyte calReductionComputeMin2Db(struct CALModel2D* model, struct CALSubstate2D
 CALint calReductionComputeMin2Di(struct CALModel2D* model, struct CALSubstate2Di* substate);
 CALreal calReductionComputeMin2Dr(struct CALModel2D* model, struct CALSubstate2Dr* substate);
 
-/*! \brief 
+/*! \brief
 
 	Set of functions that compute the sum of values of a substate.
 */
@@ -38,7 +47,7 @@ CALbyte calReductionComputeSum2Db(struct CALModel2D* model, struct CALSubstate2D
 CALint calReductionComputeSum2Di(struct CALModel2D* model, struct CALSubstate2Di* substate);
 CALreal calReductionComputeSum2Dr(struct CALModel2D* model, struct CALSubstate2Dr* substate);
 
-/*! \brief 
+/*! \brief
 
 	Set of functions that compute the product of values of a substate.
 */
@@ -46,7 +55,7 @@ CALbyte calReductionComputeProd2Db(struct CALModel2D* model, struct CALSubstate2
 CALint calReductionComputeProd2Di(struct CALModel2D* model, struct CALSubstate2Di* substate);
 CALreal calReductionComputeProd2Dr(struct CALModel2D* model, struct CALSubstate2Dr* substate);
 
-/*! \brief 
+/*! \brief
 
 	Set of functions that compute the "Logic And" of values of a substate.
 */
@@ -54,7 +63,7 @@ CALbyte calReductionComputeLogicalAnd2Db(struct CALModel2D* model, struct CALSub
 CALint calReductionComputeLogicalAnd2Di(struct CALModel2D* model, struct CALSubstate2Di* substate);
 CALreal calReductionComputeLogicalAnd2Dr(struct CALModel2D* model, struct CALSubstate2Dr* substate);
 
-/*! \brief 
+/*! \brief
 
 	Set of functions that compute the "Binary And" of values of a substate.
 */
@@ -62,7 +71,7 @@ CALbyte calReductionComputeBinaryAnd2Db(struct CALModel2D* model, struct CALSubs
 CALint calReductionComputeBinaryAnd2Di(struct CALModel2D* model, struct CALSubstate2Di* substate);
 CALreal calReductionComputeBinaryAnd2Dr(struct CALModel2D* model, struct CALSubstate2Dr* substate);
 
-/*! \brief 
+/*! \brief
 
 	Set of functions that compute the "Logic Or" of values of a substate.
 */
@@ -70,7 +79,7 @@ CALbyte calReductionComputeLogicalOr2Db(struct CALModel2D* model, struct CALSubs
 CALint calReductionComputeLogicalOr2Di(struct CALModel2D* model, struct CALSubstate2Di* substate);
 CALreal calReductionComputeLogicalOr2Dr(struct CALModel2D* model, struct CALSubstate2Dr* substate);
 
-/*! \brief 
+/*! \brief
 
 	Set of functions that compute the "Binary Or" of values of a substate.
 */
@@ -78,7 +87,7 @@ CALbyte calReductionComputeBinaryOr2Db(struct CALModel2D* model, struct CALSubst
 CALint calReductionComputeBinaryOr2Di(struct CALModel2D* model, struct CALSubstate2Di* substate);
 CALreal calReductionComputeBinaryOr2Dr(struct CALModel2D* model, struct CALSubstate2Dr* substate);
 
-/*! \brief 
+/*! \brief
 
 	Set of functions that compute the "Logic Xor" of values of a substate.
 */
@@ -86,7 +95,7 @@ CALbyte calReductionComputeLogicalXor2Db(struct CALModel2D* model, struct CALSub
 CALint calReductionComputeLogicalXor2Di(struct CALModel2D* model, struct CALSubstate2Di* substate);
 CALreal calReductionComputeLogicalXor2Dr(struct CALModel2D* model, struct CALSubstate2Dr* substate);
 
-/*! \brief 
+/*! \brief
 
 	Set of functions that compute the "Binary Xor" of values of a substate.
 */
@@ -94,7 +103,7 @@ CALbyte calReductionComputeBinaryXor2Db(struct CALModel2D* model, struct CALSubs
 CALint calReductionComputeBinaryXor2Di(struct CALModel2D* model, struct CALSubstate2Di* substate);
 CALreal calReductionComputeBinaryXor2Dr(struct CALModel2D* model, struct CALSubstate2Dr* substate);
 
-/*! \brief 
+/*! \brief
 
 	Private set of functions that execute the operation specified on a given substate.
 	The user must not call directly this function, but instead call the functions specifed above.
@@ -103,7 +112,7 @@ CALbyte calReductionOperation2Db(struct CALModel2D* model, struct CALSubstate2Db
 CALint calReductionOperation2Di(struct CALModel2D* model, struct CALSubstate2Di* substate, enum REDUCTION_OPERATION operation);
 CALreal calReductionOperation2Dr(struct CALModel2D* model, struct CALSubstate2Dr* substate, enum REDUCTION_OPERATION operation);
 
-/*! \brief 
+/*! \brief
 
 	Utility functions used instead of "calGet2D(i, j)" for retriving the cell(i, j).
 	It is sufficiently one index instead two.

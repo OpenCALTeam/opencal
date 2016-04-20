@@ -1,3 +1,23 @@
+/*
+ * Copyright (c) 2016 OpenCALTeam (https://github.com/OpenCALTeam),
+ * University of Calabria, Italy.
+ *
+ * This file is part of OpenCAL (Open Computing Abstraction Layer).
+ *
+ * OpenCAL is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of
+ * the License, or (at your option) any later version.
+ *
+ * OpenCAL is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with OpenCAL. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 
 extern "C" {
 #include <OpenCAL-OMP/cal2DIO.h>
@@ -88,7 +108,7 @@ void sciddicaT_flows_computation(struct CALModel2D* sciddicaT, int i, int j)
 					again=CAL_TRUE;
 				}
 
-	}while (again); 
+	}while (again);
 
 	for (n=1; n<sciddicaT->sizeof_X; n++)
 		if (eliminated_cells[n])
@@ -152,7 +172,7 @@ void sciddicaTSteering(struct CALModel2D* sciddicaT)
 
 int main(int argc, char** argv)
 {
-	int version=0;	
+	int version=0;
 	if (sscanf (argv[1], "%i", &version)!=1 && version >=0) {
 		printf ("error - not an integer");
 		exit(-1);
@@ -177,12 +197,12 @@ int main(int argc, char** argv)
 	//load configuration
 	calLoadSubstate2Dr(sciddicaT, Q.z, DEM_PATH);
 	calLoadSubstate2Dr(sciddicaT, Q.h, SOURCE_PATH);
-	
+
 	//simulation run
 	calRunAddInitFunc2D(sciddicaT_simulation, sciddicaT_simulation_init);
 	calRunAddSteeringFunc2D(sciddicaT_simulation, sciddicaTSteering);
 	calRun2D(sciddicaT_simulation);
-	
+
 	string path;
 	PREFIX_PATH(version,"1.txt",path);
 	//saving configuration

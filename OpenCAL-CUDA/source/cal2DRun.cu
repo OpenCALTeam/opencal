@@ -1,22 +1,31 @@
-// (C) Copyright University of Calabria and others.
-// All rights reserved. This program and the accompanying materials
-// are made available under the terms of the GNU Lesser General Public License
-// (LGPL) version 2.1 which accompanies this distribution, and is available at
-// http://www.gnu.org/licenses/lgpl-2.1.html
-//
-// This library is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-// Lesser General Public License for more details.
+/*
+ * Copyright (c) 2016 OpenCALTeam (https://github.com/OpenCALTeam),
+ * University of Calabria, Italy.
+ *
+ * This file is part of OpenCAL (Open Computing Abstraction Layer).
+ *
+ * OpenCAL is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of
+ * the License, or (at your option) any later version.
+ *
+ * OpenCAL is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with OpenCAL. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include ".\..\include\cal2DRun.cuh"
 #include <stdlib.h>
 #include <stdio.h>
 
 struct CudaCALRun2D* calCudaRunDef2D(
-struct CudaCALModel2D* device_ca2D,								
+struct CudaCALModel2D* device_ca2D,
 struct CudaCALModel2D* ca2D,
-	int initial_step, 
+	int initial_step,
 	int final_step,
 	enum CALUpdateMode UPDATE_MODE)
 {
@@ -30,7 +39,7 @@ struct CudaCALModel2D* ca2D,
 	simulation->h_device_ca2D = calCudaAllocatorModel(ca2D);
 
 	cudaMalloc((void**)&simulation->device_array_of_index_dim,sizeof(unsigned int)*ca2D->rows*ca2D->columns);
-	
+
 	simulation->step = 0;
 	simulation->initial_step = initial_step;
 	simulation->final_step = final_step;
@@ -119,11 +128,11 @@ CALbyte calCudaRunCAStep2D(struct CudaCALRun2D* simulation, dim3 grid, dim3 bloc
 			grid.x = (num_blocks+2);
 			grid.y = 1;
 			//calCudaPerformGridAndBlockForStreamCompaction2D(simulation, grid, block);
-			simulation->stopCondition<<<grid,block>>>(simulation->device_ca2D); 
+			simulation->stopCondition<<<grid,block>>>(simulation->device_ca2D);
 		}else{
-			simulation->stopCondition<<<grid,block>>>(simulation->device_ca2D); 
+			simulation->stopCondition<<<grid,block>>>(simulation->device_ca2D);
 		}
-		
+
 		cudaMemcpy(simulation->h_device_ca2D, simulation->device_ca2D, sizeof(struct CudaCALModel2D), cudaMemcpyDeviceToHost);
 		if(simulation->h_device_ca2D->stop)
 			return CAL_FALSE;
@@ -152,7 +161,7 @@ void calCudaRun2D(struct CudaCALRun2D* simulation, dim3 grid, dim3 block)
 	{
 		again = calCudaRunCAStep2D(simulation, grid, block);
 		if (!again)
-			break;		
+			break;
 	}
 
 	calCudaRunFinalizeSimulation2D(simulation, grid, block);
