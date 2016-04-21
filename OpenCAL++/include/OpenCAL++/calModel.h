@@ -19,7 +19,7 @@
 #include <OpenCAL++/calBuffer.h>
 #include<OpenCAL++/calActiveCells.h>
 #include<OpenCAL++/calSubstate.h>
-#include <OpenCAL++/calIndicesPool.h>
+#include <OpenCAL++/calIndexesPool.h>
 #include <OpenCAL++/calNeighborPool.h>
 
 
@@ -42,15 +42,24 @@ namespace opencal {
             typedef CALModel<DIMENSION, NEIGHBORHOOD, COORDINATE_TYPE> *CALMODEL_pointer;
         public:
 
-            CALElementaryProcessFunctor();
+            CALElementaryProcessFunctor()
+            {
+
+            }
 
             /*! \brief Method that has to ridefined in concrete derived class in order to specify the necessary steps for elementary process.
             */
-            virtual void run(CALMODEL_pointer calModel, int *indexes) = 0;
+            virtual void run(CALMODEL_pointer calModel, std::array<COORDINATE_TYPE,DIMENSION> indexes) = 0;
 
-            virtual void operator()(CALMODEL_pointer calModel, int *indexes);
+            virtual void operator()(CALMODEL_pointer calModel, std::array<COORDINATE_TYPE,DIMENSION> indexes)
+            {
+                run(calModel, indexes);
+            }
 
-            virtual ~CALElementaryProcessFunctor();
+            virtual ~CALElementaryProcessFunctor()
+            {
+
+            }
         };
 
 
@@ -90,7 +99,12 @@ namespace opencal {
                 this->size = opencal::calCommon::multiplier<DIMENSION,uint>(coordinates,0);
 
                 //initialize indexpool and neighbor pool
+                CALNeighborPool<DIMENSION, COORDINATE_TYPE> :: init(coordinates, CAL_TOROIDALITY);
+                CALIndexesPool<DIMENSION, COORDINATE_TYPE>:: init(coordinates,size);
 
+
+
+                this->sizeof_X = 0;
 
                 if (this->CAL_OPTIMIZATION == calCommon::CAL_OPT_ACTIVE_CELLS) {
                     CALBuffer<bool , DIMENSION , COORDINATE_TYPE>* flags = new CALBuffer<bool , DIMENSION , COORDINATE_TYPE> (this->coordinates);
@@ -99,6 +113,19 @@ namespace opencal {
                 }
                 else
                     this->activeCells = NULL;
+
+
+                this->pQ_arrays = NULL;
+                this->sizeof_pQ_arrays = 0;
+
+
+                this->X_id = _calNeighborhood;
+
+                if (X_id != NULL)
+                    this->X_id->defineNeighborhood(this);
+
+                this->elementary_processes = NULL;
+                this->num_of_elementary_processes = 0;
             }
 
             ~CALModel (){
@@ -107,10 +134,10 @@ namespace opencal {
                 }
                 delete [] pQ_arrays;
 
-                CALIndicesPool<DIMENSION , COORDINATE_TYPE>::destroy();
+                CALIndexesPool<DIMENSION , COORDINATE_TYPE>::destroy();
                 CALNeighborPool<DIMENSION , COORDINATE_TYPE>::destroy();
                 delete activeCells;
-                delete X_id;
+//                delete X_id;
 
                 delete [] this->elementary_processes;
 
@@ -119,7 +146,7 @@ namespace opencal {
             /*! \brief Sets a certain cell of the matrix flags to true and increments the
             couter sizeof_active_flags.
         */
-            void addActiveCell(int * indexes){
+            void addActiveCell(std::array<COORDINATE_TYPE, DIMENSION>& indexes){
                 this->activeCells->setElementFlags(indexes, this->coordinates, CAL_TRUE);
             }
             void addActiveCell(int linearIndex){
@@ -129,7 +156,7 @@ namespace opencal {
             /*! \brief Sets a specific cell of the matrix flags to false and decrements the
             couter sizeof_active_flags.
         */
-            void removeActiveCell(int * indexes){
+            void removeActiveCell(std::array<COORDINATE_TYPE, DIMENSION>& indexes){
                 this->activeCells->setElementFlags(indexes, this->coordinates,  CAL_FALSE);
             }
             void removeActiveCell(int linearIndex){
@@ -146,7 +173,7 @@ namespace opencal {
             /*! \brief Adds a neighbour to CALNeighbourPool.
             */
             void  addNeighbor(int* indexes){
-                CALNeighborPool<DIMENSION , COORDINATE_TYPE>::getInstance()->addNeighbor(indexes);
+                CALNeighborPool<DIMENSION , COORDINATE_TYPE>::addNeighbor(indexes);
                 this->sizeof_X++;
             }
 
@@ -155,7 +182,7 @@ namespace opencal {
             void  addNeighbors(int** indexes, size_t size){
                 int n = 0;
                 for (n = 0; n < size; n++){
-                    CALNeighborPool<DIMENSION, COORDINATE_TYPE>::getInstance()->addNeighbor(indexes[n]);
+                    CALNeighborPool<DIMENSION, COORDINATE_TYPE>::addNeighbor(indexes[n]);
                     this->sizeof_X ++;
                 }
             }
@@ -187,14 +214,14 @@ namespace opencal {
                 {
                     int sizeCurrent = this->activeCells->getSizeCurrent();
                     for (n=0; n<sizeCurrent; n++)
-                        elementary_process->run(this, opencal::calCommon::cellMultidimensionalIndices<DIMENSION , COORDINATE_TYPE>(this->activeCells->getCells()[n]));
+                        elementary_process->run(this, opencal::CALIndexesPool<DIMENSION , COORDINATE_TYPE>::getMultidimensionalIndexes(this->activeCells->getCells()[n]));
                 }
                 else //Standart cicle of the transition function
                 {
 
                     for (i=0; i<this->size; i++)
                     {
-                        int * indexes = opencal::calCommon::cellMultidimensionalIndices<DIMENSION , COORDINATE_TYPE>(i);
+                        std::array<COORDINATE_TYPE,DIMENSION> indexes = opencal::CALIndexesPool<DIMENSION , COORDINATE_TYPE>::getMultidimensionalIndexes(i);
                         elementary_process->run(this, indexes);
                     }
 
@@ -222,7 +249,7 @@ namespace opencal {
             void update()
             {
                 //updating active cells
-                if (this->OPTIMIZATION == calCommon :: CAL_OPT_ACTIVE_CELLS)
+                if (this->CAL_OPTIMIZATION == calCommon :: CAL_OPT_ACTIVE_CELLS)
                     this->updateActiveCells();
 
 
@@ -243,7 +270,7 @@ namespace opencal {
                 CALSubstateWrapper<DIMENSION , COORDINATE_TYPE>** pQ_array_tmp = this->pQ_arrays;
                 CALSubstateWrapper<DIMENSION , COORDINATE_TYPE>** pQ_array_new;
                 SUBSTATE_pointer Q;
-                int i;
+                uint i;
 
 
                 pQ_array_new = new CALSubstateWrapper<DIMENSION , COORDINATE_TYPE>* [this->sizeof_pQ_arrays + 1];
@@ -315,9 +342,9 @@ namespace opencal {
             }
 
             template <class PAYLOAD>
-            void init(CALSubstate<PAYLOAD, DIMENSION, COORDINATE_TYPE>*& Q, int* indexes, PAYLOAD value) {
+            void init(CALSubstate<PAYLOAD, DIMENSION, COORDINATE_TYPE>*& Q, std::array<COORDINATE_TYPE, DIMENSION>& indexes, PAYLOAD value) {
 
-                int linearIndex = calCommon::cellLinearIndex(indexes, this->coordinates);
+                int linearIndex = calCommon::cellLinearIndex<DIMENSION, COORDINATE_TYPE>(indexes, this->coordinates);
                 (*Q->getCurrent())[linearIndex] = value;
                 (*Q->getNext())[linearIndex] = value;
             }
@@ -391,8 +418,8 @@ namespace opencal {
                 using SUBSTATE = CALSubstate<PAYLOAD, DIMENSION , COORDINATE_TYPE>;
 
                 BUFFER* current = new BUFFER(this->coordinates);
-                BUFFER* next = new BUFFER(this->coordinates, this->dimension);
-                Q = new SUBSTATE (current, next);
+                BUFFER* next = new BUFFER(this->coordinates);
+                Q = new SUBSTATE (current, next, this->coordinates);
 
                 if (!Q->getCurrent() || !Q->getNext()){
                     return CAL_FALSE;

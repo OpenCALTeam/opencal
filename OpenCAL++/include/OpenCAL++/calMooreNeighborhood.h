@@ -7,7 +7,7 @@
 
 namespace opencal {
 class CALMooreNeighborhood {
-
+public:
     template<class CALMODEL>
     void defineNeighborhood(CALMODEL* calModel) {
         int n = calModel->getDimension();
@@ -25,7 +25,7 @@ class CALMooreNeighborhood {
                 v = v / 3;
             }
 
-            calModel-> calAddNeighbor (indexes);
+            calModel-> addNeighbor (indexes);
         }
     }
 };

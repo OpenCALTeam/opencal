@@ -40,9 +40,9 @@ namespace opencal {
             {
                 int n, k;
                 int linearIndex = i;
-                int* v = new int [this->dimension];
+                int* v = new int [DIMENSION];
                 int t =this-> size;
-                for (n=this->dimension-1; n>=0; n--)
+                for (n=DIMENSION-1; n>=0; n--)
                 {
                     if (n ==1)
                         k=0;

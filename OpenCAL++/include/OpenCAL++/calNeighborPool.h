@@ -20,8 +20,8 @@ namespace opencal{
         static int size_of_X;
         static enum calCommon::CALSpaceBoundaryCondition CAL_TOROIDALITY;
     public:
-        static void destroy();
-        static void init (std::array<COORDINATE_TYPE, DIMENSION> _coordinates, enum calCommon::CALSpaceBoundaryCondition _CAL_TOROIDALITY);
+        static inline void destroy();
+        static inline void init (std::array<COORDINATE_TYPE, DIMENSION> _coordinates, enum calCommon::CALSpaceBoundaryCondition _CAL_TOROIDALITY);
 
         static inline int getNeighborN (int linearIndex, int n)
         {
@@ -33,14 +33,23 @@ namespace opencal{
 
         }
 
-        static void addNeighbor (std::array<COORDINATE_TYPE, DIMENSION>& cellPattern);
-        static inline std::array<COORDINATE_TYPE,DIMENSION>& cellMultidimensionalIndexes(int index)
+        static void addNeighbor (int* cellPattern);
+
+
+        static int getNeighborNLinear (const std::array<COORDINATE_TYPE,DIMENSION>& indexes, int* neighbor);
+
+        static void stampa ()
         {
-            return CALIndexesPool<DIMENSION, COORDINATE_TYPE>:: getMultidimensionalIndexes(index);
+            std::cout<<"STAMPA VICINATO "<<size_of_X<<std::endl;
+            for (int i = 0; i < size; i++)
+            {
+                for (int j = 0; j < size_of_X; j++)
+                {
+                    std::cout<<neighborPool[i][j] <<" ";
+                }
+                std::cout<<std::endl;
+            }
         }
-
-        static int getNeighborNLinear (const std::array<COORDINATE_TYPE,DIMENSION>& indexes, const std::array<COORDINATE_TYPE,DIMENSION>& neighbor);
-
 
 
     };
@@ -57,14 +66,23 @@ template<uint DIMENSION, typename COORDINATE_TYPE>
 int opencal::CALNeighborPool<DIMENSION,COORDINATE_TYPE>:: size_of_X = 0;
 
 template<uint DIMENSION, typename COORDINATE_TYPE>
+std::array<COORDINATE_TYPE, DIMENSION> opencal::CALNeighborPool<DIMENSION,COORDINATE_TYPE>:: coordinates;
+
+template<uint DIMENSION, typename COORDINATE_TYPE>
+enum opencal::calCommon::CALSpaceBoundaryCondition opencal::CALNeighborPool<DIMENSION,COORDINATE_TYPE>:: CAL_TOROIDALITY;
+
+template<uint DIMENSION, typename COORDINATE_TYPE>
 void opencal::CALNeighborPool<DIMENSION, COORDINATE_TYPE>:: init (std::array<COORDINATE_TYPE, DIMENSION> _coordinates, enum calCommon::CALSpaceBoundaryCondition _CAL_TOROIDALITY)
 {
     if (neighborPool == nullptr)
     {
+        coordinates = _coordinates;
         size = opencal::calCommon::multiplier<DIMENSION,uint>(coordinates,0);
         neighborPool = new int* [size];
-        coordinates = _coordinates;
         CAL_TOROIDALITY = _CAL_TOROIDALITY;
+        for (uint i = 0; i < size; ++i) {
+            neighborPool[i] = nullptr;
+    }
     }
 }
 
@@ -82,7 +100,7 @@ void opencal::CALNeighborPool<DIMENSION, COORDINATE_TYPE>:: destroy()
 
 
 template<uint DIMENSION, typename COORDINATE_TYPE>
-void opencal::CALNeighborPool<DIMENSION, COORDINATE_TYPE>:: addNeighbor (std::array<COORDINATE_TYPE, DIMENSION>& cellPattern)
+void opencal::CALNeighborPool<DIMENSION, COORDINATE_TYPE>:: addNeighbor (int* cellPattern)
 {
     for (int i = 0; i < size; ++i)
     {
@@ -93,41 +111,47 @@ void opencal::CALNeighborPool<DIMENSION, COORDINATE_TYPE>:: addNeighbor (std::ar
             neighborsNew [k] = neighborPool[i][k];
         }
 
-        std::array<COORDINATE_TYPE,DIMENSION> multidimensionalIndex = cellMultidimensionalIndexes(i);
+        std::array<COORDINATE_TYPE,DIMENSION> multidimensionalIndex = CALIndexesPool<DIMENSION, COORDINATE_TYPE>:: getMultidimensionalIndexes(i);
         int toAdd = getNeighborNLinear(multidimensionalIndex,cellPattern );
         neighborsNew[size_of_X]= toAdd;
         neighborPool[i]= neighborsNew;
 
-        delete [] neighborsTmp;
+        if (neighborsTmp)
+            delete [] neighborsTmp;
     }
+
     size_of_X++;
+
 
 }
 
 template<uint DIMENSION, typename COORDINATE_TYPE>
-int opencal::CALNeighborPool<DIMENSION, COORDINATE_TYPE> :: getNeighborNLinear (const std::array<COORDINATE_TYPE,DIMENSION>& indexes, const std::array<COORDINATE_TYPE,DIMENSION>& neighbor)
+int opencal::CALNeighborPool<DIMENSION, COORDINATE_TYPE> :: getNeighborNLinear (const std::array<COORDINATE_TYPE,DIMENSION>& indexes, int* neighbor)
 {
     int i;
     int c = 0;
     int t = size;
     if (CAL_TOROIDALITY == calCommon::CAL_SPACE_FLAT)
+    {
         for (i = 0; i < DIMENSION; ++i)
         {
             t= t/coordinates[i];
             c+=(indexes[i] + neighbor[i])*t;
         }
+    }
     else
     {
         for (i=0; i< DIMENSION; i++)
         {
             t= t/coordinates[i];
-            c+=(calGetToroidalX(indexes[i] + neighbor[i], coordinates[i]))*t;
+            c+=(calCommon::getToroidalX(indexes[i] + neighbor[i], coordinates[i]))*t;
 
         }
-
     }
     return c;
 }
+
+
 
 
 

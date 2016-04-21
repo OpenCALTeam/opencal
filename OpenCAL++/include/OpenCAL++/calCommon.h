@@ -15,7 +15,7 @@
 
 #include "functional_utilities.h"
 #include <array>
-#include <OpenCAL++/calIndicesPool.h>
+#include <OpenCAL++/calIndexesPool.h>
 namespace opencal {
 
     namespace calCommon {
@@ -54,7 +54,12 @@ namespace opencal {
         /*! \brief Macro recomputing the out of bound neighbourhood indexes in case of toroidal cellular space.
         */
 
-        #define calGetToroidalX(index, size) (   (index)<0?((size)+(index)):( (index)>((size)-1)?((index)-(size)):(index) )   )
+
+        inline int getToroidalX (int index, uint size)
+        {
+          return (index)<0?((size)+(index)):( (index)>((size)-1)?((index)-(size)):(index) );
+        }
+//        #define calGetToroidalX(index, size) (   (index)<0?((size)+(index)):( (index)>((size)-1)?((index)-(size)):(index) )   )
 
         /*! Constant used to set the run final step to 0, correspondig to a loop condition.
         In this case, a stop condition should be defined.
@@ -116,13 +121,13 @@ namespace opencal {
 
 
 
-        /*! \brief Return multidimensional indexes of a certain cell.
-        */
-        template<uint DIMENSION, typename COORDINATE_TYPE>
-        inline int* cellMultidimensionalIndices (int index)
-        {
-            return CALIndicesPool<DIMENSION , COORDINATE_TYPE>:: getMultidimensionalIndexes(index);
-        }
+//        /*! \brief Return multidimensional indexes of a certain cell.
+//        */
+//        template<uint DIMENSION, typename COORDINATE_TYPE>
+//        inline std::array<COORDINATE_TYPE,DIMENSION>& cellMultidimensionalIndices (int index)
+//        {
+//            return CALIndexesPool<DIMENSION , COORDINATE_TYPE>:: getMultidimensionalIndexes(index);
+//        }
 
 
         /*! \brief Return linear index of n^th neighbour of a certain cell.

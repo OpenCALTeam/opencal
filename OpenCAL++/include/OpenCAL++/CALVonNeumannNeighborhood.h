@@ -7,9 +7,9 @@
 
 namespace opencal {
     class CALVonNeumannNeighborhood {
-
+public:
         template<class CALMODEL>
-        void defineNeighborhood(CALMODEL calModel) {
+        void defineNeighborhood(CALMODEL* calModel) {
             int n = calModel->getDimension();
             assert(n == 2 || n == 3);
 

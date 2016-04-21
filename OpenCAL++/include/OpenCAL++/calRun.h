@@ -68,9 +68,10 @@ namespace opencal {
                 int _final_step,					//!< Finale step; if it is 0, a loop is obtained. In order to set final_step to 0, the constant CAL_RUN_LOOP can be used.
                 enum calCommon :: CALUpdateMode _UPDATE_MODE		//!< Update mode: explicit on or explicit off (implicit).
         ): UPDATE_MODE(_UPDATE_MODE) , init(nullptr) , globalTransition(nullptr) , steering(nullptr),
-           stopCondition(nullptr) , finalize(nullptr), calModel(_calModel)
+           stopCondition(nullptr) , finalize(nullptr), calModel(_calModel), initial_step(_initial_step), final_step(_final_step)
         {
-            //empty body
+
+
         }
 
 

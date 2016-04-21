@@ -7,7 +7,7 @@
 
 
 #include <OpenCAL++/calBuffer.h>
-//#include<OpenCAL++/calNeighborPool.h>
+#include<OpenCAL++/calNeighborPool.h>
 #include <OpenCAL++/calActiveCells.h>
 #include <OpenCAL++/calConverterIO.h>
 
@@ -25,11 +25,9 @@ namespace opencal {
 
         virtual void update(opencal::CALActiveCells<DIMENSION, COORDINATE_TYPE> *activeCells) = 0;
 
-        virtual void saveSubstate(std::array<COORDINATE_TYPE, DIMENSION>& _coordinates, CALCONVERTERIO_pointer calConverterInputOutput,
-                                  char *path) = 0;
+        virtual void saveSubstate(CALCONVERTERIO_pointer calConverterInputOutput, char *path) = 0;
 
-        virtual void loadSubstate(std::array<COORDINATE_TYPE, DIMENSION>& coordinates, CALCONVERTERIO_pointer calConverterInputOutput,
-                                  char *path) = 0;
+        virtual void loadSubstate(CALCONVERTERIO_pointer calConverterInputOutput, char *path) = 0;
     };
 
     template<class PAYLOAD, uint DIMENSION, typename COORDINATE_TYPE = uint>
@@ -51,13 +49,14 @@ namespace opencal {
     private:
         BUFFER_TYPE_PTR current;    //!< Current linearised matrix of the substate, used for reading purposes.
         BUFFER_TYPE_PTR next;        //!< Next linearised matrix of the substate, used for writing purposes.
-
+        std::array<COORDINATE_TYPE,DIMENSION> coordinates;
     public:
 
 
-        CALSubstate(){
+        CALSubstate(std::array<COORDINATE_TYPE,DIMENSION> _coordinates){
             this->current   = nullptr;
             this->next      = nullptr;
+            this->coordinates = _coordinates;
         }
 
         virtual ~ CALSubstate(){
@@ -65,9 +64,10 @@ namespace opencal {
             delete this->next;
         }
 
-        CALSubstate(BUFFER_TYPE_PTR _current, BUFFER_TYPE_PTR _next){
+        CALSubstate(BUFFER_TYPE_PTR _current, BUFFER_TYPE_PTR _next, std::array<COORDINATE_TYPE,DIMENSION> _coordinates){
             this->current   = _current;
             this->next      = _next;
+            this->coordinates = _coordinates;
         }
 
         CALSubstate(const CALSubstate& obj){
@@ -115,41 +115,102 @@ namespace opencal {
             }
         }
 
-        virtual void saveSubstate(std::array<COORDINATE_TYPE, DIMENSION>& _coordinates, CALCONVERTERIO_pointer calConverterInputOutput,
-                                  char *path);
-
-        virtual void loadSubstate(std::array<COORDINATE_TYPE, DIMENSION>& _coordinates, CALCONVERTERIO_pointer calConverterInputOutput,
-                                  char *path);
-
-        void setElementCurrent(int *indexes, std::array<COORDINATE_TYPE, DIMENSION>& _coordinates, PAYLOAD value);
-
-        void setElement(int *indexes, std::array<COORDINATE_TYPE, DIMENSION>& _coordinates, PAYLOAD value);
-
-        PAYLOAD getElement(int *indexes, std::array<COORDINATE_TYPE, DIMENSION>& _coordinates);
-
-        PAYLOAD getElementNext(int *indexes, std::array<COORDINATE_TYPE, DIMENSION>& _coordinates);
-
-        PAYLOAD getX(int linearIndex, int n){
-
+        virtual void saveSubstate(CALCONVERTERIO_pointer calConverterInputOutput, char *path)
+        {
+//            this->current->template saveBuffer<CALConverterIO<DIMENSION , COORDINATE_TYPE> >(this->coordinates,calConverterInputOutput, path);
         }
 
-        PAYLOAD getX(int *indexes, std::array<COORDINATE_TYPE, DIMENSION>& _coordinates, int n){
+        virtual void loadSubstate(CALCONVERTERIO_pointer calConverterInputOutput, char *path)
+        {
 
+            delete current;
+//            this->current = new BUFFER_TYPE (this->coordinates, path, calConverterInputOutput);
+            if (this->next)
+                *next = *current;
         }
 
-        PAYLOAD getElement(int linearIndex);
+        void setElementCurrent(std::array<COORDINATE_TYPE,DIMENSION>& indexes, PAYLOAD value)
+        {
+            this->current->setElement(indexes, this->coordinates, value);
+        }
 
-        PAYLOAD getElementNext(int linearIndex);
+        void setElement(std::array<COORDINATE_TYPE,DIMENSION>& indexes, PAYLOAD value)
+        {
+            this->next->setElement(indexes, this->coordinates, value);
+        }
 
-        void setElementCurrent(int linearIndex, PAYLOAD value);
+        PAYLOAD getElement(std::array<COORDINATE_TYPE,DIMENSION>& indexes)
+        {
+            return this->current->getElement(indexes, this->coordinates);
+        }
 
-        void setElement(int linearIndex, PAYLOAD value);
+        PAYLOAD getElementNext(std::array<COORDINATE_TYPE,DIMENSION>& indexes)
+        {
+            return this->next->getElement(indexes, this->coordinates);
+        }
 
-        void setCurrentBuffer(PAYLOAD value);
+        PAYLOAD getX(int linearIndex, int n) const
+        {
+            return (*this->current)[CALNeighborPool<DIMENSION,COORDINATE_TYPE>::getNeighborN(linearIndex,n)];
+        }
 
-        void setNextBuffer(PAYLOAD value);
+        PAYLOAD getX(std::array<COORDINATE_TYPE,DIMENSION>& indexes, int n){
 
-        CALSubstate& operator=(const CALSubstate &b);
+            int linearIndex = calCommon::cellLinearIndex<DIMENSION,COORDINATE_TYPE>(indexes, this->coordinates);
+            return (*this->current)[CALNeighborPool<DIMENSION,COORDINATE_TYPE>::getNeighborN(linearIndex,n)];
+        }
+
+        PAYLOAD getElement(int linearIndex) const
+        {
+            return (*this->current)[linearIndex];
+        }
+
+        PAYLOAD getElementNext(int linearIndex) const
+        {
+            return (*this->next)[linearIndex];
+        }
+
+        void setElementCurrent(int linearIndex, PAYLOAD value)
+        {
+            (*this->current)[linearIndex] = value;
+        }
+
+        void setElement(int linearIndex, PAYLOAD value)
+        {
+            (*this->next)[linearIndex] = value;
+        }
+
+        void setCurrentBuffer(PAYLOAD value)
+        {
+            this->current->setBuffer(value);
+        }
+
+        void setNextBuffer(PAYLOAD value)
+        {
+            this->next->setBuffer(value);
+        }
+
+        CALSubstate& operator=(const CALSubstate &b)
+        {
+            if (this != &b)
+            {
+
+                //TODO SISTEMARE
+                BUFFER_TYPE_PTR currentTmp = new BUFFER_TYPE ();
+                BUFFER_TYPE_PTR nextTmp = new BUFFER_TYPE ();
+
+                *currentTmp = *b.current;
+                *nextTmp = *b.next;
+
+                //        delete current;
+                //        delete next;
+
+                this->current = currentTmp;
+                this->next = nextTmp;
+            }
+            return *this;
+
+        }
 
 
     };

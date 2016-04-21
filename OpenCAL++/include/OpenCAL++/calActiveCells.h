@@ -105,22 +105,22 @@ namespace opencal {
             this->size_current = _size_current;
         }
 
-        bool getElementFlags(int *indexes, int *coordinates, int dimension){
-            return this->flags->getElement(indexes, coordinates,dimension);
+        bool getElementFlags(std::array<COORDINATE_TYPE, DIMENSION>& indexes, std::array<COORDINATE_TYPE, DIMENSION>& coordinates){
+            return this->flags->getElement(indexes, coordinates);
         }
 
         /*! \brief Sets the cell of coordinates indexes of the matrix flags to parameter value. It
          * increments the couter size_current if value is true, it decreases otherwise.
         */
-        void setElementFlags(int *indexes, int *coordinates, int dimension, bool value){
-            if (value && !flags->getElement(indexes, coordinates,dimension))
+        void setElementFlags(std::array<COORDINATE_TYPE, DIMENSION>&indexes, std::array<COORDINATE_TYPE, DIMENSION>& coordinates, bool value){
+            if (value && !flags->getElement(indexes, coordinates))
             {
-                flags->setElement(indexes, coordinates,dimension, value);
+                flags->setElement(indexes, coordinates, value);
                 size_next++;
             }
-            else if (!value && flags->getElement(indexes, coordinates,dimension))
+            else if (!value && flags->getElement(indexes))
             {
-                flags->setElement(indexes, coordinates,dimension, value);
+                flags->setElement(indexes, coordinates, value);
                 size_next--;
             }
         }

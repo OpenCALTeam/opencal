@@ -9,8 +9,11 @@
 #include <OpenCAL++/calCommon.h>
 #include <cassert>
 #include <memory>
+#include <iostream>
 
 namespace opencal {
+
+
 
 template <class PAYLOAD , uint DIMENSION, typename COORDINATE_TYPE = uint>
 class CALBuffer
@@ -56,244 +59,158 @@ public:
     }
     void setBuffer (PAYLOAD value){
 
-        for (uint i = 0;  i < size; i++)
+        for (calCommon::uint i = 0;  i < size; i++)
             buffer[i] = value;
 
     }
-    PAYLOAD getElement (int* indexes, std::array <COORDINATE_TYPE, DIMENSION>& coordinates);
-    PAYLOAD getElement (int linearIndex);
-    int getSize ();
-    void setElement (int* indexes, std::array <COORDINATE_TYPE, DIMENSION>& coordinates, int dimension, PAYLOAD value);
-    void setElement (int linearIndex, PAYLOAD value);
-    void setSize (int size);
+    PAYLOAD getElement (std::array <COORDINATE_TYPE, DIMENSION>& indexes, std::array <COORDINATE_TYPE, DIMENSION>& coordinates)
+    {
+        return buffer[calCommon :: cellLinearIndex<DIMENSION,COORDINATE_TYPE>(indexes,coordinates)];
+    }
+
+    PAYLOAD getElement (int linearIndex)
+    {
+        return buffer[linearIndex];
+    }
+
+    int getSize ()
+    {
+        return size;
+    }
+
+    void setElement (std::array <COORDINATE_TYPE, DIMENSION>& indexes, std::array <COORDINATE_TYPE, DIMENSION>& coordinates, PAYLOAD value)
+    {
+        calCommon::uint linearIndex= calCommon :: cellLinearIndex<DIMENSION,COORDINATE_TYPE>(indexes,coordinates);
+        buffer[linearIndex] = value;
+    }
+
+    void setElement (int linearIndex, PAYLOAD value)
+    {
+        buffer[linearIndex] = value;
+    }
 
     template<class CALCONVERTER>
-    void saveBuffer (std::array <COORDINATE_TYPE, DIMENSION>& coordinates, CALCONVERTER* calConverterInputOutput, std::string* path);
+    void saveBuffer (std::array <COORDINATE_TYPE, DIMENSION>& coordinates, CALCONVERTER* calConverterInputOutput, char* path)
+    {
+//        calConverterInputOutput->calSaveBuffer(this->buffer, this->size, coordinates, DIMENSION, path);
+    }
 
-    void copyActiveCellsBuffer (CALBuffer<PAYLOAD , DIMENSION, COORDINATE_TYPE>* M_src, int* activeCells, int sizeof_active_cells);
-    void setActiveCellsBuffer (int* activeCells, int sizeof_active_cells, PAYLOAD value);
-    void stampa (std::array <COORDINATE_TYPE, DIMENSION>& coordinates, size_t dimension);
-    PAYLOAD &operator[](int i);
-    BUFFER_TYPE operator+(const BUFFER_TYPE_REF & b);
-    BUFFER_TYPE operator-(const BUFFER_TYPE_REF & b);
-    BUFFER_TYPE_REF operator+=(const BUFFER_TYPE_REF& b);
-    BUFFER_TYPE_REF operator-=(const BUFFER_TYPE_REF & b);
-    BUFFER_TYPE_REF operator=(const BUFFER_TYPE_REF & b);
+    void copyActiveCellsBuffer (BUFFER_TYPE_PTR M_src, int* activeCells, int sizeof_active_cells)
+    {
+        calCommon::uint c, n;
+
+        for(n=0; n<sizeof_active_cells; n++)
+        {
+            c= activeCells[n];
+            if (this->buffer[c] != (*M_src)[c])
+                this->buffer[c] = (*M_src)[c];
+        }
+    }
+
+    void setActiveCellsBuffer (int* activeCells, int sizeof_active_cells, PAYLOAD value)
+    {
+        calCommon::uint n;
+        for(n=0; n<sizeof_active_cells; n++)
+        {
+            this->buffer[activeCells[n]] = value;
+        }
+
+    }
+
+    void stampa (std::array <COORDINATE_TYPE, DIMENSION>& coordinates)
+    {
+        for(int i= 0; i< size; i++)
+        {
+            std::cout<<this->buffer[i];
+            if ((i+1) % coordinates[DIMENSION-1] == 0)
+            {
+                std::cout<<'\n';
+            }
+            else
+            {
+                std::cout<<"  ";
+            }
+        }
+    }
+
+    PAYLOAD &operator[](int i)
+    {
+        assert (i < this-> size);
+        return buffer [i];
+    }
+
+    BUFFER_TYPE operator+(const BUFFER_TYPE_REF & b)
+    {
+        assert (this->size == b.size);
+        PAYLOAD* buffer = new PAYLOAD [this->size];
+        for (int i = 0; i < b.size; ++i) {
+            buffer[i] = this->buffer[i] + b.buffer[i];
+        }
+        return new BUFFER_TYPE (buffer, this->size);
+    }
+
+    BUFFER_TYPE operator-(const BUFFER_TYPE_REF & b)
+    {
+        assert (this->size == b.size);
+        PAYLOAD* buffer = new PAYLOAD [this->size];
+        for (int i = 0; i < b.size; ++i) {
+            buffer[i] = this->buffer[i] - b.buffer[i];
+        }
+        return new BUFFER_TYPE (buffer, this->size);
+    }
+
+    BUFFER_TYPE_REF operator+=(const BUFFER_TYPE_REF& b)
+    {
+        assert (this->size == b.size);
+        for (int i = 0; i < b.size; ++i) {
+            this->buffer[i] = this->buffer[i] + b.buffer[i];
+        }
+        return *this;
+    }
+
+    BUFFER_TYPE_REF operator-=(const BUFFER_TYPE_REF & b)
+    {
+        assert (this->size == b.size);
+        for (int i = 0; i < b.size; ++i) {
+            this->buffer[i] = this->buffer[i] - b.buffer[i];
+        }
+        return *this;
+    }
+
+    BUFFER_TYPE_REF operator=(const BUFFER_TYPE_REF & b)
+    {
+        if (this != &b)
+        {
+            if (this->size == b.size)
+            {
+                for (int i = 0; i < b.size; ++i)
+                {
+                    this->buffer[i] = b.buffer[i];
+                }
+
+            }else
+            {
+                PAYLOAD* bufferTmp = new PAYLOAD[b.size];
+
+                for (int i = 0; i < b.size; ++i)
+                {
+                    this->buffer[i] = b.buffer[i];
+                }
+                if (this->buffer)
+                    delete[] this->buffer;
+                this->buffer = bufferTmp;
+                this->size = b.size;
+            }
+        }
+        return *this;
+    }
 
 
 
 };
 
-/*
-
-
-
-
-
-template<class PAYLOAD>
-CALBuffer<PAYLOAD> :: CALBuffer (std::array <COORDINATE_TYPE, DIMENSION>& coordinates, size_t dimension,  char* path, CALConverterIO * calConverterInputOutput)
-{
-    this->size = calCommon :: multiplier(coordinates, 0, dimension);
-    this-> buffer = calConverterInputOutput-> loadBuffer<PAYLOAD>(this->size, path);
-}
-
-template <class PAYLOAD>
-CALBuffer<PAYLOAD> :: ~ CALBuffer ()
-{
-    delete [] buffer;
-}
-
-template <class PAYLOAD>
-void CALBuffer<PAYLOAD> :: setBuffer (PAYLOAD* buffer, int size)
-{
-    this->buffer = buffer;
-    this->size = size;
-}
-
-template <class PAYLOAD>
-void CALBuffer <PAYLOAD> ::  setBuffer (PAYLOAD value)
-{
-    int i;
-    for (i = 0;  i< size; i++)
-    {
-        buffer[i] = value;
-    }
-}
-
-template <class PAYLOAD>
-PAYLOAD CALBuffer<PAYLOAD> :: getElement (int *indexes, int *coordinates, int dimension)
-{
-
-    return buffer[calCommon :: cellLinearIndex(indexes,coordinates,dimension)];
-
-}
-
-template <class PAYLOAD>
-PAYLOAD CALBuffer<PAYLOAD> :: getElement (int linearIndex)
-{
-
-    return buffer[linearIndex];
-
-}
-
-template<class PAYLOAD>
-int CALBuffer<PAYLOAD> :: getSize()
-{
-    return size;
-}
-
-template <class PAYLOAD>
-void CALBuffer<PAYLOAD> :: setElement (int* indexes, std::array <COORDINATE_TYPE, DIMENSION>& coordinates, int dimension, PAYLOAD value)
-{
-    int linearIndex = calCommon :: cellLinearIndex(indexes,coordinates,dimension);
-
-    buffer[linearIndex] = value;
-}
-
-template <class PAYLOAD>
-void CALBuffer<PAYLOAD> :: setElement (int linearIndex, PAYLOAD value)
-{
-    buffer[linearIndex] = value;
-}
-
-
-
-template <class PAYLOAD>
-void CALBuffer<PAYLOAD> :: setSize (int size)
-{
-    this->size = size;
-}
-
-template <class PAYLOAD>
-void CALBuffer<PAYLOAD> :: stampa(std::array <COORDINATE_TYPE, DIMENSION>& coordinates, size_t dimension)
-{
-    for(int i= 0; i< size; i++)
-    {
-        std::cout<<this->buffer[i];
-        if ((i+1) % coordinates[dimension-1] == 0)
-        {
-            std::cout<<'\n';
-        }
-        else
-        {
-            std::cout<<"  ";
-        }
-    }
-}
-
-template<class PAYLOAD>
-void CALBuffer<PAYLOAD> :: copyActiveCellsBuffer (CALBuffer <PAYLOAD>* M_src, int* activeCells, int sizeof_active_cells)
-{
-    int c, n;
-
-    for(n=0; n<sizeof_active_cells; n++)
-    {
-        c= activeCells[n];
-        if (this->buffer[c] != (*M_src)[c])
-            this->buffer[c] = (*M_src)[c];
-    }
-}
-
-template <class PAYLOAD>
-void CALBuffer<PAYLOAD> :: setActiveCellsBuffer (int* cells, int sizeof_active_cells, PAYLOAD value)
-{
-    int n;
-    for(n=0; n<sizeof_active_cells; n++)
-    {
-        this->buffer[cells[n]] = value;
-    }
-}
-template <class PAYLOAD>
-void CALBuffer<PAYLOAD>:: saveBuffer (std::array <COORDINATE_TYPE, DIMENSION>& coordinates, size_t dimension, CALConverterIO* calConverterInputOutput, char* path)
-{
-    calConverterInputOutput->calSaveBuffer(this->buffer, this->size, coordinates, dimension, path);
-
-}
-
-template <class PAYLOAD>
-PAYLOAD& CALBuffer<PAYLOAD> :: operator [] (int i)
-{
-    assert (i < this-> size);
-    return buffer [i];
-}
-
-template <class PAYLOAD>
-CALBuffer<PAYLOAD> CALBuffer<PAYLOAD> :: operator+(const CALBuffer<PAYLOAD> & b)
-{
-    assert (this->size == b.size);
-    PAYLOAD* buffer = new PAYLOAD [this->size];
-    for (int i = 0; i < b.size; ++i) {
-        buffer[i] = this->buffer[i] + b.buffer[i];
-    }
-    return new CALBuffer<PAYLOAD> (buffer, this->size);
-
-}
-
-template<class PAYLOAD>
-CALBuffer<PAYLOAD> CALBuffer<PAYLOAD> :: operator-(const CALBuffer<PAYLOAD>& b)
-{
-    assert (this->size == b.size);
-    PAYLOAD* buffer = new PAYLOAD [this->size];
-    for (int i = 0; i < b.size; ++i) {
-        buffer[i] = this->buffer[i] - b.buffer[i];
-    }
-    return new CALBuffer<PAYLOAD> (buffer, this->size);
-
-}
-
-template <class PAYLOAD>
-CALBuffer<PAYLOAD>& CALBuffer<PAYLOAD> :: operator+=(const CALBuffer<PAYLOAD> & b)
-{
-    assert (this->size == b.size);
-    for (int i = 0; i < b.size; ++i) {
-        this->buffer[i] = this->buffer[i] + b.buffer[i];
-    }
-    return *this;
-
-}
-
-template<class PAYLOAD>
-CALBuffer<PAYLOAD>& CALBuffer<PAYLOAD> :: operator-=(const CALBuffer<PAYLOAD>& b)
-{
-    assert (this->size == b.size);
-    for (int i = 0; i < b.size; ++i) {
-        this->buffer[i] = this->buffer[i] - b.buffer[i];
-    }
-    return *this;
-
-}
-
-template<class PAYLOAD>
-CALBuffer<PAYLOAD>& CALBuffer<PAYLOAD> :: operator=(const CALBuffer<PAYLOAD> & b)
-{
-    if (this != &b)
-    {
-        if (this->size == b.size)
-        {
-            for (int i = 0; i < b.size; ++i)
-            {
-                this->buffer[i] = b.buffer[i];
-            }
-
-        }else
-        {
-            PAYLOAD* bufferTmp = new PAYLOAD[b.size];
-
-            for (int i = 0; i < b.size; ++i)
-            {
-                this->buffer[i] = b.buffer[i];
-            }
-            if (this->buffer)
-                delete[] this->buffer;
-            this->buffer = bufferTmp;
-            this->size = b.size;
-        }
-    }
-    return *this;
-
-
-}*/
-
 }// namespace opencal
+
+
 
 #endif //OPENCAL_ALL_CALBUFFER_H

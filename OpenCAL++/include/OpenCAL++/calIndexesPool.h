@@ -6,7 +6,6 @@
 #include <iostream>
 #include <array>
 
-#include<OpenCAL++/calCommon.h>
 
 namespace opencal {
 
@@ -21,12 +20,23 @@ protected:
 
     static void initIndexes ();
 public:
-    static void init (std::array<COORDINATE_TYPE, DIMENSION>& _coordinates);
+    static void init (std::array<COORDINATE_TYPE, DIMENSION>& _coordinates, uint size);
 
     inline static std::array <COORDINATE_TYPE, DIMENSION>& getMultidimensionalIndexes (int linearIndex)
     {
         assert(linearIndex<size);
         return indexesPool[linearIndex];
+    }
+
+    static void stampa ()
+    {
+        for (int i = 0; i < size; ++i) {
+            for (int j = 0; j < DIMENSION; ++j) {
+                std::cout<<indexesPool[i][j]<<" ";
+            }
+            std::cout<<std::endl;
+
+        }
     }
 
     static void destroy ();
@@ -42,15 +52,19 @@ public:
 
 template<uint DIMENSION, typename COORDINATE_TYPE>
 std::array <COORDINATE_TYPE, DIMENSION>* opencal::CALIndexesPool<DIMENSION,COORDINATE_TYPE>:: indexesPool = nullptr;
+
+template<uint DIMENSION, typename COORDINATE_TYPE>
+std::array <COORDINATE_TYPE, DIMENSION> opencal::CALIndexesPool<DIMENSION,COORDINATE_TYPE>:: coordinates;
+
 template<uint DIMENSION, typename COORDINATE_TYPE>
 uint opencal::CALIndexesPool<DIMENSION,COORDINATE_TYPE>:: size = 0;
 
 template<uint DIMENSION, typename COORDINATE_TYPE>
-void opencal::CALIndexesPool<DIMENSION,COORDINATE_TYPE> :: init (std::array<COORDINATE_TYPE, DIMENSION>& _coordinates)
+void opencal::CALIndexesPool<DIMENSION,COORDINATE_TYPE> :: init (std::array<COORDINATE_TYPE, DIMENSION>& _coordinates, uint _size)
 {
 
-    size = opencal::calCommon::multiplier<DIMENSION,uint>(coordinates,0);
     coordinates = _coordinates;
+    size = _size;
     indexesPool = new std::array <COORDINATE_TYPE, DIMENSION> [size];
     initIndexes();
 }
@@ -77,7 +91,7 @@ void opencal::CALIndexesPool<DIMENSION,COORDINATE_TYPE>::initIndexes ()
             v[k] = (int) linearIndex/t;
             linearIndex = linearIndex%t;
         }
-        indexesPool[i] = &v;
+        indexesPool[i] = v;
 
     }
 
