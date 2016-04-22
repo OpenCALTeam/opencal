@@ -41,6 +41,18 @@ file(GLOB HEADERS
     "include/OpenCAL/*.h"
 )
 
-add_library(opencal ${SHAREDORSTATIC} ${SRC})
-install(TARGETS opencal DESTINATION  ${INSTALL_LIB_DIR})
+#add_library(opencal ${SHAREDORSTATIC} ${SRC})
+if ( ENABLE_STATIC )
+  add_library(opencal_static STATIC ${SRC})
+  install(TARGETS opencal_static DESTINATION  ${INSTALL_LIB_DIR})
+endif()
+if ( ENABLE_SHARED )
+  add_library(opencal SHARED ${SRC})
+  if (MSVC)
+    install(TARGETS opencal DESTINATION  ${INSTALL_BIN_DIR})
+  elseif()
+    install(TARGETS opencal DESTINATION  ${INSTALL_LIB_DIR})
+  endif()
+endif()
+
 install(FILES ${HEADERS} DESTINATION ${INSTALL_INCLUDE_DIR}/${OPENCAL_LIBRARY_NAME})

@@ -4,28 +4,19 @@ cmake_policy(SET CMP0048 NEW)
 
 include(configure.cmake)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
-project(OpenCAL-ALL
+project(OpenCAL-${OPENCAL_VERSION}
 		VERSION ${OPENCAL_VERSION}
 		LANGUAGES C CXX)
 
 
 set(INSTALL_ROOT_DIR opencal-${OPENCAL_VERSION})
-set(INSTALL_DOCS_DIR "${INSTALL_ROOT_DIR}/doc" )
 set(INSTALL_INCLUDE_DIR  "${INSTALL_ROOT_DIR}/include")
 set(INSTALL_LIB_DIR "${INSTALL_ROOT_DIR}/lib" )
+set(INSTALL_BIN_DIR "${INSTALL_ROOT_DIR}/bin")
+set(INSTALL_DOCS_DIR "${INSTALL_ROOT_DIR}/doc")
 
-set(INSTALL_BIN_DIR bin CACHE PATH "Installation directory for executables")
-
-
-
-if ( ENABLE_SHARED )
-	set( SHAREDORSTATIC SHARED )
-else()
-	set( SHAREDORSTATIC STATIC )
-endif()
 
 add_definitions( -DPACKAGE="OPENCAL" -DVERSION="${OPENCAL_VERSION}" )
-
 
 if(BUILD_DOCUMENTATION)
 	find_package(Doxygen)

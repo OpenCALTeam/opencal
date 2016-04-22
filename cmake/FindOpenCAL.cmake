@@ -66,7 +66,7 @@ if(CMAKE_SIZEOF_VOID_P EQUAL 8)
   set(_lib64 "lib64")
 endif()
 #library suffixes
-list(APPEND opencal_library_suffixes "${_lib64}" "lib${_x64}" "lib")
+list(APPEND opencal_library_suffixes "${_lib64}" "lib${_x64}" "lib" "bin")
 #include suffixes
 list(APPEND opencal_include_suffixes "include/")
 #add search path for each version released
@@ -116,7 +116,7 @@ list(APPEND OPENCAL_INCLUDE_DIR ${PATH_INCLUDE_COMPONENT_${_COMPONENT}} )
 
 find_library(PATH_LIBRARY_COMPONENT_${_COMPONENT}
     NAMES
-        ${_COMPONENT} lib${_COMPONENT}
+        ${_COMPONENT} ${_COMPONENT}_static lib${_COMPONENT} lib${_COMPONENT}_static
     HINTS
         ${OPENCAL_ROOTS}
     PATH_SUFFIXES

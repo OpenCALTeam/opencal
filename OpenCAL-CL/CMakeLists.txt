@@ -65,9 +65,20 @@ file(GLOB KERNELS_SRC
     "kernel/source/*.c"
 )
 
-add_library(opencal-cl ${SHAREDORSTATIC} ${SRC})
-target_link_libraries(opencal-cl pthread)
-install(TARGETS opencal-cl DESTINATION ${INSTALL_LIB_DIR})
+if ( ENABLE_STATIC )
+  add_library(opencal-cl_static STATIC ${SRC})
+  install(TARGETS opencal-cl_static DESTINATION  ${INSTALL_LIB_DIR})
+endif()
+if ( ENABLE_SHARED )
+  add_library(opencal-cl SHARED ${SRC})
+  target_link_libraries(opencal-cl pthread opencal_static ${OpenCL_LIBRARY})
+  if (MSVC)
+    install(TARGETS opencal-cl DESTINATION  ${INSTALL_BIN_DIR})
+  elseif()
+    install(TARGETS opencal-cl DESTINATION  ${INSTALL_LIB_DIR})
+  endif()
+endif()
+
 install(FILES ${HEADERS} DESTINATION ${INSTALL_INCLUDE_DIR}/${OPENCAL-CL_LIBRARY_NAME})
 
 install(FILES ${KERNELS_HEADERS} DESTINATION ${INSTALL_INCLUDE_DIR}/${OPENCAL-CL_LIBRARY_NAME}/kernel/include/${OPENCAL-CL_LIBRARY_NAME})

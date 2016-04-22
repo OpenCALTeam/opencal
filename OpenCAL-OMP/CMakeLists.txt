@@ -53,6 +53,16 @@ file(GLOB HEADERS
     "include/OpenCAL-OMP/*.h"
 )
 
-add_library(opencal-omp ${SHAREDORSTATIC} ${SRC})
-install(TARGETS opencal-omp DESTINATION ${INSTALL_LIB_DIR})
+if ( ENABLE_STATIC )
+  add_library(opencal-omp_static STATIC ${SRC})
+  install(TARGETS opencal-omp_static DESTINATION  ${INSTALL_LIB_DIR})
+endif()
+if ( ENABLE_SHARED )
+  add_library(opencal-omp SHARED ${SRC})
+  if (MSVC)
+    install(TARGETS opencal-omp DESTINATION  ${INSTALL_BIN_DIR})
+  elseif()
+    install(TARGETS opencal-omp DESTINATION  ${INSTALL_LIB_DIR})
+  endif()
+endif()
 install(FILES ${HEADERS} DESTINATION ${INSTALL_INCLUDE_DIR}/${OPENCAL-OMP_LIBRARY_NAME})

@@ -34,7 +34,11 @@
 #define _CRT_SECURE_NO_WARNINGS 1
 #endif
 
+#ifdef _WIN32
+#include <OpenCAL-CL/dirent.h>
+#elif
 #include <dirent.h>
+#endif
 #include <string.h>
 #include <stdio.h>
 
