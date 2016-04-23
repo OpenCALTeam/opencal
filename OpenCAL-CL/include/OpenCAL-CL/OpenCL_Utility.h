@@ -36,7 +36,7 @@
 
 #ifdef _WIN32
 #include <OpenCAL-CL/dirent.h>
-#elif
+#else
 #include <dirent.h>
 #endif
 #include <string.h>
