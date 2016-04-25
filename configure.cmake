@@ -4,7 +4,7 @@ set(OPENCAL_VERSION
   ${OPENCAL_MAJOR_VERSION}.${OPENCAL_MINOR_VERSION})
 
 option(ENABLE_SHARED              "Enable Shared Libraries"                                                             ON )
-option(ENABLE_STATIC              "Enable Static Libraries"                                                             ON )
+option(ENABLE_STATIC              "Enable Static Libraries"                                                             OFF)
 option(BUILD_OPENCAL_SERIAL       "Build the OpenCAL serial version"                                                    ON )
 option(BUILD_OPENCAL_OMP          "Build the OpenCAL-OMP OpenMP parallel version (OpenMP required)"                     ON )
 option(BUILD_OPENCAL_OMP_PARALLEL "Controls if OpenCAL-OMP compiled agaist libomp. If off just one processor is used."  ON )
