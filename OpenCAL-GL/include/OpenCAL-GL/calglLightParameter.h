@@ -27,6 +27,8 @@
 #include <GL/glut.h>
 #endif
 
+#include <OpenCAL-GL/calglCommon.h>
+
 /*! \brief Structure that contains informations about the light that will be used in the scene.
 	It contains position information.
 	It contains ambient information.
@@ -47,6 +49,7 @@ struct CALGLLightParameter{
 
 /*! \brief Constructor for create the light model.
 */
+DllExport
 struct CALGLLightParameter* calglCreateLightParameter(
 	GLfloat* lightPosition,		//!< Light position in the scene.
 	GLfloat* ambientLight,		//!< Ambient component.
@@ -59,12 +62,14 @@ struct CALGLLightParameter* calglCreateLightParameter(
 
 /*! \brief Destructor for de-allocate memory allocated before.
 */
+DllExport
 void calglDestroyLightParameter(
 	struct CALGLLightParameter* calLightParameter		//!< Pointer to the CALGLLightParameter to destroy.
 	);
 
 /*! \brief Function that replace the precedent model view matrix with the new one.
 */
+DllExport
 void calglApplyLightParameter(
 	struct CALGLLightParameter* calLightParameter		//!< Pointer to the new CALGLLightParameter.
 	);

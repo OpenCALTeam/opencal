@@ -50,14 +50,17 @@ struct CALGLGlobalSettings {
 /*! \brief Constructor for create an instance of global setting.
 	This is a Singleton because in the application we need a unique instance a these parameters, and we want a global point of access to this instance.
 */
+DllExport
 struct CALGLGlobalSettings* calglCreateGlobalSettings();
 
 /*! \brief Destructor for de-alloate memory.
 */
+DllExport
 void calglDestroyGlobalSettings();
 
 /*! \brief Function for set application parameters
 */
+DllExport
 void calglInitViewer(
 	char* applicationName,	//!< Name of the application.
 	float cellSize,			//!< Cell size.
@@ -71,18 +74,21 @@ void calglInitViewer(
 
 /*! \brief Function for set an application's name.
 */
+DllExport
 void calglSetApplicationName(
 	char* applicationName	//!< Name of the application.
 	);
 
 /*! \brief Function for set the cell size.
 */
+DllExport
 void calglSetCellSize(
 	float cellSize	//!< Cell size.
 	);
 
 /*! \brief Function for set the window dimensions.
 */
+DllExport
 void calglSetWindowDimension(
 	int width,	//!< Window width.
 	int height	//!< Window height.
@@ -90,6 +96,7 @@ void calglSetWindowDimension(
 
 /*! \brief Function for set the window position.
 */
+DllExport
 void calglSetWindowPosition(
 	int positionX,	//!< Window x position.
 	int positionY	//!< Window y position.
@@ -97,6 +104,7 @@ void calglSetWindowPosition(
 
 /*! \brief Function for set the zNear and zFar clipping parameters.
 */
+DllExport
 void calglSetClippingFactor(
 	int zNear,	//!< Clipping zNear parameter.
 	int zFar	//!< Clipping zFar parameter.
@@ -104,44 +112,54 @@ void calglSetClippingFactor(
 
 /*! \brief Function to retrive the unique instance of the global settings.
 */
+DllExport
 struct CALGLGlobalSettings* calglGetGlobalSettings();
 
 /*! \brief Function for enable illumination.
 */
+DllExport
 void calglEnableLights();
 
 /*! \brief Function for disable illumination.
 */
+DllExport
 void calglDisableLights();
 
 /*! \brief Function for verify if the light are enable.
 */
+DllExport
 enum CALGL_LIGHT calglAreLightsEnable();
 
 /*! \brief Function for retrive a default value for the light position.
 */
+DllExport
 float* calglGetPositionLight();
 
 /*! \brief Function for retrive a default value for the diffuse component.
 */
+DllExport
 float* calglGetDiffuseLight();
 
 /*! \brief Function for retrive a default value for the specular component.
 */
+DllExport
 float* calglGetSpecularLight();
 
 /*! \brief Function for retrive a default value for the ambient component.
 */
+DllExport
 float* calglGetAmbientLight();
 
 /*! \brief Function for set the refresh time.
 */
+DllExport
 void calglSetRefreshTime(
 	int time	//!< Refresh time.
 	);
 
 /*! \brief Function for set the fixed display step.
 */
+DllExport
 void calglSetDisplayStep(
 	int step	//!< Fixed step.
 	);

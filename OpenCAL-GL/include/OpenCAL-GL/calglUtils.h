@@ -20,11 +20,13 @@
 
 #ifndef calglUtils_h
 #define calglUtils_h
+#include <OpenCAL-GL/calglCommon.h>
 #include <math.h>
 typedef float CALGLVector3[3];      // Three component floating point vector
 
 /*! \brief Function that given three points calculate their normal vector
 */
+DllExport
 void calglGetNormalVector(
 	CALGLVector3 vP1,		//!< First point
 	CALGLVector3 vP2, 		//!< Second point

@@ -21,6 +21,13 @@
 #ifndef calglCommon_h
 #define calglCommon_h
 
+#ifdef _MSC_VER
+#define DllExport   __declspec( dllexport )
+#else
+#define DllExport
+#endif
+
+
 /*! \brief Enumeration that specify how the substate must be drawn.
 */
 enum CALGL_TYPE_INFO {

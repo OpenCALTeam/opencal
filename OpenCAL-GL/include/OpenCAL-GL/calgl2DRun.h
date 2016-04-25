@@ -43,30 +43,35 @@ struct CALGLRun2D {
 
 /*! \brief Constructor for create a struct CALGLRun2D.
 */
+DllExport
 struct CALGLRun2D* calglRunDef2D(
 	struct CALRun2D* calRun	//!< Reference to CALRun2D
 	);
 
 /*! \brief Destructor for de-allocate memory.
 */
+DllExport
 void calglDestroyUpdater2D(
 	struct CALGLRun2D* calglRun //!< Struct to destroy.
 	);
 
 /*! \brief Main update function, it is called by the thread.
 */
+DllExport
 void* calglFuncThreadUpdate2D(
 	void* arg	//!< Argument which is a struct CALGLRun2D.
 	);
 
 /*! \brief Function for starting the thread.
 */
+DllExport
 void calglStartThread2D(
 	struct CALGLRun2D* calglRun	//!< Object which contains the thread to launch.
 	);
 
 /*! \brief Update function for updating the cellular automata computation.
 */
+DllExport
 void calglUpdate2D(
 	struct CALGLRun2D* calglRun	//!< Struct for retrieve the cellular automata to update.
 	);

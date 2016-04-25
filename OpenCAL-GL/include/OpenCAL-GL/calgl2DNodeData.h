@@ -97,18 +97,21 @@ struct CALNode2Dr {
 /*! \brief Function for create a node in which tha father must be specified.
 	This function is for 2D byte data.
 */
+DllExport
 struct CALNode2Db* calglCreateNode2Db(
 	struct CALNode2Db* father	//!< Father node.
 	);
 /*! \brief Function for create a node in which tha father must be specified.
 	This function is for 2D int data.
 */
+DllExport
 struct CALNode2Di* calglCreateNode2Di(
 	struct CALNode2Di* father	//!< Father node.
 	);
 /*! \brief Function for create a node in which tha father must be specified.
 	This function is for 2D real data.
 */
+DllExport
 struct CALNode2Dr* calglCreateNode2Dr(
 	struct CALNode2Dr* father	//!< Father node.
 	);
@@ -118,18 +121,21 @@ struct CALNode2Dr* calglCreateNode2Dr(
 /*! \brief Function for de-allocate memory.
 	This function is for 2D byte data.
 */
+DllExport
 void calglDestroyNode2Db(
 	struct CALNode2Db* node	//!< Node to destroy.
 	);
 /*! \brief Function for de-allocate memory.
 	This function is for 2D int data.
 */
+DllExport
 void calglDestroyNode2Di(
 	struct CALNode2Di* node	//!< Node to destroy.
 	);
 /*! \brief Function for de-allocate memory.
 	This function is for 2D real data.
 */
+DllExport
 void calglDestroyNode2Dr(
 	struct CALNode2Dr* node	//!< Node to destroy.
 	);
@@ -140,6 +146,7 @@ void calglDestroyNode2Dr(
 	It is increased of three units.
 	This function is for 2D byte data.
 */
+DllExport
 void calglIncreaseDataNode2Db(
 	struct CALNode2Db* node	//!< Node to which increase capacity.
 	);
@@ -147,6 +154,7 @@ void calglIncreaseDataNode2Db(
 	It is increased of three units.
 	This function is for 2D int data.
 */
+DllExport
 void calglIncreaseDataNode2Di(
 	struct CALNode2Di* node	//!< Node to which increase capacity.
 	);
@@ -154,6 +162,7 @@ void calglIncreaseDataNode2Di(
 	It is increased of three units.
 	This function is for 2D real data.
 */
+DllExport
 void calglIncreaseDataNode2Dr(
 	struct CALNode2Dr* node	//!< Node to which increase capacity.
 	);
@@ -164,6 +173,7 @@ void calglIncreaseDataNode2Dr(
 	It is Decreased of three units.
 	This function is for 2D byte data.
 */
+DllExport
 void calglDecreaseDataNode2Db(
 	struct CALNode2Db* node	//!< Node to which Decrease capacity.
 	);
@@ -171,6 +181,7 @@ void calglDecreaseDataNode2Db(
 	It is Decreased of three units.
 	This function is for 2D Det data.
 */
+DllExport
 void calglDecreaseDataNode2Di(
 	struct CALNode2Di* node	//!< Node to which Decrease capacity.
 	);
@@ -178,6 +189,7 @@ void calglDecreaseDataNode2Di(
 	It is Decreased of three units.
 	This function is for 2D real data.
 */
+DllExport
 void calglDecreaseDataNode2Dr(
 	struct CALNode2Dr* node	//!< Node to which Decrease capacity.
 	);
@@ -187,6 +199,7 @@ void calglDecreaseDataNode2Dr(
 /*! \brief Function for insert a substate in the hierarchy tree.
 	This function is for 2D byte data.
 */
+DllExport
 struct CALNode2Db* calglAddDataNode2Db(
 	struct CALNode2Db* node,						//!< Node father.
 	struct CALSubstate2Db* substate,				//!< Substate to add.
@@ -197,6 +210,7 @@ struct CALNode2Db* calglAddDataNode2Db(
 /*! \brief Function for insert a substate in the hierarchy tree.
 	This function is for 2D int data.
 */
+DllExport
 struct CALNode2Di* calglAddDataNode2Di(
 	struct CALNode2Di* node, 						//!< Node father.
 	struct CALSubstate2Di* substate, 				//!< Substate to add.
@@ -207,6 +221,7 @@ struct CALNode2Di* calglAddDataNode2Di(
 /*! \brief Function for insert a substate in the hierarchy tree.
 	This function is for 2D real data.
 */
+DllExport
 struct CALNode2Dr* calglAddDataNode2Dr(
 	struct CALNode2Dr* node, 						//!< Node father.
 	struct CALSubstate2Dr* substate, 				//!< Substate to add.
@@ -220,6 +235,7 @@ struct CALNode2Dr* calglAddDataNode2Dr(
 /*! \brief Function for remove a substate from the children of a node.
 	This function is for 2D byte data.
 */
+DllExport
 void calglRemoveDataNode2Db(
 	struct CALNode2Db* node,		//!< Node from which remove data.
 	struct CALSubstate2Db* substate	//!< Substate relative to the node to remove.
@@ -227,6 +243,7 @@ void calglRemoveDataNode2Db(
 /*! \brief Function for remove a substate from the children of a node.
 	This function is for 2D int data.
 */
+DllExport
 void calglRemoveDataNode2Di(
 	struct CALNode2Di* node, 		//!< Node from which remove data.
 	struct CALSubstate2Di* substate	//!< Substate relative to the node to remove.
@@ -234,6 +251,7 @@ void calglRemoveDataNode2Di(
 /*! \brief Function for remove a substate from the children of a node.
 	This function is for 2D real data.
 */
+DllExport
 void calglRemoveDataNode2Dr(
 	struct CALNode2Dr* node, 		//!< Node from which remove data.
 	struct CALSubstate2Dr* substate	//!< Substate relative to the node to remove.
@@ -244,6 +262,7 @@ void calglRemoveDataNode2Dr(
 /*! \brief Function that execute a left shift of the children of a node starting from index.
 	This function is for 2D byte data.
 */
+DllExport
 void calglShiftLeftFromIndexNode2Db(
 	struct CALNode2Db* node,	//!< Node from which shift children.
 	int index	 				//!< Index to begin shifting.
@@ -251,6 +270,7 @@ void calglShiftLeftFromIndexNode2Db(
 /*! \brief Function that execute a left shift of the children of a node starting from index.
 	This function is for 2D int data.
 */
+DllExport
 void calglShiftLeftFromIndexNode2Di(
 	struct CALNode2Di* node,	//!< Node from which shift children.
 	int index	 				//!< Index to begin shifting.
@@ -258,6 +278,7 @@ void calglShiftLeftFromIndexNode2Di(
 /*! \brief Function that execute a left shift of the children of a node starting from index.
 	This function is for 2D real data.
 */
+DllExport
 void calglShiftLeftFromIndexNode2Dr(
 	struct CALNode2Dr* node,	//!< Node from which shift children.
 	int index	 				//!< Index to begin shifting.
@@ -268,18 +289,21 @@ void calglShiftLeftFromIndexNode2Dr(
 /*! \brief Function that return the father of a node.
 	This function is for 2D byte data.
 */
+DllExport
 struct CALNode2Db* calglGetFatherNode2Db(
 	struct CALNode2Db* node	//!< Node from which return the father.
 	);
 /*! \brief Function that return the father of a node.
 	This function is for 2D int data.
 */
+DllExport
 struct CALNode2Di* calglGetFatherNode2Di(
 	struct CALNode2Di* node	//!< Node from which shift children.
 	);
 /*! \brief Function that return the father of a node.
 	This function is for 2D real data.
 */
+DllExport
 struct CALNode2Dr* calglGetFatherNode2Dr(
 	struct CALNode2Dr* node	//!< Node from which shift children.
 	);
@@ -289,6 +313,7 @@ struct CALNode2Dr* calglGetFatherNode2Dr(
 /*! \brief Function for set the no data that will be discarded in drawing fase.
 	This function is for 2D byte data.
 */
+DllExport
 void calglSetNoDataToNode2Db(
 	struct CALNode2Db* node,	//!< Node to which set no data value.
 	CALbyte noData				//!< No data value.
@@ -296,6 +321,7 @@ void calglSetNoDataToNode2Db(
 /*! \brief Function for set the no data that will be discarded in drawing fase.
 	This function is for 2D int data.
 */
+DllExport
 void calglSetNoDataToNode2Di(
 	struct CALNode2Di* node, 	//!< Node to which set no data value.
 	CALint noData				//!< No data value.
@@ -303,6 +329,7 @@ void calglSetNoDataToNode2Di(
 /*! \brief Function for set the no data that will be discarded in drawing fase.
 	This function is for 2D real data.
 */
+DllExport
 void calglSetNoDataToNode2Dr(
 	struct CALNode2Dr* node, 	//!< Node to which set no data value.
 	CALreal noData				//!< No data value.

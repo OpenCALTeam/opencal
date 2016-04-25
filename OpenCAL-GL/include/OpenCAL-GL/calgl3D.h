@@ -63,6 +63,7 @@ struct CALGLDrawModel3D{
 
 /*! \brief Constructor for creating the drawing model
 */
+DllExport
 struct CALGLDrawModel3D* calglDefDrawModel3D(
 	enum CALGL_DRAW_MODE mode, 			//!< Type of drawing (es. FLAT, SURFACE).
 	const char* name,					//!< Name of the drawing model.
@@ -72,6 +73,7 @@ struct CALGLDrawModel3D* calglDefDrawModel3D(
 
 /*! \brief Constructor for creating the drawing model
 */
+DllExport
 struct CALGLDrawModel3D* calglDefDrawModelCL3D(
 	enum CALGL_DRAW_MODE mode, 			//!< Type of drawing (es. FLAT, SURFACE).
 	const char* name,					//!< Name of the drawing model.
@@ -81,6 +83,7 @@ struct CALGLDrawModel3D* calglDefDrawModelCL3D(
 
 /*! \brief Destructor for destroying the drawing model
 */
+DllExport
 void calglDestoyDrawModel3D(
 struct CALGLDrawModel3D* drawModel	//!< Pointer to the CALDrawModel to destroy.
 	);
@@ -88,16 +91,18 @@ struct CALGLDrawModel3D* drawModel	//!< Pointer to the CALDrawModel to destroy.
 #pragma region AddData
 /*! \brief Add data to the byte drawing model.
 */
+DllExport
 void calglAdd3Db(
-struct CALGLDrawModel3D* drawModel,
-struct CALSubstate3Db* substateFather,
-struct CALSubstate3Db** substateToAdd,
-enum CALGL_TYPE_INFO typeInfo,
-enum CALGL_TYPE_INFO_USE typeInfoUseSubstate,
-enum CALGL_DATA_TYPE dataType
+	struct CALGLDrawModel3D* drawModel,
+	struct CALSubstate3Db* substateFather,
+	struct CALSubstate3Db** substateToAdd,
+	enum CALGL_TYPE_INFO typeInfo,
+	enum CALGL_TYPE_INFO_USE typeInfoUseSubstate,
+	enum CALGL_DATA_TYPE dataType
 	);
 /*! \brief Add data to the int drawing model.
 */
+DllExport
 void calglAdd3Di(
 	struct CALGLDrawModel3D* drawModel,				//!< The CALDrawModel to which adding data.
 	struct CALSubstate3Di* substateFather,			//!< The substate father to which add the new data.
@@ -108,6 +113,7 @@ void calglAdd3Di(
 	);
 /*! \brief Add data to the real drawing model.
 */
+DllExport
 void calglAdd3Dr(
 	struct CALGLDrawModel3D* drawModel, 				//!< The CALDrawModel to which adding data.
 	struct CALSubstate3Dr* substateFather,			//!< The substate father to which add the new data.
@@ -121,6 +127,7 @@ void calglAdd3Dr(
 #pragma region SearchSubstate
 /*! \brief Functions that search a node in the byte hierarchy tree.
 */
+DllExport
 void calglSearchSubstateDrawModel3Db(
 	struct CALNode3Db* currentNode,				//!< The hierarchy tree that contains the node to search.
 	struct CALSubstate3Db* substateToSearch,	//!< The substate to search.
@@ -128,6 +135,7 @@ void calglSearchSubstateDrawModel3Db(
 	);
 /*! \brief Functions that search a node in the int hierarchy tree.
 */
+DllExport
 void calglSearchSubstateDrawModel3Di(
 	struct CALNode3Di* currentNode, 				//!< The hierarchy tree that contains the node to search.
 	struct CALSubstate3Di* substateToSearch, 		//!< The substate to search.
@@ -135,6 +143,7 @@ void calglSearchSubstateDrawModel3Di(
 	);
 /*! \brief Functions that search a node in the real hierarchy tree.
 */
+DllExport
 void calglSearchSubstateDrawModel3Dr(
 	struct CALNode3Dr* currentNode, 				//!< The hierarchy tree that contains the node to search.
 	struct CALSubstate3Dr* substateToSearch, 		//!< The substate to search.
@@ -145,12 +154,14 @@ void calglSearchSubstateDrawModel3Dr(
 /*! \brief Functions that display the model specified.
 	It must be called into the OpenGL display function callback.
 */
+DllExport
 void calglDisplayModel3D(struct CALGLDrawModel3D* calDrawModel);
 
 #pragma region DrawDiscreetModel3D
 /*! \brief Functions for the discreet displaying.
 	It is called by the calglDisplayModel.
 */
+DllExport
 void calglDrawDiscreetModel3D(
 	struct CALGLDrawModel3D* calDrawModel	//!< The CALDrawModel to display.
 	);
@@ -158,13 +169,15 @@ void calglDrawDiscreetModel3D(
 /*! \brief Functions for the byte discreet displaying.
 It recursively display all node of the hierarchy tree.
 */
+DllExport
 void calglDrawDiscreetModelDisplayNode3Db(
-struct CALGLDrawModel3D* calDrawModel,	//!< The CALDrawModel to display.
-struct CALNode3Db* calNode				//!< The node from which begin the drawing.
+	struct CALGLDrawModel3D* calDrawModel,	//!< The CALDrawModel to display.
+	struct CALNode3Db* calNode				//!< The node from which begin the drawing.
 	);
 /*! \brief Functions for the int discreet displaying.
 	It recursively display all node of the hierarchy tree.
 */
+DllExport
 void calglDrawDiscreetModelDisplayNode3Di(
 	struct CALGLDrawModel3D* calDrawModel,	//!< The CALDrawModel to display.
 	struct CALNode3Di* calNode				//!< The node from which begin the drawing.
@@ -172,6 +185,7 @@ void calglDrawDiscreetModelDisplayNode3Di(
 /*! \brief Functions for the real discreet displaying.
 	It recursively display all node of the hierarchy tree.
 */
+DllExport
 void calglDrawDiscreetModelDisplayNode3Dr(
 	struct CALGLDrawModel3D* calDrawModel,	//!< The CALDrawModel to display.
 	struct CALNode3Dr* calNode				//!< The node from which begin the drawing.
@@ -180,6 +194,7 @@ void calglDrawDiscreetModelDisplayNode3Dr(
 /*! \brief Functions for the byte discreet displaying of the current node.
 	This function is recursively called for all node in the hierarchy tree by the calglDrawDiscreetModelDisplayNode2Db
 */
+DllExport
 void calglDrawDiscreetModelDisplayCurrentNode3Db(
 	struct CALGLDrawModel3D* calDrawModel,	//!< The CALDrawModel to display.
 	struct CALNode3Db* calNode				//!< The current node to drawing.
@@ -187,6 +202,7 @@ void calglDrawDiscreetModelDisplayCurrentNode3Db(
 /*! \brief Functions for the byte discreet displaying of the current node.
 	This function is recursively called for all node in the hierarchy tree by the calglDrawDiscreetModelDisplayNode2Di
 */
+DllExport
 void calglDrawDiscreetModelDisplayCurrentNode3Di(
 	struct CALGLDrawModel3D* calDrawModel, 	//!< The CALDrawModel to display.
 	struct CALNode3Di* calNode				//!< The current node to drawing.
@@ -194,6 +210,7 @@ void calglDrawDiscreetModelDisplayCurrentNode3Di(
 /*! \brief Functions for the byte discreet displaying of the current node.
 	This function is recursively called for all node in the hierarchy tree by the calglDrawDiscreetModelDisplayNode2Dr
 */
+DllExport
 void calglDrawDiscreetModelDisplayCurrentNode3Dr(
 	struct CALGLDrawModel3D* calDrawModel, 	//!< The CALDrawModel to display.
 	struct CALNode3Dr* calNode				//!< The current node to drawing.
@@ -204,6 +221,7 @@ void calglDrawDiscreetModelDisplayCurrentNode3Dr(
 /*! \brief Functions for the real displaying.
 	It is called by the calglDisplayModel.
 */
+DllExport
 void calglDrawRealModel3D(
 	struct CALGLDrawModel3D* calDrawModel	//!< The CALDrawModel to display.
 	);
@@ -213,6 +231,7 @@ void calglDrawRealModel3D(
 /*! \brief Functions that calculate the minimum and maximum value for the specified substate.
 	This is for byte substate.
 */
+DllExport
 void calglComputeExtremesDrawModel3Db(
 	struct CALGLDrawModel3D* calDrawModel,	//!< The pointer to CALDrawModel.
 	struct CALNode3Db* calNode,				//!< The pointer to the substate for calculating the minimum and maximum.
@@ -222,6 +241,7 @@ void calglComputeExtremesDrawModel3Db(
 /*! \brief Functions that calculate the minimum and maximum value for the specified substate.
 	This is for int substate.
 */
+DllExport
 void calglComputeExtremesDrawModel3Di(
 	struct CALGLDrawModel3D* calDrawModel, 	//!< The pointer to CALDrawModel.
 	struct CALNode3Di* calNode,				//!< The pointer to the substate for calculating the minimum and maximum.
@@ -231,6 +251,7 @@ void calglComputeExtremesDrawModel3Di(
 /*! \brief Functions that calculate the minimum and maximum value for the specified substate.
 	This is for real substate.
 */
+DllExport
 void calglComputeExtremesDrawModel3Dr(
 	struct CALGLDrawModel3D* calDrawModel,	//!< The pointer to CALDrawModel.
 	struct CALNode3Dr* calNode,				//!< The pointer to the substate for calculating the minimum and maximum.
@@ -243,6 +264,7 @@ void calglComputeExtremesDrawModel3Dr(
 /*! \brief Functions that calculate the minimum and maximum for all substate in the tree.
 	This is for byte substates.
 */
+DllExport
 void calglComputeExtremesToAll3Db(
 	struct CALGLDrawModel3D* calDrawModel,	//!< The pointer to CALDrawModel.
 	struct CALNode3Db* calNode				//!< The pointer to CALNode tree.
@@ -250,6 +272,7 @@ void calglComputeExtremesToAll3Db(
 /*! \brief Functions that calculate the minimum and maximum for all substate in the tree.
 	This is for int substates.
 */
+DllExport
 void calglComputeExtremesToAll3Di(
 	struct CALGLDrawModel3D* calDrawModel,	//!< The pointer to CALDrawModel.
 	struct CALNode3Di* calNode				//!< The pointer to CALNode tree.
@@ -257,6 +280,7 @@ void calglComputeExtremesToAll3Di(
 /*! \brief Functions that calculate the minimum and maximum for all substate in the tree.
 	This is for real substates.
 */
+DllExport
 void calglComputeExtremesToAll3Dr(
 	struct CALGLDrawModel3D* calDrawModel,	//!< The pointer to CALDrawModel.
 	struct CALNode3Dr* calNode				//!< The pointer to CALNode tree.
@@ -268,6 +292,7 @@ void calglComputeExtremesToAll3Dr(
 	This is a necessary information for the lights.
 	This is for byte substate.
 */
+DllExport
 void calglSetNormalData3Db(
 	struct CALGLDrawModel3D* calDrawModel,	//!< The CALDrawModel to display.
 	struct CALNode3Db* calNode,				//!< The current node to drawing.
@@ -279,6 +304,7 @@ void calglSetNormalData3Db(
 	This is a necessary information for the lights.
 	This is for int substate.
 */
+DllExport
 void calglSetNormalData3Di(
 	struct CALGLDrawModel3D* calDrawModel,	//!< The CALDrawModel to display.
 	struct CALNode3Di* calNode,				//!< The current node to drawing.
@@ -290,6 +316,7 @@ void calglSetNormalData3Di(
 	This is a necessary information for the lights.
 	This is for real substate.
 */
+DllExport
 void calglSetNormalData3Dr(
 	struct CALGLDrawModel3D* calDrawModel,	//!< The CALDrawModel to display.
 	struct CALNode3Dr* calNode,				//!< The current node to drawing.
@@ -303,6 +330,7 @@ void calglSetNormalData3Dr(
 /*! \brief Functions that specify, for the current row, column and slice (i, j, k) in the current substate, the color data.
 	This is for byte substate.
 */
+DllExport
 GLboolean calglSetColorData3Db(
 	struct CALGLDrawModel3D* calDrawModel,	//!< The CALDrawModel to display.
 	struct CALNode3Db* calNode,				//!< The current node to drawing.
@@ -313,6 +341,7 @@ GLboolean calglSetColorData3Db(
 /*! \brief Functions that specify, for the current row, column and slice (i, j, k) in the current substate, the color data.
 	This is for int substate.
 */
+DllExport
 GLboolean calglSetColorData3Di(
 	struct CALGLDrawModel3D* calDrawModel,	//!< The CALDrawModel to display.
 	struct CALNode3Di* calNode,				//!< The current node to drawing.
@@ -323,6 +352,7 @@ GLboolean calglSetColorData3Di(
 /*! \brief Functions that specify, for the current row, column and slice (i, j, k) in the current substate, the color data.
 	This is for real substate.
 */
+DllExport
 GLboolean calglSetColorData3Dr(
 	struct CALGLDrawModel3D* calDrawModel,	//!< The CALDrawModel to display.
 	struct CALNode3Dr* calNode,				//!< The current node to drawing.
@@ -334,6 +364,7 @@ GLboolean calglSetColorData3Dr(
 
 /*! \brief Functions that set a constant color to use in the drawing.
 */
+DllExport
 void calglColor3D(
 	struct CALGLDrawModel3D* calDrawModel,	//!< The pointer to CALDrawModel.
 	GLfloat redComponent,					//!< The red component
@@ -345,6 +376,7 @@ void calglColor3D(
 /*! \brief Functions that set the model view parameters.
 	It contains informations about the translation, rotation and scaling of the model.
 */
+DllExport
 void calglSetModelViewParameter3D(
 	struct CALGLDrawModel3D* calDrawModel,			//!< The pointer to CALDrawModel.
 	struct CALGLModelViewParameter* modelView		//!< The pointer to CALGLModelViewParameter.
@@ -353,6 +385,7 @@ void calglSetModelViewParameter3D(
 /*! \brief Functions that set the light parameters.
 	It contains informations about the ambient, diffuse and specular component of the light.
 */
+DllExport
 void calglSetLightParameter3D(
 	struct CALGLDrawModel3D* calDrawModel,		//!< The pointer to CALDrawModel.
 	struct CALGLLightParameter* modelLight		//!< The pointer to CALGLLightParameter.
@@ -361,6 +394,7 @@ void calglSetLightParameter3D(
 #pragma region BoundingBox
 /*! \brief Functions that in the drawing fase display a bounding box which contains the model.
 */
+DllExport
 void calglDrawBoundingBox3D(
 	struct CALGLDrawModel3D* calDrawModel		//!< The pointer to CALDrawModel.
 	);
@@ -371,6 +405,7 @@ void calglDrawBoundingBox3D(
 	This is the relative version, in which the display bar is positioned automatically according to the type of orientation.
 	This is for byte substate.
 */
+DllExport
 void calglRelativeInfoBar3Db(
 	struct CALGLDrawModel3D* calDrawModel,		//!< The pointer to CALDrawModel.
 	struct CALSubstate3Db* substate,  			//!< The pointer to the substate to which display informations.
@@ -382,6 +417,7 @@ void calglRelativeInfoBar3Db(
 	This is the relative version, in which the display bar is positioned automatically according to the type of orientation.
 	This is for byte substate.
 */
+DllExport
 void calglRelativeInfoBar3Di(
 	struct CALGLDrawModel3D* calDrawModel,		//!< The pointer to CALDrawModel.
 	struct CALSubstate3Di* substate,  			//!< The pointer to the substate to which display informations.
@@ -393,6 +429,7 @@ void calglRelativeInfoBar3Di(
 	This is the relative version, in which the display bar is positioned automatically according to the type of orientation.
 	This is for byte substate.
 */
+DllExport
 void calglRelativeInfoBar3Dr(
 	struct CALGLDrawModel3D* calDrawModel,		//!< The pointer to CALDrawModel.
 	struct CALSubstate3Dr* substate,  			//!< The pointer to the substate to which display informations.
@@ -404,6 +441,7 @@ void calglRelativeInfoBar3Dr(
 	This is the absolute version, in which the display bar is positioned according to the position specified by the user.
 	This is for byte substate.
 */
+DllExport
 void calglInfoBar3Db(
 	struct CALGLDrawModel3D* calDrawModel,		//!< The pointer to CALDrawModel.
 	struct CALSubstate3Db* substate,  			//!< The pointer to the substate to which display informations.
@@ -418,6 +456,7 @@ void calglInfoBar3Db(
 	This is the absolute version, in which the display bar is positioned according to the position specified by the user.
 	This is for byte substate.
 */
+DllExport
 void calglInfoBar3Di(
 	struct CALGLDrawModel3D* calDrawModel,		//!< The pointer to CALDrawModel.
 	struct CALSubstate3Di* substate,  			//!< The pointer to the substate to which display informations.
@@ -432,6 +471,7 @@ void calglInfoBar3Di(
 	This is the absolute version, in which the display bar is positioned according to the position specified by the user.
 	This is for byte substate.
 */
+DllExport
 void calglInfoBar3Dr(
 	struct CALGLDrawModel3D* calDrawModel, 		//!< The pointer to CALDrawModel.
 	struct CALSubstate3Dr* substate,  			//!< The pointer to the substate to which display informations.
@@ -449,6 +489,7 @@ void calglInfoBar3Dr(
 	This is for the rows.
 	It shows the rows in the interval [min, max].
 */
+DllExport
 void calglDisplayDrawKBound3D(
 	struct CALGLDrawModel3D* calDrawModel,		//!< The pointer to CALDrawModel.
 	GLint min, 									//!< The minimum of the interval.
@@ -458,6 +499,7 @@ void calglDisplayDrawKBound3D(
 	This is for the columns.
 	It shows the columns in the interval [min, max].
 */
+DllExport
 void calglDisplayDrawIBound3D(
 	struct CALGLDrawModel3D* calDrawModel,		//!< The pointer to CALDrawModel.
 	GLint min, 									//!< The minimum of the interval.
@@ -467,6 +509,7 @@ void calglDisplayDrawIBound3D(
 	This is for the slices.
 	It shows the columns in the interval [min, max].
 */
+DllExport
 void calglDisplayDrawJBound3D(
 	struct CALGLDrawModel3D* calDrawModel, 		//!< The pointer to CALDrawModel.
 	GLint min,									//!< The minimum of the interval.
@@ -476,6 +519,7 @@ void calglDisplayDrawJBound3D(
 	This is for the rows.
 	It hides the rows in the interval [min, max].
 */
+DllExport
 void calglHideDrawKBound3D(
 	struct CALGLDrawModel3D* calDrawModel, 		//!< The pointer to CALDrawModel.
 	GLint min, 									//!< The minimum of the interval.
@@ -485,6 +529,7 @@ void calglHideDrawKBound3D(
 	This is for the columns.
 	It hides the columns in the interval [min, max].
 */
+DllExport
 void calglHideDrawIBound3D(
 	struct CALGLDrawModel3D* calDrawModel, 		//!< The pointer to CALDrawModel.
 	GLint min, 									//!< The minimum of the interval.
@@ -494,6 +539,7 @@ void calglHideDrawIBound3D(
 	This is for the slices.
 	It hides the columns in the interval [min, max].
 */
+DllExport
 void calglHideDrawJBound3D(
 	struct CALGLDrawModel3D* calDrawModel, 		//!< The pointer to CALDrawModel.
 	GLint min, 									//!< The minimum of the interval.

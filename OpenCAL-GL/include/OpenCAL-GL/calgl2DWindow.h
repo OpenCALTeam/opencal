@@ -48,6 +48,7 @@ struct CALGLWindow2D {
 
 /*! \brief Constructor for create a window.
 */
+DllExport
 struct CALGLWindow2D* calglCreateWindow2D(
 	int argc,									//!< argc value passed from Main func.
 	char** argv,								//!< argv value passed from Main func.
@@ -58,38 +59,46 @@ struct CALGLWindow2D* calglCreateWindow2D(
 
 /*! \brief Destructor for de-allocate memory.
 */
+DllExport
 void calglDestroyWindow2D(
 	struct CALGLWindow2D* window	//!< Window to destroy.
 	);
 
 /*! \brief Function for redisplay the main window and all sub windows.
 */
+DllExport
 void calglRedisplayAllWindow2D(void);
 
 /*! \brief Display main window callback.
 */
+DllExport
 void calglDisplayWindow2D(void);
 
 /*! \brief Reshape main window callback.
 */
+DllExport
 void calglReshapeWindow2D(int w, int h);
 
 /*! \brief Display sub window callback.
 */
+DllExport
 void calglSubDisplayWindow2D(void);
 
 /*! \brief Reshape sub window callback.
 */
+DllExport
 void calglSubReshapeWindow2D(int w, int h);
 
 /*! \brief Function for auto create positions and dimensions of all sub windows.
 */
+DllExport
 void calglCalculatePositionAndDimensionWindow2D(
 	struct CALGLWindow2D* window	//!< Pointer to window.
 	);
 
 /*! \brief Function that start the window system.
 */
+DllExport
 void calglMainLoop2D(
 	int argc,	//!< argc value passed from Main func.
 	char** argv	//!< argv value passed from Main func.
@@ -97,6 +106,7 @@ void calglMainLoop2D(
 
 /*! \brief Function that set the font.
 */
+DllExport
 void calglSetfontWindow2D(
 struct CALGLWindow2D* window,	//!< Pointer to window.
 char* name, 				//!< Font name.
@@ -105,6 +115,7 @@ int size					//!< Font size.
 
 /*! \brief Function that print a string on the screen of the relative sub window.
 */
+DllExport
 void calglDrawStringWindow2D(
 	struct CALGLWindow2D* window,	//!< Pointer to window.
 	GLuint x, 					//!< X position to print.
@@ -115,64 +126,78 @@ void calglDrawStringWindow2D(
 
 /*! \brief Special keyboard callback.
 */
+DllExport
 void calglSpecialKeyboardEventWindow2D(int key, int x, int y);
 
 /*! \brief Keyboard callback.
 */
+DllExport
 void calglKeyboardEventWindow2D(unsigned char key, int x, int y);
 
 /*! \brief Keyboard up callback.
 */
+DllExport
 void calglKeyboardUpEventWindow2D(unsigned char key, int x, int y);
 
 /*! \brief Mouse callback.
 */
+DllExport
 void calglMouseWindow2D(int button, int state, int x, int y);
 
 /*! \brief Motion mouse callback.
 */
+DllExport
 void calglMotionMouseWindow2D(int x, int y);
 
 /*! \brief Idle function callback.
 */
+DllExport
 void calglIdleFuncWindow2D(void);
 
 /*! \brief Timer function callback.
 */
+DllExport
 void calglTimeFunc2D(int value);
 
 /*! \brief Destroy all models from the list of models.
 */
+DllExport
 void calglCleanDrawModelList2D();
 
 /*! \brief Insert a model in the list of models.
 */
+DllExport
 void calglShowModel2D(
 	struct CALGLDrawModel2D* model	//!< Pointer to CALGLDrawModel2D.
 	);
 
 /*! \brief Increase the capacity of the list of models.
 */
+DllExport
 void calglIncreaseDrawModel2D();
 
 /*! \brief Print on the console some utility informations.
 */
+DllExport
 void calglPrintfInfoCommand2D();
 
 /*! \brief Function for render the information bar.
 */
+DllExport
 void calglDisplayBar2D(
 	struct CALGLInfoBar* infoBar	//!< Pointer to CALGLInfoBar.
 	);
 
 /*! \brief Utility function for getting a string from a number.
 */
+DllExport
 char* calglGetString2D(
 	GLdouble number	//!< Number to convert to string.
 	);
 
 /*! \brief Function that print a string on the screen of the relative sub window.
 */
+DllExport
 void calglPrintString2D(
 	GLfloat x,		//!< X position to print.
 	GLfloat y,		//!< Y position to print.
@@ -181,6 +206,7 @@ void calglPrintString2D(
 
 /*! \brief Function that print a const string on the screen of the relative sub window.
 */
+DllExport
 void calglPrintConstString2D(
 	GLfloat x,			//!< X position to print.
 	GLfloat y,			//!< Y position to print.
@@ -189,6 +215,7 @@ void calglPrintConstString2D(
 
 /*! \brief Function that set horizontal/vertical layout when there are only two models to display.
 */
+DllExport
 void calglSetLayoutOrientation2D(
 	enum CALGL_LAYOUT_ORIENTATION newOrientation	//!< Type of orientation.
 	);

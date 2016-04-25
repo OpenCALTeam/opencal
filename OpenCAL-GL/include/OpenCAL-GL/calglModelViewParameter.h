@@ -51,6 +51,7 @@ struct CALGLModelViewParameter{
 
 /*! \brief Constructor for create a model view matrix.
 */
+DllExport
 struct CALGLModelViewParameter* calglCreateModelViewParameter(
 	GLfloat xT,		//!< x translations.
 	GLfloat yT,		//!< y translations.
@@ -66,36 +67,42 @@ struct CALGLModelViewParameter* calglCreateModelViewParameter(
 /*! \brief Function that auto-create a model view matrix.
 	This version is designed for 2D cellular automata for discreet drawing.
 */
+DllExport
 struct CALGLModelViewParameter* calglAutoCreateModelViewParameterFlat2D(
 	struct CALGLDrawModel2D* calDrawModel	//!< Pointer to CALDrawModel.
 	);
 /*! \brief Function that auto-create a model view matrix.
 	This version is designed for 3D cellular automata for discreet drawing.
 */
+DllExport
 struct CALGLModelViewParameter* calglAutoCreateModelViewParameterFlat3D(
 	struct CALGLDrawModel3D* calDrawModel	//!< Pointer to CALDrawModel.
 	);
 /*! \brief Function that auto-create a model view matrix.
 	This version is designed for 2D cellular automata for surface drawing.
 */
+DllExport
 struct CALGLModelViewParameter* calglAutoCreateModelViewParameterSurface2D(
 	struct CALGLDrawModel2D* calDrawModel	//!< Pointer to CALDrawModel.
 	);
 /*! \brief Function that auto-create a model view matrix.
 	This version is designed for 3D cellular automata for surface drawing.
 */
+DllExport
 struct CALGLModelViewParameter* calglAutoCreateModelViewParameterSurface3D(
 	struct CALGLDrawModel3D* calDrawModel	//!< Pointer to CALDrawModel.
 	);
 
 /*! \brief Destructor for de-allocate memory allocated before.
 */
+DllExport
 void calglDestroyModelViewParameter(
 	struct CALGLModelViewParameter* calModelVieParameter		//!< Pointer to the CALGLModelViewParameter to destroy.
 	);
 
 /*! \brief Function that replace the precedent model view matrix with the new one.
 */
+DllExport
 void calglApplyModelViewParameter(
 	struct CALGLModelViewParameter* calModelVieParameter		//!< Pointer to the new CALGLModelViewParameter.
 	);

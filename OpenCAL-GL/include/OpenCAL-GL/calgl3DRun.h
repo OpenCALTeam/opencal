@@ -42,30 +42,35 @@ struct CALGLRun3D {
 
 /*! \brief Constructor for create a struct CALGLRun3D.
 */
+DllExport
 struct CALGLRun3D* calglRunDef3D(
 	struct CALRun3D* calRun	//!< Reference to CALRun3D
 	);
 
 /*! \brief Destructor for de-allocate memory.
 */
+DllExport
 void calglDestroyUpdater3D(
 	struct CALGLRun3D* calglRun //!< Struct to destroy.
 	);
 
 /*! \brief Main update function, it is called by the thread.
 */
+DllExport
 void* calglFuncThreadUpdate3D(
 	void* arg	//!< Argument which is a struct CALGLRun3D.
 	);
 
 /*! \brief Function for starting the thread.
 */
+DllExport
 void calglStartThread3D(
 	struct CALGLRun3D* calglRun	//!< Object which contains the thread to launch.
 	);
 
 /*! \brief Update function for updating the cellular automata computation.
 */
+DllExport
 void calglUpdate3D(
 	struct CALGLRun3D* calglRun	//!< Struct for retrieve the cellular automata to update.
 	);

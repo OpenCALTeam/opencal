@@ -51,6 +51,7 @@ struct CALGLInfoBar{
 /*! \brief Constructor for a relative information bar.
 	This is for a 2D byte substate.
 */
+DllExport
 struct CALGLInfoBar* calglCreateRelativeInfoBar2Db(
 	const char* substateName,						//!< Infomation bar's name.
 	enum CALGL_TYPE_INFO_USE infoUse,				//!< Color gradient that must be used.
@@ -61,6 +62,7 @@ struct CALGLInfoBar* calglCreateRelativeInfoBar2Db(
 /*! \brief Constructor for a relative information bar.
 	This is for a 2D int substate.
 */
+DllExport
 struct CALGLInfoBar* calglCreateRelativeInfoBar2Di(
 	const char* substateName, 						//!< Infomation bar's name.
 	enum CALGL_TYPE_INFO_USE infoUse, 				//!< Color gradient that must be used.
@@ -71,6 +73,7 @@ struct CALGLInfoBar* calglCreateRelativeInfoBar2Di(
 /*! \brief Constructor for a relative information bar.
 	This is for a 2D real substate.
 */
+DllExport
 struct CALGLInfoBar* calglCreateRelativeInfoBar2Dr(
 	const char* substateName, 						//!< Infomation bar's name.
 	enum CALGL_TYPE_INFO_USE infoUse, 				//!< Color gradient that must be used.
@@ -81,6 +84,7 @@ struct CALGLInfoBar* calglCreateRelativeInfoBar2Dr(
 /*! \brief Constructor for a relative information bar.
 	This is for a 3D byte substate.
 */
+DllExport
 struct CALGLInfoBar* calglCreateRelativeInfoBar3Db(
 	const char* substateName, 						//!< Infomation bar's name.
 	enum CALGL_TYPE_INFO_USE infoUse, 				//!< Color gradient that must be used.
@@ -91,6 +95,7 @@ struct CALGLInfoBar* calglCreateRelativeInfoBar3Db(
 /*! \brief Constructor for a relative information bar.
 	This is for a 3D int substate.
 */
+DllExport
 struct CALGLInfoBar* calglCreateRelativeInfoBar3Di(
 	const char* substateName, 						//!< Infomation bar's name.
 	enum CALGL_TYPE_INFO_USE infoUse, 				//!< Color gradient that must be used.
@@ -101,6 +106,7 @@ struct CALGLInfoBar* calglCreateRelativeInfoBar3Di(
 /*! \brief Constructor for a relative information bar.
 	This is for a 3D real substate.
 */
+DllExport
 struct CALGLInfoBar* calglCreateRelativeInfoBar3Dr(
 	const char* substateName, 						//!< Infomation bar's name.
 	enum CALGL_TYPE_INFO_USE infoUse, 				//!< Color gradient that must be used.
@@ -111,6 +117,7 @@ struct CALGLInfoBar* calglCreateRelativeInfoBar3Dr(
 /*! \brief Constructor for an absolute information bar.
 	This is for a 2D byte substate.
 */
+DllExport
 struct CALGLInfoBar* calglCreateInfoBar2Db(
 	const char* substateName, 						//!< Infomation bar's name.
 	enum CALGL_TYPE_INFO_USE infoUse, 				//!< Color gradient that must be used.
@@ -124,6 +131,7 @@ struct CALGLInfoBar* calglCreateInfoBar2Db(
 /*! \brief Constructor for an absolute information bar.
 	This is for a 2D int substate.
 */
+DllExport
 struct CALGLInfoBar* calglCreateInfoBar2Di(
 	const char* substateName, 						//!< Infomation bar's name.
 	enum CALGL_TYPE_INFO_USE infoUse, 				//!< Color gradient that must be used.
@@ -137,6 +145,7 @@ struct CALGLInfoBar* calglCreateInfoBar2Di(
 /*! \brief Constructor for an absolute information bar.
 	This is for a 2D real substate.
 */
+DllExport
 struct CALGLInfoBar* calglCreateInfoBar2Dr(
 	const char* substateName, 						//!< Infomation bar's name.
 	enum CALGL_TYPE_INFO_USE infoUse, 				//!< Color gradient that must be used.
@@ -150,6 +159,7 @@ struct CALGLInfoBar* calglCreateInfoBar2Dr(
 /*! \brief Constructor for an absolute information bar.
 	This is for a 3D byte substate.
 */
+DllExport
 struct CALGLInfoBar* calglCreateInfoBar3Db(
 	const char* substateName, 						//!< Infomation bar's name.
 	enum CALGL_TYPE_INFO_USE infoUse, 				//!< Color gradient that must be used.
@@ -163,6 +173,7 @@ struct CALGLInfoBar* calglCreateInfoBar3Db(
 /*! \brief Constructor for an absolute information bar.
 	This is for a 3D int substate.
 */
+DllExport
 struct CALGLInfoBar* calglCreateInfoBar3Di(
 	const char* substateName, 						//!< Infomation bar's name.
 	enum CALGL_TYPE_INFO_USE infoUse, 				//!< Color gradient that must be used.
@@ -176,6 +187,7 @@ struct CALGLInfoBar* calglCreateInfoBar3Di(
 /*! \brief Constructor for an absolute information bar.
 	This is for a 3D real substate.
 */
+DllExport
 struct CALGLInfoBar* calglCreateInfoBar3Dr(
 	const char* substateName, 						//!< Infomation bar's name.
 	enum CALGL_TYPE_INFO_USE infoUse, 				//!< Color gradient that must be used.
@@ -189,12 +201,14 @@ struct CALGLInfoBar* calglCreateInfoBar3Dr(
 
 /*! \brief Destructor for de-allocate memory allocated before.
 */
+DllExport
 void calglDestroyInfoBar(
 	struct CALGLInfoBar* infoBar //!< Pointer to object to destroy.
 	);
 
 /*! \brief Function for setting constant width and height for relative bar.
 */
+DllExport
 void calglSetInfoBarConstDimension(
 	struct CALGLInfoBar* infoBar,	//!< Infomation bar's pointer.
 	GLfloat width,					//!< Infomation bar's const width.
