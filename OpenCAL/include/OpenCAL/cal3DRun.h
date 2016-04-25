@@ -48,6 +48,7 @@ struct CALRun3D
 
 /*! \brief Creates an object of type calRunDef3D, sets its records and returns it as a pointer; it defines the cellular automaton simulation structure.
 */
+DllExport
 struct CALRun3D* calRunDef3D(struct CALModel3D* ca3D,			//!< Pointer to the cellular automaton structure.
 							 int initial_step,					//!< Initial simulation step; default value is 0.
 							 int final_step,					//!< Finale step; if it is 0, a loop is obtained. In order to set final_step to 0, the constant CAL_RUN_LOOP can be used.
@@ -58,6 +59,7 @@ struct CALRun3D* calRunDef3D(struct CALModel3D* ca3D,			//!< Pointer to the cell
 
 /*! \brief Adds a simulation initialization function to CALRun3D.
 */
+DllExport
 void calRunAddInitFunc3D(struct CALRun3D* simulation,			//!< Pointer to the run structure.
 						 void (*init)(struct CALModel3D*)		//!< Simulation's initialization callback function.
 						 );
@@ -65,24 +67,28 @@ void calRunAddInitFunc3D(struct CALRun3D* simulation,			//!< Pointer to the run 
 /*! \brief Adds a CA's globalTransition callback function.
 	If defined, it is executed instead of cal3D.c::calGlobalTransitionFunction3D.
 */
+DllExport
 void calRunAddGlobalTransitionFunc3D(struct CALRun3D* simulation,					//!< Pointer to the run structure.
 									 void (*globalTransition)(struct CALModel3D*)	//!< CA's globalTransition callback function. If defined, it is executed instead of cal3D.c::calGlobalTransitionFunction3D.
 									 );
 
 /*! \brief Adds a simulation steering function to CALRun3D.
 */
+DllExport
 void calRunAddSteeringFunc3D(struct CALRun3D* simulation,			//!< Pointer to the run structure.
 							 void (*steering)(struct CALModel3D*)	//!< Simulation's steering callback function.
 							 );
 
 /*! \brief Adds a stop condition function to CALRun3D.
 */
+DllExport
 void calRunAddStopConditionFunc3D(struct CALRun3D* simulation,					//!< Pointer to the run structure.
 								  CALbyte (*stopCondition)(struct CALModel3D*)	//!< Simulation's stopCondition callback function.
 								  );
 
 /*! \brief Adds a finalization function to CALRun3D.
 */
+DllExport
 void calRunAddFinalizeFunc3D(struct CALRun3D* simulation,			//!< Pointer to the run structure.
 							 void (*finalize)(struct CALModel3D*)	//!< Simulation's finalize callback function.
 							 );
@@ -91,21 +97,25 @@ void calRunAddFinalizeFunc3D(struct CALRun3D* simulation,			//!< Pointer to the 
 
 /*! \brief It executes the simulation initialization function.
 */
+DllExport
 void calRunInitSimulation3D(struct CALRun3D* simulation	//!< Pointer to the run structure.
 	);
 
 /*! \brief A single step of the cellular automaton. It executes the transition function, the steering and check for the stop condition.
 */
+DllExport
 CALbyte calRunCAStep3D(struct CALRun3D* simulation  //!< Pointer to the run structure.
 					   );
 
 /*! \brief It executes the simulation finalization function.
 */
+DllExport
 void calRunFinalizeSimulation3D(struct CALRun3D* simulation	//!< Pointer to the run structure.
 								);
 
 /*! \brief Main simulation cicle. It can become a loop is CALRun3D::final_step == 0.
 */
+DllExport
 void calRun3D(struct CALRun3D* simulation			//!< Pointer to the run structure.
 			  );
 
@@ -113,6 +123,7 @@ void calRun3D(struct CALRun3D* simulation			//!< Pointer to the run structure.
 
 /*! \brief Finalization function. It releases the allocated memory.
 */
+DllExport
 void calRunFinalize3D(struct CALRun3D* cal3DRun		//!< Pointer to the run structure.
 					  );
 

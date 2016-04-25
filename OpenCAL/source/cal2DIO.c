@@ -21,18 +21,22 @@
 #include <OpenCAL/cal2D.h>
 #include <OpenCAL/cal2DBuffer.h>
 #include <OpenCAL/cal2DBufferIO.h>
+#include <OpenCAL/cal2DIO.h>
 
 
+DllExport
 void calfLoadSubstate2Db(struct CALModel2D* ca2D, struct CALSubstate2Db* Q, FILE* f) {
 	calfLoadMatrix2Db(Q->current, ca2D->rows, ca2D->columns, f);
 	if (Q->next)
 		calCopyBuffer2Db(Q->current, Q->next, ca2D->rows, ca2D->columns);
 }
+DllExport
 void calfLoadSubstate2Di(struct CALModel2D* ca2D, struct CALSubstate2Di* Q, FILE* f) {
 	calfLoadMatrix2Di(Q->current, ca2D->rows, ca2D->columns, f);
 	if (Q->next)
 		calCopyBuffer2Di(Q->current, Q->next, ca2D->rows, ca2D->columns);
 }
+DllExport
 void calfLoadSubstate2Dr(struct CALModel2D* ca2D, struct CALSubstate2Dr* Q, FILE* f) {
 	calfLoadMatrix2Dr(Q->current, ca2D->rows, ca2D->columns, f);
 	if (Q->next)
@@ -40,18 +44,21 @@ void calfLoadSubstate2Dr(struct CALModel2D* ca2D, struct CALSubstate2Dr* Q, FILE
 }
 
 
+DllExport
 CALbyte calLoadSubstate2Db(struct CALModel2D* ca2D, struct CALSubstate2Db* Q, char* path) {
 	CALbyte return_state = calLoadMatrix2Db(Q->current, ca2D->rows, ca2D->columns, path);
 	if (Q->next)
 		calCopyBuffer2Db(Q->current, Q->next, ca2D->rows, ca2D->columns);
 	return return_state;
 }
+DllExport
 CALbyte calLoadSubstate2Di(struct CALModel2D* ca2D, struct CALSubstate2Di* Q, char* path) {
 	CALbyte return_state = calLoadMatrix2Di(Q->current, ca2D->rows, ca2D->columns, path);
 	if (Q->next)
 		calCopyBuffer2Di(Q->current, Q->next, ca2D->rows, ca2D->columns);
 	return return_state;
 }
+DllExport
 CALbyte calLoadSubstate2Dr(struct CALModel2D* ca2D, struct CALSubstate2Dr* Q, char* path) {
 	CALbyte return_state = calLoadMatrix2Dr(Q->current, ca2D->rows, ca2D->columns, path);
 	if (Q->next)
@@ -60,25 +67,31 @@ CALbyte calLoadSubstate2Dr(struct CALModel2D* ca2D, struct CALSubstate2Dr* Q, ch
 }
 
 
+DllExport
 void calfSaveSubstate2Db(struct CALModel2D* ca2D, struct CALSubstate2Db* Q, FILE* f) {
 	calfSaveMatrix2Db(Q->current, ca2D->rows, ca2D->columns, f);
 }
+DllExport
 void calfSaveSubstate2Di(struct CALModel2D* ca2D, struct CALSubstate2Di* Q, FILE* f) {
 	calfSaveMatrix2Di(Q->current, ca2D->rows, ca2D->columns, f);
 }
+DllExport
 void calfSaveSubstate2Dr(struct CALModel2D* ca2D, struct CALSubstate2Dr* Q, FILE* f) {
 	calfSaveMatrix2Dr(Q->current, ca2D->rows, ca2D->columns, f);
 }
 
 
+DllExport
 CALbyte calSaveSubstate2Db(struct CALModel2D* ca2D, struct CALSubstate2Db* Q, char* path) {
 	CALbyte return_state = calSaveMatrix2Db(Q->current, ca2D->rows, ca2D->columns, path);
 	return return_state;
 }
+DllExport
 CALbyte calSaveSubstate2Di(struct CALModel2D* ca2D, struct CALSubstate2Di* Q, char* path) {
 	CALbyte return_state = calSaveMatrix2Di(Q->current, ca2D->rows, ca2D->columns, path);
 	return return_state;
 }
+DllExport
 CALbyte calSaveSubstate2Dr(struct CALModel2D* ca2D, struct CALSubstate2Dr* Q, char* path) {
 	CALbyte return_state = calSaveMatrix2Dr(Q->current, ca2D->rows, ca2D->columns, path);
 	return return_state;

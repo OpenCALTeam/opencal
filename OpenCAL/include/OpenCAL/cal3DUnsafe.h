@@ -28,6 +28,7 @@
 /*! \brief Sets the n-th neighbor of the cell (i,j) of the matrix flags to
 	CAL_TRUE and increments the couter sizeof_active_flags.
 */
+DllExport
 void calAddActiveCellX3D(struct CALModel3D* ca3D,	//!< Pointer to the cellular automaton structure.
 						 int i,	//!< Row coordinate of the central cell.
 						 int j,	//!< Column coordinate of the central cell.
@@ -41,6 +42,7 @@ void calAddActiveCellX3D(struct CALModel3D* ca3D,	//!< Pointer to the cellular a
 	it updates both the current and next matrix at the position (i, j).
 	This operation is unsafe since it writes value in a neighbor, both on the current and next matrix.
 */
+DllExport
 void calInitX3Db(struct CALModel3D* ca3D,	//!< Pointer to the cellular automaton structure.
 				 struct CALSubstate3Db* Q,	//!< Pointer to a 3D byte substate.
 				 int i,						//!< Row coordinate of the central cell.
@@ -54,6 +56,7 @@ void calInitX3Db(struct CALModel3D* ca3D,	//!< Pointer to the cellular automaton
 	it updates both the current and next matrix at the position (i, j).
 	This operation is unsafe since it writes value in a neighbor, both on the current and next matrix.
 */
+DllExport
 void calInitX3Di(struct CALModel3D* ca3D,	//!< Pointer to the cellular automaton structure.
 				 struct CALSubstate3Di* Q,	//!< Pointer to a 3D int substate.
 				 int i,						//!< Row coordinate of the central cell.
@@ -67,6 +70,7 @@ void calInitX3Di(struct CALModel3D* ca3D,	//!< Pointer to the cellular automaton
 	it updates both the current and next matrix at the position (i, j).
 	This operation is unsafe since it writes value in a neighbor, both on the current and next matrix.
 */
+DllExport
 void calInitX3Dr(struct CALModel3D* ca3D,	//!< Pointer to the cellular automaton structure.
 				 struct CALSubstate3Dr* Q,	//!< Pointer to a 3D real (floating point) substate.
 				 int i,						//!< Row coordinate of the central cell.
@@ -81,6 +85,7 @@ void calInitX3Dr(struct CALModel3D* ca3D,	//!< Pointer to the cellular automaton
 /*! \brief Returns the cell (i, j) value of a byte substate from the next matrix.
 	This operation is unsafe since it reads a value from the next matrix.
 */
+DllExport
 CALbyte calGetNext3Db(struct CALModel3D* ca3D,		//!< Pointer to the cellular automaton structure.
 						  struct CALSubstate3Db* Q,	//!< Pointer to a 3D byte substate.
 						  int i,					//!< Row coordinate of the cell.
@@ -91,6 +96,7 @@ CALbyte calGetNext3Db(struct CALModel3D* ca3D,		//!< Pointer to the cellular aut
 /*! \brief Returns the cell (i, j) value of an integer substate from the next matrix.
 	This operation is unsafe since it reads a value from the next matrix.
 */
+DllExport
 CALint calGetNext3Di(struct CALModel3D* ca3D,		//!< Pointer to the cellular automaton structure.
 						 struct CALSubstate3Di* Q,	//!< Pointer to a 3D int substate.
 						 int i,						//!< Row coordinate of the cell.
@@ -101,6 +107,7 @@ CALint calGetNext3Di(struct CALModel3D* ca3D,		//!< Pointer to the cellular auto
 /*! \brief Returns the cell (i, j) value of a real (floating point) substate from the next matrix.
 	This operation is unsafe since it read a value from the next matrix.
 */
+DllExport
 CALreal calGetNext3Dr(struct CALModel3D* ca3D,		//!< Pointer to the cellular automaton structure.
 						  struct CALSubstate3Dr* Q,	//!< Pointer to a 3D real (floating point) substate.
 						  int i,					//!< Row coordinate of the cell.
@@ -113,6 +120,7 @@ CALreal calGetNext3Dr(struct CALModel3D* ca3D,		//!< Pointer to the cellular aut
 /*! \brief Returns the cell (i, j) n-th neighbor value of a byte substate from the next matrix.
 	This operation is unsafe since it reads a value from the next matrix.
 */
+DllExport
 CALbyte calGetNextX3Db(struct CALModel3D* ca3D,		//!< Pointer to the cellular automaton structure.
 					   struct CALSubstate3Db* Q,	//!< Pointer to a 3D real (floating point) substate.
 					   int i,						//!< Row coordinate of the cell.
@@ -124,6 +132,7 @@ CALbyte calGetNextX3Db(struct CALModel3D* ca3D,		//!< Pointer to the cellular au
 /*! \brief Returns the cell (i, j) n-th neighbor value of an integer substate from the next matrix.
 	This operation is unsafe since it reads a value from the next matrix.
 */
+DllExport
 CALint calGetNextX3Di(struct CALModel3D* ca3D,		//!< Pointer to the cellular automaton structure.
 					  struct CALSubstate3Di* Q,		//!< Pointer to a 3D real (floating point) substate.
 					  int i,						//!< Row coordinate of the cell.
@@ -135,6 +144,7 @@ CALint calGetNextX3Di(struct CALModel3D* ca3D,		//!< Pointer to the cellular aut
 /*! \brief Returns the cell (i, j) n-th neighbor value of a real (floating point) substate from the next matrix.
 	This operation is unsafe since it read a value from the next matrix.
 */
+DllExport
 CALreal calGetNextX3Dr(struct CALModel3D* ca3D,		//!< Pointer to the cellular automaton structure.
 					   struct CALSubstate3Dr* Q,	//!< Pointer to a 3D real (floating point) substate.
 					   int i,						//!< Row coordinate of the cell.
@@ -148,6 +158,7 @@ CALreal calGetNextX3Dr(struct CALModel3D* ca3D,		//!< Pointer to the cellular au
 /*! \brief Sets the value of the n-th neighbor of the cell (i, j) of a byte substate.
 	This operation is unsafe since it writes a value in a neighbor of the next matrix.
 */
+DllExport
 void calSetX3Db(struct CALModel3D* ca3D,	//!< Pointer to the cellular automaton structure.
 				struct CALSubstate3Db* Q,	//!< Pointer to a 3D byte substate.
 				int i,						//!< Row coordinate of the central cell.
@@ -160,6 +171,7 @@ void calSetX3Db(struct CALModel3D* ca3D,	//!< Pointer to the cellular automaton 
 /*! \brief Sets the value of the n-th neighbor of the cell (i, j) of an integer substate.
 	This operation is unsafe since it writes a value in a neighbor of the next matrix.
 */
+DllExport
 void calSetX3Di(struct CALModel3D* ca3D,	//!< Pointer to the cellular automaton structure.
 				struct CALSubstate3Di* Q,	//!< Pointer to a 3D int substate.
 				int i,						//!< Row coordinate of the central cell.
@@ -172,6 +184,7 @@ void calSetX3Di(struct CALModel3D* ca3D,	//!< Pointer to the cellular automaton 
 /*! \brief Sets the value of the n-th neighbor of the cell (i, j) of a real (floating point) substate.
 	This operation is unsafe since it writes a value in a neighbor of the next matrix.
 */
+DllExport
 void calSetX3Dr(struct CALModel3D* ca3D,	//!< Pointer to the cellular automaton structure.
 				struct CALSubstate3Dr* Q,	//!< Pointer to a 3D real (floating point) substate.
 				int i,						//!< Row coordinate of the central cell.
@@ -186,6 +199,7 @@ void calSetX3Dr(struct CALModel3D* ca3D,	//!< Pointer to the cellular automaton 
 /*! \brief Sets the value of the n-th neighbor of the cell (i, j)x of a byte substate of the CURRENT matri.
 	This operation is unsafe since it writes a value directly to the current matrix.
 */
+DllExport
 void calSetCurrentX3Db(struct CALModel3D* ca3D,	//!< Pointer to the cellular automaton structure.
 					  struct CALSubstate3Db* Q,	//!< Pointer to a 3D byte substate.
 					  int i,					//!< Row coordinate of the central cell.
@@ -198,6 +212,7 @@ void calSetCurrentX3Db(struct CALModel3D* ca3D,	//!< Pointer to the cellular aut
 /*! \brief Set the value of the n-th neighbor of the  cell (i, j) of an int substate of the CURRENT matrix.
 	This operation is unsafe since it writes a value directly to the current matrix.
 */
+DllExport
 void calSetCurrentX3Di(struct CALModel3D* ca3D,	//!< Pointer to the cellular automaton structure.
 					  struct CALSubstate3Di* Q,	//!< Pointer to a 3D int substate.
 					  int i,					//!< Row coordinate of the central cell.
@@ -210,6 +225,7 @@ void calSetCurrentX3Di(struct CALModel3D* ca3D,	//!< Pointer to the cellular aut
 /*! \brief Set the value of the n-th neighbor of the  cell (i, j) of a real (floating point) substate of the CURRENT matrix.
 	This operation is unsafe since it writes a value directly to the current matrix.
 */
+DllExport
 void calSetCurrentX3Dr(struct CALModel3D* ca3D,	//!< Pointer to the cellular automaton structure.
 					  struct CALSubstate3Dr* Q,	//!< Pointer to a 3D int substate.
 					  int i,					//!< Row coordinate of the central cell.

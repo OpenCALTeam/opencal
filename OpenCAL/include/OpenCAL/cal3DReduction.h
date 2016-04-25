@@ -27,80 +27,110 @@
 
 	Set of functions that compute the maximum value of a substate.
 */
+DllExport
 CALbyte calReductionComputeMax3Db(struct CALModel3D* model, struct CALSubstate3Db* substate);
+DllExport
 CALint calReductionComputeMax3Di(struct CALModel3D* model, struct CALSubstate3Di* substate);
+DllExport
 CALreal calReductionComputeMax3Dr(struct CALModel3D* model, struct CALSubstate3Dr* substate);
 
 /*! \brief
 
 	Set of functions that compute the minimum value of a substate.
 */
+DllExport
 CALbyte calReductionComputeMin3Db(struct CALModel3D* model, struct CALSubstate3Db* substate);
+DllExport
 CALint calReductionComputeMin3Di(struct CALModel3D* model, struct CALSubstate3Di* substate);
+DllExport
 CALreal calReductionComputeMin3Dr(struct CALModel3D* model, struct CALSubstate3Dr* substate);
 
 /*! \brief
 
 	Set of functions that compute the sum of values of a substate.
 */
+DllExport
 CALbyte calReductionComputeSum3Db(struct CALModel3D* model, struct CALSubstate3Db* substate);
+DllExport
 CALint calReductionComputeSum3Di(struct CALModel3D* model, struct CALSubstate3Di* substate);
+DllExport
 CALreal calReductionComputeSum3Dr(struct CALModel3D* model, struct CALSubstate3Dr* substate);
 
 /*! \brief
 
 	Set of functions that compute the product of values of a substate.
 */
+DllExport
 CALbyte calReductionComputeProd3Db(struct CALModel3D* model, struct CALSubstate3Db* substate);
+DllExport
 CALint calReductionComputeProd3Di(struct CALModel3D* model, struct CALSubstate3Di* substate);
+DllExport
 CALreal calReductionComputeProd3Dr(struct CALModel3D* model, struct CALSubstate3Dr* substate);
 
 /*! \brief
 
 	Set of functions that compute the "Logic And" of values of a substate.
 */
+DllExport
 CALbyte calReductionComputeLogicalAnd3Db(struct CALModel3D* model, struct CALSubstate3Db* substate);
+DllExport
 CALint calReductionComputeLogicalAnd3Di(struct CALModel3D* model, struct CALSubstate3Di* substate);
+DllExport
 CALreal calReductionComputeLogicalAnd3Dr(struct CALModel3D* model, struct CALSubstate3Dr* substate);
 
 /*! \brief
 
 	Set of functions that compute the "Binary And" of values of a substate.
 */
+DllExport
 CALbyte calReductionComputeBinaryAnd3Db(struct CALModel3D* model, struct CALSubstate3Db* substate);
+DllExport
 CALint calReductionComputeBinaryAnd3Di(struct CALModel3D* model, struct CALSubstate3Di* substate);
+DllExport
 CALreal calReductionComputeBinaryAnd3Dr(struct CALModel3D* model, struct CALSubstate3Dr* substate);
 
 /*! \brief
 
 	Set of functions that compute the "Logic Or" of values of a substate.
 */
+DllExport
 CALbyte calReductionComputeLogicalOr3Db(struct CALModel3D* model, struct CALSubstate3Db* substate);
+DllExport
 CALint calReductionComputeLogicalOr3Di(struct CALModel3D* model, struct CALSubstate3Di* substate);
+DllExport
 CALreal calReductionComputeLogicalOr3Dr(struct CALModel3D* model, struct CALSubstate3Dr* substate);
 
 /*! \brief
 
 	Set of functions that compute the "Binary Or" of values of a substate.
 */
+DllExport
 CALbyte calReductionComputeBinaryOr3Db(struct CALModel3D* model, struct CALSubstate3Db* substate);
+DllExport
 CALint calReductionComputeBinaryOr3Di(struct CALModel3D* model, struct CALSubstate3Di* substate);
+DllExport
 CALreal calReductionComputeBinaryOr3Dr(struct CALModel3D* model, struct CALSubstate3Dr* substate);
 
 /*! \brief
 
 	Set of functions that compute the "Logic Xor" of values of a substate.
 */
+DllExport
 CALbyte calReductionComputeLogicalXor3Db(struct CALModel3D* model, struct CALSubstate3Db* substate);
+DllExport
 CALint calReductionComputeLogicalXor3Di(struct CALModel3D* model, struct CALSubstate3Di* substate);
+DllExport
 CALreal calReductionComputeLogicalXor3Dr(struct CALModel3D* model, struct CALSubstate3Dr* substate);
 
 /*! \brief
 
 	Set of functions that compute the "Binary Xor" of values of a substate.
 */
+DllExport
 CALbyte calReductionComputeBinaryXor3Db(struct CALModel3D* model, struct CALSubstate3Db* substate);
+DllExport
 CALint calReductionComputeBinaryXor3Di(struct CALModel3D* model, struct CALSubstate3Di* substate);
+DllExport
 CALreal calReductionComputeBinaryXor3Dr(struct CALModel3D* model, struct CALSubstate3Dr* substate);
 
 /*! \brief
@@ -108,8 +138,11 @@ CALreal calReductionComputeBinaryXor3Dr(struct CALModel3D* model, struct CALSubs
 	Private set of functions that execute the operation specified on a given substate.
 	The user must not call directly this function, but instead call the functions specifed above.
 */
+DllExport
 CALbyte calReductionOperation3Db(struct CALModel3D* model, struct CALSubstate3Db* substate, enum REDUCTION_OPERATION operation);
+DllExport
 CALint calReductionOperation3Di(struct CALModel3D* model, struct CALSubstate3Di* substate, enum REDUCTION_OPERATION operation);
+DllExport
 CALreal calReductionOperation3Dr(struct CALModel3D* model, struct CALSubstate3Dr* substate, enum REDUCTION_OPERATION operation);
 
 /*! \brief
@@ -118,8 +151,11 @@ CALreal calReductionOperation3Dr(struct CALModel3D* model, struct CALSubstate3Dr
 	It is sufficiently one index instead two.
 */
 
+DllExport
 CALbyte getValue3DbAtIndex(struct CALSubstate3Db* substate, CALint index);
+DllExport
 CALint getValue3DiAtIndex(struct CALSubstate3Di* substate, CALint index);
+DllExport
 CALreal getValue3DrAtIndex(struct CALSubstate3Dr* substate, CALint index);
 
 #endif

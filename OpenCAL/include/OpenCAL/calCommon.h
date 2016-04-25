@@ -21,6 +21,12 @@
 #ifndef calCommon_h
 #define calCommon_h
 
+#ifdef _MSC_VER
+#define DllExport   __declspec( dllexport ) 
+#else
+#define DllExport
+#endif
+
 
 #define CAL_FALSE 0		//!< Boolean alias for false
 #define CAL_TRUE  1		//!< Boolean alias for true

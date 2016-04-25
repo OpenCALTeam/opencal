@@ -21,6 +21,7 @@
 #include <OpenCAL/cal3D.h>
 #include <OpenCAL/cal3DBuffer.h>
 #include <OpenCAL/cal3DBufferIO.h>
+#include <OpenCAL/cal3DIO.h>
 
 
 void calfLoadSubstate3Db(struct CALModel3D* ca3D, struct CALSubstate3Db* Q, FILE* f) {
