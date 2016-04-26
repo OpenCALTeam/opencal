@@ -49,7 +49,10 @@ endif()
 if ( ENABLE_SHARED )
   add_library(opencal SHARED ${SRC})
   if (MSVC)
-    install(TARGETS opencal DESTINATION  ${INSTALL_BIN_DIR})
+    install(TARGETS opencal
+            ARCHIVE DESTINATION  ${INSTALL_LIB_DIR}
+            RUNTIME DESTINATION  ${INSTALL_BIN_DIR}
+          )
   else()
     install(TARGETS opencal DESTINATION  ${INSTALL_LIB_DIR})
   endif()

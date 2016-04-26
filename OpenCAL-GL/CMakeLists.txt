@@ -65,7 +65,10 @@ if ( ENABLE_SHARED )
   add_library(opencal-gl SHARED ${SRC})
   target_link_libraries(opencal-gl pthread opencal)
   if (MSVC)
-    install(TARGETS opencal-gl DESTINATION  ${INSTALL_BIN_DIR})
+    install(TARGETS opencal-gl
+            ARCHIVE DESTINATION  ${INSTALL_LIB_DIR}
+            RUNTIME DESTINATION  ${INSTALL_BIN_DIR}
+            )
   else()
     install(TARGETS opencal-gl DESTINATION  ${INSTALL_LIB_DIR})
   endif()

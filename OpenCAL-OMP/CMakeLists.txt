@@ -60,7 +60,10 @@ endif()
 if ( ENABLE_SHARED )
   add_library(opencal-omp SHARED ${SRC})
   if (MSVC)
-    install(TARGETS opencal-omp DESTINATION  ${INSTALL_BIN_DIR})
+    install(TARGETS opencal-omp
+            ARCHIVE DESTINATION  ${INSTALL_LIB_DIR}
+            RUNTIME DESTINATION  ${INSTALL_BIN_DIR}
+            )
   else()
     install(TARGETS opencal-omp DESTINATION  ${INSTALL_LIB_DIR})
   endif()
