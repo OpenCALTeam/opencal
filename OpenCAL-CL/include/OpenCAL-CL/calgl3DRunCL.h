@@ -24,6 +24,7 @@
 #define calgl3DRun_h
 
 #include <OpenCAL-CL/calcl3D.h>
+#include <OpenCAL-CL/dllexport.h>
 #include <time.h>
 #include <pthread.h>
 
@@ -51,6 +52,7 @@ struct CALGLRun3D {
 
 /*! \brief Constructor for create a struct CALGLRun3D.
 */
+DllExport
 struct CALGLRun3D* calglRunCLDef3D(
 	struct CALCLModel3D* device_CA,	//!< Reference to CALRun2D
 	CALint fixedStep,               //!< Fixed step for transfer memory from device to host.
@@ -60,24 +62,28 @@ struct CALGLRun3D* calglRunCLDef3D(
 
 /*! \brief Destructor for de-allocate memory.
 */
+DllExport
 void calglDestroyUpdater3DCL(
 	struct CALGLRun3D* calglRun //!< Struct to destroy.
 	);
 
 /*! \brief Main update function, it is called by the thread.
 */
+DllExport
 void* calglFuncThreadUpdate3DCL(
 	void* arg	//!< Argument which is a struct CALGLRun3D.
 	);
 
 /*! \brief Function for starting the thread.
 */
+DllExport
 void calglStartThread3DCL(
 	struct CALGLRun3D* calglRun	//!< Object which contains the thread to launch.
 	);
 
 /*! \brief Update function for updating the cellular automata computation.
 */
+DllExport
 void calglUpdate3DCL(
 	struct CALGLRun3D* calglRun	//!< Struct for retrieve the cellular automata to update.
 	);

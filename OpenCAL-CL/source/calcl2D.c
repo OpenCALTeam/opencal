@@ -27,6 +27,7 @@
  *      Author: alessio
  */
 #include <OpenCAL-CL/calcl2D.h>
+#include <OpenCAL-CL/calcl2DReduction.h>
 
 /******************************************************************************
  * 							PRIVATE FUNCTIONS

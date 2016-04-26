@@ -27,6 +27,7 @@
  *      Author: alessio
  */
 #include <OpenCAL-CL/calcl3D.h>
+#include <OpenCAL-CL/calcl3DReduction.h>
 
 /******************************************************************************
  * 							PRIVATE FUNCTIONS

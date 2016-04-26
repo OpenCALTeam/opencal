@@ -24,6 +24,7 @@
 #define calgl2DRun_h
 
 #include <OpenCAL-CL/calcl2D.h>
+#include <OpenCAL-CL/dllexport.h>
 #include <time.h>
 #include <pthread.h>
 
@@ -52,6 +53,7 @@ struct CALGLRun2D {
 
 /*! \brief Constructor for create a struct CALGLRun2D.
 */
+DllExport
 struct CALGLRun2D* calglRunCLDef2D(
 	struct CALCLModel2D* deviceCA,	//!< Reference to CALRun2D
 	CALint fixedStep,				//!< Fixed step for transfer memory from device to host.
@@ -61,24 +63,28 @@ struct CALGLRun2D* calglRunCLDef2D(
 
 /*! \brief Destructor for de-allocate memory.
 */
+DllExport
 void calglDestroyUpdater2DCL(
 	struct CALGLRun2D* calglRun //!< Struct to destroy.
 	);
 
 /*! \brief Main update function, it is called by the thread.
 */
+DllExport
 void* calglFuncThreadUpdate2DCL(
 	void* arg	//!< Argument which is a struct CALGLRun2D.
 	);
 
 /*! \brief Function for starting the thread.
 */
+DllExport
 void calglStartThread2DCL(
 	struct CALGLRun2D* calglRun	//!< Object which contains the thread to launch.
 	);
 
 /*! \brief Update function for updating the cellular automata computation.
 */
+DllExport
 void calglUpdate2DCL(
 	struct CALGLRun2D* calglRun	//!< Struct for retrieve the cellular automata to update.
 	);

@@ -30,8 +30,8 @@
  */
 #include <math.h>
 #include <OpenCAL/cal3D.h>
-
-#include "OpenCL_Utility.h"
+#include <OpenCAL-CL/clUtility.h>
+#include <OpenCAL-CL/dllexport.h>
 
 #ifdef _WIN32
 #define ROOT_DIR ".."
@@ -374,6 +374,7 @@ struct CALCLModel3D {
  * Allocate, initialize and return a pointer to a struct CALCLModel3D. Opencl buffers are initialized using data from a CALModel3D instance.
  * Moreover, the function receive an Opencl program used to initialize library kernels.
  */
+DllExport
 struct CALCLModel3D * calclCADef3D(struct CALModel3D *model,		//!< Pointer to a CALModel3D
 		CALCLcontext context,										//!< Opencl context
 		CALCLprogram program,										//!< Opencl program containing library source and user defined source
@@ -381,18 +382,21 @@ struct CALCLModel3D * calclCADef3D(struct CALModel3D *model,		//!< Pointer to a 
 		);
 
 /*! \brief Main simulation cycle. It can become a loop if maxStep == CALCL_RUN_LOOP */
+DllExport
 void calclRun3D(struct CALCLModel3D* calclmodel3D,			//!< Pointer to a struct CALCLModel3D
 		unsigned int initialStep,				//!< Initial simulation step
 		unsigned maxStep							//!< Maximum number of CA steps. Simulation can become a loop if maxStep == CALCL_RUN_LOOP
 		);
 
 /*! \brief A single step of CA. It executes the transition function, the steering and check the stop condition */
+DllExport
 CALbyte calclSingleStep3D(struct CALCLModel3D* calclmodel3D, 		//!< Pointer to a struct CALCLModel3D
 		size_t * dimSize,									//!< Array of size_t containing the number of threads for each used Opencl dimension (CALCL_NO_OPT 3 dimensions, CALCL_OPT_ACTIVE_CELL 1 dimension)
 		int dimNum											//!< Number of Opencl dimensions (CALCL_NO_OPT 3 dimensions, CALCL_OPT_ACTIVE_CELL 1 dimension)
 		);
 
 /*! \brief Execute an Opencl kernel */
+DllExport
 void calclKernelCall3D(struct CALCLModel3D * calclmodel3D,		//!< Pointer to a struct CALCLModel3D
 		CALCLkernel ker,								//!< Opencl kernel
 		int numDim,										//!< Number of Opencl dimensions (CALCL_NO_OPT 3 dimensions, CALCL_OPT_ACTIVE_CELL 1 dimension)
@@ -401,6 +405,7 @@ void calclKernelCall3D(struct CALCLModel3D * calclmodel3D,		//!< Pointer to a st
 		);
 
 /*! \brief Execute stream compaction kernels to compact and order CA active cells */
+DllExport
 void calclComputeStreamCompaction3D(struct CALCLModel3D * calclmodel3D		//!< Pointer to a struct CALCLModel3D
 		);
 
@@ -410,6 +415,7 @@ void calclComputeStreamCompaction3D(struct CALCLModel3D * calclmodel3D		//!< Poi
  * after the default argument provided by the library.
  *
  *  */
+DllExport
 void calclSetKernelArgs3D(CALCLkernel * kernel,			//!< Opencl kernel
 		CALCLmem * args,									//!< Array of Opencl buffers that represents kernel additional arguments
 		cl_uint numArgs										//!< Number of Opencl kernel additional arguments
@@ -422,6 +428,7 @@ void calclSetKernelArgs3D(CALCLkernel * kernel,			//!< Opencl kernel
  * to stop the simulation.
  *
  *  */
+DllExport
 void calclAddStopConditionFunc3D(struct CALCLModel3D * calclmodel3D,		//!< Pointer to a struct CALCLModel3D
 		CALCLkernel * kernel										//!< Opencl kernel
 		);
@@ -432,6 +439,7 @@ void calclAddStopConditionFunc3D(struct CALCLModel3D * calclmodel3D,		//!< Point
  * at the beginning of the simulation
  *
  *  */
+DllExport
 void calclAddInitFunc3D(struct CALCLModel3D * calclmodel3D, 		//!< Pointer to a struct CALCLModel3D
 		CALCLkernel * kernel										//!< Opencl kernel
 		);
@@ -442,6 +450,7 @@ void calclAddInitFunc3D(struct CALCLModel3D * calclmodel3D, 		//!< Pointer to a 
  * each time the function calclSingleStep3D is called.
  *
  *  */
+DllExport
 void calclAddSteeringFunc3D(struct CALCLModel3D * calclmodel3D,			//!< Pointer to a struct CALCLModel3D
 		CALCLkernel * kernel										//!< Opencl kernel
 		);
@@ -452,6 +461,7 @@ void calclAddSteeringFunc3D(struct CALCLModel3D * calclmodel3D,			//!< Pointer t
  *	could decrease the performance because of the transfer of data between host and GPU.
  *
  *  */
+DllExport
 void calclBackToHostFunc3D(struct CALCLModel3D* calclmodel3D,		//!< Pointer to a struct CALCLModel3D
 		void (*cl_update_substates)(struct CALModel3D*), 				//!< Callback function executed each callbackSteps steps
 		int callbackSteps												//!< Define how many steps must be executed before call the callback functions
@@ -464,11 +474,13 @@ void calclBackToHostFunc3D(struct CALCLModel3D* calclmodel3D,		//!< Pointer to a
  *	is executed each time the function calclSingleStep3D is called.
  *
  *  */
+DllExport
 void calclAddElementaryProcess3D(struct CALCLModel3D* calclmodel3D, 		//!< Pointer to a struct CALCLModel3D
 		CALCLkernel * kernel											//!< Pointer to Opencl kernel
 		);
 
 /*! \brief Deallcate a struct CALCLModel3D instance */
+DllExport
 void calclFinalize3D(struct CALCLModel3D * calclmodel3D			//!< Pointer to a struct CALCLModel3D
 		);
 
@@ -478,6 +490,7 @@ void calclFinalize3D(struct CALCLModel3D * calclmodel3D			//!< Pointer to a stru
  *	is compiled using library source files and user defined source files.
  *
  *  */
+DllExport
 CALCLprogram calclLoadProgram3D(CALCLcontext context, 		//!< Opencl context
 		CALCLdevice device, 									//!< Opencl device
 		char* path_user_kernel,									//!< Kernel source files path
@@ -485,6 +498,7 @@ CALCLprogram calclLoadProgram3D(CALCLcontext context, 		//!< Opencl context
 		);
 
 /*! \brief Set a kernel argument   */
+DllExport
 int calclSetKernelArg3D(CALCLkernel kernel,			//!< Opencl kernel
 			cl_uint arg_index,			//!< Index argument
 			size_t arg_size,			//!< Size argument
@@ -492,10 +506,12 @@ int calclSetKernelArg3D(CALCLkernel kernel,			//!< Opencl kernel
 			);
 
 /*! \brief Copy all the substates device memory to host memory   */
+DllExport
 void calclGetSubstatesDeviceToHost3D(struct CALCLModel3D* calclmodel3D //!< Pointer to a struct CALCLModel3D
 			);
 
 /*! \brief Set reduction arguments to Opencl kernel   */
+DllExport
 void calclSetReductionParameters3D(struct CALCLModel3D* calclmodel3D,		//!< Pointer to a struct CALCLModel3D
 		CALCLkernel * kernel		//!< Pointer to Opencl kernel
 		);

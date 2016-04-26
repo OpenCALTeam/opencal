@@ -20,7 +20,7 @@
  * License along with OpenCAL. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "OpenCAL-CL/OpenCL_Utility.h"
+#include <OpenCAL-CL/clUtility.h>
 
 // PRIVATE FUNCTIONS
 /*! \brief Allocates and initializes available Opencl platforms */

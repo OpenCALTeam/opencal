@@ -34,7 +34,8 @@
 
 #include <OpenCAL/cal2D.h>
 #include "math.h"
-#include "OpenCL_Utility.h"
+#include <OpenCAL-CL/clUtility.h>
+#include <OpenCAL-CL/dllexport.h>
 
 #ifdef _WIN32
 #define ROOT_DIR ".."
@@ -373,6 +374,7 @@ struct CALCLModel2D {
  * Allocate, initialize and return a pointer to a struct CALCLModel2D. Opencl buffers are initialized using data from a CALModel2D instance.
  * Moreover, the function receive an Opencl program used to initialize library kernels.
  */
+DllExport
 struct CALCLModel2D * calclCADef2D(struct CALModel2D *host_CA,		//!< Pointer to a CALModel2D
 		CALCLcontext context,										//!< Opencl context
 		CALCLprogram program,										//!< Opencl program containing library source and user defined source
@@ -380,18 +382,21 @@ struct CALCLModel2D * calclCADef2D(struct CALModel2D *host_CA,		//!< Pointer to 
 		);
 
 /*! \brief Main simulation cycle. It can become a loop if maxStep == CALCL_RUN_LOOP */
+DllExport
 void calclRun2D(struct CALCLModel2D* calclmodel2D, 		//!< Pointer to a struct CALCLModel2D
 		unsigned int initialStep,				//!< Initial simulation step
 		unsigned maxStep						//!< Maximum number of CA steps. Simulation can become a loop if maxStep == CALCL_RUN_LOOP
 		);
 
 /*! \brief A single step of CA. It executes the transition function, the steering and check the stop condition */
+DllExport
 CALbyte calclSingleStep2D(struct CALCLModel2D* calclmodel2D,		//!< Pointer to a struct CALCLModel2D
 		size_t * dimSize,							//!< Array of size_t containing the number of threads for each used Opencl dimension (CALCL_NO_OPT 2 dimensions, CALCL_OPT_ACTIVE_CELL 1 dimension)
 		int dimNum											//!< Number of Opencl dimensions (CALCL_NO_OPT 2 dimensions, CALCL_OPT_ACTIVE_CELL 1 dimension)
 		);
 
 /*! \brief Execute an Opencl kernel */
+DllExport
 void calclKernelCall2D(struct CALCLModel2D* calclmodel2D,		//!< Pointer to a struct CALCLModel2D
 		CALCLkernel ker,								//!< Opencl kernel
 		int dimNum,										//!< Number of Opencl dimensions (CALCL_NO_OPT 2 dimensions, CALCL_OPT_ACTIVE_CELL 1 dimension)
@@ -400,6 +405,7 @@ void calclKernelCall2D(struct CALCLModel2D* calclmodel2D,		//!< Pointer to a str
 		);
 
 /*! \brief Execute stream compaction kernels to compact and order CA active cells */
+DllExport
 void calclComputeStreamCompaction2D(struct CALCLModel2D * calclmodel2D		//!< Pointer to a struct CALCLModel2D
 		);
 
@@ -409,6 +415,7 @@ void calclComputeStreamCompaction2D(struct CALCLModel2D * calclmodel2D		//!< Poi
  * after the default argument provided by the library.
  *
  *  */
+DllExport
 void calclSetKernelArgs2D(CALCLkernel * kernel,		//!< Pointer to Opencl kernel
 		CALCLmem * args,								//!< Array of Opencl buffers that represents kernel additional arguments
 		cl_uint numArgs									//!< Number of Opencl kernel additional arguments
@@ -421,6 +428,7 @@ void calclSetKernelArgs2D(CALCLkernel * kernel,		//!< Pointer to Opencl kernel
  * to stop the simulation.
  *
  *  */
+DllExport
 void calclAddStopConditionFunc2D(struct CALCLModel2D * calclmodel2D,		//!< Pointer to a struct CALCLModel2D
 		CALCLkernel * kernel										//!< Pointer to Opencl kernel
 		);
@@ -431,6 +439,7 @@ void calclAddStopConditionFunc2D(struct CALCLModel2D * calclmodel2D,		//!< Point
  * at the beginning of the simulation
  *
  *  */
+DllExport
 void calclAddInitFunc2D(struct CALCLModel2D * calclmodel2D,		//!< Pointer to a struct CALCLModel2D
 		CALCLkernel * kernel										//!< Pointer to Opencl kernel
 		);
@@ -441,6 +450,7 @@ void calclAddInitFunc2D(struct CALCLModel2D * calclmodel2D,		//!< Pointer to a s
  * each time the function calclSingleStep2D is called.
  *
  *  */
+DllExport
 void calclAddSteeringFunc2D(struct CALCLModel2D * calclmodel2D,		//!< Pointer to a struct CALCLModel2D
 		CALCLkernel * kernel									//!< Pointer to Opencl kernel
 		);
@@ -451,6 +461,7 @@ void calclAddSteeringFunc2D(struct CALCLModel2D * calclmodel2D,		//!< Pointer to
  *	could decrease the performance because of the transfer of data between host and GPU.
  *
  *  */
+DllExport
 void calclBackToHostFunc2D(struct CALCLModel2D* calclmodel2D,		//!< Pointer to a struct CALCLModel2D
 		void (*cl_update_substates)(struct CALModel2D*),				//!< Callback function executed each callbackSteps steps
 		int callbackSteps												//!< Define how many steps must be executed before call the callback functions
@@ -462,11 +473,13 @@ void calclBackToHostFunc2D(struct CALCLModel2D* calclmodel2D,		//!< Pointer to a
  *	is executed each time the function calclSingleStep2D is called.
  *
  *  */
+DllExport
 void calclAddElementaryProcess2D(struct CALCLModel2D * calclmodel2D,		//!< Pointer to a struct CALCLModel2D
 		CALCLkernel * kernel											//!< Pointer to Opencl kernel
 		);
 
 /*! \brief Deallcate a struct CALCLModel2D instance */
+DllExport
 void calclFinalize2D(struct CALCLModel2D * calclmodel2D	//!< Pointer to a struct CALCLModel2D
 		);
 
@@ -476,6 +489,7 @@ void calclFinalize2D(struct CALCLModel2D * calclmodel2D	//!< Pointer to a struct
  *	is compiled using library source files and user defined source files.
  *
  *  */
+DllExport
 CALCLprogram calclLoadProgram2D(CALCLcontext context,		//!< Opencl context
 		CALCLdevice device,										//!< Opencl device
 		char* path_user_kernel,									//!< Kernel source files path
@@ -483,6 +497,7 @@ CALCLprogram calclLoadProgram2D(CALCLcontext context,		//!< Opencl context
 		);
 
 /*! \brief Set a kernel argument   */
+DllExport
 int calclSetKernelArg2D(CALCLkernel* kernel,			//!< Opencl kernel
 		cl_uint arg_index,			//!< Index argument
 		size_t arg_size,			//!< Size argument
@@ -490,10 +505,12 @@ int calclSetKernelArg2D(CALCLkernel* kernel,			//!< Opencl kernel
 		);
 
 /*! \brief Copy all the substates device memory to host memory   */
+DllExport
 void calclGetSubstatesDeviceToHost2D(struct CALCLModel2D* calclmodel2D //!< Pointer to a CALCLModel2D
 		);
 
 /*! \brief Set reduction arguments to Opencl kernel   */
+DllExport
 void calclSetReductionParameters2D(struct CALCLModel2D* calclmodel2D,//!< Pointer to a CALCLModel2D
 		CALCLkernel * kernel//!< Pointer to Opencl kernel
 		);
