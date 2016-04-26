@@ -1,5 +1,7 @@
 /*
  * Copyright (c) 2016 OpenCALTeam (https://github.com/OpenCALTeam),
+ * Telesio Research Group,
+ * Department of Mathematics and Computer Science,
  * University of Calabria, Italy.
  *
  * This file is part of OpenCAL (Open Computing Abstraction Layer).
