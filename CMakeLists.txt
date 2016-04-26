@@ -3,20 +3,20 @@ cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 cmake_policy(SET CMP0048 NEW)
 
 include(configure.cmake)
-
-project(OpenCAL-ALL 
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
+project(OpenCAL-${OPENCAL_VERSION}
 		VERSION ${OPENCAL_VERSION}
 		LANGUAGES C CXX)
 
 
-if ( ENABLE_SHARED )
-	set( SHAREDORSTATIC SHARED )
-else()
-	set( SHAREDORSTATIC STATIC )
-endif()
+set(INSTALL_ROOT_DIR opencal-${OPENCAL_VERSION})
+set(INSTALL_INCLUDE_DIR  "${INSTALL_ROOT_DIR}/include")
+set(INSTALL_LIB_DIR "${INSTALL_ROOT_DIR}/lib" )
+set(INSTALL_BIN_DIR "${INSTALL_ROOT_DIR}/bin")
+set(INSTALL_DOCS_DIR "${INSTALL_ROOT_DIR}/doc")
+
 
 add_definitions( -DPACKAGE="OPENCAL" -DVERSION="${OPENCAL_VERSION}" )
-
 
 if(BUILD_DOCUMENTATION)
 	find_package(Doxygen)
@@ -51,8 +51,8 @@ if(BUILD_OPENCAL_CL)
 	set(Red         "${Esc}[31m")
 	set(ColourReset "${Esc}[m")
 	set(ColourBold  "${Esc}[1m")
-	get_filename_component(KERNELPATH "${CMAKE_INSTALL_PREFIX}/${INSTALL_SHARE_DIR}/OpenCAL-CL/" ABSOLUTE)
-	MESSAGE(STATUS "${Red}(*AFTER MAKE INSTALL*) PLEASE EXPORT THE FOLLOWING ENVIRONMENT VARIABLE...${ColourReset}")
+	get_filename_component(KERNELPATH "${CMAKE_INSTALL_PREFIX}/${INSTALL_ROOT_DIR}/include/OpenCAL-CL" ABSOLUTE)
+	MESSAGE(STATUS "${Red}AFTER INSTALLATION, PLEASE EXPORT THE FOLLOWING ENVIRONMENT VARIABLE...${ColourReset}")
 	MESSAGE(STATUS "${ColourBold}${Red}export OPENCALCL_PATH=${KERNELPATH}${ColourReset}")
 endif(BUILD_OPENCAL_CL)
 

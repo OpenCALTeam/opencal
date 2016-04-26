@@ -1,13 +1,24 @@
-// (C) Copyright University of Calabria and others.
-// All rights reserved. This program and the accompanying materials
-// are made available under the terms of the GNU Lesser General Public License
-// (LGPL) version 2.1 which accompanies this distribution, and is available at
-// http://www.gnu.org/licenses/lgpl-2.1.html
-//
-// This library is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-// Lesser General Public License for more details.
+/*
+ * Copyright (c) 2016 OpenCALTeam (https://github.com/OpenCALTeam),
+ * Telesio Research Group,
+ * Department of Mathematics and Computer Science,
+ * University of Calabria, Italy.
+ *
+ * This file is part of OpenCAL (Open Computing Abstraction Layer).
+ *
+ * OpenCAL is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of
+ * the License, or (at your option) any later version.
+ *
+ * OpenCAL is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with OpenCAL. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include <OpenCAL-GL/calglCommon.h>
 #include <OpenCAL-GL/calglGlobalSettings.h>
@@ -26,11 +37,11 @@ unsigned int Sleep(unsigned int usecond) {
 
 static struct CALGLGlobalSettings* globalSettings = NULL;
 
-// Light 
-static float pos[] = {0.0f, 10.0f, 0.0f, 1.0f};
+// Light
+static float pos[] = {0.0f, 5.0f, 0.0f, 1.0f};
 static float diff[] = {0.8f, 0.8f, 0.8f};
-static float spec[] = {1.0f, 1.0f, 1.0f};
-static float amb[] =  {0.2f, 0.2f, 0.2f};
+static float spec[] = {0.0f, 0.0f, 0.0f};
+static float amb[] =  {0.4f, 0.4f, 0.4f};
 static float spot[] = {0.1f, 0.1f, 0.1f};
 
 struct CALGLGlobalSettings* calglCreateGlobalSettings(){
@@ -146,7 +157,7 @@ float* calglGetPositionLight(){
 
 float* calglGetDiffuseLight(){
 	return diff;
-} 
+}
 
 float* calglGetSpecularLight(){
 	return spec;
@@ -174,6 +185,3 @@ void calglSetDisplayStep(int step){
 	globalSettings->fixedDisplay = CAL_TRUE;
 	globalSettings->fixedStep = step;
 }
-
-
-

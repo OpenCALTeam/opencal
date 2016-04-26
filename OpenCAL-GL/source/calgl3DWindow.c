@@ -1,13 +1,24 @@
-// (C) Copyright University of Calabria and others.
-// All rights reserved. This program and the accompanying materials
-// are made available under the terms of the GNU Lesser General Public License
-// (LGPL) version 2.1 which accompanies this distribution, and is available at
-// http://www.gnu.org/licenses/lgpl-2.1.html
-//
-// This library is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-// Lesser General Public License for more details.
+/*
+ * Copyright (c) 2016 OpenCALTeam (https://github.com/OpenCALTeam),
+ * Telesio Research Group,
+ * Department of Mathematics and Computer Science,
+ * University of Calabria, Italy.
+ *
+ * This file is part of OpenCAL (Open Computing Abstraction Layer).
+ *
+ * OpenCAL is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of
+ * the License, or (at your option) any later version.
+ *
+ * OpenCAL is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with OpenCAL. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include <math.h>
 #include <OpenCAL-GL/calgl3DWindow.h>
@@ -18,12 +29,12 @@
 #define SEPARATOR_SPACE 5
 #define TRANSLATION_CONSTANT 20
 
-static struct CALWindow3D* window3D = NULL;
+static struct CALGLWindow3D* window3D = NULL;
 // Models data
 static GLint noModels3D = 0;
 static GLint currentModel3D = 0;
 static GLint capacityModels3D = 1;
-static struct CALDrawModel3D** models3D = NULL;
+static struct CALGLDrawModel3D** models3D = NULL;
 // Worlds Properties
 static GLfloat keyboardSensitivity = 0.02f;
 static GLfloat mouseSensitivity = 0.2f;
@@ -42,8 +53,8 @@ static GLfloat fovy = 45.0;
 
 static enum CALGL_LAYOUT_ORIENTATION orientation = CALGL_LAYOUT_ORIENTATION_UNKNOW;
 
-struct CALWindow3D* calglCreateWindow3D(int argc, char** argv, struct CALGLGlobalSettings* globalSettings, struct CALDrawModel3D** models, int size){
-	struct CALWindow3D* window = (struct CALWindow3D*) malloc(sizeof(struct CALWindow3D));
+struct CALGLWindow3D* calglCreateWindow3D(int argc, char** argv, struct CALGLGlobalSettings* globalSettings, struct CALGLDrawModel3D** models, int size){
+	struct CALGLWindow3D* window = (struct CALGLWindow3D*) malloc(sizeof(struct CALGLWindow3D));
 	GLint i = 0;
 
 	window->globalSettings = globalSettings;
@@ -98,7 +109,7 @@ struct CALWindow3D* calglCreateWindow3D(int argc, char** argv, struct CALGLGloba
 	return window;
 }
 
-void calglDestroyWindow3D(struct CALWindow3D* window){
+void calglDestroyWindow3D(struct CALGLWindow3D* window){
 	GLint i = 0;
 
 	if (window){
@@ -176,10 +187,10 @@ void calglSubDisplayWindow3D(void){
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	currentModel3D = glutGetWindow() - 2;
-	
+
 	if(window3D->models[currentModel3D]->modelLight)
 		calglApplyLightParameter(window3D->models[currentModel3D]->modelLight);
-	
+
 	glPushMatrix();	{
 		glTranslatef(xPos[currentModel3D], yPos[currentModel3D], zPos[currentModel3D]);
 
@@ -236,7 +247,7 @@ void calglSubReshapeWindow3D(int w, int h){
 	glEnable(GL_DEPTH_TEST);
 }
 
-void calglCalculatePositionAndDimensionWindow3D(struct CALWindow3D* window){
+void calglCalculatePositionAndDimensionWindow3D(struct CALGLWindow3D* window){
 	GLint noSubWindowX = 0;
 	GLint noSubWindowY = 0;
 	GLint i = 0, j = 0, k = 0;
@@ -289,7 +300,7 @@ void calglMainLoop3D(int argc, char** argv) {
 	calglDestroyWindow3D(window3D);
 }
 
-void calglSetfontWindow3D(struct CALWindow3D* window, char* name, int size){
+void calglSetfontWindow3D(struct CALGLWindow3D* window, char* name, int size){
 	window->font_style = GLUT_BITMAP_HELVETICA_10;
 	if (strcmp(name, "helvetica") == 0) {
 		if (size == 12)
@@ -310,7 +321,7 @@ void calglSetfontWindow3D(struct CALWindow3D* window, char* name, int size){
 	}
 }
 
-void calglDrawStringWindow3D(struct CALWindow3D* window, GLuint x, GLuint y, char* format, ...){
+void calglDrawStringWindow3D(struct CALGLWindow3D* window, GLuint x, GLuint y, char* format, ...){
 	va_list args;
 	char buffer[255], *s;
 
@@ -371,16 +382,15 @@ void calglKeyboardEventWindow3D(unsigned char key, int x, int y){
 	}
 
 	if (key == 'x' || key == 's'){
-		if (window3D->models[0]->calUpdater){
-			window3D->models[0]->calUpdater->active = !window3D->models[0]->calUpdater->active;
+		if (window3D->models[0]->calglRun){
+			window3D->models[0]->calglRun->active = !window3D->models[0]->calglRun->active;
 		}
 	}
 
 	if(key=='r') {
 		for(i = 0; i < window3D->noModels; i++) {
 			xPos[i] = 0.0f;	yPos[i] = 0.0f;	zPos[i] = 0.0f;
-			xRot[i] = 0.0f; yRot[i] = 0.0f; zRot[i] = 0.0f;
-			xRot[i] = 90.0f;
+			xRot[i] = 90.0f; yRot[i] = 0.0f; zRot[i] = 0.0f;
 		}
 	}
 
@@ -403,18 +413,21 @@ void calglMouseWindow3D(int button, int state, int x, int y){
 		leftPressed = CAL_TRUE;
 		old_x = x - window3D->sub_width / 2;
 		old_y = y-window3D->sub_height/2;
-		models3D[glutGetWindow()-2]->moving = CAL_TRUE;
+
+		//models3D[glutGetWindow()-2]->moving = CAL_TRUE;
 	}
 	else if (button == 2) { // Right click
 		rightPressed = CAL_TRUE;
 		oldestY = y-window3D->sub_height/2;
-		models3D[glutGetWindow()-2]->moving = CAL_TRUE;
+
+		//models3D[glutGetWindow()-2]->moving = CAL_TRUE;
 	}
 
 	if (state == GLUT_UP){
 		leftPressed = CAL_FALSE;
 		rightPressed = CAL_FALSE;
-		models3D[glutGetWindow()-2]->moving = CAL_FALSE;
+
+		//models3D[glutGetWindow()-2]->moving = CAL_FALSE;
 	}
 	else {
 		calglRedisplayAllWindow3D();
@@ -458,7 +471,7 @@ void calglMotionMouseWindow3D(int x, int y){
 }
 
 void calglIdleFuncWindow3D(void){
-	if (calglGetGlobalSettings()->fixedDisplay && window3D->models[0]->calUpdater->calRun->step%calglGetGlobalSettings()->fixedStep == 0){
+	if (calglGetGlobalSettings()->fixedDisplay && window3D->models[0]->calglRun->step%calglGetGlobalSettings()->fixedStep == 0){
 		calglRedisplayAllWindow3D();
 	}
 }
@@ -477,9 +490,9 @@ void calglCleanDrawModelList3D(){
 	}
 }
 
-void calglShowModel3D(struct CALDrawModel3D* model){
+void calglShowModel3D(struct CALGLDrawModel3D* model){
 	if (!models3D){
-		models3D = (struct CALDrawModel3D**) malloc(sizeof(struct CALDrawModel3D));
+		models3D = (struct CALGLDrawModel3D**) malloc(sizeof(struct CALGLDrawModel3D));
 	}
 
 	if (noModels3D >= capacityModels3D){
@@ -491,10 +504,10 @@ void calglShowModel3D(struct CALDrawModel3D* model){
 
 void calglIncreaseDrawModel3D(){
 	int i = 0;
-	struct CALDrawModel3D** models = NULL;
+	struct CALGLDrawModel3D** models = NULL;
 
 	capacityModels3D += 3;
-	models = (struct CALDrawModel3D**) malloc(sizeof(struct CALDrawModel3D) * (capacityModels3D));
+	models = (struct CALGLDrawModel3D**) malloc(sizeof(struct CALGLDrawModel3D) * (capacityModels3D));
 
 	for (i = 0; i < (capacityModels3D - 3); i++){
 		models[i] = models3D[i];
@@ -511,14 +524,14 @@ void calglPrintfInfoCommand3D(){
 	system("clear");
 #endif
 	printf("*---------------------  Command  ---------------------*\n");
-	printf("* Point mouse over a sub window                       *\n");
-	printf("* Keep T key down and move mouse -> translate model   *\n");
-	printf("* Use arrows -> translate model						  *\n");
-	printf("* Left click and move mouse -> rotate model           *\n");
-	printf("* Right click and move mouse -> zoom in/out model     *\n");
-	printf("* Press X/S key -> Start/Stop Simulation              *\n");
-	printf("* Press H key -> Toggle on/off Information Bar Draw   *\n");
-	printf("* Press R key -> Reset models positions			      *\n");
+	printf(" Point mouse over a sub window                       \n");
+	printf(" Keep T key down and move mouse -> translate model   \n");
+	printf(" Use arrows -> translate model						  \n");
+	printf(" Left click and move mouse -> rotate model           \n");
+	printf(" Right click and move mouse -> zoom in/out model     \n");
+	printf(" Press X/S key -> Start/Stop Simulation              \n");
+	printf(" Press H key -> Toggle on/off Information Bar Draw   \n");
+	printf(" Press R key -> Reset models positions			      \n");
 	printf("*-----------------------------------------------------*\n");
 }
 

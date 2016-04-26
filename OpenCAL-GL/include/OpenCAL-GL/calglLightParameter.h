@@ -1,13 +1,24 @@
-// (C) Copyright University of Calabria and others.
-// All rights reserved. This program and the accompanying materials
-// are made available under the terms of the GNU Lesser General Public License
-// (LGPL) version 2.1 which accompanies this distribution, and is available at
-// http://www.gnu.org/licenses/lgpl-2.1.html
-//
-// This library is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-// Lesser General Public License for more details.
+/*
+ * Copyright (c) 2016 OpenCALTeam (https://github.com/OpenCALTeam),
+ * Telesio Research Group,
+ * Department of Mathematics and Computer Science,
+ * University of Calabria, Italy.
+ *
+ * This file is part of OpenCAL (Open Computing Abstraction Layer).
+ *
+ * OpenCAL is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of
+ * the License, or (at your option) any later version.
+ *
+ * OpenCAL is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with OpenCAL. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #ifndef calglLightParameter_h
 #define calglLightParameter_h
@@ -17,6 +28,8 @@
 #else
 #include <GL/glut.h>
 #endif
+
+#include <OpenCAL-GL/calglCommon.h>
 
 /*! \brief Structure that contains informations about the light that will be used in the scene.
 	It contains position information.
@@ -38,6 +51,7 @@ struct CALGLLightParameter{
 
 /*! \brief Constructor for create the light model.
 */
+DllExport
 struct CALGLLightParameter* calglCreateLightParameter(
 	GLfloat* lightPosition,		//!< Light position in the scene.
 	GLfloat* ambientLight,		//!< Ambient component.
@@ -46,16 +60,18 @@ struct CALGLLightParameter* calglCreateLightParameter(
 	GLint shininess,			//!< Shininess for the specular component.
 	GLfloat* spotDirection,		//!< Spot direction.
 	GLfloat cutOffAngle			//!< Cut off angle for the spot light.
-	);	
+	);
 
 /*! \brief Destructor for de-allocate memory allocated before.
 */
+DllExport
 void calglDestroyLightParameter(
 	struct CALGLLightParameter* calLightParameter		//!< Pointer to the CALGLLightParameter to destroy.
 	);
 
 /*! \brief Function that replace the precedent model view matrix with the new one.
 */
+DllExport
 void calglApplyLightParameter(
 	struct CALGLLightParameter* calLightParameter		//!< Pointer to the new CALGLLightParameter.
 	);

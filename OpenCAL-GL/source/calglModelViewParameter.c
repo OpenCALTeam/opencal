@@ -1,18 +1,29 @@
-// (C) Copyright University of Calabria and others.
-// All rights reserved. This program and the accompanying materials
-// are made available under the terms of the GNU Lesser General Public License
-// (LGPL) version 2.1 which accompanies this distribution, and is available at
-// http://www.gnu.org/licenses/lgpl-2.1.html
-//
-// This library is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-// Lesser General Public License for more details.
+/*
+ * Copyright (c) 2016 OpenCALTeam (https://github.com/OpenCALTeam),
+ * Telesio Research Group,
+ * Department of Mathematics and Computer Science,
+ * University of Calabria, Italy.
+ *
+ * This file is part of OpenCAL (Open Computing Abstraction Layer).
+ *
+ * OpenCAL is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of
+ * the License, or (at your option) any later version.
+ *
+ * OpenCAL is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with OpenCAL. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include <OpenCAL-GL/calglModelViewParameter.h>
 
-struct CALGLModelViewParameter* calglCreateModelViewParameter(GLfloat xT, GLfloat yT, GLfloat zT, 
-	GLfloat xR, GLfloat yR, GLfloat zR, 
+struct CALGLModelViewParameter* calglCreateModelViewParameter(GLfloat xT, GLfloat yT, GLfloat zT,
+	GLfloat xR, GLfloat yR, GLfloat zR,
 	GLfloat xS, GLfloat yS, GLfloat zS){
 		struct CALGLModelViewParameter* modelView;
 
@@ -33,7 +44,7 @@ struct CALGLModelViewParameter* calglCreateModelViewParameter(GLfloat xT, GLfloa
 		return modelView;
 }
 
-struct CALGLModelViewParameter* calglAutoCreateModelViewParameterFlat2D(struct CALDrawModel2D* calDrawModel){
+struct CALGLModelViewParameter* calglAutoCreateModelViewParameterFlat2D(struct CALGLDrawModel2D* calDrawModel){
 	struct CALGLModelViewParameter* modelView = (struct CALGLModelViewParameter*) malloc(sizeof(struct CALGLModelViewParameter));
 
 	modelView = calglCreateModelViewParameter(-calDrawModel->calModel->columns/2.0f, -calDrawModel->calModel->rows/2.0f, 0,
@@ -42,7 +53,7 @@ struct CALGLModelViewParameter* calglAutoCreateModelViewParameterFlat2D(struct C
 
 	return modelView;
 }
-struct CALGLModelViewParameter* calglAutoCreateModelViewParameterFlat3D(struct CALDrawModel3D* calDrawModel){
+struct CALGLModelViewParameter* calglAutoCreateModelViewParameterFlat3D(struct CALGLDrawModel3D* calDrawModel){
 	struct CALGLModelViewParameter* modelView = (struct CALGLModelViewParameter*) malloc(sizeof(struct CALGLModelViewParameter));
 	int rows = calDrawModel->calModel->rows;
 	int columns = calDrawModel->calModel->columns;
@@ -51,12 +62,12 @@ struct CALGLModelViewParameter* calglAutoCreateModelViewParameterFlat3D(struct C
 	modelView = calglCreateModelViewParameter (
 		0.0f, 0.0f, 0.0f,
 		0, 0, 0,
-		1/(columns/10.0f), -1/(rows/10.0f), 1/(slices/10.0f));
+		1/(columns/5.0f), -1/(rows/5.0f), 1/(slices/5.0f));
 
 
 	return modelView;
 }
-struct CALGLModelViewParameter* calglAutoCreateModelViewParameterSurface2D(struct CALDrawModel2D* calDrawModel){
+struct CALGLModelViewParameter* calglAutoCreateModelViewParameterSurface2D(struct CALGLDrawModel2D* calDrawModel){
 	struct CALGLModelViewParameter* modelView = (struct CALGLModelViewParameter*) malloc(sizeof(struct CALGLModelViewParameter));
 	GLfloat max, min;
 	GLfloat yTranslate = 0.0f;
@@ -94,14 +105,20 @@ struct CALGLModelViewParameter* calglAutoCreateModelViewParameterSurface2D(struc
 		}
 	}
 
+	//modelView = calglCreateModelViewParameter(
+	//	(-calDrawModel->calModel->columns/2.0f) * calglGetGlobalSettings()->cellSize, yTranslate, (-calDrawModel->calModel->rows/2.0f)* calglGetGlobalSettings()->cellSize,
+	//	0,0,0,
+	//	1/(calDrawModel->calModel->columns/10.0f), 1/(heightDiff/10.0f), 1/(calDrawModel->calModel->rows/10.0f));
+
 	modelView = calglCreateModelViewParameter(
 		(-calDrawModel->calModel->columns/2.0f) * calglGetGlobalSettings()->cellSize, yTranslate, (-calDrawModel->calModel->rows/2.0f)* calglGetGlobalSettings()->cellSize,
-		0,0,0,
-		1/(calDrawModel->calModel->columns/10.0f), 1/(heightDiff/10.0f), 1/(calDrawModel->calModel->rows/10.0f));
+		0, 0, 0,
+		1/(calDrawModel->calModel->columns/1.0f), 1/(heightDiff/1.0f), 1/(calDrawModel->calModel->rows/1.0f));
+
 
 	return modelView;
 }
-struct CALGLModelViewParameter* calglAutoCreateModelViewParameterSurface3D(struct CALDrawModel3D* calDrawModel){
+struct CALGLModelViewParameter* calglAutoCreateModelViewParameterSurface3D(struct CALGLDrawModel3D* calDrawModel){
 	struct CALGLModelViewParameter* modelView = (struct CALGLModelViewParameter*) malloc(sizeof(struct CALGLModelViewParameter));
 
 	return modelView;

@@ -1,16 +1,34 @@
-// (C) Copyright University of Calabria and others.
-// All rights reserved. This program and the accompanying materials
-// are made available under the terms of the GNU Lesser General Public License
-// (LGPL) version 2.1 which accompanies this distribution, and is available at
-// http://www.gnu.org/licenses/lgpl-2.1.html
-//
-// This library is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-// Lesser General Public License for more details.
+/*
+ * Copyright (c) 2016 OpenCALTeam (https://github.com/OpenCALTeam),
+ * Telesio Research Group,
+ * Department of Mathematics and Computer Science,
+ * University of Calabria, Italy.
+ *
+ * This file is part of OpenCAL (Open Computing Abstraction Layer).
+ *
+ * OpenCAL is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of
+ * the License, or (at your option) any later version.
+ *
+ * OpenCAL is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with OpenCAL. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #ifndef calglCommon_h
 #define calglCommon_h
+
+#ifdef _MSC_VER
+#define DllExport   __declspec( dllexport )
+#else
+#define DllExport
+#endif
+
 
 /*! \brief Enumeration that specify how the substate must be drawn.
 */
@@ -19,19 +37,18 @@ enum CALGL_TYPE_INFO {
 	CALGL_TYPE_INFO_VERTEX_DATA,	//!< Enumerator used for specify that a node contains vertex data.
 	CALGL_TYPE_INFO_COLOR_DATA,		//!< Enumerator used for specify that a node contains color data.
 	CALGL_TYPE_INFO_NORMAL_DATA,	//!< Enumerator used for specify that a node contains normal data.
-	CALGL_TYPE_INFO_TEXTURE_DATA,	//!< Enumerator used for specify that a node contains texture data.
-	CALGL_TYPE_INFO_STRING_DATA		//!< Enumerator used for specify that a node contains string data.
 };
 
 /*! \brief Enumeration that specify how the type substate must be use.
 */
 enum CALGL_TYPE_INFO_USE {
-	CALGL_TYPE_INFO_USE_DEFAULT = 0,	//!< Enumerator used for specify that a no color must be used on the node.
-	CALGL_TYPE_INFO_USE_CONST_VALUE,	//!< Enumerator used for specify a const color to use on the node.
+	CALGL_TYPE_INFO_USE_NO_COLOR = 0,	//!< Enumerator used for specify that a no color must be used on the node.
+	CALGL_TYPE_INFO_USE_CURRENT_COLOR,	//!< Enumerator used for specify a const color to use on the node.
 	CALGL_TYPE_INFO_USE_GRAY_SCALE,		//!< Enumerator used for specify a gray gradient to use on the node.
 	CALGL_TYPE_INFO_USE_RED_SCALE,		//!< Enumerator used for specify a red gradient to use on the node.
 	CALGL_TYPE_INFO_USE_GREEN_SCALE,	//!< Enumerator used for specify a green gradient to use on the node.
 	CALGL_TYPE_INFO_USE_BLUE_SCALE,		//!< Enumerator used for specify a blu gradient to use on the node.
+	CALGL_TYPE_INFO_USE_RED_YELLOW_SCALE,	//!< Enumerator used for specify a Red and Yellow gradient to use on the node.
 	CALGL_TYPE_INFO_USE_ALL_COLOR		//!< Enumerator used for specify a special color combination to use on the node.
 };
 

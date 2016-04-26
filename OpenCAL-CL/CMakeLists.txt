@@ -1,6 +1,7 @@
 # opencal/OpenCAL-CL/CMakeLists.txt
 cmake_minimum_required(VERSION 3.1 FATAL_ERROR)
 
+set(OPENCAL-CL_LIBRARY_NAME OpenCAL-CL CACHE PATH "Name of the specific version of opencal (OPENCAL CL)")
 # add a target to generate API documentation with Doxygen
 if(BUILD_DOCUMENTATION)
     if(NOT DOXYGEN_FOUND)
@@ -18,22 +19,23 @@ if(BUILD_DOCUMENTATION)
         COMMENT "Generating API documentation with Doxygen for for OpenCAL-CL"
         VERBATIM)
 
-    	install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html DESTINATION share/doc/OpenCAL/OpenCAL-CL)
+    	install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html DESTINATION ${INSTALL_DOCS_DIR}/${OPENCAL-CL_LIBRARY_NAME})
 endif()
 
 
 find_package( OpenCL REQUIRED )
 
 #compile opencl-utils first
-add_subdirectory(OpenCL-Utils)
+#add_subdirectory(OpenCL-Utils)
 
-set (OPENCL-UTILS_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/OpenCL-Utils/include")
+#set (OPENCL-UTILS_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/OpenCL-Utils/include")
 set (OPENCAL_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/OpenCAL/include")
 
 include_directories(
 	${OpenCL_INCLUDE_DIRS}
-	${OPENCL-UTILS_INCLUDE_DIR}
 	${OPENCAL_INCLUDE_DIR}
+	${OPENGL_INCLUDE_DIRS}
+	${GLUT_INCLUDE_DIR}
 )
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib)
@@ -55,7 +57,7 @@ file(GLOB HEADERS
 )
 
 file(GLOB KERNELS_HEADERS
-    "kernel/include/*.h"
+    "kernel/include/OpenCAL-CL/*.h"
 )
 
 file(GLOB KERNELS_SRC
@@ -63,15 +65,24 @@ file(GLOB KERNELS_SRC
     "kernel/source/*.c"
 )
 
-add_library(opencal-cl ${SHAREDORSTATIC} ${SRC})
-install(TARGETS opencal-cl DESTINATION ${INSTALL_LIB_DIR})
-install(FILES ${HEADERS} DESTINATION ${INSTALL_INCLUDE_DIR}/OpenCAL-CL)
-
-install(FILES ${KERNELS_HEADERS} DESTINATION ${INSTALL_SHARE_DIR}/OpenCAL-CL/kernel/include)
-install(FILES ${KERNELS_SRC} DESTINATION ${INSTALL_SHARE_DIR}/OpenCAL-CL/kernel/source)
-
-
-if(${BUILD_EXAMPLES} STREQUAL "ON")
-        add_subdirectory(examples)
-		install(DIRECTORY examples DESTINATION ${INSTALL_EXAMPLE_DIR}/OpenCAL-CL)
+if ( ENABLE_STATIC )
+  add_library(opencal-cl_static STATIC ${SRC})
+  install(TARGETS opencal-cl_static DESTINATION  ${INSTALL_LIB_DIR})
 endif()
+if ( ENABLE_SHARED )
+  add_library(opencal-cl SHARED ${SRC})
+  target_link_libraries(opencal-cl pthread opencal ${OpenCL_LIBRARY})
+  if (MSVC)
+    install(TARGETS opencal-cl
+            ARCHIVE DESTINATION  ${INSTALL_LIB_DIR}
+            RUNTIME DESTINATION  ${INSTALL_BIN_DIR}
+            )
+  else()
+    install(TARGETS opencal-cl DESTINATION  ${INSTALL_LIB_DIR})
+  endif()
+endif()
+
+install(FILES ${HEADERS} DESTINATION ${INSTALL_INCLUDE_DIR}/${OPENCAL-CL_LIBRARY_NAME})
+
+install(FILES ${KERNELS_HEADERS} DESTINATION ${INSTALL_INCLUDE_DIR}/${OPENCAL-CL_LIBRARY_NAME}/kernel/include/${OPENCAL-CL_LIBRARY_NAME})
+install(FILES ${KERNELS_SRC} DESTINATION ${INSTALL_INCLUDE_DIR}/${OPENCAL-CL_LIBRARY_NAME}/kernel/source)

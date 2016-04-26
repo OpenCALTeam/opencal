@@ -1,13 +1,24 @@
-// (C) Copyright University of Calabria and others.
-// All rights reserved. This program and the accompanying materials
-// are made available under the terms of the GNU Lesser General Public License
-// (LGPL) version 2.1 which accompanies this distribution, and is available at
-// http://www.gnu.org/licenses/lgpl-2.1.html
-//
-// This library is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-// Lesser General Public License for more details.
+/*
+ * Copyright (c) 2016 OpenCALTeam (https://github.com/OpenCALTeam),
+ * Telesio Research Group,
+ * Department of Mathematics and Computer Science,
+ * University of Calabria, Italy.
+ *
+ * This file is part of OpenCAL (Open Computing Abstraction Layer).
+ *
+ * OpenCAL is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of
+ * the License, or (at your option) any later version.
+ *
+ * OpenCAL is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with OpenCAL. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #ifndef calglModelViewParameter_h
 #define calglModelViewParameter_h
@@ -21,7 +32,7 @@
 #include <OpenCAL-GL/calgl2D.h>
 #include <OpenCAL-GL/calgl3D.h>
 
-struct CALDrawModel2D;
+struct CALGLDrawModel2D;
 
 /*! \brief Structure that contains informations about the model view matrix.
 	It contains translations information.
@@ -42,6 +53,7 @@ struct CALGLModelViewParameter{
 
 /*! \brief Constructor for create a model view matrix.
 */
+DllExport
 struct CALGLModelViewParameter* calglCreateModelViewParameter(
 	GLfloat xT,		//!< x translations.
 	GLfloat yT,		//!< y translations.
@@ -57,36 +69,42 @@ struct CALGLModelViewParameter* calglCreateModelViewParameter(
 /*! \brief Function that auto-create a model view matrix.
 	This version is designed for 2D cellular automata for discreet drawing.
 */
+DllExport
 struct CALGLModelViewParameter* calglAutoCreateModelViewParameterFlat2D(
-	struct CALDrawModel2D* calDrawModel	//!< Pointer to CALDrawModel.
+	struct CALGLDrawModel2D* calDrawModel	//!< Pointer to CALDrawModel.
 	);
 /*! \brief Function that auto-create a model view matrix.
 	This version is designed for 3D cellular automata for discreet drawing.
 */
+DllExport
 struct CALGLModelViewParameter* calglAutoCreateModelViewParameterFlat3D(
-	struct CALDrawModel3D* calDrawModel	//!< Pointer to CALDrawModel.
+	struct CALGLDrawModel3D* calDrawModel	//!< Pointer to CALDrawModel.
 	);
 /*! \brief Function that auto-create a model view matrix.
 	This version is designed for 2D cellular automata for surface drawing.
 */
+DllExport
 struct CALGLModelViewParameter* calglAutoCreateModelViewParameterSurface2D(
-	struct CALDrawModel2D* calDrawModel	//!< Pointer to CALDrawModel.
+	struct CALGLDrawModel2D* calDrawModel	//!< Pointer to CALDrawModel.
 	);
 /*! \brief Function that auto-create a model view matrix.
 	This version is designed for 3D cellular automata for surface drawing.
 */
+DllExport
 struct CALGLModelViewParameter* calglAutoCreateModelViewParameterSurface3D(
-	struct CALDrawModel3D* calDrawModel	//!< Pointer to CALDrawModel.
+	struct CALGLDrawModel3D* calDrawModel	//!< Pointer to CALDrawModel.
 	);
 
 /*! \brief Destructor for de-allocate memory allocated before.
 */
+DllExport
 void calglDestroyModelViewParameter(
 	struct CALGLModelViewParameter* calModelVieParameter		//!< Pointer to the CALGLModelViewParameter to destroy.
 	);
 
 /*! \brief Function that replace the precedent model view matrix with the new one.
 */
+DllExport
 void calglApplyModelViewParameter(
 	struct CALGLModelViewParameter* calModelVieParameter		//!< Pointer to the new CALGLModelViewParameter.
 	);

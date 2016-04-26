@@ -1,6 +1,8 @@
 # opencal/OpenCAL-GL/CMakeLists.txt
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 
+set(OPENCAL-GL_LIBRARY_NAME OpenCAL-GL CACHE PATH "Name of the specific version of opencal (OPENCAL GL)")
+
 # add a target to generate API documentation with Doxygen
 if(BUILD_DOCUMENTATION)
     if(NOT DOXYGEN_FOUND)
@@ -18,7 +20,7 @@ if(BUILD_DOCUMENTATION)
         COMMENT "Generating API documentation with Doxygen for OPENCAL-GL"
         VERBATIM)
 
-    install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html DESTINATION share/doc)
+    install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html DESTINATION ${INSTALL_DOCS_DIR}/${OPENCAL-GL_LIBRARY_NAME})
 endif()
 
 
@@ -55,11 +57,20 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 
-add_library(opencal-gl ${SHAREDORSTATIC} ${SRC} )
-install(TARGETS opencal-gl DESTINATION  ${INSTALL_LIB_DIR})
-install(FILES ${HEADERS} DESTINATION ${INSTALL_INCLUDE_DIR}/OpenCAL-GL)
-
-if(${BUILD_EXAMPLES} STREQUAL "ON")
-    add_subdirectory(examples)
-	install(DIRECTORY examples DESTINATION ${INSTALL_EXAMPLE_DIR}/OpenCAL-GL)
+if ( ENABLE_STATIC )
+  add_library(opencal-gl_static STATIC ${SRC})
+  install(TARGETS opencal-gl_static DESTINATION  ${INSTALL_LIB_DIR})
 endif()
+if ( ENABLE_SHARED )
+  add_library(opencal-gl SHARED ${SRC})
+  target_link_libraries(opencal-gl pthread opencal)
+  if (MSVC)
+    install(TARGETS opencal-gl
+            ARCHIVE DESTINATION  ${INSTALL_LIB_DIR}
+            RUNTIME DESTINATION  ${INSTALL_BIN_DIR}
+            )
+  else()
+    install(TARGETS opencal-gl DESTINATION  ${INSTALL_LIB_DIR})
+  endif()
+endif()
+install(FILES ${HEADERS} DESTINATION ${INSTALL_INCLUDE_DIR}/${OPENCAL-GL_LIBRARY_NAME})

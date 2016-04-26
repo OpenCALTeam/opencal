@@ -1,13 +1,24 @@
-// (C) Copyright University of Calabria and others.
-// All rights reserved. This program and the accompanying materials
-// are made available under the terms of the GNU Lesser General Public License
-// (LGPL) version 2.1 which accompanies this distribution, and is available at
-// http://www.gnu.org/licenses/lgpl-2.1.html
-//
-// This library is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-// Lesser General Public License for more details.
+/*
+ * Copyright (c) 2016 OpenCALTeam (https://github.com/OpenCALTeam),
+ * Telesio Research Group,
+ * Department of Mathematics and Computer Science,
+ * University of Calabria, Italy.
+ *
+ * This file is part of OpenCAL (Open Computing Abstraction Layer).
+ *
+ * OpenCAL is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of
+ * the License, or (at your option) any later version.
+ *
+ * OpenCAL is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with OpenCAL. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include <math.h>
 #include <OpenCAL-GL/calgl2DWindow.h>
@@ -24,12 +35,12 @@
 #define SEPARATOR_SPACE 5
 #define TRANSLATION_CONSTANT 20
 
-static struct CALWindow2D* window2D = NULL;
+static struct CALGLWindow2D* window2D = NULL;
 // Models data
 static GLint noModels2D = 0;
 static GLint currentModel2D = 0;
 static GLint capacityModels2D = 1;
-static struct CALDrawModel2D** models2D = NULL;
+static struct CALGLDrawModel2D** models2D = NULL;
 // Worlds Properties
 static GLfloat mouseSensitivity = 0.2f;
 static GLfloat keyboardSensitivity = 0.02f;
@@ -49,8 +60,8 @@ static GLfloat fovy = 45.0;
 
 static enum CALGL_LAYOUT_ORIENTATION orientation = CALGL_LAYOUT_ORIENTATION_UNKNOW;
 
-struct CALWindow2D* calglCreateWindow2D(int argc, char** argv, struct CALGLGlobalSettings* globalSettings, struct CALDrawModel2D** models, int size) {
-	struct CALWindow2D* window = (struct CALWindow2D*) malloc(sizeof(struct CALWindow2D));
+struct CALGLWindow2D* calglCreateWindow2D(int argc, char** argv, struct CALGLGlobalSettings* globalSettings, struct CALGLDrawModel2D** models, int size) {
+	struct CALGLWindow2D* window = (struct CALGLWindow2D*) malloc(sizeof(struct CALGLWindow2D));
 	GLint i = 0;
 
 	window->globalSettings = globalSettings;
@@ -106,7 +117,7 @@ struct CALWindow2D* calglCreateWindow2D(int argc, char** argv, struct CALGLGloba
 	return window;
 }
 
-void calglDestroyWindow2D(struct CALWindow2D* window) {
+void calglDestroyWindow2D(struct CALGLWindow2D* window) {
 	GLint i = 0;
 
 	if(window) {
@@ -185,8 +196,8 @@ void calglSubDisplayWindow2D(void) {
 
 	currentModel2D = glutGetWindow()-2;
 
-	if(window2D->models[currentModel2D]->modelLight)
-		calglApplyLightParameter(window2D->models[currentModel2D]->modelLight);
+	//if(window2D->models[currentModel2D]->modelLight)
+	//	calglApplyLightParameter(window2D->models[currentModel2D]->modelLight);
 
 	glPushMatrix();	{
 		glTranslatef(xPos[currentModel2D], yPos[currentModel2D], zPos[currentModel2D]);
@@ -243,7 +254,7 @@ void calglSubReshapeWindow2D(int w, int h) {
 	glEnable(GL_DEPTH_TEST);
 }
 
-void calglCalculatePositionAndDimensionWindow2D(struct CALWindow2D* window) {
+void calglCalculatePositionAndDimensionWindow2D(struct CALGLWindow2D* window) {
 	GLint noSubWindowX = 0;
 	GLint noSubWindowY = 0;
 	GLint i = 0, j = 0, k = 0;
@@ -294,7 +305,7 @@ void calglMainLoop2D(int argc, char** argv) {
 	calglDestroyWindow2D(window2D);
 }
 
-void calglSetfontWindow2D(struct CALWindow2D* window, char* name, int size) {
+void calglSetfontWindow2D(struct CALGLWindow2D* window, char* name, int size) {
 	window->font_style = GLUT_BITMAP_HELVETICA_10;
 	if(strcmp(name, "helvetica")==0) {
 		if(size==12)
@@ -312,7 +323,7 @@ void calglSetfontWindow2D(struct CALWindow2D* window, char* name, int size) {
 	}
 }
 
-void calglDrawStringWindow2D(struct CALWindow2D* window, GLuint x, GLuint y, char* format, ...) {
+void calglDrawStringWindow2D(struct CALGLWindow2D* window, GLuint x, GLuint y, char* format, ...) {
 	va_list args;
 	char buffer[255], *s;
 
@@ -372,16 +383,15 @@ void calglKeyboardEventWindow2D(unsigned char key, int x, int y) {
 	}
 
 	if(key=='x'||key=='s') {
-		if(window2D->models[0]->calUpdater) {
-			window2D->models[0]->calUpdater->active = !window2D->models[0]->calUpdater->active;
+		if(window2D->models[0]->calglRun) {
+			window2D->models[0]->calglRun->active = !window2D->models[0]->calglRun->active;
 		}
 	}
 
 	if(key=='r') {
 		for(i = 0; i<window2D->noModels; i++) {
 			xPos[i] = 0.0f;	yPos[i] = 0.0f;	zPos[i] = 0.0f;
-			xRot[i] = 0.0f; yRot[i] = 0.0f; zRot[i] = 0.0f;
-			xRot[i] = 90.0f;
+			xRot[i] = 90.0f; yRot[i] = 0.0f; zRot[i] = 0.0f;
 		}
 	}
 
@@ -404,19 +414,24 @@ void calglMouseWindow2D(int button, int state, int x, int y) {
 		leftPressed = CAL_TRUE;
 		old_x = x-window2D->sub_width/2;
 		old_y = y-window2D->sub_height/2;
-		models2D[glutGetWindow()-2]->moving = CAL_TRUE;
+
+		//models2D[glutGetWindow()-2]->moving = CAL_TRUE;
 	} else if(button==2) { // Right click
 		rightPressed = CAL_TRUE;
 		oldestY = y-window2D->sub_height/2;
-		models2D[glutGetWindow()-2]->moving = CAL_TRUE;
+
+		//models2D[glutGetWindow()-2]->moving = CAL_TRUE;
 	}
 
 	if(state==GLUT_UP) {
 		leftPressed = CAL_FALSE;
 		rightPressed = CAL_FALSE;
-		models2D[glutGetWindow()-2]->moving = CAL_FALSE;
+
+		//models2D[glutGetWindow()-2]->moving = CAL_FALSE;
 	} else {
 		calglRedisplayAllWindow2D();
+
+		//models2D[glutGetWindow()-2]->moving = CAL_FALSE;
 	}
 }
 
@@ -444,6 +459,8 @@ void calglMotionMouseWindow2D(int x, int y) {
 		window2D->models[glutGetWindow()-2]->modelView->yRotation += rot_x;*/
 
 		calglRedisplayAllWindow2D();
+
+		//models2D[glutGetWindow()-2]->moving = CAL_TRUE;
 	} else if(rightPressed) {
 		y -= window2D->sub_height/2;
 		transY = -(y-oldestY) * mouseSensitivity;
@@ -452,11 +469,16 @@ void calglMotionMouseWindow2D(int x, int y) {
 		zPos[glutGetWindow()-2] += transY;
 
 		calglRedisplayAllWindow2D();
+
+		//models2D[glutGetWindow()-2]->moving = CAL_TRUE;
+	} else {
+
+		//models2D[glutGetWindow()-2]->moving = CAL_FALSE;
 	}
 }
 
 void calglIdleFuncWindow2D(void) {
-	if(calglGetGlobalSettings()->fixedDisplay && window2D->models[0]->calUpdater->calRun->step%calglGetGlobalSettings()->fixedStep==0) {
+	if(calglGetGlobalSettings()->fixedDisplay && window2D->models[0]->calglRun->step%calglGetGlobalSettings()->fixedStep==0) {
 		calglRedisplayAllWindow2D();
 	}
 }
@@ -475,9 +497,9 @@ void calglCleanDrawModelList2D() {
 	}
 }
 
-void calglShowModel2D(struct CALDrawModel2D* model) {
+void calglShowModel2D(struct CALGLDrawModel2D* model) {
 	if(!models2D) {
-		models2D = (struct CALDrawModel2D**) malloc(sizeof(struct CALDrawModel2D));
+		models2D = (struct CALGLDrawModel2D**) malloc(sizeof(struct CALGLDrawModel2D));
 	}
 
 	if(noModels2D>=capacityModels2D) {
@@ -489,10 +511,10 @@ void calglShowModel2D(struct CALDrawModel2D* model) {
 
 void calglIncreaseDrawModel2D() {
 	int i = 0;
-	struct CALDrawModel2D** models = NULL;
+	struct CALGLDrawModel2D** models = NULL;
 
 	capacityModels2D += 3;
-	models = (struct CALDrawModel2D**) malloc(sizeof(struct CALDrawModel2D) * (capacityModels2D));
+	models = (struct CALGLDrawModel2D**) malloc(sizeof(struct CALGLDrawModel2D) * (capacityModels2D));
 
 	for(i = 0; i<(capacityModels2D-3); i++) {
 		models[i] = models2D[i];
@@ -509,14 +531,14 @@ void calglPrintfInfoCommand2D() {
 	system("clear");
 #endif
 	printf("*---------------------  Command  ---------------------*\n");
-	printf("* Point mouse over a sub window                       *\n");
-	printf("* Keep T key down and move mouse -> translate model   *\n");
-	printf("* Use arrows -> translate model						  *\n");
-	printf("* Left click and move mouse -> rotate model           *\n");
-	printf("* Right click and move mouse -> zoom in/out model     *\n");
-	printf("* Press X/S key -> Start/Stop Simulation              *\n");
-	printf("* Press H key -> Toggle on/off Information Bar Draw   *\n");
-	printf("* Press R key -> Reset models positions			      *\n");
+	printf(" Point mouse over a sub window                       \n");
+	printf(" Keep T key down and move mouse -> translate model   \n");
+	printf(" Use arrows -> translate model						  \n");
+	printf(" Left click and move mouse -> rotate model           \n");
+	printf(" Right click and move mouse -> zoom in/out model     \n");
+	printf(" Press X/S key -> Start/Stop Simulation              \n");
+	printf(" Press H key -> Toggle on/off Information Bar Draw   \n");
+	printf(" Press R key -> Reset models positions			      \n");
 	printf("*-----------------------------------------------------*\n");
 }
 

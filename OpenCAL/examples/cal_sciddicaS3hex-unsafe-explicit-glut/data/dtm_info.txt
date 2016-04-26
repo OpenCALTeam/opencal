@@ -1,3 +1,0 @@
-ncols	925
-nrows	767
-apothem	1.25

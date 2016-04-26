@@ -1,22 +1,31 @@
-// (C) Copyright University of Calabria and others.
-// All rights reserved. This program and the accompanying materials
-// are made available under the terms of the GNU Lesser General Public License
-// (LGPL) version 2.1 which accompanies this distribution, and is available at
-// http://www.gnu.org/licenses/lgpl-2.1.html
-//
-// This library is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-// Lesser General Public License for more details.
+/*
+ * Copyright (c) 2016 OpenCALTeam (https://github.com/OpenCALTeam),
+ * Telesio Research Group,
+ * Department of Mathematics and Computer Science,
+ * University of Calabria, Italy.
+ *
+ * This file is part of OpenCAL (Open Computing Abstraction Layer).
+ *
+ * OpenCAL is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of
+ * the License, or (at your option) any later version.
+ *
+ * OpenCAL is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with OpenCAL. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "OpenCL_Utility.h"
 
-CALOpenCL * calclCreateCALOpenCL() {
-	CALOpenCL * calOpenCL = (CALOpenCL*) malloc(sizeof(CALOpenCL));
-	return calOpenCL;
-}
-
-void calclInitializePlatforms(CALOpenCL * opencl) {
+// PRIVATE FUNCTIONS
+/*! \brief Allocates and initializes available Opencl platforms */
+void calclInitializePlatforms(struct CALCLDeviceManager * opencl	//!< Pointer to struct CALCLDeviceManager structure
+		){
 
 	opencl->num_platforms = 0;
 	CALCLint err = clGetPlatformIDs(0, NULL, &opencl->num_platforms);
@@ -26,7 +35,9 @@ void calclInitializePlatforms(CALOpenCL * opencl) {
 	calclHandleError(err);
 }
 
-void calclInitializeDevices(CALOpenCL * opencl) {
+/*! \brief For each available platform allocates and initializes its Opencl devices */
+void calclInitializeDevices(struct CALCLDeviceManager * opencl //!< Pointer to struct CALCLDeviceManager structure
+		){
 	opencl->devices = (CALCLdevice**) malloc(sizeof(CALCLdevice*) * opencl->num_platforms);
 	opencl->num_platforms_devices = (int*) malloc(sizeof(int) * opencl->num_platforms);
 	CALCLuint num_devices;
@@ -41,8 +52,20 @@ void calclInitializeDevices(CALOpenCL * opencl) {
 	}
 }
 
-CALCLcontext calclcreateContext(CALCLdevice * devices, CALCLuint num_devices) {
+// PUBLIC FUNCTIONS
+
+struct CALCLDeviceManager * calclCreateManager() {
+	struct CALCLDeviceManager * calOpenCL = (struct CALCLDeviceManager*) malloc(sizeof(struct CALCLDeviceManager));
+	calclInitializePlatforms(calOpenCL);
+	calclInitializeDevices(calOpenCL);
+	return calOpenCL;
+}
+
+
+
+CALCLcontext calclCreateContext(CALCLdevice * devices) {
 	CALCLint err;
+	CALCLuint num_devices=1;
 	CALCLcontext context = clCreateContext(NULL, num_devices, devices, NULL, NULL, &err);
 	calclHandleError(err);
 	return context;
@@ -63,11 +86,11 @@ CALCLqueue calclCreateCommandQueue(CALCLcontext context, CALCLdevice device) {
 	return out;
 }
 
-CALCLdevice calclGetDevice(CALOpenCL * calOpenCL, int platformIndex, int deviceIndex) {
+CALCLdevice calclGetDevice(struct CALCLDeviceManager * calOpenCL, int platformIndex, int deviceIndex) {
 	return calOpenCL->devices[platformIndex][deviceIndex];
 }
 
-void calclFinalizeCALOpencl(CALOpenCL * opencl) {
+void calclFinalizeManager(struct CALCLDeviceManager * opencl) {
 	free(opencl->platforms);
 	unsigned i = 0;
 	for (i = 0; i < opencl->num_platforms; i++)
@@ -129,7 +152,8 @@ void calclReadFile(char * fileName, char ** programBuffer, size_t * program_size
 		char * errorMessage = (char*) malloc(strlen(error) + strlen(fileName) + 1);
 		strcpy(errorMessage, error);
 		strcat(errorMessage, fileName);
-		strcat(errorMessage, '\0');
+		//strcat(errorMessage, '\0');
+		errorMessage[strlen(error) + strlen(fileName)]='\0';
 		perror(errorMessage);
 		exit(EXIT_FAILURE);
 	}
@@ -375,7 +399,7 @@ CALCLuint calclGetDeviceMaxWorkItemDimensions(CALCLdevice device) {
 
 void calclPrintAllDeviceInfo(CALCLdevice device) {
 
-	printf("--------DEVICE------- \n  Name: %s\n	Vendor: %s\nExtentions: %s \nGlobal Memory: %lu bytes\n MaxDim: %u \n--------------------- \n", calclGetDeviceName(device), calclGetDeviceVendor(device), calclGetDeviceExtensions(device), calclGetDeviceGlobalMemSize(device), calclGetDeviceMaxWorkItemDimensions);
+	printf("--------DEVICE------- \n  Name: %s\n	Vendor: %s\nExtentions: %s \nGlobal Memory: %lu bytes\n MaxDim: %u \n--------------------- \n", calclGetDeviceName(device), calclGetDeviceVendor(device), calclGetDeviceExtensions(device), calclGetDeviceGlobalMemSize(device), calclGetDeviceMaxWorkItemDimensions(device));
 }
 
 void calclHandleError(CALCLint err) {
@@ -385,7 +409,7 @@ void calclHandleError(CALCLint err) {
 	}
 }
 
-void calclPrintAllPlatformAndDevices(CALOpenCL * opencl){
+void calclPrintPlatformsAndDevices(struct CALCLDeviceManager * opencl){
 	unsigned int i;
 	int j;
 	for (i = 0; i < opencl->num_platforms; i++) {
@@ -407,8 +431,8 @@ void calclPrintAllPlatformAndDevices(CALOpenCL * opencl){
 		    }
 }
 
-void calclGetPlatformAndDeviceFromStandardInput(CALOpenCL * opencl,CALCLdevice * device){
-	calclPrintAllPlatformAndDevices(opencl);
+void calclGetPlatformAndDeviceFromStdIn(struct CALCLDeviceManager * opencl,CALCLdevice * device){
+	calclPrintPlatformsAndDevices(opencl);
 	CALCLuint num_platform;
 	CALCLuint num_device;
 	char line[256];
@@ -527,7 +551,19 @@ const char * calclGetErrorString(CALCLint err) {
 	case -63:
 		return "CL_INVALID_GLOBAL_WORK_SIZE";
 	case -101:
-		return "FILE_NOT_FOUND";
+	  return "FILE_NOT_FOUND";
+  case -1000:
+	  return "CL_INVALID_GL_SHAREGROUP_REFERENCE_KHR";
+  case -1001:
+	  return "CL_PLATFORM_NOT_FOUND_KHR";
+  case -1002:
+    return "CL_INVALID_D3D10_DEVICE_KHR";
+  case -1003:
+    return "CL_INVALID_D3D10_RESOURCE_KHR";
+  case -1004:
+    return "CL_D3D10_RESOURCE_ALREADY_ACQUIRED_KHR";
+  case -1005:
+    return "CL_D3D10_RESOURCE_NOT_ACQUIRED_KHR";
 	default:
 		return "Unknown OpenCL error";
 	}

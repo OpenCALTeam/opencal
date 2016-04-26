@@ -1,13 +1,24 @@
-// (C) Copyright University of Calabria and others.
-// All rights reserved. This program and the accompanying materials
-// are made available under the terms of the GNU Lesser General Public License
-// (LGPL) version 2.1 which accompanies this distribution, and is available at
-// http://www.gnu.org/licenses/lgpl-2.1.html
-//
-// This library is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-// Lesser General Public License for more details.
+/*
+ * Copyright (c) 2016 OpenCALTeam (https://github.com/OpenCALTeam),
+ * Telesio Research Group,
+ * Department of Mathematics and Computer Science,
+ * University of Calabria, Italy.
+ *
+ * This file is part of OpenCAL (Open Computing Abstraction Layer).
+ *
+ * OpenCAL is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of
+ * the License, or (at your option) any later version.
+ *
+ * OpenCAL is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with OpenCAL. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include <OpenCAL-GL/calgl3D.h>
 #include <OpenCAL-GL/calgl3DWindow.h>
@@ -18,8 +29,8 @@
 static GLuint componentColor[3] = {0};
 static GLint currentIndex = 0;
 
-struct CALDrawModel3D* calglDefDrawModel3D(enum CALGL_DRAW_MODE mode, const char* name, struct CALModel3D* calModel, struct CALRun3D* calRun) {
-	struct CALDrawModel3D* drawModel = (struct CALDrawModel3D*) malloc(sizeof(struct CALDrawModel3D));
+struct CALGLDrawModel3D* calglDefDrawModel3D(enum CALGL_DRAW_MODE mode, const char* name, struct CALModel3D* calModel, struct CALRun3D* calRun) {
+	struct CALGLDrawModel3D* drawModel = (struct CALGLDrawModel3D*) malloc(sizeof(struct CALGLDrawModel3D));
 
 	drawModel->drawMode = mode;
 	drawModel->name = name;
@@ -45,7 +56,7 @@ struct CALDrawModel3D* calglDefDrawModel3D(enum CALGL_DRAW_MODE mode, const char
 	calglDisplayDrawIBound3D(drawModel, 0, calModel->rows);
 	calglDisplayDrawJBound3D(drawModel, 0, calModel->columns);
 
-	drawModel->calUpdater = calglCreateUpdater3D(calRun);
+	drawModel->calglRun = calglRunDef3D(calRun);
 	drawModel->infoBar = NULL;
 
 	drawModel->moving = CAL_FALSE;
@@ -55,7 +66,45 @@ struct CALDrawModel3D* calglDefDrawModel3D(enum CALGL_DRAW_MODE mode, const char
 	return drawModel;
 }
 
-void calglDestoyDrawModel3D(struct CALDrawModel3D* drawModel) {
+struct CALGLDrawModel3D* calglDefDrawModelCL3D(enum CALGL_DRAW_MODE mode, const char* name, struct CALModel3D* calModel, struct CALGLRun3D* calglRun) {
+	struct CALGLDrawModel3D* drawModel = (struct CALGLDrawModel3D*) malloc(sizeof(struct CALGLDrawModel3D));
+	drawModel->drawMode = mode;
+	drawModel->name = name;
+
+	drawModel->calModel = calModel;
+
+	drawModel->byteModel = NULL;
+	drawModel->intModel = NULL;
+	drawModel->realModel = NULL;
+	drawModel->modelView = NULL;
+	drawModel->modelLight = NULL;
+
+	drawModel->redComponent = 1.0f;
+	drawModel->greenComponent = 1.0f;
+	drawModel->blueComponent = 1.0f;
+	drawModel->alphaComponent = 1.0f;
+
+	drawModel->drawKCells = (GLshort*) malloc(sizeof(GLshort)*calModel->slices);
+	drawModel->drawICells = (GLshort*) malloc(sizeof(GLshort)*calModel->rows);
+	drawModel->drawJCells = (GLshort*) malloc(sizeof(GLshort)*calModel->columns);
+
+	calglDisplayDrawKBound3D(drawModel, 0, calModel->slices);
+	calglDisplayDrawIBound3D(drawModel, 0, calModel->rows);
+	calglDisplayDrawJBound3D(drawModel, 0, calModel->columns);
+
+	//drawModel->calglRun = calglCreateUpdater3D(calRun);
+
+	drawModel->calglRun = calglRun;
+	drawModel->infoBar = NULL;
+
+	drawModel->moving = CAL_FALSE;
+
+	calglShowModel3D(drawModel);
+
+	return drawModel;
+}
+
+void calglDestoyDrawModel3D(struct CALGLDrawModel3D* drawModel) {
 	if(drawModel) {
 		if(drawModel->byteModel)
 			calglDestroyNode3Db(drawModel->byteModel);
@@ -71,13 +120,13 @@ void calglDestoyDrawModel3D(struct CALDrawModel3D* drawModel) {
 			free(drawModel->drawJCells);
 		calglDestroyModelViewParameter(drawModel->modelView);
 		calglDestroyLightParameter(drawModel->modelLight);
-		calglDestroyUpdater3D(drawModel->calUpdater);
+		calglDestroyUpdater3D(drawModel->calglRun);
 		free(drawModel);
 	}
 }
 
 #pragma region AddData
-void calglAddToDrawModel3Db(struct CALDrawModel3D* drawModel, struct CALSubstate3Db* substateFather, struct CALSubstate3Db** substateToAdd, enum CALGL_TYPE_INFO typeInfo, enum CALGL_TYPE_INFO_USE typeInfoUseSubstate, enum CALGL_DATA_TYPE dataType) {
+void calglAdd3Db(struct CALGLDrawModel3D* drawModel, struct CALSubstate3Db* substateFather, struct CALSubstate3Db** substateToAdd, enum CALGL_TYPE_INFO typeInfo, enum CALGL_TYPE_INFO_USE typeInfoUseSubstate, enum CALGL_DATA_TYPE dataType) {
 	struct CALNode3Db* toReturn = NULL;
 	struct CALNode3Db* nodeFather = NULL;
 
@@ -93,14 +142,14 @@ void calglAddToDrawModel3Db(struct CALDrawModel3D* drawModel, struct CALSubstate
 		toReturn = calglAddDataNode3Db(nodeFather, *substateToAdd, typeInfo, typeInfoUseSubstate, dataType);
 	}
 
-	if(typeInfoUseSubstate==CALGL_TYPE_INFO_USE_CONST_VALUE) {
+	if(typeInfoUseSubstate==CALGL_TYPE_INFO_USE_CURRENT_COLOR) {
 		toReturn->redComponent = drawModel->redComponent;
 		toReturn->greenComponent = drawModel->blueComponent;
 		toReturn->blueComponent = drawModel->greenComponent;
 		toReturn->alphaComponent = drawModel->alphaComponent;
 	}
 }
-void calglAddToDrawModel3Di(struct CALDrawModel3D* drawModel, struct CALSubstate3Di* substateFather, struct CALSubstate3Di** substateToAdd, enum CALGL_TYPE_INFO typeInfo, enum CALGL_TYPE_INFO_USE typeInfoUseSubstate, enum CALGL_DATA_TYPE dataType) {
+void calglAdd3Di(struct CALGLDrawModel3D* drawModel, struct CALSubstate3Di* substateFather, struct CALSubstate3Di** substateToAdd, enum CALGL_TYPE_INFO typeInfo, enum CALGL_TYPE_INFO_USE typeInfoUseSubstate, enum CALGL_DATA_TYPE dataType) {
 	struct CALNode3Di* toReturn = NULL;
 	struct CALNode3Di* nodeFather = NULL;
 
@@ -116,14 +165,14 @@ void calglAddToDrawModel3Di(struct CALDrawModel3D* drawModel, struct CALSubstate
 		toReturn = calglAddDataNode3Di(nodeFather, *substateToAdd, typeInfo, typeInfoUseSubstate, dataType);
 	}
 
-	if(typeInfoUseSubstate==CALGL_TYPE_INFO_USE_CONST_VALUE) {
+	if(typeInfoUseSubstate==CALGL_TYPE_INFO_USE_CURRENT_COLOR) {
 		toReturn->redComponent = drawModel->redComponent;
 		toReturn->greenComponent = drawModel->blueComponent;
 		toReturn->blueComponent = drawModel->greenComponent;
 		toReturn->alphaComponent = drawModel->alphaComponent;
 	}
 }
-void calglAddToDrawModel3Dr(struct CALDrawModel3D* drawModel, struct CALSubstate3Dr* substateFather, struct CALSubstate3Dr** substateToAdd, enum CALGL_TYPE_INFO typeInfo, enum CALGL_TYPE_INFO_USE typeInfoUseSubstate, enum CALGL_DATA_TYPE dataType) {
+void calglAdd3Dr(struct CALGLDrawModel3D* drawModel, struct CALSubstate3Dr* substateFather, struct CALSubstate3Dr** substateToAdd, enum CALGL_TYPE_INFO typeInfo, enum CALGL_TYPE_INFO_USE typeInfoUseSubstate, enum CALGL_DATA_TYPE dataType) {
 	struct CALNode3Dr* toReturn = NULL;
 	struct CALNode3Dr* nodeFather = NULL;
 
@@ -139,7 +188,7 @@ void calglAddToDrawModel3Dr(struct CALDrawModel3D* drawModel, struct CALSubstate
 		toReturn = calglAddDataNode3Dr(nodeFather, *substateToAdd, typeInfo, typeInfoUseSubstate, dataType);
 	}
 
-	if(typeInfoUseSubstate==CALGL_TYPE_INFO_USE_CONST_VALUE) {
+	if(typeInfoUseSubstate==CALGL_TYPE_INFO_USE_CURRENT_COLOR) {
 		toReturn->redComponent = drawModel->redComponent;
 		toReturn->greenComponent = drawModel->blueComponent;
 		toReturn->blueComponent = drawModel->greenComponent;
@@ -202,7 +251,7 @@ void calglSearchSubstateDrawModel3Dr(struct CALNode3Dr* currentNode, struct CALS
 }
 #pragma endregion
 
-void calglDisplayModel3D(struct CALDrawModel3D* calDrawModel) {
+void calglDisplayModel3D(struct CALGLDrawModel3D* calDrawModel) {
 	switch(calDrawModel->drawMode) {
 	case CALGL_DRAW_MODE_NO_DRAW:
 		break;
@@ -218,7 +267,7 @@ void calglDisplayModel3D(struct CALDrawModel3D* calDrawModel) {
 }
 
 #pragma region DrawDiscreetModel3D
-void calglDrawDiscreetModel3D(struct CALDrawModel3D* calDrawModel) {
+void calglDrawDiscreetModel3D(struct CALGLDrawModel3D* calDrawModel) {
 	glPushMatrix(); {
 		glPushAttrib(GL_LIGHTING_BIT); {
 			// Apply Light
@@ -289,21 +338,21 @@ void calglDrawDiscreetModel3D(struct CALDrawModel3D* calDrawModel) {
 	}	glPopMatrix();
 }
 
-void calglDrawDiscreetModelDisplayNode3Db(struct CALDrawModel3D* calDrawModel, struct CALNode3Db* calNode) {
+void calglDrawDiscreetModelDisplayNode3Db(struct CALGLDrawModel3D* calDrawModel, struct CALNode3Db* calNode) {
 	int i;
 	calglDrawDiscreetModelDisplayCurrentNode3Db(calDrawModel, calNode);
 	for(i = 1; i<calNode->insertedNode; i++) {
 		calglDrawDiscreetModelDisplayNode3Db(calDrawModel, calNode->nodes[i]);
 	}
 }
-void calglDrawDiscreetModelDisplayNode3Di(struct CALDrawModel3D* calDrawModel, struct CALNode3Di* calNode) {
+void calglDrawDiscreetModelDisplayNode3Di(struct CALGLDrawModel3D* calDrawModel, struct CALNode3Di* calNode) {
 	int i;
 	calglDrawDiscreetModelDisplayCurrentNode3Di(calDrawModel, calNode);
 	for(i = 1; i<calNode->insertedNode; i++) {
 		calglDrawDiscreetModelDisplayNode3Di(calDrawModel, calNode->nodes[i]);
 	}
 }
-void calglDrawDiscreetModelDisplayNode3Dr(struct CALDrawModel3D* calDrawModel, struct CALNode3Dr* calNode) {
+void calglDrawDiscreetModelDisplayNode3Dr(struct CALGLDrawModel3D* calDrawModel, struct CALNode3Dr* calNode) {
 	int i;
 	calglDrawDiscreetModelDisplayCurrentNode3Dr(calDrawModel, calNode);
 	for(i = 1; i<calNode->insertedNode; i++) {
@@ -311,7 +360,7 @@ void calglDrawDiscreetModelDisplayNode3Dr(struct CALDrawModel3D* calDrawModel, s
 	}
 }
 
-void calglDrawDiscreetModelDisplayCurrentNode3Db(struct CALDrawModel3D* calDrawModel, struct CALNode3Db* calNode) {
+void calglDrawDiscreetModelDisplayCurrentNode3Db(struct CALGLDrawModel3D* calDrawModel, struct CALNode3Db* calNode) {
 	int i, j, k;
 	int rows = calDrawModel->calModel->rows;
 	int columns = calDrawModel->calModel->columns;
@@ -373,7 +422,7 @@ void calglDrawDiscreetModelDisplayCurrentNode3Db(struct CALDrawModel3D* calDrawM
 		}
 	} glPopMatrix();
 }
-void calglDrawDiscreetModelDisplayCurrentNode3Di(struct CALDrawModel3D* calDrawModel, struct CALNode3Di* calNode) {
+void calglDrawDiscreetModelDisplayCurrentNode3Di(struct CALGLDrawModel3D* calDrawModel, struct CALNode3Di* calNode) {
 	int i, j, k, x;
 	int rows = calDrawModel->calModel->rows;
 	int columns = calDrawModel->calModel->columns;
@@ -497,7 +546,7 @@ void calglDrawDiscreetModelDisplayCurrentNode3Di(struct CALDrawModel3D* calDrawM
 		}
 	}
 }
-void calglDrawDiscreetModelDisplayCurrentNode3Dr(struct CALDrawModel3D* calDrawModel, struct CALNode3Dr* calNode) {
+void calglDrawDiscreetModelDisplayCurrentNode3Dr(struct CALGLDrawModel3D* calDrawModel, struct CALNode3Dr* calNode) {
 	int i, j, k, x;
 	int rows = calDrawModel->calModel->rows;
 	int columns = calDrawModel->calModel->columns;
@@ -624,7 +673,7 @@ void calglDrawDiscreetModelDisplayCurrentNode3Dr(struct CALDrawModel3D* calDrawM
 #pragma endregion
 
 #pragma region DrawRealModel3D
-void calglDrawRealModel3D(struct CALDrawModel3D* calDrawModel) {
+void calglDrawRealModel3D(struct CALGLDrawModel3D* calDrawModel) {
 	glPushMatrix(); {
 		glPushAttrib(GL_LIGHTING_BIT); {
 			// Apply Light
@@ -646,7 +695,7 @@ void calglDrawRealModel3D(struct CALDrawModel3D* calDrawModel) {
 #pragma endregion
 
 #pragma region ComputeExtremes
-void calglComputeExtremesDrawModel3Db(struct CALDrawModel3D* calDrawModel, struct CALNode3Db* calNode, GLdouble* m, GLdouble* M) {
+void calglComputeExtremesDrawModel3Db(struct CALGLDrawModel3D* calDrawModel, struct CALNode3Db* calNode, GLdouble* m, GLdouble* M) {
 	GLint i = 0, j = 0, k = 0;
 	GLdouble tmp = 0;
 
@@ -677,7 +726,7 @@ void calglComputeExtremesDrawModel3Db(struct CALDrawModel3D* calDrawModel, struc
 		}
 	}
 }
-void calglComputeExtremesDrawModel3Di(struct CALDrawModel3D* calDrawModel, struct CALNode3Di* calNode, GLdouble* m, GLdouble* M) {
+void calglComputeExtremesDrawModel3Di(struct CALGLDrawModel3D* calDrawModel, struct CALNode3Di* calNode, GLdouble* m, GLdouble* M) {
 	GLint i = 0, j = 0, k = 0;
 	GLdouble tmp = 0;
 
@@ -708,7 +757,7 @@ void calglComputeExtremesDrawModel3Di(struct CALDrawModel3D* calDrawModel, struc
 		}
 	}
 }
-void calglComputeExtremesDrawModel3Dr(struct CALDrawModel3D* calDrawModel, struct CALNode3Dr* calNode, GLdouble* m, GLdouble* M) {
+void calglComputeExtremesDrawModel3Dr(struct CALGLDrawModel3D* calDrawModel, struct CALNode3Dr* calNode, GLdouble* m, GLdouble* M) {
 	GLint i = 0, j = 0, k = 0;
 	GLdouble tmp = 0;
 
@@ -742,7 +791,7 @@ void calglComputeExtremesDrawModel3Dr(struct CALDrawModel3D* calDrawModel, struc
 #pragma endregion
 
 #pragma region ComputeExtremesToAll
-void calglComputeExtremesToAll3Db(struct CALDrawModel3D* calDrawModel, struct CALNode3Db* calNode) {
+void calglComputeExtremesToAll3Db(struct CALGLDrawModel3D* calDrawModel, struct CALNode3Db* calNode) {
 	int i;
 	if(calNode!=NULL) {
 		calglComputeExtremesDrawModel3Db(calDrawModel, calNode, &calNode->min, &calNode->max);
@@ -752,7 +801,7 @@ void calglComputeExtremesToAll3Db(struct CALDrawModel3D* calDrawModel, struct CA
 		}
 	}
 }
-void calglComputeExtremesToAll3Di(struct CALDrawModel3D* calDrawModel, struct CALNode3Di* calNode) {
+void calglComputeExtremesToAll3Di(struct CALGLDrawModel3D* calDrawModel, struct CALNode3Di* calNode) {
 	int i;
 	if(calNode!=NULL) {
 		calglComputeExtremesDrawModel3Di(calDrawModel, calNode, &calNode->min, &calNode->max);
@@ -762,7 +811,7 @@ void calglComputeExtremesToAll3Di(struct CALDrawModel3D* calDrawModel, struct CA
 		}
 	}
 }
-void calglComputeExtremesToAll3Dr(struct CALDrawModel3D* calDrawModel, struct CALNode3Dr* calNode) {
+void calglComputeExtremesToAll3Dr(struct CALGLDrawModel3D* calDrawModel, struct CALNode3Dr* calNode) {
 	int i;
 	if(calNode!=NULL) {
 		calglComputeExtremesDrawModel3Dr(calDrawModel, calNode, &calNode->min, &calNode->max);
@@ -775,7 +824,7 @@ void calglComputeExtremesToAll3Dr(struct CALDrawModel3D* calDrawModel, struct CA
 #pragma endregion
 
 #pragma region SetNormalData
-void calglSetNormalData3Db(struct CALDrawModel3D* calDrawModel, struct CALNode3Db* calNode, GLint i, GLint j, GLint k) {
+void calglSetNormalData3Db(struct CALGLDrawModel3D* calDrawModel, struct CALNode3Db* calNode, GLint i, GLint j, GLint k) {
 	GLint t;
 	CALGLVector3 vPoints[3];
 	CALGLVector3 vNormal;
@@ -797,7 +846,7 @@ void calglSetNormalData3Db(struct CALDrawModel3D* calDrawModel, struct CALNode3D
 		}
 	}
 }
-void calglSetNormalData3Di(struct CALDrawModel3D* calDrawModel, struct CALNode3Di* calNode, GLint i, GLint j, GLint k) {
+void calglSetNormalData3Di(struct CALGLDrawModel3D* calDrawModel, struct CALNode3Di* calNode, GLint i, GLint j, GLint k) {
 	GLint t;
 	CALGLVector3 vPoints[3];
 	CALGLVector3 vNormal;
@@ -819,7 +868,7 @@ void calglSetNormalData3Di(struct CALDrawModel3D* calDrawModel, struct CALNode3D
 		}
 	}
 }
-void calglSetNormalData3Dr(struct CALDrawModel3D* calDrawModel, struct CALNode3Dr* calNode, GLint i, GLint j, GLint k) {
+void calglSetNormalData3Dr(struct CALGLDrawModel3D* calDrawModel, struct CALNode3Dr* calNode, GLint i, GLint j, GLint k) {
 	GLint t;
 	CALGLVector3 vPoints[3];
 	CALGLVector3 vNormal;
@@ -844,7 +893,7 @@ void calglSetNormalData3Dr(struct CALDrawModel3D* calDrawModel, struct CALNode3D
 #pragma endregion
 
 #pragma region SetColorData
-GLboolean calglSetColorData3Db(struct CALDrawModel3D* calDrawModel, struct CALNode3Db* calNode, GLint i, GLint j, GLint k) {
+GLboolean calglSetColorData3Db(struct CALGLDrawModel3D* calDrawModel, struct CALNode3Db* calNode, GLint i, GLint j, GLint k) {
 	GLint t = 0;
 	GLboolean entered = CAL_FALSE;
 	GLdouble tmp = 1.0;
@@ -861,9 +910,15 @@ GLboolean calglSetColorData3Db(struct CALDrawModel3D* calDrawModel, struct CALNo
 					break;
 				case CALGL_TYPE_INFO_USE_RED_SCALE:
 					entered = CAL_TRUE;
-					doubleColor[1] = ((tmp-calNode->nodes[t]->min)/(calNode->nodes[t]->max-calNode->nodes[t]->min));
-					doubleColor[0] = 1;
-					doubleColor[2] = 0;
+					doubleColor[0] = (tmp-calNode->nodes[k]->min)/(calNode->nodes[k]->max-calNode->nodes[k]->min);
+					doubleColor[1] = 0.0;
+					doubleColor[2] = 0.0;
+					break;
+				case CALGL_TYPE_INFO_USE_RED_YELLOW_SCALE:
+					entered = CAL_TRUE;
+					doubleColor[1] = (tmp-calNode->nodes[k]->min)/(calNode->nodes[k]->max-calNode->nodes[k]->min);
+					doubleColor[0] = 1.0;
+					doubleColor[2] = 0.0;
 					break;
 				case CALGL_TYPE_INFO_USE_GREEN_SCALE:
 					entered = CAL_TRUE;
@@ -875,7 +930,7 @@ GLboolean calglSetColorData3Db(struct CALDrawModel3D* calDrawModel, struct CALNo
 					doubleColor[2] = ((tmp-calNode->nodes[t]->min)/(calNode->nodes[t]->max-calNode->nodes[t]->min));
 					doubleColor[0] = doubleColor[1] = 0;
 					break;
-				case CALGL_TYPE_INFO_USE_CONST_VALUE:
+				case CALGL_TYPE_INFO_USE_CURRENT_COLOR:
 					entered = CAL_TRUE;
 					doubleColor[0] = calNode->nodes[t]->redComponent;
 					doubleColor[1] = calNode->nodes[t]->greenComponent;
@@ -907,7 +962,7 @@ GLboolean calglSetColorData3Db(struct CALDrawModel3D* calDrawModel, struct CALNo
 
 	return entered;
 }
-GLboolean calglSetColorData3Di(struct CALDrawModel3D* calDrawModel, struct CALNode3Di* calNode, GLint i, GLint j, GLint k) {
+GLboolean calglSetColorData3Di(struct CALGLDrawModel3D* calDrawModel, struct CALNode3Di* calNode, GLint i, GLint j, GLint k) {
 	GLint t = 0;
 	GLboolean entered = CAL_FALSE;
 	GLdouble tmp = 1.0;
@@ -925,7 +980,13 @@ GLboolean calglSetColorData3Di(struct CALDrawModel3D* calDrawModel, struct CALNo
 					break;
 				case CALGL_TYPE_INFO_USE_RED_SCALE:
 					entered = CAL_TRUE;
-					doubleColor[1] = (tmp-calNode->nodes[t]->min)/(calNode->nodes[t]->max-calNode->nodes[t]->min);
+					doubleColor[0] = (tmp-calNode->nodes[k]->min)/(calNode->nodes[k]->max-calNode->nodes[k]->min);
+					doubleColor[1] = 0.0;
+					doubleColor[2] = 0.0;
+					break;
+				case CALGL_TYPE_INFO_USE_RED_YELLOW_SCALE:
+					entered = CAL_TRUE;
+					doubleColor[1] = (tmp-calNode->nodes[k]->min)/(calNode->nodes[k]->max-calNode->nodes[k]->min);
 					doubleColor[0] = 1.0;
 					doubleColor[2] = 0.0;
 					break;
@@ -939,7 +1000,7 @@ GLboolean calglSetColorData3Di(struct CALDrawModel3D* calDrawModel, struct CALNo
 					doubleColor[2] = (tmp-calNode->nodes[t]->min)/(calNode->nodes[t]->max-calNode->nodes[t]->min);
 					doubleColor[0] = doubleColor[1] = 0.0;
 					break;
-				case CALGL_TYPE_INFO_USE_CONST_VALUE:
+				case CALGL_TYPE_INFO_USE_CURRENT_COLOR:
 					entered = CAL_TRUE;
 					doubleColor[0] = calNode->nodes[t]->redComponent;
 					doubleColor[1] = calNode->nodes[t]->greenComponent;
@@ -971,7 +1032,7 @@ GLboolean calglSetColorData3Di(struct CALDrawModel3D* calDrawModel, struct CALNo
 
 	return entered;
 }
-GLboolean calglSetColorData3Dr(struct CALDrawModel3D* calDrawModel, struct CALNode3Dr* calNode, GLint i, GLint j, GLint k) {
+GLboolean calglSetColorData3Dr(struct CALGLDrawModel3D* calDrawModel, struct CALNode3Dr* calNode, GLint i, GLint j, GLint k) {
 	GLint t = 0;
 	GLboolean entered = CAL_FALSE;
 	GLdouble tmp = 1.0;
@@ -989,7 +1050,13 @@ GLboolean calglSetColorData3Dr(struct CALDrawModel3D* calDrawModel, struct CALNo
 					break;
 				case CALGL_TYPE_INFO_USE_RED_SCALE:
 					entered = CAL_TRUE;
-					doubleColor[1] = (tmp-calNode->nodes[t]->min)/(calNode->nodes[t]->max-calNode->nodes[t]->min);
+					doubleColor[0] = (tmp-calNode->nodes[k]->min)/(calNode->nodes[k]->max-calNode->nodes[k]->min);
+					doubleColor[1] = 0.0;
+					doubleColor[2] = 0.0;
+					break;
+				case CALGL_TYPE_INFO_USE_RED_YELLOW_SCALE:
+					entered = CAL_TRUE;
+					doubleColor[1] = (tmp-calNode->nodes[k]->min)/(calNode->nodes[k]->max-calNode->nodes[k]->min);
 					doubleColor[0] = 1.0;
 					doubleColor[2] = 0.0;
 					break;
@@ -1003,7 +1070,7 @@ GLboolean calglSetColorData3Dr(struct CALDrawModel3D* calDrawModel, struct CALNo
 					doubleColor[2] = (tmp-calNode->nodes[t]->min)/(calNode->nodes[t]->max-calNode->nodes[t]->min);
 					doubleColor[0] = doubleColor[1] = 0.0;
 					break;
-				case CALGL_TYPE_INFO_USE_CONST_VALUE:
+				case CALGL_TYPE_INFO_USE_CURRENT_COLOR:
 					entered = CAL_TRUE;
 					doubleColor[0] = calNode->nodes[t]->redComponent;
 					doubleColor[1] = calNode->nodes[t]->greenComponent;
@@ -1037,25 +1104,25 @@ GLboolean calglSetColorData3Dr(struct CALDrawModel3D* calDrawModel, struct CALNo
 }
 #pragma endregion
 
-void calglColor3D(struct CALDrawModel3D* calDrawModel, GLfloat redComponent, GLfloat greenComponent, GLfloat blueComponent, GLfloat alphaComponent) {
+void calglColor3D(struct CALGLDrawModel3D* calDrawModel, GLfloat redComponent, GLfloat greenComponent, GLfloat blueComponent, GLfloat alphaComponent) {
 	calDrawModel->redComponent = redComponent;
 	calDrawModel->greenComponent = greenComponent;
 	calDrawModel->blueComponent = blueComponent;
 	calDrawModel->alphaComponent = alphaComponent;
 }
 
-void calglSetModelViewParameter3D(struct CALDrawModel3D* calDrawModel, struct CALGLModelViewParameter* modelView) {
+void calglSetModelViewParameter3D(struct CALGLDrawModel3D* calDrawModel, struct CALGLModelViewParameter* modelView) {
 	calglDestroyModelViewParameter(calDrawModel->modelView);
 	calDrawModel->modelView = modelView;
 }
 
-void calglSetLightParameter3D(struct CALDrawModel3D* calDrawModel, struct CALGLLightParameter* modelLight) {
+void calglSetLightParameter3D(struct CALGLDrawModel3D* calDrawModel, struct CALGLLightParameter* modelLight) {
 	calglDestroyLightParameter(calDrawModel->modelLight);
 	calDrawModel->modelLight = modelLight;
 }
 
 #pragma region BoundingBox
-void calglDrawBoundingBox3D(struct CALDrawModel3D* calDrawModel) {
+void calglDrawBoundingBox3D(struct CALGLDrawModel3D* calDrawModel) {
 	int x;
 	GLfloat xData[8];
 	GLfloat yData[8];
@@ -1117,34 +1184,34 @@ void calglDrawBoundingBox3D(struct CALDrawModel3D* calDrawModel) {
 #pragma endregion
 
 #pragma region InfoBar
-void calglRelativeInfoBar3Db(struct CALDrawModel3D* calDrawModel, struct CALSubstate3Db* substate, const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, enum CALGL_INFO_BAR_ORIENTATION orientation) {
+void calglRelativeInfoBar3Db(struct CALGLDrawModel3D* calDrawModel, struct CALSubstate3Db* substate, const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, enum CALGL_INFO_BAR_ORIENTATION orientation) {
 	calglDestroyInfoBar(calDrawModel->infoBar);
 	calDrawModel->infoBar = calglCreateRelativeInfoBar3Db(substateName, CALGL_TYPE_INFO_USE_RED_SCALE, calDrawModel, substate, orientation);
 }
-void calglRelativeInfoBar3Di(struct CALDrawModel3D* calDrawModel, struct CALSubstate3Di* substate, const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, enum CALGL_INFO_BAR_ORIENTATION orientation) {
+void calglRelativeInfoBar3Di(struct CALGLDrawModel3D* calDrawModel, struct CALSubstate3Di* substate, const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, enum CALGL_INFO_BAR_ORIENTATION orientation) {
 	calglDestroyInfoBar(calDrawModel->infoBar);
 	calDrawModel->infoBar = calglCreateRelativeInfoBar3Di(substateName, CALGL_TYPE_INFO_USE_RED_SCALE, calDrawModel, substate, orientation);
 }
-void calglRelativeInfoBar3Dr(struct CALDrawModel3D* calDrawModel, struct CALSubstate3Dr* substate, const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, enum CALGL_INFO_BAR_ORIENTATION orientation) {
+void calglRelativeInfoBar3Dr(struct CALGLDrawModel3D* calDrawModel, struct CALSubstate3Dr* substate, const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, enum CALGL_INFO_BAR_ORIENTATION orientation) {
 	calglDestroyInfoBar(calDrawModel->infoBar);
 	calDrawModel->infoBar = calglCreateRelativeInfoBar3Dr(substateName, CALGL_TYPE_INFO_USE_RED_SCALE, calDrawModel, substate, orientation);
 }
-void calglInfoBar3Db(struct CALDrawModel3D* calDrawModel, struct CALSubstate3Db* substate, const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, GLfloat xPosition, GLfloat yPosition, GLint width, GLint height) {
+void calglInfoBar3Db(struct CALGLDrawModel3D* calDrawModel, struct CALSubstate3Db* substate, const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, GLfloat xPosition, GLfloat yPosition, GLint width, GLint height) {
 	calglDestroyInfoBar(calDrawModel->infoBar);
 	calDrawModel->infoBar = calglCreateInfoBar3Db(substateName, infoUse, calDrawModel, substate, xPosition, yPosition, width, height);
 }
-void calglInfoBar3Di(struct CALDrawModel3D* calDrawModel, struct CALSubstate3Di* substate, const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, GLfloat xPosition, GLfloat yPosition, GLint width, GLint height) {
+void calglInfoBar3Di(struct CALGLDrawModel3D* calDrawModel, struct CALSubstate3Di* substate, const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, GLfloat xPosition, GLfloat yPosition, GLint width, GLint height) {
 	calglDestroyInfoBar(calDrawModel->infoBar);
 	calDrawModel->infoBar = calglCreateInfoBar3Di(substateName, infoUse, calDrawModel, substate, xPosition, yPosition, width, height);
 }
-void calglInfoBar3Dr(struct CALDrawModel3D* calDrawModel, struct CALSubstate3Dr* substate, const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, GLfloat xPosition, GLfloat yPosition, GLint width, GLint height) {
+void calglInfoBar3Dr(struct CALGLDrawModel3D* calDrawModel, struct CALSubstate3Dr* substate, const char* substateName, enum CALGL_TYPE_INFO_USE infoUse, GLfloat xPosition, GLfloat yPosition, GLint width, GLint height) {
 	calglDestroyInfoBar(calDrawModel->infoBar);
 	calDrawModel->infoBar = calglCreateInfoBar3Dr(substateName, infoUse, calDrawModel, substate, xPosition, yPosition, width, height);
 }
 #pragma endregion
 
 #pragma region DrawIntervals
-void calglDisplayDrawKBound3D(struct CALDrawModel3D* calDrawModel, GLint min, GLint max) {
+void calglDisplayDrawKBound3D(struct CALGLDrawModel3D* calDrawModel, GLint min, GLint max) {
 	int i = 0;
 
 	if(min < 0||min > max||max>calDrawModel->calModel->slices)
@@ -1154,7 +1221,7 @@ void calglDisplayDrawKBound3D(struct CALDrawModel3D* calDrawModel, GLint min, GL
 		calDrawModel->drawKCells[i] = CAL_TRUE;
 	}
 }
-void calglDisplayDrawIBound3D(struct CALDrawModel3D* calDrawModel, GLint min, GLint max) {
+void calglDisplayDrawIBound3D(struct CALGLDrawModel3D* calDrawModel, GLint min, GLint max) {
 	int i = 0;
 
 	if(min < 0||min > max||max>calDrawModel->calModel->rows)
@@ -1164,7 +1231,7 @@ void calglDisplayDrawIBound3D(struct CALDrawModel3D* calDrawModel, GLint min, GL
 		calDrawModel->drawICells[i] = CAL_TRUE;
 	}
 }
-void calglDisplayDrawJBound3D(struct CALDrawModel3D* calDrawModel, GLint min, GLint max) {
+void calglDisplayDrawJBound3D(struct CALGLDrawModel3D* calDrawModel, GLint min, GLint max) {
 	int i = 0;
 
 	if(min < 0||min > max||max>calDrawModel->calModel->columns)
@@ -1174,7 +1241,7 @@ void calglDisplayDrawJBound3D(struct CALDrawModel3D* calDrawModel, GLint min, GL
 		calDrawModel->drawJCells[i] = CAL_TRUE;
 	}
 }
-void calglHideDrawKBound3D(struct CALDrawModel3D* calDrawModel, GLint min, GLint max) {
+void calglHideDrawKBound3D(struct CALGLDrawModel3D* calDrawModel, GLint min, GLint max) {
 	int i = 0;
 
 	if(min < 0||min > max||max>calDrawModel->calModel->slices)
@@ -1184,7 +1251,7 @@ void calglHideDrawKBound3D(struct CALDrawModel3D* calDrawModel, GLint min, GLint
 		calDrawModel->drawKCells[i] = CAL_FALSE;
 	}
 }
-void calglHideDrawIBound3D(struct CALDrawModel3D* calDrawModel, GLint min, GLint max) {
+void calglHideDrawIBound3D(struct CALGLDrawModel3D* calDrawModel, GLint min, GLint max) {
 	int i = 0;
 
 	if(min < 0||min > max||max>calDrawModel->calModel->rows)
@@ -1194,7 +1261,7 @@ void calglHideDrawIBound3D(struct CALDrawModel3D* calDrawModel, GLint min, GLint
 		calDrawModel->drawICells[i] = CAL_FALSE;
 	}
 }
-void calglHideDrawJBound3D(struct CALDrawModel3D* calDrawModel, GLint min, GLint max) {
+void calglHideDrawJBound3D(struct CALGLDrawModel3D* calDrawModel, GLint min, GLint max) {
 	int i = 0;
 
 	if(min < 0||min > max||max>calDrawModel->calModel->columns)
