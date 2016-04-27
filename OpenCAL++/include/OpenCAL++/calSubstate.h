@@ -9,7 +9,7 @@
 #include <OpenCAL++/calBuffer.h>
 #include<OpenCAL++/calNeighborPool.h>
 #include <OpenCAL++/calActiveCells.h>
-#include <OpenCAL++/calConverterIO.h>
+#include <OpenCAL++/calManagerIO.h>
 
 namespace opencal {
 
@@ -17,17 +17,17 @@ namespace opencal {
     class CALSubstateWrapper {
 
     public:
-        typedef CALConverterIO<DIMENSION , COORDINATE_TYPE> CALCONVERTERIO_type;
-        typedef CALConverterIO<DIMENSION , COORDINATE_TYPE>& CALCONVERTERIO_reference;
-        typedef CALConverterIO<DIMENSION , COORDINATE_TYPE>* CALCONVERTERIO_pointer;
+//        typedef CALConverterIO<DIMENSION , COORDINATE_TYPE> CALCONVERTERIO_type;
+//        typedef CALConverterIO<DIMENSION , COORDINATE_TYPE>& CALCONVERTERIO_reference;
+//        typedef CALConverterIO<DIMENSION , COORDINATE_TYPE>* CALCONVERTERIO_pointer;
 
         virtual ~ CALSubstateWrapper() { }
 
         virtual void update(opencal::CALActiveCells<DIMENSION, COORDINATE_TYPE> *activeCells) = 0;
 
-        virtual void saveSubstate(CALCONVERTERIO_pointer calConverterInputOutput, char *path) = 0;
+//        virtual void saveSubstate(CALCONVERTERIO_pointer calConverterInputOutput, char *path) = 0;
 
-        virtual void loadSubstate(CALCONVERTERIO_pointer calConverterInputOutput, char *path) = 0;
+//        virtual void loadSubstate(CALCONVERTERIO_pointer calConverterInputOutput, char *path) = 0;
     };
 
     template<class PAYLOAD, uint DIMENSION, typename COORDINATE_TYPE = uint>
@@ -43,7 +43,7 @@ namespace opencal {
         typedef CALActiveCells<DIMENSION , COORDINATE_TYPE>& CALACTIVECELLS_reference;
         typedef CALActiveCells<DIMENSION , COORDINATE_TYPE>* CALACTIVECELLS_pointer;
 
-        typedef CALConverterIO<DIMENSION , COORDINATE_TYPE>* CALCONVERTERIO_pointer;
+        typedef CALManagerIO<DIMENSION , COORDINATE_TYPE>* CALCONVERTERIO_pointer;
 
 
     private:
@@ -115,16 +115,18 @@ namespace opencal {
             }
         }
 
-        virtual void saveSubstate(CALCONVERTERIO_pointer calConverterInputOutput, char *path)
+        template <class CALCONVERTER>
+        void saveSubstate(CALCONVERTER* calConverterInputOutput, char *path)
         {
-//            this->current->template saveBuffer<CALConverterIO<DIMENSION , COORDINATE_TYPE> >(this->coordinates,calConverterInputOutput, path);
+            this->current->template saveBuffer<CALCONVERTER>(this->coordinates,calConverterInputOutput, path);
         }
 
-        virtual void loadSubstate(CALCONVERTERIO_pointer calConverterInputOutput, char *path)
+        template <class CALCONVERTER>
+        void loadSubstate(CALCONVERTER* calConverterInputOutput, char *path)
         {
 
             delete current;
-//            this->current = new BUFFER_TYPE (this->coordinates, path, calConverterInputOutput);
+            this->current = new BUFFER_TYPE (this->coordinates, path, calConverterInputOutput);
             if (this->next)
                 *next = *current;
         }
