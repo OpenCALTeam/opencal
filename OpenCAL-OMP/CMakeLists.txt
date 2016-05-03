@@ -3,7 +3,6 @@ cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 
 set(OPENCAL-OMP_LIBRARY_NAME OpenCAL-OMP CACHE PATH "Name of the specific version of opencal (OMP)")
 
-
 # add a target to generate API documentation with Doxygen
 if(BUILD_DOCUMENTATION)
     if(NOT DOXYGEN_FOUND)
@@ -20,7 +19,6 @@ if(BUILD_DOCUMENTATION)
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
         COMMENT "Generating API documentation with Doxygen for for OpenCAL-OMP"
         VERBATIM)
-
     install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html DESTINATION ${INSTALL_DOCS_DIR}/${OPENCAL-OMP_LIBRARY_NAME})
 endif()
 
@@ -34,31 +32,21 @@ IF(BUILD_OPENCAL_OMP_PARALLEL)
 	ENDIF()
 ENDIF()
 
-
-
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib)
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY lib)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY lib)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY bin)
 
 link_directories(${CMAKE_CURRENT_SOURCE_DIR}/source)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
-
-file(GLOB SRC
-    "include/*.h"
-     "include/OpenCAL-OMP/*.h"
-    "source/*.c"
-)
-file(GLOB HEADERS
-    "include/*.h"
-    "include/OpenCAL-OMP/*.h"
-)
+file(GLOB SRC "source/*.c")
+file(GLOB HEADERS "include/OpenCAL-OMP/*.h")
 
 if ( ENABLE_STATIC )
-  add_library(opencal-omp_static STATIC ${SRC})
+  add_library(opencal-omp_static STATIC ${SRC} ${HEADERS})
   install(TARGETS opencal-omp_static DESTINATION  ${INSTALL_LIB_DIR})
 endif()
 if ( ENABLE_SHARED )
-  add_library(opencal-omp SHARED ${SRC})
+  add_library(opencal-omp SHARED ${SRC} ${HEADERS})
   if (MSVC)
     install(TARGETS opencal-omp
             ARCHIVE DESTINATION  ${INSTALL_LIB_DIR}

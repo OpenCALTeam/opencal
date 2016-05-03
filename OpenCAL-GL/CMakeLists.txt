@@ -31,38 +31,26 @@ find_package(GLUT REQUIRED)
 set (OPENCAL_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/OpenCAL/include")
 set (OPENCAL-GL_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include")
 
+link_directories(${CMAKE_CURRENT_SOURCE_DIR}/source)
 include_directories(
 	${OPENCAL-GL_INCLUDE_DIR}
 	${OPENCAL_INCLUDE_DIR}
 	${OPENGL_INCLUDE_DIRS}
 	${GLUT_INCLUDE_DIR}
 )
+file(GLOB SRC "source/*.c")
+file(GLOB HEADERS "include/OpenCAL-GL/*.h")
 
-link_directories(
-	${CMAKE_CURRENT_SOURCE_DIR}/source
-)
-
-file(GLOB SRC
-    "include/*.h"
-    "source/*.cpp"
-    "source/*.c"
-)
-
-file(GLOB HEADERS
-    "include/*.h"
-    "include/OpenCAL-GL/*.h"
-)
-
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib)
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY lib)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY lib)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY bin)
 
 if ( ENABLE_STATIC )
-  add_library(opencal-gl_static STATIC ${SRC})
+  add_library(opencal-gl_static STATIC ${SRC} ${HEADERS})
   install(TARGETS opencal-gl_static DESTINATION  ${INSTALL_LIB_DIR})
 endif()
 if ( ENABLE_SHARED )
-  add_library(opencal-gl SHARED ${SRC})
+  add_library(opencal-gl SHARED ${SRC} ${HEADERS})
   target_link_libraries(opencal-gl pthread opencal)
   if (MSVC)
     install(TARGETS opencal-gl

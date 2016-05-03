@@ -4,17 +4,24 @@ cmake_policy(SET CMP0048 NEW)
 
 include(configure.cmake)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
+
 project(OpenCAL-${OPENCAL_VERSION}
 		VERSION ${OPENCAL_VERSION}
 		LANGUAGES C CXX)
-
 
 set(INSTALL_ROOT_DIR opencal-${OPENCAL_VERSION})
 set(INSTALL_INCLUDE_DIR  "${INSTALL_ROOT_DIR}/include")
 set(INSTALL_LIB_DIR "${INSTALL_ROOT_DIR}/lib" )
 set(INSTALL_BIN_DIR "${INSTALL_ROOT_DIR}/bin")
 set(INSTALL_DOCS_DIR "${INSTALL_ROOT_DIR}/doc")
-
+if (WIN32)
+	set(CMAKE_INSTALL_PREFIX "C:/libs" CACHE PATH "libs install prefix" FORCE)
+	MESSAGE(STATUS "***********************************************************************")
+	message(STATUS "Installation path: ${CMAKE_INSTALL_PREFIX}")
+	message(STATUS "After installation, please add ${CMAKE_INSTALL_PREFIX}/${INSTALL_BIN_DIR}")
+	message(STATUS "to the PATH environment variable")
+	MESSAGE(STATUS "***********************************************************************")
+endif()
 
 add_definitions( -DPACKAGE="OPENCAL" -DVERSION="${OPENCAL_VERSION}" )
 
@@ -47,15 +54,12 @@ if(BUILD_OPENCAL_TESTS)
 endif(BUILD_OPENCAL_TESTS)
 
 if(BUILD_OPENCAL_CL)
-	string(ASCII 27 Esc)
-	set(Red         "${Esc}[31m")
-	set(ColourReset "${Esc}[m")
-	set(ColourBold  "${Esc}[1m")
 	get_filename_component(KERNELPATH "${CMAKE_INSTALL_PREFIX}/${INSTALL_ROOT_DIR}/include/OpenCAL-CL" ABSOLUTE)
-	MESSAGE(STATUS "${Red}AFTER INSTALLATION, PLEASE EXPORT THE FOLLOWING ENVIRONMENT VARIABLE...${ColourReset}")
-	MESSAGE(STATUS "${ColourBold}${Red}export OPENCALCL_PATH=${KERNELPATH}${ColourReset}")
+	MESSAGE(STATUS "***********************************************************************")
+	MESSAGE(STATUS "After installation, define the OPENCALCL_PATH environment variable as: ")
+	MESSAGE(STATUS "export OPENCALCL_PATH=${KERNELPATH}")
+	MESSAGE(STATUS "***********************************************************************")
 endif(BUILD_OPENCAL_CL)
-
 
 # uninstall target
 configure_file(

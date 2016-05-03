@@ -22,32 +22,21 @@ if(BUILD_DOCUMENTATION)
     	install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html DESTINATION ${INSTALL_DOCS_DIR}/${OPENCAL_LIBRARY_NAME})
 endif()
 
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib)
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
-
-set( OPENCAL_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/include )
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY lib)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY lib)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY bin)
 
 link_directories(${CMAKE_CURRENT_SOURCE_DIR}/source)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
+file(GLOB SRC "source/*.c")
+file(GLOB HEADERS "include/OpenCAL/*.h")
 
-file(GLOB SRC
-    "include/*.h"
-    "source/*.c"
-)
-
-file(GLOB HEADERS
-    "include/*.h"
-    "include/OpenCAL/*.h"
-)
-
-#add_library(opencal ${SHAREDORSTATIC} ${SRC})
 if ( ENABLE_STATIC )
-  add_library(opencal_static STATIC ${SRC})
+  add_library(opencal_static STATIC ${SRC} ${HEADERS})
   install(TARGETS opencal_static DESTINATION  ${INSTALL_LIB_DIR})
 endif()
 if ( ENABLE_SHARED )
-  add_library(opencal SHARED ${SRC})
+  add_library(opencal SHARED ${SRC} ${HEADERS})
   if (MSVC)
     install(TARGETS opencal
             ARCHIVE DESTINATION  ${INSTALL_LIB_DIR}

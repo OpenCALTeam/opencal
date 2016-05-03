@@ -27,52 +27,36 @@ find_package(OpenCL REQUIRED)
 find_package(OpenGL REQUIRED)
 find_package(GLUT REQUIRED)
 
-#compile opencl-utils first
-#add_subdirectory(OpenCL-Utils)
-
-#set (OPENCL-UTILS_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/OpenCL-Utils/include")
 set (OPENCAL_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/OpenCAL/include")
 
+link_directories(${CMAKE_CURRENT_SOURCE_DIR}/source)
 include_directories(
-	${OpenCL_INCLUDE_DIRS}
+  ${CMAKE_CURRENT_SOURCE_DIR}/include
 	${OPENCAL_INCLUDE_DIR}
+  ${OpenCL_INCLUDE_DIRS}
 	${OPENGL_INCLUDE_DIRS}
 	${GLUT_INCLUDE_DIR}
 )
 
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib)
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
-link_directories(${CMAKE_CURRENT_SOURCE_DIR}/source)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY lib)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY lib)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY bin)
 
 
-file(GLOB SRC
-    "include/*.h"
-    "source/*.cpp"
-    "source/*.c"
-)
-
-file(GLOB HEADERS
-    "include/*.h"
-    "include/OpenCAL-CL/*.h"
-)
-
-file(GLOB KERNELS_HEADERS
-    "kernel/include/OpenCAL-CL/*.h"
-)
-
+file(GLOB SRC "source/*.c")
+file(GLOB HEADERS "include/OpenCAL-CL/*.h")
+file(GLOB KERNELS_HEADERS "kernel/include/OpenCAL-CL/*.h")
 file(GLOB KERNELS_SRC
-    "kernel/source/*.cl"
-    "kernel/source/*.c"
+  "kernel/source/*.cl"
+  "kernel/source/*.c*"
 )
 
 if ( ENABLE_STATIC )
-  add_library(opencal-cl_static STATIC ${SRC})
+  add_library(opencal-cl_static STATIC ${SRC} ${HEADERS})
   install(TARGETS opencal-cl_static DESTINATION  ${INSTALL_LIB_DIR})
 endif()
 if ( ENABLE_SHARED )
-  add_library(opencal-cl SHARED ${SRC})
+  add_library(opencal-cl SHARED ${SRC} ${HEADERS})
   target_link_libraries(opencal-cl pthread opencal ${OpenCL_LIBRARY})
   if (MSVC)
     install(TARGETS opencal-cl
