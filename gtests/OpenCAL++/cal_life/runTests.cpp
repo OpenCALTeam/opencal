@@ -25,7 +25,7 @@ public:
         Q = _Q;
     }
 
-    void run(opencal::CALModel<2 , opencal::CALMooreNeighborhood , uint>* calModel, std::array<uint,2> indexes)
+    void run(opencal::CALModel<2 , opencal::CALMooreNeighborhood , uint>* calModel, std::array<uint,2> & indexes)
     {
 
         int sum = 0, n;
