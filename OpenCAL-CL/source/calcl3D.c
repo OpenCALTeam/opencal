@@ -2090,15 +2090,15 @@ CALCLprogram calclLoadProgram3D(CALCLcontext context, CALCLdevice device, char* 
 	int num_files;
 	char** filesNames;
 	char** paths = (char**) malloc(sizeof(char*) * 2);
-	char* tmp2 = (char*) malloc(sizeof(char) * (strlen(pathOpenCALCL) + strlen(KERNEL_SOURCE_DIR)));
+	char* tmp2 = (char*) malloc(sizeof(char) * (strlen(pathOpenCALCL) + strlen(KERNEL_SOURCE_DIR))+1);
 	strcpy(tmp2,pathOpenCALCL );
 	strcat(tmp2,KERNEL_SOURCE_DIR );
-
+	
 	paths[0] = path_user_kernel;
 	paths[1] = tmp2;
 
 	calclGetDirFiles(paths, 2, &filesNames, &num_files);
-
+	
 	CALCLprogram program = calclGetProgramFromFiles(filesNames, num_files, tmp, context, &device, 1);
 	int i;
 	for (i = 0; i < num_files; i++) {
