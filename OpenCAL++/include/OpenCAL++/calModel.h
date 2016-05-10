@@ -100,8 +100,7 @@ namespace opencal {
                      NEIGHBORHOOD_pointer _calNeighborhood, //!< Class that identifies the type of neighbourhood relation to be used.
                      enum opencal::calCommon::CALSpaceBoundaryCondition _CAL_TOROIDALITY, //!< Enumerator that identifies the type of cellular space: toroidal or non-toroidal.
                      enum opencal::calCommon::CALOptimization _CAL_OPTIMIZATION //!< Enumerator used for specifying the active cells optimization or no optimization.
-            ): coordinates(_coordinates) , CAL_TOROIDALITY(_CAL_TOROIDALITY) , CAL_OPTIMIZATION(_CAL_OPTIMIZATION) ,
-                elementary_processes(1,nullptr)
+            ): coordinates(_coordinates) , CAL_TOROIDALITY(_CAL_TOROIDALITY) , CAL_OPTIMIZATION(_CAL_OPTIMIZATION)
             {
 
                 this->size = opencal::calCommon::multiplier<DIMENSION,uint>(coordinates,0);
