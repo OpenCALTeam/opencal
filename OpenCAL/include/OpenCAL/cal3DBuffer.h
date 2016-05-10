@@ -13,6 +13,7 @@
 #define cal3DBuffer_h
 
 #include <OpenCAL/calCommon.h>
+#include <OpenCAL/cal3D.h>
 
 
 /*! \brief Allocates a byte linearized 3D buffer.
@@ -59,15 +60,15 @@ void calCopyBuffer3Dr(CALreal* M_src, CALreal* M_dest, int rows, int columns, in
 
 /*! \brief Active cells byte linearized 3D buffer copy function.
 */
-void calCopyActiveCellsBuffer3Db(CALbyte* M_src, CALbyte* M_dest, int rows, int columns, int slices, struct CALCell3D* active_cells, int sizeof_active_cells);
+void calCopyBufferActiveCells3Db(CALbyte* M_src, CALbyte* M_dest, struct CALModel3D* ca3D);
 
 /*! \brief Active cells int linearized 3D buffer copy function.
 */
-void calCopyActiveCellsBuffer3Di(CALint* M_src, CALint* M_dest, int rows, int columns, int slices, struct CALCell3D* active_cells, int sizeof_active_cells);
+void calCopyBufferActiveCells3Di(CALint* M_src, CALint* M_dest, struct CALModel3D* ca3D);
 
 /*! \brief Active cells real (floating point) linearized 3D buffer copy function.
 */
-void calCopyActiveCellsBuffer3Dr(CALreal* M_src, CALreal* M_dest, int rows, int columns, int slices, struct CALCell3D* active_cells, int sizeof_active_cells);
+void calCopyBufferActiveCells3Dr(CALreal* M_src, CALreal* M_dest, struct CALModel3D* ca3D);
 
 
 /*! \brief Byte linearized 3D buffer copy function.
@@ -98,31 +99,31 @@ void calSubtractBuffer3Dr(CALreal* M_op1, CALreal* M_op2,  CALreal* M_dest, int 
 
 
 
-/*! \brief Sets a byte 3D buffer to a constant value.  
+/*! \brief Sets a byte 3D buffer to a constant value.
 */
 void calSetBuffer3Db(CALbyte* M, int rows, int columns, int slices, CALbyte value);
 
-/*! \brief Sets an int 3D buffer to a constant value.  
+/*! \brief Sets an int 3D buffer to a constant value.
 */
 void calSetBuffer3Di(CALint* M, int rows, int columns, int slices, CALint value);
 
-/*! \brief Sets a real (floating point) 3D buffer to a constant value.  
+/*! \brief Sets a real (floating point) 3D buffer to a constant value.
 */
 void calSetBuffer3Dr(CALreal* M, int rows, int columns, int slices, CALreal value);
 
 
 
-/*! \brief Sets active cells of a byte 3D buffer to a constant value.  
+/*! \brief Sets active cells of a byte 3D buffer to a constant value.
 */
-void calSetActiveCellsBuffer3Db(CALbyte* M, int rows, int columns, int slices, CALbyte value, struct CALCell3D* active_cells, int sizeof_active_cells);
+void calSetActiveCellsBuffer3Db(CALbyte* M, CALbyte value, struct CALModel3D* ca3D);
 
-/*! \brief Sets active cells of an int 3D buffer to a constant value.  
+/*! \brief Sets active cells of an int 3D buffer to a constant value.
 */
-void calSetActiveCellsBuffer3Di(CALint* M, int rows, int columns, int slices, CALint value, struct CALCell3D* active_cells, int sizeof_active_cells);
+void calSetActiveCellsBuffer3Di(CALint* M, CALint value, struct CALModel3D* ca3D);
 
-/*! \brief Sets active cells of a real (floating point) 3D buffer to a constant value.  
+/*! \brief Sets active cells of a real (floating point) 3D buffer to a constant value.
 */
-void calSetActiveCellsBuffer3Dr(CALreal* M, int rows, int columns, int slices, CALreal value, struct CALCell3D* active_cells, int sizeof_active_cells);
+void calSetActiveCellsBuffer3Dr(CALreal* M, CALreal value, struct CALModel3D* ca3D);
 
 
 
