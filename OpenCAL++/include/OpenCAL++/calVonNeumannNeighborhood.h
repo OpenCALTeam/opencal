@@ -11,11 +11,22 @@ template<unsigned int DIMENSION>
 class CALVonNeumannNeighborhood {
 protected:
 static constexpr const int total = 2*DIMENSION+1;
-typedef std::array<uint,DIMENSION> element;
+//int is necessary since neighborhood definition requires negative numbers
+typedef std::array<int,DIMENSION> element;
 
   static std::array<element, total> indices;
 
-   void defineNeighborhood();
+   static void defineNeighborhood(){
+       indices[0] = {0};//central cell
+       //total number of insertions is 2*Dimension+1
+       for (int i = 0; i < DIMENSION; ++i)
+       {
+           indices[2*i+1] = {0};
+           indices[2*i+2] = {0};
+           indices[2*i+1][i] = 1;
+           indices[2*i+2][i] = -1;
+       }
+   }
 
 public:
 
@@ -28,14 +39,15 @@ public:
   }
 };
 
+/*
 template<>
 inline void opencal::CALVonNeumannNeighborhood<2>::defineNeighborhood(){
     CALVonNeumannNeighborhood<2>::indices = { {
-                                                { {1, 2} },
-                                                { { 4, 5} },
-                                                { {1, 2} },
-                                                { {1, 2} },
-                                                { {1, 2} }
+                                                { {0, 0} },
+                                                { { 1, 0} },
+                                                { {-1, 0} },
+                                                { {0, 1} },
+                                                { {0, -1} }
                                             } };
 }
 
@@ -43,16 +55,18 @@ inline void opencal::CALVonNeumannNeighborhood<2>::defineNeighborhood(){
 template<>
 inline void opencal::CALVonNeumannNeighborhood<3>::defineNeighborhood(){
     CALVonNeumannNeighborhood<3>::indices =   { {
-                                                { {1, 2,3} },
-                                                { { 4, 5,3} },
-                                                { {1, 2,3} },
-                                                { {1, 2,3} },
-                                                { {1, 2,3} }
+                                                { {0, 2,3} },
+                                                { {1, 5,3} },
+                                                { {-1, 2,3} },
+                                                { {0, 5,3} },
+                                                { {0, 2,3} },
+                                                { {0, 2,3} },
+                                                { {0, 2,3} }
                                             } };
 
 }
 
-
+*/
 
 
 // static member declaration

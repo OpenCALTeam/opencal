@@ -10,7 +10,7 @@ class CALMooreNeighborhood {
 protected:
 
 static constexpr const int total = calCommon::pow_ct(3, DIMENSION);
- typedef std::array<uint,DIMENSION> element;
+ typedef std::array<int,DIMENSION> element;
   static std::array<element, total> indices;
 
   static void defineNeighborhood() {
