@@ -10,54 +10,12 @@ namespace opencal {
 template<unsigned int DIMENSION>
 class CALVonNeumannNeighborhood {
 protected:
+static constexpr const int total = 2*DIMENSION+1;
+typedef std::array<uint,DIMENSION> element;
 
-  static std::array<uint, DIMENSION> indices;
-  void defineNeighborhood() {
-    int n = calModel->getDimension();
+  static std::array<element, total> indices;
 
-    assert(n == 2 || n == 3);
-
-    if (n == 2) {
-      /*
-       | 1 |
-          ---|---|---
-           2 | 0 | 3
-          ---|---|---
-       | 4 |
-       */
-      int vonNeumannNeighborhoodIndexes[5][2] = { {  0,   0 },
-                                                  { -1,   0 },
-                                                  {  0,  -1 },
-                                                  {  0,   1 },
-                                                  {  1,   0 } };
-
-      for (int i = 0; i < 5; i++) {
-        calModel->addNeighbor(vonNeumannNeighborhoodIndexes[i]);
-      }
-    }
-    else {
-      /*
-           slice -1       slice 0       slice 1
-           (sopra)					  (sotto)
-       |   |         | 1 |         |   |
-          ---|---|---   ---|---|---   ---|---|---
-       | 5 |       2 | 0 | 3       | 6 |
-          ---|---|---   ---|---|---   ---|---|---
-       |   |         | 4 |         |   |
-       */
-      int vonNeumannNeighborhoodIndexes[7][3] = { {  0,   0,   0 },
-                                                  { -1,   0,   0 },
-                                                  {  0,  -1,   0 },
-                                                  {  0,   1,   0 },
-                                                  {  1,   0,   0 },
-                                                  {  0,   0,  -1 },
-                                                  {  0,   0,   1 } };
-
-      for (int i = 0; i < 7; i++) {
-        calModel->addNeighbor(vonNeumannNeighborhoodIndexes[i]);
-      }
-    }
-  }
+   void defineNeighborhood();
 
 public:
 
@@ -70,9 +28,37 @@ public:
   }
 };
 
+template<>
+inline void opencal::CALVonNeumannNeighborhood<2>::defineNeighborhood(){
+    CALVonNeumannNeighborhood<2>::indices = { {
+                                                { {1, 2} },
+                                                { { 4, 5} },
+                                                { {1, 2} },
+                                                { {1, 2} },
+                                                { {1, 2} }
+                                            } };
+}
+
+
+template<>
+inline void opencal::CALVonNeumannNeighborhood<3>::defineNeighborhood(){
+    CALVonNeumannNeighborhood<3>::indices =   { {
+                                                { {1, 2,3} },
+                                                { { 4, 5,3} },
+                                                { {1, 2,3} },
+                                                { {1, 2,3} },
+                                                { {1, 2,3} }
+                                            } };
+
+}
+
+
+
 
 // static member declaration
 template<uint DIMENSION>
-std::array<uint, DIMENSION>opencal::CALVonNeumannNeighborhood<DIMENSION>::indices;
+std::array<typename CALVonNeumannNeighborhood<DIMENSION>::element, CALVonNeumannNeighborhood<DIMENSION>::total>opencal::CALVonNeumannNeighborhood<DIMENSION>::indices;
+
 } // namespace opencal
+
 #endif // OPENCAL_ALL_CALVONNEUMANNNEIGHBORHOOD_H

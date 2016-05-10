@@ -14,4 +14,3 @@ file(GLOB SRC
 link_directories(${PROJECT_SOURCE_DIR}/OpenCAL/lib)
 add_executable(cal-life2D-test ${SRC})
 target_link_libraries(cal-life2D-test opencal)
-

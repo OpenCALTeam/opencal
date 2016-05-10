@@ -72,7 +72,7 @@ namespace opencal {
             typedef CALModel CALMODEL_type;
             typedef CALModel* CALMODEL_pointer;
             typedef  std::array<COORDINATE_TYPE, DIMENSION>& CALCELL_INDIXES_constreference;
-            using CACallback = std::function<void(CALMODEL_pointer, CALCELL_INDIXES_constreference)>;
+
 
 
             typedef NEIGHBORHOOD* NEIGHBORHOOD_pointer;
@@ -83,6 +83,7 @@ namespace opencal {
             typedef CALElementaryProcessFunctor<DIMENSION , NEIGHBORHOOD , COORDINATE_TYPE>* CALCallbackFunc_pointer;
             typedef CALElementaryProcessFunctor<DIMENSION , NEIGHBORHOOD , COORDINATE_TYPE>** CALCallbackFunc_pointer_pointer;
 
+            using CACallback = CALCallbackFunc_pointer;
 
 
 
@@ -129,7 +130,7 @@ namespace opencal {
                 this->X_id = _calNeighborhood;
 
                 if (X_id != NULL){
-                    this->addNeighbor (this->X_id->getNeighborhoodIndices());
+                    this->addNeighbors(this->X_id->getNeighborhoodIndices());
                 }
 
 
@@ -196,6 +197,15 @@ namespace opencal {
                 }
             }
 
+            /*! \brief Adds a neighbours to CALNeighbourPool.
+            */
+            void  addNeighbors(const auto& indices){
+                for (auto el: indices){
+                    CALNeighborPool<DIMENSION, COORDINATE_TYPE>::addNeighbor(el);
+                    this->sizeof_X ++;
+                }
+            }
+
             void addElementaryProcess(CACallback _elementary_process)
             {
               elementary_processes.push_back(_elementary_process);
@@ -209,14 +219,14 @@ namespace opencal {
                 {
                     int sizeCurrent = this->activeCells->getSizeCurrent();
                     for (n=0; n<sizeCurrent; n++)
-                        _elementary_process(this,calCommon::cellMultidimensionalIndices<DIMENSION,COORDINATE_TYPE>(this->activeCells->getCells()[n]));
+                        (*_elementary_process)(this,calCommon::cellMultidimensionalIndices<DIMENSION,COORDINATE_TYPE>(this->activeCells->getCells()[n]));
                 }
                 else //Standart cicle of the transition function
                 {
 
                     for (i=0; i<this->size; i++){
                     auto indices = calCommon:: cellMultidimensionalIndices<DIMENSION,COORDINATE_TYPE>(i);
-                        _elementary_process(this,indices);
+                        (*_elementary_process)(this,indices);
                     }
 
                 }

@@ -34,16 +34,16 @@ class SciddicaTModel
 
 private:
     // pointer to cellular automaton
-    opencal::CALModel<2,opencal::CALVonNeumannNeighborhood,COORD_TYPE> sciddicaT;
+    opencal::CALModel<2,opencal::CALVonNeumannNeighborhood<2>,COORD_TYPE> sciddicaT;
     // simulation object
-    opencal::CALRun<opencal::CALModel<2,opencal::CALVonNeumannNeighborhood,COORD_TYPE>> sciddicaT_simulation;
+    opencal::CALRun<opencal::CALModel<2,opencal::CALVonNeumannNeighborhood<2>,COORD_TYPE>> sciddicaT_simulation;
     // set of substates used in the simulation
     struct SciddicaTSubstates* Q;
     // paramenters
     struct SciddicaTParameters* P;
     opencal::CALRealConverter converter;
 
-    opencal::CALVonNeumannNeighborhood neighbor;
+    opencal::CALVonNeumannNeighborhood<2> neighbor;
 
     //private method used by contructor to load substates from file
     void sciddicaTLoadConfig();

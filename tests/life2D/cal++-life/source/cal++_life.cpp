@@ -1,13 +1,11 @@
 //
 // Created by Davide Spataro on 12/04/16.
 //
-#include <gtest/gtest.h>
-#include "functional_tests.h"
 #include <OpenCAL++/calCommon.h>
 #include <OpenCAL++/calModel.h>
 #include <OpenCAL++/calRun.h>
 #include <OpenCAL++/calMooreNeighborhood.h>
-#include <OpenCAL++/calIntConverter.h>
+
 typedef unsigned int COORD_TYPE;
 
 class Life_transition_function : public opencal::CALElementaryProcessFunctor<2,
@@ -87,14 +85,9 @@ int main(int argc, char **argv) {
 
   Q->getCurrent()->stampa(coords);
 
-    opencal::CALIntConverter converter;
-    Q->saveSubstate<opencal::CALIntConverter> (&converter,(char*) "./substate.txt");
 
 
-    ::testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
 
-    delete Q;
-    
-    return 0;
+  delete Q;
+  return 0;
 }

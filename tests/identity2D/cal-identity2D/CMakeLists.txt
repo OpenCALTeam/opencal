@@ -16,4 +16,3 @@ link_directories(${PROJECT_SOURCE_DIR}/OpenCAL/lib)
 
 add_executable(cal-identity2D-test ${SRC})
 target_link_libraries(cal-identity2D-test opencal)
-
