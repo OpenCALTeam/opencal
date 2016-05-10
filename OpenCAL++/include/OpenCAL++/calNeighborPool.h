@@ -33,10 +33,10 @@ namespace opencal{
 
         }
 
-        static void addNeighbor (int* cellPattern);
+        static void addNeighbor (auto& cellPattern);
 
 
-        static int getNeighborNLinear (const std::array<COORDINATE_TYPE,DIMENSION>& indexes, int* neighbor);
+        static int getNeighborNLinear (const std::array<COORDINATE_TYPE,DIMENSION>& indexes, auto& neighbor);
 
         static void stampa ()
         {
@@ -100,7 +100,7 @@ void opencal::CALNeighborPool<DIMENSION, COORDINATE_TYPE>:: destroy()
 
 
 template<uint DIMENSION, typename COORDINATE_TYPE>
-void opencal::CALNeighborPool<DIMENSION, COORDINATE_TYPE>:: addNeighbor (int* cellPattern)
+void opencal::CALNeighborPool<DIMENSION, COORDINATE_TYPE>:: addNeighbor (auto& cellPattern)
 {
     for (int i = 0; i < size; ++i)
     {
@@ -126,7 +126,7 @@ void opencal::CALNeighborPool<DIMENSION, COORDINATE_TYPE>:: addNeighbor (int* ce
 }
 
 template<uint DIMENSION, typename COORDINATE_TYPE>
-int opencal::CALNeighborPool<DIMENSION, COORDINATE_TYPE> :: getNeighborNLinear (const std::array<COORDINATE_TYPE,DIMENSION>& indexes, int* neighbor)
+int opencal::CALNeighborPool<DIMENSION, COORDINATE_TYPE> :: getNeighborNLinear (const std::array<COORDINATE_TYPE,DIMENSION>& indexes, auto& neighbor)
 {
     int i;
     int c = 0;
@@ -156,4 +156,3 @@ int opencal::CALNeighborPool<DIMENSION, COORDINATE_TYPE> :: getNeighborNLinear (
 
 
 #endif
-
