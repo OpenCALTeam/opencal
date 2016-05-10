@@ -50,9 +50,9 @@ namespace opencal {
 
             /*! \brief Method that has to ridefined in concrete derived class in order to specify the necessary steps for elementary process.
             */
-            virtual void run(CALMODEL_pointer calModel, std::array<COORDINATE_TYPE,DIMENSION> indexes) = 0;
+            virtual void run(CALMODEL_pointer calModel, std::array<COORDINATE_TYPE,DIMENSION>& indexes) = 0;
 
-            virtual void operator()(CALMODEL_pointer calModel, std::array<COORDINATE_TYPE,DIMENSION> indexes)
+            virtual void operator()(CALMODEL_pointer calModel, std::array<COORDINATE_TYPE,DIMENSION>& indexes)
             {
                 run(calModel, indexes);
             }

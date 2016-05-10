@@ -10,6 +10,7 @@
 #include <OpenCAL++/calModel.h>
 #include <OpenCAL++/calRun.h>
 #include <OpenCAL++/calMooreNeighborhood.h>
+#include <OpenCAL++/calIntConverter.h>
 
 
 
@@ -24,7 +25,7 @@ public:
         Q = _Q;
     }
 
-    void run(opencal::CALModel<2 , opencal::CALMooreNeighborhood , uint>* calModel, std::array<uint,2> indexes)
+    void run(opencal::CALModel<2 , opencal::CALMooreNeighborhood , uint>* calModel, std::array<uint,2> & indexes)
     {
 
         int sum = 0, n;
@@ -72,11 +73,16 @@ int main(int argc, char** argv){
 
     calmodel.addElementaryProcess(new Life_transition_function(Q));
 
+
     Q->getCurrent()->stampa(coords);
     printf("\n_____________________________________ \n\n");
     calrun.run();
 
     Q->getCurrent()->stampa(coords);
+
+
+    opencal::CALIntConverter converter;
+    Q->saveSubstate<opencal::CALIntConverter> (&converter,(char*) "./substate.txt");
 
 
     ::testing::InitGoogleTest(&argc, argv);

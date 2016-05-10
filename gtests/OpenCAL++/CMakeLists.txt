@@ -1,20 +1,20 @@
-find_package(GTest REQUIRED)
+cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
+#  ADD_SUBDIRECTORY(cal_life)
 
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib)
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
+MACRO(SUBDIRLIST result curdir)
+  FILE(GLOB children RELATIVE ${curdir} ${curdir}/*)
+  SET(dirlist "")
+  FOREACH(child ${children})
+    IF(IS_DIRECTORY ${curdir}/${child})
+        LIST(APPEND dirlist ${child})
+    ENDIF()
+  ENDFOREACH()
+  SET(${result} ${dirlist})
+ENDMACRO()
 
-include_directories(${PROJECT_SOURCE_DIR}/OpenCAL++/include/)
-include_directories(${GTEST_INCLUDE_DIRS})
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/)
+SUBDIRLIST(SUBDIRS ${CMAKE_CURRENT_SOURCE_DIR})
 
-
-file(GLOB SRC
-        "*.h"
-        "*.cpp"
-        )
-
-message(STATUS  ${PROJECT_SOURCE_DIR}/OpenCAL++/include/ )
-add_executable(opencal++_tests ${SRC} )
-set_property(TARGET opencal++_tests PROPERTY CXX_STANDARD 14)
-target_link_libraries(opencal++_tests ${GTEST_LIBRARIES} ${GTEST_MAIN_LIBRARIES} pthread)
+#add all subdirectory 
+FOREACH(subdir ${SUBDIRS})
+    ADD_SUBDIRECTORY(${subdir})
+ENDFOREACH()

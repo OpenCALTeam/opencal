@@ -10,6 +10,7 @@
 #include <cassert>
 #include <memory>
 #include <iostream>
+#include <OpenCAL++/calManagerIO.h>
 
 namespace opencal {
 
@@ -45,9 +46,9 @@ public:
     }
 
     template<class CALCONVERTER>
-    CALBuffer (std::array <COORDINATE_TYPE, DIMENSION>& coordinates,  std::string& path, CALCONVERTER* calConverterInputOutput){
+    CALBuffer (std::array <COORDINATE_TYPE, DIMENSION>& coordinates,  char* path, CALCONVERTER* calConverterInputOutput){
         this->size = opencal::calCommon::multiplier<DIMENSION,uint>(coordinates , 0 , DIMENSION);
-       // this-> buffer = calConverterInputOutput -> loadBuffer<PAYLOAD>(this->size, path);
+        this-> buffer = CALManagerIO<DIMENSION, COORDINATE_TYPE> :: template loadBuffer<PAYLOAD,CALCONVERTER>(this->size, calConverterInputOutput, path);
     }
 
     ~CALBuffer (){
@@ -92,7 +93,7 @@ public:
     template<class CALCONVERTER>
     void saveBuffer (std::array <COORDINATE_TYPE, DIMENSION>& coordinates, CALCONVERTER* calConverterInputOutput, char* path)
     {
-//        calConverterInputOutput->calSaveBuffer(this->buffer, this->size, coordinates, DIMENSION, path);
+        opencal::CALManagerIO<DIMENSION, COORDINATE_TYPE>:: template saveBuffer<PAYLOAD,CALCONVERTER>(this->buffer, this->size, coordinates, calConverterInputOutput, path);
     }
 
     void copyActiveCellsBuffer (BUFFER_TYPE_PTR M_src, int* activeCells, int sizeof_active_cells)
