@@ -13,6 +13,7 @@
 #define cal2DBuffer_h
 
 #include <OpenCAL/calCommon.h>
+#include <OpenCAL/cal2D.h>
 
 
 /*! \brief Allocates a byte linearized matrix.
@@ -59,15 +60,15 @@ void calCopyBuffer2Dr(CALreal* M_src, CALreal* M_dest, int rows, int columns);
 
 /*! \brief Active cells byte linearized matrix copy function.
 */
-void calCopyActiveCellsBuffer2Db(CALbyte* M_src, CALbyte* M_dest, int rows, int columns, struct CALCell2D* active_cells, int sizeof_active_cells);
+void calCopyBufferActiveCells2Db(CALbyte* M_src, CALbyte* M_dest, struct CALModel2D* ca2D);
 
 /*! \brief Active cells int linearized matrix copy function.
 */
-void calCopyActiveCellsBuffer2Di(CALint* M_src, CALint* M_dest, int rows, int columns, struct CALCell2D* active_cells, int sizeof_active_cells);
+void calCopyBufferActiveCells2Di(CALint* M_src, CALint* M_dest, struct CALModel2D* ca2D);
 
 /*! \brief Active cells real (floating point) linearized matrix copy function.
 */
-void calCopyActiveCellsBuffer2Dr(CALreal* M_src, CALreal* M_dest, int rows, int columns, struct CALCell2D* active_cells, int sizeof_active_cells);
+void calCopyBufferActiveCells2Dr(CALreal* M_src, CALreal* M_dest,  struct CALModel2D* ca2D);
 
 
 /*! \brief Byte linearized matrix copy function.
@@ -98,31 +99,31 @@ void calSubtractBuffer2Dr(CALreal* M_op1, CALreal* M_op2,  CALreal* M_dest, int 
 
 
 
-/*! \brief Sets a byte matrix to a constant value.  
+/*! \brief Sets a byte matrix to a constant value.
 */
 void calSetBuffer2Db(CALbyte* M, int rows, int columns, CALbyte value);
 
-/*! \brief Sets an int matrix to a constant value.  
+/*! \brief Sets an int matrix to a constant value.
 */
 void calSetBuffer2Di(CALint* M, int rows, int columns, CALint value);
 
-/*! \brief Sets a real (floating point) matrix to a constant value.  
+/*! \brief Sets a real (floating point) matrix to a constant value.
 */
 void calSetBuffer2Dr(CALreal* M, int rows, int columns, CALreal value);
 
 
 
-/*! \brief Sets active cells of a byte matrix to a constant value.  
+/*! \brief Sets active cells of a byte matrix to a constant value.
 */
-void calSetActiveCellsBuffer2Db(CALbyte* M, int rows, int columns, CALbyte value, struct CALCell2D* active_cells, int sizeof_active_cells);
+void calSetActiveCellsBuffer2Db(CALbyte* M, CALbyte value, struct CALModel2D* ca2D);
 
-/*! \brief Sets active cells of an int matrix to a constant value.  
+/*! \brief Sets active cells of an int matrix to a constant value.
 */
-void calSetActiveCellsBuffer2Di(CALint* M, int rows, int columns, CALint value, struct CALCell2D* active_cells, int sizeof_active_cells);
+void calSetActiveCellsBuffer2Di(CALint* M, CALint value, struct CALModel2D* ca2D);
 
-/*! \brief Sets active cells of a real (floating point) matrix to a constant value.  
+/*! \brief Sets active cells of a real (floating point) matrix to a constant value.
 */
-void calSetActiveCellsBuffer2Dr(CALreal* M, int rows, int columns, CALreal value, struct CALCell2D* active_cells, int sizeof_active_cells);
+void calSetActiveCellsBuffer2Dr(CALreal* M, CALreal value,struct CALModel2D* ca2D);
 
 
 

@@ -46,10 +46,10 @@ enum CALUpdateMode{
 /*!	\brief Enumeration used for optimization strategies.
 */
 enum CALOptimization{
-	CAL_NO_OPT = 0,				//!< Enumerator used for specifying no optimizations.
-	CAL_OPT_ACTIVE_CELLS		//!< Enumerator used for specifying the active cells optimization.
+    CAL_NO_OPT = 0,				//!< Enumerator used for specifying no optimizations.
+    CAL_OPT_ACTIVE_CELLS_NAIVE,		//!< Enumerator used for specifying the naive implementation of the active cells optimization.
+    CAL_OPT_ACTIVE_CELLS		//!< Enumerator used for specifying the optimal implementation of the active cells optimization (based on the Cntiguous Linked List structure).
 };
-
 
 /*! \brief Macro recomputing the out of bound neighbourhood indexes in case of toroidal cellular space.
 */
