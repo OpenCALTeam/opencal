@@ -115,14 +115,15 @@ namespace opencal {
             }
         }
 
-        template <class CALCONVERTER>
-        void saveSubstate(CALCONVERTER* calConverterInputOutput, char *path)
+        template <class CALCONVERTER, class STR_TYPE = std::string>
+        void saveSubstate(CALCONVERTER& calConverterInputOutput, const STR_TYPE& path)
         {
-            this->current->template saveBuffer<CALCONVERTER>(this->coordinates,calConverterInputOutput, path);
+            this->current-> template saveBuffer<CALCONVERTER>(this->coordinates,calConverterInputOutput, path);
         }
 
+
         template <class CALCONVERTER>
-        void loadSubstate(CALCONVERTER* calConverterInputOutput, char *path)
+        void loadSubstate(CALCONVERTER& calConverterInputOutput, char *path)
         {
 
             delete current;

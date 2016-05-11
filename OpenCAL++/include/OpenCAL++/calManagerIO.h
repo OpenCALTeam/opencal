@@ -22,7 +22,7 @@ namespace opencal {
         /*! \brief loads a matrix from file.
         */
         template<class T, class CALCONVERTER>
-        static T *loadBuffer(int size, CALCONVERTER* converter, char *path){
+        static T *loadBuffer(int size, CALCONVERTER& converter, char *path){
             T *buffer = new T[size];
 
             std::string line, token;
@@ -32,7 +32,7 @@ namespace opencal {
             while (getline(in, line)) {
                 std::stringstream s(line);
                 while (s >> token) {
-                    T converted = converter->convertInput(token);
+                    T converted = converter.deserialize(token);
                     buffer[i] = converted;
 
                     i++;
@@ -41,8 +41,8 @@ namespace opencal {
             return buffer;
         }
 
-        template<class T, class CALCONVERTER>
-        static T *loadBuffer(std::array <COORDINATE_TYPE, DIMENSION>& coordinates, CALCONVERTER* converter, char *path){
+        template<class T, class CALCONVERTER, class STR_TYPE = std::string>
+        static T *loadBuffer(std::array <COORDINATE_TYPE, DIMENSION>& coordinates, CALCONVERTER converter, const STR_TYPE& path){
             T *buffer = new T[opencal::calCommon::multiplier(coordinates, 0, DIMENSION)];
 
             std::string line, token;
@@ -53,7 +53,7 @@ namespace opencal {
                 std::stringstream s(line);
                 while (s >> token) {
                     i++;
-                    T converted = converter->convertInput(token);
+                    T converted = converter(token);
                     buffer[i] = converted;
 
                 }
@@ -63,12 +63,12 @@ namespace opencal {
 
         /*! \brief saves a certain matrix to file.
         */
-        template<class T, class CALCONVERTER>
-        static void  saveBuffer(T *buffer, int size, std::array <COORDINATE_TYPE, DIMENSION>& coordinates,CALCONVERTER* converter, char *path) {
+        template<class T, class CALCONVERTER, class STR_TYPE = std::string>
+        static void  saveBuffer(T *buffer, int size, std::array <COORDINATE_TYPE, DIMENSION>& coordinates,CALCONVERTER& converter, const STR_TYPE& path) {
             std::ofstream out;
             out.open(path);
             for (int i = 0; i < size; ++i) {
-                out << converter->convertOutput(buffer[i]);
+                out << converter(buffer[i]);
 
                 if ((i + 1) % coordinates[1] == 0)
                     out << '\n';
@@ -76,8 +76,12 @@ namespace opencal {
                     out << "  ";
                 }
             }
+            printf("Saved in %s\n",path);
             out.close();
         }
+
+
+
 
 
     };

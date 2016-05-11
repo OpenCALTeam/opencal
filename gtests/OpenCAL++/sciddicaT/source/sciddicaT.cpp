@@ -198,10 +198,10 @@ void SciddicaTModel :: sciddicaTRun ()
 
 void SciddicaTModel::sciddicaTLoadConfig()
 {
-    Q->z->loadSubstate<opencal::CALRealConverter> (&converter,(char*) DEM_PATH);
-    Q->h->loadSubstate<opencal::CALRealConverter> (&converter,(char*) SOURCE_PATH);
+    Q->z->loadSubstate<opencal::CALRealConverter> (converter,(char*) DEM_PATH);
+    Q->h->loadSubstate<opencal::CALRealConverter> (converter,(char*) SOURCE_PATH);
 }
 void SciddicaTModel::sciddicaTSaveConfig()
 {
-    Q->h->saveSubstate<opencal::CALRealConverter> (&converter, (char*) OUTPUT_PATH);
+    Q->h->saveSubstate<opencal::CALRealConverter> (converter, (char*) OUTPUT_PATH);
 }

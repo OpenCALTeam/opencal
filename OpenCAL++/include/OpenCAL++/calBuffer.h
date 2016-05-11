@@ -45,8 +45,8 @@ public:
         buffer = new PAYLOAD [size];
     }
 
-    template<class CALCONVERTER>
-    CALBuffer (std::array <COORDINATE_TYPE, DIMENSION>& coordinates,  char* path, CALCONVERTER* calConverterInputOutput){
+    template<class CALCONVERTER, class STR_TYPE = std::string>
+    CALBuffer (std::array <COORDINATE_TYPE, DIMENSION>& coordinates, const STR_TYPE& path, CALCONVERTER& calConverterInputOutput){
         this->size = opencal::calCommon::multiplier<DIMENSION,uint>(coordinates , 0 , DIMENSION);
         this-> buffer = CALManagerIO<DIMENSION, COORDINATE_TYPE> :: template loadBuffer<PAYLOAD,CALCONVERTER>(this->size, calConverterInputOutput, path);
     }
@@ -90,11 +90,13 @@ public:
         buffer[linearIndex] = value;
     }
 
-    template<class CALCONVERTER>
-    void saveBuffer (std::array <COORDINATE_TYPE, DIMENSION>& coordinates, CALCONVERTER* calConverterInputOutput, char* path)
+    template<class CALCONVERTER, class STR_TYPE = std::string>
+    void saveBuffer (std::array <COORDINATE_TYPE, DIMENSION>& coordinates, CALCONVERTER& calConverterInputOutput, const STR_TYPE& path)
     {
         opencal::CALManagerIO<DIMENSION, COORDINATE_TYPE>:: template saveBuffer<PAYLOAD,CALCONVERTER>(this->buffer, this->size, coordinates, calConverterInputOutput, path);
     }
+
+
 
     void copyActiveCellsBuffer (BUFFER_TYPE_PTR M_src, int* activeCells, int sizeof_active_cells)
     {

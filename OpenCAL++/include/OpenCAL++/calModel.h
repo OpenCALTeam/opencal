@@ -79,9 +79,10 @@ namespace opencal {
             typedef NEIGHBORHOOD& NEIGHBORHOOD_reference;
 
             typedef CALElementaryProcessFunctor<DIMENSION , NEIGHBORHOOD , COORDINATE_TYPE> CALCallbackFunc_type;
-            typedef CALElementaryProcessFunctor<DIMENSION , NEIGHBORHOOD , COORDINATE_TYPE>& CALCallbackFunc_reference;
-            typedef CALElementaryProcessFunctor<DIMENSION , NEIGHBORHOOD , COORDINATE_TYPE>* CALCallbackFunc_pointer;
-            typedef CALElementaryProcessFunctor<DIMENSION , NEIGHBORHOOD , COORDINATE_TYPE>** CALCallbackFunc_pointer_pointer;
+            //typedef void(*CALCallbackFunc_type)(CALMODEL_pointer, CALCELL_INDIXES_constreference);
+            typedef CALCallbackFunc_type& CALCallbackFunc_reference;
+            typedef CALCallbackFunc_type* CALCallbackFunc_pointer;
+            typedef CALCallbackFunc_type** CALCallbackFunc_pointer_pointer;
 
             using CACallback = CALCallbackFunc_pointer;
 
