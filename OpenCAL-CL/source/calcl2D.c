@@ -83,9 +83,9 @@ void calclResizeThreadsNum2D(struct CALCLModel2D * calclmodel2D, size_t * thread
 	cl_int err;
 	size_t zero = 0;
 
-	err = clEnqueueReadBuffer(queue, calclmodel2D->bufferActiveCellsNum, CL_TRUE, zero, sizeof(int), &calclmodel2D->host_CA->A.size_current, 0, NULL, NULL);
+	err = clEnqueueReadBuffer(queue, calclmodel2D->bufferActiveCellsNum, CL_TRUE, zero, sizeof(int), &calclmodel2D->host_CA->A->size_current, 0, NULL, NULL);
 	calclHandleError(err);
-	threadNum[0] = calclmodel2D->host_CA->A.size_current;
+	threadNum[0] = calclmodel2D->host_CA->A->size_current;
 }
 
 CALCLmem calclGetSubstateBuffer2D(CALCLmem bufferSubstates, cl_buffer_region region) {
@@ -278,9 +278,9 @@ struct CALCLModel2D * calclCADef2D(struct CALModel2D *host_CA, CALCLcontext cont
 	calclmodel2D->elementaryProcessesNum = 0;
 	calclmodel2D->steps = 0;
 
-	if (calclmodel2D->host_CA->A.flags == NULL) {
-		calclmodel2D->host_CA->A.flags = (CALbyte*) malloc(sizeof(CALbyte) * calclmodel2D->host_CA->rows * calclmodel2D->host_CA->columns);
-		memset(calclmodel2D->host_CA->A.flags, CAL_FALSE, sizeof(CALbyte) * calclmodel2D->host_CA->rows * calclmodel2D->host_CA->columns);
+	if (calclmodel2D->host_CA->A->flags == NULL) {
+		calclmodel2D->host_CA->A->flags = (CALbyte*) malloc(sizeof(CALbyte) * calclmodel2D->host_CA->rows * calclmodel2D->host_CA->columns);
+		memset(calclmodel2D->host_CA->A->flags, CAL_FALSE, sizeof(CALbyte) * calclmodel2D->host_CA->rows * calclmodel2D->host_CA->columns);
 	}
 
 	cl_int err;
@@ -295,15 +295,15 @@ struct CALCLModel2D * calclCADef2D(struct CALModel2D *host_CA, CALCLcontext cont
 	calclmodel2D->kernelDownSweep = calclGetKernelFromProgram(&program, KER_STC_DOWN_SWEEP);
 
 	struct CALCell2D * activeCells = (struct CALCell2D*) malloc(sizeof(struct CALCell2D) * bufferDim);
-	memcpy(activeCells, calclmodel2D->host_CA->A.cells, sizeof(struct CALCell2D) * calclmodel2D->host_CA->A.size_current);
+	memcpy(activeCells, calclmodel2D->host_CA->A->cells, sizeof(struct CALCell2D) * calclmodel2D->host_CA->A->size_current);
 
 	calclmodel2D->bufferActiveCells = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(struct CALCell2D) * bufferDim, activeCells, &err);
 	calclHandleError(err);
 	free(activeCells);
-	calclmodel2D->bufferActiveCellsFlags = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALbyte) * bufferDim, calclmodel2D->host_CA->A.flags, &err);
+	calclmodel2D->bufferActiveCellsFlags = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALbyte) * bufferDim, calclmodel2D->host_CA->A->flags, &err);
 	calclHandleError(err);
 
-	calclmodel2D->bufferActiveCellsNum = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALint), &calclmodel2D->host_CA->A.size_current, &err);
+	calclmodel2D->bufferActiveCellsNum = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALint), &calclmodel2D->host_CA->A->size_current, &err);
 	calclHandleError(err);
 
 	calclmodel2D->bufferByteSubstateNum = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALint), &calclmodel2D->host_CA->sizeof_pQb_array, &err);
@@ -399,7 +399,7 @@ void calclRun2D(struct CALCLModel2D* calclmodel2D, unsigned int initialStep, uns
 		dimNum = 2;
 	} else {
 		singleStepThreadNum = (size_t*) malloc(sizeof(size_t));
-		singleStepThreadNum[0] = calclmodel2D->host_CA->A.size_current;
+		singleStepThreadNum[0] = calclmodel2D->host_CA->A->size_current;
 		dimNum = 1;
 	}
 

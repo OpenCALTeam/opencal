@@ -152,7 +152,7 @@ void calglUpdate3DCL(struct CALGLRun3D* calglRun){
 				dimNum = 3;
 			} else {
 				singleStepThreadNum = (size_t*) malloc(sizeof(size_t));
-				singleStepThreadNum[0] = calglRun->device_CA->host_CA->A.size_current;
+				singleStepThreadNum[0] = calglRun->device_CA->host_CA->A->size_current;
 				dimNum = 1;
 			}
 		//	calclRoundThreadsNum(singleStepThreadNum, dimNum);
@@ -174,7 +174,7 @@ void calglUpdate3DCL(struct CALGLRun3D* calglRun){
 		//#endif
 		//		printf("*----------------  Cellular Automata  ----------------*\n");
 		//		printf(" Rows: %d, Columns: %d\n", calglGetGlobalSettings()->rows, calglGetGlobalSettings()->columns);
-		//		printf(" Current Step: %d/%d; Active cells: %d\n", calglRun->calRun->step, calglGetGlobalSettings()->step, calglRun->calRun->ca3D->A.size_current);
+		//		printf(" Current Step: %d/%d; Active cells: %d\n", calglRun->calRun->step, calglGetGlobalSettings()->step, calglRun->calRun->ca3D->A->size_current);
 		printf ("Cellular Automata: Current Step: %d\r", calglRun->device_CA->steps);
 		//		printf("*-----------------------------------------------------*\n");
 		//check for the stop condition

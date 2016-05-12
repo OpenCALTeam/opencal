@@ -82,9 +82,9 @@ void calclResizeThreadsNum3D(struct CALCLModel3D * calclmodel3D, size_t * thread
 	CALCLqueue queue = calclmodel3D->queue;
 
 
-	err = clEnqueueReadBuffer(queue, calclmodel3D->bufferActiveCellsNum, CL_TRUE, zero, sizeof(int), &calclmodel3D->host_CA->A.size_current, 0, NULL, NULL);
+	err = clEnqueueReadBuffer(queue, calclmodel3D->bufferActiveCellsNum, CL_TRUE, zero, sizeof(int), &calclmodel3D->host_CA->A->size_current, 0, NULL, NULL);
 	calclHandleError(err);
-	threadNum[0] = calclmodel3D->host_CA->A.size_current;
+	threadNum[0] = calclmodel3D->host_CA->A->size_current;
 }
 
 CALCLmem calclGetSubstateBuffer3D(CALCLmem bufferSubstates, cl_buffer_region region) {
@@ -282,9 +282,9 @@ struct CALCLModel3D * calclCADef3D(struct CALModel3D *host_CA, CALCLcontext cont
 	calclmodel3D->steps = 0;
 
 
-	if (host_CA->A.flags == NULL) {
-		host_CA->A.flags = (CALbyte*) malloc(sizeof(CALbyte) * host_CA->rows * host_CA->columns * host_CA->slices);
-		memset(host_CA->A.flags, CAL_FALSE, sizeof(CALbyte) * host_CA->rows * host_CA->columns * host_CA->slices);
+	if (host_CA->A->flags == NULL) {
+		host_CA->A->flags = (CALbyte*) malloc(sizeof(CALbyte) * host_CA->rows * host_CA->columns * host_CA->slices);
+		memset(host_CA->A->flags, CAL_FALSE, sizeof(CALbyte) * host_CA->rows * host_CA->columns * host_CA->slices);
 	}
 
 	cl_int err;
@@ -299,15 +299,15 @@ struct CALCLModel3D * calclCADef3D(struct CALModel3D *host_CA, CALCLcontext cont
 	calclmodel3D->kernelDownSweep = calclGetKernelFromProgram(&program, KER_STC_DOWN_SWEEP);
 
 	struct CALCell3D * activeCells = (struct CALCell3D*) malloc(sizeof(struct CALCell3D) * bufferDim);
-	memcpy(activeCells, host_CA->A.cells, sizeof(struct CALCell3D) * host_CA->A.size_current);
+	memcpy(activeCells, host_CA->A->cells, sizeof(struct CALCell3D) * host_CA->A->size_current);
 
 	calclmodel3D->bufferActiveCells = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(struct CALCell3D) * bufferDim, activeCells, &err);
 	calclHandleError(err);
 	free(activeCells);
-	calclmodel3D->bufferActiveCellsFlags = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALbyte) * bufferDim, host_CA->A.flags, &err);
+	calclmodel3D->bufferActiveCellsFlags = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALbyte) * bufferDim, host_CA->A->flags, &err);
 	calclHandleError(err);
 
-	calclmodel3D->bufferActiveCellsNum = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALint), &host_CA->A.size_current, &err);
+	calclmodel3D->bufferActiveCellsNum = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALint), &host_CA->A->size_current, &err);
 	calclHandleError(err);
 
 	calclmodel3D->bufferByteSubstateNum = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALint), &host_CA->sizeof_pQb_array, &err);
@@ -408,7 +408,7 @@ void calclRun3D(struct CALCLModel3D* calclmodel3D, unsigned int initialStep, uns
 		dimNum = 3;
 	} else {
 		singleStepThreadNum = (size_t*) malloc(sizeof(size_t));
-		singleStepThreadNum[0] = calclmodel3D->host_CA->A.size_current;
+		singleStepThreadNum[0] = calclmodel3D->host_CA->A->size_current;
 		dimNum = 1;
 	}
 //	calclRoundThreadsNum(singleStepThreadNum, dimNum);

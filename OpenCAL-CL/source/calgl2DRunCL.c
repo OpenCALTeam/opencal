@@ -117,7 +117,7 @@ void calglUpdate2DCL(struct CALGLRun2D* calglRun){
 			dimNum = 2;
 		} else {
 			singleStepThreadNum = (size_t*) malloc(sizeof(size_t));
-			singleStepThreadNum[0] = calglRun->deviceCA->host_CA->A.size_current;
+			singleStepThreadNum[0] = calglRun->deviceCA->host_CA->A->size_current;
 			dimNum = 1;
 		}
 		//system("clear");
