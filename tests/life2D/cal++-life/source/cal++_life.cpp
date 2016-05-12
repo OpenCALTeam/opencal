@@ -5,89 +5,209 @@
 #include <OpenCAL++/calModel.h>
 #include <OpenCAL++/calRun.h>
 #include <OpenCAL++/calMooreNeighborhood.h>
+#include <OpenCAL++/calRealConverter.h>
+
+using namespace std;
+template <typename T>
+string NumberToString ( T Number )
+{
+    ostringstream ss;
+    ss << Number;
+    return ss.str();
+}
+
+//-----------------------------------------------------------------------
+//   THE LIFE CELLULAR AUTOMATON
+//-----------------------------------------------------------------------
+#define DIMX 	(100)
+#define DIMY 	(100)
+#define STEPS 	(100)
+
+//if versio == 0 -> write in serial folder
+#define PREFIX_PATH(version,name,pathVarName) \
+    if(version==0)\
+    pathVarName="./testsout/serial/" name;\
+    else if(version>0)\
+    pathVarName="./testsout/other/" name;
+
 
 typedef unsigned int COORD_TYPE;
 
+
+int version=1;
+string path;
+string step="";
+
+
+void print (int currentStep, opencal::CALSubstate<int, 2, COORD_TYPE> * Q)
+{
+    step=NumberToString( currentStep);
+    PREFIX_PATH(version,"",path);
+    path+=step;
+    path+=".txt";
+    Q->saveSubstate(opencal::tostring_fn<int>(4),  path);
+}
+
+
 class Life_transition_function : public opencal::CALElementaryProcessFunctor<2,
-                                                                             opencal::CALMooreNeighborhood<2>
-                                                                            >{
+        opencal::CALMooreNeighborhood<2>
+        >{
 private:
 
-  opencal::CALSubstate<int, 2> *Q;
+    opencal::CALSubstate<int, 2> *Q;
 
 public:
 
-  Life_transition_function(opencal::CALSubstate<int, 2> *_Q)
-  {
-    Q = _Q;
-  }
-
-  void run(opencal::CALModel<2, opencal::CALMooreNeighborhood<2> > *calModel,
-           std::array<COORD_TYPE, 2>& indexes)
-  {
-    int sum              = 0, n;
-    int neighborhoodSize = calModel->getNeighborhoodSize();
-
-    for (n = 1; n < neighborhoodSize; n++)
+    Life_transition_function(opencal::CALSubstate<int, 2> *_Q)
     {
-      sum += Q->getX(indexes, n);
+        Q = _Q;
+    }
+
+    void run(opencal::CALModel<2, opencal::CALMooreNeighborhood<2> > *calModel,
+             std::array<COORD_TYPE, 2>& indexes)
+    {
+        int sum              = 0, n;
+        int neighborhoodSize = calModel->getNeighborhoodSize();
+
+        for (n = 1; n < neighborhoodSize; n++)
+        {
+            sum += Q->getX(indexes, n);
+        }
+
+
+        if ((sum == 3) || ((sum == 2) && (Q->getElement(indexes) == 1)))
+        {
+            Q->setElement(indexes, 1);
+        }
+        else Q->setElement(indexes, 0);
+    }
+};
+
+class LifeSimulationStopCondition : public opencal::CALModelFunctor <opencal::CALModel<2, opencal::CALMooreNeighborhood<2>, COORD_TYPE>, bool>
+{
+private:
+    opencal::CALRun < opencal::CALModel < 2, opencal::CALMooreNeighborhood<2>,COORD_TYPE >>* life_simulation;
+    opencal::CALSubstate<int, 2, COORD_TYPE> *Q;
+public:
+    LifeSimulationStopCondition(opencal::CALRun < opencal::CALModel < 2, opencal::CALMooreNeighborhood<2>,COORD_TYPE >>* _life_simulation,  opencal::CALSubstate<int, 2, COORD_TYPE> * _Q)
+    {
+        this->life_simulation = _life_simulation;
+        this->Q = _Q;
+    }
+
+    bool run(opencal::CALModel<2, opencal::CALMooreNeighborhood<2>, COORD_TYPE>* model)
+    {
+
+
+        if (life_simulation->getStep() >= STEPS)
+        {
+            return true;
+        }
+
+        print (life_simulation->getStep()+1, Q);
+
+        return false;
+    }
+
+};
+
+
+
+class Init : public opencal::CALModelFunctor <opencal::CALModel<2, opencal::CALMooreNeighborhood<2>, COORD_TYPE>, void>
+{
+private:
+
+    opencal::CALSubstate<int, 2> *Q;
+    opencal::CALRun < opencal::CALModel < 2, opencal::CALMooreNeighborhood<2>,COORD_TYPE >>* life_simulation;
+
+public:
+
+    Init(opencal::CALSubstate<int, 2> *_Q, opencal::CALRun < opencal::CALModel < 2, opencal::CALMooreNeighborhood<2>,COORD_TYPE >>* _life_simulation)
+    {
+        Q = _Q;
+        this->life_simulation = _life_simulation;
+    }
+
+    void run(opencal::CALModel<2, opencal::CALMooreNeighborhood<2>, COORD_TYPE>* model)
+    {
+        setGlider(model,1,1);
+        setGlider(model,94,94);
+        setToad(model,15,22);
+
+        print (life_simulation->getStep(), Q);
+    }
+
+    void setToad(opencal::CALModel<2, opencal::CALMooreNeighborhood<2>, COORD_TYPE>* model, uint dx, uint dy){
+        //set a Toad Pulsar
+
+        std::array<std::array<COORD_TYPE, 2>, 6> indexes = {        {
+                                                                        { { 0+dx, 1+dy } },
+                                                                        { { 0+dx, 2+dy } },
+                                                                        { { 0+dx, 3+dy } },
+                                                                        { { 1+dx, 0+dy } },
+                                                                        { { 1+dx, 1+dy } },
+                                                                        { { 1+dx, 2+dy } }
+                                                                    } };
+
+
+        for (uint i = 0; i < 6; i++)
+        {
+            model->init(Q, indexes[i], 1);
+        }
+
+    }
+
+    void setGlider(opencal::CALModel<2, opencal::CALMooreNeighborhood<2>, COORD_TYPE>* model, uint dx, uint dy){
+        //set a glider
+        std::array<std::array<COORD_TYPE, 2>, 5> indexes = {        {
+                                                                        { { 0+dx, 2+dy } },
+                                                                        { { 1+dx, 0+dy } },
+                                                                        { { 1+dx, 2+dy } },
+                                                                        { { 2+dx, 1+dy } },
+                                                                        { { 2+dx, 2+dy } }
+                                                                    } };
+
+
+        for (uint i = 0; i < 5; i++)
+        {
+            model->init(Q, indexes[i], 1);
+        }
     }
 
 
-    if ((sum == 3) || ((sum == 2) && (Q->getElement(indexes) == 1)))
-    {
-      Q->setElement(indexes, 1);
-    }
-    else Q->setElement(indexes, 0);
-  }
 };
 
 
 
 
 int main(int argc, char **argv) {
-  std::array<COORD_TYPE, 2> coords = { 8, 16 };
-  opencal::CALMooreNeighborhood<2> neighbor;
+    std::array<COORD_TYPE, 2> coords = { DIMX, DIMY };
+    opencal::CALMooreNeighborhood<2> neighbor;
 
-  opencal::CALModel<2, opencal::CALMooreNeighborhood<2>, COORD_TYPE> calmodel(
-    coords,
-    &neighbor,
-    opencal::calCommon::CAL_SPACE_TOROIDAL,
-    opencal::calCommon::CAL_NO_OPT);
+    opencal::CALModel<2, opencal::CALMooreNeighborhood<2>, COORD_TYPE> calmodel(
+                coords,
+                &neighbor,
+                opencal::calCommon::CAL_SPACE_TOROIDAL,
+                opencal::calCommon::CAL_NO_OPT);
 
-  opencal::CALRun < opencal::CALModel < 2, opencal::CALMooreNeighborhood<2>,
-  COORD_TYPE >> calrun(&calmodel, 1, 4, opencal::calCommon::CAL_UPDATE_IMPLICIT);
-
-  opencal::CALSubstate<int, 2, COORD_TYPE> *Q = calmodel.addSubstate<int>();
-
-  calmodel.initSubstate(Q, 0);
-
-  std::array<std::array<COORD_TYPE, 2>, 5> indexes = {        {
-                                                                { { 0, 2 } },
-                                                                { { 1, 0 } },
-                                                                { { 1, 2 } },
-                                                                { { 2, 1 } },
-                                                                { { 2, 2 } }
-                                                              } };
-
-  // set a glider
-  for (uint i = 0; i < 5; i++)
-  {
-    calmodel.init(Q, indexes[i], 1);
-  }
+    opencal::CALRun < opencal::CALModel < 2, opencal::CALMooreNeighborhood<2>,
+            COORD_TYPE >> calrun(&calmodel, 1, STEPS, opencal::calCommon::CAL_UPDATE_IMPLICIT);
 
 
-  calmodel.addElementaryProcess(new Life_transition_function(Q) );
+    opencal::CALSubstate<int, 2, COORD_TYPE> *Q = calmodel.addSubstate<int>();
 
-  Q->getCurrent()->stampa(coords);
-  printf("\n_____________________________________ \n\n");
-  calrun.run();
+    calmodel.initSubstate(Q, 0);
+    calmodel.addElementaryProcess(new Life_transition_function(Q) );
 
-  Q->getCurrent()->stampa(coords);
+    calrun.addInitFunc(new Init(Q,&calrun));
+
+    calrun.addStopConditionFunc(new LifeSimulationStopCondition(&calrun, Q));
 
 
 
+    calrun.run();
 
-  delete Q;
-  return 0;
+
+
+    return 0;
 }
