@@ -1,0 +1,184 @@
+TEST SUITE identity2D
+	TEST identity2D/cal-identity2D/bin/cal-identity2D-test
+	 
+real	0m0.035s
+user	0m0.034s
+sys	0m0.001s
+
+	TEST identity2D/cal++-identity2D/bin/cal++-identity2D-test
+	 Saved in „\
+Saved in „\
+Saved in „\
+Saved in „\
+Saved in „\
+Saved in „\
+END
+
+real	0m0.039s
+user	0m0.037s
+sys	0m0.002s
+
+	TEST identity2D/calomp-identity2D/bin/calomp-identity2D-test
+	 
+real	0m0.029s
+user	0m0.201s
+sys	0m0.001s
+
+TEST SUITE identity3D
+	TEST identity3D/cal-identity3D/bin/cal-identity3D-test
+	 
+real	0m0.098s
+user	0m0.097s
+sys	0m0.001s
+
+	TEST identity3D/cal++-identity3D/bin/cal++-identity3D-test
+	 Saved in Ènm
+Saved in Ènm
+Saved in Ènm
+Saved in Ènm
+Saved in Ènm
+Saved in Ènm
+END
+
+real	0m0.001s
+user	0m0.001s
+sys	0m0.000s
+
+	TEST identity3D/calomp-identity3D/bin/calomp-identity3D-test
+	 
+real	0m0.062s
+user	0m0.426s
+sys	0m0.003s
+
+TEST SUITE life2D
+	TEST life2D/cal-life2D/bin/cal-life2D-test
+	 
+real	0m0.303s
+user	0m0.293s
+sys	0m0.004s
+
+	TEST life2D/cal++-life/bin/cal++-life-test
+	 Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+Saved in ¨\¥
+
+real	0m0.734s
+user	0m0.732s
+sys	0m0.003s
+
+	TEST life2D/calomp-life2D/bin/calomp-life2D-test
+	 
+real	0m0.373s
+user	0m2.897s
+sys	0m0.011s
+
+TEST SUITE sciddicaT
+	TEST sciddicaT/cal-sciddicaT/bin/cal-sciddicaT-test
+	 
+real	0m6.069s
+user	0m6.067s
+sys	0m0.009s
+
+	TEST sciddicaT/calomp-sciddicaT/bin/calomp-sciddicaT-test
+	 
+real	0m4.919s
+user	0m35.509s
+sys	0m0.040s
+

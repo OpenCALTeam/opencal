@@ -54,7 +54,7 @@ namespace opencal {
 template<class T>
 std::string tostring_fn_(const T& s,const int n = 6) {
  	std::ostringstream out;
-	out<<std::setprecision(n) <<s;
+	out<<std::setprecision(n+1) <<s;
 	return out.str();
 }
 

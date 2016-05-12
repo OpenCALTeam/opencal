@@ -1,0 +1,47 @@
+TEST SUITE identity2D
+	TEST identity2D/cal-identity2D/bin/cal-identity2D-test
+	 
+real	0m0.032s
+user	0m0.030s
+sys	0m0.002s
+
+	TEST identity2D/cal++-identity2D/bin/cal++-identity2D-test
+	 Saved in ¤
+Saved in ¤
+Saved in ¤
+Saved in ¤
+Saved in ¤
+Saved in ¤
+END
+
+real	0m0.039s
+user	0m0.039s
+sys	0m0.000s
+
+	TEST identity2D/calomp-identity2D/bin/calomp-identity2D-test
+	 END
+
+real	0m0.029s
+user	0m0.202s
+sys	0m0.001s
+
+TEST SUITE identity3D
+	TEST identity3D/cal-identity3D/bin/cal-identity3D-test
+	 
+real	0m0.100s
+user	0m0.099s
+sys	0m0.001s
+
+	TEST identity3D/calomp-identity3D/bin/calomp-identity3D-test
+	 
+real	0m0.069s
+user	0m0.470s
+sys	0m0.003s
+
+TEST SUITE life2D
+	TEST life2D/cal-life2D/bin/cal-life2D-test
+	 
+real	0m0.328s
+user	0m0.301s
+sys	0m0.015s
+

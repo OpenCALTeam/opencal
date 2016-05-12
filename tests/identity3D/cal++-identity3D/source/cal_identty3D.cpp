@@ -2,11 +2,12 @@
 #include <OpenCAL++/calModel.h>
 #include <OpenCAL++/calRun.h>
 #include <OpenCAL++/calMooreNeighborhood.h>
-#include<OpenCAL++/calRealConverter.h>
+#include <OpenCAL++/calRealConverter.h>
 using namespace std;
 
-#define DIMX 	(100)
-#define DIMY 	(100)
+#define DIMX 	(30)
+#define DIMY 	(30)
+#define LAYERS 	(30)
 #define STEPS 	(100)
 
 #define PREFIX_PATH(version,name,pathVarName) \
@@ -17,21 +18,21 @@ using namespace std;
 
 typedef unsigned int COORD_TYPE;
 
-class IdentityFunctor : public opencal::CALElementaryProcessFunctor<2,
-		                                                                  opencal::CALMooreNeighborhood<2>
+class IdentityFunctor : public opencal::CALElementaryProcessFunctor<3,
+		                                                                  opencal::CALMooreNeighborhood<3>
 		                                                                 >{
 private:
 
-		 opencal::CALSubstate<int, 2> *I;
-		 opencal::CALSubstate<double, 2> *R;
-		 opencal::CALSubstate<bool, 2> *B;
+		 opencal::CALSubstate<int, 3> *I;
+		 opencal::CALSubstate<double, 3> *R;
+		 opencal::CALSubstate<bool, 3> *B;
 
 		 public:
 
 		   IdentityFunctor(auto& _I,auto& _R,auto& _B):I(_I),R(_R),B(_B){}
 
-		   void run(opencal::CALModel<2, opencal::CALMooreNeighborhood<2> > *calModel,
-		            std::array<COORD_TYPE, 2>& indexes)
+		   void run(opencal::CALModel<3, opencal::CALMooreNeighborhood<3> > *calModel,
+		            std::array<COORD_TYPE, 3>& indexes)
 		   {
 			    B->setElement(indexes, B->getElement(indexes));
 				R->setElement(indexes, R->getElement(indexes));
@@ -49,10 +50,10 @@ int main(int argc, char** argv)
 		exit(-1);
 	 }
 
-	 std::array<COORD_TYPE, 2> coords = { DIMX, DIMY };
-	 opencal::CALMooreNeighborhood<2> neighbor;
+	 std::array<COORD_TYPE, 3> coords = { DIMX, DIMY };
+	 opencal::CALMooreNeighborhood<3> neighbor;
 
-	 opencal::CALModel<2, opencal::CALMooreNeighborhood<2>, COORD_TYPE> calmodel(
+	 opencal::CALModel<3, opencal::CALMooreNeighborhood<3>, COORD_TYPE> calmodel(
 	   coords,
 	   &neighbor,
 	   opencal::calCommon::CAL_SPACE_TOROIDAL,
@@ -60,18 +61,16 @@ int main(int argc, char** argv)
 
 	opencal::CALRun < decltype(calmodel) > calrun(&calmodel, 1, 4, opencal::calCommon::CAL_UPDATE_IMPLICIT);
 
-opencal::CALSubstate<int, 2, COORD_TYPE> *I = calmodel.addSubstate<int>();
-opencal::CALSubstate<double, 2, COORD_TYPE> *R = calmodel.addSubstate<double>();
-opencal::CALSubstate<bool, 2, COORD_TYPE> *B = calmodel.addSubstate<bool>();
+opencal::CALSubstate<int, 3, COORD_TYPE> *I = calmodel.addSubstate<int>();
+opencal::CALSubstate<double, 3, COORD_TYPE> *R = calmodel.addSubstate<double>();
+opencal::CALSubstate<bool, 3, COORD_TYPE> *B = calmodel.addSubstate<bool>();
 
 calmodel.initSubstate(I, 12345);
 calmodel.initSubstate(R, 1.98765432);
 calmodel.initSubstate(B, false);
 
 string path;
-/*I->loadSubstate(opencal::stoi,  path);
-R->loadSubstate(opencal::stod,  path);
-R->loadSubstate(opencal::stoi,  path);*/
+
 //saving initial configuration
 //auto tostring_fn = []  (const auto& s)  -> std::string { return std::to_string(s);};
 PREFIX_PATH(version,"1.txt",path);
@@ -89,16 +88,6 @@ R->saveSubstate(opencal::tostring_fn<double>(6), path);
 PREFIX_PATH(version,"6.txt",path);
 B->saveSubstate(opencal::tostring_fn<bool>(), path);
 
-//lSaveSubstate2Di(life, I, (char*)path.c_str());
-//I->saveSubstate<opencal::CALIntConverter>(std::stof, (char*)path.c_str());
-/*
-PREFIX_PATH(version,"2.txt",path);
-
-PREFIX_PATH(version,"3.txt",path);
-R->saveSubstate<opencal::CALRealConverter>(&opencal::CALRealConverter::getInstance(), (char*)path.c_str());
-*/
-
-//calmodel.addElementaryProcess(new IdentityFunctor(I,R,B) );
 printf("END\n");
 	return 0;
 }
