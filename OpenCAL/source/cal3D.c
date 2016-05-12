@@ -454,13 +454,12 @@ void calInitSubstate3Db(struct CALModel3D* ca3D, struct CALSubstate3Db* Q, CALby
         calSetActiveCellsBuffer3Db(Q->current, value, ca3D);
         if(Q->next)
             calSetActiveCellsBuffer3Db(Q->next, value, ca3D);
-
+    }
     else
     {
             calSetBuffer3Db(Q->current, ca3D->rows, ca3D->columns, ca3D->slices, value);
             if(Q->next)
                 calSetBuffer3Db(Q->next, ca3D->rows, ca3D->columns,ca3D->slices, value);
-        }
     }
 }
 
@@ -471,13 +470,12 @@ void calInitSubstate3Di(struct CALModel3D* ca3D, struct CALSubstate3Di* Q, CALin
         calSetActiveCellsBuffer3Di(Q->current, value, ca3D);
         if(Q->next)
             calSetActiveCellsBuffer3Di(Q->next, value, ca3D);
-
+    }
     else
     {
             calSetBuffer3Di(Q->current, ca3D->rows, ca3D->columns, ca3D->slices, value);
             if(Q->next)
                 calSetBuffer3Di(Q->next, ca3D->rows, ca3D->columns,ca3D->slices, value);
-        }
     }
 }
 
@@ -488,15 +486,14 @@ void calInitSubstate3Dr(struct CALModel3D* ca3D, struct CALSubstate3Dr* Q, CALre
         calSetActiveCellsBuffer3Dr(Q->current, value, ca3D);
         if(Q->next)
             calSetActiveCellsBuffer3Dr(Q->next, value, ca3D);
-
+   }
     else
     {
             calSetBuffer3Dr(Q->current, ca3D->rows, ca3D->columns, ca3D->slices, value);
             if(Q->next)
                 calSetBuffer3Dr(Q->next, ca3D->rows, ca3D->columns,ca3D->slices, value);
-        }
     }
-}
+  }
 
 
 

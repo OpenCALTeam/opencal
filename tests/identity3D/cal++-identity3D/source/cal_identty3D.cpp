@@ -50,7 +50,7 @@ int main(int argc, char** argv)
 		exit(-1);
 	 }
 
-	 std::array<COORD_TYPE, 3> coords = { DIMX, DIMY };
+	 std::array<COORD_TYPE, 3> coords = { DIMX, DIMY, LAYERS };
 	 opencal::CALMooreNeighborhood<3> neighbor;
 
 	 opencal::CALModel<3, opencal::CALMooreNeighborhood<3>, COORD_TYPE> calmodel(
