@@ -267,6 +267,9 @@ struct CALModel2D* calCADef2D(int rows,
     if (ca2D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE) {
         ca2D->A = malloc( sizeof(struct CALActiveCells2D));
         ca2D->A->flags = calAllocBuffer2Db(ca2D->rows, ca2D->columns);
+        ca2D->A->cells = NULL;
+        ca2D->A->size_current = 0;
+        ca2D->A->size_next = 0;
         calSetBuffer2Db(ca2D->A->flags, ca2D->rows, ca2D->columns, CAL_FALSE);
     }
     else if(ca2D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS)
@@ -506,7 +509,7 @@ CALCallbackFunc2D* calAddElementaryProcess2D(struct CALModel2D* ca2D,	//!< Point
 
 void calInitSubstate2Db(struct CALModel2D* ca2D, struct CALSubstate2Db* Q, CALbyte value) {
     if ( (ca2D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS && ca2D->contiguousLinkedList->size_current > 0 ) ||
-        ( ca2D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE && ca2D->A) )
+        ( ca2D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE && ca2D->A->size_current > 0) )
     {
         calSetActiveCellsBuffer2Db(Q->current, value, ca2D);
         if(Q->next)
@@ -523,7 +526,7 @@ void calInitSubstate2Db(struct CALModel2D* ca2D, struct CALSubstate2Db* Q, CALby
 
 void calInitSubstate2Di(struct CALModel2D* ca2D, struct CALSubstate2Di* Q, CALint value) {
     if ( (ca2D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS && ca2D->contiguousLinkedList->size_current > 0 ) ||
-        ( ca2D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE && ca2D->A) )
+        ( ca2D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE && ca2D->A->size_current > 0) )
     {
         calSetActiveCellsBuffer2Di(Q->current, value, ca2D);
         if(Q->next)
@@ -540,7 +543,7 @@ void calInitSubstate2Di(struct CALModel2D* ca2D, struct CALSubstate2Di* Q, CALin
 
 void calInitSubstate2Dr(struct CALModel2D* ca2D, struct CALSubstate2Dr* Q, CALreal value) {
     if ( (ca2D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS && ca2D->contiguousLinkedList->size_current > 0 ) ||
-        ( ca2D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE && ca2D->A) )
+        ( ca2D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE && ca2D->A->size_current > 0) )
     {
         calSetActiveCellsBuffer2Dr(Q->current, value, ca2D);
         if(Q->next)
@@ -560,7 +563,7 @@ void calInitSubstate2Dr(struct CALModel2D* ca2D, struct CALSubstate2Dr* Q, CALre
 void calInitSubstateNext2Db(struct CALModel2D* ca2D, struct CALSubstate2Db* Q, CALbyte value) {
 
     if ( (ca2D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS && ca2D->contiguousLinkedList->size_current > 0 ) ||
-        ( ca2D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE && ca2D->A) )
+        ( ca2D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE && ca2D->A->size_current > 0) )
         calSetActiveCellsBuffer2Db(Q->next, value, ca2D);
     else
         calSetBuffer2Db(Q->next, ca2D->rows, ca2D->columns, value);
@@ -569,7 +572,7 @@ void calInitSubstateNext2Db(struct CALModel2D* ca2D, struct CALSubstate2Db* Q, C
 void calInitSubstateNext2Di(struct CALModel2D* ca2D, struct CALSubstate2Di* Q, CALint value) {
 
     if ( (ca2D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS && ca2D->contiguousLinkedList->size_current > 0 ) ||
-        ( ca2D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE && ca2D->A) )
+        ( ca2D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE && ca2D->A->size_current > 0) )
         calSetActiveCellsBuffer2Di(Q->next, value, ca2D);
     else
         calSetBuffer2Di(Q->next, ca2D->rows, ca2D->columns, value);
@@ -578,7 +581,7 @@ void calInitSubstateNext2Di(struct CALModel2D* ca2D, struct CALSubstate2Di* Q, C
 void calInitSubstateNext2Dr(struct CALModel2D* ca2D, struct CALSubstate2Dr* Q, CALreal value) {
 
     if ( (ca2D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS && ca2D->contiguousLinkedList->size_current > 0 ) ||
-        ( ca2D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE && ca2D->A) )
+        ( ca2D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE && ca2D->A->size_current > 0) )
         calSetActiveCellsBuffer2Dr(Q->next, value, ca2D);
     else
         calSetBuffer2Dr(Q->next, ca2D->rows, ca2D->columns, value);
@@ -588,7 +591,7 @@ void calInitSubstateNext2Dr(struct CALModel2D* ca2D, struct CALSubstate2Dr* Q, C
 void calUpdateSubstate2Db(struct CALModel2D* ca2D, struct CALSubstate2Db* Q) {
 
     if ( (ca2D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS && ca2D->contiguousLinkedList->size_current > 0 ) ||
-        ( ca2D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE && ca2D->A) )
+        ( ca2D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE && ca2D->A->size_current > 0) )
         calCopyBufferActiveCells2Db(Q->next, Q->current, ca2D);
     else
         calCopyBuffer2Db(Q->next, Q->current, ca2D->rows, ca2D->columns);
@@ -597,7 +600,7 @@ void calUpdateSubstate2Db(struct CALModel2D* ca2D, struct CALSubstate2Db* Q) {
 void calUpdateSubstate2Di(struct CALModel2D* ca2D, struct CALSubstate2Di* Q) {
 
     if ( (ca2D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS && ca2D->contiguousLinkedList->size_current > 0 ) ||
-        ( ca2D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE && ca2D->A) )
+        ( ca2D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE && ca2D->A->size_current > 0) )
         calCopyBufferActiveCells2Di(Q->next, Q->current, ca2D);
     else
         calCopyBuffer2Di(Q->next, Q->current, ca2D->rows, ca2D->columns);
@@ -607,7 +610,7 @@ void calUpdateSubstate2Dr(struct CALModel2D* ca2D, struct CALSubstate2Dr* Q) {
 
 
     if ( (ca2D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS && ca2D->contiguousLinkedList->size_current > 0 ) ||
-        ( ca2D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE && ca2D->A) )
+        ( ca2D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE && ca2D->A->size_current > 0) )
         calCopyBufferActiveCells2Dr(Q->next, Q->current, ca2D);
     else
         calCopyBuffer2Dr(Q->next, Q->current, ca2D->rows, ca2D->columns);

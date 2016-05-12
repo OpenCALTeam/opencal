@@ -204,6 +204,9 @@ struct CALModel3D* calCADef3D(int rows,
     if (ca3D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE) {
         ca3D->A = malloc( sizeof(struct CALActiveCells3D));
         ca3D->A->flags = calAllocBuffer3Db(ca3D->rows, ca3D->columns, ca3D->slices);
+        ca3D->A->cells = NULL;
+        ca3D->A->size_current = 0;
+        ca3D->A->size_next = 0;
         calSetBuffer3Db(ca3D->A->flags, ca3D->rows, ca3D->columns, ca3D->slices, CAL_FALSE);
     }
     else if(ca3D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS)
@@ -449,7 +452,7 @@ CALCallbackFunc3D* calAddElementaryProcess3D(struct CALModel3D* ca3D,	//!< Point
 
 void calInitSubstate3Db(struct CALModel3D* ca3D, struct CALSubstate3Db* Q, CALbyte value) {
     if ( (ca3D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS && ca3D->contiguousLinkedList->size_current > 0 ) ||
-        ( ca3D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE && ca3D->A) )
+        ( ca3D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE && ca3D->A->size_current > 0) )
     {
         calSetActiveCellsBuffer3Db(Q->current, value, ca3D);
         if(Q->next)
@@ -465,7 +468,7 @@ void calInitSubstate3Db(struct CALModel3D* ca3D, struct CALSubstate3Db* Q, CALby
 
 void calInitSubstate3Di(struct CALModel3D* ca3D, struct CALSubstate3Di* Q, CALint value) {
     if ( (ca3D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS && ca3D->contiguousLinkedList->size_current > 0 ) ||
-        ( ca3D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE && ca3D->A) )
+        ( ca3D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE && ca3D->A->size_current > 0) )
     {
         calSetActiveCellsBuffer3Di(Q->current, value, ca3D);
         if(Q->next)
@@ -481,7 +484,7 @@ void calInitSubstate3Di(struct CALModel3D* ca3D, struct CALSubstate3Di* Q, CALin
 
 void calInitSubstate3Dr(struct CALModel3D* ca3D, struct CALSubstate3Dr* Q, CALreal value) {
     if ( (ca3D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS && ca3D->contiguousLinkedList->size_current > 0 ) ||
-        ( ca3D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE && ca3D->A) )
+        ( ca3D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE && ca3D->A->size_current > 0) )
     {
         calSetActiveCellsBuffer3Dr(Q->current, value, ca3D);
         if(Q->next)
@@ -500,7 +503,7 @@ void calInitSubstate3Dr(struct CALModel3D* ca3D, struct CALSubstate3Dr* Q, CALre
 void calInitSubstateNext3Db(struct CALModel3D* ca3D, struct CALSubstate3Db* Q, CALbyte value) {
 
     if ( (ca3D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS && ca3D->contiguousLinkedList->size_current > 0 ) ||
-        ( ca3D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE && ca3D->A) )
+        ( ca3D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE && ca3D->A->size_current > 0) )
         calSetActiveCellsBuffer3Db(Q->next, value, ca3D);
     else
         calSetBuffer3Db(Q->next, ca3D->rows, ca3D->columns, ca3D->slices, value);
@@ -509,7 +512,7 @@ void calInitSubstateNext3Db(struct CALModel3D* ca3D, struct CALSubstate3Db* Q, C
 void calInitSubstateNext3Di(struct CALModel3D* ca3D, struct CALSubstate3Di* Q, CALint value) {
 
     if ( (ca3D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS && ca3D->contiguousLinkedList->size_current > 0 ) ||
-        ( ca3D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE && ca3D->A) )
+        ( ca3D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE && ca3D->A->size_current > 0) )
         calSetActiveCellsBuffer3Di(Q->next, value, ca3D);
     else
         calSetBuffer3Di(Q->next, ca3D->rows, ca3D->columns, ca3D->slices, value);
@@ -518,7 +521,7 @@ void calInitSubstateNext3Di(struct CALModel3D* ca3D, struct CALSubstate3Di* Q, C
 void calInitSubstateNext3Dr(struct CALModel3D* ca3D, struct CALSubstate3Dr* Q, CALreal value) {
 
     if ( (ca3D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS && ca3D->contiguousLinkedList->size_current > 0 ) ||
-        ( ca3D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE && ca3D->A) )
+        ( ca3D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE && ca3D->A->size_current > 0) )
         calSetActiveCellsBuffer3Dr(Q->next, value, ca3D);
     else
         calSetBuffer3Dr(Q->next, ca3D->rows, ca3D->columns, ca3D->slices, value);
@@ -529,7 +532,7 @@ void calInitSubstateNext3Dr(struct CALModel3D* ca3D, struct CALSubstate3Dr* Q, C
 void calUpdateSubstate3Db(struct CALModel3D* ca3D, struct CALSubstate3Db* Q) {
 
     if ( (ca3D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS && ca3D->contiguousLinkedList->size_current > 0 ) ||
-        ( ca3D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE && ca3D->A) )
+        ( ca3D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE && ca3D->A->size_current > 0) )
         calCopyBufferActiveCells3Db(Q->next, Q->current, ca3D);
     else
         calCopyBuffer3Db(Q->next, Q->current, ca3D->rows, ca3D->columns, ca3D->slices);
@@ -538,7 +541,7 @@ void calUpdateSubstate3Db(struct CALModel3D* ca3D, struct CALSubstate3Db* Q) {
 void calUpdateSubstate3Di(struct CALModel3D* ca3D, struct CALSubstate3Di* Q) {
 
     if ( (ca3D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS && ca3D->contiguousLinkedList->size_current > 0 ) ||
-        ( ca3D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE && ca3D->A) )
+        ( ca3D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE && ca3D->A->size_current > 0) )
         calCopyBufferActiveCells3Di(Q->next, Q->current, ca3D);
     else
         calCopyBuffer3Di(Q->next, Q->current, ca3D->rows, ca3D->columns, ca3D->slices);
@@ -547,7 +550,7 @@ void calUpdateSubstate3Di(struct CALModel3D* ca3D, struct CALSubstate3Di* Q) {
 void calUpdateSubstate3Dr(struct CALModel3D* ca3D, struct CALSubstate3Dr* Q) {
 
     if ( (ca3D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS && ca3D->contiguousLinkedList->size_current > 0 ) ||
-        ( ca3D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE && ca3D->A) )
+        ( ca3D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE && ca3D->A->size_current > 0) )
         calCopyBufferActiveCells3Dr(Q->next, Q->current, ca3D);
     else
         calCopyBuffer3Dr(Q->next, Q->current, ca3D->rows, ca3D->columns, ca3D->slices);

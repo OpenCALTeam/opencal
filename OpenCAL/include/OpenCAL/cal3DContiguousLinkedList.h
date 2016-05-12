@@ -68,8 +68,4 @@ void calSetActiveCellsCLLBuffer3Dr(CALreal* M, CALreal value, CALModel3D* ca3D);
 
 void calFreeContiguousLinkedList3D(CALContiguousLinkedList3D* cll);
 
-
-
-int getLinearIndex2D(int columns, int i, int j );
-
 #endif
