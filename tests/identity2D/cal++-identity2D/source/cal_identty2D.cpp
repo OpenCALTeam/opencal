@@ -68,9 +68,12 @@ calmodel.initSubstate(I, 12345);
 calmodel.initSubstate(R, 1.98765432);
 calmodel.initSubstate(B, false);
 
+string path;
+I->loadSubstate(opencal::stoi,  path);
+R->loadSubstate(opencal::stod,  path);
+R->loadSubstate(opencal::stoi,  path);
 //saving initial configuration
 //auto tostring_fn = []  (const auto& s)  -> std::string { return std::to_string(s);};
-string path;
 PREFIX_PATH(version,"1.txt",path);
 I->saveSubstate(opencal::tostring_fn<int>(4),  path);
 PREFIX_PATH(version,"2.txt",path);

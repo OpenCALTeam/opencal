@@ -21,8 +21,8 @@ namespace opencal {
 
         /*! \brief loads a matrix from file.
         */
-        template<class T, class CALCONVERTER>
-        static T *loadBuffer(int size, CALCONVERTER& converter, char *path){
+        template<class T, class CALCONVERTER, class STR_TYPE = std::string>
+        static T *loadBuffer(int size, CALCONVERTER& converter, const STR_TYPE& path){
             T *buffer = new T[size];
 
             std::string line, token;
@@ -32,7 +32,7 @@ namespace opencal {
             while (getline(in, line)) {
                 std::stringstream s(line);
                 while (s >> token) {
-                    T converted = converter.deserialize(token);
+                    T converted = converter(token);
                     buffer[i] = converted;
 
                     i++;

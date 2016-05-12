@@ -122,8 +122,8 @@ namespace opencal {
         }
 
 
-        template <class CALCONVERTER>
-        void loadSubstate(CALCONVERTER& calConverterInputOutput, char *path)
+        template <class CALCONVERTER, class STR_TYPE = std::string>
+        void loadSubstate(CALCONVERTER& calConverterInputOutput, const STR_TYPE& path)
         {
 
             delete current;

@@ -11,7 +11,45 @@
 
 namespace opencal {
 
+    // string -> signed integral
+    inline int stoi(const std::string& s){
+       return std::stoi(s);
+    }
 
+    inline long int stol(const std::string& s){
+       return std::stol(s);
+    }
+
+    inline long long int stoll(const std::string& s){
+       return std::stoll(s);
+    }
+
+    // string -> unsigned integral
+    inline unsigned long int stoul(const std::string& s){
+       return std::stol(s);
+    }
+
+    inline unsigned long long int stoull(const std::string& s){
+       return std::stoll(s);
+    }
+
+    // string -> floating
+    inline float stof(const std::string& s){
+       return std::stof(s);
+    }
+
+    inline double stod(const std::string& s){
+       return std::stol(s);
+    }
+
+    inline long double stold(const std::string& s){
+       return std::stoll(s);
+    }
+
+    //string to boolean (aka int short)
+    inline bool stob(const std::string& s){
+       return (bool)std::stoi(s);
+    }
 
 template<class T>
 std::string tostring_fn_(const T& s,const int n = 6) {
