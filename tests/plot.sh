@@ -5,15 +5,13 @@ set -o nounset
 #exit on error
 set -o errexit
 
-fileName=$1
-column=$2
 
 GetNthWordOfString() {
   echo `echo $1 | cut -d " " -f $2`
 
 }
 
-echo $fileName $column
+
 metric=""
 mkdir -p plotFiles
 rm -rf plotFiles/*
@@ -42,7 +40,8 @@ m=$i
         if [[ "$line" == "TEST"* ]]; then
           read -r row || [[ -n "$row" ]]
           metric=`GetNthWordOfString "$row" $(($m*2 -1 ))`
-          echo $s ${line##*/} `GetNthWordOfString "$row" $(($m*2 )) | tr . :` >> $namefile
+          #echo $s ${line##*/} `GetNthWordOfString "$row" $(($m*2 )) | tr . :` >> $namefile
+          echo $s ${line##*/} `GetNthWordOfString "$row" $(($m*2 ))` >> $namefile
         #  echo $s ${line##*/} `GetNthWordOfString "$row" $(($2*2 ))` $namefile
           s=$(($s+1 ))
         fi
