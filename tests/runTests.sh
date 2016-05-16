@@ -137,10 +137,16 @@ TestOutputFiles() {
 }
 
 ExecuteAndSaveElapsedTime() {
+	timeUtility="/usr/bin/time"
+	format="Time\t%E\tMaxMem\t%M\tPageFaults(minor)\t%R\tPageFaults(major)\t%F\tFS(input)\t%I\tFS(outpu)\t%O"
+# format=" -v "
+	timeOptions=" -f $format "
 	outFile="$1"
 	binary="$2"
 	parameters="$3"
-	execTime="$(time ( ./$binary $parameters) 2>&1 )"
+	echo "here $timeUtility $timeOptions ./$binary $parameters 2>&1"
+	execTime="$( $timeUtility $timeOptions ./$binary $parameters 2>&1)"
+
 	Indent "$(printColored $PURPLE "Elapsed Time: $execTime")"
 	echo -e "\tTEST $binary" >> $TIMINGFILE;
 	echo -e "\t $execTime\n" >> $outFile
@@ -169,15 +175,15 @@ mkdir -p testsout/serial
 mkdir -p testsout/other
 rm -f testsout/serial/*
 rm -f testsout/other/*
-TIMINGFILE="TestTiming-`date +"%s"`"
+TIMINGFILE="TestTiming-`date +"%d-%B-%y_%R:%S"`"
 touch $TIMINGFILE
 for d in */ ; do
-	if [[ $d != "testsout/" &&  $d != "testData/" ]]; then
+	if [[ $d != "testsout/" &&  $d != "testData/" &&  $d != "plotFiles/" ]]; then
 		dir=${d%/}
 
 		echo ""
 		printColored $GREEN "TEST SUITE $dir";
-		echo "TEST SUITE $dir" >> $TIMINGFILE;
+		echo "SUITE $dir" >> $TIMINGFILE;
 		#printColored $GREEN "`cat $dir/description.txt`"; #uncomment if you want to print a description of the test
 
 
@@ -216,8 +222,8 @@ for d in */ ; do
 				Md5CumulativeTest
 			#Numerical comparison
 				TestOutputFiles $NUMERICALTEST
-
-
+#comment this line to avoid pause between tests
+#pause
 				rm -f $TESTROOT/testsout/other/*
 
 		#restore test directory to run other version of the test
