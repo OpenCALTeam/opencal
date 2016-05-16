@@ -7,7 +7,7 @@ using namespace std;
 
 #define DIMX 	(100)
 #define DIMY 	(100)
-#define STEPS 	(100)
+#define STEPS 	(10000)
 
 #define PREFIX_PATH(version,name,pathVarName) \
 	if(version==0)\
@@ -58,7 +58,7 @@ int main(int argc, char** argv)
 	   opencal::calCommon::CAL_SPACE_TOROIDAL,
 	   opencal::calCommon::CAL_NO_OPT);
 
-	opencal::CALRun < decltype(calmodel) > calrun(&calmodel, 1, 4, opencal::calCommon::CAL_UPDATE_IMPLICIT);
+	opencal::CALRun < decltype(calmodel) > calrun(&calmodel, 1, STEPS, opencal::calCommon::CAL_UPDATE_IMPLICIT);
 
 opencal::CALSubstate<int, 2, COORD_TYPE> *I = calmodel.addSubstate<int>();
 opencal::CALSubstate<double, 2, COORD_TYPE> *R = calmodel.addSubstate<double>();
@@ -99,7 +99,7 @@ R->saveSubstate<opencal::CALRealConverter>(&opencal::CALRealConverter::getInstan
 */
 
 //calmodel.addElementaryProcess(new IdentityFunctor(I,R,B) );
-printf("END\n");
+
 	return 0;
 }
 
