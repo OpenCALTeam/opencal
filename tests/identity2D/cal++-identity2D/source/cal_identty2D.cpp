@@ -82,6 +82,9 @@ PREFIX_PATH(version,"3.txt",path);
 B->saveSubstate(opencal::tostring_fn<bool>(), path);
 
 
+calmodel.addElementaryProcess(new IdentityFunctor(I,R,B) );
+calrun.run();
+
 PREFIX_PATH(version,"4.txt",path);
 I->saveSubstate(opencal::tostring_fn<int>(),  path);
 PREFIX_PATH(version,"5.txt",path);
@@ -89,16 +92,8 @@ R->saveSubstate(opencal::tostring_fn<double>(6), path);
 PREFIX_PATH(version,"6.txt",path);
 B->saveSubstate(opencal::tostring_fn<bool>(), path);
 
-//lSaveSubstate2Di(life, I, (char*)path.c_str());
-//I->saveSubstate<opencal::CALIntConverter>(std::stof, (char*)path.c_str());
-/*
-PREFIX_PATH(version,"2.txt",path);
 
-PREFIX_PATH(version,"3.txt",path);
-R->saveSubstate<opencal::CALRealConverter>(&opencal::CALRealConverter::getInstance(), (char*)path.c_str());
-*/
 
-//calmodel.addElementaryProcess(new IdentityFunctor(I,R,B) );
 
 	return 0;
 }

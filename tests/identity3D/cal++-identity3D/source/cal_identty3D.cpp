@@ -8,7 +8,7 @@ using namespace std;
 #define DIMX 	(30)
 #define DIMY 	(30)
 #define LAYERS 	(30)
-#define STEPS 	(10000)
+#define STEPS 	(100)
 
 #define PREFIX_PATH(version,name,pathVarName) \
 	if(version==0)\
@@ -80,6 +80,8 @@ R->saveSubstate(opencal::tostring_fn<double>(6), path);
 PREFIX_PATH(version,"3.txt",path);
 B->saveSubstate(opencal::tostring_fn<bool>(), path);
 
+calmodel.addElementaryProcess(new IdentityFunctor(I,R,B) );
+calrun.run();
 
 PREFIX_PATH(version,"4.txt",path);
 I->saveSubstate(opencal::tostring_fn<int>(),  path);

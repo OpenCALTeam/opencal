@@ -73,7 +73,6 @@ int main(int argc, char** argv)
 	PREFIX_PATH(version,"3.txt",path);
 	calSaveSubstate2Db(life, B, (char*)path.c_str());
 
-
 	//simulation run
 	calRun2D(life_simulation);
 

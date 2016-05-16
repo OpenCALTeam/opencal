@@ -15,7 +15,7 @@ using namespace std;
 #define DIMX 	(30)
 #define DIMY 	(30)
 #define LAYERS 	(30)
-#define STEPS 	(10000)
+#define STEPS 	(100)
 
 struct CALModel3D* life;
 struct CALSubstate3Di *I;

@@ -15,5 +15,4 @@ file(GLOB SRC
 link_directories(${PROJECT_SOURCE_DIR}/OpenCAL++/lib)
 
 add_executable(cal++-identity3D-test ${SRC})
-target_link_libraries(cal++-identity3D-test opencal++)
 set_property(TARGET cal++-identity3D-test PROPERTY CXX_STANDARD 14)
