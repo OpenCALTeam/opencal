@@ -17,6 +17,9 @@
 #include "functional_utilities.h"
 #include <array>
 #include <OpenCAL++/calIndexesPool.h>
+#include <iostream>
+#include <iterator>
+#include <algorithm>
 namespace opencal {
 namespace calCommon {
 typedef unsigned int uint;
@@ -59,7 +62,7 @@ enum CALOptimization {
 /*! \brief Macro recomputing the out of bound neighbourhood indexes in case of
    toroidal cellular space.
  */
-inline int getToroidalX(int index, uint size)
+inline int getToroidalX(const int index, const uint size)
 {
   return (index) <
          0 ? ((size) + (index)) : ((index) >
@@ -108,6 +111,13 @@ inline unsigned int multiplier(std::array<COORDINATE_TYPE, DIMENSION>& coords,
                        mult);
 }
 
+using namespace std;
+template <class T, std::size_t N>
+std::ostream& operator<<(std::ostream& o, const std::array<T, N>& arr)
+{
+    copy(arr.cbegin(), arr.cend(), ostream_iterator<T>(o, " "));
+    return o;
+}
 /*! \brief Return the linearIndex of the cell with coordinates indexes.
  */
 template<uint DIMENSION, class COORDINATE_TYPE>
@@ -118,8 +128,9 @@ inline unsigned int cellLinearIndex(const std::array<COORDINATE_TYPE,
   uint c          = 0;
   uint multiplier = 1;
   uint n;
-
-  for (uint i = 0; i < DIMENSION; i++)
+//std::cout<<"coord ="<<coords<<std::endl;
+//std::cout<<"indices ="<<indices<<std::endl;
+  for (uint i = 1; i < DIMENSION; i++)
   {
     if (i == 1) n = 0;
     else if (i == 0) n = 1;
@@ -129,6 +140,22 @@ inline unsigned int cellLinearIndex(const std::array<COORDINATE_TYPE,
   }
 
   return c;
+}
+
+template<class COORDINATE_TYPE>
+inline unsigned int cellLinearIndex(const std::array<COORDINATE_TYPE,
+                                                     2>& indices,
+                                    const std::array<COORDINATE_TYPE,
+                                                     2>& coords) {
+   return indices[0]*coords[1]+indices[1];
+}
+
+template<class COORDINATE_TYPE>
+inline unsigned int cellLinearIndex(const std::array<COORDINATE_TYPE,
+                                                     3>& indices,
+                                    const std::array<COORDINATE_TYPE,
+                                                     3>& coords) {
+   return indices[0]*coords[1]+indices[1] + indices[2]*(coords[0]*coords[1]);
 }
 
 /*! \brief Return multidimensional indexes of a certain cell.
@@ -146,7 +173,7 @@ inline std::array<COORDINATE_TYPE, DIMENSION>& cellMultidimensionalIndices(
 template<uint DIMENSION, typename COORDINATE_TYPE>
 inline int getNeighborNLinear(int *indexes,
                               int *neighbor,
-                              std::array<COORDINATE_TYPE, DIMENSION>& coordinates,
+                              const std::array<COORDINATE_TYPE, DIMENSION>& coordinates,
                               enum CALSpaceBoundaryCondition CAL_TOROIDALITY)
 {
   int i;

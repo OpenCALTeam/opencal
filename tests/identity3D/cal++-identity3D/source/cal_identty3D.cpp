@@ -8,7 +8,7 @@ using namespace std;
 #define DIMX 	(30)
 #define DIMY 	(30)
 #define LAYERS 	(30)
-#define STEPS 	(100)
+#define STEPS 	(10000)
 
 #define PREFIX_PATH(version,name,pathVarName) \
 	if(version==0)\
@@ -19,8 +19,8 @@ using namespace std;
 typedef unsigned int COORD_TYPE;
 
 class IdentityFunctor : public opencal::CALElementaryProcessFunctor<3,
-		                                                                  opencal::CALMooreNeighborhood<3>
-		                                                                 >{
+		                                                        opencal::CALMooreNeighborhood<3>
+		                                                         >{
 private:
 
 		 opencal::CALSubstate<int, 3> *I;
