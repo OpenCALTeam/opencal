@@ -15,7 +15,7 @@ static constexpr const int total = 2*DIMENSION+1;
 typedef std::array<int,DIMENSION> element;
 
   static std::array<element, total> indices;
-
+public:
    static void defineNeighborhood(){
        indices[0] = {0};//central cell
        //total number of insertions is 2*Dimension+1
@@ -28,13 +28,14 @@ typedef std::array<int,DIMENSION> element;
        }
    }
 
-public:
+
 
   CALVonNeumannNeighborhood() {
     defineNeighborhood();
   }
 
   static const auto&  getNeighborhoodIndices() {
+
     return indices;
   }
 };
@@ -74,5 +75,7 @@ template<uint DIMENSION>
 std::array<typename CALVonNeumannNeighborhood<DIMENSION>::element, CALVonNeumannNeighborhood<DIMENSION>::total>opencal::CALVonNeumannNeighborhood<DIMENSION>::indices;
 
 } // namespace opencal
+
+
 
 #endif // OPENCAL_ALL_CALVONNEUMANNNEIGHBORHOOD_H

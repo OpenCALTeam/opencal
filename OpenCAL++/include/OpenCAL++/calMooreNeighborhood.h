@@ -12,7 +12,7 @@ protected:
 static constexpr const int total = calCommon::pow_ct(3, DIMENSION);
  typedef std::array<int,DIMENSION> element;
   static std::array<element, total> indices;
-
+public:
   static void defineNeighborhood() {
     assert(DIMENSION > 1);
     const int alphabet[] = { 0, -1, 1 };
@@ -31,7 +31,7 @@ static constexpr const int total = calCommon::pow_ct(3, DIMENSION);
      }
   }
 
-public:
+
 
   CALMooreNeighborhood() {
     defineNeighborhood(); // create the neighbohood

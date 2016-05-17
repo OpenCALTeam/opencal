@@ -130,8 +130,12 @@ namespace opencal {
                 this->X_id = _calNeighborhood;
 
                 if (X_id != NULL){
+
+                    NEIGHBORHOOD::defineNeighborhood();
+
                     this->addNeighbors(this->X_id->getNeighborhoodIndices());
                 }
+
 
 
 
