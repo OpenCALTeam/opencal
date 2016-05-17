@@ -38,6 +38,8 @@ public:
             z = Q->z->getX(linearIndex, n);
             h = Q->h->getX(linearIndex, n);
             u[n] = z + h;
+
+
         }
         //computes outflows
         do{
@@ -51,14 +53,14 @@ public:
                     cells_count++;
                 }
 
-                if (cells_count != 0)
-                    average /= cells_count;
+            if (cells_count != 0)
+                average /= cells_count;
 
-                for (n=0; n<neighboorhoodSize; n++)
-                    if( (average<=u[n]) && (!eliminated_cells[n]) ){
-                        eliminated_cells[n]=CAL_TRUE;
-                        again=CAL_TRUE;
-                    }
+            for (n=0; n<neighboorhoodSize; n++)
+                if( (average<=u[n]) && (!eliminated_cells[n]) ){
+                    eliminated_cells[n]=CAL_TRUE;
+                    again=CAL_TRUE;
+                }
         }while (again);
 
         for (n=1; n<neighboorhoodSize; n++)
@@ -86,11 +88,14 @@ public:
         double h_next;
         int n;
         h_next = Q->h->getElement(linearIndex);
+
         int neighboorhoodSize = calModel->getNeighborhoodSize();
         for(n=1; n<neighboorhoodSize; n++)
         {
             h_next +=  Q->f[NUMBER_OF_OUTFLOWS - n]->getX(linearIndex, n) - Q->f[n-1]->getElement(linearIndex);
         }
+
+
         Q->h->setElement(linearIndex, h_next);
     }
 };
@@ -111,15 +116,15 @@ public:
     }
     void run(opencal::CALModel<2,opencal::CALVonNeumannNeighborhood<2>,COORD_TYPE>* model)
     {
-       double z, h;
-       int i;
+        double z, h;
+        int i;
         //initializing substates to 0
-       model->initSubstate(Q->f[0],0.0);
-       model->initSubstate(Q->f[1],0.0);
-       model->initSubstate(Q->f[2],0.0);
-       model->initSubstate(Q->f[3],0.0);
+        model->initSubstate(Q->f[0],0.0);
+        model->initSubstate(Q->f[1],0.0);
+        model->initSubstate(Q->f[2],0.0);
+        model->initSubstate(Q->f[3],0.0);
 
-       //sciddicaT parameters setting
+        //sciddicaT parameters setting
         P->r = P_R;
         P->epsilon = P_EPSILON;
 
@@ -159,7 +164,7 @@ public:
 //-------------------------------------------------
 
 SciddicaTModel::SciddicaTModel (std::array<COORD_TYPE,2>& coords): sciddicaT(coords,&neighbor,opencal::calCommon::CAL_SPACE_TOROIDAL, opencal::calCommon::CAL_NO_OPT),
-                                                                    sciddicaT_simulation(&sciddicaT, 1, STEPS, opencal::calCommon:: CAL_UPDATE_IMPLICIT)
+    sciddicaT_simulation(&sciddicaT, 1, STEPS, opencal::calCommon:: CAL_UPDATE_IMPLICIT)
 {
     //adds substates
     Q = new SciddicaTSubstates ();
@@ -178,7 +183,7 @@ SciddicaTModel::SciddicaTModel (std::array<COORD_TYPE,2>& coords): sciddicaT(coo
     //adds elementary processes
     sciddicaT.addElementaryProcess(new SciddicaT_flows_computation(this->Q, this->P));
     sciddicaT.addElementaryProcess(new SciddicaT_width_update (this->Q));
-//    //simulation run setup
+    //    //simulation run setup
     sciddicaT_simulation.addInitFunc(new Simulation_Init(this->P, this->Q) );
     sciddicaT_simulation.addSteeringFunc(new SciddicaTSteering (this->Q));
 }
@@ -212,10 +217,10 @@ double convertInput (std::string in)
 void SciddicaTModel::sciddicaTLoadConfig()
 {
     Q->z->loadSubstate (convertInput,(char*) DEM_PATH);
-    Q->z->saveSubstate (convertOutput, (char*)"./data/1.txt");
+//    Q->z->saveSubstate (convertOutput, (char*)"./data/1.txt");
 
     Q->h->loadSubstate (convertInput,(char*) SOURCE_PATH);
-    Q->h->saveSubstate (convertOutput, (char*)"./data/2.txt");
+//    Q->h->saveSubstate (convertOutput, (char*)"./data/2.txt");
 }
 void SciddicaTModel::sciddicaTSaveConfig()
 {

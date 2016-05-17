@@ -17,6 +17,8 @@ typedef std::array<int,DIMENSION> element;
   static std::array<element, total> indices;
 public:
    static void defineNeighborhood(){
+
+
        indices[0] = {0};//central cell
        //total number of insertions is 2*Dimension+1
        for (int i = 0; i < DIMENSION; ++i)
@@ -26,6 +28,8 @@ public:
            indices[2*i+1][i] = 1;
            indices[2*i+2][i] = -1;
        }
+
+
    }
 
 
@@ -40,17 +44,17 @@ public:
   }
 };
 
-/*
 template<>
 inline void opencal::CALVonNeumannNeighborhood<2>::defineNeighborhood(){
-    CALVonNeumannNeighborhood<2>::indices = { {
-                                                { {0, 0} },
-                                                { { 1, 0} },
-                                                { {-1, 0} },
-                                                { {0, 1} },
-                                                { {0, -1} }
-                                            } };
+       CALVonNeumannNeighborhood<2>::indices = { {
+                                                   { {0, 0} },
+                                                   { { -1, 0} },
+                                                   { {0,-1} },
+                                                   { {0, 1} },
+                                                   { {1, 0} }
+                                               } };
 }
+/*
 
 
 template<>
