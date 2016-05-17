@@ -11,12 +11,14 @@
 
 #define P_R 0.5
 #define P_EPSILON 0.001
-#define STEPS 4000
-#define DEM_PATH "./data/dem.txt"
-#define SOURCE_PATH "./data/source.txt"
-#define OUTPUT_PATH "./data/width_final.txt"
+#define STEPS 200
+#define DEM_PATH "./testData/sciddicaT-data/dem.txt"
+
+#define SOURCE_PATH "./testData/sciddicaT-data/source.txt"
 
 #define NUMBER_OF_OUTFLOWS 4
+
+
 
 typedef uint COORD_TYPE;
 
