@@ -196,12 +196,28 @@ void SciddicaTModel :: sciddicaTRun ()
 //			sciddicaT I/O functions
 //-------------------------------------------------
 
+
+std::string convertOutput (double in)
+{
+    std::string c= std::to_string(in);
+    return c;
+}
+
+double convertInput (std::string in)
+{
+
+    return (std::stof(in));
+}
+
 void SciddicaTModel::sciddicaTLoadConfig()
 {
-    Q->z->loadSubstate<opencal::CALRealConverter> (converter,(char*) DEM_PATH);
-    Q->h->loadSubstate<opencal::CALRealConverter> (converter,(char*) SOURCE_PATH);
+    Q->z->loadSubstate (convertInput,(char*) DEM_PATH);
+    Q->z->saveSubstate (convertOutput, (char*)"./data/1.txt");
+
+    Q->h->loadSubstate (convertInput,(char*) SOURCE_PATH);
+    Q->h->saveSubstate (convertOutput, (char*)"./data/2.txt");
 }
 void SciddicaTModel::sciddicaTSaveConfig()
 {
-    Q->h->saveSubstate<opencal::CALRealConverter> (converter, (char*) OUTPUT_PATH);
+    Q->h->saveSubstate (convertOutput, (char*) OUTPUT_PATH);
 }

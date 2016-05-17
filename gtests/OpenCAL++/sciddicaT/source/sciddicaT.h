@@ -56,5 +56,22 @@ public:
     void sciddicaTSaveConfig();
     //runs simulation
     void sciddicaTRun();
+    
+    void stampa (opencal::CALSubstate<double, 2, COORD_TYPE> *Q)
+    {
+        for (int i=0; i< sciddicaT.getSize(); i++)
+        {
+
+//            std::cout.precision(dbl::max_digits10);
+            printf ("%f ",(*Q->getCurrent())[i]);
+
+
+            if ((i+1)%sciddicaT.getCoordinates()[1]== 0)
+            {
+                std::cout<<"\n";
+            }
+
+        }
+    }
 };
 #endif
