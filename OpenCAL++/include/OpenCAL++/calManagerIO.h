@@ -72,22 +72,17 @@ namespace opencal {
 
                 if ((i + 1) % coordinates[1] == 0)
                     out << '\n';
-                else {
+                else
                     out << "  ";
-                }
-
-
+                
                 int dim = size;
                 for (uint j = DIMENSION-1; j> 1; j--)
                 {
                     dim = dim/coordinates[j];
                     if ((i + 1) % dim == 0)
                         out << '\n';
-
                 }
-
             }
-            printf("Saved in %s\n",path);
             out.close();
         }
 

@@ -120,40 +120,40 @@ std::ostream& operator<<(std::ostream& o, const std::array<T, N>& arr)
 }
 /*! \brief Return the linearIndex of the cell with coordinates indexes.
  */
-template<uint DIMENSION, class COORDINATE_TYPE>
-inline unsigned int cellLinearIndex(const std::array<COORDINATE_TYPE,
-                                                     DIMENSION>& indices,
-                                    const std::array<COORDINATE_TYPE,
-                                                     DIMENSION>& coords) {
-  uint c          = 0;
-  uint multiplier = 1;
-  uint n;
-//std::cout<<"coord ="<<coords<<std::endl;
-//std::cout<<"indices ="<<indices<<std::endl;
-  for (uint i = 1; i < DIMENSION; i++)
-  {
-    if (i == 1) n = 0;
-    else if (i == 0) n = 1;
-    else n = i;
-    c          += indices[n] * multiplier;
-    multiplier *= coords[n];
-  }
+ template<uint DIMENSION, class COORDINATE_TYPE>
+ inline unsigned int cellLinearIndex(const std::array<COORDINATE_TYPE,
+                                                      DIMENSION>& indices,
+                                     const std::array<COORDINATE_TYPE,
+                                                      DIMENSION>& coords) {
+   uint c          = 0;
+   uint multiplier = 1;
+   uint n;
 
-  return c;
-}
+   for (uint i = 0; i < DIMENSION; i++)
+   {
+     if (i == 1) n = 0;
+     else if (i == 0) n = 1;
+     else n = i;
+     c          += indices[n] * multiplier;
+     multiplier *= coords[n];
+   }
 
-template<class COORDINATE_TYPE>
-inline unsigned int cellLinearIndex(const std::array<COORDINATE_TYPE,
+   return c;
+ }
+
+
+template<>
+inline unsigned int cellLinearIndex<2,uint>(const std::array<uint,
                                                      2>& indices,
-                                    const std::array<COORDINATE_TYPE,
+                                    const std::array<uint,
                                                      2>& coords) {
    return indices[0]*coords[1]+indices[1];
 }
 
-template<class COORDINATE_TYPE>
-inline unsigned int cellLinearIndex(const std::array<COORDINATE_TYPE,
+template<>
+inline unsigned int cellLinearIndex<3,uint>(const std::array<uint,
                                                      3>& indices,
-                                    const std::array<COORDINATE_TYPE,
+                                    const std::array<uint,
                                                      3>& coords) {
    return indices[0]*coords[1]+indices[1] + indices[2]*(coords[0]*coords[1]);
 }

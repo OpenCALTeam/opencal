@@ -22,10 +22,10 @@ template <typename T>
 //-----------------------------------------------------------------------
 //   THE LIFE CELLULAR AUTOMATON
 //-----------------------------------------------------------------------
-
 #define DIMX 	(100)
 #define DIMY 	(100)
 #define STEPS 	(100)
+
 
 struct CALModel2D* life;
 struct CALSubstate2Di *Q;
@@ -74,41 +74,38 @@ void setToad(struct  CALModel2D* life,int dx, int dy){
 
 //size DIMX DIMY alway >= 20
 void init(CALModel2D* life){
-	setGlider(life,1,1);
-	setGlider(life,94,94);
-	setToad(life,15,22);
-	
+    setGlider(life,1,1);
+    setGlider(life,DIMX-5,DIMY-5);
+    setToad(life,5,DIMY-5);
+
 }
 
 CALbyte lifeSimulationStopCondition(struct CALModel2D* life)
 {
+
 	if (life_simulation->step >= STEPS)
 		return CAL_TRUE;
 	return CAL_FALSE;
 }
 
-int version=0;	
+int version=0;
 string path;
 string step="";
 CALbyte simulationRun(){
-	
-	step=NumberToString( life_simulation->step );
-	PREFIX_PATH(version,"",path);
-	path+=step;
-	path+=".txt";	
-	calSaveSubstate2Di(life, Q, (char*)path.c_str());	
+
+
 
 	CALbyte again;
 
 	//simulation main loop
 	life_simulation->step++;
-	
+//printf("STEPS IS ddfd%d\n",life_simulation->step);
 	//exectutes the global transition function, the steering function and check for the stop 	condition.
 	again = calRunCAStep2D(life_simulation);
 	step=NumberToString( life_simulation->step );
 	PREFIX_PATH(version,"",path);
 	path+=step;
-	path+=".txt";	
+	path+=".txt";
 	calSaveSubstate2Di(life, Q, (char*)path.c_str());
 
 	return again;
@@ -116,8 +113,8 @@ CALbyte simulationRun(){
 
 int main(int argc, char**argv)
 {
-	
-		
+
+
 	if ( sscanf (argv[1], "%i", &version)!=1 && version >=0) {
 		printf ("error");
 		exit(-1);
@@ -130,21 +127,22 @@ int main(int argc, char**argv)
 	//add substates
 	Q = calAddSubstate2Di(life);
 
-	//add transition function's elementary processes. 
+	//add transition function's elementary processes.
 	calAddElementaryProcess2D(life, life_transition_function);
 
-	
+
 	//set the whole substate to 0
 	calInitSubstate2Di(life, Q, 0);
-	
-	calRunAddInitFunc2D(life_simulation, init); 
+
+	calRunAddInitFunc2D(life_simulation, init);
 	calRunInitSimulation2D(life_simulation);
 	calRunAddStopConditionFunc2D(life_simulation, lifeSimulationStopCondition);
 
+    PREFIX_PATH(version,"1.txt",path);
+    calSaveSubstate2Di(life, Q, (char*)path.c_str());
 	while(simulationRun())	{
 
 	}
-	
 	//finalization
 	calRunFinalize2D(life_simulation);
 	calFinalize2D(life);

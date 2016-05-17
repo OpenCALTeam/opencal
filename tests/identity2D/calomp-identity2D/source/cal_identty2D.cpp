@@ -14,7 +14,7 @@ using namespace std;
 //-----------------------------------------------------------------------
 #define DIMX 	(100)
 #define DIMY 	(100)
-#define STEPS 	(10000)
+#define STEPS 	(1000)
 
 struct CALModel2D* life;
 struct CALSubstate2Di *I;

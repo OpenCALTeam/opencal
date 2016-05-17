@@ -1,8 +1,9 @@
+#define CAL_OMP 1
 
 extern "C"{
-#include <OpenCAL/cal2DIO.h>
-#include <OpenCAL/cal2D.h>
-#include <OpenCAL/cal2DRun.h>
+#include <OpenCAL-OMP/cal2DIO.h>
+#include <OpenCAL-OMP/cal2D.h>
+#include <OpenCAL-OMP/cal2DRun.h>
 }
 #include <stdlib.h>
 #include <iostream>
@@ -21,9 +22,9 @@ template <typename T>
 //-----------------------------------------------------------------------
 //   THE LIFE CELLULAR AUTOMATON
 //-----------------------------------------------------------------------
-#define DIMX 	(100)
-#define DIMY 	(100)
-#define STEPS 	(100)
+#define DIMX 	(120)
+#define DIMY 	(120)
+#define STEPS 	(50000)
 
 struct CALModel2D* life;
 struct CALSubstate2Di *Q;
@@ -93,18 +94,18 @@ CALbyte simulationRun(){
 
 
 
+//printf("STEPS IS ddfd%d\n",life_simulation->step);
 	CALbyte again;
 
 	//simulation main loop
-	life_simulation->step++;
-//printf("STEPS IS ddfd%d\n",life_simulation->step);
 	//exectutes the global transition function, the steering function and check for the stop 	condition.
 	again = calRunCAStep2D(life_simulation);
-	step=NumberToString( life_simulation->step );
+	life_simulation->step++;
+/*	step=NumberToString( life_simulation->step );
 	PREFIX_PATH(version,"",path);
 	path+=step;
 	path+=".txt";
-	calSaveSubstate2Di(life, Q, (char*)path.c_str());
+	calSaveSubstate2Di(life, Q, (char*)path.c_str());*/
 
 	return again;
 }
@@ -141,6 +142,8 @@ int main(int argc, char**argv)
 	while(simulationRun())	{
 
 	}
+    PREFIX_PATH(version,"2.txt",path);
+    calSaveSubstate2Di(life, Q, (char*)path.c_str());
 	//finalization
 	calRunFinalize2D(life_simulation);
 	calFinalize2D(life);

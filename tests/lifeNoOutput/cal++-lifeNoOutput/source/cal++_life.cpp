@@ -19,10 +19,9 @@ string NumberToString ( T Number )
 //-----------------------------------------------------------------------
 //   THE LIFE CELLULAR AUTOMATON
 //-----------------------------------------------------------------------
-#define DIMX 	(100)
-#define DIMY 	(100)
-#define STEPS 	(100)
-
+#define DIMX 	(120)
+#define DIMY 	(120)
+#define STEPS 	(50000)
 
 //if versio == 0 -> write in serial folder
 #define PREFIX_PATH(version,name,pathVarName) \
@@ -105,7 +104,7 @@ public:
             return true;
         }
 
-        print (life_simulation->getStep()+1, Q);
+        //print (life_simulation->getStep()+1, Q);
 
         return false;
     }
@@ -135,7 +134,7 @@ public:
         setGlider(model,DIMX-5,DIMY-5);
         setToad(model,5,DIMY-5);
 
-        print (life_simulation->getStep(), Q);
+        //print (life_simulation->getStep(), Q);
     }
 
     void setToad(opencal::CALModel<2, opencal::CALMooreNeighborhood<2>, COORD_TYPE>* model, uint dx, uint dy){
@@ -205,13 +204,13 @@ int main(int argc, char **argv) {
 
     calrun.addStopConditionFunc(new LifeSimulationStopCondition(&calrun, Q));
 
-    //PREFIX_PATH(version,"1.txt",path);
-    //Q->saveSubstate(opencal::tostring_fn<int>(4),  path);
+    PREFIX_PATH(version,"1.txt",path);
+    Q->saveSubstate(opencal::tostring_fn<int>(4),  path);
 
 
     calrun.run();
-    //PREFIX_PATH(version,"2.txt",path);
-    //Q->saveSubstate(opencal::tostring_fn<int>(4),  path);
+    PREFIX_PATH(version,"2.txt",path);
+    Q->saveSubstate(opencal::tostring_fn<int>(4),  path);
 
 
     return 0;

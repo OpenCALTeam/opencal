@@ -7,7 +7,7 @@ using namespace std;
 
 #define DIMX 	(100)
 #define DIMY 	(100)
-#define STEPS 	(10000)
+#define STEPS 	(1000)
 
 #define PREFIX_PATH(version,name,pathVarName) \
 	if(version==0)\
