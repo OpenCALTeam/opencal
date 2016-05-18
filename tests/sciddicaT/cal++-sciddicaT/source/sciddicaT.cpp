@@ -225,10 +225,10 @@ double convertInput (std::string in)
 
 void SciddicaTModel::sciddicaTLoadConfig()
 {
-    Q->z->loadSubstate (convertInput,(char*) DEM_PATH);
+    Q->z->loadSubstate(opencal::stof,(char*) DEM_PATH);
 //    Q->z->saveSubstate (convertOutput, (char*)"./data/1.txt");
 
-    Q->h->loadSubstate (convertInput,(char*) SOURCE_PATH);
+    Q->h->loadSubstate(opencal::stof,(char*) SOURCE_PATH);
 //    Q->h->saveSubstate (convertOutput, (char*)"./data/2.txt");
 }
 void SciddicaTModel::sciddicaTSaveConfig()

@@ -14,46 +14,47 @@ static constexpr const int total = 2*DIMENSION+1;
 //int is necessary since neighborhood definition requires negative numbers
 typedef std::array<int,DIMENSION> element;
 
-  static std::array<element, total> indices;
+ static std::array<element, total> indices;
+
 public:
-   static void defineNeighborhood(){
+   static const std::array<element, total>&  defineNeighborhood(){
 
 
        indices[0] = {0};//central cell
        //total number of insertions is 2*Dimension+1
-       for (int i = 0; i < DIMENSION; ++i)
+       for (int i = 1; i <= DIMENSION; ++i)
        {
-           indices[2*i+1] = {0};
-           indices[2*i+2] = {0};
-           indices[2*i+1][i] = 1;
-           indices[2*i+2][i] = -1;
+           indices[i] = {0};
+           indices[i][i-1] = -1;
+       }
+       int c = DIMENSION -1;
+       for (int i = DIMENSION+1; i <= 2*DIMENSION; ++i,--c)
+       {
+           indices[i] = {0};
+           indices[i][c] = 1;
        }
 
-
+       return indices;
    }
 
 
 
-  CALVonNeumannNeighborhood() {
-    defineNeighborhood();
-  }
 
   static const auto&  getNeighborhoodIndices() {
-
     return indices;
   }
 };
-
+/*
 template<>
 inline void opencal::CALVonNeumannNeighborhood<2>::defineNeighborhood(){
        CALVonNeumannNeighborhood<2>::indices = { {
                                                    { {0, 0} },
-                                                   { { -1, 0} },
+                                                   { {-1, 0} },
                                                    { {0,-1} },
                                                    { {0, 1} },
                                                    { {1, 0} }
                                                } };
-}
+}*/
 /*
 
 
@@ -76,7 +77,8 @@ inline void opencal::CALVonNeumannNeighborhood<3>::defineNeighborhood(){
 
 // static member declaration
 template<uint DIMENSION>
-std::array<typename CALVonNeumannNeighborhood<DIMENSION>::element, CALVonNeumannNeighborhood<DIMENSION>::total>opencal::CALVonNeumannNeighborhood<DIMENSION>::indices;
+std::array<typename CALVonNeumannNeighborhood<DIMENSION>::element, CALVonNeumannNeighborhood<DIMENSION>::total>
+ opencal::CALVonNeumannNeighborhood<DIMENSION>::indices = opencal::CALVonNeumannNeighborhood<DIMENSION>::defineNeighborhood();
 
 } // namespace opencal
 

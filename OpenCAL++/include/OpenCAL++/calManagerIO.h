@@ -41,24 +41,10 @@ namespace opencal {
             return buffer;
         }
 
+
         template<class T, class CALCONVERTER, class STR_TYPE = std::string>
-        static T *loadBuffer(std::array <COORDINATE_TYPE, DIMENSION>& coordinates, CALCONVERTER converter, const STR_TYPE& path){
-            T *buffer = new T[opencal::calCommon::multiplier(coordinates, 0, DIMENSION)];
-
-            std::string line, token;
-            std::ifstream in(path);
-            int i = 0;
-
-            while (getline(in, line)) {
-                std::stringstream s(line);
-                while (s >> token) {
-                    i++;
-                    T converted = converter(token);
-                    buffer[i] = converted;
-
-                }
-            }
-            return buffer;
+        inline static T *loadBuffer(std::array <COORDINATE_TYPE, DIMENSION>& coordinates, CALCONVERTER converter, const STR_TYPE& path){
+            return loadBuffer(opencal::calCommon::multiplier(coordinates, 0, DIMENSION),converter,path);
         }
 
         /*! \brief saves a certain matrix to file.
@@ -74,7 +60,7 @@ namespace opencal {
                     out << '\n';
                 else
                     out << "  ";
-                
+
                 int dim = size;
                 for (uint j = DIMENSION-1; j> 1; j--)
                 {

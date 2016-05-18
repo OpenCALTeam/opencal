@@ -2,7 +2,7 @@
 #include <OpenCAL++/calModel.h>
 #include <OpenCAL++/calRun.h>
 #include <OpenCAL++/calMooreNeighborhood.h>
-#include<OpenCAL++/calRealConverter.h>
+
 using namespace std;
 
 #define DIMX 	(100)

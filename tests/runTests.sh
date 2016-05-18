@@ -144,7 +144,7 @@ ExecuteAndSaveElapsedTime() {
 	outFile="$1"
 	binary="$2"
 	parameters="$3"
-	echo "here $timeUtility $timeOptions ./$binary $parameters 2>&1"
+	#echo "here $timeUtility $timeOptions ./$binary $parameters 2>&1"
 	execTime="$( $timeUtility $timeOptions ./$binary $parameters 2>&1)"
 
 	Indent "$(printColored $PURPLE "Elapsed Time: $execTime")"

@@ -7,7 +7,7 @@
 #include <OpenCAL++/calModel.h>
 #include <OpenCAL++/calRun.h>
 #include <OpenCAL++/calMooreNeighborhood.h>
-#include <OpenCAL++/calRealConverter.h>
+#include <OpenCAL++/calIOIntConverter.h>
 typedef unsigned int COORD_TYPE;
 
 class Life_transition_function : public opencal::CALElementaryProcessFunctor<2,

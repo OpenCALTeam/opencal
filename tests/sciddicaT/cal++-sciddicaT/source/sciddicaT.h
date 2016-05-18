@@ -4,7 +4,7 @@
 #include <OpenCAL++/calModel.h>
 #include <OpenCAL++/calVonNeumannNeighborhood.h>
 #include <OpenCAL++/calRun.h>
-#include <OpenCAL++/calRealConverter.h>
+#include <OpenCAL++/calIORealConverter.h>
 
 #include <stdlib.h>
 #include <time.h>
@@ -58,7 +58,7 @@ public:
     void sciddicaTSaveConfig();
     //runs simulation
     void sciddicaTRun();
-    
+
 
 };
 #endif
