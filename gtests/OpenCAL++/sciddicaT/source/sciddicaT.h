@@ -21,9 +21,9 @@
 typedef uint COORD_TYPE;
 
 struct SciddicaTSubstates {
-    opencal::CALSubstate<double, 2, COORD_TYPE> *z;
-    opencal::CALSubstate<double, 2, COORD_TYPE> *h;
-    opencal::CALSubstate<double, 2, COORD_TYPE> *f[NUMBER_OF_OUTFLOWS];
+    opencal::CALSubstate<double, 2, COORD_TYPE, opencal::calCommon::OPT> *z;
+    opencal::CALSubstate<double, 2, COORD_TYPE, opencal::calCommon::OPT> *h;
+    opencal::CALSubstate<double, 2, COORD_TYPE, opencal::calCommon::OPT> *f[NUMBER_OF_OUTFLOWS];
 };
 struct SciddicaTParameters {
     double epsilon;
@@ -56,7 +56,7 @@ public:
     void sciddicaTSaveConfig();
     //runs simulation
     void sciddicaTRun();
-
+    
 
 };
 #endif

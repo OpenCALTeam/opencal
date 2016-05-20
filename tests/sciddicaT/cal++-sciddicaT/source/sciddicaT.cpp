@@ -178,13 +178,13 @@ SciddicaTModel::SciddicaTModel (std::array<COORD_TYPE,2>& coords): sciddicaT(coo
     //adds substates
     Q = new SciddicaTSubstates ();
     P = new SciddicaTParameters ();
-    Q->z = sciddicaT.addSubstate<double>();
-    Q->h = sciddicaT.addSubstate<double>();
+    Q->z = sciddicaT.addSubstate<double, opencal::calCommon::OPT>();
+    Q->h = sciddicaT.addSubstate<double, opencal::calCommon::OPT>();
 
-    Q->f[0] = sciddicaT.addSubstate<double>();
-    Q->f[1] = sciddicaT.addSubstate<double>();
-    Q->f[2] = sciddicaT.addSubstate<double>();
-    Q->f[3] = sciddicaT.addSubstate<double>();
+    Q->f[0] = sciddicaT.addSubstate<double, opencal::calCommon::OPT>();
+    Q->f[1] = sciddicaT.addSubstate<double, opencal::calCommon::OPT>();
+    Q->f[2] = sciddicaT.addSubstate<double, opencal::calCommon::OPT>();
+    Q->f[3] = sciddicaT.addSubstate<double,opencal::calCommon::OPT>();
 
     //loads configuration
     sciddicaTLoadConfig();

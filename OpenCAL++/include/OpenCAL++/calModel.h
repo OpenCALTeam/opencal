@@ -267,10 +267,10 @@ namespace opencal {
             }
             /*! \brief Creates and adds a new substate to CALModel::pQ_arrays and return a pointer to it.
         */
-            template <class PAYLOAD>
-            CALSubstate<PAYLOAD, DIMENSION, COORDINATE_TYPE>* addSubstate(){
-                using SUBSTATE = CALSubstate<PAYLOAD, DIMENSION , COORDINATE_TYPE>;
-                using SUBSTATE_pointer = CALSubstate<PAYLOAD, DIMENSION , COORDINATE_TYPE>*;
+            template <class PAYLOAD, calCommon::SUBSTATE_OPT OPT= calCommon::NO_OPT>
+            CALSubstate<PAYLOAD, DIMENSION, COORDINATE_TYPE, OPT>* addSubstate(){
+                using SUBSTATE = CALSubstate<PAYLOAD, DIMENSION , COORDINATE_TYPE, OPT>;
+                using SUBSTATE_pointer = CALSubstate<PAYLOAD, DIMENSION , COORDINATE_TYPE,OPT>*;
 
                 CALSubstateWrapper<DIMENSION , COORDINATE_TYPE>** pQ_array_tmp = this->pQ_arrays;
                 CALSubstateWrapper<DIMENSION , COORDINATE_TYPE>** pQ_array_new;
@@ -286,7 +286,7 @@ namespace opencal {
                     pQ_array_new[i] = pQ_array_tmp[i];
                 }
 
-                if (!allocSubstate<PAYLOAD>(Q))
+                if (!allocSubstate<PAYLOAD, OPT>(Q))
                 {
                     return NULL;
                 }
@@ -306,10 +306,10 @@ namespace opencal {
                 Note that sinlgle-layer substates are not added to CALModel::pQ_arrays because
                 they do not need to be updated.
             */
-            template <class PAYLOAD>
-            CALSubstate<PAYLOAD, DIMENSION, COORDINATE_TYPE>* addSingleLayerSubstate(){
-                using SUBSTATE_type = CALSubstate<PAYLOAD, DIMENSION , COORDINATE_TYPE>;
-                using SUBSTATE_pointer = CALSubstate<PAYLOAD, DIMENSION , COORDINATE_TYPE>*;
+            template <class PAYLOAD, calCommon::SUBSTATE_OPT OPT= calCommon::NO_OPT>
+            CALSubstate<PAYLOAD, DIMENSION, COORDINATE_TYPE, OPT>* addSingleLayerSubstate(){
+                using SUBSTATE_type = CALSubstate<PAYLOAD, DIMENSION , COORDINATE_TYPE,OPT>;
+                using SUBSTATE_pointer = CALSubstate<PAYLOAD, DIMENSION , COORDINATE_TYPE,OPT>*;
                 using BUFFER_pointer = CALBuffer<PAYLOAD, DIMENSION, COORDINATE_TYPE>*;
                 using BUFFER_type = CALBuffer<PAYLOAD, DIMENSION, COORDINATE_TYPE>;
 
@@ -320,8 +320,8 @@ namespace opencal {
             }
 
 
-            template <class PAYLOAD>
-            void initSubstate(CALSubstate<PAYLOAD, DIMENSION, COORDINATE_TYPE>*& Q, PAYLOAD value) {
+            template <class PAYLOAD, calCommon::SUBSTATE_OPT OPT= calCommon::NO_OPT>
+            void initSubstate(CALSubstate<PAYLOAD, DIMENSION, COORDINATE_TYPE,OPT>*& Q, PAYLOAD value) {
                 if (this->activeCells)
                 {
                     Q->setActiveCellsBufferCurrent(this->activeCells, value);
@@ -338,16 +338,16 @@ namespace opencal {
                 }
             }
 
-            template <class PAYLOAD>
-            void initSubstateNext(CALSubstate<PAYLOAD, DIMENSION, COORDINATE_TYPE>*& Q, PAYLOAD value) {
+            template <class PAYLOAD, calCommon::SUBSTATE_OPT OPT= calCommon::NO_OPT>
+            void initSubstateNext(CALSubstate<PAYLOAD, DIMENSION, COORDINATE_TYPE, OPT>*& Q, PAYLOAD value) {
                 if (this->activeCells)
                     Q->setActiveCellsBuffer(this->activeCells, value);
                 else
                     Q->setNextBuffer(value);
             }
 
-            template <class PAYLOAD>
-            void init(CALSubstate<PAYLOAD, DIMENSION, COORDINATE_TYPE>*& Q, std::array<COORDINATE_TYPE, DIMENSION>& indexes, PAYLOAD value) {
+            template <class PAYLOAD, calCommon::SUBSTATE_OPT OPT= calCommon::NO_OPT>
+            void init(CALSubstate<PAYLOAD, DIMENSION, COORDINATE_TYPE,OPT>*& Q, std::array<COORDINATE_TYPE, DIMENSION>& indexes, PAYLOAD value) {
 
                 int linearIndex = calCommon::cellLinearIndex<DIMENSION, COORDINATE_TYPE>(indexes, this->coordinates);
                 (*Q->getCurrent())[linearIndex] = value;
@@ -425,10 +425,10 @@ namespace opencal {
             //protected methods
         protected:
 
-            template<class PAYLOAD>
-            calCommon::CALbyte allocSubstate(CALSubstate<PAYLOAD , DIMENSION , COORDINATE_TYPE>*& Q){
+            template<class PAYLOAD, calCommon::SUBSTATE_OPT OPT= calCommon::NO_OPT>
+            calCommon::CALbyte allocSubstate(CALSubstate<PAYLOAD , DIMENSION , COORDINATE_TYPE, OPT>*& Q){
                 using BUFFER = CALBuffer<PAYLOAD, DIMENSION, COORDINATE_TYPE>;
-                using SUBSTATE = CALSubstate<PAYLOAD, DIMENSION , COORDINATE_TYPE>;
+                using SUBSTATE = CALSubstate<PAYLOAD, DIMENSION , COORDINATE_TYPE, OPT>;
 
                 BUFFER* current = new BUFFER(this->coordinates);
                 BUFFER* next = new BUFFER(this->coordinates);

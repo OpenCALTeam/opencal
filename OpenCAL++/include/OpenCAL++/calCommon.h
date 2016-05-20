@@ -142,6 +142,8 @@ namespace opencal {
           REDUCTION_BINARY_XOR
         };
 
+        enum SUBSTATE_OPT { NO_OPT, OPT };
+
 
         /*! \brief Multiply cordinates array's element from startingIndex to dimension.
          */
