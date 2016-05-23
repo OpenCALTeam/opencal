@@ -18,7 +18,7 @@
 
 #define NUMBER_OF_OUTFLOWS 4
 
-
+using namespace opencal;
 
 typedef uint COORD_TYPE;
 
@@ -31,6 +31,73 @@ struct SciddicaTParameters {
     double epsilon;
     double r;
 };
+
+
+typedef opencal::CALModel<2,opencal::CALVonNeumannNeighborhood<2>,COORD_TYPE> CALMODEL;
+
+class MyRun : public opencal::CALRun<CALMODEL >
+{
+private:
+    struct SciddicaTSubstates* Q;
+    struct SciddicaTParameters* P;
+public:
+
+    MyRun (CALMODEL_pointer model,   int _initial_step,int _final_step,enum calCommon :: CALUpdateMode _UPDATE_MODE
+           )	:
+        CALRun(model, _initial_step,_final_step, _UPDATE_MODE)
+    {
+
+    }
+
+    void init(SciddicaTSubstates* _Q, SciddicaTParameters* _P)
+    {
+        this->Q = _Q;
+        this->P = _P;
+
+    }
+
+    void steering()
+    {
+        // set flow to 0 everywhere
+        calModel->initSubstate(Q->f[0],0.0);
+        calModel->initSubstate(Q->f[1],0.0);
+        calModel->initSubstate(Q->f[2],0.0);
+        calModel->initSubstate(Q->f[3],0.0);
+
+    }
+
+    void init()
+    {
+        double z, h;
+        int i;
+        //initializing substates to 0
+        calModel->initSubstate(Q->f[0],0.0);
+        calModel->initSubstate(Q->f[1],0.0);
+        calModel->initSubstate(Q->f[2],0.0);
+        calModel->initSubstate(Q->f[3],0.0);
+
+        //sciddicaT parameters setting
+        P->r = P_R;
+        P->epsilon = P_EPSILON;
+
+        int size = calModel->getSize();
+        //sciddicaT source initialization
+        for (i = 0;  i< size; i++)
+        {
+            h = Q->h->getElement(i);
+            if ( h > 0.0 )
+            {
+                z = Q->z->getElement(i);
+                Q->z->setElement(i, z-h);
+            }
+        }
+    }
+};
+
+
+
+
+
 class SciddicaTModel
 {
 
@@ -38,7 +105,7 @@ private:
     // pointer to cellular automaton
     opencal::CALModel<2,opencal::CALVonNeumannNeighborhood<2>,COORD_TYPE> sciddicaT;
     // simulation object
-    opencal::CALRun<opencal::CALModel<2,opencal::CALVonNeumannNeighborhood<2>,COORD_TYPE>> sciddicaT_simulation;
+    MyRun sciddicaT_simulation;
     // set of substates used in the simulation
     struct SciddicaTSubstates* Q;
     // paramenters

@@ -108,66 +108,7 @@ public:
         Q->h->setElement(linearIndex, h_next);
     }
 };
-//-------------------------------------------------
-//		sciddicaT simulation functions
-//-------------------------------------------------
 
-class Simulation_Init : public opencal::CALModelFunctor <opencal::CALModel<2,opencal::CALVonNeumannNeighborhood<2>,COORD_TYPE>, void>
-{
-private:
-    struct SciddicaTParameters* P;
-    struct SciddicaTSubstates* Q;
-public:
-    Simulation_Init (SciddicaTParameters* P, SciddicaTSubstates* Q)
-    {
-        this->P = P;
-        this->Q= Q;
-    }
-    void run(opencal::CALModel<2,opencal::CALVonNeumannNeighborhood<2>,COORD_TYPE>* model)
-    {
-        double z, h;
-        int i;
-        //initializing substates to 0
-        model->initSubstate(Q->f[0],0.0);
-        model->initSubstate(Q->f[1],0.0);
-        model->initSubstate(Q->f[2],0.0);
-        model->initSubstate(Q->f[3],0.0);
-
-        //sciddicaT parameters setting
-        P->r = P_R;
-        P->epsilon = P_EPSILON;
-
-        int size = model->getSize();
-        //sciddicaT source initialization
-        for (i = 0;  i< size; i++)
-        {
-            h = Q->h->getElement(i);
-            if ( h > 0.0 )
-            {
-                z = Q->z->getElement(i);
-                Q->z->setElement(i, z-h);
-            }
-        }
-    }
-};
-class SciddicaTSteering : public opencal::CALModelFunctor <opencal::CALModel<2,opencal::CALVonNeumannNeighborhood<2>,COORD_TYPE>, void>
-{
-private:
-    struct SciddicaTSubstates* Q;
-public:
-    SciddicaTSteering (SciddicaTSubstates* Q)
-    {
-        this->Q = Q;
-    }
-    void run(opencal::CALModel<2,opencal::CALVonNeumannNeighborhood<2>,COORD_TYPE>* model)
-    {
-        // set flow to 0 everywhere
-        model->initSubstate(Q->f[0],0.0);
-        model->initSubstate(Q->f[1],0.0);
-        model->initSubstate(Q->f[2],0.0);
-        model->initSubstate(Q->f[3],0.0);
-    }
-};
 //-------------------------------------------------
 //		sciddicaT constructor and destructor
 //-------------------------------------------------
@@ -178,6 +119,8 @@ SciddicaTModel::SciddicaTModel (std::array<COORD_TYPE,2>& coords): sciddicaT(coo
     //adds substates
     Q = new SciddicaTSubstates ();
     P = new SciddicaTParameters ();
+
+    sciddicaT_simulation.init(Q,P);
     Q->z = sciddicaT.addSubstate<double, opencal::calCommon::OPT>();
     Q->h = sciddicaT.addSubstate<double, opencal::calCommon::OPT>();
 
@@ -192,9 +135,7 @@ SciddicaTModel::SciddicaTModel (std::array<COORD_TYPE,2>& coords): sciddicaT(coo
     //adds elementary processes
     sciddicaT.addElementaryProcess(new SciddicaT_flows_computation(this->Q, this->P));
     sciddicaT.addElementaryProcess(new SciddicaT_width_update (this->Q));
-    //    //simulation run setup
-    sciddicaT_simulation.addInitFunc(new Simulation_Init(this->P, this->Q) );
-    sciddicaT_simulation.addSteeringFunc(new SciddicaTSteering (this->Q));
+
 }
 SciddicaTModel :: ~SciddicaTModel ()
 {
@@ -217,19 +158,14 @@ std::string convertOutput (double in)
     return c;
 }
 
-double convertInput (std::string in)
-{
-
-    return (std::stof(in));
-}
 
 void SciddicaTModel::sciddicaTLoadConfig()
 {
     Q->z->loadSubstate(opencal::stof,(char*) DEM_PATH);
-//    Q->z->saveSubstate (convertOutput, (char*)"./data/1.txt");
+
 
     Q->h->loadSubstate(opencal::stof,(char*) SOURCE_PATH);
-//    Q->h->saveSubstate (convertOutput, (char*)"./data/2.txt");
+
 }
 void SciddicaTModel::sciddicaTSaveConfig()
 {

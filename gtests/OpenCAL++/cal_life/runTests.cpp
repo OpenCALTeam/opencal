@@ -45,8 +45,6 @@ public:
 };
 
 
-
-
 int main(int argc, char **argv) {
   std::array<COORD_TYPE, 2> coords = { 8, 16 };
   opencal::CALMooreNeighborhood<2> neighbor;

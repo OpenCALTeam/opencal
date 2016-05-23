@@ -33,6 +33,7 @@ string NumberToString ( T Number )
 
 typedef unsigned int COORD_TYPE;
 
+using namespace opencal;
 
 int version=1;
 string path;
@@ -83,23 +84,125 @@ public:
     }
 };
 
-class LifeSimulationStopCondition : public opencal::CALModelFunctor <opencal::CALModel<2, opencal::CALMooreNeighborhood<2>, COORD_TYPE>, bool>
+//class LifeSimulationStopCondition : public opencal::CALModelFunctor <opencal::CALModel<2, opencal::CALMooreNeighborhood<2>, COORD_TYPE>, bool>
+//{
+//private:
+//    opencal::CALRun < opencal::CALModel < 2, opencal::CALMooreNeighborhood<2>,COORD_TYPE >>* life_simulation;
+//    opencal::CALSubstate<int, 2, COORD_TYPE> *Q;
+//public:
+//    LifeSimulationStopCondition(opencal::CALRun < opencal::CALModel < 2, opencal::CALMooreNeighborhood<2>,COORD_TYPE >>* _life_simulation,  opencal::CALSubstate<int, 2, COORD_TYPE> * _Q)
+//    {
+//        this->life_simulation = _life_simulation;
+//        this->Q = _Q;
+//    }
+
+//    bool run(opencal::CALModel<2, opencal::CALMooreNeighborhood<2>, COORD_TYPE>* model)
+//    {
+
+
+//        if (life_simulation->getStep() >= STEPS)
+//        {
+//            return true;
+//        }
+
+//        //print (life_simulation->getStep()+1, Q);
+
+//        return false;
+//    }
+
+//};
+
+
+
+//class Init : public opencal::CALModelFunctor <opencal::CALModel<2, opencal::CALMooreNeighborhood<2>, COORD_TYPE>, void>
+//{
+//private:
+
+//    opencal::CALSubstate<int, 2> *Q;
+//    opencal::CALRun < opencal::CALModel < 2, opencal::CALMooreNeighborhood<2>,COORD_TYPE >>* life_simulation;
+
+//public:
+
+//    Init(opencal::CALSubstate<int, 2> *_Q, opencal::CALRun < opencal::CALModel < 2, opencal::CALMooreNeighborhood<2>,COORD_TYPE >>* _life_simulation)
+//    {
+//        Q = _Q;
+//        this->life_simulation = _life_simulation;
+//    }
+
+//    void run(opencal::CALModel<2, opencal::CALMooreNeighborhood<2>, COORD_TYPE>* model)
+//    {
+//        setGlider(model,1,1);
+//        setGlider(model,DIMX-5,DIMY-5);
+//        setToad(model,5,DIMY-5);
+
+//        //print (life_simulation->getStep(), Q);
+//    }
+
+//    void setToad(opencal::CALModel<2, opencal::CALMooreNeighborhood<2>, COORD_TYPE>* model, uint dx, uint dy){
+//        //set a Toad Pulsar
+
+//        std::array<std::array<COORD_TYPE, 2>, 6> indexes = {        {
+//                                                                        { { 0+dx, 1+dy } },
+//                                                                        { { 0+dx, 2+dy } },
+//                                                                        { { 0+dx, 3+dy } },
+//                                                                        { { 1+dx, 0+dy } },
+//                                                                        { { 1+dx, 1+dy } },
+//                                                                        { { 1+dx, 2+dy } }
+//                                                                    } };
+
+
+//        for (uint i = 0; i < 6; i++)
+//        {
+//            model->init(Q, indexes[i], 1);
+//        }
+
+//    }
+
+//    void setGlider(opencal::CALModel<2, opencal::CALMooreNeighborhood<2>, COORD_TYPE>* model, uint dx, uint dy){
+//        //set a glider
+//        std::array<std::array<COORD_TYPE, 2>, 5> indexes = {        {
+//                                                                        { { 0+dx, 2+dy } },
+//                                                                        { { 1+dx, 0+dy } },
+//                                                                        { { 1+dx, 2+dy } },
+//                                                                        { { 2+dx, 1+dy } },
+//                                                                        { { 2+dx, 2+dy } }
+//                                                                    } };
+
+
+//        for (uint i = 0; i < 5; i++)
+//        {
+//            model->init(Q, indexes[i], 1);
+//        }
+//    }
+
+
+//};
+
+typedef opencal::CALModel<2, opencal::CALMooreNeighborhood<2>, COORD_TYPE> CALMODEL;
+
+class MyRun : public opencal::CALRun<CALMODEL>
 {
 private:
-    opencal::CALRun < opencal::CALModel < 2, opencal::CALMooreNeighborhood<2>,COORD_TYPE >>* life_simulation;
-    opencal::CALSubstate<int, 2, COORD_TYPE> *Q;
+    opencal::CALSubstate<int, 2> *Q;
 public:
-    LifeSimulationStopCondition(opencal::CALRun < opencal::CALModel < 2, opencal::CALMooreNeighborhood<2>,COORD_TYPE >>* _life_simulation,  opencal::CALSubstate<int, 2, COORD_TYPE> * _Q)
+
+    MyRun (CALMODEL_pointer model,   int _initial_step,int _final_step,enum calCommon :: CALUpdateMode _UPDATE_MODE
+           )	:
+        CALRun(model, _initial_step,_final_step, _UPDATE_MODE)
     {
-        this->life_simulation = _life_simulation;
-        this->Q = _Q;
+
     }
 
-    bool run(opencal::CALModel<2, opencal::CALMooreNeighborhood<2>, COORD_TYPE>* model)
+    void init(opencal::CALSubstate<int, 2> *_Q)
     {
+        this->Q = _Q;
 
 
-        if (life_simulation->getStep() >= STEPS)
+    }
+
+    bool stopCondition()
+    {
+        if (this->step >= STEPS)
         {
             return true;
         }
@@ -109,35 +212,16 @@ public:
         return false;
     }
 
-};
-
-
-
-class Init : public opencal::CALModelFunctor <opencal::CALModel<2, opencal::CALMooreNeighborhood<2>, COORD_TYPE>, void>
-{
-private:
-
-    opencal::CALSubstate<int, 2> *Q;
-    opencal::CALRun < opencal::CALModel < 2, opencal::CALMooreNeighborhood<2>,COORD_TYPE >>* life_simulation;
-
-public:
-
-    Init(opencal::CALSubstate<int, 2> *_Q, opencal::CALRun < opencal::CALModel < 2, opencal::CALMooreNeighborhood<2>,COORD_TYPE >>* _life_simulation)
+    void init()
     {
-        Q = _Q;
-        this->life_simulation = _life_simulation;
-    }
-
-    void run(opencal::CALModel<2, opencal::CALMooreNeighborhood<2>, COORD_TYPE>* model)
-    {
-        setGlider(model,1,1);
-        setGlider(model,DIMX-5,DIMY-5);
-        setToad(model,5,DIMY-5);
+        setGlider(1,1);
+        setGlider(DIMX-5,DIMY-5);
+        setToad(5,DIMY-5);
 
         //print (life_simulation->getStep(), Q);
     }
 
-    void setToad(opencal::CALModel<2, opencal::CALMooreNeighborhood<2>, COORD_TYPE>* model, uint dx, uint dy){
+    void setToad( uint dx, uint dy){
         //set a Toad Pulsar
 
         std::array<std::array<COORD_TYPE, 2>, 6> indexes = {        {
@@ -152,12 +236,12 @@ public:
 
         for (uint i = 0; i < 6; i++)
         {
-            model->init(Q, indexes[i], 1);
+            calModel->init(Q, indexes[i], 1);
         }
 
     }
 
-    void setGlider(opencal::CALModel<2, opencal::CALMooreNeighborhood<2>, COORD_TYPE>* model, uint dx, uint dy){
+    void setGlider( uint dx, uint dy){
         //set a glider
         std::array<std::array<COORD_TYPE, 2>, 5> indexes = {        {
                                                                         { { 0+dx, 2+dy } },
@@ -170,11 +254,9 @@ public:
 
         for (uint i = 0; i < 5; i++)
         {
-            model->init(Q, indexes[i], 1);
+            calModel->init(Q, indexes[i], 1);
         }
     }
-
-
 };
 
 
@@ -190,19 +272,19 @@ int main(int argc, char **argv) {
                 opencal::calCommon::CAL_SPACE_TOROIDAL,
                 opencal::calCommon::CAL_NO_OPT);
 
-    opencal::CALRun < opencal::CALModel < 2, opencal::CALMooreNeighborhood<2>,
-            COORD_TYPE >> calrun(&calmodel, 1, STEPS, opencal::calCommon::CAL_UPDATE_IMPLICIT);
+    MyRun calrun(&calmodel, 1, STEPS, opencal::calCommon::CAL_UPDATE_IMPLICIT);
 
 
     opencal::CALSubstate<int, 2, COORD_TYPE> *Q = calmodel.addSubstate<int>();
 
     calmodel.initSubstate(Q, 0);
+    calrun.init(Q);
     calmodel.addElementaryProcess(new Life_transition_function(Q) );
 
-    calrun.addInitFunc(new Init(Q,&calrun));
+
     calrun.runInitSimulation();
 
-    calrun.addStopConditionFunc(new LifeSimulationStopCondition(&calrun, Q));
+
 
     PREFIX_PATH(version,"1.txt",path);
     Q->saveSubstate(opencal::tostring_fn<int>(4),  path);
