@@ -18,7 +18,7 @@ using namespace std;
 
 typedef unsigned int COORD_TYPE;
 
-class IdentityFunctor : public opencal::CALElementaryProcessFunctor<3,
+class IdentityFunctor : public opencal::CALLocalFunction<3,
 		                                                        opencal::CALMooreNeighborhood<3>
 		                                                         >{
 private:

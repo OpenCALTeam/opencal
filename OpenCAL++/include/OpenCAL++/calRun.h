@@ -28,8 +28,8 @@ protected:
     enum calCommon :: CALUpdateMode UPDATE_MODE;	//!< Callbacks substates' update mode; it can be CAL_UPDATE_EXPLICIT or CAL_UPDATE_IMPLICIT.
 
     bool initFunctionRedefined = true;
-    bool globalTransitionFunctionRedefined = true;
-    bool steeringFunctionRedefined = true;
+    //    bool globalTransitionFunctionRedefined = true;
+    //    bool steeringFunctionRedefined = true;
     bool finalizeFunctionRedefined = true;
 
 
@@ -59,20 +59,20 @@ public:
         initFunctionRedefined = false;
     }
 
-    inline virtual void steering ()
-    {
-        steeringFunctionRedefined = false;
-    }
+    //    inline virtual void steering ()
+    //    {
+    //        steeringFunctionRedefined = false;
+    //    }
 
     inline virtual void finalize ()
     {
         finalizeFunctionRedefined = false;
     }
 
-    inline virtual void global ()
-    {
-        globalTransitionFunctionRedefined = false;
-    }
+    //    inline virtual void global ()
+    //    {
+    //        globalTransitionFunctionRedefined = false;
+    //    }
 
 
     inline virtual bool stopCondition ()
@@ -96,23 +96,8 @@ public:
     /*! \brief A single step of the cellular automaton. It executes the transition function, the steering and check for the stop condition.
     */
     calCommon::CALbyte runCAStep(){
-        this->global();
-        if (this->globalTransitionFunctionRedefined){
 
-            if (this->UPDATE_MODE == calCommon :: CAL_UPDATE_IMPLICIT)
-                this->calModel->update();
-        }
-        else{
-            this->calModel->globalTransitionFunction();
-
-        }
-
-        this->steering ();
-
-
-        if (steeringFunctionRedefined)
-            if (this->UPDATE_MODE == calCommon :: CAL_UPDATE_IMPLICIT)
-                this->calModel->update();
+        this->calModel->globalTransitionFunction();
 
         return !this->stopCondition();
     }

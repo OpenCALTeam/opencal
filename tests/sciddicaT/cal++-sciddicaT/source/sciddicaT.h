@@ -56,15 +56,6 @@ public:
 
     }
 
-    void steering()
-    {
-        // set flow to 0 everywhere
-        calModel->initSubstate(Q->f[0],0.0);
-        calModel->initSubstate(Q->f[1],0.0);
-        calModel->initSubstate(Q->f[2],0.0);
-        calModel->initSubstate(Q->f[3],0.0);
-
-    }
 
     void init()
     {

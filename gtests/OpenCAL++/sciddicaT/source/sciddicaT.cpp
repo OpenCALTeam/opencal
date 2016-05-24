@@ -4,7 +4,7 @@
 //-------------------------------------------------
 
 //first elementary process
-class SciddicaT_flows_computation : public opencal::CALElementaryProcessFunctor<2 , opencal::CALVonNeumannNeighborhood<2> , COORD_TYPE>
+class SciddicaT_flows_computation : public opencal::CALLocalFunction<2 , opencal::CALVonNeumannNeighborhood<2> , COORD_TYPE>
 {
 private:
     struct SciddicaTSubstates* Q;
@@ -73,7 +73,7 @@ public:
 };
 
 //second (and last) elementary process
-class SciddicaT_width_update: public opencal::CALElementaryProcessFunctor<2 , opencal::CALVonNeumannNeighborhood<2> , COORD_TYPE>
+class SciddicaT_width_update: public opencal::CALLocalFunction<2 , opencal::CALVonNeumannNeighborhood<2> , COORD_TYPE>
 {
 private:
     struct SciddicaTSubstates* Q;
@@ -99,6 +99,66 @@ public:
         Q->h->setElement(linearIndex, h_next);
     }
 };
+
+
+
+//class Simulation_Init : public opencal::CALGlobalFunction <2 , opencal::CALVonNeumannNeighborhood<2> , COORD_TYPE>
+//{
+//private:
+//    struct SciddicaTParameters* P;
+//    struct SciddicaTSubstates* Q;
+//public:
+//    Simulation_Init (SciddicaTParameters* P, SciddicaTSubstates* Q)
+//    {
+//        this->P = P;
+//        this->Q= Q;
+//    }
+//    void run(opencal::CALModel<2,opencal::CALVonNeumannNeighborhood<2>,COORD_TYPE>* model)
+//    {
+//        double z, h;
+//        int i;
+//        //initializing substates to 0
+//        model->initSubstate(Q->f[0],0.0);
+//        model->initSubstate(Q->f[1],0.0);
+//        model->initSubstate(Q->f[2],0.0);
+//        model->initSubstate(Q->f[3],0.0);
+
+//        //sciddicaT parameters setting
+//        P->r = P_R;
+//        P->epsilon = P_EPSILON;
+
+//        int size = model->getSize();
+//        //sciddicaT source initialization
+//        for (i = 0;  i< size; i++)
+//        {
+//            h = Q->h->getElement(i);
+//            if ( h > 0.0 )
+//            {
+//                z = Q->z->getElement(i);
+//                Q->z->setElement(i, z-h);
+//            }
+//        }
+//    }
+//};
+class SciddicaTSteering : public opencal::CALGlobalFunction <2 , opencal::CALVonNeumannNeighborhood<2> , COORD_TYPE>
+{
+private:
+    struct SciddicaTSubstates* Q;
+public:
+    SciddicaTSteering (SciddicaTSubstates* Q, enum opencal::calCommon :: CALUpdateMode _UPDATE_MODE): CALGlobalFunction(_UPDATE_MODE)
+    {
+        this->Q = Q;
+    }
+    void run(opencal::CALModel<2,opencal::CALVonNeumannNeighborhood<2>,COORD_TYPE>* model)
+    {
+        // set flow to 0 everywhere
+        model->initSubstate(Q->f[0],0.0);
+        model->initSubstate(Q->f[1],0.0);
+        model->initSubstate(Q->f[2],0.0);
+        model->initSubstate(Q->f[3],0.0);
+    }
+};
+
 
 //-------------------------------------------------
 //		sciddicaT constructor and destructor
@@ -126,6 +186,7 @@ SciddicaTModel::SciddicaTModel (std::array<COORD_TYPE,2>& coords): sciddicaT(coo
     //adds elementary processes
     sciddicaT.addElementaryProcess(new SciddicaT_flows_computation(this->Q, this->P));
     sciddicaT.addElementaryProcess(new SciddicaT_width_update (this->Q));
+    sciddicaT.addElementaryProcess(new SciddicaTSteering (this->Q, opencal::calCommon:: CAL_UPDATE_IMPLICIT));
 }
 SciddicaTModel :: ~SciddicaTModel ()
 {

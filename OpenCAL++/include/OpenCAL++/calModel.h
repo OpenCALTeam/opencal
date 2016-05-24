@@ -21,49 +21,13 @@
 #include<OpenCAL++/calSubstate.h>
 #include <OpenCAL++/calIndexesPool.h>
 #include <OpenCAL++/calNeighborPool.h>
+#include <OpenCAL++/calElementaryProcessFunctor.h>
 #include<vector>
 
 
 
 
 namespace opencal {
-
-
-    /*! \brief Class that defines transition function's elementary processes.
-*/
-
-    template<uint DIMENSION, class NEIGHBORHOOD, typename COORDINATE_TYPE>
-    class CALModel;
-
-
-        template<uint DIMENSION, class NEIGHBORHOOD, typename COORDINATE_TYPE = uint>
-        class CALElementaryProcessFunctor {
-        protected:
-            typedef CALModel<DIMENSION, NEIGHBORHOOD, COORDINATE_TYPE> CALMODEL_type;
-            typedef CALModel<DIMENSION, NEIGHBORHOOD, COORDINATE_TYPE> *CALMODEL_pointer;
-        public:
-
-            CALElementaryProcessFunctor()
-            {
-
-            }
-
-            /*! \brief Method that has to ridefined in concrete derived class in order to specify the necessary steps for elementary process.
-            */
-            virtual void run(CALMODEL_pointer calModel, std::array<COORDINATE_TYPE,DIMENSION>& indexes) = 0;
-
-            virtual void operator()(CALMODEL_pointer calModel, std::array<COORDINATE_TYPE,DIMENSION>& indexes)
-            {
-                run(calModel, indexes);
-            }
-
-            virtual ~CALElementaryProcessFunctor()
-            {
-
-            }
-        };
-
-
 
 
         template<uint DIMENSION, class NEIGHBORHOOD, typename COORDINATE_TYPE = uint>
@@ -78,7 +42,7 @@ namespace opencal {
             typedef NEIGHBORHOOD* NEIGHBORHOOD_pointer;
             typedef NEIGHBORHOOD& NEIGHBORHOOD_reference;
 
-            typedef CALElementaryProcessFunctor<DIMENSION , NEIGHBORHOOD , COORDINATE_TYPE> CALCallbackFunc_type;
+            typedef CALFunction<DIMENSION , NEIGHBORHOOD , COORDINATE_TYPE> CALCallbackFunc_type;
             //typedef void(*CALCallbackFunc_type)(CALMODEL_pointer, CALCELL_INDIXES_constreference);
             typedef CALCallbackFunc_type& CALCallbackFunc_reference;
             typedef CALCallbackFunc_type* CALCallbackFunc_pointer;
@@ -215,26 +179,26 @@ namespace opencal {
               elementary_processes.push_back(_elementary_process);
             }
 
-            void applyElementaryProcess(CACallback _elementary_process) //!< Pointer to a transition function's elementary process
-            {
-                int i, n;
+//            void applyElementaryProcess(CACallback _elementary_process) //!< Pointer to a transition function's elementary process
+//            {
+//                int i, n;
 
-                if (this->activeCells) //Computationally active cells optimization.
-                {
-                    int sizeCurrent = this->activeCells->getSizeCurrent();
-                    for (n=0; n<sizeCurrent; n++)
-                        (*_elementary_process)(this,calCommon::cellMultidimensionalIndices<DIMENSION,COORDINATE_TYPE>(this->activeCells->getCells()[n]));
-                }
-                else //Standart cicle of the transition function
-                {
+//                if (this->activeCells) //Computationally active cells optimization.
+//                {
+//                    int sizeCurrent = this->activeCells->getSizeCurrent();
+//                    for (n=0; n<sizeCurrent; n++)
+//                        (*_elementary_process)(this,calCommon::cellMultidimensionalIndices<DIMENSION,COORDINATE_TYPE>(this->activeCells->getCells()[n]));
+//                }
+//                else //Standart cicle of the transition function
+//                {
 
-                    for (i=0; i<this->size; i++){
-                    auto indices = calCommon:: cellMultidimensionalIndices<DIMENSION,COORDINATE_TYPE>(i);
-                        (*_elementary_process)(this,indices);
-                    }
+//                    for (i=0; i<this->size; i++){
+//                    auto indices = calCommon:: cellMultidimensionalIndices<DIMENSION,COORDINATE_TYPE>(i);
+//                        (*_elementary_process)(this,indices);
+//                    }
 
-                }
-            }
+//                }
+//            }
 
 
             void globalTransitionFunction()
@@ -245,9 +209,10 @@ namespace opencal {
                 for (const auto elementaty_process : elementary_processes){
 
                   //applying the b-th elementary process
-                    this->applyElementaryProcess(elementaty_process);
+//                    this->applyElementaryProcess(elementaty_process);
                     //updating substates
-                    this-> update();
+//                    this-> update();
+                    (*elementaty_process)(this);
                 }
             }
 
@@ -390,6 +355,11 @@ namespace opencal {
             {
                 this->sizeof_X = sizeof_X;
             }
+
+//            opencal::CALActiveCells<DIMENSION,COORDINATE_TYPE>* getActiveCells ()
+//            {
+//                return activeCells;
+//            }
 
 
             template <class PAYLOAD>

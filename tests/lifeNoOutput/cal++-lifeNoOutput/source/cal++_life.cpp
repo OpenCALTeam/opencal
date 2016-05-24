@@ -50,7 +50,7 @@ void print (int currentStep, opencal::CALSubstate<int, 2, COORD_TYPE> * Q)
 }
 
 
-class Life_transition_function : public opencal::CALElementaryProcessFunctor<2,
+class Life_transition_function : public opencal::CALLocalFunction<2,
         opencal::CALMooreNeighborhood<2>
         >{
 private:

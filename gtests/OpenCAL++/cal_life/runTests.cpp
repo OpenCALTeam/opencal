@@ -10,7 +10,7 @@
 #include <OpenCAL++/calIOIntConverter.h>
 typedef unsigned int COORD_TYPE;
 
-class Life_transition_function : public opencal::CALElementaryProcessFunctor<2,
+class Life_transition_function : public opencal::CALLocalFunction<2,
                                                                              opencal::CALMooreNeighborhood<2>
                                                                             >{
 private:
