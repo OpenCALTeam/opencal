@@ -17,6 +17,8 @@ namespace opencal {
 
     template<uint DIMENSION, typename COORDINATE_TYPE = uint>
     class CALManagerIO {
+        typedef std::function< T*( int, STR_TYPE ) > Function;
+
     public:
 
         /*! \brief loads a matrix from file.
@@ -38,6 +40,14 @@ namespace opencal {
                     i++;
                 }
             }
+            return buffer;
+        }
+
+
+
+        template<class T,class STR_TYPE = std::string, typename T*(*CALSUBSTATELOADER)(int, STR_TYPE) >
+        static T *loadBuffer(int size, CALSUBSTATELOADER& converter, const STR_TYPE& path){
+            T *buffer = converter(size,path);
             return buffer;
         }
 
