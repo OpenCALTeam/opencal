@@ -45,14 +45,12 @@ namespace opencal {
 
 
 
-        template<typename T,class STR_TYPE >
-        static T *loadBuffer(int size, std::function<T*(int, const std::string&)> loader, const STR_TYPE& path){
-            T *buffer = loader(size,path);
+        template<typename T,class STR_TYPE > inline
+        static T *loadBuffer(int size, std::function<T*(int, const std::string&)>& loadCallback, const STR_TYPE& path){
+            T *buffer = loadCallback(size,path);
             
             return buffer;
         }
-
-
         template<class T, class CALCONVERTER, class STR_TYPE = std::string>
         inline static T *loadBuffer(std::array <COORDINATE_TYPE, DIMENSION>& coordinates, CALCONVERTER converter, const STR_TYPE& path){
             return loadBuffer(opencal::calCommon::multiplier(coordinates, 0, DIMENSION),converter,path);
@@ -83,6 +81,16 @@ namespace opencal {
             out.close();
         }
 
+
+
+        template<typename T,class STR_TYPE > inline
+        static void saveBuffer(T *buffer, int size, std::array <COORDINATE_TYPE, DIMENSION>& coordinates,
+                                std::function<void(const T*, const std::string&)>& saveCallback, const STR_TYPE& path){
+            
+            saveCallback(buffer,path);
+            
+           
+        }
 
 
 

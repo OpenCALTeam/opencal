@@ -25,7 +25,7 @@ public:
 
     virtual void update(opencal::CALActiveCells<DIMENSION, COORDINATE_TYPE> *activeCells) = 0;
 
-    //        virtual void saveSubstate(CALCONVERTERIO_pointer calConverterInputOutput, char *path) = 0;
+    //        virtual void raveSubstate(CALCONVERTERIO_pointer calConverterInputOutput, char *path) = 0;
 
     //        virtual void loadSubstate(CALCONVERTERIO_pointer calConverterInputOutput, char *path) = 0;
 };
@@ -122,12 +122,12 @@ public:
     template <class CALCONVERTER, class STR_TYPE = std::string>
     void saveSubstate(CALCONVERTER& calConverterInputOutput, const STR_TYPE& path)
     {
-        this->current-> template saveBuffer<CALCONVERTER>(this->coordinates,calConverterInputOutput, path);
+        this->current-> template saveBuffer(this->coordinates,calConverterInputOutput, path);
     }
 
 
     template <class CALCONVERTER, class STR_TYPE = std::string>
-    void loadSubstate(CALCONVERTER calConverterInputOutput, const STR_TYPE& path)
+    void loadSubstate(CALCONVERTER& calConverterInputOutput, const STR_TYPE& path)
     {
 
         delete current;
@@ -324,7 +324,7 @@ public:
     template <class CALCONVERTER, class STR_TYPE = std::string>
     void saveSubstate(CALCONVERTER& calConverterInputOutput, const STR_TYPE& path)
     {
-        this->current-> template saveBuffer<CALCONVERTER>(this->coordinates,calConverterInputOutput, path);
+        this->current-> template saveBuffer(this->coordinates,calConverterInputOutput, path);
     }
 
 

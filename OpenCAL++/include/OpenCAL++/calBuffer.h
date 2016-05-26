@@ -93,7 +93,7 @@ public:
     template<class CALCONVERTER, class STR_TYPE = std::string>
     void saveBuffer (std::array <COORDINATE_TYPE, DIMENSION>& coordinates, CALCONVERTER& calConverterInputOutput, const STR_TYPE& path)
     {
-        opencal::CALManagerIO<DIMENSION, COORDINATE_TYPE>:: template saveBuffer<PAYLOAD,CALCONVERTER>(this->buffer, this->size, coordinates, calConverterInputOutput, path);
+        opencal::CALManagerIO<DIMENSION, COORDINATE_TYPE>:: template saveBuffer<PAYLOAD>(this->buffer, this->size, coordinates, calConverterInputOutput, path);
     }
 
 

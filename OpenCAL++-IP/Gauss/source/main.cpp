@@ -32,6 +32,14 @@ printf("sto qui\n");
 }
 
 
+template<class T>
+void saveImage(const T* buffer, const std::string& path){
+printf("sto qui save\n");
+    
+}
+
+
+
 int main ()
 {
     std::array<COORD_TYPE, 2> coords = { 8, 16 };
@@ -47,9 +55,8 @@ int main ()
     COORD_TYPE >> calrun(&calmodel, 1, 4, opencal::calCommon::CAL_UPDATE_IMPLICIT);
 
     opencal::CALSubstate<vec3b, 2, COORD_TYPE> *bgr = calmodel.addSubstate<vec3b>();
-    std::function<vec3b*(int, const std::string)> lf= loadImage<vec3b>;
     bgr->loadSubstate(*(new std::function<decltype(loadImage<vec3b>)>(loadImage<vec3b>)), "");
-
+    bgr->saveSubstate(*(new std::function<decltype(saveImage<vec3b>)>(saveImage<vec3b>)), "");
 
 
 
