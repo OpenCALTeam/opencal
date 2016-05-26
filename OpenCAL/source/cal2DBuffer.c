@@ -1,4 +1,4 @@
-// (C) Copyright University of Calabria and others.
+﻿// (C) Copyright University of Calabria and others.
 // All rights reserved. This program and the accompanying materials
 // are made available under the terms of the GNU Lesser General Public License
 // (LGPL) version 2.1 which accompanies this distribution, and is available at
@@ -132,11 +132,11 @@ void calSetBuffer2Db(CALbyte* M, int rows, int columns, CALbyte value)
 }
 void calSetBuffer2Di(CALint* M, int rows, int columns, CALint value)
 {
-	int size = rows * columns;
-	int i;
+    int size = rows * columns;
+    int i;
 
-	for (i=0; i<size; i++)
-			M[i] = value;
+    for (i=0; i<size; i++)
+            M[i] = value;
 }
 void calSetBuffer2Dr(CALreal* M, int rows, int columns, CALreal value)
 {

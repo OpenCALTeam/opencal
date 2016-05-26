@@ -8,19 +8,19 @@ static int getLinearIndex3D( int columns, int rows, int i, int j, int k)
 
 CALContiguousLinkedList3D* calMakeContiguousLinkedList3D( CALModel3D* model )
 {
-    CALContiguousLinkedList3D* linkedBuffer = ( CALContiguousLinkedList3D* )malloc( sizeof( CALContiguousLinkedList3D ) );
-    linkedBuffer->columns = model->columns;
-    linkedBuffer->rows = model->rows;
-    linkedBuffer->slices = model->slices;
-    linkedBuffer->size = model->columns * model->rows * model->slices;
+    CALContiguousLinkedList3D* contiguousLinkedList = ( CALContiguousLinkedList3D* )malloc( sizeof( CALContiguousLinkedList3D ) );
+    contiguousLinkedList->columns = model->columns;
+    contiguousLinkedList->rows = model->rows;
+    contiguousLinkedList->slices = model->slices;
+    contiguousLinkedList->size = model->columns * model->rows * model->slices;
 
-    if( linkedBuffer->size <= 0 )
+    if( contiguousLinkedList->size <= 0 )
     {
-        free( linkedBuffer );
+        free( contiguousLinkedList );
         return NULL;
     }
 
-    linkedBuffer->buffer = ( CALBufferElement3D* ) malloc( sizeof(CALBufferElement3D) * linkedBuffer->size );
+    contiguousLinkedList->buffer = ( CALBufferElement3D* ) malloc( sizeof(CALBufferElement3D) * contiguousLinkedList->size );
 
 
     int columnIndex = 0;
@@ -28,14 +28,14 @@ CALContiguousLinkedList3D* calMakeContiguousLinkedList3D( CALModel3D* model )
         int sliceIndex = 0;
         int i = 0;
 
-        for( ; i < linkedBuffer->size; i++ )
+        for( ; i < contiguousLinkedList->size; i++ )
         {
             CALBufferElement3D element;
             element.cell.i = rowIndex;
             element.cell.j = columnIndex;
             element.cell.k = sliceIndex++;
 
-            if( sliceIndex == linkedBuffer->slices )
+            if( sliceIndex == contiguousLinkedList->slices )
             {
                 rowIndex++;
                 columnIndex++;
@@ -46,12 +46,14 @@ CALContiguousLinkedList3D* calMakeContiguousLinkedList3D( CALModel3D* model )
             element.next = NULL;
             element.previous = NULL;
 
-            linkedBuffer->buffer[i] = element;
+            contiguousLinkedList->buffer[i] = element;
         }
 
-        linkedBuffer->head = NULL;
-        linkedBuffer->tail = NULL;
-        linkedBuffer->firstElementAddedAtCurrentIteration = NULL;
+        contiguousLinkedList->head = NULL;
+        contiguousLinkedList->tail = NULL;
+        contiguousLinkedList->firstElementAddedAtCurrentIteration = NULL;
+
+        return contiguousLinkedList;
 }
 
 
