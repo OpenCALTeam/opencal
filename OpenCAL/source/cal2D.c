@@ -1,4 +1,4 @@
-// (C) Copyright University of Calabria and others.
+﻿// (C) Copyright University of Calabria and others.
 // All rights reserved. This program and the accompanying materials
 // are made available under the terms of the GNU Lesser General Public License
 // (LGPL) version 2.1 which accompanies this distribution, and is available at
@@ -537,7 +537,7 @@ void calInitSubstate2Di(struct CALModel2D* ca2D, struct CALSubstate2Di* Q, CALin
             calSetBuffer2Di(Q->current, ca2D->rows, ca2D->columns, value);
             if(Q->next)
                 calSetBuffer2Di(Q->next, ca2D->rows, ca2D->columns, value);
-      }
+    }
 }
 
 
@@ -554,7 +554,7 @@ void calInitSubstate2Dr(struct CALModel2D* ca2D, struct CALSubstate2Dr* Q, CALre
             calSetBuffer2Dr(Q->current, ca2D->rows, ca2D->columns, value);
             if(Q->next)
                 calSetBuffer2Dr(Q->next, ca2D->rows, ca2D->columns, value);
-        }
+    }
 }
 
 

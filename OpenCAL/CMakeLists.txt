@@ -1,4 +1,4 @@
-# opencal/OpenCAL/CMakeLists.txt
+﻿# opencal/OpenCAL/CMakeLists.txt
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 
 set(OPENCAL_LIBRARY_NAME OpenCAL CACHE PATH "Name of the specific version of opencal (SERIAL)")
@@ -19,7 +19,7 @@ if(BUILD_DOCUMENTATION)
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
         COMMENT "Generating API documentation with Doxygen for for OpenCAL"
         VERBATIM)
-    	install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html DESTINATION ${INSTALL_DOCS_DIR}/${OPENCAL_LIBRARY_NAME})
+        install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html DESTINATION ${INSTALL_DOCS_DIR}/${OPENCAL_LIBRARY_NAME})
 endif()
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib)
@@ -32,7 +32,7 @@ link_directories(${CMAKE_CURRENT_SOURCE_DIR}/source)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 file(GLOB SRC
-    "include/*.h"
+    "include/OpenCAL/*.h"
     "source/*.c"
 )
 

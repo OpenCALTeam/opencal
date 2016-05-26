@@ -2,31 +2,31 @@
 
 CALContiguousLinkedList2D* calMakeContiguousLinkedList2D( CALModel2D* model )
 {
-    CALContiguousLinkedList2D* linkedBuffer = ( CALContiguousLinkedList2D* )malloc( sizeof( CALContiguousLinkedList2D ) );
-    linkedBuffer->columns = model->columns;
-    linkedBuffer->rows = model->rows;
-    linkedBuffer->size = model->columns * model->rows;
+    CALContiguousLinkedList2D* contiguousLinkedList = ( CALContiguousLinkedList2D* )malloc( sizeof( CALContiguousLinkedList2D ) );
+    contiguousLinkedList->columns = model->columns;
+    contiguousLinkedList->rows = model->rows;
+    contiguousLinkedList->size = model->columns * model->rows;
 
-    if( linkedBuffer->size <= 0 )
+    if( contiguousLinkedList->size <= 0 )
     {
-        free( linkedBuffer );
+        free( contiguousLinkedList );
         return NULL;
     }
 
-    linkedBuffer->buffer = ( CALBufferElement2D* ) malloc( sizeof(CALBufferElement2D) * linkedBuffer->size );
+    contiguousLinkedList->buffer = ( CALBufferElement2D* ) malloc( sizeof(CALBufferElement2D) * contiguousLinkedList->size );
 
 
     int columnIndex = 0;
     int rowIndex = 0;
     int i = 0;
 
-    for( ; i < linkedBuffer->size; i++ )
+    for( ; i < contiguousLinkedList->size; i++ )
     {
         CALBufferElement2D element;
         element.cell.i = rowIndex;
         element.cell.j = columnIndex++;
 
-        if( columnIndex == linkedBuffer->columns )
+        if( columnIndex == contiguousLinkedList->columns )
         {
             rowIndex++;
             columnIndex = 0;
@@ -36,13 +36,15 @@ CALContiguousLinkedList2D* calMakeContiguousLinkedList2D( CALModel2D* model )
         element.next = NULL;
         element.previous = NULL;
 
-        linkedBuffer->buffer[i] = element;
+        contiguousLinkedList->buffer[i] = element;
     }
 
-    linkedBuffer->head = NULL;
-    linkedBuffer->tail = NULL;
-    linkedBuffer->firstElementAddedAtCurrentIteration = NULL;
-    linkedBuffer->size_current = 0;
+    contiguousLinkedList->head = NULL;
+    contiguousLinkedList->tail = NULL;
+    contiguousLinkedList->firstElementAddedAtCurrentIteration = NULL;
+    contiguousLinkedList->size_current = 0;
+
+    return contiguousLinkedList;
 }
 
 
