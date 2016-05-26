@@ -48,7 +48,7 @@ public:
     template<class CALCONVERTER, class STR_TYPE = std::string>
     CALBuffer (std::array <COORDINATE_TYPE, DIMENSION>& coordinates, const STR_TYPE& path, CALCONVERTER& calConverterInputOutput){
         this->size = opencal::calCommon::multiplier<DIMENSION,uint>(coordinates , 0 , DIMENSION);
-        this-> buffer = CALManagerIO<DIMENSION, COORDINATE_TYPE> :: template loadBuffer<PAYLOAD,CALCONVERTER>(this->size, calConverterInputOutput, path);
+        this-> buffer = CALManagerIO<DIMENSION, COORDINATE_TYPE> :: template loadBuffer<PAYLOAD>(this->size, calConverterInputOutput, path);
     }
 
     ~CALBuffer (){

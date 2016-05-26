@@ -17,7 +17,7 @@ namespace opencal {
 
     template<uint DIMENSION, typename COORDINATE_TYPE = uint>
     class CALManagerIO {
-        typedef std::function< T*( int, STR_TYPE ) > Function;
+       // typedef std::function< T*( int, STR_TYPE ) > Function;
 
     public:
 
@@ -45,9 +45,10 @@ namespace opencal {
 
 
 
-        template<class T,class STR_TYPE = std::string, typename T*(*CALSUBSTATELOADER)(int, STR_TYPE) >
-        static T *loadBuffer(int size, CALSUBSTATELOADER& converter, const STR_TYPE& path){
-            T *buffer = converter(size,path);
+        template<typename T,class STR_TYPE >
+        static T *loadBuffer(int size, std::function<T*(int, const std::string&)> loader, const STR_TYPE& path){
+            T *buffer = loader(size,path);
+            
             return buffer;
         }
 

@@ -3,7 +3,7 @@
 #include <OpenCAL++/calMooreNeighborhood.h>
 #include<OpenCAL++/calRun.h>
 #include <opencv2/opencv.hpp>
-
+#include <functional>
 typedef unsigned int COORD_TYPE;
 
 typedef std::array<unsigned char, 2> vec2b;
@@ -13,7 +13,7 @@ typedef std::array<unsigned char, 4> vec4b;
 
 template<class T>
 T *loadImage(int size, const std::string& path){
-
+printf("sto qui\n");
     cv::Mat mat= cv::imread(path);
 
     //int size = mat.rows * mat.cols;
@@ -47,8 +47,8 @@ int main ()
     COORD_TYPE >> calrun(&calmodel, 1, 4, opencal::calCommon::CAL_UPDATE_IMPLICIT);
 
     opencal::CALSubstate<vec3b, 2, COORD_TYPE> *bgr = calmodel.addSubstate<vec3b>();
-
-    bgr->loadSubstate(loadImage<vec3b>, "");
+    std::function<vec3b*(int, const std::string)> lf= loadImage<vec3b>;
+    bgr->loadSubstate(*(new std::function<decltype(loadImage<vec3b>)>(loadImage<vec3b>)), "");
 
 
 

@@ -127,7 +127,7 @@ public:
 
 
     template <class CALCONVERTER, class STR_TYPE = std::string>
-    void loadSubstate(CALCONVERTER& calConverterInputOutput, const STR_TYPE& path)
+    void loadSubstate(CALCONVERTER calConverterInputOutput, const STR_TYPE& path)
     {
 
         delete current;
