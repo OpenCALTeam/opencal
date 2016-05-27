@@ -16,6 +16,16 @@ namespace opencal{
         }
     }
 
+ template< typename  Iterator ,  typename Lambda >
+    void map_inplace(Iterator s, Iterator e, Lambda l){
+        while(s != e){
+            *s=l(*s);
+            s++;
+        }
+    }
+
+
+
     //Lambda has type: D -> T -> D
     template<typename D ,
             typename Iterator,

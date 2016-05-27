@@ -13,7 +13,7 @@ else()
 endif()
 
 
-project( opencal++_CAUSS )
+#project( opencal++_CAUSS )
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib)
@@ -34,7 +34,7 @@ file(GLOB SRC
 
 
 
-message(STATUS  ${PROJECT_SOURCE_DIR}/OpenCAL++/include/ )
+message(STATUS  "sdfvsdfsdf{PROJECT_SOURCE_DIR}/OpenCAL++/include/" )
 add_executable(gauss ${SRC} )
 #set_property(TARGET opencal++_imageProcessing PROPERTY CXX_STANDARD 14)
 target_link_libraries(gauss ${OpenCV_LIBS})
