@@ -18,7 +18,7 @@ typedef opencal::CALModel<2, opencal::CALMooreNeighborhood<2>, COORD_TYPE> MODEL
 
 template<class T>
 T *loadImage(int size, const std::string& path){
-printf("sto qui\n");
+    printf("sto qui\n");
     cv::Mat mat= cv::imread(path);
 
     //int size = mat.rows * mat.cols;
@@ -56,47 +56,66 @@ void save (const T *array, const std::string pathOutput,int rows, int cols, int 
 
 template<typename T>
 class CALLBACKTYPE{
-  public:
+public:
     typedef std::function<void(const T*, const std::string&)> SAVECALLBACK;
     typedef std::function<T*(int size, const std::string&)>    LOADCALLBACK;
 
 };
 
- CALLBACKTYPE<vec3b>::SAVECALLBACK savef = std::bind(save<vec3b>,_1,_2,coords[0], coords[1],CV_8UC3);
+std::array<COORD_TYPE, 2> coords = {512, 640 };
+CALLBACKTYPE<vec3b>::SAVECALLBACK savef = std::bind(save<vec3b>,_1,_2,coords[0], coords[1],CV_8UC3);
 
 template<typename PIXELTYPE>
 class MeanFilter : public opencal::CALLocalFunction<2,opencal::CALMooreNeighborhood<2>,uint>{
 
-  opencal::CALSubstate<PIXELTYPE,2>* img;
-  public:
+    opencal::CALSubstate<PIXELTYPE,2>* img;
+public:
     MeanFilter(auto* sbs): img(sbs){
 
- }
-
-
-    void run(MODELTYPE* model,std::array<uint,2>& indices){
-      using namespace std;
-      constexpr int channels = std::tuple_size<PIXELTYPE>::value;
-      std::array<unsigned int,channels> avg ={};
-      PIXELTYPE newval;
-
-      unsigned short ns = model->getNeighborhoodSize();
-      for(int x=0 ; x<ns; ++x){
-        for (int i=0; i<channels; ++i)
-        avg[i] += img->getX(indices,x)[i];
-      }
-     // cout<<(unsigned short)avg[0]<<" ";
-      //cout<<endl;
-
-      auto f = [&](unsigned int c)-> unsigned int{return ns!=0 ? c/ns : c;};
-      opencal::map_inplace(avg.begin(),avg.end(),f);
-      for(int i=0; i<channels; i++)
-       newval[i] = avg[i];
-
-      img->setElement(indices,newval);
     }
 
 
+    void run(MODELTYPE* model,std::array<uint,2>& indices){
+        using namespace std;
+        constexpr int channels = std::tuple_size<PIXELTYPE>::value;
+        std::array<unsigned int,channels> avg ={};
+        PIXELTYPE newval;
+
+        unsigned short ns = model->getNeighborhoodSize();
+        for(int x=0 ; x<ns; ++x){
+            for (int i=0; i<channels; ++i)
+                avg[i] += img->getX(indices,x)[i];
+        }
+        // cout<<(unsigned short)avg[0]<<" ";
+        //cout<<endl;
+
+        auto f = [&](unsigned int c)-> unsigned int{return ns!=0 ? c/ns : c;};
+        opencal::map_inplace(avg.begin(),avg.end(),f);
+        for(int i=0; i<channels; i++)
+            newval[i] = avg[i];
+
+        img->setElement(indices,newval);
+    }
+
+
+
+};
+
+template<typename PIXELTYPE>
+class SaveGlobalFunction : public opencal::CALGlobalFunction<2,opencal::CALMooreNeighborhood<2>,uint>{
+
+    opencal::CALSubstate<PIXELTYPE,2>* img;
+    int step = 0;
+public:
+    SaveGlobalFunction(auto* sbs,  enum opencal::calCommon :: CALUpdateMode _UPDATE_MODE): CALGlobalFunction(_UPDATE_MODE), img(sbs){
+
+    }
+
+
+    void run(MODELTYPE* model){
+        img->saveSubstate(savef, "output/out_"+std::to_string(step)+".tiff");
+        step++;
+    }
 
 };
 
@@ -104,28 +123,29 @@ int main ()
 {
 
 
-  int steps=1; printf("how many steps?.."); scanf("%d",&steps);
+    int steps=1; printf("how many steps?.."); scanf("%d",&steps);
 
-  std::array<COORD_TYPE, 2> coords = {512, 640 };
+
     opencal::CALMooreNeighborhood<2> neighbor;
 
-  MODELTYPE calmodel(
-      coords,
-      &neighbor,
-      opencal::calCommon::CAL_SPACE_TOROIDAL,
-      opencal::calCommon::CAL_NO_OPT);
+    MODELTYPE calmodel(
+                coords,
+                &neighbor,
+                opencal::calCommon::CAL_SPACE_TOROIDAL,
+                opencal::calCommon::CAL_NO_OPT);
 
     opencal::CALRun < opencal::CALModel < 2, opencal::CALMooreNeighborhood<2>,
-    COORD_TYPE >> calrun(&calmodel, 1, steps, opencal::calCommon::CAL_UPDATE_IMPLICIT);
+            COORD_TYPE >> calrun(&calmodel, 1, steps, opencal::calCommon::CAL_UPDATE_IMPLICIT);
 
     opencal::CALSubstate<vec3b, 2, COORD_TYPE> *bgr = calmodel.addSubstate<vec3b>();
 
     bgr->loadSubstate(*(new std::function<decltype(loadImage<vec3b>)>(loadImage<vec3b>)), "input/tiff/example2.tiff");
 
 
-  calmodel.addElementaryProcess(new MeanFilter<vec3b>(bgr));
-calrun.run();
-     bgr->saveSubstate(savef, "output/outexample2.tiff");
+    calmodel.addElementaryProcess(new MeanFilter<vec3b>(bgr));
+    calmodel.addElementaryProcess(new SaveGlobalFunction<vec3b>(bgr, opencal::calCommon::CAL_UPDATE_EXPLICIT));
+    calrun.run();
+    bgr->saveSubstate(savef, "output/outexample2.tiff");
 
 
 
