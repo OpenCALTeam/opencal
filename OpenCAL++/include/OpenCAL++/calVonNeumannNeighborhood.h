@@ -7,10 +7,10 @@
 #define OPENCAL_ALL_CALVONNEUMANNNEIGHBORHOOD_H
 
 namespace opencal {
-template<unsigned int DIMENSION>
+template<unsigned int DIMENSION , unsigned int RADIUS=1>
 class CALVonNeumannNeighborhood {
 protected:
-static constexpr const int total = 2*DIMENSION+1;
+static constexpr const int total = (RADIUS*2)*DIMENSION+1;
 //int is necessary since neighborhood definition requires negative numbers
 typedef std::array<int,DIMENSION> element;
 
@@ -24,14 +24,18 @@ public:
        //total number of insertions is 2*Dimension+1
        for (int i = 1; i <= DIMENSION; ++i)
        {
+        for(int r = 1; r <= RADIUS ; ++r){
            indices[i] = {0};
-           indices[i][i-1] = -1;
+           indices[i][i-1] = -r;
+        }
        }
        int c = DIMENSION -1;
        for (int i = DIMENSION+1; i <= 2*DIMENSION; ++i,--c)
        {
+          for(int r = 1; r<=RADIUS ; ++r){
            indices[i] = {0};
-           indices[i][c] = 1;
+           indices[i][c] = r;
+          }
        }
 
        return indices;
@@ -76,9 +80,8 @@ inline void opencal::CALVonNeumannNeighborhood<3>::defineNeighborhood(){
 
 
 // static member declaration
-template<uint DIMENSION>
-std::array<typename CALVonNeumannNeighborhood<DIMENSION>::element, CALVonNeumannNeighborhood<DIMENSION>::total>
- opencal::CALVonNeumannNeighborhood<DIMENSION>::indices = opencal::CALVonNeumannNeighborhood<DIMENSION>::defineNeighborhood();
+template<unsigned int DIMENSION , unsigned int RADIUS>
+std::array<typename CALVonNeumannNeighborhood<DIMENSION,RADIUS>::element, CALVonNeumannNeighborhood<DIMENSION,RADIUS>::total> opencal::CALVonNeumannNeighborhood<DIMENSION,RADIUS>::indices = opencal::CALVonNeumannNeighborhood<DIMENSION,RADIUS>::defineNeighborhood();
 
 } // namespace opencal
 
