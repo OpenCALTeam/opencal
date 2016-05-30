@@ -1,12 +1,12 @@
-# opencal/CMakeLists.txt
+﻿# opencal/CMakeLists.txt
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 cmake_policy(SET CMP0048 NEW)
 
 include(configure.cmake)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 project(OpenCAL-ALL
-		VERSION ${OPENCAL_VERSION}
-		LANGUAGES C CXX)
+                VERSION ${OPENCAL_VERSION}
+                LANGUAGES C CXX)
 
 
 
@@ -25,51 +25,55 @@ message(STATUS ${INSTALL_EXAMPLE_DIR})
 
 
 if ( ENABLE_SHARED )
-	set( SHAREDORSTATIC SHARED )
+        set( SHAREDORSTATIC SHARED )
 else()
-	set( SHAREDORSTATIC STATIC )
+        set( SHAREDORSTATIC STATIC )
 endif()
 
 add_definitions( -DPACKAGE="OPENCAL" -DVERSION="${OPENCAL_VERSION}" )
 
 
 if(BUILD_DOCUMENTATION)
-	find_package(Doxygen)
+        find_package(Doxygen)
 endif(BUILD_DOCUMENTATION)
 
 if (BUILD_OPENCAL_SERIAL)
-	add_subdirectory(OpenCAL)
+        add_subdirectory(OpenCAL)
 endif(BUILD_OPENCAL_SERIAL)
 
 if(BUILD_OPENCAL_OMP)
-	add_subdirectory(OpenCAL-OMP)
+        add_subdirectory(OpenCAL-OMP)
 endif(BUILD_OPENCAL_OMP)
 
 if(BUILD_OPENCAL_CL)
-	add_subdirectory(OpenCAL-CL)
+        add_subdirectory(OpenCAL-CL)
 endif(BUILD_OPENCAL_CL)
 
 if(BUILD_OPENCAL_GL)
-	add_subdirectory(OpenCAL-GL)
+        add_subdirectory(OpenCAL-GL)
 endif(BUILD_OPENCAL_GL)
 
 if(BUILD_OPENCAL_PP)
-	add_subdirectory(OpenCAL++)
-	add_subdirectory(gtests/OpenCAL++)
+        add_subdirectory(OpenCAL++)
+        #add_subdirectory(gtests/OpenCAL++)
 endif(BUILD_OPENCAL_PP)
 
 if(BUILD_OPENCAL_TESTS)
-	add_subdirectory(tests)
+        add_subdirectory(tests)
 endif(BUILD_OPENCAL_TESTS)
 
+if(BUILD_OPENCAL_CPU)
+        add_subdirectory(OpenCAL-CPU)
+endif(BUILD_OPENCAL_CPU)
+
 if(BUILD_OPENCAL_CL)
-	string(ASCII 27 Esc)
-	set(Red         "${Esc}[31m")
-	set(ColourReset "${Esc}[m")
-	set(ColourBold  "${Esc}[1m")
-	get_filename_component(KERNELPATH "${CMAKE_INSTALL_PREFIX}/${INSTALL_SHARE_DIR}/OpenCAL-CL/" ABSOLUTE)
-	MESSAGE(STATUS "${Red}(*AFTER MAKE INSTALL*) PLEASE EXPORT THE FOLLOWING ENVIRONMENT VARIABLE...${ColourReset}")
-	MESSAGE(STATUS "${ColourBold}${Red}export OPENCALCL_PATH=${KERNELPATH}${ColourReset}")
+        string(ASCII 27 Esc)
+        set(Red         "${Esc}[31m")
+        set(ColourReset "${Esc}[m")
+        set(ColourBold  "${Esc}[1m")
+        get_filename_component(KERNELPATH "${CMAKE_INSTALL_PREFIX}/${INSTALL_SHARE_DIR}/OpenCAL-CL/" ABSOLUTE)
+        MESSAGE(STATUS "${Red}(*AFTER MAKE INSTALL*) PLEASE EXPORT THE FOLLOWING ENVIRONMENT VARIABLE...${ColourReset}")
+        MESSAGE(STATUS "${ColourBold}${Red}export OPENCALCL_PATH=${KERNELPATH}${ColourReset}")
 endif(BUILD_OPENCAL_CL)
 
 
