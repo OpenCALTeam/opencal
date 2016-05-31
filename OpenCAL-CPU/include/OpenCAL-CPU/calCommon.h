@@ -29,6 +29,17 @@ typedef CALint CALParameteri;	//!< Redefinition of the type CALint. It is used f
 typedef CALreal CALParameterr;	//!< Redefinition of the type CALreal. It is used for automaton's parameters.
 
 
+
+struct CALIndexesPool {
+        int cellular_space_dimension;
+        CALIndexes coordinates_dimensions;
+        int number_of_dimensions;
+        CALIndexes* pool;
+};
+
+CALIndexesPool* calDefIndexesPool(CALIndexes coordinates_dimensions, int number_of_dimensions);
+
+
 /*!	\brief Enumeration used for cellular space toroidality setting.
 */
 enum CALSpaceBoundaryCondition{
@@ -58,37 +69,10 @@ enum CALOptimization{
 #define calGetToroidalX(index, size) (   (index)<0?((size)+(index)):( (index)>((size)-1)?((index)-(size)):(index) )   )
 
 
-/*! \brief 2D cell's coordinates structure.
 
-    Structure that defines the cell's coordinates for 2D
-    cellular automata.
-    Here, the first coordinate, i, represents the cell's row coordinate;
-    the second coordinate, j, represents the cell's column coordinate.
-*/
-struct CALCell2D {
-    int i;		//!< Cell row coordinate.
-    int j;		//!< Cell column coordinate.
-};
+/*! \brief 8 bit (256 values) integer substate; it can also be used for 1 bit boolean substates.
 
-
-/*! \brief 3D cell's coordinates structure.
-
-    Structure that defines the cell's coordinates for 2D
-    cellular automata.
-    Here, the first coordinate, i, represents the cell's row coordinate;
-    the second coordinate, j, represents the cell's column coordinate.
-*/
-struct CALCell3D {
-    int i;		//!< Cell row coordinate.
-    int j;		//!< Cell column coordinate.
-    int k;		//!< Cell slice coordinate.
-};
-
-
-
-/*! \brief 8 bit (256 values) 2D integer substate; it can also be used for 1 bit boolean substates.
-
-    Structure that defines the abstraction of 2D cellular automaton
+    Structure that defines the abstraction of cellular automaton
     8 bit (256 values) integer substates. It can be also used for
     1 bit (0, 1 or false, true) boolean substates.
     It consists of two linearised matrices: the first, current, represents
@@ -98,14 +82,14 @@ struct CALCell3D {
     to the values of the substates do not affect the current values
     inside the cells.
 */
-struct CALSubstate2Db {
+struct CALSubstate_b {
     CALbyte* current;	//!< Current linearised matrix of the substate, used for reading purposes.
     CALbyte* next;		//!< Next linearised matrix of the substate, used for writing purposes.
     };
 
-/*! \brief 2D integer substate.
+/*! \brief integer substate.
 
-    Structure that defines the abstraction of 2D cellular automaton
+    Structure that defines the abstraction of cellular automaton
     integer substates.
     It consists of two linearised matrices: the first, current, represents
     the (linearised) matrix used for reading the substates values;
@@ -114,14 +98,14 @@ struct CALSubstate2Db {
     to the values of the substates do not affect the current values
     inside the cells.
 */
-struct CALSubstate2Di {
+struct CALSubstate_i {
     CALint* current;	//!< Current linearised matrix of the substate, used for reading purposes.
     CALint* next;		//!< Next linearised matrix of the substate, used for writing purposes.
 };
 
-/*! \brief 2D real (floating point) substate.
+/*! \brief real (floating point) substate.
 
-    Structure that defines the abstraction of 2D cellular automaton
+    Structure that defines the abstraction of cellular automaton
     floating point substates.
     It consists of two linearised matrices: the first, current, represents
     the (linearised) matrix used for reading the substates values;
@@ -130,69 +114,16 @@ struct CALSubstate2Di {
     to the values of the substates do not affect the current values
     inside the cells.
 */
-struct CALSubstate2Dr {
+struct CALSubstate_r {
     CALreal* current;	//!< Current linearised matrix of the substate, used for reading purposes.
     CALreal* next;		//!< Next linearised matrix of the substate, used for writing purposes.
 };
-
-
-
-/*! \brief 8 bit (256 values) 3D integer substate; it can also be used for 1 bit boolean substates.
-
-    Structure that defines the abstraction of 3D cellular automaton
-    8 bit (256 values) integer substates. It can be also used for
-    1 bit (0, 1 or false, true) boolean substates.
-    It consists of two linearised 3D buffers: the first, current, represents
-    the (linearised) 3D buffer used for reading the substate's values;
-    the last, next, is used to write the new computed values.
-    In this way, implicit parallelism is obtained, since the changes
-    to the values of the substates do not affect the current values
-    inside the cells.
-*/
-struct CALSubstate3Db {
-    CALbyte* current;	//!< Current linearised 3D buffer of the substate, used for reading purposes.
-    CALbyte* next;		//!< Next linearised 3D buffer of the substate, used for writing purposes.
-    };
-
-/*! \brief 3D integer substate.
-
-    Structure that defines the abstraction of 3D cellular automaton
-    integer substates.
-    It consists of two linearised 3D buffers: the first, current, represents
-    the (linearised) buffer used for reading the substates values;
-    the last, next, is used to write the new computed values.
-    In this way, implicit parallelism is obtained, since the changes
-    to the values of the substates do not affect the current values
-    inside the cells.
-*/
-struct CALSubstate3Di {
-    CALint* current;	//!< Current linearised 3D buffer of the substate, used for reading purposes.
-    CALint* next;		//!< Next linearised 3D buffer of the substate, used for writing purposes.
-};
-
-/*! \brief 3D real (floating point) substate.
-
-    Structure that defines the abstraction of 3D cellular automaton
-    floating point substates.
-    It consists of two linearised 3D buffers: the first, current, represents
-    the (linearised) 3D buffer used for reading the substates values;
-    the last, next, is used to write the new computed values.
-    In this way, implicit parallelism is obtained, since the changes
-    to the values of the substates do not affect the current values
-    inside the cells.
-*/
-struct CALSubstate3Dr {
-    CALreal* current;	//!< Current linearised 3D buffer of the substate, used for reading purposes.
-    CALreal* next;		//!< Next linearised 3D buffer of the substate, used for writing purposes.
-};
-
 
 
 /*! Constant used to set the run final step to 0, correspondig to a loop condition.
     In this case, a stop condition should be defined.
 */
 #define CAL_RUN_LOOP 0
-
 
 
 /*! \brief Enumeration defining global reduction operations.

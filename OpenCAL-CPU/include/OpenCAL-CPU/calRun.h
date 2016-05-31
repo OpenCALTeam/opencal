@@ -7,7 +7,7 @@ enum CALExecutionType {SERIAL = 0, PARALLEL};
 
 struct CALRun {
 
-        void (* calApplyLocalProcess)( struct CALModel* calModel, CALLocalFunction local_process );
+        void (* calApplyLocalProcess)( struct CALModel* calModel, CALLocalProcess local_process );
 
         void (* calUpdate) (struct CALModel* calModel);
 

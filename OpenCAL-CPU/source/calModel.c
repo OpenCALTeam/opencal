@@ -10,7 +10,7 @@ void calAddNeighbor2D(CALModel* calModel, CALIndexes neighbourIndex)
 
 }
 
-CALSubstate_b*calAddSubstate_b(CALModel* calModel, CALInitMethod initMethod, CALbyte value)
+CALSubstate_b*calAddSubstate_b(CALModel* calModel, CALInitMethod initMethod, CALbyte value = 0)
 {
 
 }
@@ -40,12 +40,12 @@ CALSubstate_r*calAddSingleLayerSubstate_r(CALModel* calModel, CALreal init_value
 
 }
 
-void calAddLocalFunction(CALModel* calModel, CALLocalFunction elementary_process)
+void calAddLocalProcess(CALModel* calModel, CALLocalProcess elementary_process)
 {
 
 }
 
-void calAddGlobalFunction(CALModel* calModel, CALGlobalFunction elementary_process)
+void calAddGlobalProcess(CALModel* calModel, CALGlobalProcess elementary_process)
 {
 
 }
@@ -60,7 +60,7 @@ void calUpdateSubstate_r(CALModel* calModel, CALSubstate_r* Q)
 
 }
 
-void calApplyLocalProcess(CALModel* calModel, CALLocalFunction local_process)
+void calApplyLocalProcess(CALModel* calModel, CALLocalProcess local_process)
 {
 
 }
@@ -136,6 +136,11 @@ void calSetCurrent_r(CALModel* calModel, CALSubstate_r* Q, CALIndexes central_ce
 }
 
 void calFinalize2D(CALModel* calModel)
+{
+
+}
+
+void calApplyGlobalProcess(CALModel* calModel, CALGlobalProcess global_process)
 {
 
 }
