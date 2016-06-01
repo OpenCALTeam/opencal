@@ -23,7 +23,7 @@
 #ifndef kernel_h
 #define kernel_h
 
-#include <cal2DActive.h>
+#include <OpenCAL-CL/calcl2D.h>
 
 #define NUMBER_OF_OUTFLOWS 4
 #define F0 0

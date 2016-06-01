@@ -174,7 +174,7 @@ void sciddicaTSteering(struct CALModel2D* sciddicaT)
 
 int main(int argc, char** argv)
 {
-	int version=0;
+	int version=1;
 	if (sscanf (argv[1], "%i", &version)!=1 && version >=0) {
 		printf ("error - not an integer");
 		exit(-1);
@@ -208,7 +208,7 @@ int main(int argc, char** argv)
 	string path;
 	PREFIX_PATH(version,"1.txt",path);
 	//saving configuration
-	calSaveSubstate2Dr(sciddicaT, Q.h, (char*)path.c_str());
+	calSaveSubstate2Dr(sciddicaT, Q.h,"./testsout/other/1.txt");
 	//finalizations
 	calRunFinalize2D(sciddicaT_simulation);
 	calFinalize2D(sciddicaT);
