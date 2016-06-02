@@ -84,6 +84,33 @@ namespace opencal {
 
 
   template< uint DIMENSION , template <uint , class...> class _NEIGHBORHOOD , class FLOATING>
+  class UniformKernel : public Kernel<DIMENSION, _NEIGHBORHOOD, FLOATING> {
+
+    typedef Kernel<DIMENSION , _NEIGHBORHOOD,  FLOATING> SUPER;
+    typedef _NEIGHBORHOOD<DIMENSION> NEIGHBORHOOD;
+    typedef typename NEIGHBORHOOD::COORDINATE_TYPE COORDINATE_TYPE;
+
+    public:
+     UniformKernel(uint size) : SUPER(size) {};
+     UniformKernel(const typename SUPER::VEC_TYPE& _data) = delete ;
+
+    protected:
+    std::array<double,DIMENSION> sigma;
+    std::array<double,DIMENSION> mu;
+
+     void initKernel(){
+       const auto&  indices = NEIGHBORHOOD::getNeighborhoodIndices();
+       const auto size = indices.size();
+       for(int i =0 ; i < size ; ++i ){
+          this->data[i] = 1/size;
+       }
+
+     }
+
+  };
+
+
+  template< uint DIMENSION , template <uint , class...> class _NEIGHBORHOOD , class FLOATING>
   class GaussianKernel : public Kernel<DIMENSION, _NEIGHBORHOOD, FLOATING> {
 
     typedef Kernel<DIMENSION , _NEIGHBORHOOD,  FLOATING> SUPER;
@@ -91,14 +118,14 @@ namespace opencal {
     typedef typename NEIGHBORHOOD::COORDINATE_TYPE COORDINATE_TYPE;
     //static auto phi = [] (const double sigma, const
     public:
-     GaussianKernel(uint size,std::array<double,DIMENSION> _sigma, std::array<double,DIMENSION> _mu) : SUPER(size) , sigma(_sigma) , mu(_mu) {};
+     GaussianKernel(uint size,std::array<double,DIMENSION> _sigma, std::array<double,DIMENSION> _mu) : SUPER(size) , sigma(_sigma) , mu(_mu) {initKernel();};
      GaussianKernel(const typename SUPER::VEC_TYPE& _data) = delete ;
 
     protected:
     std::array<double,DIMENSION> sigma;
     std::array<double,DIMENSION> mu;
 
-     void fillGaussianKernel(){
+     void initKernel(){
        const auto&  indices = NEIGHBORHOOD::getNeighborhoodIndices();
        for(int i =0 ; i < indices.size() ; ++i ){
           this->data[i] = getGaussianVal(indices[i]);
