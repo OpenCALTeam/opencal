@@ -5,6 +5,7 @@
 #include <opencv2/opencv.hpp>
 #include <functional>
 #include<OpenCAL++/functional_utilities.h>
+#include "image_processing.h"
 typedef unsigned int COORD_TYPE;
 
 using namespace std::placeholders;
@@ -18,54 +19,13 @@ typedef std::array<unsigned char, 4> vec4b;
 
 typedef opencal::CALModel<2, opencal::CALMooreNeighborhood<2,MOORERADIUS>, COORD_TYPE> MODELTYPE;
 
-template<class T>
-T *loadImage(int size, const std::string& path){
-//    printf("sto qui\n");
-    cv::Mat mat= cv::imread(path);
-
-    //int size = mat.rows * mat.cols;
-    T* vec = new T [size];
-    int linearIndex = 0;
-
-    for (int i = 0; i < mat.rows; ++i) {
-        for (int j = 0; j < mat.cols; ++j, ++linearIndex) {
-            T& bgra = mat.at<T>(i, j);
-            vec[linearIndex] = bgra;
-        }
-    }
 
 
-    return vec;
-}
-
-
-
-template<class T>
-void save (const T *array, const std::string pathOutput,int rows, int cols, int type)
-{
-
-
-    cv::Mat mat (rows, cols, type);
-    int linearIndex =0;
-    //printf ("%d %d \n", mat.rows, mat.cols);
-    for (int i = 0; i < mat.rows; ++i) {
-        for (int j = 0; j < mat.cols; ++j, ++linearIndex)
-            mat.at<T>(i,j) = array[linearIndex];
-    }
-    cv::imwrite(pathOutput, mat);
-    return;
-}
-
-template<typename T>
-class CALLBACKTYPE{
-public:
-    typedef std::function<void(const T*, const std::string&)> SAVECALLBACK;
-    typedef std::function<T*(int size, const std::string&)>    LOADCALLBACK;
-
-};
 
 std::array<COORD_TYPE, 2> coords = { 857,1500 };
 CALLBACKTYPE<vec3b>::SAVECALLBACK savef = std::bind(save<vec3b>,_1,_2,coords[0], coords[1],CV_8UC3);
+
+
 
 template<typename PIXELTYPE>
 class MeanFilter : public opencal::CALLocalFunction<2,opencal::CALMooreNeighborhood<2,MOORERADIUS>,uint>{
