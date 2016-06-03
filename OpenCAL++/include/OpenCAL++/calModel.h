@@ -32,7 +32,7 @@ namespace opencal {
 
         template<uint DIMENSION, class NEIGHBORHOOD, typename COORDINATE_TYPE = uint>
         class CALModel {
-
+  public:
             typedef CALModel CALMODEL_type;
             typedef CALModel* CALMODEL_pointer;
             typedef  std::array<COORDINATE_TYPE, DIMENSION>& CALCELL_INDIXES_constreference;
@@ -52,7 +52,7 @@ namespace opencal {
 
 
 
-        public:
+
 
             //typedefs here
 
@@ -81,7 +81,10 @@ namespace opencal {
                 if (this->CAL_OPTIMIZATION == calCommon::CAL_OPT_ACTIVE_CELLS) {
                     CALBuffer<bool , DIMENSION , COORDINATE_TYPE>* flags = new CALBuffer<bool , DIMENSION , COORDINATE_TYPE> (this->coordinates);
                     flags->setBuffer(false);
+
+
                     this->activeCells = new opencal::CALActiveCells< DIMENSION , COORDINATE_TYPE>(flags, 0);
+
                 }
                 else
                     this->activeCells = NULL;
@@ -99,10 +102,6 @@ namespace opencal {
 
                     this->addNeighbors(this->X_id->getNeighborhoodIndices());
                 }
-
-
-
-
 
             }
 
@@ -280,7 +279,8 @@ namespace opencal {
 
                 SUBSTATE_pointer Q;
                 BUFFER_pointer current = new BUFFER_type (this->coordinates);
-                Q = new SUBSTATE_type(current, NULL);
+                Q = new SUBSTATE_type(current, NULL, this->coordinates);
+                return Q;
 
             }
 
@@ -369,7 +369,7 @@ namespace opencal {
 
 
 
-        private:
+        protected:
             enum opencal::calCommon::CALSpaceBoundaryCondition CAL_TOROIDALITY;    //!< Type of cellular space: toroidal or non-toroidal.
 
 

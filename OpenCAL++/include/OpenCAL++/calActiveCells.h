@@ -113,12 +113,13 @@ namespace opencal {
          * increments the couter size_current if value is true, it decreases otherwise.
         */
         void setElementFlags(std::array<COORDINATE_TYPE, DIMENSION>&indexes, std::array<COORDINATE_TYPE, DIMENSION>& coordinates, bool value){
+
             if (value && !flags->getElement(indexes, coordinates))
             {
                 flags->setElement(indexes, coordinates, value);
                 size_next++;
             }
-            else if (!value && flags->getElement(indexes))
+            else if (!value && flags->getElement(indexes, coordinates))
             {
                 flags->setElement(indexes, coordinates, value);
                 size_next--;
@@ -162,8 +163,16 @@ namespace opencal {
          * increments the couter size_current if value is true, it decreases otherwise.
         */
         void setFlag(int linearIndex, bool value){
-            (*flags)[linearIndex] = value;
-            size_next--;
+            if (value && !(*flags)[linearIndex])
+               {
+                   (*flags)[linearIndex] = value;
+                   size_next++;
+               }
+               else if (!value && (*flags)[linearIndex])
+               {
+                   (*flags)[linearIndex] = value;
+                   size_next--;
+               }
         }
 
 
