@@ -876,8 +876,6 @@ void calFinalize2D(struct CALModel2D* ca2D)
 
     free(ca2D->elementary_processes);
 
-    free(ca2D->A->size_next);
-
     CAL_DESTROY_LOCKS(ca2D, i);
     CAL_FREE_LOCKS(ca2D);
 
