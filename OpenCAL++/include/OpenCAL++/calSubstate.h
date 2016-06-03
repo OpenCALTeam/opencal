@@ -32,7 +32,7 @@ public:
 
 template<class PAYLOAD, uint DIMENSION, typename COORDINATE_TYPE = uint, calCommon::SUBSTATE_OPT OPT= calCommon::NO_OPT>
 class CALSubstate : public CALSubstateWrapper<DIMENSION , COORDINATE_TYPE> {
-
+protected:
     typedef CALBuffer <PAYLOAD, DIMENSION, COORDINATE_TYPE> BUFFER_TYPE;
     typedef CALBuffer <PAYLOAD, DIMENSION, COORDINATE_TYPE>& BUFFER_TYPE_REF;
     typedef CALBuffer <PAYLOAD, DIMENSION, COORDINATE_TYPE>* BUFFER_TYPE_PTR;
@@ -46,7 +46,7 @@ class CALSubstate : public CALSubstateWrapper<DIMENSION , COORDINATE_TYPE> {
     typedef CALManagerIO<DIMENSION , COORDINATE_TYPE>* CALCONVERTERIO_pointer;
 
 
-private:
+
     BUFFER_TYPE_PTR current;    //!< Current linearised matrix of the substate, used for reading purposes.
     BUFFER_TYPE_PTR next;        //!< Next linearised matrix of the substate, used for writing purposes.
     std::array<COORDINATE_TYPE,DIMENSION> coordinates;
