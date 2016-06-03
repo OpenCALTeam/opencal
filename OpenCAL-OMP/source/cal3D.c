@@ -778,8 +778,10 @@ void calFinalize3D(struct CALModel3D* ca3D)
 {
     int i;
 
-    free(ca3D->A->flags);
-    free(ca3D->A->cells);
+    if(ca3D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS)
+        calFreeContiguousLinkedList3D(ca3D->contiguousLinkedList);
+    else if(ca3D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE)
+        calFreeActiveCellsNaive3D(ca3D->A);
 
     free(ca3D->X);
 
