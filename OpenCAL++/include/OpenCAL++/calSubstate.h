@@ -30,13 +30,15 @@ public:
     //        virtual void loadSubstate(CALCONVERTERIO_pointer calConverterInputOutput, char *path) = 0;
 };
 
-template<class PAYLOAD, uint DIMENSION, typename COORDINATE_TYPE = uint, calCommon::SUBSTATE_OPT OPT= calCommon::NO_OPT>
+template<class _PAYLOAD, uint DIMENSION, typename COORDINATE_TYPE = uint, calCommon::SUBSTATE_OPT OPT= calCommon::NO_OPT>
 class CALSubstate : public CALSubstateWrapper<DIMENSION , COORDINATE_TYPE> {
+  public:
+    typedef _PAYLOAD PAYLOAD;
 
-    typedef CALBuffer <PAYLOAD, DIMENSION, COORDINATE_TYPE> BUFFER_TYPE;
-    typedef CALBuffer <PAYLOAD, DIMENSION, COORDINATE_TYPE>& BUFFER_TYPE_REF;
-    typedef CALBuffer <PAYLOAD, DIMENSION, COORDINATE_TYPE>* BUFFER_TYPE_PTR;
-    typedef CALBuffer <PAYLOAD, DIMENSION, COORDINATE_TYPE>* BUFFER_TYPE_REF_TO_PTR;
+    typedef CALBuffer <_PAYLOAD, DIMENSION, COORDINATE_TYPE> BUFFER_TYPE;
+    typedef CALBuffer <_PAYLOAD, DIMENSION, COORDINATE_TYPE>& BUFFER_TYPE_REF;
+    typedef CALBuffer <_PAYLOAD, DIMENSION, COORDINATE_TYPE>* BUFFER_TYPE_PTR;
+    typedef CALBuffer <_PAYLOAD, DIMENSION, COORDINATE_TYPE>* BUFFER_TYPE_REF_TO_PTR;
 
 
     typedef CALActiveCells<DIMENSION , COORDINATE_TYPE> CALACTIVECELLS_type;
@@ -98,11 +100,11 @@ public:
         this->next = next;
     }
 
-    void setActiveCellsBufferCurrent(CALACTIVECELLS_pointer activeCells, PAYLOAD value){
+    void setActiveCellsBufferCurrent(CALACTIVECELLS_pointer activeCells, _PAYLOAD value){
         this->current->setActiveCellsBuffer(activeCells->getCells(), activeCells->getSizeCurrent(), value);
     }
 
-    void setActiveCellsBufferNext(CALACTIVECELLS_pointer activeCells, PAYLOAD value){
+    void setActiveCellsBufferNext(CALACTIVECELLS_pointer activeCells, _PAYLOAD value){
         this->next->setActiveCellsBuffer(activeCells->getCells(), activeCells->getSizeCurrent(), value);
     }
 
@@ -136,63 +138,63 @@ public:
             *next = *current;
     }
 
-    void setElementCurrent(std::array<COORDINATE_TYPE,DIMENSION>& indexes, PAYLOAD value)
+    void setElementCurrent(std::array<COORDINATE_TYPE,DIMENSION>& indexes, _PAYLOAD value)
     {
         this->current->setElement(indexes, this->coordinates, value);
     }
 
-    void setElement(std::array<COORDINATE_TYPE,DIMENSION>& indexes, PAYLOAD value)
+    void setElement(std::array<COORDINATE_TYPE,DIMENSION>& indexes, _PAYLOAD value)
     {
         this->next->setElement(indexes,coordinates, value);
     }
 
-    PAYLOAD getElement(std::array<COORDINATE_TYPE,DIMENSION>& indexes)
+    _PAYLOAD getElement(std::array<COORDINATE_TYPE,DIMENSION>& indexes)
     {
         return this->current->getElement(indexes, this->coordinates);
     }
 
-    PAYLOAD getElementNext(std::array<COORDINATE_TYPE,DIMENSION>& indexes)
+    _PAYLOAD getElementNext(std::array<COORDINATE_TYPE,DIMENSION>& indexes)
     {
         return this->next->getElement(indexes, this->coordinates);
     }
 
-    PAYLOAD getX(int linearIndex, int n) const
+    _PAYLOAD getX(int linearIndex, int n) const
     {
         return (*this->current)[CALNeighborPool<DIMENSION,COORDINATE_TYPE>::getNeighborN(linearIndex,n)];
     }
 
-    PAYLOAD getX(std::array<COORDINATE_TYPE,DIMENSION>& indexes, int n){
+    _PAYLOAD getX(std::array<COORDINATE_TYPE,DIMENSION>& indexes, int n){
 
         int linearIndex = calCommon::cellLinearIndex<DIMENSION,COORDINATE_TYPE>(indexes, this->coordinates);
         return (*this->current)[CALNeighborPool<DIMENSION,COORDINATE_TYPE>::getNeighborN(linearIndex,n)];
     }
 
-    PAYLOAD getElement(int linearIndex) const
+    _PAYLOAD getElement(int linearIndex) const
     {
         return (*this->current)[linearIndex];
     }
 
-    PAYLOAD getElementNext(int linearIndex) const
+    _PAYLOAD getElementNext(int linearIndex) const
     {
         return (*this->next)[linearIndex];
     }
 
-    void setElementCurrent(int linearIndex, PAYLOAD value)
+    void setElementCurrent(int linearIndex, _PAYLOAD value)
     {
         (*this->current)[linearIndex] = value;
     }
 
-    void setElement(int linearIndex, PAYLOAD value)
+    void setElement(int linearIndex, _PAYLOAD value)
     {
         (*this->next)[linearIndex] = value;
     }
 
-    void setCurrentBuffer(PAYLOAD value)
+    void setCurrentBuffer(_PAYLOAD value)
     {
         this->current->setBuffer(value);
     }
 
-    void setNextBuffer(PAYLOAD value)
+    void setNextBuffer(_PAYLOAD value)
     {
         this->next->setBuffer(value);
     }
@@ -224,13 +226,13 @@ public:
 };
 
 
-template<class PAYLOAD, uint DIMENSION, typename COORDINATE_TYPE>
-class CALSubstate<PAYLOAD,DIMENSION,COORDINATE_TYPE,calCommon::OPT> : public CALSubstateWrapper<DIMENSION , COORDINATE_TYPE> {
+template<class _PAYLOAD, uint DIMENSION, typename COORDINATE_TYPE>
+class CALSubstate<_PAYLOAD,DIMENSION,COORDINATE_TYPE,calCommon::OPT> : public CALSubstateWrapper<DIMENSION , COORDINATE_TYPE> {
 
-    typedef CALBuffer <PAYLOAD, DIMENSION, COORDINATE_TYPE> BUFFER_TYPE;
-    typedef CALBuffer <PAYLOAD, DIMENSION, COORDINATE_TYPE>& BUFFER_TYPE_REF;
-    typedef CALBuffer <PAYLOAD, DIMENSION, COORDINATE_TYPE>* BUFFER_TYPE_PTR;
-    typedef CALBuffer <PAYLOAD, DIMENSION, COORDINATE_TYPE>* BUFFER_TYPE_REF_TO_PTR;
+    typedef CALBuffer <_PAYLOAD, DIMENSION, COORDINATE_TYPE> BUFFER_TYPE;
+    typedef CALBuffer <_PAYLOAD, DIMENSION, COORDINATE_TYPE>& BUFFER_TYPE_REF;
+    typedef CALBuffer <_PAYLOAD, DIMENSION, COORDINATE_TYPE>* BUFFER_TYPE_PTR;
+    typedef CALBuffer <_PAYLOAD, DIMENSION, COORDINATE_TYPE>* BUFFER_TYPE_REF_TO_PTR;
 
 
     typedef CALActiveCells<DIMENSION , COORDINATE_TYPE> CALACTIVECELLS_type;
@@ -295,11 +297,11 @@ public:
         this->next = next;
     }
 
-    void setActiveCellsBufferCurrent(CALACTIVECELLS_pointer activeCells, PAYLOAD value){
+    void setActiveCellsBufferCurrent(CALACTIVECELLS_pointer activeCells, _PAYLOAD value){
         this->current->setActiveCellsBuffer(activeCells->getCells(), activeCells->getSizeCurrent(), value);
     }
 
-    void setActiveCellsBufferNext(CALACTIVECELLS_pointer activeCells, PAYLOAD value){
+    void setActiveCellsBufferNext(CALACTIVECELLS_pointer activeCells, _PAYLOAD value){
         this->next->setActiveCellsBuffer(activeCells->getCells(), activeCells->getSizeCurrent(), value);
     }
 
@@ -338,12 +340,12 @@ public:
             *next = *current;
     }
 
-    void setElementCurrent(std::array<COORDINATE_TYPE,DIMENSION>& indexes, PAYLOAD value)
+    void setElementCurrent(std::array<COORDINATE_TYPE,DIMENSION>& indexes, _PAYLOAD value)
     {
         this->current->setElement(indexes, this->coordinates, value);
     }
 
-    void setElement(std::array<COORDINATE_TYPE,DIMENSION>& indexes, PAYLOAD value)
+    void setElement(std::array<COORDINATE_TYPE,DIMENSION>& indexes, _PAYLOAD value)
     {
         uint linearIndex = opencal::calCommon::cellLinearIndex<DIMENSION,COORDINATE_TYPE>(indexes,coordinates);
 
@@ -351,54 +353,54 @@ public:
         this->next->setElement(linearIndex, value);
     }
 
-    PAYLOAD getElement(std::array<COORDINATE_TYPE,DIMENSION>& indexes)
+    _PAYLOAD getElement(std::array<COORDINATE_TYPE,DIMENSION>& indexes)
     {
         return this->current->getElement(indexes, this->coordinates);
     }
 
-    PAYLOAD getElementNext(std::array<COORDINATE_TYPE,DIMENSION>& indexes)
+    _PAYLOAD getElementNext(std::array<COORDINATE_TYPE,DIMENSION>& indexes)
     {
         return this->next->getElement(indexes, this->coordinates);
     }
 
-    PAYLOAD getX(int linearIndex, int n) const
+    _PAYLOAD getX(int linearIndex, int n) const
     {
         return (*this->current)[CALNeighborPool<DIMENSION,COORDINATE_TYPE>::getNeighborN(linearIndex,n)];
     }
 
-    PAYLOAD getX(std::array<COORDINATE_TYPE,DIMENSION>& indexes, int n){
+    _PAYLOAD getX(std::array<COORDINATE_TYPE,DIMENSION>& indexes, int n){
 
         int linearIndex = calCommon::cellLinearIndex<DIMENSION,COORDINATE_TYPE>(indexes, this->coordinates);
         return (*this->current)[CALNeighborPool<DIMENSION,COORDINATE_TYPE>::getNeighborN(linearIndex,n)];
     }
 
-    PAYLOAD getElement(int linearIndex) const
+    _PAYLOAD getElement(int linearIndex) const
     {
         return (*this->current)[linearIndex];
     }
 
-    PAYLOAD getElementNext(int linearIndex) const
+    _PAYLOAD getElementNext(int linearIndex) const
     {
         return (*this->next)[linearIndex];
     }
 
-    void setElementCurrent(int linearIndex, PAYLOAD value)
+    void setElementCurrent(int linearIndex, _PAYLOAD value)
     {
         (*this->current)[linearIndex] = value;
     }
 
-    void setElement(int linearIndex, PAYLOAD value)
+    void setElement(int linearIndex, _PAYLOAD value)
     {
         addModifiedCell(linearIndex, value);
         (*this->next)[linearIndex] = value;
     }
 
-    void setCurrentBuffer(PAYLOAD value)
+    void setCurrentBuffer(_PAYLOAD value)
     {
         this->current->setBuffer(value);
     }
 
-    void setNextBuffer(PAYLOAD value)
+    void setNextBuffer(_PAYLOAD value)
     {
         this->next->setBuffer(value);
     }
@@ -433,7 +435,7 @@ private:
 
 
     }
-    void addModifiedCell(int linearIndex, PAYLOAD value)
+    void addModifiedCell(int linearIndex, _PAYLOAD value)
     {
         if (flagModified[linearIndex] == false && (*next)[linearIndex] != value)
         {

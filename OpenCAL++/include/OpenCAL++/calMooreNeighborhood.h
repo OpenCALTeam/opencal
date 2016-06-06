@@ -11,17 +11,19 @@ protected:
 
   static constexpr const int ALPHABETHSIZE = 2*RADIUS+1;
   static constexpr const int total = calCommon::pow_ct(ALPHABETHSIZE, DIMENSION);
-
-
-typedef std::array<int,DIMENSION> element;
-
- static std::array<element, total> indices;
+public:
+    typedef int COORDINATE_TYPE;
+protected:
+  typedef std::array<COORDINATE_TYPE,DIMENSION> element;
+   static std::array<element, total> indices;
 
 public:
-  static const std::array<element, total>& defineNeighborhood() {
+  static constexpr const unsigned int _DIMENSION = DIMENSION;
+
+static const std::array<element, total>& defineNeighborhood() {
     assert(DIMENSION > 1);
 
-    const  std::array<int ,ALPHABETHSIZE> alphabet = generateAlphabeth();
+    const  std::array<COORDINATE_TYPE ,ALPHABETHSIZE> alphabet = generateAlphabeth();
 
     for (int i = 0; i < total; i++)
      for (int pos = 0 , v=i ; pos < DIMENSION; pos++, v/=ALPHABETHSIZE)
@@ -35,8 +37,8 @@ public:
   }
 
 protected:
- static const std::array<int ,ALPHABETHSIZE> generateAlphabeth(){
-    std::array<int , ALPHABETHSIZE> alphabet;
+ static const std::array<COORDINATE_TYPE ,ALPHABETHSIZE> generateAlphabeth(){
+    std::array<COORDINATE_TYPE , ALPHABETHSIZE> alphabet;
     alphabet[0] = 0;
 
     for(int i = 1 , pos = 1 ; i <= RADIUS ; i++ ){

@@ -10,7 +10,7 @@ typedef unsigned int COORD_TYPE;
 
 using namespace std::placeholders;
 
-constexpr unsigned int MOORERADIUS=5;
+constexpr unsigned int MOORERADIUS=1;
 
 
 typedef std::array<unsigned char, 2> vec2b;
@@ -81,16 +81,49 @@ public:
 
 };
 
+template<uint _DIMENSION, class _NEIGHBORHOOD , class _KERNEL , class _SUBSTATE , class COORDINATE_TYPE = uint>
+class UniformFilter : public opencal::ConvolutionFilter<_DIMENSION, _NEIGHBORHOOD , _KERNEL, _SUBSTATE >{
+  typedef opencal::ConvolutionFilter<_DIMENSION, _NEIGHBORHOOD , _KERNEL, _SUBSTATE > SUPER;
+
+  //constructor inheritance
+using SUPER::SUPER;
+
+virtual void applyConvolution(typename SUPER::MODEL_pointer model, std::array<uint,_DIMENSION>& indices, _KERNEL* kernel) {
+       typename _SUBSTATE::PAYLOAD newVal= {} ;
+
+       for(int i=0 ; i < model->getNeighborhoodSize() ; ++i)
+         for(int j=0 ; j < newVal.size(); j++)
+          newVal[j] += std::get<0>((*kernel)[i]) * (double)this->substate->getX(indices,i)[j];
+
+       this->substate->setElement(indices,newVal);
+
+      }
+
+};
+
+
+
 int main ()
 {
 
 
     int steps=1; printf("how many steps?.."); scanf("%d",&steps);
 
+    opencal::UniformKernel<2,opencal::CALMooreNeighborhood<2,MOORERADIUS>, double> unikernel;
+    opencal::GaussianKernel<2,opencal::CALMooreNeighborhood<2,MOORERADIUS>, double> gaukernel
+      ({1.0,1.0},{0.0,0.0});
 
+
+   // unikernel.print();
+   // gaukernel.print();
     opencal::CALMooreNeighborhood<2,MOORERADIUS> neighbor;
 
-    MODELTYPE calmodel(
+
+
+
+    //return 0;*/
+
+      MODELTYPE calmodel(
                 coords,
                 &neighbor,
                 opencal::calCommon::CAL_SPACE_TOROIDAL,
@@ -101,15 +134,18 @@ int main ()
 
     opencal::CALSubstate<vec3b, 2, COORD_TYPE> *bgr = calmodel.addSubstate<vec3b>();
 
+
+UniformFilter<2, decltype(neighbor), decltype(unikernel),opencal::CALSubstate<vec3b, 2, COORD_TYPE>  > unifilter(bgr,&unikernel);
+
     bgr->loadSubstate(*(new std::function<decltype(loadImage<vec3b>)>(loadImage<vec3b>)), "input/jpg/protein1500.jpg");
 
 
-    calmodel.addElementaryProcess(new MeanFilter<vec3b>(bgr));
+    calmodel.addElementaryProcess(&unifilter);
     calmodel.addElementaryProcess(new SaveGlobalFunction<vec3b>(bgr, opencal::calCommon::CAL_UPDATE_EXPLICIT));
     calrun.run();
-  //  bgr->saveSubstate(savef, "output/outproteinMO.jpg");
+    //bgr->saveSubstate(savef, "output/outproteinMO.jpg");
 
-
+printf("END\n");
 
 
 }

@@ -60,12 +60,39 @@
 
 namespace opencal {
 
-  template< uint DIMENSION , template <uint, class...> class _NEIGHBORHOOD, class ...TYPES>
+  template<class Tuple, std::size_t N>
+struct TuplePrinter{
+
+  static void print(const Tuple& t){
+    TuplePrinter<Tuple, N-1>::print(t);
+    std::cout<<", "<<std::get<N>(t);
+  }
+};
+
+template<class Tuple>
+struct TuplePrinter<Tuple,1>{
+
+  static void print(const Tuple& t){
+    std::cout<<std::get<0>(t);
+  }
+};
+
+template<class... Args>
+void print_tuple(const std::tuple<Args...>& t){
+  std::cout<<"(";
+  TuplePrinter<decltype(t),sizeof...(Args)>::print(t);
+  std::cout<<")";
+}
+
+template< uint _DIMENSION ,  class _NEIGHBORHOOD, class ...TYPES>
   class Kernel {
 
     public:
      typedef std::tuple<TYPES...> PAYLOAD;
      typedef std::vector<PAYLOAD> VEC_TYPE;
+
+     template<typename = typename std::enable_if<_DIMENSION == _NEIGHBORHOOD::_DIMENSION>::type>
+      Kernel() : data(_NEIGHBORHOOD::getNeighborhoodIndices().size()) {};
 
      Kernel(uint size) : data(size) {};
      Kernel(const VEC_TYPE& _data) : data(_data) {};
@@ -75,6 +102,16 @@ namespace opencal {
        return data[idx];
       };
 
+   virtual  void initKernel() = 0;
+
+    void print(){
+      using namespace std;
+      for(int i=0 ; i < data.size(); ++i){
+
+        print_tuple(data[i]);
+        cout<<endl;
+      }
+    }
 
 
     protected:
@@ -83,16 +120,20 @@ namespace opencal {
   };
 
 
-  template< uint DIMENSION , template <uint , class...> class _NEIGHBORHOOD , class FLOATING>
+  template< uint DIMENSION , class _NEIGHBORHOOD , class FLOATING>
   class UniformKernel : public Kernel<DIMENSION, _NEIGHBORHOOD, FLOATING> {
 
     typedef Kernel<DIMENSION , _NEIGHBORHOOD,  FLOATING> SUPER;
-    typedef _NEIGHBORHOOD<DIMENSION> NEIGHBORHOOD;
+    typedef _NEIGHBORHOOD NEIGHBORHOOD;
     typedef typename NEIGHBORHOOD::COORDINATE_TYPE COORDINATE_TYPE;
 
     public:
-     UniformKernel(uint size) : SUPER(size) {};
+      UniformKernel() : SUPER() {initKernel();};
+     UniformKernel(uint size) : SUPER(size) {initKernel();};
+
      UniformKernel(const typename SUPER::VEC_TYPE& _data) = delete ;
+
+
 
     protected:
     std::array<double,DIMENSION> sigma;
@@ -102,7 +143,7 @@ namespace opencal {
        const auto&  indices = NEIGHBORHOOD::getNeighborhoodIndices();
        const auto size = indices.size();
        for(int i =0 ; i < size ; ++i ){
-          this->data[i] = 1/size;
+         std::get<0>(this->data[i]) = static_cast<FLOATING>(1/static_cast<FLOATING>(size));
        }
 
      }
@@ -110,14 +151,17 @@ namespace opencal {
   };
 
 
-  template< uint DIMENSION , template <uint , class...> class _NEIGHBORHOOD , class FLOATING>
+  template< uint DIMENSION ,class _NEIGHBORHOOD , class FLOATING>
   class GaussianKernel : public Kernel<DIMENSION, _NEIGHBORHOOD, FLOATING> {
 
     typedef Kernel<DIMENSION , _NEIGHBORHOOD,  FLOATING> SUPER;
-    typedef _NEIGHBORHOOD<DIMENSION> NEIGHBORHOOD;
+    typedef _NEIGHBORHOOD NEIGHBORHOOD;
     typedef typename NEIGHBORHOOD::COORDINATE_TYPE COORDINATE_TYPE;
     //static auto phi = [] (const double sigma, const
     public:
+
+    GaussianKernel(std::array<double,DIMENSION> _sigma, std::array<double,DIMENSION> _mu) : SUPER() , sigma(_sigma) , mu(_mu) {initKernel();};
+
      GaussianKernel(uint size,std::array<double,DIMENSION> _sigma, std::array<double,DIMENSION> _mu) : SUPER(size) , sigma(_sigma) , mu(_mu) {initKernel();};
      GaussianKernel(const typename SUPER::VEC_TYPE& _data) = delete ;
 
@@ -128,7 +172,7 @@ namespace opencal {
      void initKernel(){
        const auto&  indices = NEIGHBORHOOD::getNeighborhoodIndices();
        for(int i =0 ; i < indices.size() ; ++i ){
-          this->data[i] = getGaussianVal(indices[i]);
+         std::get<0>(this->data[i]) = getGaussianVal(indices[i]);
        }
 
      }
@@ -156,13 +200,13 @@ namespace opencal {
 
 
 
-  template< uint DIMENSION, template <uint, class...> class _NEIGHBORHOOD , template<uint , class...> class _KERNEL , template<uint, class...> class _SUBSTATE, class COORDINATE_TYPE>
-  class ConvolutionFilter: public opencal::CALLocalFunction<DIMENSION, _NEIGHBORHOOD<DIMENSION> ,  COORDINATE_TYPE>{
+  template< uint DIMENSION,  class _NEIGHBORHOOD , class _KERNEL , class _SUBSTATE, class COORDINATE_TYPE=uint>
+  class ConvolutionFilter: public opencal::CALLocalFunction<DIMENSION, _NEIGHBORHOOD ,  COORDINATE_TYPE>{
+    public:
+  typedef _KERNEL KERNEL;
+  typedef _SUBSTATE SUBSTATE;
 
-  typedef _KERNEL<DIMENSION> KERNEL;
-  typedef _SUBSTATE<DIMENSION> SUBSTATE;
-
-  typedef CALModel<DIMENSION, _NEIGHBORHOOD<DIMENSION>, COORDINATE_TYPE> *MODEL_pointer;
+  typedef CALModel<DIMENSION, _NEIGHBORHOOD, COORDINATE_TYPE> *MODEL_pointer;
 
 
     protected:
@@ -171,20 +215,11 @@ namespace opencal {
 
       //some substate may need convolution filter to be applied differenlty.
       //Consider to overload this function to obtain the desired result
-      virtual void applyConvolution(MODEL_pointer model, std::array<COORDINATE_TYPE,DIMENSION>& indices, KERNEL* kernel){
-       typename SUBSTATE::PAYLOAD newVal;
-
-       for(int i=0 ; i < model->getNeighborhoodSize() ; ++i)
-          newVal += (*kernel)[i] * substate->getX(indices,i);
-
-       substate->setElement(indices,newVal);
-
-      }
-
+     virtual void applyConvolution(MODEL_pointer model, std::array<COORDINATE_TYPE,DIMENSION>& indices, KERNEL* kernel) =0;
 
     public:
 
-      ConvolutionFilter(const SUBSTATE* _sub , const KERNEL* k) : substate(_sub) , kernel(k) {};
+      ConvolutionFilter(SUBSTATE* _sub , KERNEL* k) : substate(_sub) , kernel(k) {};
       ConvolutionFilter() = delete;
 
 
