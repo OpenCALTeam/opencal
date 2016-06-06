@@ -77,12 +77,19 @@ struct CALModel2D {
 	int sizeof_X;						//!< Number of cells belonging to the neighbourhood. Note that predefined neighbourhoods include the central cell.
 	enum CALNeighborhood2D X_id;		//!< Neighbourhood relation's id.
 
-	struct CALSubstate2Db** pQb_array;	//!< Array of pointers to 2D substates of type byte
+    struct CALSubstate2Db** pQb_array;	//!< Array of pointers to 2D substates of type byte
 	struct CALSubstate2Di** pQi_array;	//!< Array of pointers to 2D substates of type int
 	struct CALSubstate2Dr** pQr_array;	//!< Array of pointers to 2D substates of type real (floating point)
 	int sizeof_pQb_array;				//!< Number of substates of type byte.
 	int sizeof_pQi_array;				//!< Number of substates of type int.
-	int sizeof_pQr_array;				//!< Number of substates of type real (floating point).
+    int sizeof_pQr_array;				//!< Number of substates of type real (floating point).
+
+    struct CALSubstate2Db** pQb_single_layer_array;	//!< Array of pointers to 2D single layer substates of type byte
+    struct CALSubstate2Di** pQi_single_layer_array;	//!< Array of pointers to 2D single layer substates of type int
+    struct CALSubstate2Dr** pQr_single_layer_array;	//!< Array of pointers to 2D single layer substates of type real (floating point)
+    int sizeof_pQb_single_layer_array;				//!< Number of single layer substates of type byte.
+    int sizeof_pQi_single_layer_array;				//!< Number of single layer substates of type int.
+    int sizeof_pQr_single_layer_array;				//!< Number of single layer substates of type real (floating point).
 
 	CALCallbackFunc2D *elementary_processes; //!< Array of function pointers to the transition function's elementary processes callback functions. Note that a substates' update must be performed after each elementary process has been applied to each cell of the cellular space (see calGlobalTransitionFunction2D).
 	int num_of_elementary_processes; //!< Number of function pointers to the transition functions's elementary processes callbacks.

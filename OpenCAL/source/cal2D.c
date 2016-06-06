@@ -311,6 +311,13 @@ struct CALModel2D* calCADef2D(int rows,
 	ca2D->sizeof_pQi_array = 0;
 	ca2D->sizeof_pQr_array = 0;
 
+    ca2D->pQb_single_layer_array = NULL;
+    ca2D->pQi_single_layer_array = NULL;
+    ca2D->pQr_single_layer_array = NULL;
+    ca2D->sizeof_pQb_single_layer_array = 0;
+    ca2D->sizeof_pQi_single_layer_array = 0;
+    ca2D->sizeof_pQr_single_layer_array = 0;
+
 	ca2D->elementary_processes = NULL;
 	ca2D->num_of_elementary_processes = 0;
 
@@ -477,44 +484,83 @@ struct CALSubstate2Dr* calAddSubstate2Dr(struct CALModel2D* ca2D){
 
 struct CALSubstate2Db* calAddSingleLayerSubstate2Db(struct CALModel2D* ca2D){
 
-	struct CALSubstate2Db* Q;
-	Q = (struct CALSubstate2Db*)malloc(sizeof(struct CALSubstate2Db));
-	if (!Q)
-		return NULL;
-	Q->current = calAllocBuffer2Db(ca2D->rows, ca2D->columns);
-	if (!Q->current)
-		return NULL;
-	Q->next = NULL;
+    struct CALSubstate2Db* Q;
+    struct CALSubstate2Db** pQb_single_layer_array_new;
+    int i;
 
-	return Q;
+    pQb_single_layer_array_new = (struct CALSubstate2Db**)malloc(sizeof(struct CALSubstate2Db*)*(ca2D->sizeof_pQb_single_layer_array + 1));
+    if (!pQb_single_layer_array_new)
+        return NULL;
+
+    for (i = 0; i < ca2D->sizeof_pQb_single_layer_array; i++)
+        pQb_single_layer_array_new[i] = ca2D->pQb_single_layer_array[i];
+
+    Q = (struct CALSubstate2Db*)malloc(sizeof(struct CALSubstate2Db));
+    if (!Q)
+        return NULL;
+    if (!calAllocSubstate2Db(ca2D, Q))
+        return NULL;
+
+    pQb_single_layer_array_new[ca2D->sizeof_pQb_single_layer_array] = Q;
+    ca2D->sizeof_pQb_single_layer_array++;
+
+    ca2D->pQb_single_layer_array = pQb_single_layer_array_new;
+
+    return Q;
 }
 
 struct CALSubstate2Di* calAddSingleLayerSubstate2Di(struct CALModel2D* ca2D){
 
-	struct CALSubstate2Di* Q;
-	Q = (struct CALSubstate2Di*)malloc(sizeof(struct CALSubstate2Di));
-	if (!Q)
-		return NULL;
-	Q->current = calAllocBuffer2Di(ca2D->rows, ca2D->columns);
-	if (!Q->current)
-		return NULL;
-	Q->next = NULL;
+    struct CALSubstate2Di* Q;
+    struct CALSubstate2Di** pQi_single_layer_array_new;
+    int i;
 
-	return Q;
+    pQi_single_layer_array_new = (struct CALSubstate2Di**)malloc(sizeof(struct CALSubstate2Di*)*(ca2D->sizeof_pQi_single_layer_array + 1));
+    if (!pQi_single_layer_array_new)
+        return NULL;
+
+    for (i = 0; i < ca2D->sizeof_pQi_single_layer_array; i++)
+        pQi_single_layer_array_new[i] = ca2D->pQi_single_layer_array[i];
+
+    Q = (struct CALSubstate2Di*)malloc(sizeof(struct CALSubstate2Di));
+    if (!Q)
+        return NULL;
+    if (!calAllocSubstate2Di(ca2D, Q))
+        return NULL;
+
+    pQi_single_layer_array_new[ca2D->sizeof_pQi_single_layer_array] = Q;
+    ca2D->sizeof_pQi_single_layer_array++;
+
+    ca2D->pQi_single_layer_array = pQi_single_layer_array_new;
+
+    return Q;
 }
 
 struct CALSubstate2Dr* calAddSingleLayerSubstate2Dr(struct CALModel2D* ca2D){
 
-	struct CALSubstate2Dr* Q;
-	Q = (struct CALSubstate2Dr*)malloc(sizeof(struct CALSubstate2Dr));
-	if (!Q)
-		return NULL;
-	Q->current = calAllocBuffer2Dr(ca2D->rows, ca2D->columns);
-	if (!Q->current)
-		return NULL;
-	Q->next = NULL;
+    struct CALSubstate2Dr* Q;
+    struct CALSubstate2Dr** pQr_single_layer_array_new;
+    int i;
 
-	return Q;
+    pQr_single_layer_array_new = (struct CALSubstate2Dr**)malloc(sizeof(struct CALSubstate2Dr*)*(ca2D->sizeof_pQr_single_layer_array + 1));
+    if (!pQr_single_layer_array_new)
+        return NULL;
+
+    for (i = 0; i < ca2D->sizeof_pQr_single_layer_array; i++)
+        pQr_single_layer_array_new[i] = ca2D->pQr_single_layer_array[i];
+
+    Q = (struct CALSubstate2Dr*)malloc(sizeof(struct CALSubstate2Dr));
+    if (!Q)
+        return NULL;
+    if (!calAllocSubstate2Dr(ca2D, Q))
+        return NULL;
+
+    pQr_single_layer_array_new[ca2D->sizeof_pQr_single_layer_array] = Q;
+    ca2D->sizeof_pQr_single_layer_array++;
+
+    ca2D->pQr_single_layer_array = pQr_single_layer_array_new;
+
+    return Q;
 }
 
 
