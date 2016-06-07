@@ -107,7 +107,7 @@ template< uint _DIMENSION ,  class _NEIGHBORHOOD, class ...TYPES>
     void print(){
       using namespace std;
       for(int i=0 ; i < data.size(); ++i){
-
+        cout<<_NEIGHBORHOOD::getNeighborhoodIndices()[i][0]<<" , "<<_NEIGHBORHOOD::getNeighborhoodIndices()[i][1]<<" ";
         print_tuple(data[i]);
         cout<<endl;
       }
@@ -171,29 +171,31 @@ template< uint _DIMENSION ,  class _NEIGHBORHOOD, class ...TYPES>
 
      void initKernel(){
        const auto&  indices = NEIGHBORHOOD::getNeighborhoodIndices();
+       FLOATING sum = 0;
        for(int i =0 ; i < indices.size() ; ++i ){
-         std::get<0>(this->data[i]) = getGaussianVal(indices[i]);
+         FLOATING val = getGaussianVal(indices[i]);
+         sum+=val;
+         std::get<0>(this->data[i]) = val;
        }
-
+       //normalize the kernel
+       for(int i =0 ; i < this->data.size() ; ++i )
+          std::get<0>(this->data[i])/=sum;
      }
 
      double getGaussianVal(const std::array<COORDINATE_TYPE,DIMENSION>& x){
 
 
-       double prodSig2 = fold(sigma.begin(),sigma.end(),1,
-           []( double acc,  double s) -> double {return s*s*acc; }
+       double prodSigma = fold(sigma.begin(),sigma.end(),1.0,
+           []( double acc,  double s) -> double {return s*acc; }
            );
-       double coeff = 1/(2*M_PIl * prodSig2);
+       double coeff = 1/(2*M_PIl * prodSigma);
 
        double exponent = 0;
        for(int i = 0 ; i < DIMENSION ; ++i){
-          double p = (x[i] - mu[i])/sigma[i];
-          p*=2;
-          exponent+=p;
+          exponent+= ( (x[i] - mu[i]) * (x[i] -mu[i]) ) /(2*(sigma[i]* sigma[i]));
        }
-       exponent*=0.5;
 
-       return coeff * exp(exponent);
+       return coeff * exp(-exponent);
      }
 
   };

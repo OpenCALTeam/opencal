@@ -10,7 +10,7 @@ typedef unsigned int COORD_TYPE;
 
 using namespace std::placeholders;
 
-constexpr unsigned int MOORERADIUS=1;
+constexpr unsigned int MOORERADIUS=2;
 
 
 typedef std::array<unsigned char, 2> vec2b;
@@ -111,17 +111,17 @@ int main ()
 
     opencal::UniformKernel<2,opencal::CALMooreNeighborhood<2,MOORERADIUS>, double> unikernel;
     opencal::GaussianKernel<2,opencal::CALMooreNeighborhood<2,MOORERADIUS>, double> gaukernel
-      ({1.0,1.0},{0.0,0.0});
+      ({0.05,2.0},{0.0,0.0});
 
 
    // unikernel.print();
-   // gaukernel.print();
+    gaukernel.print();
     opencal::CALMooreNeighborhood<2,MOORERADIUS> neighbor;
 
 
 
 
-    //return 0;*/
+    //return 0;
 
       MODELTYPE calmodel(
                 coords,
@@ -135,7 +135,7 @@ int main ()
     opencal::CALSubstate<vec3b, 2, COORD_TYPE> *bgr = calmodel.addSubstate<vec3b>();
 
 
-UniformFilter<2, decltype(neighbor), decltype(unikernel),opencal::CALSubstate<vec3b, 2, COORD_TYPE>  > unifilter(bgr,&unikernel);
+UniformFilter<2, decltype(neighbor), decltype(gaukernel),opencal::CALSubstate<vec3b, 2, COORD_TYPE>  > unifilter(bgr,&gaukernel);
 
     bgr->loadSubstate(*(new std::function<decltype(loadImage<vec3b>)>(loadImage<vec3b>)), "input/jpg/protein1500.jpg");
 

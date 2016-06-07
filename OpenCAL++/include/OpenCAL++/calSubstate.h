@@ -48,7 +48,7 @@ class CALSubstate : public CALSubstateWrapper<DIMENSION , COORDINATE_TYPE> {
     typedef CALManagerIO<DIMENSION , COORDINATE_TYPE>* CALCONVERTERIO_pointer;
 
 
-private:
+
     BUFFER_TYPE_PTR current;    //!< Current linearised matrix of the substate, used for reading purposes.
     BUFFER_TYPE_PTR next;        //!< Next linearised matrix of the substate, used for writing purposes.
     std::array<COORDINATE_TYPE,DIMENSION> coordinates;
