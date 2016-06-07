@@ -10,7 +10,7 @@ typedef unsigned int COORD_TYPE;
 
 using namespace std::placeholders;
 
-constexpr unsigned int MOORERADIUS=2;
+constexpr unsigned int MOORERADIUS=7;
 
 
 typedef std::array<unsigned char, 2> vec2b;
@@ -22,7 +22,7 @@ typedef opencal::CALModel<2, opencal::CALMooreNeighborhood<2,MOORERADIUS>, COORD
 
 
 
-std::array<COORD_TYPE, 2> coords = { 857,1500 };
+std::array<COORD_TYPE, 2> coords = { 480,512 };
 CALLBACKTYPE<vec3b>::SAVECALLBACK savef = std::bind(save<vec3b>,_1,_2,coords[0], coords[1],CV_8UC3);
 
 
@@ -111,11 +111,16 @@ int main ()
 
     opencal::UniformKernel<2,opencal::CALMooreNeighborhood<2,MOORERADIUS>, double> unikernel;
     opencal::GaussianKernel<2,opencal::CALMooreNeighborhood<2,MOORERADIUS>, double> gaukernel
-      ({0.05,2.0},{0.0,0.0});
+      ({0.5,0.5},{0.0,0.0});
+
+    opencal::LaplacianKernel<2,opencal::CALMooreNeighborhood<2,MOORERADIUS>, double> lapkernel
+      ({0.3,0.3},{0.0,0.0});
+
 
 
    // unikernel.print();
-    gaukernel.print();
+   // gaukernel.print();
+     lapkernel.print();
     opencal::CALMooreNeighborhood<2,MOORERADIUS> neighbor;
 
 
@@ -134,10 +139,12 @@ int main ()
 
     opencal::CALSubstate<vec3b, 2, COORD_TYPE> *bgr = calmodel.addSubstate<vec3b>();
 
-
+//laplacian
+//UniformFilter<2, decltype(neighbor), decltype(lapkernel),opencal::CALSubstate<vec3b, 2, COORD_TYPE>  > unifilter(bgr,&lapkernel);
 UniformFilter<2, decltype(neighbor), decltype(gaukernel),opencal::CALSubstate<vec3b, 2, COORD_TYPE>  > unifilter(bgr,&gaukernel);
 
-    bgr->loadSubstate(*(new std::function<decltype(loadImage<vec3b>)>(loadImage<vec3b>)), "input/jpg/protein1500.jpg");
+
+    bgr->loadSubstate(*(new std::function<decltype(loadImage<vec3b>)>(loadImage<vec3b>)), "input/jpg/woman_.jpg");
 
 
     calmodel.addElementaryProcess(&unifilter);

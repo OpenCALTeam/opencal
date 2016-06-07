@@ -136,8 +136,6 @@ template< uint _DIMENSION ,  class _NEIGHBORHOOD, class ...TYPES>
 
 
     protected:
-    std::array<double,DIMENSION> sigma;
-    std::array<double,DIMENSION> mu;
 
      void initKernel(){
        const auto&  indices = NEIGHBORHOOD::getNeighborhoodIndices();
@@ -149,6 +147,62 @@ template< uint _DIMENSION ,  class _NEIGHBORHOOD, class ...TYPES>
      }
 
   };
+
+
+  template< uint DIMENSION , class _NEIGHBORHOOD , class FLOATING>
+  class LaplacianKernel : public Kernel<DIMENSION, _NEIGHBORHOOD, FLOATING> {
+
+    typedef Kernel<DIMENSION , _NEIGHBORHOOD,  FLOATING> SUPER;
+    typedef _NEIGHBORHOOD NEIGHBORHOOD;
+    typedef typename NEIGHBORHOOD::COORDINATE_TYPE COORDINATE_TYPE;
+
+    public:
+
+    LaplacianKernel(std::array<double,DIMENSION> _sigma, std::array<double,DIMENSION> _mu) : SUPER() , sigma(_sigma) , mu(_mu) {initKernel();};
+
+    LaplacianKernel(uint size,std::array<double,DIMENSION> _sigma, std::array<double,DIMENSION> _mu) : SUPER(size) , sigma(_sigma) , mu(_mu) {initKernel();};
+     LaplacianKernel(const typename SUPER::VEC_TYPE& _data) = delete ;
+
+
+    protected:
+    std::array<double,DIMENSION> sigma;
+    std::array<double,DIMENSION> mu;
+
+
+     void initKernel(){
+       const auto&  indices = NEIGHBORHOOD::getNeighborhoodIndices();
+       FLOATING sum = 0;
+       for(int i =0 ; i < indices.size() ; ++i ){
+         FLOATING val = getLaplacianVal(indices[i]);
+         sum+=fabs(val);
+         std::get<0>(this->data[i]) = val;
+       }
+       //normalize the kernel
+       for(int i =0 ; i < this->data.size() ; ++i )
+         std::get<0>(this->data[i])/=sum;
+     }
+
+     double getLaplacianVal(const std::array<COORDINATE_TYPE,DIMENSION>& x){
+
+
+       double prodSigma = fold(sigma.begin(),sigma.end(),1.0,
+           []( double acc,  double s) -> double {return s*acc; }
+           );
+       double coeff = 1/(2*M_PIl * prodSigma*prodSigma);
+
+       double exponent = 0;
+       for(int i = 0 ; i < DIMENSION ; ++i)
+          exponent+= ( (x[i] - mu[i]) * (x[i] -mu[i]) ) /(2.0*(sigma[i]* sigma[i]));
+
+      const  FLOATING val = -coeff * (1.0-exponent)*exp(-exponent);
+
+       return val;
+     }
+
+
+  };
+
+
 
 
   template< uint DIMENSION ,class _NEIGHBORHOOD , class FLOATING>
