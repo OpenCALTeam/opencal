@@ -6,6 +6,7 @@
 #include <functional>
 #include<OpenCAL++/functional_utilities.h>
 #include "image_processing.h"
+#include<algorithm>
 typedef unsigned int COORD_TYPE;
 
 using namespace std::placeholders;
@@ -24,6 +25,35 @@ typedef opencal::CALModel<2, opencal::CALMooreNeighborhood<2,MOORERADIUS>, COORD
 
 std::array<COORD_TYPE, 2> coords = { 480,512 };
 CALLBACKTYPE<vec3b>::SAVECALLBACK savef = std::bind(save<vec3b>,_1,_2,coords[0], coords[1],CV_8UC3);
+
+
+template<typename PIXELTYPE>
+class BrightnessContrastFilter : public opencal::CALLocalFunction<2,opencal::CALMooreNeighborhood<2,MOORERADIUS>,uint>{
+
+    opencal::CALSubstate<PIXELTYPE,2>* img;
+  double alpha;
+  double beta;
+public:
+    BrightnessContrastFilter(auto* sbs , double _alpha, double _beta): img(sbs) , alpha(_alpha), beta(_beta){
+
+    }
+
+
+    void run(MODELTYPE* model,std::array<uint,2>& indices){
+        using namespace std;
+        constexpr int channels = std::tuple_size<PIXELTYPE>::value;
+        PIXELTYPE newVal=img->getElement(indices);
+
+        unsigned short ns = model->getNeighborhoodSize();
+         for (int i=0; i<channels; ++i)
+              newVal[i] = min(255.0, max(alpha*newVal[i]+beta, 0.0));
+
+        img->setElement(indices,newVal);
+    }
+
+
+
+};
 
 
 
@@ -62,6 +92,9 @@ public:
 
 
 };
+
+
+
 
 template<typename PIXELTYPE>
 class SaveGlobalFunction : public opencal::CALGlobalFunction<2,opencal::CALMooreNeighborhood<2,MOORERADIUS>,uint>{
@@ -144,10 +177,13 @@ int main ()
 UniformFilter<2, decltype(neighbor), decltype(gaukernel),opencal::CALSubstate<vec3b, 2, COORD_TYPE>  > unifilter(bgr,&gaukernel);
 
 
+
     bgr->loadSubstate(*(new std::function<decltype(loadImage<vec3b>)>(loadImage<vec3b>)), "input/jpg/woman_.jpg");
 
 
-    calmodel.addElementaryProcess(&unifilter);
+    //calmodel.addElementaryProcess(&unifilter);
+    calmodel.addElementaryProcess(new BrightnessContrastFilter<vec3b>(bgr,2.0,50));
+
     calmodel.addElementaryProcess(new SaveGlobalFunction<vec3b>(bgr, opencal::calCommon::CAL_UPDATE_EXPLICIT));
     calrun.run();
     //bgr->saveSubstate(savef, "output/outproteinMO.jpg");
