@@ -1,23 +1,20 @@
 #ifndef INVERTCOLORSFILTER_H
 #define INVERTCOLORSFILTER_H
 
-
 #include <OpenCAL++/calElementaryProcessFunctor.h>
-
 #include<OpenCAL++/calSubstate.h>
-#include<opencv2/core/core.hpp>
-
 
 
 template<uint DIMENSION, class NEIGHBORHOOD, typename COORDINATE_TYPE, class PIXELTYPE>
-class InvertColorsFilter : public opencal::CALLocalFunction<DIMENSION,NEIGHBORHOOD,COORDINATE_TYPE>{
+class InvertColorsFilter : public opencal::CALLocalFunction< DIMENSION , NEIGHBORHOOD , COORDINATE_TYPE>{
 
     typedef opencal::CALModel<DIMENSION, NEIGHBORHOOD, COORDINATE_TYPE> MODELTYPE;
+    typedef typename std::tuple_element<0,PIXELTYPE>::type TYPE;
     opencal::CALSubstate<PIXELTYPE,DIMENSION>* img;
-    int maxLimit;
+    TYPE maxLimit;
 
 public:
-    InvertColorsFilter(auto* sbs, int _maxLimit=255 ):
+    InvertColorsFilter(auto* sbs, TYPE _maxLimit = 255 ):
         img(sbs), maxLimit(_maxLimit)  {
 
     }
@@ -29,20 +26,17 @@ public:
         constexpr int channels = std::tuple_size<PIXELTYPE>::value;
         PIXELTYPE newVal=img->getElement(indices);
 
-
-        for (int i=0; i<channels; ++i)
+        for (int i = 0; i<channels; ++i)
         {
-            int output = maxLimit - newVal[i];
-            newVal[i] = cv::saturate_cast<uchar>(output);
+            const TYPE output = maxLimit - newVal[i];
+            newVal[i] = output;
         }
 
         img->setElement(indices,newVal);
     }
 
 
-
 };
-
 
 
 
