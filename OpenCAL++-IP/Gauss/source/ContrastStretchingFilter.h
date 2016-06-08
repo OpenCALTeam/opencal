@@ -5,7 +5,6 @@
 #include <OpenCAL++/calElementaryProcessFunctor.h>
 #include <OpenCAL++/calMooreNeighborhood.h>
 #include<OpenCAL++/calSubstate.h>
-#include<opencv2/core/core.hpp>
 
 
 
@@ -28,20 +27,8 @@ public:
     }
 
 
-    TYPE computeOutput(TYPE x)
-    {
-        TYPE result;
-        if(0 <= x && x <= low_in){
-            result = low_out/low_in * x;
-        }else if(low_in < x && x <= high_in){
-            result = ((high_out - low_out)/(high_in - low_in)) * (x - low_in) + low_out;
-        }else if(high_in < x && x <= 255){
-            result = ((255 - high_out)/(255 - high_in)) * (x - high_in) + high_out;
-        }
-        return result;
-    }
 
-    TYPE computeValOutput (TYPE x)
+    TYPE computeValOutput (const TYPE x)
     {
         if (x <= low_in)
             return low_out;
@@ -59,14 +46,14 @@ public:
         PIXELTYPE newVal=img->getElement(indices);
 
 
-        double gammaCorrection = 1.0 / gamma;
+        const double gammaCorrection = 1.0 / gamma;
 
         for (int i=0; i<channels; ++i)
         {
             TYPE output = computeValOutput(newVal[i]);
             output = (double)high_out * std::pow(((double)output  / (double)high_out), gammaCorrection);
 
-            newVal[i] = cv::saturate_cast<TYPE>(output);
+            newVal[i] = static_cast<TYPE>(output);
         }
 
         img->setElement(indices,newVal);
