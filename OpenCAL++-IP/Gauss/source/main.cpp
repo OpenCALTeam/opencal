@@ -8,6 +8,7 @@
 #include "image_processing.h"
 #include<algorithm>
 #include "ContrastStretchingFilter.h"
+#include "ThresholdFilter.h"
 typedef unsigned int COORD_TYPE;
 
 using namespace std::placeholders;
@@ -184,8 +185,9 @@ int main ()
     bgr->loadSubstate(*(new std::function<decltype(loadImage<vec1s>)>(loadImage<vec1s>)), "input/tiff/traking_10x_480010persect0001.tif");
 
 
-
+ThresholdFilter<2,decltype(neighbor),COORD_TYPE,vec1s>* thresholdFilter = new ThresholdFilter<2,decltype(neighbor),COORD_TYPE,vec1s> (bgr,0,61680,0,65535);
     calmodel.addElementaryProcess(contrastStretchingFilter);
+    calmodel.addElementaryProcess(thresholdFilter);
 
     calmodel.addElementaryProcess(new SaveGlobalFunction<vec1s>(bgr, opencal::calCommon::CAL_UPDATE_EXPLICIT, "tif"));
     calrun.run();
@@ -195,3 +197,12 @@ int main ()
 
 
 }
+
+/*
+ *
+ * Blob detection: Laplacian of Gaussian (LoG), Difference of Gaussians (DoG), Determinant of Hessian (DoH), Hough transform.
+ * Edge detection: Canny, Deriche, Differential, Sobel, Prewitt, Roberts cross.
+ * Corner detection: Harris operator, Shi and Tomasi, Level curve curvature, SUSAN, FAST.
+ * Feature description: SIFT, SURF, GLOH, HOG.
+ *
+ * */
