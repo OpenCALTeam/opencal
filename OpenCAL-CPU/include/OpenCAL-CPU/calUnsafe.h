@@ -95,7 +95,7 @@ CALreal calGetNextX_r(struct CALModel* calModel,		//!< Pointer to the cellular a
 /*! \brief Sets the value of the n-th neighbor of the given cell of a byte substate.
     This operation is unsafe since it writes a value in a neighbor of the next matrix.
 */
-void calSetX_b(struct CALModel* CALModel,	//!< Pointer to the cellular automaton structure.
+void calSetX_b(struct CALModel* calModel,	//!< Pointer to the cellular automaton structure.
                struct CALSubstate_b* Q,     //!< Pointer to a byte substate.
                CALIndexes central_cell,     //!< The central cell's coordinates
                int n,						//!< Index of the n-th neighbor to be initialized.

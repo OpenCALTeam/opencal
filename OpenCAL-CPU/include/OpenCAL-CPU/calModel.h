@@ -2,8 +2,6 @@
 #define cal_model
 
 #include <OpenCAL-CPU/calCommon.h>
-#include <OpenCAL-CPU/calRun.h>
-#include <OpenCAL-CPU/calRun.h>
 
 /*****************************************************************************
                         DEFINITIONS OF NEW DATA TYPES
@@ -35,7 +33,7 @@ struct CALModel {
         enum CALOptimization OPTIMIZATION;	//!< Type of optimization used. It can be CAL_NO_OPT or CAL_OPT_ACTIVE_CELLS.
         //struct CALActiveCells2D A;			//!< Computational Active cells object. if A.actives==NULL no optimization is applied.
 
-        struct CALIndexes X;				//!< Array of cell coordinates defining the cellular automaton neighbourhood relation.
+        CALIndexes X;				//!< Array of cell coordinates defining the cellular automaton neighbourhood relation.
         int sizeof_X;						//!< Number of cells belonging to the neighbourhood. Note that predefined neighbourhoods include the central cell.
 
         struct CALSubstate_b** pQb_array;	//!< Array of pointers to 2D substates of type byte
@@ -56,8 +54,6 @@ struct CALModel {
                     DEFINITIONS OF FUNCTIONS PROTOTYPES
 *******************************************************************************/
 
-
-
 /*! \brief Creates an object of type CALModel2D, sets its records and returns it as a pointer; it defines the cellular automaton structure.
 */
 struct CALModel* calCADef(int numberOfCoordinates, //!< Number of coordinates of the Cellular Space.
@@ -68,14 +64,12 @@ struct CALModel* calCADef(int numberOfCoordinates, //!< Number of coordinates of
                           );
 
 
-/*! \brief Adds a neighbour to CALModel2D::X and updates the value of CALModel2D::sizeof_X.
+/*! \brief Adds a neighbour to CALModel::X and updates the value of CALModel::sizeof_X.
 */
-void calAddNeighbor2D(struct CALModel* calModel, //!< Pointer to the cellular automaton structure.
+void calAddNeighbor(struct CALModel* calModel, //!< Pointer to the cellular automaton structure.
                       CALIndexes neighbourIndex  //!< Indexes of the n-th neighbour
                       );
 
-
-enum CALInitMethod { CAL_NO_INIT = 0, CAL_INIT_CURRENT, CAL_INIT_NEXT, CAL_INIT_BOTH };
 
 /*! \brief Creates and adds a new byte substate to CALModel2D::pQb_array and return a pointer to it.
 */
@@ -118,68 +112,6 @@ struct CALSubstate_i* calAddSingleLayerSubstate_i(struct CALModel* calModel,	//!
 struct CALSubstate_r* calAddSingleLayerSubstate_r(struct CALModel* calModel,	//!< Pointer to the cellular automaton structure.
                                                   CALreal init_value);
 
-/*! \brief Adds a local function to the CALModel::modelFunctions array.
-*/
-void calAddLocalProcess(struct CALModel* calModel,	//!< Pointer to the cellular automaton structure.
-                        CALLocalProcess elementary_process //!< Pointer to a transition function's elementary process.
-                        );
-
-/*! \brief Adds a global function to the CALModel::modelFunctions array.
-*/
-void calAddGlobalProcess(struct CALModel* calModel,	//!< Pointer to the cellular automaton structure.
-                         CALGlobalProcess elementary_process //!< Pointer to a global function.
-                         );
-
-
-/*! \brief Copies the next matrix of a integer substate to the current one: current = next.
-    If the active cells optimization is considered, it only updates the active cells.
-*/
-void calUpdateSubstate_i(struct CALModel* calModel,	//!< Pointer to the cellular automaton structure.
-                         struct CALSubstate_i* Q	//!< Pointer to a int substate.
-                         );
-
-/*! \brief Copies the next matrix of a real (floating point) substate to the current one: current = next.
-    If the active cells optimization is considered, it only updates the active cells.
-*/
-void calUpdateSubstate_r(struct CALModel* calModel,	//!< Pointer to the cellular automaton structure.
-                         struct CALSubstate_r* Q	//!< Pointer to a real (floating point) substate.
-                         );
-
-
-
-/*! \brief Apply a local process to all the cellular space.
-*/
-void calApplyLocalProcess(struct CALModel* calModel,	//!< Pointer to the cellular automaton structure.
-                          CALLocalProcess local_process //!< Pointer to a local function.
-                          );
-
-/*! \brief Apply a global process to all the cellular space.
-*/
-void calApplyGlobalProcess(struct CALModel* calModel,	//!< Pointer to the cellular automaton structure.
-                          CALGlobalProcess global_process //!< Pointer to a global function.
-                          );
-
-
-
-
-/*! \brief The cellular automaton global transition function.
-    It applies the transition function to each cell of the cellular space.
-    After each local process, a global substates update is performed.
-*/
-void calGlobalTransitionFunction(struct CALModel* calModel	//!< Pointer to the cellular automaton structure.
-                                 );
-
-
-
-/*! \brief Updates all the substates registered in CALModel::pQb_array,
-    CALModel::pQi_array and CALModel::pQr_array.
-    It is called by the global transition function.
-*/
-void calUpdate2D(struct CALModel* calModel	//!< Pointer to the cellular automaton structure.
-                 );
-
-
-
 /*! \brief Inits the value of a byte substate in the given cell to value; it updates both the current and next matrices at that position.
 */
 void calInit_b(struct CALModel* calModel,	//!< Pointer to the cellular automaton structure.
@@ -204,123 +136,123 @@ void calInit_r(struct CALModel* calModel,	//!< Pointer to the cellular automaton
                CALreal value				//!< initializing value for the substate at the cell (i, j).
                );
 
+extern CALbyte (* calGet_b)(struct CALModel* calModel, struct CALSubstate_b* Q, CALIndexes indexes);
+extern CALint (* calGet_i)(struct CALModel* calModel, struct CALSubstate_i* Q, CALIndexes indexes);
+extern CALreal (* calGet_r)(struct CALModel* calModel, struct CALSubstate_r* Q, CALIndexes indexes);
 
+extern CALbyte (* calGetX_b)(struct CALModel* calModel, struct CALSubstate_b* Q, CALIndexes central_cell, int n);
+extern CALint (* calGetX_i)(struct CALModel* calModel, struct CALSubstate_i* Q, CALIndexes central_cell, int n);
+extern CALreal (* calGetX_r)(struct CALModel* calModel, struct CALSubstate_r* Q, CALIndexes central_cell, int n);
 
-/*! \brief Returns the given cell's value of a byte substate.
-*/
-CALbyte calGet_b(struct CALModel* calModel,	//!< Pointer to the cellular automaton structure.
-                 struct CALSubstate_b* Q,	//!< Pointer to a byte substate.
-                 CALIndexes indexes
-                 );
+extern void (* calSet_b)(struct CALModel* calModel, struct CALSubstate_b* Q, CALIndexes central_cell,CALbyte value);
+extern void (* calSet_i)(struct CALModel* calModel, struct CALSubstate_i* Q, CALIndexes central_cell,CALbyte value);
+extern void (* calSet_r)(struct CALModel* calModel, struct CALSubstate_r* Q, CALIndexes central_cell,CALbyte value);
 
-/*! \brief Returns the given cell's value of an integer substate.
-*/
-CALint calGet_i(struct CALModel* calModel,	//!< Pointer to the cellular automaton structure.
-                struct CALSubstate_i* Q,	//!< Pointer to a int substate.
-                CALIndexes indexes
-                );
+extern void (* calSetCurrent_b)(struct CALModel* calModel, struct CALSubstate_b* Q, CALIndexes central_cell, CALbyte value);
+extern void (* calSetCurrent_i)(struct CALModel* calModel, struct CALSubstate_i* Q, CALIndexes central_cell, CALbyte value);
+extern void (* calSetCurrent_r)(struct CALModel* calModel, struct CALSubstate_r* Q, CALIndexes central_cell, CALbyte value);
 
-/*! \brief Returns the given cell's value of the of a real (floating point) substate.
-*/
-CALreal calGet_r(struct CALModel* calModel,	//!< Pointer to the cellular automaton structure.
-                 struct CALSubstate_r* Q,	//!< Pointer to a real (floating point) substate.
-                 CALIndexes indexes
-                 );
+///*! \brief Returns the given cell's value of a byte substate.
+//*/
+//CALbyte calGet_b(struct CALModel* calModel,	//!< Pointer to the cellular automaton structure.
+//                 struct CALSubstate_b* Q,	//!< Pointer to a byte substate.
+//                 CALIndexes indexes
+//                 );
 
+///*! \brief Returns the given cell's value of an integer substate.
+//*/
+//CALint calGet_i(struct CALModel* calModel,	//!< Pointer to the cellular automaton structure.
+//                struct CALSubstate_i* Q,	//!< Pointer to a int substate.
+//                CALIndexes indexes
+//                );
 
-
-/*! \brief Returns the n-th neighbor's value (in Q) of the given cell.
-*/
-CALbyte calGetX_b(struct CALModel* calModel,	//!< Pointer to the cellular automaton structure.
-                  struct CALSubstate_b* Q,//!< Pointer to a byte substate.
-                  CALIndexes central_cell, //!< the central cell's coordinates
-                  int n					//!< Index of the n-th neighbor.
-                  );
-
-/*! \brief Returns the n-th neighbor's value (in Q) of the given cell.
-*/
-CALint calGetX_i(struct CALModel* calModel,	//!< Pointer to the cellular automaton structure.
-                 struct CALSubstate_i* Q,	//!< Pointer to a int substate.
-                 CALIndexes central_cell, //!< the central cell's coordinates
-                 int n					//!< Index of the n-th neighbor.
-                 );
-
-/*! \brief Returns the n-th neighbor's value (in Q) of the given cell.
-*/
-CALreal calGetX_r(struct CALModel* calModel,	//!< Pointer to the cellular automaton structure.
-                  struct CALSubstate_r* Q,//!< Pointer to a real (floating point) substate.
-                  CALIndexes central_cell, //!< the central cell's coordinates
-                  int n					//!< Index of the n-th neighbor.
-                  );
+///*! \brief Returns the given cell's value of the of a real (floating point) substate.
+//*/
+//CALreal calGet_r(struct CALModel* calModel,	//!< Pointer to the cellular automaton structure.
+//                 struct CALSubstate_r* Q,	//!< Pointer to a real (floating point) substate.
+//                 CALIndexes indexes
+//                 );
 
 
 
-/*! \brief Sets the cell value of a byte substate.
-*/
-void calSet_b(struct CALModel* calModel,		//!< Pointer to the cellular automaton structure.
-              struct CALSubstate_b* Q,	//!< Pointer to a byte substate.
-              CALIndexes central_cell, //!< the central cell's coordinates
-              CALbyte value				//!< initializing value.
-              );
+///*! \brief Returns the n-th neighbor's value (in Q) of the given cell.
+//*/
+//CALbyte calGetX_b(struct CALModel* calModel,	//!< Pointer to the cellular automaton structure.
+//                  struct CALSubstate_b* Q,//!< Pointer to a byte substate.
+//                  CALIndexes central_cell, //!< the central cell's coordinates
+//                  int n					//!< Index of the n-th neighbor.
+//                  );
 
-/*! \brief Set the cell value of an integer substate.
-*/
-void calSet_i(struct CALModel* calModel,		//!< Pointer to the cellular automaton structure.
-              struct CALSubstate_i* Q,	//!< Pointer to a int substate.
-              CALIndexes central_cell, //!< the central cell's coordinates
-              CALint value					//!< initializing value.
-              );
+///*! \brief Returns the n-th neighbor's value (in Q) of the given cell.
+//*/
+//CALint calGetX_i(struct CALModel* calModel,	//!< Pointer to the cellular automaton structure.
+//                 struct CALSubstate_i* Q,	//!< Pointer to a int substate.
+//                 CALIndexes central_cell, //!< the central cell's coordinates
+//                 int n					//!< Index of the n-th neighbor.
+//                 );
 
-/*! \brief Set the cell value of a real (floating point) substate.
-*/
-void calSet_r(struct CALModel* calModel,		//!< Pointer to the cellular automaton structure.
-              struct CALSubstate_r* Q,	//!< Pointer to a real (floating point) substate.
-              CALIndexes central_cell, //!< the central cell's coordinates
-              CALreal value				//!< initializing value.
-              );
-
-
-
-/*! \brief Sets the value of the cell of a byte substate of the CURRENT matrix.
-    This operation is unsafe since it writes a value directly to the current matrix.
-*/
-void calSetCurrent_b(struct CALModel* calModel,	//!< Pointer to the cellular automaton structure.
-                     struct CALSubstate_b* Q,	//!< Pointer to a byte substate.
-                     CALIndexes central_cell, //!< the central cell's coordinates
-                     CALbyte value				//!< initializing value.
-                     );
-
-/*! \brief Set the value the  cell of an int substate of the CURRENT matrix.
-    This operation is unsafe since it writes a value directly to the current matrix.
-*/
-void calSetCurrent_i(struct CALModel* calModel,	//!< Pointer to the cellular automaton structure.
-                     struct CALSubstate_i* Q,	//!< Pointer to a int substate.
-                     CALIndexes central_cell, //!< the central cell's coordinates
-                     CALint value				//!< initializing value.
-                     );
-
-/*! \brief Set the value the  cell (i, j) of a real (floating point) substate of the CURRENT matrix.
-    This operation is unsafe since it writes a value directly to the current matrix.
-*/
-void calSetCurrent_r(struct CALModel* calModel,	//!< Pointer to the cellular automaton structure.
-                     struct CALSubstate_r* Q,	//!< Pointer to a int substate.
-                     CALIndexes central_cell, //!< the central cell's coordinates
-                     CALreal value				//!< initializing value.
-                     );
+///*! \brief Returns the n-th neighbor's value (in Q) of the given cell.
+//*/
+//CALreal calGetX_r(struct CALModel* calModel,	//!< Pointer to the cellular automaton structure.
+//                  struct CALSubstate_r* Q,//!< Pointer to a real (floating point) substate.
+//                  CALIndexes central_cell, //!< the central cell's coordinates
+//                  int n					//!< Index of the n-th neighbor.
+//                  );
 
 
 
-/*! \brief Finalization function: it releases the memory allocated.
-*/
-void calFinalize2D(struct CALModel* calModel	//!< Pointer to the cellular automaton structure.
-                   );
+///*! \brief Sets the cell value of a byte substate.
+//*/
+//void calSet_b(struct CALModel* calModel,		//!< Pointer to the cellular automaton structure.
+//              struct CALSubstate_b* Q,	//!< Pointer to a byte substate.
+//              CALIndexes central_cell, //!< the central cell's coordinates
+//              CALbyte value				//!< initializing value.
+//              );
+
+///*! \brief Set the cell value of an integer substate.
+//*/
+//void calSet_i(struct CALModel* calModel,		//!< Pointer to the cellular automaton structure.
+//              struct CALSubstate_i* Q,	//!< Pointer to a int substate.
+//              CALIndexes central_cell, //!< the central cell's coordinates
+//              CALint value					//!< initializing value.
+//              );
+
+///*! \brief Set the cell value of a real (floating point) substate.
+//*/
+//void calSet_r(struct CALModel* calModel,		//!< Pointer to the cellular automaton structure.
+//              struct CALSubstate_r* Q,	//!< Pointer to a real (floating point) substate.
+//              CALIndexes central_cell, //!< the central cell's coordinates
+//              CALreal value				//!< initializing value.
+//              );
 
 
 
+///*! \brief Sets the value of the cell of a byte substate of the CURRENT matrix.
+//    This operation is unsafe since it writes a value directly to the current matrix.
+//*/
+//void calSetCurrent_b(struct CALModel* calModel,	//!< Pointer to the cellular automaton structure.
+//                     struct CALSubstate_b* Q,	//!< Pointer to a byte substate.
+//                     CALIndexes central_cell, //!< the central cell's coordinates
+//                     CALbyte value				//!< initializing value.
+//                     );
 
+///*! \brief Set the value the  cell of an int substate of the CURRENT matrix.
+//    This operation is unsafe since it writes a value directly to the current matrix.
+//*/
+//void calSetCurrent_i(struct CALModel* calModel,	//!< Pointer to the cellular automaton structure.
+//                     struct CALSubstate_i* Q,	//!< Pointer to a int substate.
+//                     CALIndexes central_cell, //!< the central cell's coordinates
+//                     CALint value				//!< initializing value.
+//                     );
 
-
-
+///*! \brief Set the value the  cell (i, j) of a real (floating point) substate of the CURRENT matrix.
+//    This operation is unsafe since it writes a value directly to the current matrix.
+//*/
+//void calSetCurrent_r(struct CALModel* calModel,	//!< Pointer to the cellular automaton structure.
+//                     struct CALSubstate_r* Q,	//!< Pointer to a int substate.
+//                     CALIndexes central_cell, //!< the central cell's coordinates
+//                     CALreal value				//!< initializing value.
+//                     );
 
 #endif
 

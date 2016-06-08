@@ -11,9 +11,9 @@
 
 #include <OpenCAL-CPU/calCommon.h>
 
-CALIndexesPool* calDefIndexesPool(CALIndexes coordinates_dimensions, int number_of_dimensions)
+struct CALIndexesPool* calDefIndexesPool(CALIndexes coordinates_dimensions, int number_of_dimensions)
 {
-    CALIndexesPool* indexes_pool = (CALIndexesPool*) malloc(sizeof(CALIndexesPool));
+    struct CALIndexesPool* indexes_pool = (struct CALIndexesPool*) malloc(sizeof(struct CALIndexesPool));
     indexes_pool->coordinates_dimensions = coordinates_dimensions;
     indexes_pool->number_of_dimensions = number_of_dimensions;
 
@@ -57,7 +57,7 @@ CALIndexesPool* calDefIndexesPool(CALIndexes coordinates_dimensions, int number_
         for( i = 0; i < number_of_dimensions; i++ )
             cell_to_add[i] = current_cell[i];
 
-        indexes_pool[n] = cell_to_add;
+        indexes_pool->pool[n] = cell_to_add;
     }
 
     free(current_cell);
