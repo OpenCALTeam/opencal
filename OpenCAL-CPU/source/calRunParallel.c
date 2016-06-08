@@ -1,61 +1,61 @@
 ﻿#include <OpenCAL-CPU/calRunParallel.h>
 
-CALbyte calParallelGet_b(CALModel* calModel, CALSubstate_b* Q, CALIndexes indexes)
+CALbyte calParallelGet_b(struct CALModel* calModel, struct CALSubstate_b* Q, CALIndexes indexes)
 {
 
 }
 
-CALint calParallelGet_i(CALModel* calModel, CALSubstate_i* Q, CALIndexes indexes)
+CALint calParallelGet_i(struct CALModel* calModel, struct CALSubstate_i* Q, CALIndexes indexes)
 {
 
 }
 
-CALreal calParallelGet_r(CALModel* calModel, CALSubstate_r* Q, CALIndexes indexes)
+CALreal calParallelGet_r(struct CALModel* calModel, struct CALSubstate_r* Q, CALIndexes indexes)
 {
 
 }
 
-CALbyte calParallelGetX_b(CALModel* calModel, CALSubstate_b* Q, CALIndexes central_cell, int n)
+CALbyte calParallelGetX_b(struct CALModel* calModel, struct CALSubstate_b* Q, CALIndexes central_cell, int n)
 {
 
 }
 
-CALint calParallelGetX_i(CALModel* calModel, CALSubstate_i* Q, CALIndexes central_cell, int n)
+CALint calParallelGetX_i(struct CALModel* calModel, struct CALSubstate_i* Q, CALIndexes central_cell, int n)
 {
 
 }
 
-CALreal calParallelGetX_r(CALModel* calModel, CALSubstate_r* Q, CALIndexes central_cell, int n)
+CALreal calParallelGetX_r(struct CALModel* calModel, struct CALSubstate_r* Q, CALIndexes central_cell, int n)
 {
 
 }
 
-void calParallelSet_b(CALModel* calModel, CALSubstate_b* Q, CALIndexes central_cell, CALbyte value)
+void calParallelSet_b(struct CALModel* calModel, struct CALSubstate_b* Q, CALIndexes central_cell, CALbyte value)
 {
 
 }
 
-void calParallelSet_i(CALModel* calModel, CALSubstate_i* Q, CALIndexes central_cell, CALbyte value)
+void calParallelSet_i(struct CALModel* calModel, struct CALSubstate_i* Q, CALIndexes central_cell, CALbyte value)
 {
 
 }
 
-void calParallelSet_r(CALModel* calModel, CALSubstate_r* Q, CALIndexes central_cell, CALbyte value)
+void calParallelSet_r(struct CALModel* calModel, struct CALSubstate_r* Q, CALIndexes central_cell, CALbyte value)
 {
 
 }
 
-void calParallelSetCurrent_b(CALModel* calModel, CALSubstate_b* Q, CALIndexes central_cell, CALbyte value)
+void calParallelSetCurrent_b(struct CALModel* calModel, struct CALSubstate_b* Q, CALIndexes central_cell, CALbyte value)
 {
 
 }
 
-void calParallelSetCurrent_i(CALModel* calModel, CALSubstate_i* Q, CALIndexes central_cell, CALbyte value)
+void calParallelSetCurrent_i(struct CALModel* calModel, struct CALSubstate_i* Q, CALIndexes central_cell, CALbyte value)
 {
 
 }
 
-void calParallelSetCurrent_r(CALModel* calModel, CALSubstate_r* Q, CALIndexes central_cell, CALbyte value)
+void calParallelSetCurrent_r(struct CALModel* calModel, struct CALSubstate_r* Q, CALIndexes central_cell, CALbyte value)
 {
 
 }

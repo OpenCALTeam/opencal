@@ -3,45 +3,45 @@
 
 #include <OpenCAL-CPU/calModel.h>
 
-enum CALExecutionType {SERIAL = 0, PARALLEL};
-
 struct CALRun {
+        int step;			//!< Current simulation step.
+        int initial_step;	//!< Initial simulation step.
+        int final_step;		//!< Final simulation step; if 0 the simulation becomes a loop.
 
-        void (* calApplyLocalProcess)( struct CALModel* calModel, CALLocalProcess local_process );
+        enum CALUpdateMode UPDATE_MODE;	//!< Callbacks substates' update mode; it can be CAL_UPDATE_EXPLICIT or CAL_UPDATE_IMPLICIT.
 
-        void (* calUpdate) (struct CALModel* calModel);
-
-
-        CALbyte (* calGet_b)(struct CALModel* calModel, struct CALSubstate_b* Q, CALIndexes indexes);
-        CALint (* calGet_i)(struct CALModel* calModel, struct CALSubstate_i* Q, CALIndexes indexes);
-        CALreal (* calGet_r)(struct CALModel* calModel, struct CALSubstate_r* Q, CALIndexes indexes);
-
-        CALbyte (* calGetX_b)(struct CALModel* calModel, struct CALSubstate_b* Q, CALIndexes central_cell, int n);
-        CALint (* calGetX_i)(struct CALModel* calModel, struct CALSubstate_i* Q, CALIndexes central_cell, int n);
-        CALreal (* calGetX_r)(struct CALModel* calModel, struct CALSubstate_r* Q, CALIndexes central_cell, int n);
-
-        void (* calSet_b)(struct CALModel* calModel, struct CALSubstate_b* Q, CALIndexes central_cell,CALbyte value);
-        void (* calSet_i)(struct CALModel* calModel, struct CALSubstate_i* Q, CALIndexes central_cell,CALbyte value);
-        void (* calSet_r)(struct CALModel* calModel, struct CALSubstate_r* Q, CALIndexes central_cell,CALbyte value);
-
-        void (* calSetCurrent_b)(struct CALModel* calModel, struct CALSubstate_b* Q, CALIndexes central_cell, CALbyte value);
-        void (* calSetCurrent_i)(struct CALModel* calModel, struct CALSubstate_i* Q, CALIndexes central_cell, CALbyte value);
-        void (* calSetCurrent_r)(struct CALModel* calModel, struct CALSubstate_r* Q, CALIndexes central_cell, CALbyte value);
-
-        void (* calCopyBuffer_b)(CALbyte* M_src, CALbyte* M_dest, int buffer_dimension);
-        void (* calCopyBuffer_i)(CALint* M_src, CALint* M_dest, int buffer_dimension);
-        void (* calCopyBuffer_r)(CALreal* M_src, CALreal* M_dest, int buffer_dimension);
-
-        void (* calAddBuffer_b)(CALbyte* M_op1, CALbyte* M_op2,  CALbyte* M_dest, int buffer_dimension);
-        void (* calAddBuffer_i)(CALint* M_op1, CALint* M_op2,  CALint* M_dest, int buffer_dimension);
-        void (* calAddBuffer_r)(CALreal* M_op1, CALreal* M_op2,  CALreal* M_dest, int buffer_dimension);
-
-        void (* calSubtractBuffer_b)(CALbyte* M_op1, CALbyte* M_op2,  CALbyte* M_dest, int buffer_dimension);
-        void (* calSubtractBuffer_i)(CALint* M_op1, CALint* M_op2,  CALint* M_dest, int buffer_dimension);
-        void (* calSubtractBuffer_r)(CALreal* M_op1, CALreal* M_op2,  CALreal* M_dest, int buffer_dimension);
-
+        void (**init)(struct CALModel*);				//!< Simulation's initialization callback function.
+        int num_of_init_func;
+        void (*globalTransition)(struct CALModel*);	//!< CA's globalTransition callback function. If defined, it is executed instead of cal2D.c::calGlobalTransitionFunction2D.
+        CALbyte (*stopCondition)(struct CALModel*);	//!< Simulation's stopCondition callback function.
+        void (**finalize)(struct CALModel*);			//!< Simulation's finalize callback function.
+        int num_of_fin_func;
 };
 
+
 struct CALRun* makeCALRun(enum CALExecutionType executionType);
+
+extern void (* calRunApplyLocalProcess)( struct CALModel* calModel, CALLocalProcess local_process );
+
+extern void (* calRunUpdate) (struct CALModel* calModel);
+
+
+
+
+/*! \brief The cellular automaton global transition function.
+    It applies the transition function to each cell of the cellular space.
+    After each local process, a global substates update is performed.
+*/
+void calGlobalTransitionFunction(struct CALModel* calModel	//!< Pointer to the cellular automaton structure.
+                                 );
+
+
+CALint calRunSimulation(struct CALModel* calModel);
+
+
+
+
+
+
 
 #endif

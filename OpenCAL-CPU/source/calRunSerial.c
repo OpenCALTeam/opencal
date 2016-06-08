@@ -1,61 +1,61 @@
 ﻿#include <OpenCAL-CPU/calRunSerial.h>
 
-CALbyte calSerialGet_b(CALModel* calModel, CALSubstate_b* Q, CALIndexes indexes)
+CALbyte calSerialGet_b(struct CALModel* calModel, struct CALSubstate_b* Q, CALIndexes indexes)
 {
 
 }
 
-CALint calSerialGet_i(CALModel* calModel, CALSubstate_i* Q, CALIndexes indexes)
+CALint calSerialGet_i(struct CALModel* calModel, struct CALSubstate_i* Q, CALIndexes indexes)
 {
 
 }
 
-CALreal calSerialGet_r(CALModel* calModel, CALSubstate_r* Q, CALIndexes indexes)
+CALreal calSerialGet_r(struct CALModel* calModel, struct CALSubstate_r* Q, CALIndexes indexes)
 {
 
 }
 
-CALbyte calSerialGetX_b(CALModel* calModel, CALSubstate_b* Q, CALIndexes central_cell, int n)
+CALbyte calSerialGetX_b(struct CALModel* calModel, struct CALSubstate_b* Q, CALIndexes central_cell, int n)
 {
 
 }
 
-CALint calSerialGetX_i(CALModel* calModel, CALSubstate_i* Q, CALIndexes central_cell, int n)
+CALint calSerialGetX_i(struct CALModel* calModel, struct CALSubstate_i* Q, CALIndexes central_cell, int n)
 {
 
 }
 
-CALreal calSerialGetX_r(CALModel* calModel, CALSubstate_r* Q, CALIndexes central_cell, int n)
+CALreal calSerialGetX_r(struct CALModel* calModel, struct CALSubstate_r* Q, CALIndexes central_cell, int n)
 {
 
 }
 
-void calSerialSet_b(CALModel* calModel, CALSubstate_b* Q, CALIndexes central_cell, CALbyte value)
+void calSerialSet_b(struct CALModel* calModel, struct CALSubstate_b* Q, CALIndexes central_cell, CALbyte value)
 {
 
 }
 
-void calSerialSet_i(CALModel* calModel, CALSubstate_i* Q, CALIndexes central_cell, CALbyte value)
+void calSerialSet_i(struct CALModel* calModel, struct CALSubstate_i* Q, CALIndexes central_cell, CALbyte value)
 {
 
 }
 
-void calSerialSet_r(CALModel* calModel, CALSubstate_r* Q, CALIndexes central_cell, CALbyte value)
+void calSerialSet_r(struct CALModel* calModel, struct CALSubstate_r* Q, CALIndexes central_cell, CALbyte value)
 {
 
 }
 
-void calSerialSetCurrent_b(CALModel* calModel, CALSubstate_b* Q, CALIndexes central_cell, CALbyte value)
+void calSerialSetCurrent_b(struct CALModel* calModel, struct CALSubstate_b* Q, CALIndexes central_cell, CALbyte value)
 {
 
 }
 
-void calSerialSetCurrent_i(CALModel* calModel, CALSubstate_i* Q, CALIndexes central_cell, CALbyte value)
+void calSerialSetCurrent_i(struct CALModel* calModel, struct CALSubstate_i* Q, CALIndexes central_cell, CALbyte value)
 {
 
 }
 
-void calSerialSetCurrent_r(CALModel* calModel, CALSubstate_r* Q, CALIndexes central_cell, CALbyte value)
+void calSerialSetCurrent_r(struct CALModel* calModel, struct CALSubstate_r* Q, CALIndexes central_cell, CALbyte value)
 {
 
 }

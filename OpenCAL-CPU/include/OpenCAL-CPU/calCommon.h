@@ -11,11 +11,15 @@
 
 #ifndef calCommon_h
 #define calCommon_h
+#include <stdlib.h>
+
 
 
 #define CAL_FALSE 0		//!< Boolean alias for false
 #define CAL_TRUE  1		//!< Boolean alias for true
 
+enum CALInitMethod { CAL_NO_INIT = 0, CAL_INIT_CURRENT, CAL_INIT_NEXT, CAL_INIT_BOTH };
+enum CALExecutionType {SERIAL = 0, PARALLEL};
 
 typedef int* CALIndexes;
 
@@ -29,6 +33,7 @@ typedef CALint CALParameteri;	//!< Redefinition of the type CALint. It is used f
 typedef CALreal CALParameterr;	//!< Redefinition of the type CALreal. It is used for automaton's parameters.
 
 
+#include <OpenCAL-CPU/calBuffer.h>
 
 struct CALIndexesPool {
         int cellular_space_dimension;
@@ -37,7 +42,7 @@ struct CALIndexesPool {
         CALIndexes* pool;
 };
 
-CALIndexesPool* calDefIndexesPool(CALIndexes coordinates_dimensions, int number_of_dimensions);
+struct CALIndexesPool* calDefIndexesPool(CALIndexes coordinates_dimensions, int number_of_dimensions);
 
 
 /*!	\brief Enumeration used for cellular space toroidality setting.
