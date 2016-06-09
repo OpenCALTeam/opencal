@@ -40,16 +40,6 @@ struct CALSubstate_r*calAddSingleLayerSubstate_r(struct CALModel* calModel, CALr
 
 }
 
-void calUpdateSubstate_i(struct CALModel* calModel, struct CALSubstate_i* Q)
-{
-
-}
-
-void calUpdateSubstate_r(struct CALModel* calModel, struct CALSubstate_r* Q)
-{
-
-}
-
 void calInit_b(struct CALModel* calModel, struct CALSubstate_b* Q, CALIndexes indexes, CALbyte value)
 {
 
@@ -115,7 +105,7 @@ void calInit_r(struct CALModel* calModel, struct CALSubstate_r* Q, CALIndexes in
 
 //}
 
-void calFinalize2D(struct CALModel* calModel)
+void calFinalize(struct CALModel* calModel)
 {
 
 }

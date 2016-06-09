@@ -18,8 +18,8 @@ typedef void (* CALLocalProcess)(struct CALModel* calModel, CALIndexes);
 typedef void (* CALGlobalProcess)(struct CALModel* calModel);
 
 struct CALProcess {
-        CALLocalProcess * localFunction;
-        CALGlobalProcess * globalFunction;
+        CALLocalProcess  localProcess;
+        CALGlobalProcess globalProcess;
         char type;
 };
 
@@ -29,6 +29,8 @@ struct CALModel {
         int* coordinatesDimensions;
         int numberOfCoordinates;
         int cellularSpaceDimension;
+
+        struct CALIndexesPool* calIndexesPool; //!<
 
         enum CALOptimization OPTIMIZATION;	//!< Type of optimization used. It can be CAL_NO_OPT or CAL_OPT_ACTIVE_CELLS.
         //struct CALActiveCells2D A;			//!< Computational Active cells object. if A.actives==NULL no optimization is applied.
@@ -43,8 +45,8 @@ struct CALModel {
         int sizeof_pQi_array;				//!< Number of substates of type int.
         int sizeof_pQr_array;				//!< Number of substates of type real (floating point).
 
-        struct CALProcess * model_functions; //!< Array of function pointers to the transition function's elementary processes or generic global functions.Note that a substates' update must be performed after each elementary process has been applied to each cell of the cellular space (see calGlobalTransitionFunction2D).
-        int num_of_functions; //!< Number of function pointers to the transition functions's elementary processes callbacks.
+        struct CALProcess * model_processes; //!< Array of function pointers to the transition function's elementary processes or generic global functions.Note that a substates' update must be performed after each elementary process has been applied to each cell of the cellular space (see calGlobalTransitionFunction2D).
+        int num_of_processes; //!< Number of function pointers to the transition functions's elementary processes callbacks.
 
         struct CALRun* calRun; //!< Pointer to a structure containing the appropriate functions which implementation should change according to the type of execution chosen (serial or parallel)
 };
@@ -254,5 +256,6 @@ extern void (* calSetCurrent_r)(struct CALModel* calModel, struct CALSubstate_r*
 //                     CALreal value				//!< initializing value.
 //                     );
 
+void calFinalize(struct CALModel* calModel);
 #endif
 
