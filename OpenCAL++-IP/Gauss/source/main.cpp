@@ -140,6 +140,68 @@ class UniformFilter : public opencal::ConvolutionFilter<_DIMENSION, _NEIGHBORHOO
 
 
 
+
+
+/*
+
+template<typename PIXELTYPE>
+class LabelConnectedComponentFilter : public opencal::CALLocalFunction<2,opencal::CALMooreNeighborhood<2,MOORERADIUS>,uint>{
+
+    opencal::CALSubstate<PIXELTYPE,2>* binImg;
+    opencal::CALSubstate<uint,2>*     connComponents;
+    uint label;
+public:
+    LabelConnectedComponentFilter(decltype(binImg) sbs,decltype(connComponents)): binImg(sbs){
+      label = 1;
+    }
+
+
+    void dfs(MODELTYPE* model,std::array<uint,2>& indices, uint label){
+      PIXELTYPE newVal = binImg->getElement(indices);
+
+      if(newVal[0]){
+           newVal[0] = label;
+           binImg->setElement(indices,newVal);
+
+        std::array<uint,2> neighIdx = indices;
+        int x=0;
+        for(auto a : opencal::CALMooreNeighborhood<2,MOORERADIUS>::getNeighborhoodIndices){
+            if(binImg->getX(indices,x)[0])
+
+           x++;
+        }
+        //iterate on the right
+        if(indices[0] +1 < model->getSize()[0]){
+          neighIdx =
+        }
+
+
+      }
+
+    }
+
+
+    void run(MODELTYPE* model,std::array<uint,2>& indices){
+        using namespace std;
+        PIXELTYPE newval=binImg->getElement(indices);
+
+        unsigned short ns = model->getNeighborhoodSize();
+        for(int x=0 ; x<ns; ++x){
+                 binImg->getX(indices,x)[0];
+        }
+        // cout<<(unsigned short)avg[0]<<" ";
+        //cout<<endl;
+
+
+        binImg->setElement(indices,newval);
+    }
+
+
+
+};
+
+*/
+
 int main ()
 {
 
