@@ -6,18 +6,16 @@
 
 
 template<uint DIMENSION, class NEIGHBORHOOD, typename COORDINATE_TYPE, class PIXELTYPE>
-class InvertColorsFilter : public opencal::CALLocalFunction< DIMENSION , NEIGHBORHOOD , COORDINATE_TYPE>{
+class ThresholdFilter : public opencal::CALLocalFunction< DIMENSION , NEIGHBORHOOD , COORDINATE_TYPE>{
 
     typedef opencal::CALModel<DIMENSION, NEIGHBORHOOD, COORDINATE_TYPE> MODELTYPE;
     typedef typename std::tuple_element<0,PIXELTYPE>::type TYPE;
     opencal::CALSubstate<PIXELTYPE,DIMENSION>* img;
-    TYPE maxLimit;
-
+    TYPE lowT , highT ;
+    TYPE outRangeValue , inRangeValue;
 public:
-    InvertColorsFilter(auto* sbs, TYPE _maxLimit = 255 ):
-        img(sbs), maxLimit(_maxLimit)  {
-
-    }
+    ThresholdFilter(auto* sbs, TYPE _lowT , TYPE _highT , TYPE _outrange, TYPE _inrange ):
+        img(sbs), lowT(_lowT) , highT(_highT) , outRangeValue(_outrange) , inRangeValue(_inrange) { }
 
 
 
@@ -28,7 +26,7 @@ public:
 
         for (int i = 0; i<channels; ++i)
         {
-            const TYPE output = maxLimit - newVal[i];
+            const TYPE output =  (newVal[i] >= lowT && newVal[i] <= highT) ? inRangeValue : outRangeValue ;
             newVal[i] = output;
         }
 

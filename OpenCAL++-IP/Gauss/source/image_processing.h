@@ -31,7 +31,7 @@
   template<class T>
   T *loadImage(int size, const std::string& path){
   //    printf("sto qui\n");
-      cv::Mat mat= cv::imread(path);
+      cv::Mat mat= cv::imread(path, -1);
 
       //int size = mat.rows * mat.cols;
       T* vec = new T [size];
