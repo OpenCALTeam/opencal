@@ -1,7 +1,38 @@
 ﻿#include <OpenCAL-CPU/calModel.h>
 #include <OpenCAL-CPU/calRun.h>
-struct CALModel*calCADef(int numberOfCoordinates, CALIndexes coordinatesDimensions, enum CALSpaceBoundaryCondition CAL_TOROIDALITY, enum CALExecutionType executionType, enum CALOptimization CAL_OPTIMIZATION)
+struct CALModel*calCADef(int numberOfCoordinates, CALIndexes coordinatesDimensions, enum CALNeighborhood CAL_NEIGHBORHOOD, enum CALSpaceBoundaryCondition CAL_TOROIDALITY, enum CALExecutionType executionType, enum CALOptimization CAL_OPTIMIZATION)
 {
+
+    struct CALModel *calModel = (struct CALModel *)malloc(sizeof(struct CALModel));
+    if (!calModel)
+        return NULL;
+
+    calModel->numberOfCoordinates = numberOfCoordinates;
+
+    calModel->coordinatesDimensions = coordinatesDimensions;
+
+    calModel->calIndexesPool =  calDefIndexesPool(coordinatesDimensions,numberOfCoordinates);
+//    calModel->calNeighborPool = calDefNeighborPool(calModel->calIndexesPool, CAL_TOROIDALITY, );
+
+    //CALL calRun constructor and set optimization
+    int ** cellPattern;
+    switch (CAL_NEIGHBORHOOD) {
+    case CAL_VON_NEUMANN_NEIGHBORHOOD:
+        cellPattern = defineVonNeumannNeighborhood(1,numberOfCoordinates);
+        break;
+    case CAL_MOORE_NEIGHBORHOOD:
+        cellPattern = defineMooreNeighborhood(1,numberOfCoordinates);
+        break;
+//    case CAL_HEXAGONAL_NEIGHBORHOOD:
+//        break;
+//    case CAL_HEXAGONAL_NEIGHBORHOOD_ALT:
+//        break;
+    }
+    calModel->calNeighborPool = calDefNeighborPool(calModel->calIndexesPool,CAL_TOROIDALITY, cellPattern);
+
+    calModel->OPTIMIZATION = CAL_OPTIMIZATION;
+
+    //Manage Optimization
 
 }
 

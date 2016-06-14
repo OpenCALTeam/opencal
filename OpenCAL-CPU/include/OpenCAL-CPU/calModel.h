@@ -2,6 +2,7 @@
 #define cal_model
 
 #include <OpenCAL-CPU/calCommon.h>
+#include <OpenCAL-CPU/calNeighborPool.h>
 
 /*****************************************************************************
                         DEFINITIONS OF NEW DATA TYPES
@@ -32,6 +33,8 @@ struct CALModel {
 
         struct CALIndexesPool* calIndexesPool; //!<
 
+        struct CALNeighborPool* calNeighborPool;
+
         enum CALOptimization OPTIMIZATION;	//!< Type of optimization used. It can be CAL_NO_OPT or CAL_OPT_ACTIVE_CELLS.
         //struct CALActiveCells2D A;			//!< Computational Active cells object. if A.actives==NULL no optimization is applied.
 
@@ -60,6 +63,7 @@ struct CALModel {
 */
 struct CALModel* calCADef(int numberOfCoordinates, //!< Number of coordinates of the Cellular Space.
                           CALIndexes coordinatesDimensions,
+                          enum CALNeighborhood CAL_NEIGHBORHOOD,
                           enum CALSpaceBoundaryCondition CAL_TOROIDALITY, //!< Enumerator that identifies the type of cellular space: toroidal or non-toroidal.
                           enum CALExecutionType executionType, //!< Enumerator that specifies whether the execution flow must be serial or parallel.
                           enum CALOptimization CAL_OPTIMIZATION //!< Enumerator used for specifying the active cells optimization or no optimization.
