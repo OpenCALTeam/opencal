@@ -19,9 +19,9 @@ struct CALRun {
 
 struct CALRun* makeCALRun(enum CALExecutionType executionType);
 
-extern void (* calRunApplyLocalProcess)( struct CALModel* calModel, CALLocalProcess local_process );
+void calRunApplyLocalProcess( struct CALModel* calModel, CALLocalProcess local_process );
 
-extern void (* calRunUpdate) (struct CALModel* calModel);
+void calRunUpdate (struct CALModel* calModel);
 
 
 

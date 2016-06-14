@@ -86,55 +86,88 @@ void calInit_r(struct CALModel* calModel, struct CALSubstate_r* Q, CALIndexes in
 
 }
 
-//CALbyte calGet_b(struct CALModel* calModel, struct CALSubstate_b* Q, CALIndexes indexes)
-//{
+CALbyte calGet_b(struct CALModel* calModel, struct CALSubstate_b* Q, CALIndexes indexes)
+{
+    CALbyte ret;
+#if CAL_PARALLEL == 1
+        CAL_SET_CELL_LOCK(i, j, calModel);
+#endif
 
-//}
+    //ret = calGetMatrixElement(Q->current, calModel->columns, i, j);
 
-//CALreal calGet_r(struct CALModel* calModel, struct CALSubstate_r* Q, CALIndexes indexes)
-//{
+#if CAL_PARALLEL == 1
+    CAL_UNSET_CELL_LOCK(i, j, ca2D);
+#endif
 
-//}
+    return ret;
+}
 
-//CALint calGet_i(struct CALModel* calModel, struct CALSubstate_i* Q, CALIndexes indexes)
-//{
+CALreal calGet_r(struct CALModel* calModel, struct CALSubstate_r* Q, CALIndexes indexes)
+{
+    CALreal ret;
+#if CAL_PARALLEL == 1
+        CAL_SET_CELL_LOCK(i, j, calModel);
+#endif
 
-//}
+    //ret = calGetMatrixElement(Q->current, calModel->columns, i, j);
 
-//CALbyte calGetX_b(struct CALModel* calModel, struct CALSubstate_b* Q, CALIndexes central_cell, int n)
-//{
+#if CAL_PARALLEL == 1
+    CAL_UNSET_CELL_LOCK(i, j, ca2D);
+#endif
 
-//}
+    return ret;
+}
 
-//void calSet_b(struct CALModel* calModel, struct CALSubstate_b* Q, CALIndexes central_cell, CALbyte value)
-//{
+CALint calGet_i(struct CALModel* calModel, struct CALSubstate_i* Q, CALIndexes indexes)
+{
+    CALint ret;
+#if CAL_PARALLEL == 1
+        CAL_SET_CELL_LOCK(i, j, calModel);
+#endif
 
-//}
+    //ret = calGetMatrixElement(Q->current, calModel->columns, i, j);
 
-//void calSet_i(struct CALModel* calModel, struct CALSubstate_i* Q, CALIndexes central_cell, CALint value)
-//{
+#if CAL_PARALLEL == 1
+    CAL_UNSET_CELL_LOCK(i, j, ca2D);
+#endif
 
-//}
+    return ret;
+}
 
-//void calSet_r(struct CALModel* calModel, struct CALSubstate_r* Q, CALIndexes central_cell, CALreal value)
-//{
+CALbyte calGetX_b(struct CALModel* calModel, struct CALSubstate_b* Q, CALIndexes central_cell, int n)
+{
 
-//}
+}
 
-//void calSetCurrent_b(struct CALModel* calModel, struct CALSubstate_b* Q, CALIndexes central_cell, CALbyte value)
-//{
+void calSet_b(struct CALModel* calModel, struct CALSubstate_b* Q, CALIndexes central_cell, CALbyte value)
+{
 
-//}
+}
 
-//void calSetCurrent_i(struct CALModel* calModel, struct CALSubstate_i* Q, CALIndexes central_cell, CALint value)
-//{
+void calSet_i(struct CALModel* calModel, struct CALSubstate_i* Q, CALIndexes central_cell, CALint value)
+{
 
-//}
+}
 
-//void calSetCurrent_r(struct CALModel* calModel, struct CALSubstate_r* Q, CALIndexes central_cell, CALreal value)
-//{
+void calSet_r(struct CALModel* calModel, struct CALSubstate_r* Q, CALIndexes central_cell, CALreal value)
+{
 
-//}
+}
+
+void calSetCurrent_b(struct CALModel* calModel, struct CALSubstate_b* Q, CALIndexes central_cell, CALbyte value)
+{
+
+}
+
+void calSetCurrent_i(struct CALModel* calModel, struct CALSubstate_i* Q, CALIndexes central_cell, CALint value)
+{
+
+}
+
+void calSetCurrent_r(struct CALModel* calModel, struct CALSubstate_r* Q, CALIndexes central_cell, CALreal value)
+{
+
+}
 
 void calFinalize(struct CALModel* calModel)
 {

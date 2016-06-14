@@ -18,6 +18,28 @@
 #define CAL_FALSE 0		//!< Boolean alias for false
 #define CAL_TRUE  1		//!< Boolean alias for true
 
+#define CAL_PARALLEL 0
+
+#define calDefineParallel() (CAL_PARALLEL=1)
+
+
+int getLinearIndex()
+{
+    int c = 0;
+    uint multiplier = 1;
+    uint n;
+
+    for (uint i = 0; i < DIMENSION; i++)
+    {
+        if (i == 1) n = 0;
+        else if (i == 0) n = 1;
+        else n = i;
+        c          += indices[n] * multiplier;
+        multiplier *= coords[n];
+    }
+    return c;
+}
+
 enum CALInitMethod { CAL_NO_INIT = 0, CAL_INIT_CURRENT, CAL_INIT_NEXT, CAL_INIT_BOTH };
 enum CALExecutionType {SERIAL = 0, PARALLEL};
 
@@ -88,9 +110,9 @@ enum CALOptimization{
     inside the cells.
 */
 struct CALSubstate_b {
-    CALbyte* current;	//!< Current linearised matrix of the substate, used for reading purposes.
-    CALbyte* next;		//!< Next linearised matrix of the substate, used for writing purposes.
-    };
+        CALbyte* current;	//!< Current linearised matrix of the substate, used for reading purposes.
+        CALbyte* next;		//!< Next linearised matrix of the substate, used for writing purposes.
+};
 
 /*! \brief integer substate.
 
@@ -104,8 +126,8 @@ struct CALSubstate_b {
     inside the cells.
 */
 struct CALSubstate_i {
-    CALint* current;	//!< Current linearised matrix of the substate, used for reading purposes.
-    CALint* next;		//!< Next linearised matrix of the substate, used for writing purposes.
+        CALint* current;	//!< Current linearised matrix of the substate, used for reading purposes.
+        CALint* next;		//!< Next linearised matrix of the substate, used for writing purposes.
 };
 
 /*! \brief real (floating point) substate.
@@ -120,8 +142,8 @@ struct CALSubstate_i {
     inside the cells.
 */
 struct CALSubstate_r {
-    CALreal* current;	//!< Current linearised matrix of the substate, used for reading purposes.
-    CALreal* next;		//!< Next linearised matrix of the substate, used for writing purposes.
+        CALreal* current;	//!< Current linearised matrix of the substate, used for reading purposes.
+        CALreal* next;		//!< Next linearised matrix of the substate, used for writing purposes.
 };
 
 

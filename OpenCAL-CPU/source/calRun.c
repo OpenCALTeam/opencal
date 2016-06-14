@@ -17,8 +17,6 @@ static void calRunFinalizeSimulation(struct CALModel* calModel)
 }
 
 
-void (* calRunApplyLocalProcess)( struct CALModel* calModel, CALLocalProcess local_process );
-
 CALbyte calRunCAStep(struct CALModel* calModel)
 {
     if(calModel->calRun->globalTransition)
@@ -80,3 +78,13 @@ CALint calRunSimulation(struct CALModel* calModel)
 
 }
 
+
+void calRunApplyLocalProcess(struct CALModel* calModel, CALLocalProcess local_process)
+{
+
+}
+
+void calRunUpdate(struct CALModel* calModel)
+{
+
+}
