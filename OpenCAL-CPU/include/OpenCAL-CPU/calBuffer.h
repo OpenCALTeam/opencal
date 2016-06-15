@@ -3,18 +3,17 @@
 
 #include <OpenCAL-CPU/calCommon.h>
 
-
 /*! \brief Allocates a byte linearized matrix.
 */
-CALbyte* calAllocBuffer_b(CALIndexes dimensions, int num_of_dimensions);
+CALbyte* calAllocBuffer_b(CALIndices dimensions, int num_of_dimensions);
 
 /*! \brief Allocates an int linearized matrix.
 */
-CALint* calAllocBuffer_i(CALIndexes dimensions, int num_of_dimensions);
+CALint* calAllocBuffer_i(CALIndices dimensions, int num_of_dimensions);
 
 /*! \brief Allocates a real (floating point) linearized matrix.
 */
-CALreal* calAllocBuffer_r(CALIndexes dimensions, int num_of_dimensions);
+CALreal* calAllocBuffer_r(CALIndices dimensions, int num_of_dimensions);
 
 
 

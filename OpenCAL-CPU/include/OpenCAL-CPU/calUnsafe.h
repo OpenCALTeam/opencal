@@ -9,7 +9,7 @@
 */
 void calInitX_b(struct CALModel* calModel,	//!< Pointer to the cellular automaton structure.
                 struct CALSubstate_b* Q,	//!< Pointer to a byte substate.
-                CALIndexes central_cell,    //!< The central cell's coordinates
+                CALIndices central_cell,    //!< The central cell's coordinates
                 int n,						//!< Index of the n-th neighbor to be initialized.
                 CALbyte value				//!< initializing value.
                 );
@@ -20,7 +20,7 @@ void calInitX_b(struct CALModel* calModel,	//!< Pointer to the cellular automato
 */
 void calInitX_i(struct CALModel* calModel,	//!< Pointer to the cellular automaton structure.
                 struct CALSubstate_i* Q,	//!< Pointer to a int substate.
-                CALIndexes central_cell,    //!< The central cell's coordinates
+                CALIndices central_cell,    //!< The central cell's coordinates
                 int n,						//!< Index of the n-th neighbor to be initialized.
                 CALint value				//!< initializing value.
                 );
@@ -42,7 +42,7 @@ void calInitX_r(struct CALModel* calModel,	//!< Pointer to the cellular automato
 */
 CALbyte calGetNext_b(struct CALModel* calModel,		//!< Pointer to the cellular automaton structure.
                      struct CALSubstate_b* Q,       //!< Pointer to a 2D byte substate.
-                     CALIndexes central_cell        //!< The central cell's coordinates
+                     CALIndices central_cell        //!< The central cell's coordinates
                      );
 
 /*! \brief Returns the given cell's value of an integer substate from the next matrix.
@@ -50,7 +50,7 @@ CALbyte calGetNext_b(struct CALModel* calModel,		//!< Pointer to the cellular au
 */
 CALint calGetNext_i(struct CALModel* calModel,		//!< Pointer to the cellular automaton structure.
                     struct CALSubstate_i* Q,        //!< Pointer to a int substate.
-                    CALIndexes central_cell         //!< The central cell's coordinates
+                    CALIndices central_cell         //!< The central cell's coordinates
                     );
 
 /*! \brief Returns the given cell's value of a real (floating point) substate from the next matrix.
@@ -58,7 +58,7 @@ CALint calGetNext_i(struct CALModel* calModel,		//!< Pointer to the cellular aut
 */
 CALreal calGetNext_r(struct CALModel* calModel,		//!< Pointer to the cellular automaton structure.
                      struct CALSubstate_r* Q,       //!< Pointer to a real (floating point) substate.
-                     CALIndexes central_cell        //!< The central cell's coordinates
+                     CALIndices central_cell        //!< The central cell's coordinates
                      );
 
 
@@ -68,7 +68,7 @@ CALreal calGetNext_r(struct CALModel* calModel,		//!< Pointer to the cellular au
 */
 CALbyte calGetNextX_b(struct CALModel* calModel,		//!< Pointer to the cellular automaton structure.
                       struct CALSubstate_b* Q,          //!< Pointer to a real (floating point) substate.
-                      CALIndexes central_cell,          //!< The central cell's coordinates
+                      CALIndices central_cell,          //!< The central cell's coordinates
                       int n                             //!< Index of the n-th neighbor
                       );
 
@@ -77,7 +77,7 @@ CALbyte calGetNextX_b(struct CALModel* calModel,		//!< Pointer to the cellular a
 */
 CALint calGetNextX_i(struct CALModel* calModel,		//!< Pointer to the cellular automaton structure.
                     struct CALSubstate_i* Q,		//!< Pointer to a real (floating point) substate.
-                    CALIndexes central_cell,        //!< The central cell's coordinates
+                    CALIndices central_cell,        //!< The central cell's coordinates
                     int n							//!< Index of the n-th neighbor
                     );
 
@@ -86,7 +86,7 @@ CALint calGetNextX_i(struct CALModel* calModel,		//!< Pointer to the cellular au
 */
 CALreal calGetNextX_r(struct CALModel* calModel,		//!< Pointer to the cellular automaton structure.
                       struct CALSubstate_r* Q,          //!< Pointer to a real (floating point) substate.
-                      CALIndexes central_cell,          //!< The central cell's coordinates
+                      CALIndices central_cell,          //!< The central cell's coordinates
                       int n                             //!< Index of the n-th neighbor
                       );
 
@@ -97,7 +97,7 @@ CALreal calGetNextX_r(struct CALModel* calModel,		//!< Pointer to the cellular a
 */
 void calSetX_b(struct CALModel* calModel,	//!< Pointer to the cellular automaton structure.
                struct CALSubstate_b* Q,     //!< Pointer to a byte substate.
-               CALIndexes central_cell,     //!< The central cell's coordinates
+               CALIndices central_cell,     //!< The central cell's coordinates
                int n,						//!< Index of the n-th neighbor to be initialized.
                CALbyte value				//!< initializing value.
                );
@@ -107,7 +107,7 @@ void calSetX_b(struct CALModel* calModel,	//!< Pointer to the cellular automaton
 */
 void calSetX_i(struct CALModel* calModel,	//!< Pointer to the cellular automaton structure.
                struct CALSubstate_i* Q,     //!< Pointer to a int substate.
-               CALIndexes central_cell,     //!< The central cell's coordinates
+               CALIndices central_cell,     //!< The central cell's coordinates
                int n,						//!< Index of the n-th neighbor to be initialized.
                CALint value                 //!< initializing value.
                );
@@ -117,7 +117,7 @@ void calSetX_i(struct CALModel* calModel,	//!< Pointer to the cellular automaton
 */
 void calSetX_r(struct CALModel* calModel,	//!< Pointer to the cellular automaton structure.
                struct CALSubstate_r* Q,     //!< Pointer to a real (floating point) substate.
-               CALIndexes central_cell,     //!< The central cell's coordinates
+               CALIndices central_cell,     //!< The central cell's coordinates
                int n,						//!< Index of the n-th neighbor to be initialized.
                CALreal value				//!< initializing value.
                );
@@ -129,7 +129,7 @@ void calSetX_r(struct CALModel* calModel,	//!< Pointer to the cellular automaton
 */
 void calSetCurrentX_b(struct CALModel* calModel,	//!< Pointer to the cellular automaton structure.
                       struct CALSubstate_b* Q,      //!< Pointer to a byte substate.
-                      CALIndexes central_cell,      //!< The central cell's coordinates
+                      CALIndices central_cell,      //!< The central cell's coordinates
                       int n,                        //!< Index of the n-th neighbor to be initialized.
                       CALbyte value                 //!< initializing value.
                       );
@@ -139,7 +139,7 @@ void calSetCurrentX_b(struct CALModel* calModel,	//!< Pointer to the cellular au
 */
 void calSetCurrentX_i(struct CALModel* calModel,	//!< Pointer to the cellular automaton structure.
                       struct CALSubstate_i* Q,      //!< Pointer to a int substate.
-                      CALIndexes central_cell,      //!< The central cell's coordinates
+                      CALIndices central_cell,      //!< The central cell's coordinates
                       int n,                        //!< Index of the n-th neighbor to be initialized.
                       CALint value                  //!< initializing value.
                       );
@@ -149,7 +149,7 @@ void calSetCurrentX_i(struct CALModel* calModel,	//!< Pointer to the cellular au
 */
 void calSetCurrentX_r(struct CALModel* calModel,	//!< Pointer to the cellular automaton structure.
                       struct CALSubstate_r* Q,      //!< Pointer to a int substate.
-                      CALIndexes central_cell,      //!< The central cell's coordinates
+                      CALIndices central_cell,      //!< The central cell's coordinates
                       int n,                        //!< Index of the n-th neighbor to be initialized.
                       CALreal value                 //!< initializing value.
                       );

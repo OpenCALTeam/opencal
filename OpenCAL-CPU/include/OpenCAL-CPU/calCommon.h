@@ -12,7 +12,7 @@
 #ifndef calCommon_h
 #define calCommon_h
 #include <stdlib.h>
-
+#include <OpenCAL-CPU/calOmpDef.h>
 
 
 #define CAL_FALSE 0		//!< Boolean alias for false
@@ -23,27 +23,13 @@
 #define calDefineParallel() (CAL_PARALLEL=1)
 
 
-int getLinearIndex()
-{
-    int c = 0;
-    uint multiplier = 1;
-    uint n;
-
-    for (uint i = 0; i < DIMENSION; i++)
-    {
-        if (i == 1) n = 0;
-        else if (i == 0) n = 1;
-        else n = i;
-        c          += indices[n] * multiplier;
-        multiplier *= coords[n];
-    }
-    return c;
-}
 
 enum CALInitMethod { CAL_NO_INIT = 0, CAL_INIT_CURRENT, CAL_INIT_NEXT, CAL_INIT_BOTH };
 enum CALExecutionType {SERIAL = 0, PARALLEL};
 
-typedef int* CALIndexes;
+typedef int* CALIndices;
+
+int getLinearIndex(CALIndices indices, CALIndices coordinates_dimensions, int cellular_space_dimension );
 
 typedef char CALbyte;	//!< Redefinition of the type char.
 typedef int CALint;		//!< Redefinition of the type int.
@@ -59,12 +45,12 @@ typedef CALreal CALParameterr;	//!< Redefinition of the type CALreal. It is used
 
 struct CALIndexesPool {
         int cellular_space_dimension;
-        CALIndexes coordinates_dimensions;
+        CALIndices coordinates_dimensions;
         int number_of_dimensions;
-        CALIndexes* pool;
+        CALIndices* pool;
 };
 
-struct CALIndexesPool* calDefIndexesPool(CALIndexes coordinates_dimensions, int number_of_dimensions);
+struct CALIndexesPool* calDefIndexesPool(CALIndices coordinates_dimensions, int number_of_dimensions);
 
 
 /*!	\brief Enumeration used for cellular space toroidality setting.

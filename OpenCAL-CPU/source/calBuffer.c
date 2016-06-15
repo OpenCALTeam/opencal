@@ -1,9 +1,10 @@
 ﻿#include <OpenCAL-CPU/calBuffer.h>
 #include <OpenCAL-CPU/calRunSerial.h>
 #include <OpenCAL-CPU/calRunParallel.h>
+#include <string.h>
 
 
-CALbyte*calAllocBuffer_b(CALIndexes dimensions, int num_of_dimensions)
+CALbyte*calAllocBuffer_b(CALIndices dimensions, int num_of_dimensions)
 {
     int overall_dimension = 1;
     int i = 0;
@@ -12,7 +13,7 @@ CALbyte*calAllocBuffer_b(CALIndexes dimensions, int num_of_dimensions)
     return (CALbyte*)malloc(sizeof(CALbyte) * overall_dimension );
 }
 
-CALint*calAllocBuffer_i(CALIndexes dimensions, int num_of_dimensions)
+CALint*calAllocBuffer_i(CALIndices dimensions, int num_of_dimensions)
 {
     int overall_dimension = 1;
     int i = 0;
@@ -21,7 +22,7 @@ CALint*calAllocBuffer_i(CALIndexes dimensions, int num_of_dimensions)
     return (CALint*)malloc(sizeof(CALint) * overall_dimension );
 }
 
-CALreal*calAllocBuffer_r(CALIndexes dimensions, int num_of_dimensions)
+CALreal*calAllocBuffer_r(CALIndices dimensions, int num_of_dimensions)
 {
     int overall_dimension = 1;
     int i = 0;
