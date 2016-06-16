@@ -18,7 +18,6 @@ int * generateAlphabethMooreNeighborhood(int radius,int alphabethsize)
     for(int i = 1 , pos = 1 ; i <= radius ; i++ ){
         alphabet[pos++] = i;
         alphabet[pos++] = -i;
-
     }
     return alphabet;
 }
@@ -30,7 +29,7 @@ static int getNeighborNLinear(struct CALNeighborPool * calNeighborPool,struct CA
     int t = calNeighborPool->neighborPool_size;
     if (calNeighborPool->CAL_TOROIDALITY == CAL_SPACE_FLAT)
     {
-        for (i = 0; i < calIndexesPool->cellular_space_dimension; ++i)
+        for (i = 0; i < calIndexesPool->number_of_dimensions; ++i)
         {
             t= t/calIndexesPool->coordinates_dimensions[i];
             c+=(indexes[i] + neighbor[i])*t;
@@ -38,9 +37,13 @@ static int getNeighborNLinear(struct CALNeighborPool * calNeighborPool,struct CA
     }
     else
     {
-        for (i=0; i< calIndexesPool->cellular_space_dimension; i++)
+        for (i=0; i< calIndexesPool->number_of_dimensions; i++)
         {
             t= t/calIndexesPool->coordinates_dimensions[i];
+//            printf("i %d \n",i);
+//            printf("indexes %d \n",indexes[i]);
+//            printf("neighbor %d \n",neighbor[i]);
+//            printf("calIndexesPool->coordinates_dimensions %d \n",calIndexesPool->coordinates_dimensions[i]);
             c+=(calGetToroidalX(indexes[i] + neighbor[i], calIndexesPool->coordinates_dimensions[i]))*t;
 
         }
@@ -58,7 +61,6 @@ static void addNeighbor(struct CALNeighborPool * calNeighborPool,struct CALIndex
         {
             neighborsNew [k] = calNeighborPool->neighborPool[i][k];
         }
-
         int* multidimensionalIndex = calIndexesPool->pool[i];
         int toAdd = getNeighborNLinear(calNeighborPool, calIndexesPool, multidimensionalIndex, cellPattern);
         neighborsNew[calNeighborPool->size_of_X]= toAdd;
@@ -72,28 +74,27 @@ static void addNeighbor(struct CALNeighborPool * calNeighborPool,struct CALIndex
 
 }
 
-struct CALNeighborPool * calDefNeighborPool(struct CALIndexesPool* calIndexesPool, enum CALSpaceBoundaryCondition _CAL_TOROIDALITY,int ** cellPattern){
+struct CALNeighborPool * calDefNeighborPool(struct CALIndexesPool* calIndexesPool, enum CALSpaceBoundaryCondition _CAL_TOROIDALITY,int ** cellPattern, int radius){
 
     struct CALNeighborPool *calNeighborPool = (struct CALNeighborPool *)malloc(sizeof(struct CALNeighborPool));
 
-    for (int i = 0; i < calIndexesPool->cellular_space_dimension; ++i) {
-        calNeighborPool->neighborPool_size*=calIndexesPool->coordinates_dimensions[i];
-    }
+    calNeighborPool->neighborPool_size=calIndexesPool->cellular_space_dimension;
     calNeighborPool->neighborPool =(int **)malloc (sizeof(int*)*calNeighborPool->neighborPool_size);
     calNeighborPool->CAL_TOROIDALITY = _CAL_TOROIDALITY;
     for (uint i = 0; i < calNeighborPool->neighborPool_size; ++i) {
         calNeighborPool->neighborPool[i] = NULL;
     }
     calNeighborPool->size_of_X = 0;
-    addNeighbors(calNeighborPool, calIndexesPool, cellPattern);
+    addNeighbors(calNeighborPool, calIndexesPool, cellPattern,radius);
     return calNeighborPool;
 }
 
 int ** defineMooreNeighborhood(int radius,int dimension) {
+
     int alphabethsize = 2*radius+1;
     int * alphabet = generateAlphabethMooreNeighborhood(radius,alphabethsize);
 
-    int indices_size = pow_ct(radius, dimension);
+    int indices_size = pow_ct(alphabethsize, dimension);
     int ** indices = (int **) malloc(sizeof(int*) * indices_size);
 
     for (int i = 0; i < indices_size; ++i) {
@@ -115,10 +116,6 @@ int **  defineVonNeumannNeighborhood(int radius,int dimension)
         indices[i] = (int*) malloc(sizeof(int) * dimension);
     }
 
-
-  //  indices[0] = NULL;//central cell
-    //total number of insertions is 2*Dimension+1
-    //TODO chiedere paola indices[i] = {0}
     for (int i = 1; i <= dimension; ++i)
     {
      for(int r = 1; r <= radius ; ++r){
@@ -136,10 +133,11 @@ int **  defineVonNeumannNeighborhood(int radius,int dimension)
     return indices;
 }
 
-void addNeighbors(struct CALNeighborPool * calNeighborPool,struct CALIndexesPool* calIndexesPool, int ** cellPattern){
-    for (int i = 0; i < calIndexesPool->cellular_space_dimension; i++){
+void addNeighbors(struct CALNeighborPool * calNeighborPool,struct CALIndexesPool* calIndexesPool, int ** cellPattern,int radius){
+    int indices_size = pow_ct(2*radius+1, calIndexesPool->number_of_dimensions);
+    for (int i = 0; i < indices_size; i++){
         addNeighbor(calNeighborPool, calIndexesPool, cellPattern[i]);
-        //this->sizeof_X ++;
+       // calNeighborPool->size_of_X++;
     }
 }
 

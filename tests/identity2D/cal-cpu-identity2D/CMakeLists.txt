@@ -1,0 +1,23 @@
+# opencal/OpenCAL/examples/cal_life/CMakeLists.txt
+cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
+message (STATUS "PATH " ${PROJECT_SOURCE_DIR} )
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
+
+link_directories(${CMAKE_CURRENT_SOURCE_DIR}/source)
+
+include_directories(${PROJECT_SOURCE_DIR}/OpenCAL-CPU/include)
+
+FIND_PACKAGE(OpenMP)
+IF(OPENMP_FOUND)
+        SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
+        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
+ENDIF()
+
+link_directories(${PROJECT_SOURCE_DIR}/OpenCAL-CPU/lib)
+file(GLOB SRC
+    "source/*.c"
+    "include/*.h"
+)
+add_executable(cal-cpu-identity2D ${SRC})
+target_link_libraries(cal-cpu-identity2D opencal-cpu)

@@ -62,8 +62,20 @@ struct CALModel*calCADef(int numberOfCoordinates, CALIndices coordinatesDimensio
         //    case CAL_HEXAGONAL_NEIGHBORHOOD_ALT:
         //        break;
     }
-    calModel->calNeighborPool = calDefNeighborPool(calModel->calIndexesPool,CAL_TOROIDALITY, cellPattern);
 
+    calModel->calNeighborPool = calDefNeighborPool(calModel->calIndexesPool,CAL_TOROIDALITY, cellPattern,1);
+
+
+
+    printf("STAMPA VICINATO %d\n",calModel->calNeighborPool->size_of_X);
+    for (int i = 0; i < calModel->calIndexesPool->cellular_space_dimension; i++)
+    {
+        for (int j = 0; j <  calModel->calNeighborPool->size_of_X; j++)
+        {
+            printf("%d ",calModel->calNeighborPool->neighborPool[i][j]);
+        }
+        printf("\n");
+    }
     calModel->OPTIMIZATION = CAL_OPTIMIZATION;
 
     //Manage Optimization
@@ -317,12 +329,12 @@ CALbyte calGetX_b(struct CALModel* calModel, struct CALSubstate_b* Q, CALIndices
 
 }
 
-CALint calGetX_i(CALModel* calModel, CALSubstate_i* Q, CALIndices central_cell, int n)
+CALint calGetX_i(struct CALModel* calModel, struct CALSubstate_i* Q, CALIndices central_cell, int n)
 {
 
 }
 
-CALreal calGetX_r(CALModel* calModel, CALSubstate_r* Q, CALIndices central_cell, int n)
+CALreal calGetX_r(struct CALModel* calModel, struct CALSubstate_r* Q, CALIndices central_cell, int n)
 {
 
 }
