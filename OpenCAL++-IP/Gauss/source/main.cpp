@@ -104,15 +104,15 @@ class SaveGlobalFunction : public opencal::CALGlobalFunction<2,opencal::CALMoore
 
     opencal::CALSubstate<PIXELTYPE,2>* img;
     int step = 0;
-    std::string filename;
+    std::string filenameExtension;
 public:
-    SaveGlobalFunction(auto* sbs,  enum opencal::calCommon :: CALUpdateMode _UPDATE_MODE, std::string _filename): CALGlobalFunction(_UPDATE_MODE), img(sbs), filename(_filename){
+    SaveGlobalFunction(auto* sbs,  enum opencal::calCommon :: CALUpdateMode _UPDATE_MODE, std::string _filenameExtension): CALGlobalFunction(_UPDATE_MODE), img(sbs), filenameExtension(_filenameExtension){
 
     }
 
 
     void run(MODELTYPE* model){
-        img->saveSubstate(savef, "output/"+filename);
+        img->saveSubstate(savef, "output/out_"+std::to_string(step)+"."+filenameExtension);
         step++;
     }
 
@@ -140,19 +140,73 @@ class UniformFilter : public opencal::ConvolutionFilter<_DIMENSION, _NEIGHBORHOO
 
 
 
-int main (int argc, char** argv)
+
+
+/*
+
+template<typename PIXELTYPE>
+class LabelConnectedComponentFilter : public opencal::CALLocalFunction<2,opencal::CALMooreNeighborhood<2,MOORERADIUS>,uint>{
+
+    opencal::CALSubstate<PIXELTYPE,2>* binImg;
+    opencal::CALSubstate<uint,2>*     connComponents;
+    uint label;
+public:
+    LabelConnectedComponentFilter(decltype(binImg) sbs,decltype(connComponents)): binImg(sbs){
+      label = 1;
+    }
+
+
+    void dfs(MODELTYPE* model,std::array<uint,2>& indices, uint label){
+      PIXELTYPE newVal = binImg->getElement(indices);
+
+      if(newVal[0]){
+           newVal[0] = label;
+           binImg->setElement(indices,newVal);
+
+        std::array<uint,2> neighIdx = indices;
+        int x=0;
+        for(auto a : opencal::CALMooreNeighborhood<2,MOORERADIUS>::getNeighborhoodIndices){
+            if(binImg->getX(indices,x)[0])
+
+           x++;
+        }
+        //iterate on the right
+        if(indices[0] +1 < model->getSize()[0]){
+          neighIdx =
+        }
+
+
+      }
+
+    }
+
+
+    void run(MODELTYPE* model,std::array<uint,2>& indices){
+        using namespace std;
+        PIXELTYPE newval=binImg->getElement(indices);
+
+        unsigned short ns = model->getNeighborhoodSize();
+        for(int x=0 ; x<ns; ++x){
+                 binImg->getX(indices,x)[0];
+        }
+        // cout<<(unsigned short)avg[0]<<" ";
+        //cout<<endl;
+
+
+        binImg->setElement(indices,newval);
+    }
+
+
+
+};
+
+*/
+
+int main ()
 {
 
 
-//    int steps=1; printf("how many steps?.."); scanf("%d",&steps);
-
-
-    std::string filename;
-//    printf("image filename ");
-//    std::cin>>filename;
-    filename = argv[1];
-
-    std::cout<<filename<<std::endl;
+    int steps=1; printf("how many steps?.."); scanf("%d",&steps);
 
     opencal::UniformKernel<2,opencal::CALMooreNeighborhood<2,MOORERADIUS>, double> unikernel;
     opencal::GaussianKernel<2,opencal::CALMooreNeighborhood<2,MOORERADIUS>, double> gaukernel
@@ -163,7 +217,9 @@ int main (int argc, char** argv)
 
 
 
-
+    // unikernel.print();
+    // gaukernel.print();
+    //     lapkernel.print();
     opencal::CALMooreNeighborhood<2,MOORERADIUS> neighbor;
 
 
@@ -178,7 +234,7 @@ int main (int argc, char** argv)
                 opencal::calCommon::CAL_NO_OPT);
 
     opencal::CALRun < opencal::CALModel < 2, opencal::CALMooreNeighborhood<2,MOORERADIUS>,
-            COORD_TYPE >> calrun(&calmodel, 1, 1, opencal::calCommon::CAL_UPDATE_IMPLICIT);
+            COORD_TYPE >> calrun(&calmodel, 1, steps, opencal::calCommon::CAL_UPDATE_IMPLICIT);
 
     opencal::CALSubstate<vec1s, 2, COORD_TYPE> *bgr = calmodel.addSubstate<vec1s>();
 
@@ -187,17 +243,17 @@ int main (int argc, char** argv)
     //UniformFilter<2, decltype(neighbor), decltype(gaukernel),opencal::CALSubstate<vec1s, 2, COORD_TYPE>  > unifilter(bgr,&gaukernel);
 
     ContrastStretchingFilter <2,decltype(neighbor),COORD_TYPE,vec1s>* contrastStretchingFilter = new ContrastStretchingFilter<2,decltype(neighbor),COORD_TYPE,vec1s> (bgr, 0, 1799, 0, 65535,0.10);
-    ThresholdFilter<2,decltype(neighbor),COORD_TYPE,vec1s>* thresholdFilter = new ThresholdFilter<2,decltype(neighbor),COORD_TYPE,vec1s> (bgr,0,61680,0,65535);
 
+    bgr->loadSubstate(*(new std::function<decltype(loadImage<vec1s>)>(loadImage<vec1s>)), "input/tiff/traking_10x_480010persect0001.tif");
+
+
+ThresholdFilter<2,decltype(neighbor),COORD_TYPE,vec1s>* thresholdFilter = new ThresholdFilter<2,decltype(neighbor),COORD_TYPE,vec1s> (bgr,0,61680,0,65535);
     calmodel.addElementaryProcess(contrastStretchingFilter);
     calmodel.addElementaryProcess(thresholdFilter);
 
-    calmodel.addElementaryProcess(new SaveGlobalFunction<vec1s>(bgr, opencal::calCommon::CAL_UPDATE_EXPLICIT, filename));
-
-
-    bgr->loadSubstate(*(new std::function<decltype(loadImage<vec1s>)>(loadImage<vec1s>)), "input/tiff/"+filename);
+    calmodel.addElementaryProcess(new SaveGlobalFunction<vec1s>(bgr, opencal::calCommon::CAL_UPDATE_EXPLICIT, "tif"));
     calrun.run();
-
+    //bgr->saveSubstate(savef, "output/outproteinMO.jpg");
 
     printf("END\n");
 
