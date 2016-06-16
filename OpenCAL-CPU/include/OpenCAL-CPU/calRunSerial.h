@@ -8,21 +8,21 @@ void calSerialApplyLocalProcess( struct CALModel* calModel, CALLocalProcess loca
 void calSerialUpdate (struct CALModel* calModel);
 
 
-CALbyte calSerialGet_b(struct CALModel* calModel, struct CALSubstate_b* Q, CALIndexes indexes);
-CALint calSerialGet_i(struct CALModel* calModel, struct CALSubstate_i* Q, CALIndexes indexes);
-CALreal  calSerialGet_r(struct CALModel* calModel, struct CALSubstate_r* Q, CALIndexes indexes);
+CALbyte calSerialGet_b(struct CALModel* calModel, struct CALSubstate_b* Q, CALIndices indexes);
+CALint calSerialGet_i(struct CALModel* calModel, struct CALSubstate_i* Q, CALIndices indexes);
+CALreal  calSerialGet_r(struct CALModel* calModel, struct CALSubstate_r* Q, CALIndices indexes);
 
-CALbyte  calSerialGetX_b(struct CALModel* calModel, struct CALSubstate_b* Q, CALIndexes central_cell, int n);
-CALint  calSerialGetX_i(struct CALModel* calModel, struct CALSubstate_i* Q, CALIndexes central_cell, int n);
-CALreal  calSerialGetX_r(struct CALModel* calModel, struct CALSubstate_r* Q, CALIndexes central_cell, int n);
+CALbyte  calSerialGetX_b(struct CALModel* calModel, struct CALSubstate_b* Q, CALIndices central_cell, int n);
+CALint  calSerialGetX_i(struct CALModel* calModel, struct CALSubstate_i* Q, CALIndices central_cell, int n);
+CALreal  calSerialGetX_r(struct CALModel* calModel, struct CALSubstate_r* Q, CALIndices central_cell, int n);
 
-void  calSerialSet_b(struct CALModel* calModel, struct CALSubstate_b* Q, CALIndexes central_cell,CALbyte value);
-void  calSerialSet_i(struct CALModel* calModel, struct CALSubstate_i* Q, CALIndexes central_cell,CALbyte value);
-void  calSerialSet_r(struct CALModel* calModel, struct CALSubstate_r* Q, CALIndexes central_cell,CALbyte value);
+void  calSerialSet_b(struct CALModel* calModel, struct CALSubstate_b* Q, CALIndices central_cell,CALbyte value);
+void  calSerialSet_i(struct CALModel* calModel, struct CALSubstate_i* Q, CALIndices central_cell,CALbyte value);
+void  calSerialSet_r(struct CALModel* calModel, struct CALSubstate_r* Q, CALIndices central_cell,CALbyte value);
 
-void  calSerialSetCurrent_b(struct CALModel* calModel, struct CALSubstate_b* Q, CALIndexes central_cell, CALbyte value);
-void  calSerialSetCurrent_i(struct CALModel* calModel, struct CALSubstate_i* Q, CALIndexes central_cell, CALbyte value);
-void  calSerialSetCurrent_r(struct CALModel* calModel, struct CALSubstate_r* Q, CALIndexes central_cell, CALbyte value);
+void  calSerialSetCurrent_b(struct CALModel* calModel, struct CALSubstate_b* Q, CALIndices central_cell, CALbyte value);
+void  calSerialSetCurrent_i(struct CALModel* calModel, struct CALSubstate_i* Q, CALIndices central_cell, CALbyte value);
+void  calSerialSetCurrent_r(struct CALModel* calModel, struct CALSubstate_r* Q, CALIndices central_cell, CALbyte value);
 
 void  calSerialCopyBuffer_b(CALbyte* M_src, CALbyte* M_dest, int buffer_dimension);
 void  calSerialCopyBuffer_i(CALint* M_src, CALint* M_dest, int buffer_dimension);

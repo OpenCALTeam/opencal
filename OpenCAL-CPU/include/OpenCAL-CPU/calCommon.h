@@ -12,16 +12,24 @@
 #ifndef calCommon_h
 #define calCommon_h
 #include <stdlib.h>
-
+#include <OpenCAL-CPU/calOmpDef.h>
 
 
 #define CAL_FALSE 0		//!< Boolean alias for false
 #define CAL_TRUE  1		//!< Boolean alias for true
 
+#define CAL_PARALLEL 0
+
+#define calDefineParallel() (CAL_PARALLEL=1)
+
+
+
 enum CALInitMethod { CAL_NO_INIT = 0, CAL_INIT_CURRENT, CAL_INIT_NEXT, CAL_INIT_BOTH };
 enum CALExecutionType {SERIAL = 0, PARALLEL};
 
-typedef int* CALIndexes;
+typedef int* CALIndices;
+
+int getLinearIndex(CALIndices indices, CALIndices coordinates_dimensions, int cellular_space_dimension );
 
 typedef char CALbyte;	//!< Redefinition of the type char.
 typedef int CALint;		//!< Redefinition of the type int.
@@ -37,12 +45,12 @@ typedef CALreal CALParameterr;	//!< Redefinition of the type CALreal. It is used
 
 struct CALIndexesPool {
         int cellular_space_dimension;
-        CALIndexes coordinates_dimensions;
+        CALIndices coordinates_dimensions;
         int number_of_dimensions;
-        CALIndexes* pool;
+        CALIndices* pool;
 };
 
-struct CALIndexesPool* calDefIndexesPool(CALIndexes coordinates_dimensions, int number_of_dimensions);
+struct CALIndexesPool* calDefIndexesPool(CALIndices coordinates_dimensions, int number_of_dimensions);
 
 
 /*!	\brief Enumeration used for cellular space toroidality setting.
@@ -88,9 +96,9 @@ enum CALOptimization{
     inside the cells.
 */
 struct CALSubstate_b {
-    CALbyte* current;	//!< Current linearised matrix of the substate, used for reading purposes.
-    CALbyte* next;		//!< Next linearised matrix of the substate, used for writing purposes.
-    };
+        CALbyte* current;	//!< Current linearised matrix of the substate, used for reading purposes.
+        CALbyte* next;		//!< Next linearised matrix of the substate, used for writing purposes.
+};
 
 /*! \brief integer substate.
 
@@ -104,8 +112,8 @@ struct CALSubstate_b {
     inside the cells.
 */
 struct CALSubstate_i {
-    CALint* current;	//!< Current linearised matrix of the substate, used for reading purposes.
-    CALint* next;		//!< Next linearised matrix of the substate, used for writing purposes.
+        CALint* current;	//!< Current linearised matrix of the substate, used for reading purposes.
+        CALint* next;		//!< Next linearised matrix of the substate, used for writing purposes.
 };
 
 /*! \brief real (floating point) substate.
@@ -120,8 +128,8 @@ struct CALSubstate_i {
     inside the cells.
 */
 struct CALSubstate_r {
-    CALreal* current;	//!< Current linearised matrix of the substate, used for reading purposes.
-    CALreal* next;		//!< Next linearised matrix of the substate, used for writing purposes.
+        CALreal* current;	//!< Current linearised matrix of the substate, used for reading purposes.
+        CALreal* next;		//!< Next linearised matrix of the substate, used for writing purposes.
 };
 
 

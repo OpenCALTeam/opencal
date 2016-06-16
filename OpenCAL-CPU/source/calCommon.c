@@ -11,7 +11,7 @@
 
 #include <OpenCAL-CPU/calCommon.h>
 
-struct CALIndexesPool* calDefIndexesPool(CALIndexes coordinates_dimensions, int number_of_dimensions)
+struct CALIndexesPool* calDefIndexesPool(CALIndices coordinates_dimensions, int number_of_dimensions)
 {
     struct CALIndexesPool* indexes_pool = (struct CALIndexesPool*) malloc(sizeof(struct CALIndexesPool));
     indexes_pool->coordinates_dimensions = coordinates_dimensions;
@@ -23,10 +23,10 @@ struct CALIndexesPool* calDefIndexesPool(CALIndexes coordinates_dimensions, int 
     for( n = 0; n < number_of_dimensions; n++ )
         indexes_pool->cellular_space_dimension *= coordinates_dimensions[n];
 
-    indexes_pool->pool = (CALIndexes*) malloc(sizeof(CALIndexes) * indexes_pool->cellular_space_dimension);
+    indexes_pool->pool = (CALIndices*) malloc(sizeof(CALIndices) * indexes_pool->cellular_space_dimension);
 
-    CALIndexes current_cell = (CALIndexes) malloc(sizeof(int) * number_of_dimensions);
-    CALIndexes first_cell = (CALIndexes) malloc(sizeof(int) * number_of_dimensions);
+    CALIndices current_cell = (CALIndices) malloc(sizeof(int) * number_of_dimensions);
+    CALIndices first_cell = (CALIndices) malloc(sizeof(int) * number_of_dimensions);
     for( n = 0; n < number_of_dimensions; n++ )
     {
         current_cell[n] = 0;
@@ -52,7 +52,7 @@ struct CALIndexesPool* calDefIndexesPool(CALIndexes coordinates_dimensions, int 
 
         current_dimension = number_of_dimensions - 1;
 
-        CALIndexes cell_to_add = (CALIndexes) malloc(sizeof(int) * number_of_dimensions);
+        CALIndices cell_to_add = (CALIndices) malloc(sizeof(int) * number_of_dimensions);
 
         for( i = 0; i < number_of_dimensions; i++ )
             cell_to_add[i] = current_cell[i];
@@ -63,4 +63,22 @@ struct CALIndexesPool* calDefIndexesPool(CALIndexes coordinates_dimensions, int 
     free(current_cell);
     return indexes_pool;
 
+}
+
+int getLinearIndex(CALIndices indices, CALIndices coordinates_dimensions, int cellular_space_dimension)
+{
+
+    int c = 0;
+    uint multiplier = 1;
+    uint n;
+
+    for (uint i = 0; i < cellular_space_dimension; i++)
+    {
+        if (i == 1) n = 0;
+        else if (i == 0) n = 1;
+        else n = i;
+        c          += indices[n] * multiplier;
+        multiplier *= coordinates_dimensions[n];
+    }
+    return c;
 }
