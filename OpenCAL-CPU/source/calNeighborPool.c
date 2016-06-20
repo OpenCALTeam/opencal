@@ -137,7 +137,6 @@ void addNeighbors(struct CALNeighborPool * calNeighborPool,struct CALIndexesPool
     int indices_size = pow_ct(2*radius+1, calIndexesPool->number_of_dimensions);
     for (int i = 0; i < indices_size; i++){
         addNeighbor(calNeighborPool, calIndexesPool, cellPattern[i]);
-       // calNeighborPool->size_of_X++;
     }
 }
 

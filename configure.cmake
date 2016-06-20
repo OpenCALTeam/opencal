@@ -11,5 +11,5 @@ option(BUILD_OPENCAL_OMP_PARALLEL "Controls if OpenCAL-OMP compiled agaist libom
 option(BUILD_OPENCAL_CL           "Build the OpenCAL-CL OpenCL parallel version (OpenCL required)"                      OFF)
 option(BUILD_OPENCAL_GL           "Build the OpenCAL-GL visualization library (OpenGL and GLUT required)"               OFF)
 option(BUILD_DOCUMENTATION        "Build the HTML based API documentation (Doxygen required)"                           OFF)
-option(BUILD_OPENCAL_PP           "Build the OpenCAL-C++ version (C++11 Required)"		 				                          OFF)
-option(BUILD_OPENCAL_TESTS        "Build the test suite of application for OPENCAL"                         OFF)
+option(BUILD_OPENCAL_PP           "Build the OpenCAL-C++ version (C++11 Required)"		 			OFF)
+option(BUILD_OPENCAL_TESTS        "Build the test suite of application for OPENCAL"                                     OFF)

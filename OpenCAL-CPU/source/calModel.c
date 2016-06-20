@@ -46,7 +46,6 @@ struct CALModel*calCADef(int numberOfCoordinates, CALIndices coordinatesDimensio
     calModel->coordinatesDimensions = coordinatesDimensions;
 
     calModel->calIndexesPool =  calDefIndexesPool(coordinatesDimensions,numberOfCoordinates);
-    //    calModel->calNeighborPool = calDefNeighborPool(calModel->calIndexesPool, CAL_TOROIDALITY, );
 
     //CALL calRun constructor and set optimization
     int ** cellPattern;
