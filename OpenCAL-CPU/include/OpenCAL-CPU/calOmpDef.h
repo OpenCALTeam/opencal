@@ -52,9 +52,9 @@
     for (i = 0; i < (calModel)->cellularSpaceDimension; i++)	\
         omp_destroy_lock(calModel->locks[i])		\
 
-    #define CAL_FREE_LOCKS(calModel, i)			\
-        for(i = 0; i < (calModel)->cellularSpaceDimension; i++)
-            free((calModel)->locks[i])
+//    #define CAL_FREE_LOCKS(calModel, i)			\
+//        for(i = 0; i < (calModel)->cellularSpaceDimension; i++)
+//            free(((calModel)->locks[i]))
 
 
     #define CAL_GET_NUM_PROCS() 	\

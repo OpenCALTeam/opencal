@@ -20,47 +20,84 @@ struct CALIndexesPool* calDefIndexesPool(CALIndices coordinates_dimensions, int 
     indexes_pool->cellular_space_dimension = 1;
     int n, i;
 
-    for( n = 0; n < number_of_dimensions; n++ )
+    for( n = 0; n < number_of_dimensions; n++ ){
+
         indexes_pool->cellular_space_dimension *= coordinates_dimensions[n];
+
+    }
 
     indexes_pool->pool = (CALIndices*) malloc(sizeof(CALIndices) * indexes_pool->cellular_space_dimension);
 
-    CALIndices current_cell = (CALIndices) malloc(sizeof(int) * number_of_dimensions);
-    CALIndices first_cell = (CALIndices) malloc(sizeof(int) * number_of_dimensions);
-    for( n = 0; n < number_of_dimensions; n++ )
+    for (i = 0; i < indexes_pool->cellular_space_dimension; ++i)
     {
-        current_cell[n] = 0;
-        first_cell[n] = 0;
-    }
-
-    int current_dimension = number_of_dimensions - 1;
-    n = 0;
-    indexes_pool->pool[n] = first_cell;
-
-    for(n = 1; n < indexes_pool->cellular_space_dimension; n++)
-    {
-        current_cell[current_dimension]++;
-
-        while(current_cell[current_dimension] == coordinates_dimensions[current_dimension])
+        int n, k;
+        int linearIndex = i;
+        int* v = (int*)malloc(sizeof(int)*number_of_dimensions);
+        int t =indexes_pool->cellular_space_dimension;
+        for (n=number_of_dimensions-1; n>=0; n--)
         {
-            current_cell[current_dimension--] = 0;
-            if( current_dimension < 0 )
-                break;
+            if (n ==1)
+                k=0;
+            else if (n==0)
+                k=1;
+            else
+                k=n;
 
-            current_cell[current_dimension]++;
+            t= (int)t/coordinates_dimensions[k];
+            v[k] = (int) linearIndex/t;
+            linearIndex = linearIndex%t;
         }
+        indexes_pool->pool[i] = v;
 
-        current_dimension = number_of_dimensions - 1;
-
-        CALIndices cell_to_add = (CALIndices) malloc(sizeof(int) * number_of_dimensions);
-
-        for( i = 0; i < number_of_dimensions; i++ )
-            cell_to_add[i] = current_cell[i];
-
-        indexes_pool->pool[n] = cell_to_add;
     }
 
-    free(current_cell);
+// check indexes
+//    for (int i = 0; i < indexes_pool->cellular_space_dimension; ++i) {
+//        for (int j = 0; j < number_of_dimensions; ++j) {
+//            printf("%d ",indexes_pool->pool[i][j]);
+//        }
+//        printf("\d\n");
+
+//    }
+
+//TODO Mario plz check your init IndexesPool version, I just imported Paola's version for simplicity
+
+//    CALIndices current_cell = (CALIndices) malloc(sizeof(int) * number_of_dimensions);
+//    CALIndices first_cell = (CALIndices) malloc(sizeof(int) * number_of_dimensions);
+//    for( n = 0; n < number_of_dimensions; n++ )
+//    {
+//        current_cell[n] = 0;
+//        first_cell[n] = 0;
+//    }
+
+//    int current_dimension = number_of_dimensions - 1;
+//    n = 0;
+//    indexes_pool->pool[n] = first_cell;
+
+//    for(n = 1; n < indexes_pool->cellular_space_dimension; n++)
+//    {
+//        current_cell[current_dimension]++;
+
+//        while(current_cell[current_dimension] == coordinates_dimensions[current_dimension])
+//        {
+//            current_cell[current_dimension--] = 0;
+//            if( current_dimension < 0 )
+//                break;
+
+//            current_cell[current_dimension]++;
+//        }
+
+//        current_dimension = number_of_dimensions - 1;
+
+//        CALIndices cell_to_add = (CALIndices) malloc(sizeof(int) * number_of_dimensions);
+
+//        for( i = 0; i < number_of_dimensions; i++ )
+//            cell_to_add[i] = current_cell[i];
+
+//        indexes_pool->pool[n] = cell_to_add;
+//    }
+
+//    free(current_cell);
     return indexes_pool;
 
 }

@@ -66,6 +66,10 @@ if(BUILD_OPENCAL_CPU)
         add_subdirectory(OpenCAL-CPU)
 endif(BUILD_OPENCAL_CPU)
 
+if(BUILD_OPENCAL_CPU_TESTS)
+        add_subdirectory(tests-cpu)
+endif(BUILD_OPENCAL_CPU_TESTS)
+
 if(BUILD_OPENCAL_CL)
         string(ASCII 27 Esc)
         set(Red         "${Esc}[31m")

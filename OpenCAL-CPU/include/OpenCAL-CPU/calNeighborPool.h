@@ -24,13 +24,13 @@ struct CALNeighborPool{
     enum CALSpaceBoundaryCondition CAL_TOROIDALITY;
 };
 
-struct CALNeighborPool * calDefNeighborPool(struct CALIndexesPool* calIndexesPool, enum CALSpaceBoundaryCondition _CAL_TOROIDALITY, int **cellPattern);
+struct CALNeighborPool * calDefNeighborPool(struct CALIndexesPool* calIndexesPool, enum CALSpaceBoundaryCondition _CAL_TOROIDALITY, int **cellPattern, int radius);
 
 int ** defineMooreNeighborhood(int radius,int dimension);
 
 int ** defineVonNeumannNeighborhood(int radius,int dimension);
 
-void addNeighbors(struct CALNeighborPool * calNeighborPool,struct CALIndexesPool* calIndexesPool, int ** cellPattern);
+void addNeighbors(struct CALNeighborPool * calNeighborPool,struct CALIndexesPool* calIndexesPool, int ** cellPattern, int radius);
 
 void destroy(struct CALNeighborPool * calNeighborPool);
 
