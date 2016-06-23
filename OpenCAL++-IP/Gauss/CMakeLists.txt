@@ -1,5 +1,33 @@
  cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 
+# CGAL and its components
+find_package( CGAL QUIET COMPONENTS  )
+
+if ( NOT CGAL_FOUND )
+
+  message(STATUS "This project requires the CGAL library, and will not be compiled.")
+  return()  
+
+endif()
+
+# include helper file
+include( ${CGAL_USE_FILE} )
+
+
+# Boost and its components
+find_package( Boost REQUIRED )
+
+if ( NOT Boost_FOUND )
+
+  message(STATUS "This project requires the Boost library, and will not be compiled.")
+
+  return()  
+
+endif() 
+ 
+ 
+ 
+ 
 find_package(OpenCAL 1.0 COMPONENTS OpenCAL++ REQUIRED)
 find_package( OpenCV REQUIRED )
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
@@ -30,6 +58,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include ${OPENCAL_INCLUDE_DIR} )
 file(GLOB SRC
     "include/*.h"
     "source/*.cpp"
+    "source/*.h"
 )
 
 

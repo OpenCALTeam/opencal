@@ -10,6 +10,7 @@
 #include<algorithm>
 #include "ContrastStretchingFilter.h"
 #include "ThresholdFilter.h"
+#include "Bacterium.h"
 typedef unsigned int COORD_TYPE;
 
 using namespace std::placeholders;
