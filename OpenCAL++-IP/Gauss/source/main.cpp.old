@@ -15,7 +15,7 @@ typedef unsigned int COORD_TYPE;
 
 using namespace std::placeholders;
 
-constexpr unsigned int MOORERADIUS=1;
+constexpr unsigned int MOORERADIUS=3;
 
 
 typedef std::array<unsigned char, 2> vec2b;
@@ -271,7 +271,7 @@ int main ()
 
     opencal::UniformKernel<2,opencal::CALMooreNeighborhood<2,MOORERADIUS>, double> unikernel;
     opencal::GaussianKernel<2,opencal::CALMooreNeighborhood<2,MOORERADIUS>, double> gaukernel
-    ({0.5,0.5}, {0.0,0.0});
+    ({0.1,0.5}, {0.0,0.0});
 
     opencal::LaplacianKernel<2,opencal::CALMooreNeighborhood<2,MOORERADIUS>, double> lapkernel
     ({0.3,0.3}, {0.0,0.0});
@@ -279,9 +279,11 @@ int main ()
 
 
     // unikernel.print();
-    // gaukernel.print();
+     gaukernel.print();
     //     lapkernel.print();
-    opencal::CALMooreNeighborhood<2,MOORERADIUS> neighbor;
+
+    return 0;
+     opencal::CALMooreNeighborhood<2,MOORERADIUS> neighbor;
 
 
 

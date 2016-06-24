@@ -10,6 +10,8 @@
 #include<OpenCAL++/functional_utilities.h>
 #include<functional>
 
+#include <opencv2/opencv.hpp>
+
   template<class T>
   void save (const T *array, const std::string pathOutput,int rows, int cols, int type)
   {

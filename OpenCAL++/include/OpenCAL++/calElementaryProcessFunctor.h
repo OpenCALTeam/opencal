@@ -1,8 +1,8 @@
 
 #ifndef CALELEMENTARYPROCESSFUNCTOR_H_
 #define CALELEMENTARYPROCESSFUNCTOR_H_
-
-
+#include <OpenCAL++/calCommon.h>
+#include <OpenCAL++/calActiveCells.h>
 /*! \brief Class that defines transition function's elementary processes.
 */
 namespace opencal {
