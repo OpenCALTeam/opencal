@@ -25,7 +25,7 @@ private:
 public:
     Polygon (Points points) : CGALPolygon (points.begin(), points.end())
     {
-//        CGAL::convex_hull_2( points.begin(), points.end(), std::back_inserter(*this) );
+        //        CGAL::convex_hull_2( points.begin(), points.end(), std::back_inserter(*this) );
         create();
 
     }
@@ -56,21 +56,33 @@ public:
 
     void convexHull ()
     {
-//        CGAL::convex_hull_2(this->vertices_begin(), this->vertices_end(), std::back_inserter(*this) );
-//        this->erase(this->vertices_begin(), this->vertices_begin()+area);
+        //        CGAL::convex_hull_2(this->vertices_begin(), this->vertices_end(), std::back_inserter(*this) );
+        //        this->erase(this->vertices_begin(), this->vertices_begin()+area);
     }
 
 
-
-    int intersectionArea (Polygon polygon)
+    CGAL::Bounded_side check_inside(CGALPoint& pt)
     {
-        return 0;
+        return this->bounded_side(pt);
     }
 
-    int differenceArea (Polygon polygon)
+    int intersectionArea (Polygon & polygon)
     {
-        return 0;
+       Polygon::iterator it;
+
+       int area = 0;
+       for (it = polygon.vertices_begin(); it != polygon.vertices_end(); it++) {
+            CGAL::Bounded_side bounded_side = check_inside(*it);
+            if (bounded_side == CGAL::ON_BOUNDED_SIDE  || bounded_side == CGAL::ON_BOUNDARY)
+                area++;
+       }
+       return area;
     }
+
+//    int differenceArea (Polygon polygon)
+//    {
+//        return 0;
+//    }
 
     CGALPoint& getCentroid ()
     {
