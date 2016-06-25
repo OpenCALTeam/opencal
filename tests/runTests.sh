@@ -238,8 +238,8 @@ TIMINGFILE="TestTiming-`date +"%d-%B-%y_%R:%S"`"
 touch $TIMINGFILE
 for d in */ ; do
 #        if [[ $d != "include/" && $d != "testsout/" &&  $d != "testData/" &&  $d != "plotFiles/" ]]; then
-#        if [[ $d == "sciddicaT/" || $d == "heattransfer/" ]]; then
-        if [[ $d == "sciddicaT/" ]]; then
+         if [[ $d == "sciddicaT/" || $d == "heattransfer/" ]]; then
+#        if [[ $d == "sciddicaT/" ]]; then
 		dir=${d%/}
 
                 echo ""
