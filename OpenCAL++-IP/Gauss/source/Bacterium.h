@@ -148,6 +148,7 @@ private:
 
 };
 
+
 class Bacterium
 {
 private:
@@ -183,6 +184,7 @@ public:
         return std::sqrt (std::pow ((bacterium.getCentroid().x() - this->polygon.getCentroid().x()), 2) + std::pow ((bacterium.getCentroid().y()- this->polygon.getCentroid().y()),2));
 
     }
+
 
 void createBactriaFromRawPoints(){
   Polygon p(points);
