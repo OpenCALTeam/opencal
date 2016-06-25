@@ -12,6 +12,7 @@ endif()
 
 include_directories(
 	${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/../../include
 	${OPENCAL_INCLUDE_DIR}
 )
 

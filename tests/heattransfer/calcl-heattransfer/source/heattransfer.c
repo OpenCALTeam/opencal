@@ -14,6 +14,7 @@
 #include <OpenCAL-CL/calcl3D.h>
 #include <OpenCAL-CL/calgl3DRunCL.h>
 #include <OpenCAL/cal3DIO.h>
+#include <OpenCALTime.h>
 
 #define SIZE (100)
 #define ROWS (SIZE)
@@ -86,7 +87,6 @@ void exitFunction(void)
 }
 
 int main(int argc, char** argv) {
-	time_t start_time, end_time;
 
 	// Declare a viewer object
 	struct CALGLDrawModel3D* drawModel;
@@ -122,10 +122,10 @@ int main(int argc, char** argv) {
 	// Add transition function's elementary process
 	calclAddElementaryProcess3D(device_CA, &kernel_transition_function);
 
-	start_time = time(NULL);
-	calclRun3D(device_CA,1,STEPS);
-	end_time = time(NULL);
-	printf("%lds", end_time - start_time);
+    struct OpenCALTime * opencalTime= (struct OpenCALTime *)malloc(sizeof(struct OpenCALTime));
+    startTime(opencalTime);
+    calclRun3D(device_CA,1,STEPS);
+    endTime(opencalTime);
 
 	// Save the substate to file
 	calSaveSubstate3Dr(host_CA, Q_temperature, "./testsout/other/1.txt");

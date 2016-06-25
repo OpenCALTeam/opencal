@@ -1,46 +1,13 @@
-/*
- * Copyright (c) 2016 OpenCALTeam (https://github.com/OpenCALTeam),
- * Telesio Research Group,
- * Department of Mathematics and Computer Science,
- * University of Calabria, Italy.
- *
- * This file is part of OpenCAL (Open Computing Abstraction Layer).
- *
- * OpenCAL is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation, either version 3 of
- * the License, or (at your option) any later version.
- *
- * OpenCAL is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with OpenCAL. If not, see <http://www.gnu.org/licenses/>.
- */
-
-#ifndef __OPENCL_VERSION__
-#define __kernel
-#define __global
-#define __local
-#define get_global_id (int)
-#endif
+// The SciddicaT debris flows XCA transition function kernels
 
 #include <kernel.h>
 
-//first elementary process
-__kernel void sciddicaT_flows_computation(MODEL_DEFINITION2D, __global CALParameterr * Pepsilon, __global CALParameterr * Pr
+__kernel void flowsComputation(__CALCL_MODEL_2D, __global CALParameterr * Pepsilon, __global CALParameterr * Pr)
+{
+	calclThreadCheck2D();
 
-) {
-
-	initThreads2D();
-
-	__global CALbyte * activeCellsFlags = get_active_cells_flags();
-	CALint cols_ = get_columns();
-
-	int i = getX();
-	int j = getY();
+	int i = calclGlobalRow();
+	int j = calclGlobalColumn();
 
 	CALbyte eliminated_cells[5] = { CAL_FALSE, CAL_FALSE, CAL_FALSE, CAL_FALSE, CAL_FALSE };
 	CALbyte again;
@@ -50,17 +17,18 @@ __kernel void sciddicaT_flows_computation(MODEL_DEFINITION2D, __global CALParame
 	CALreal u[5];
 	CALint n;
 	CALreal z, h;
-	CALint sizeOfX_ = get_neighborhoods_size();
+
+	CALint sizeOfX_ = calclGetNeighborhoodSize();
 	CALParameterr eps = *Pepsilon;
 
-	if (calGet2Dr(MODEL2D, H, i, j) <= eps)
+	if (calclGet2Dr(MODEL_2D, H, i, j) <= eps)
 		return;
 
-	m = calGet2Dr(MODEL2D, H, i, j) - eps;
-	u[0] = calGet2Dr(MODEL2D, Z , i, j) + eps;
+	m = calclGet2Dr(MODEL_2D, H, i, j) - eps;
+	u[0] = calclGet2Dr(MODEL_2D, Z , i, j) + eps;
 	for (n = 1; n < sizeOfX_; n++) {
-		z = calGetX2Dr(MODEL2D,Z, i, j, n);
-		h = calGetX2Dr(MODEL2D,H, i, j, n);
+		z = calclGetX2Dr(MODEL_2D,Z, i, j, n);
+		h = calclGetX2Dr(MODEL_2D,H, i, j, n);
 		u[n] = z + h;
 	}
 
@@ -88,48 +56,44 @@ __kernel void sciddicaT_flows_computation(MODEL_DEFINITION2D, __global CALParame
 
 	for (n = 1; n < sizeOfX_; n++) {
 		if (eliminated_cells[n])
-			calSet2Dr(MODEL2D, n-1, i, j, 0.0);
+			calclSet2Dr(MODEL_2D, n-1, i, j, 0.0);
 		else
-			calSet2Dr(MODEL2D, n-1, i, j,(average - u[n]) * (*Pr));
+			calclSet2Dr(MODEL_2D, n-1, i, j,(average - u[n]) * (*Pr));
 	}
 }
 
-__kernel void sciddicaT_width_update(MODEL_DEFINITION2D) {
+__kernel void widthUpdate(__CALCL_MODEL_2D)
+{
+	calclThreadCheck2D();
 
-	initThreads2D();
-
-	__global CALbyte * activeCellsFlags = get_active_cells_flags();
-	CALint cols_ = get_columns();
-
-	int i = getX();
-	int j = getY();
+	int i = calclGlobalRow();
+	int j = calclGlobalColumn();
 
 	CALreal h_next;
 	CALint n;
 
-	h_next = calGet2Dr(MODEL2D, H, i, j);
+	h_next = calclGet2Dr(MODEL_2D, H, i, j);
 
-	for (n = 1; n < get_neighborhoods_size(); n++) {
-		h_next += ( calGetX2Dr(MODEL2D, NUMBER_OF_OUTFLOWS-n, i, j, n) - calGet2Dr(MODEL2D, n-1, i, j) );
+	for (n = 1; n < calclGetNeighborhoodSize(); n++) {
+		h_next += ( calclGetX2Dr(MODEL_2D, NUMBER_OF_OUTFLOWS-n, i, j, n) - calclGet2Dr(MODEL_2D, n-1, i, j) );
 	}
-	calSet2Dr(MODEL2D, H, i, j, h_next);
+	calclSet2Dr(MODEL_2D, H, i, j, h_next);
 
 }
 
-__kernel void sciddicaTSteering(MODEL_DEFINITION2D) {
+__kernel void steering(__CALCL_MODEL_2D)
+{
+	calclThreadCheck2D();
 
-	initThreads2D();
+	CALint cols_ = calclGetColumns();
+	CALint rows_ = calclGetRows();
 
-	__global CALbyte * activeCellsFlags = get_active_cells_flags();
-	CALint cols_ = get_columns();
-	CALint rows_ = get_rows();
-
-	int i = getX();
-	int j = getY();
-
-	int dim = cols_ * rows_;
+	int i = calclGlobalRow();
+	int j = calclGlobalColumn();
 	int s;
-	for (s = 0; s < NUMBER_OF_OUTFLOWS; ++s)
-		calInitSubstate2Dr(MODEL2D, s, i, j, 0);
-
+//	for (s = 0; s < NUMBER_OF_OUTFLOWS; ++s)
+		calclInitSubstate2Dr(MODEL_2D, 0, i, j, 0);
+		calclInitSubstate2Dr(MODEL_2D, 1, i, j, 0);
+		calclInitSubstate2Dr(MODEL_2D, 2, i, j, 0);
+		calclInitSubstate2Dr(MODEL_2D, 3, i, j, 0);
 }

@@ -1,5 +1,14 @@
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 
 ADD_SUBDIRECTORY(cal-sciddicaT)
+ADD_SUBDIRECTORY(cal-sciddicaT-activecells)
+ADD_SUBDIRECTORY(cal-sciddicaT-explicit)
+ADD_SUBDIRECTORY(cal-sciddicaT-explicit-activecells)
 ADD_SUBDIRECTORY(calomp-sciddicaT)
+ADD_SUBDIRECTORY(calomp-sciddicaT-activecells)
+ADD_SUBDIRECTORY(calomp-sciddicaT-explicit)
+ADD_SUBDIRECTORY(calomp-sciddicaT-explicit-activecells)
 ADD_SUBDIRECTORY(calcl-sciddicaT)
+ADD_SUBDIRECTORY(calcl-sciddicaT-activecells)
+
+

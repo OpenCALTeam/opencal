@@ -4,7 +4,8 @@ cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 
 link_directories(${CMAKE_CURRENT_SOURCE_DIR}/source)
-include_directories(${PROJECT_SOURCE_DIR}/OpenCAL-OMP/include)
+include_directories(${PROJECT_SOURCE_DIR}/OpenCAL-OMP/include
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../../include)
 
 FIND_PACKAGE(OpenMP)
 IF(OPENMP_FOUND)
@@ -15,7 +16,8 @@ ENDIF()
 
 link_directories(${PROJECT_SOURCE_DIR}/OpenCAL-OMP/lib)
 file(GLOB SRC
-    "source/*.cpp"
+    "source/*.c"
+    "include/*.h"
     "OpenCAL-OMP/include/*.h"
 )
 add_executable(calomp-sciddicaT-test ${SRC})

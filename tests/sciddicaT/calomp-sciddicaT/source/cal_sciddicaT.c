@@ -21,15 +21,11 @@
  */
 
 
-extern "C" {
 #include <OpenCAL-OMP/cal2DIO.h>
 #include <OpenCAL-OMP/cal2D.h>
 #include <OpenCAL-OMP/cal2DRun.h>
-}
+#include <OpenCALTime.h>
 #include <stdlib.h>
-#include<string>
-#include<iostream>
-using namespace std;
 //-----------------------------------------------------------------------
 //   THE sciddicaT (Toy model) CELLULAR AUTOMATON
 //-----------------------------------------------------------------------
@@ -40,10 +36,7 @@ using namespace std;
 #define P_EPSILON 0.001
 #define STEPS 200
 #define DEM_PATH "./testData/sciddicaT-data/dem.txt"
-
 #define SOURCE_PATH "./testData/sciddicaT-data/source.txt"
-
-
 #define NUMBER_OF_OUTFLOWS 4
 
 #define PREFIX_PATH(version,name,pathVarName) \
@@ -180,9 +173,16 @@ int main(int argc, char** argv)
 		exit(-1);
 	 }
 
+    // read from argv the number of steps
+    int steps;
+    if (sscanf (argv[2], "%i", &steps)!=1 && steps >=0) {
+        printf ("number of steps is not an integer");
+        exit(-1);
+    }
+
 	//cadef and rundef
 	struct CALModel2D* sciddicaT = calCADef2D (ROWS, COLS, CAL_VON_NEUMANN_NEIGHBORHOOD_2D, CAL_SPACE_TOROIDAL, CAL_NO_OPT);
-	struct CALRun2D* sciddicaT_simulation = calRunDef2D(sciddicaT, 1, STEPS, CAL_UPDATE_IMPLICIT);
+    struct CALRun2D* sciddicaT_simulation = calRunDef2D(sciddicaT, 1, steps, CAL_UPDATE_IMPLICIT);
 
 	//add transition function's elementary processes
 	calAddElementaryProcess2D(sciddicaT, sciddicaT_flows_computation);
@@ -203,10 +203,14 @@ int main(int argc, char** argv)
 	//simulation run
 	calRunAddInitFunc2D(sciddicaT_simulation, sciddicaT_simulation_init);
 	calRunAddSteeringFunc2D(sciddicaT_simulation, sciddicaTSteering);
-	calRun2D(sciddicaT_simulation);
+    struct OpenCALTime * opencalTime= (struct OpenCALTime *)malloc(sizeof(struct OpenCALTime));
+    startTime(opencalTime);
+    calRun2D(sciddicaT_simulation);
+    endTime(opencalTime);
+    free(opencalTime);
 
-	string path;
-	PREFIX_PATH(version,"1.txt",path);
+//	string path;
+//	PREFIX_PATH(version,"1.txt",path);
 	//saving configuration
 	calSaveSubstate2Dr(sciddicaT, Q.h,"./testsout/other/1.txt");
 	//finalizations

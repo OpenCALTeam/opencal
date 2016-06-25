@@ -15,6 +15,7 @@
 #include <OpenCAL-OMP/cal3DRun.h>
 #include <OpenCAL/cal3DIO.h>
 #include <time.h>
+#include <OpenCALTime.h>
 
 
 #define SIZE (100)
@@ -121,7 +122,6 @@ void heatModel_SimulationInit(struct CALModel3D* heatModel)
 
 
 int main(int argc, char** argv) {
-	time_t start_time, end_time;
 
 	//cadef and rundef
 	heatModel = calCADef3D(ROWS, COLS, LAYERS, CAL_MOORE_NEIGHBORHOOD_3D, CAL_SPACE_FLAT, CAL_NO_OPT);
@@ -137,10 +137,10 @@ int main(int argc, char** argv) {
 	calRunInitSimulation3D(heat_simulation);	//It is required in the case the simulation main loop is explicitated; similarly for calRunFinalizeSimulation3D
 //	calRunAddStopConditionFunc3D(heat_simulation, heatModel_SimulationStopCondition);
 
-	start_time = time(NULL);
+    struct OpenCALTime * opencalTime= (struct OpenCALTime *)malloc(sizeof(struct OpenCALTime));
+    startTime(opencalTime);
 	calRun3D(heat_simulation);
-	end_time = time(NULL);
-	printf("%lds", end_time - start_time);
+    endTime(opencalTime);
 
 	// Save the substate to file
 	calSaveSubstate3Dr(heatModel, Q_temperature, "./testsout/other/1.txt");

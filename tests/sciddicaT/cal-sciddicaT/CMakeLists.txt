@@ -3,7 +3,8 @@ cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
-include_directories(${PROJECT_SOURCE_DIR}/OpenCAL/include)
+include_directories(${PROJECT_SOURCE_DIR}/OpenCAL/include
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../../include)
 
 file(GLOB SRC
     "include/*.h"

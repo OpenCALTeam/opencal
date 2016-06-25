@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 
-find_package(OpenCAL 1.0 COMPONENTS  OpenCAL-OMP REQUIRED)
+find_package(OpenCAL 1.0 COMPONENTS OpenCAL-OMP REQUIRED)
 
 
 if(NOT MSVC)
@@ -12,6 +12,7 @@ endif()
 
 include_directories(
 	${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/../../include
 	${OPENCAL_INCLUDE_DIR}
 )
 

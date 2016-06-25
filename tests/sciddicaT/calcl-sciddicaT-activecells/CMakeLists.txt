@@ -28,5 +28,5 @@ file(GLOB SRC
     "source/*.c"
 )
 
-add_executable(calcl-sciddicaT-test ${SRC})
-target_link_libraries(calcl-sciddicaT-test  opencal-cl ${M_LIB} opencal ${OpenCL_LIBRARY} ${OPENCAL_LIBRARIES} )
+add_executable(calcl-sciddicaT-activecells-test ${SRC})
+target_link_libraries(calcl-sciddicaT-activecells-test  opencal-cl ${M_LIB} opencal ${OpenCL_LIBRARY} ${OPENCAL_LIBRARIES} )

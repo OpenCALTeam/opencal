@@ -15,6 +15,8 @@ PURPLE="\e[35m"
 DEFAULT="\e[39m"
 
 NUMERICALTEST=1
+NUMBEROFTESTS=1
+STEPS=4000
 MD5TEST=0
 
 EPSILON=0.0001
@@ -137,19 +139,36 @@ TestOutputFiles() {
 }
 
 ExecuteAndSaveElapsedTime() {
-	timeUtility="/usr/bin/time"
-	format="Time\t%E\tMaxMem\t%M\tPageFaults(minor)\t%R\tPageFaults(major)\t%F\tFS(input)\t%I\tFS(outpu)\t%O"
+#	timeUtility="/usr/bin/time"
+#	format="Time\t%E\tMaxMem\t%M\tPageFaults(minor)\t%R\tPageFaults(major)\t%F\tFS(input)\t%I\tFS(outpu)\t%O"
 # format=" -v "
-	timeOptions=" -f $format "
+#	timeOptions=" -f $format "
 	outFile="$1"
 	binary="$2"
 	parameters="$3"
-	#echo "here $timeUtility $timeOptions ./$binary $parameters 2>&1"
-	execTime="$( $timeUtility $timeOptions ./$binary $parameters 2>&1)"
 
-	Indent "$(printColored $PURPLE "Elapsed Time: $execTime")"
+
+	#echo "here $timeUtility $timeOptions ./$binary $parameters 2>&1"
+#	execTime="$( $timeUtility $timeOptions ./$binary $parameters 2>&1)"
+        totalmilliseconds=0
+        for (( c=1; c<= $NUMBEROFTESTS; c++ ))
+        do
+        execTime="$(./$binary $parameters $STEPS 2>&1)"
+        #split outpute, take only milliseconds
+        times=(${execTime//;/ })
+        #times=$(echo $execTime | tr ";" "\n")
+        echo "Execution simulation number $c "
+
+        let "totalmilliseconds += ${times[1]}"
+        #echo $totalmilliseconds
+        #totalmilliseconds += ${times[1]}
+        done
+        let "tmp = $totalmilliseconds / $NUMBEROFTESTS"
+        #tmp  = $totalmilliseconds/$NUMBEROFTESTS;
+
+        Indent "$(printColored $PURPLE "Elapsed Time: $tmp")"
 	echo -e "\tTEST $binary" >> $TIMINGFILE;
-	echo -e "\t $execTime\n" >> $outFile
+        echo -e "\t $tmp \n" >> $outFile
 }
 
 
@@ -178,63 +197,64 @@ rm -f testsout/other/*
 TIMINGFILE="TestTiming-`date +"%d-%B-%y_%R:%S"`"
 touch $TIMINGFILE
 for d in */ ; do
-	if [[ $d != "testsout/" &&  $d != "testData/" &&  $d != "plotFiles/" ]]; then
+#        if [[ $d != "include/" && $d != "testsout/" &&  $d != "testData/" &&  $d != "plotFiles/" ]]; then
+        if [[ $d == "sciddicaT/" ]]; then
 		dir=${d%/}
 
-		echo ""
-		printColored $GREEN "TEST SUITE $dir";
-		echo "SUITE $dir" >> $TIMINGFILE;
-		#printColored $GREEN "`cat $dir/description.txt`"; #uncomment if you want to print a description of the test
+                echo ""
+                printColored $GREEN "TEST SUITE $dir";
+                echo "SUITE $dir" >> $TIMINGFILE;
+#		#printColored $GREEN "`cat $dir/description.txt`"; #uncomment if you want to print a description of the test
 
 
-		#execute serial version
-		bin=$dir/cal-$dir/bin/cal-$dir-test
+#		#execute serial version
+                bin=$dir/cal-$dir/bin/cal-$dir-test
 
 
-		ExecutableExistsOrDie "$bin"
+#		ExecutableExistsOrDie "$bin"
 
-		Indent "$(printColored $BLUE "Creating Reference Test Data (Serial Version)  $bin 0")"
-		#./$bin 0
-		ExecuteAndSaveElapsedTime $TIMINGFILE $bin 0
+                Indent "$(printColored $BLUE "Creating Reference Test Data (Serial Version)  $bin 0")"
+                #./$bin 0
+                ExecuteAndSaveElapsedTime $TIMINGFILE $bin 0
 
-		#now run all the otherversion of this test
-		cd $dir
-		for o in */ ; do
-			if [[ $o != "cal-$dir/" ]]; then
-				odir=${o%/}
-			#execute serial version
-				otherBin=$dir/$odir/bin/$odir-test
+                #now run all the otherversion of this test
+                cd $dir
+                for o in */ ; do
+                        if [[ $o != "cal-$dir/" ]]; then
+                                odir=${o%/}
+                        #execute serial version
+                                otherBin=$dir/$odir/bin/$odir-test
 
-			#need to run the test from the tests directory!
-				cd ..
-				echo "TESTING $otherBin"
-				ExecutableExistsOrDie "$otherBin"
+                        #need to run the test from the tests directory!
+                                cd ..
+                                echo "TESTING $otherBin"
+                                ExecutableExistsOrDie "$otherBin"
 
-				Indent "$(printColored $YELLOW "Executing  $odir-test")"
-			#execute test
-				 #./$otherBin 1
+                                Indent "$(printColored $YELLOW "Executing  $odir-test")"
+                        #execute test
+                                 #./$otherBin 1
 
-				ExecuteAndSaveElapsedTime $TIMINGFILE $otherBin 1
+                                ExecuteAndSaveElapsedTime $TIMINGFILE $otherBin 1
 
-			#md5sum on all single files
-				TestOutputFiles $MD5TEST
-			#md5sum CUMULATIVE
-				Md5CumulativeTest
-			#Numerical comparison
-				TestOutputFiles $NUMERICALTEST
+                        #md5sum on all single files
+                                TestOutputFiles $MD5TEST
+                        #md5sum CUMULATIVE
+                                Md5CumulativeTest
+                        #Numerical comparison
+                                TestOutputFiles $NUMERICALTEST
 #comment this line to avoid pause between tests
 #pause
-				rm -f $TESTROOT/testsout/other/*
+                                rm -f $TESTROOT/testsout/other/*
 
-		#restore test directory to run other version of the test
-				cd $dir
+                #restore test directory to run other version of the test
+                                cd $dir
 
 
-			fi
-		done
+                        fi
+                done
 
-		rm -f $TESTROOT/testsout/serial/*
-		cd $TESTROOT
+                rm -f $TESTROOT/testsout/serial/*
+                cd $TESTROOT
 	fi
 done
 rm -f $TESTROOT/testsout/serial/*

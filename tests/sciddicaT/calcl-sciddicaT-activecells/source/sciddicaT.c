@@ -29,7 +29,7 @@
 //-----------------------------------------------------------------------
 //   THE sciddicaT (Toy model) CELLULAR AUTOMATON
 //-----------------------------------------------------------------------
-//#define ACTIVE_CELLS
+#define ACTIVE_CELLS
 #define ROWS 610
 #define COLS 496
 #define P_R 0.5
