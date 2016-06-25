@@ -16,7 +16,7 @@ DEFAULT="\e[39m"
 
 NUMERICALTEST=1
 NUMBEROFTESTS=1
-STEPS=4000
+STEPS=2
 MD5TEST=0
 
 EPSILON=0.0001
@@ -150,25 +150,65 @@ ExecuteAndSaveElapsedTime() {
 
 	#echo "here $timeUtility $timeOptions ./$binary $parameters 2>&1"
 #	execTime="$( $timeUtility $timeOptions ./$binary $parameters 2>&1)"
-        totalmilliseconds=0
-        for (( c=1; c<= $NUMBEROFTESTS; c++ ))
-        do
-        execTime="$(./$binary $parameters $STEPS 2>&1)"
-        #split outpute, take only milliseconds
-        times=(${execTime//;/ })
-        #times=$(echo $execTime | tr ";" "\n")
-        echo "Execution simulation number $c "
 
-        let "totalmilliseconds += ${times[1]}"
-        #echo $totalmilliseconds
-        #totalmilliseconds += ${times[1]}
-        done
-        let "tmp = $totalmilliseconds / $NUMBEROFTESTS"
-        #tmp  = $totalmilliseconds/$NUMBEROFTESTS;
 
-        Indent "$(printColored $PURPLE "Elapsed Time: $tmp")"
-	echo -e "\tTEST $binary" >> $TIMINGFILE;
-        echo -e "\t $tmp \n" >> $outFile
+        if [[ $binary == *"calcl"* ]]
+        then
+            #echo "ENTRO IF calcl"
+            #Get all platforms and devices
+            #For each device executes the examples for NUMBEROFTESTS times and save the results in milliseconds
+            echo -e "\tTEST ON $binary" >> $TIMINGFILE;
+            getPlatformAndDevice="$(./getOpenCLPlatformAndDevice/bin/calcl-getPlatformAndDevice-test 2>&1)"
+            allPlatformAndDevice=(${getPlatformAndDevice// / })
+            for i in "${allPlatformAndDevice[@]}"
+            do
+                #echo $i
+                platformAndDevice=(${i//;/ })
+                echo "Execution on Plarform ${platformAndDevice[0]} and Device ${platformAndDevice[1]}"
+                totalmilliseconds=0
+                for (( c=1; c<= $NUMBEROFTESTS; c++ ))
+                do
+                    execTime="$(./$binary $parameters $STEPS ${platformAndDevice[0]} ${platformAndDevice[1]} 2>&1)"
+                    #split outpute, take only milliseconds
+                    times=(${execTime//;/ })
+                    #times=$(echo $execTime | tr ";" "\n")
+                    echo "Execution simulation number $c "
+
+                    let "totalmilliseconds += ${times[1]}"
+                 done
+
+                let "tmp = $totalmilliseconds / $NUMBEROFTESTS"
+
+                Indent "$(printColored $PURPLE "Elapsed Time: $tmp")"
+                echo -e "\tTEST ON ${platformAndDevice[0]} and Device ${platformAndDevice[1]}" >> $TIMINGFILE;
+                echo -e "\t $tmp \n" >> $outFile
+            done
+
+        else
+            #echo "ENTRO ELSE calcl"
+            totalmilliseconds=0
+            for (( c=1; c<= $NUMBEROFTESTS; c++ ))
+            do
+                 execTime="$(./$binary $parameters $STEPS 2>&1)"
+                 #split outpute, take only milliseconds
+                 times=(${execTime//;/ })
+                 #times=$(echo $execTime | tr ";" "\n")
+                 echo "Execution simulation number $c "
+
+                let "totalmilliseconds += ${times[1]}"
+                #echo $totalmilliseconds
+                #totalmilliseconds += ${times[1]}
+            done
+
+            let "tmp = $totalmilliseconds / $NUMBEROFTESTS"
+
+            Indent "$(printColored $PURPLE "Elapsed Time: $tmp")"
+            echo -e "\tTEST $binary" >> $TIMINGFILE;
+            echo -e "\t $tmp \n" >> $outFile
+
+        fi
+
+
 }
 
 
@@ -198,6 +238,7 @@ TIMINGFILE="TestTiming-`date +"%d-%B-%y_%R:%S"`"
 touch $TIMINGFILE
 for d in */ ; do
 #        if [[ $d != "include/" && $d != "testsout/" &&  $d != "testData/" &&  $d != "plotFiles/" ]]; then
+#        if [[ $d == "sciddicaT/" || $d == "heattransfer/" ]]; then
         if [[ $d == "sciddicaT/" ]]; then
 		dir=${d%/}
 
