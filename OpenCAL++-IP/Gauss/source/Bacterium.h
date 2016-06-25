@@ -149,7 +149,6 @@ private:
 };
 
 
-
 class Bacterium
 {
 private:
@@ -176,21 +175,12 @@ public:
 
 
     int getIntersectionArea (Bacterium&  bacterium)
-<<<<<<< HEAD
     {
         return polygon.intersectionArea(bacterium.polygon);
     }
 
     double distance (Bacterium& bacterium)
     {
-=======
-    {
-        return polygon.intersectionArea(bacterium.polygon);
-    }
-
-    double distance (Bacterium& bacterium)
-    {
->>>>>>> 7c7a186ab6b43ec9ebec2ec2aff03904a8722c80
         return std::sqrt (std::pow ((bacterium.getCentroid().x() - this->polygon.getCentroid().x()), 2) + std::pow ((bacterium.getCentroid().y()- this->polygon.getCentroid().y()),2));
 
     }
