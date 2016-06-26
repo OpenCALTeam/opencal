@@ -159,12 +159,15 @@ ExecuteAndSaveElapsedTime() {
             #For each device executes the examples for NUMBEROFTESTS times and save the results in milliseconds
             echo -e "\tTEST ON $binary" >> $TIMINGFILE;
             getPlatformAndDevice="$(./getOpenCLPlatformAndDevice/bin/calcl-getPlatformAndDevice-test 2>&1)"
-            allPlatformAndDevice=(${getPlatformAndDevice// / })
+            #split getPlatformAndDevice by : separator
+            IFS=':' read -r -a allPlatformAndDevice <<< "$getPlatformAndDevice"
             for i in "${allPlatformAndDevice[@]}"
             do
-                #echo $i
-                platformAndDevice=(${i//;/ })
-                echo "Execution on Plarform ${platformAndDevice[0]} and Device ${platformAndDevice[1]}"
+                 #echo $i
+                 IFS=';' read -r -a platformAndDevice <<< "$i"
+                 #split getPlatformAndDevice by ; separator
+                 echo "Execution on Plarform ${platformAndDevice[0]} and Device ${platformAndDevice[1]}"
+                 echo "Device Name: ${platformAndDevice[2]}"
                 totalmilliseconds=0
                 for (( c=1; c<= $NUMBEROFTESTS; c++ ))
                 do
@@ -181,6 +184,7 @@ ExecuteAndSaveElapsedTime() {
 
                 Indent "$(printColored $PURPLE "Elapsed Time: $tmp")"
                 echo -e "\tTEST ON ${platformAndDevice[0]} and Device ${platformAndDevice[1]}" >> $TIMINGFILE;
+                echo -e "\tDevice Name: ${platformAndDevice[2]}" >> $TIMINGFILE;
                 echo -e "\t $tmp \n" >> $outFile
             done
 
@@ -238,8 +242,8 @@ TIMINGFILE="TestTiming-`date +"%d-%B-%y_%R:%S"`"
 touch $TIMINGFILE
 for d in */ ; do
 #        if [[ $d != "include/" && $d != "testsout/" &&  $d != "testData/" &&  $d != "plotFiles/" ]]; then
-         if [[ $d == "sciddicaT/" || $d == "heattransfer/" ]]; then
-#        if [[ $d == "sciddicaT/" ]]; then
+#         if [[ $d == "sciddicaT/" || $d == "heattransfer/" ]]; then
+         if [[ $d == "sciddicaT/" ]]; then
 		dir=${d%/}
 
                 echo ""

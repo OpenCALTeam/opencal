@@ -33,8 +33,8 @@ int main(int argc, char** argv)
     //calclGetPlatformAndDeviceFromStdIn(calcl_device_manager, &device);
     for (int i = 0; i < calcl_device_manager->num_platforms; ++i)
         for (int j = 0; j < calcl_device_manager->num_platforms_devices[i]; ++j) {
-                //printf("%d;%d;%s:\n", i, j, calclGetDeviceName(calcl_device_manager->devices[i][j]));
-            printf("%d;%d \n", i, j);
+               printf("%d;%d;%s:\n", i, j, calclGetDeviceName(calcl_device_manager->devices[i][j]));
+            //printf("%d;%d \n", i, j);
         }
 
     // Finalizations
