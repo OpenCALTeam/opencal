@@ -183,26 +183,65 @@ ExecuteAndSaveElapsedTime() {
 
                 let "tmp = $totalmilliseconds / $NUMBEROFTESTS"
 
-                Indent "$(printColored $PURPLE "Elapsed Time: $tmp")"
+                Indent "$(printColored $PURPLE "Elapsed Time: $tmp ms")"
                 echo -e "\tTEST ON ${platformAndDevice[0]} and Device ${platformAndDevice[1]}" >> $TIMINGFILE;
                 echo -e "\tDevice Name: ${platformAndDevice[2]}" >> $TIMINGFILE;
-                echo -e "\t $tmp \n" >> $outFile
+                echo -e "\t $tmp ms\n" >> $outFile
 
 
-								#md5sum on all single files
-												TestOutputFiles $MD5TEST
-								#md5sum CUMULATIVE
-												Md5CumulativeTest
-								#Numerical comparison
-												TestOutputFiles $NUMERICALTEST
+                                                                #md5sum on all single files
+                                                                                                TestOutputFiles $MD5TEST
+                                                                #md5sum CUMULATIVE
+                                                                                                Md5CumulativeTest
+                                                                #Numerical comparison
+                                                                                                TestOutputFiles $NUMERICALTEST
 #comment this line to avoid pause between tests
 #pause
-								#rm -f $TESTROOT/testsout/other/*
+                                                                #rm -f $TESTROOT/testsout/other/*
 
 
             done
 						done <<< "$getPlatformAndDevice"
 
+        else
+        if [[ $binary == *"calomp"* ]]
+        then
+            LimitsNumberOfCore="$(grep -c ^processor /proc/cpuinfo)"
+            echo "Number of Total Cores $LimitsNumberOfCore"
+            increment=2
+            echo -e "\tTEST $binary" >> $TIMINGFILE;
+
+            for (( cores=2; cores<= $LimitsNumberOfCore; cores+=$increment ))
+            do
+
+                if [[ $cores == 8 ]]; then
+                   increment=8;
+                fi
+                export OMP_NUM_THREADS=$cores
+                totalmilliseconds=0
+                echo "Test with $cores cores"
+
+                for (( c=1; c<= $NUMBEROFTESTS; c++ ))
+                do
+                     execTime="$(./$binary $parameters $STEPS 2>&1)"
+                     #split outpute, take only milliseconds
+                     times=(${execTime//;/ })
+                     #times=$(echo $execTime | tr ";" "\n")
+                     echo "Execution simulation number $c "
+
+                    let "totalmilliseconds += ${times[1]}"
+                    #echo $totalmilliseconds
+                    #totalmilliseconds += ${times[1]}
+                done
+
+                let "tmp = $totalmilliseconds / $NUMBEROFTESTS"
+
+                Indent "$(printColored $PURPLE "Elapsed Time: $tmp ms")"
+                echo -e "\tTEST with $cores cores \n" >> $outFile
+
+                echo -e "\t $tmp ms \n" >> $outFile
+
+            done
         else
             #echo "ENTRO ELSE calcl"
             totalmilliseconds=0
@@ -221,10 +260,10 @@ ExecuteAndSaveElapsedTime() {
 
             let "tmp = $totalmilliseconds / $NUMBEROFTESTS"
 
-            Indent "$(printColored $PURPLE "Elapsed Time: $tmp")"
+            Indent "$(printColored $PURPLE "Elapsed Time: $tmp ms")"
             echo -e "\tTEST $binary" >> $TIMINGFILE;
-            echo -e "\t $tmp \n" >> $outFile
-
+            echo -e "\t $tmp ms\n" >> $outFile
+            fi
         fi
 
 
@@ -257,9 +296,9 @@ TIMINGFILE="TestTiming-`date +"%d-%B-%y_%R:%S"`"
 touch $TIMINGFILE
 for d in */ ; do
 #        if [[ $d != "include/" && $d != "testsout/" &&  $d != "testData/" &&  $d != "plotFiles/" ]]; then
-        	if [[./r	 $d == "heattransfer/" ]]; then
-#						if [[ $d == "sciddicaT/" || $d == "heattransfer/" ]]; then
-#		       if [[ $d == "sciddicaT/" ]]; then
+#               if [[ $d == "heattransfer/" ]]; then
+#		if [[ $d == "sciddicaT/" || $d == "heattransfer/" ]]; then
+                if [[ $d == "sciddicaT/" ]]; then
 		dir=${d%/}
 
                 echo ""
