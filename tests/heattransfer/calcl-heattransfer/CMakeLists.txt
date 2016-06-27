@@ -1,5 +1,7 @@
+#
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 find_package(OpenCAL 1.0 COMPONENTS OpenCAL  OpenCAL-CL REQUIRED)
 find_package(OpenCL REQUIRED)
 
@@ -22,11 +24,8 @@ link_directories(${OpenCL_LIBRARIES})
 
 file(GLOB SRC
     "include/*.h"
-    "source/*.cpp"
     "source/*.c"
 )
-
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 
 add_executable(calcl-heattransfer-test ${SRC})
 target_link_libraries(calcl-heattransfer-test ${OPENCAL_LIBRARIES} ${M_LIB} ${OpenCL_LIBRARY})
