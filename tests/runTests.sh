@@ -15,8 +15,8 @@ PURPLE="\e[35m"
 DEFAULT="\e[39m"
 
 NUMERICALTEST=1
-NUMBEROFTESTS=1
-STEPS=2
+NUMBEROFTESTS=10
+STEPS=4000
 MD5TEST=0
 
 EPSILON=0.0001
@@ -157,11 +157,12 @@ ExecuteAndSaveElapsedTime() {
             #echo "ENTRO IF calcl"
             #Get all platforms and devices
             #For each device executes the examples for NUMBEROFTESTS times and save the results in milliseconds
-            echo -e "\tTEST ON $binary" >> $TIMINGFILE;
             getPlatformAndDevice="$(./getOpenCLPlatformAndDevice/bin/calcl-getPlatformAndDevice-test 2>&1)"
-            #split getPlatformAndDevice by : separator
-            IFS=':' read -r -a allPlatformAndDevice <<< "$getPlatformAndDevice"
-            for i in "${allPlatformAndDevice[@]}"
+						#split getPlatformAndDevice by : separator
+						echo -e "\tTEST $binary" >> $TIMINGFILE;
+						while IFS=':' read -ra allPlatformAndDevice; do
+
+            for i in "${allPlatformAndDevice[@]}";
             do
                  #echo $i
                  IFS=';' read -r -a platformAndDevice <<< "$i"
@@ -186,7 +187,21 @@ ExecuteAndSaveElapsedTime() {
                 echo -e "\tTEST ON ${platformAndDevice[0]} and Device ${platformAndDevice[1]}" >> $TIMINGFILE;
                 echo -e "\tDevice Name: ${platformAndDevice[2]}" >> $TIMINGFILE;
                 echo -e "\t $tmp \n" >> $outFile
+
+
+								#md5sum on all single files
+												TestOutputFiles $MD5TEST
+								#md5sum CUMULATIVE
+												Md5CumulativeTest
+								#Numerical comparison
+												TestOutputFiles $NUMERICALTEST
+#comment this line to avoid pause between tests
+#pause
+								#rm -f $TESTROOT/testsout/other/*
+
+
             done
+						done <<< "$getPlatformAndDevice"
 
         else
             #echo "ENTRO ELSE calcl"
@@ -242,8 +257,9 @@ TIMINGFILE="TestTiming-`date +"%d-%B-%y_%R:%S"`"
 touch $TIMINGFILE
 for d in */ ; do
 #        if [[ $d != "include/" && $d != "testsout/" &&  $d != "testData/" &&  $d != "plotFiles/" ]]; then
-#         if [[ $d == "sciddicaT/" || $d == "heattransfer/" ]]; then
-         if [[ $d == "sciddicaT/" ]]; then
+        	if [[./r	 $d == "heattransfer/" ]]; then
+#						if [[ $d == "sciddicaT/" || $d == "heattransfer/" ]]; then
+#		       if [[ $d == "sciddicaT/" ]]; then
 		dir=${d%/}
 
                 echo ""
@@ -281,6 +297,7 @@ for d in */ ; do
 
                                 ExecuteAndSaveElapsedTime $TIMINGFILE $otherBin 1
 
+									#if [[ $otherBin != *"calcl"* ]]; then
                         #md5sum on all single files
                                 TestOutputFiles $MD5TEST
                         #md5sum CUMULATIVE
@@ -293,7 +310,7 @@ for d in */ ; do
 
                 #restore test directory to run other version of the test
                                 cd $dir
-
+												#fi
 
                         fi
                 done

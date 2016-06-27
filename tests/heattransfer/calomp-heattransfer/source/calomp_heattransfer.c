@@ -44,7 +44,8 @@ struct CALSubstate3Db *Q_heat_source;							//the substate Q
 struct CALRun3D* heat_simulation;
 
 const CALreal radius = 5;
-
+		int j=0;
+		int z=0;
 // The cell's transition function (first and only elementary process)
 void heatModel_TransitionFunction(struct CALModel3D* heatModel, int i, int j, int k)
 {
@@ -97,8 +98,10 @@ void heatModel_SimulationInit(struct CALModel3D* heatModel)
 
 
 	//for(int i=1 ; i < ROWS ; ++i){
-		for (int j = 1; j < COLS; ++j) {
-			for (int z = 1; z < LAYERS; ++z) {
+	int j=0;
+	int z=0;
+		for (j = 1; j < COLS; ++j) {
+			for (z = 1; z < LAYERS; ++z) {
 
 				CALreal _i, _j,_z;
 				CALreal chunk = ROWS/2;

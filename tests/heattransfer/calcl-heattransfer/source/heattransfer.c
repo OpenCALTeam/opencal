@@ -57,8 +57,10 @@ void heatModel_SimulationInit(struct CALModel3D* host_CA)
 
 
 	//for(int i=1 ; i < ROWS ; ++i){
-		for (int j = 1; j < COLS; ++j) {
-			for (int z = 1; z < LAYERS; ++z) {
+	int j=0;
+	int z=0;
+		for ( j = 1; j < COLS; ++j) {
+			for ( z = 1; z < LAYERS; ++z) {
 
 				CALreal _i, _j,_z;
 				CALreal chunk = ROWS/2;
