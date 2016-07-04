@@ -134,7 +134,7 @@ class Frame
 public:
 
     std::vector<shared_ptr<Bacterium>> segmented_bacteria;
-    vector<vector<shared_ptr<Bacterium>>> matrix;
+    vector<vector<int>> matrix;
 
 };
 
@@ -192,16 +192,16 @@ void SegmentFrame(const std::string& path, Frame& frame) {
 
 
     for(int i= 0 ; i < coords[0] ; i++){
-      vector<shared_ptr<Bacterium>> row(coords[1],nullptr);
+      vector<int> row(coords[1],-1);
       frame.matrix.push_back(row);
        }
 
-  /*  for(auto b : frame.segmented_bacteria)
-        for( auto p : b.points)
-          frame.matrix[p.x()][p.y()] = &b;
-*/
+    int c=0;
+    for(auto b : frame.segmented_bacteria)
+        for( auto p : b->points)
+          frame.matrix[p.x()][p.y()] = c++;
 
-     //using that create the matrix
+
 
 
 }

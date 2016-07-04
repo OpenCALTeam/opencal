@@ -151,10 +151,10 @@ private:
 
 class Bacterium
 {
-private:
+//private:
+public:
 Polygon polygon;
 Points points;
-public:
  Bacterium(){};
 
  /*    Bacterium (Points _points) : points(_points) , polygon(points)
