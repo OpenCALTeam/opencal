@@ -149,12 +149,12 @@ void SegmentFrame(const std::string& path, Frame& frame) {
     opencal::CALMooreNeighborhood<2,MOORERADIUS> neighbor;
 
     MODELTYPE calmodel(
-        coords,
-        &neighbor,
-        opencal::calCommon::CAL_SPACE_TOROIDAL,
-        opencal::calCommon::CAL_NO_OPT);
+                coords,
+                &neighbor,
+                opencal::calCommon::CAL_SPACE_TOROIDAL,
+                opencal::calCommon::CAL_NO_OPT);
 
-//image processing kernels and filters
+    //image processing kernels and filters
     opencal::CALRun < opencal::CALModel < 2, opencal::CALMooreNeighborhood<2,MOORERADIUS>,
             COORD_TYPE >> calrun(&calmodel, 1, steps, opencal::calCommon::CAL_UPDATE_IMPLICIT);
 
@@ -168,11 +168,11 @@ void SegmentFrame(const std::string& path, Frame& frame) {
 
     RemoveSinglePixelFilter<vec1s> removeSinglePixelFilter(bgr);
 
-   // LabelConnectedComponentFilter<vec1s> connComponent(bgr,connComp,&(frame.segmented_bacteria));
+    // LabelConnectedComponentFilter<vec1s> connComponent(bgr,connComp,&(frame.segmented_bacteria));
 
 
 
-//load image into the model
+    //load image into the model
     bgr->loadSubstate(*(new std::function<decltype(loadImage<vec1s>)>(loadImage<vec1s>)), path);
 
     calmodel.addElementaryProcess(&contrastStretchingFilter);
@@ -181,30 +181,179 @@ void SegmentFrame(const std::string& path, Frame& frame) {
     //calmodel.addElementaryProcess(&connComponent);
 
 
-     calrun.run();
+    calrun.run();
 
-     //frame.segmented has the list of all bacteria each with a list of points
-     //Postprocess the bacteria in order to generate the polygon and the ocnvexhull
-     for(auto b : frame.segmented_bacteria){
-       b->createBactriaFromRawPoints();
-     }
+    //frame.segmented has the list of all bacteria each with a list of points
+    //Postprocess the bacteria in order to generate the polygon and the ocnvexhull
+    for(auto b : frame.segmented_bacteria){
+        b->createBactriaFromRawPoints();
+    }
 
 
 
     for(int i= 0 ; i < coords[0] ; i++){
-      vector<int> row(coords[1],-1);
-      frame.matrix.push_back(row);
-       }
+        vector<int> row(coords[1],-1);
+        frame.matrix.push_back(row);
+    }
 
     int c=0;
     for(auto b : frame.segmented_bacteria)
         for( auto p : b->points)
-          frame.matrix[p.x()][p.y()] = c++;
-
-
-
+            frame.matrix[p.x()][p.y()] = c++;
 
 }
+std::set <int> findBacteria (CGALPoint & centroid, Frame & frame, int ray)
+{
+    std::set <int> bacteria;
+
+    int nCol = frame.matrix[0].size(), nRows = frame.matrix.size();
+
+    int xMin = centroid.x()-ray>=0? centroid.x()-ray:0, xMax = centroid.x()+ray<=nCol? centroid.x()+ray: nCol;
+    int yMin = centroid.y()-ray>=0? centroid.y()-ray:0, yMax = centroid.y()+ray<=nRows? centroid.y()+ray: nRows;
+
+    for(int i = xMin; i< xMax; ++i)
+    {
+        for (int j = yMin; j < yMax; ++j) {
+            if (frame.matrix[i][j] != -1)
+            {
+                bacteria.insert(frame.matrix[i][j]);
+            }
+
+        }
+    }
+    return bacteria;
+}
+
+std::set<shared_ptr<Bacterium>> getListBacteria (Frame & frame, std::set <int> & bacteriaIndexes)
+{
+    std::set<shared_ptr<Bacterium>> bacteria;
+    std::set <int>:: iterator it;
+    for (it =bacteriaIndexes.begin(); it != bacteriaIndexes.end(); it++) {
+        bacteria.insert(frame.segmented_bacteria[*it]);
+    }
+}
+
+int computeWeight (Bacterium & b1, Bacterium & b2) //TODO k * distance + k1 * area
+{
+    return 0,6*b1.distance(b2) + 0,4 * (std::abs (b1.getArea()-b2.getArea()));
+}
+
+int computeRadius (Bacterium & bacterium) //TODO polygon "radius" + costant
+{
+    return bacterium.getRadius()+5;
+}
+
+void findAnotherCandidate (int i, Frame & frame, std::vector<int>& assignedBacteriaFrame,
+                           std::vector <std::list<std::pair <int, int> > >& weights );
+
+void assign (int i, Frame & frame, std::vector<int>& assignedBacteriaFrame,
+             std::vector <std::list<std::pair <int, int> > >& weights )
+
+{
+    int indexCadidate = weights[i].front().first;
+    if (assignedBacteriaFrame[indexCadidate] == -1)
+    {
+        //            bacteria[i].push_back (frame.segmented_bacteria[indexCadidate]);
+        assignedBacteriaFrame[indexCadidate] = i;
+        //        assigned[indexCadidate] = true;
+        //        numberOfAssigned++;
+    }
+    else
+        findAnotherCandidate (i, frame, /*assigned, numberOfAssigned, */assignedBacteriaFrame, weights);
+}
+
+
+
+void findAnotherCandidate (int i, Frame & frame, std::vector<int>& assignedBacteriaFrame,
+                           std::vector <std::list<std::pair <int, int> > >& weights )
+{
+    if (weights[i].size() == 0) //untraceable bacterium
+    {
+        return;
+    }
+
+    std::pair <int,int> candidate = weights[i].front(); //coppia id, peso del batterio che voglio assegnare al batterio i della lista condivisa
+
+    int indexOldAssociated = assignedBacteriaFrame[candidate.first]; // indice (nella lista condivisa) del batterio a cui era associato precedentemente
+    int oldWeight = weights[indexOldAssociated].front().second; // peso del batterio (nella lista condivisa) a cui era associato precedentemente
+
+    if (candidate.second <= oldWeight) // significa che il batterio era già stato assegnato al suo corrispondente e bisogna cercare di associarlo al successivo
+    {
+        //prova ad assegnare al secondo candidato
+        weights[i].pop_front ();
+        //assegna al primo disponibile nella lista dei weights
+        assign(i,frame, assignedBacteriaFrame, weights);
+    }
+    else
+    {
+        assignedBacteriaFrame[candidate.first] = i; //associo al batterio del frame il nuovo batterio della lista condivisa che meglio matcha con esso
+        weights[indexOldAssociated].pop_front (); //tolgo il miglior candidato del batterio (nella lista condivisa) che non matcha più con il primo della lista
+        findAnotherCandidate(indexOldAssociated, frame, assignedBacteriaFrame, weights);
+    }
+
+}
+
+void tracking (Frame & frame, std::vector <std::list<shared_ptr<Bacterium>> > & bacteria)
+{
+    std::vector <std::list<std::pair <int, int> > > weights; //std::pair <position in frame.segmented_bacteria vector, distance from bacterium in shared list>
+
+    for (int i = 0; i < bacteria.size(); i++)
+    {
+        std::set <int> neighbors = findBacteria(bacteria[i].back().get()->getCentroid(), frame, computeRadius (*bacteria[i].back().get())); //fix ray
+
+        std::set <int>:: iterator it;
+        for (it =neighbors.begin(); it != neighbors.end(); it++) {
+            int weight = computeWeight(*bacteria[i].back().get(), *(frame.segmented_bacteria[*it].get()));
+            weights[i].push_back (std::pair <int, int> (*it, weight));
+        }
+        weights[i].sort([](auto &left, auto &right) {
+            return left.second < right.second;
+        });
+    }
+
+    //    std::vector <bool> assigned (frame.segmented_bacteria.size(), false);
+    std::vector <int> assignedBacteriaFrame (frame.segmented_bacteria.size(), -1);
+
+    //    int numberOfAssigned = 0;
+
+    for (int i = 0; i < bacteria.size(); i++)
+    {
+        if (weights[i].size() == 0) //untraceable bacterium
+        {
+            break;
+        }
+        assign(i,frame,/*assigned,numberOfAssigned,*/ assignedBacteriaFrame, weights);
+    }
+
+
+    for(int i= 0; i < frame.segmented_bacteria.size(); ++i)
+    {
+        if (assignedBacteriaFrame[i] == -1)
+        {
+            std::list <shared_ptr<Bacterium>> l;
+            l.push_back(frame.segmented_bacteria[i]);
+            bacteria.push_back(l);
+        }
+        else
+        {
+            bacteria[assignedBacteriaFrame[i]].push_back (frame.segmented_bacteria[i]);
+        }
+    }
+
+    //se ci sono batteri nuovi aggiungili alla lista condvisa
+    //    if (numberOfAssigned < frame.segmented_bacteria.size())
+    //        for (int i = 0; i < frame.segmented_bacteria.size(); i++)
+    //        {
+    //            if (assignedBacteriaFrame[i] == -1)
+    //            {
+    //                std::list <shared_ptr<Bacterium>> l;
+    //                l.push_back(frame.segmented_bacteria[i]);
+    //                bacteria.push_back(l);
+    //            }
+    //        }
+}
+
+
 
 
 int main() {

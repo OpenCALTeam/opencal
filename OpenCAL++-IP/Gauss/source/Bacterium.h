@@ -20,6 +20,7 @@ class Polygon : public CGALPolygon
 private:
     CGALPoint centroid;
     int area;
+    int radius;
 
 
 
@@ -46,7 +47,7 @@ public:
     {
         area = this->size();
         centroid=CGAL::centroid(this->vertices_begin(), this->vertices_end(),CGAL::Dimension_tag<0>());
-
+        computeRadius();
     }
 
     int getArea ()
@@ -54,6 +55,10 @@ public:
         return area;
     }
 
+    int getRadius ()
+    {
+        return radius;
+    }
 
     void convexHull ()
     {
@@ -62,28 +67,29 @@ public:
     }
 
 
-    CGAL::Bounded_side check_inside(CGALPoint& pt)
+    bool check_inside(CGALPoint& pt)
     {
-        return this->bounded_side(pt);
+        CGAL::Bounded_side bounded_side =this->bounded_side(pt);
+        return bounded_side == CGAL::ON_BOUNDED_SIDE  || bounded_side == CGAL::ON_BOUNDARY;
     }
 
     int intersectionArea (Polygon & polygon)
     {
-       Polygon::iterator it;
+        Polygon::iterator it;
 
-       int area = 0;
-       for (it = polygon.vertices_begin(); it != polygon.vertices_end(); it++) {
-            CGAL::Bounded_side bounded_side = check_inside(*it);
-            if (bounded_side == CGAL::ON_BOUNDED_SIDE  || bounded_side == CGAL::ON_BOUNDARY)
+        int area = 0;
+        for (it = polygon.vertices_begin(); it != polygon.vertices_end(); it++) {
+
+            if (check_inside(*it))
                 area++;
-       }
-       return area;
+        }
+        return area;
     }
 
-//    int differenceArea (Polygon polygon)
-//    {
-//        return 0;
-//    }
+    //    int differenceArea (Polygon polygon)
+    //    {
+    //        return 0;
+    //    }
 
     CGALPoint& getCentroid ()
     {
@@ -105,6 +111,16 @@ public:
         return pixelsToColor;
     }
 
+    std::ostream& operator<<(std::ostream& os)
+    {
+        os << "Centroid: " << centroid<<" \n"<<"Area: "<<area<<"\n"<<"Radius: "<<radius<<"\n"<<"Points: ";
+        CGALPolygon::iterator it;
+        for(it = this->vertices_begin(); it!=this->vertices_end(); it++){
+            os<<*it<<" | ";
+        }
+        os<<"\n";
+        return os;
+    }
 
 
 
@@ -144,6 +160,20 @@ private:
     }
 
 
+    void computeRadius ()
+    {
+        Polygon::iterator it;
+        radius = 0;
+
+        int distanceFromCentroid;
+        for (it = this->vertices_begin(); it != this->vertices_end(); it++) {
+            distanceFromCentroid = std::sqrt (std::pow ((it->x() - this->centroid.x()), 2) + std::pow ((it->y()- this->centroid.y()),2));
+            if (distanceFromCentroid > radius)
+                radius = distanceFromCentroid;
+        }
+
+    }
+
 
 
 };
@@ -151,13 +181,13 @@ private:
 
 class Bacterium
 {
-//private:
+    //private:
 public:
-Polygon polygon;
-Points points;
- Bacterium(){};
+    Polygon polygon;
+    Points points;
+    Bacterium(){}
 
- /*    Bacterium (Points _points) : points(_points) , polygon(points)
+    /*    Bacterium (Points _points) : points(_points) , polygon(points)
     {
 
     }*/
@@ -185,12 +215,23 @@ Points points;
 
     }
 
+    int getRadius ()
+    {
+        return polygon.getRadius();
+    }
 
-void createBactriaFromRawPoints(){
-  Polygon p(points);
-  polygon = p;
+    void createBactriaFromRawPoints(){
+        Polygon p(points);
+        polygon = p;
 
-}
+    }
+
+
+    std::ostream& operator<<(std::ostream& os)
+    {
+        os << polygon<<" \n";
+        return os;
+    }
 
 
 
