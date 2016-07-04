@@ -16,6 +16,8 @@
 
 #include <opencv2/opencv.hpp>
 
+
+
 //utility functions
 inline bool file_exists (const std::string& name) {
     struct stat buffer;
@@ -357,6 +359,17 @@ void tracking (Frame & frame, std::vector <std::list<shared_ptr<Bacterium>> > & 
 
 
 int main() {
+ std::vector <std::list<shared_ptr<Bacterium>> > bacteria();
+std::array<std::string,2> paths= {"aa","bb"};
+
+for(auto& p : paths){
+ Frame f;
+ segmentFrame(p,f);
+
+
+
+}
+
 
     return 0;
 }
