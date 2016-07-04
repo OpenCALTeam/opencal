@@ -127,7 +127,8 @@ public:
                 shared_ptr<Bacterium> bacterium (new Bacterium());
                 dfs(model,indices,label,bacterium);
                 label++;
-                //std::cout<<label<<" "<<bacteriaPath.size()<<endl;
+
+                std::cout<<" label è "<<label<<" "<<paths->size()<<endl;
                 paths->push_back(bacterium);
 
             }
@@ -143,10 +144,25 @@ public:
     std::vector<shared_ptr<Bacterium>> segmented_bacteria;
     vector<vector<int>> matrix;
 
+    friend std::ostream& operator<<(std::ostream& out, Frame f)
+    {
+        for (int i = 0; i < f.matrix.size(); ++i) {
+            for (int j = 0; j < f.matrix[i].size(); ++j) {
+                if (f.matrix[i][j] == -1)
+                    out<<"  ";
+                else
+                    out<<f.matrix[i][j]<<" ";
+            }
+            out<<"\n";
+
+        }
+        return out;
+    }
+
 };
 
- std::array<COORD_TYPE, 2> coords = { 431,512 };
- opencal::CALMooreNeighborhood<2,MOORERADIUS> neighbor;
+std::array<COORD_TYPE, 2> coords = { 431,512 };
+opencal::CALMooreNeighborhood<2,MOORERADIUS> neighbor;
 void SegmentFrame(const std::string& path, Frame& frame, MODELTYPE& calmodel, CALRUN& calrun) {
 
 
@@ -164,7 +180,7 @@ void SegmentFrame(const std::string& path, Frame& frame, MODELTYPE& calmodel, CA
 
     RemoveSinglePixelFilter<vec1s> removeSinglePixelFilter(bgr);
 
-     LabelConnectedComponentFilter<vec1s> connComponent(bgr,connComp,&(frame.segmented_bacteria));
+    LabelConnectedComponentFilter<vec1s> connComponent(bgr,connComp,&(frame.segmented_bacteria));
 
 
 
@@ -194,9 +210,11 @@ void SegmentFrame(const std::string& path, Frame& frame, MODELTYPE& calmodel, CA
 
     int c=0;
     for(auto b : frame.segmented_bacteria)
+    {
         for( auto p : b->points)
-            frame.matrix[p.x()][p.y()] = c++;
-
+            frame.matrix[p.x()][p.y()] = c;
+        c++;
+    }
 
 
     delete connComp;
@@ -299,16 +317,18 @@ void tracking (Frame & frame, std::vector <std::list<shared_ptr<Bacterium>> > & 
 
     for (int i = 0; i < bacteria.size(); i++)
     {
-        std::set <int> neighbors = findBacteria(bacteria[i].back().get()->getCentroid(), frame, computeRadius (*bacteria[i].back().get())); //fix ray
+        std::set <int> neighbors = findBacteria(bacteria[i].back()->getCentroid(), frame, computeRadius (*bacteria[i].back())); //fix ray
 
+        weights.push_back(std::list<std::pair<int,int>> ());
         std::set <int>:: iterator it;
         for (it =neighbors.begin(); it != neighbors.end(); it++) {
-            int weight = computeWeight(*bacteria[i].back().get(), *(frame.segmented_bacteria[*it].get()));
+            int weight = computeWeight(*bacteria[i].back(), *(frame.segmented_bacteria[*it]));
             weights[i].push_back (std::pair <int, int> (*it, weight));
         }
         weights[i].sort([](auto &left, auto &right) {
             return left.second < right.second;
         });
+
     }
 
     //    std::vector <bool> assigned (frame.segmented_bacteria.size(), false);
@@ -383,38 +403,41 @@ int main() {
 
 
 
-     MODELTYPE calmodel (
-                 coords,
-                 &neighbor,
-                 opencal::calCommon::CAL_SPACE_TOROIDAL,
-                 opencal::calCommon::CAL_NO_OPT);
+    MODELTYPE calmodel (
+                coords,
+                &neighbor,
+                opencal::calCommon::CAL_SPACE_TOROIDAL,
+                opencal::calCommon::CAL_NO_OPT);
 
 
-     const int steps  = 1;
+    const int steps  = 1;
 
-     //image processing kernels and filters
-     CALRUN calrun (&calmodel, 1, steps, opencal::calCommon::CAL_UPDATE_IMPLICIT);
+    //image processing kernels and filters
+    CALRUN calrun (&calmodel, 1, steps, opencal::calCommon::CAL_UPDATE_IMPLICIT);
 
     for(auto& p : paths){
         std::cout<<"carico "<<p<<"\n";
         Frame f;
         SegmentFrame(p,f, calmodel, calrun);
-        std::cout<<"ho finito di segmentare il frame "<<std::endl;
+//        std::cout<<f;
         tracking(f,bacteria);
+        std::cout<<"ho finito di segmentare il frame "<<std::endl;
 
-       calmodel.empty();
+        calmodel.empty();
 
 
 
     }
+    //    SegmentFrame(paths[0],f, calmodel, calrun);
 
-//    for (int i = 0; i < bacteria.size(); i++)
-//    {
+    for (int i = 0; i < bacteria.size(); i++)
+    {
+        std::cout<<"batterio "<<i <<" suoi associati "<<bacteria[i].size()<<"\n";
 //        for (auto b : bacteria[i])
 //        {
-//            std::cout<<b.get()<< std::endl;
+//            std::cout<<*b<< " ";
 //        }
-//    }
+    }
 
 
 

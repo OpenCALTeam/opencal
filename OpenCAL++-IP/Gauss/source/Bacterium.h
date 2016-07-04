@@ -111,11 +111,11 @@ public:
         return pixelsToColor;
     }
 
-    std::ostream& operator<<(std::ostream& os)
+    friend std::ostream& operator<<(std::ostream& os, Polygon polygon)
     {
-        os << "Centroid: " << centroid<<" \n"<<"Area: "<<area<<"\n"<<"Radius: "<<radius<<"\n"<<"Points: ";
+        os << "Centroid: " << polygon.centroid<<" \n"<<"Area: "<<polygon.area<<"\n"<<"Radius: "<<polygon.radius<<"\n"<<"Points: ";
         CGALPolygon::iterator it;
-        for(it = this->vertices_begin(); it!=this->vertices_end(); it++){
+        for(it = polygon.vertices_begin(); it!=polygon.vertices_end(); it++){
             os<<*it<<" | ";
         }
         os<<"\n";
@@ -195,7 +195,7 @@ public:
 
     CGALPoint& getCentroid ()
     {
-        polygon.getCentroid();
+        return polygon.getCentroid();
     }
 
     int getArea ()
@@ -227,14 +227,14 @@ public:
     }
 
 
-    std::ostream& operator<<(std::ostream& os)
+
+
+
+    friend std::ostream& operator<<(std::ostream& os, Bacterium b)
     {
-        os << polygon<<" \n";
+        os << b.polygon<<" \n";
         return os;
     }
-
-
-
 };
 
 #endif
