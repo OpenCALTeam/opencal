@@ -41,6 +41,7 @@ typedef std::array<unsigned short, 1> vec1s;
 constexpr unsigned int MOORERADIUS=1;
 typedef unsigned int COORD_TYPE;
 typedef opencal::CALModel<2, opencal::CALMooreNeighborhood<2,MOORERADIUS>, COORD_TYPE> MODELTYPE;
+typedef opencal::CALRun < opencal::CALModel < 2, opencal::CALMooreNeighborhood<2,MOORERADIUS>,COORD_TYPE >> CALRUN;
 
 
 
@@ -86,12 +87,12 @@ class LabelConnectedComponentFilter : public opencal::CALLocalFunction<2,opencal
 public:
     std::vector<shared_ptr<Bacterium>>* paths;
 
-    LabelConnectedComponentFilter(decltype(binImg) sbs,decltype(connComponents)connComp, std::vector<Bacterium>* _paths): binImg(sbs), connComponents(connComp),paths(_paths) {
+    LabelConnectedComponentFilter(decltype(binImg) sbs,decltype(connComponents)connComp, std::vector<shared_ptr<Bacterium>>* _paths): binImg(sbs), connComponents(connComp),paths(_paths) {
         label = 1;
 
     }
 
-    void dfs(MODELTYPE* model,std::array<uint,2>& indices, uint label, shared_ptr<Bacterium> bacterium) {
+    void dfs(MODELTYPE* model,std::array<uint,2>& indices, uint label, shared_ptr<Bacterium> & bacterium) {
         PIXELTYPE val = binImg->getElement(indices);
 
         if(val[0] && !connComponents->getElement(indices)) {
@@ -111,6 +112,10 @@ public:
         }
 
     }
+    void setLabel (uint _label)
+    {
+        label = _label;
+    }
 
 
     void run(MODELTYPE* model,std::array<uint,2>& indices) {
@@ -119,7 +124,7 @@ public:
         if(val[0]) {
             uint comp = connComponents->getElement(indices);
             if(!comp) {
-                shared_ptr<Bacterium> bacterium;
+                shared_ptr<Bacterium> bacterium (new Bacterium());
                 dfs(model,indices,label,bacterium);
                 label++;
                 //std::cout<<label<<" "<<bacteriaPath.size()<<endl;
@@ -140,29 +145,18 @@ public:
 
 };
 
-void SegmentFrame(const std::string& path, Frame& frame) {
+ std::array<COORD_TYPE, 2> coords = { 431,512 };
+ opencal::CALMooreNeighborhood<2,MOORERADIUS> neighbor;
+void SegmentFrame(const std::string& path, Frame& frame, MODELTYPE& calmodel, CALRUN& calrun) {
 
-    const int steps  = 1;
 
     //size of the images to br processed
-    std::array<COORD_TYPE, 2> coords = { 431,512 };
 
-    //Moore Neighborhood
-    opencal::CALMooreNeighborhood<2,MOORERADIUS> neighbor;
-
-    MODELTYPE calmodel(
-                coords,
-                &neighbor,
-                opencal::calCommon::CAL_SPACE_TOROIDAL,
-                opencal::calCommon::CAL_NO_OPT);
-
-    //image processing kernels and filters
-    opencal::CALRun < opencal::CALModel < 2, opencal::CALMooreNeighborhood<2,MOORERADIUS>,
-            COORD_TYPE >> calrun(&calmodel, 1, steps, opencal::calCommon::CAL_UPDATE_IMPLICIT);
 
     opencal::CALSubstate<vec1s, 2, COORD_TYPE> *bgr = calmodel.addSubstate<vec1s>();
     opencal::CALSubstate<uint, 2, COORD_TYPE> *connComp = calmodel.addSingleLayerSubstate<uint>();
 
+    std::cout<<"SONO ARRIVATO QUA"<<std::endl;
     //Image Filters
     ContrastStretchingFilter <2,decltype(neighbor),COORD_TYPE,vec1s>contrastStretchingFilter(bgr, 0, 1799, 0, 65535,0.10);
 
@@ -170,7 +164,7 @@ void SegmentFrame(const std::string& path, Frame& frame) {
 
     RemoveSinglePixelFilter<vec1s> removeSinglePixelFilter(bgr);
 
-    // LabelConnectedComponentFilter<vec1s> connComponent(bgr,connComp,&(frame.segmented_bacteria));
+     LabelConnectedComponentFilter<vec1s> connComponent(bgr,connComp,&(frame.segmented_bacteria));
 
 
 
@@ -180,7 +174,7 @@ void SegmentFrame(const std::string& path, Frame& frame) {
     calmodel.addElementaryProcess(&contrastStretchingFilter);
     calmodel.addElementaryProcess(&thresholdFilter);
     calmodel.addElementaryProcess(&removeSinglePixelFilter);
-    //calmodel.addElementaryProcess(&connComponent);
+    calmodel.addElementaryProcess(&connComponent);
 
 
     calrun.run();
@@ -202,6 +196,10 @@ void SegmentFrame(const std::string& path, Frame& frame) {
     for(auto b : frame.segmented_bacteria)
         for( auto p : b->points)
             frame.matrix[p.x()][p.y()] = c++;
+
+
+
+    delete connComp;
 
 }
 std::set <int> findBacteria (CGALPoint & centroid, Frame & frame, int ray)
@@ -355,20 +353,70 @@ void tracking (Frame & frame, std::vector <std::list<shared_ptr<Bacterium>> > & 
     //        }
 }
 
+// void tracka (list batteri trackati, frame)
+//scorri la lista dei batteri
+//pesa distanza e area per ogni singolo batterio con gli quelli del frame
+
+//lista tutti possibili candidati
+//scegli il candidato migliore
+
+//oppure
+//scegli un candidato e in caso cambialo se migliore pretendente
+
+
+
+//batterio candidato + peso batterio candidato
+//per ogni batterio quello con mimina distanza
+//situazione limite batterio senza candidati = batterio sparito
+//situazione limite batterio nuovo add alla lista
+
 
 
 
 int main() {
- std::vector <std::list<shared_ptr<Bacterium>> > bacteria();
-std::array<std::string,2> paths= {"aa","bb"};
-
-for(auto& p : paths){
- Frame f;
- segmentFrame(p,f);
+    std::vector <std::list<shared_ptr<Bacterium>> > bacteria;
+    std::array<std::string,2> paths= {"/home/parcuri/Dropbox/Workspace_cpp/OpenCAL_Devel/opencal/OpenCAL++-IP/Gauss/input/tiff/traking_10x_480010persect0001.tif",
+                                      "/home/parcuri/Dropbox/Workspace_cpp/OpenCAL_Devel/opencal/OpenCAL++-IP/Gauss/input/tiff/traking_10x_480010persect0001.tif"};
 
 
 
-}
+
+
+
+     MODELTYPE calmodel (
+                 coords,
+                 &neighbor,
+                 opencal::calCommon::CAL_SPACE_TOROIDAL,
+                 opencal::calCommon::CAL_NO_OPT);
+
+
+     const int steps  = 1;
+
+     //image processing kernels and filters
+     CALRUN calrun (&calmodel, 1, steps, opencal::calCommon::CAL_UPDATE_IMPLICIT);
+
+    for(auto& p : paths){
+        std::cout<<"carico "<<p<<"\n";
+        Frame f;
+        SegmentFrame(p,f, calmodel, calrun);
+        std::cout<<"ho finito di segmentare il frame "<<std::endl;
+        tracking(f,bacteria);
+
+       calmodel.empty();
+
+
+
+    }
+
+//    for (int i = 0; i < bacteria.size(); i++)
+//    {
+//        for (auto b : bacteria[i])
+//        {
+//            std::cout<<b.get()<< std::endl;
+//        }
+//    }
+
+
 
 
     return 0;
