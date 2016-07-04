@@ -14,17 +14,16 @@ struct CALRun {
         CALbyte (*stopCondition)(struct CALModel*);	//!< Simulation's stopCondition callback function.
         void (**finalize)(struct CALModel*);			//!< Simulation's finalize callback function.
         int num_of_fin_func;
+
+#if CAL_PARALLEL == 1
+        CAL_LOCKS_DEFINE(locks);
+#endif
 };
 
 
-struct CALRun* makeCALRun(enum CALExecutionType executionType);
+struct CALRun* makeCALRun(int initial_step, int final_step);
 
 void calRunApplyLocalProcess( struct CALModel* calModel, CALLocalProcess local_process );
-
-void calRunUpdate (struct CALModel* calModel);
-
-
-
 
 ///*! \brief The cellular automaton global transition function.
 //    It applies the transition function to each cell of the cellular space.

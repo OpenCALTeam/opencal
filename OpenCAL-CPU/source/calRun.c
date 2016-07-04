@@ -16,6 +16,24 @@ static void calRunFinalizeSimulation(struct CALModel* calModel)
         calModel->calRun->finalize[n](calModel);
 }
 
+struct CALRun*makeCALRun(int initial_step, int final_step)
+{
+    struct CALRun* simulation = (struct CALRun*)malloc(sizeof(struct CALRun));
+    if (!simulation)
+        return NULL;
+
+    simulation->step = initial_step;
+    simulation->initial_step = initial_step;
+    simulation->final_step = final_step;
+
+    simulation->init = NULL;
+    simulation->globalTransition = NULL;
+    simulation->stopCondition = NULL;
+    simulation->finalize = NULL;
+
+    return simulation;
+}
+
 
 CALbyte calRunCAStep(struct CALModel* calModel)
 {
@@ -36,13 +54,10 @@ CALbyte calRunCAStep(struct CALModel* calModel)
             calRunUpdate(calModel);
         }
     }
+
+    return(calModel->calRun->stopCondition(calModel));
 }
 
-
-struct CALRun*makeCALRun(enum CALExecutionType executionType)
-{
-
-}
 
 
 void calApplyLocalProcess(struct CALModel* calModel, CALLocalProcess local_process)
@@ -57,7 +72,7 @@ void calApplyGlobalProcess(struct CALModel* calModel, CALGlobalProcess global_pr
 
 void calGlobalTransitionFunction(struct CALModel* calModel)
 {
-
+    calModel->calRun->globalTransition(calModel);
 }
 
 CALint calRunSimulation(struct CALModel* calModel)
@@ -81,10 +96,12 @@ CALint calRunSimulation(struct CALModel* calModel)
 
 void calRunApplyLocalProcess(struct CALModel* calModel, CALLocalProcess local_process)
 {
+    int n;
+    int cellular_space_dimension = calModel->calIndexesPool->cellular_space_dimension;
+    int number_of_dimensions = calModel->calIndexesPool->number_of_dimensions;
+    CALIndices* pool = calModel->calIndexesPool->pool;
 
-}
-
-void calRunUpdate(struct CALModel* calModel)
-{
+    for(n = 0; n < cellular_space_dimension; n++)
+        local_process(calModel, pool[n], number_of_dimensions);
 
 }

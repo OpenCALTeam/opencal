@@ -15,7 +15,7 @@ typedef int* CALNeighbourPattern;
 struct CALModel;
 /*! \brief Fake function pointer type.
 */
-typedef void (* CALLocalProcess)(struct CALModel* calModel, CALIndices);
+typedef void (* CALLocalProcess)(struct CALModel* calModel, CALIndices, int number_of_dimensions);
 typedef void (* CALGlobalProcess)(struct CALModel* calModel);
 
 struct CALProcess {
@@ -52,9 +52,6 @@ struct CALModel {
         int num_of_processes; //!< Number of function pointers to the transition functions's elementary processes callbacks.
         struct CALRun* calRun; //!< Pointer to a structure containing the appropriate functions which implementation should change according to the type of execution chosen (serial or parallel)
 
-#if CAL_PARALLEL == 1
-        CAL_LOCKS_DEFINE(locks);
-#endif
 };
 
 
@@ -259,6 +256,25 @@ void calSetCurrent_r(struct CALModel* calModel,	//!< Pointer to the cellular aut
                      CALIndices central_cell, //!< the central cell's coordinates
                      CALreal value				//!< initializing value.
                      );
+
+void calUpdateSubstate_b(struct CALModel* calModel,	//!< Pointer to the cellular automaton structure.
+                         struct CALSubstate_b* Q	//!< Pointer to a byte substate.
+                         );
+/*! \brief Copies the next matrix of a integer substate to the current one: current = next.
+    If the active cells optimization is considered, it only updates the active cells.
+*/
+void calUpdateSubstate_i(struct CALModel* calModel,	//!< Pointer to the cellular automaton structure.
+                         struct CALSubstate_i* Q	//!< Pointer to a int substate.
+                         );
+
+/*! \brief Copies the next matrix of a real (floating point) substate to the current one: current = next.
+    If the active cells optimization is considered, it only updates the active cells.
+*/
+void calUpdateSubstate_r(struct CALModel* calModel,	//!< Pointer to the cellular automaton structure.
+                         struct CALSubstate_r* Q	//!< Pointer to a real (floating point) substate.
+                         );
+
+void calUpdate(struct CALModel* calModel);
 
 void calFinalize(struct CALModel* calModel);
 #endif

@@ -69,6 +69,16 @@ void calSetBuffer_i(CALint* M, int buffer_dimension, CALint value);
 void calSetBuffer_r(CALreal* M, int buffer_dimension, CALreal value);
 
 
+/*! \brief Sets the value of the cell (i, j) of the matrix M.
+*/
+#define calSetMatrixElement(M, i, value) ( (M)[i] = (value) )
+
+
+/*! \brief Returns the value of the cell (i, j) of the matrix M.
+*/
+#define calGetMatrixElement(M, i) ( M[i] )
+
+
 
 
 #endif
