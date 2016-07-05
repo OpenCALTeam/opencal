@@ -128,7 +128,7 @@ public:
                 dfs(model,indices,label,bacterium);
                 label++;
 
-                std::cout<<" label è "<<label<<" "<<paths->size()<<endl;
+//                std::cout<<" label è "<<label<<" "<<paths->size()<<endl;
                 paths->push_back(bacterium);
 
             }
@@ -280,7 +280,21 @@ void assign (int i, Frame & frame, std::vector<int>& assignedBacteriaFrame,
         findAnotherCandidate (i, frame, /*assigned, numberOfAssigned, */assignedBacteriaFrame, weights);
 }
 
+void printWeights (Frame & frame, std::vector <std::list<std::pair <int, int> > >& weights, std::vector <std::list<shared_ptr<Bacterium>> > & bacteria)
+{
+    for (int i = 0; i < weights.size(); i++)
+    {
 
+        std::cout<<" ____________________________"<<std::endl;
+        std::cout<< "batterio n "<<i<<" lista condivisa = "<< bacteria[i].back()->getCentroid()<<std::endl;
+        for (auto it = weights[i].begin(); it !=weights[i].end(); it++  )
+        {
+            std::cout<<"peso = "<<it->second<< " batterio frame = "<<frame.segmented_bacteria[it->first]->getCentroid()<<std::endl;
+        }
+        std::cout<<" ____________________________"<<std::endl;
+
+    }
+}
 
 void findAnotherCandidate (int i, Frame & frame, std::vector<int>& assignedBacteriaFrame,
                            std::vector <std::list<std::pair <int, int> > >& weights )
@@ -331,16 +345,19 @@ void tracking (Frame & frame, std::vector <std::list<shared_ptr<Bacterium>> > & 
 
     }
 
+//    printWeights(frame,weights, bacteria);
+
     //    std::vector <bool> assigned (frame.segmented_bacteria.size(), false);
     std::vector <int> assignedBacteriaFrame (frame.segmented_bacteria.size(), -1);
 
     //    int numberOfAssigned = 0;
 
+    std::cout<<"i batteri sono "<<bacteria.size()<< " i pesi sono "<<weights.size()<<std::endl;
     for (int i = 0; i < bacteria.size(); i++)
     {
         if (weights[i].size() == 0) //untraceable bacterium
         {
-            break;
+            continue;
         }
         assign(i,frame,/*assigned,numberOfAssigned,*/ assignedBacteriaFrame, weights);
     }
@@ -395,8 +412,8 @@ void tracking (Frame & frame, std::vector <std::list<shared_ptr<Bacterium>> > & 
 
 int main() {
     std::vector <std::list<shared_ptr<Bacterium>> > bacteria;
-    std::array<std::string,2> paths= {"/home/parcuri/Dropbox/Workspace_cpp/OpenCAL_Devel/opencal/OpenCAL++-IP/Gauss/input/tiff/traking_10x_480010persect0001.tif",
-                                      "/home/parcuri/Dropbox/Workspace_cpp/OpenCAL_Devel/opencal/OpenCAL++-IP/Gauss/input/tiff/traking_10x_480010persect0001.tif"};
+    std::array<std::string,2> paths= {"./input/tiff/traking_10x_480010persect0001.tif",
+                                      "./input/tiff/traking_10x_480010persect0001.tif"};
 
 
 
@@ -430,14 +447,22 @@ int main() {
     }
     //    SegmentFrame(paths[0],f, calmodel, calrun);
 
+    int count= 0;
     for (int i = 0; i < bacteria.size(); i++)
     {
         std::cout<<"batterio "<<i <<" suoi associati "<<bacteria[i].size()<<"\n";
+
+        if (bacteria[i].size() >1)
+        {
+            count++;
+        }
 //        for (auto b : bacteria[i])
 //        {
 //            std::cout<<*b<< " ";
 //        }
     }
+
+    std::cout<<"i batteri associati sono "<<count<<std::endl;
 
 
 
