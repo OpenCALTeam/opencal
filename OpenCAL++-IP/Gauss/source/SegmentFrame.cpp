@@ -3,7 +3,7 @@
 #include <list>
 #include<vector>
 
-#include"Bacterium.h"
+#include"MyMat.h"
 #include "ContrastStretchingFilter.h"
 #include "ThresholdFilter.h"
 #include "image_processing.h"
@@ -258,7 +258,7 @@ int computeWeight (Bacterium & b1, Bacterium & b2) //TODO k * distance + k1 * ar
 
 int computeRadius (Bacterium & bacterium) //TODO polygon "radius" + costant
 {
-    return bacterium.getRadius()+5;
+    return bacterium.getRadius()+10;
 }
 
 void findAnotherCandidate (int i, Frame & frame, std::vector<int>& assignedBacteriaFrame,
@@ -271,13 +271,10 @@ void assign (int i, Frame & frame, std::vector<int>& assignedBacteriaFrame,
     int indexCadidate = weights[i].front().first;
     if (assignedBacteriaFrame[indexCadidate] == -1)
     {
-        //            bacteria[i].push_back (frame.segmented_bacteria[indexCadidate]);
         assignedBacteriaFrame[indexCadidate] = i;
-        //        assigned[indexCadidate] = true;
-        //        numberOfAssigned++;
     }
     else
-        findAnotherCandidate (i, frame, /*assigned, numberOfAssigned, */assignedBacteriaFrame, weights);
+        findAnotherCandidate (i, frame, assignedBacteriaFrame, weights);
 }
 
 void printWeights (Frame & frame, std::vector <std::list<std::pair <int, int> > >& weights, std::vector <std::list<shared_ptr<Bacterium>> > & bacteria)
@@ -304,6 +301,8 @@ void findAnotherCandidate (int i, Frame & frame, std::vector<int>& assignedBacte
         return;
     }
 
+    std::cout<<"cerco un altro candidato per "<<i << " la size dei candidati è "<< weights[i].size()<<std::endl;
+
     std::pair <int,int> candidate = weights[i].front(); //coppia id, peso del batterio che voglio assegnare al batterio i della lista condivisa
 
     int indexOldAssociated = assignedBacteriaFrame[candidate.first]; // indice (nella lista condivisa) del batterio a cui era associato precedentemente
@@ -320,7 +319,7 @@ void findAnotherCandidate (int i, Frame & frame, std::vector<int>& assignedBacte
     {
         assignedBacteriaFrame[candidate.first] = i; //associo al batterio del frame il nuovo batterio della lista condivisa che meglio matcha con esso
         weights[indexOldAssociated].pop_front (); //tolgo il miglior candidato del batterio (nella lista condivisa) che non matcha più con il primo della lista
-        findAnotherCandidate(indexOldAssociated, frame, assignedBacteriaFrame, weights);
+        assign(indexOldAssociated,frame, assignedBacteriaFrame, weights);
     }
 
 }
@@ -345,18 +344,17 @@ void tracking (Frame & frame, std::vector <std::list<shared_ptr<Bacterium>> > & 
 
     }
 
-    //    std::vector <bool> assigned (frame.segmented_bacteria.size(), false);
-    std::vector <int> assignedBacteriaFrame (frame.segmented_bacteria.size(), -1);
 
-    //    int numberOfAssigned = 0;
+    std::vector <int> assignedBacteriaFrame (frame.segmented_bacteria.size(), -1);
 
     for (int i = 0; i < bacteria.size(); i++)
     {
+        std::cout<<" sono qui a processare il batterio n "<<i<<std::endl;
         if (weights[i].size() == 0) //untraceable bacterium
         {
             continue;
         }
-        assign(i,frame,/*assigned,numberOfAssigned,*/ assignedBacteriaFrame, weights);
+        assign(i,frame, assignedBacteriaFrame, weights);
     }
 
 
@@ -374,17 +372,6 @@ void tracking (Frame & frame, std::vector <std::list<shared_ptr<Bacterium>> > & 
         }
     }
 
-    //se ci sono batteri nuovi aggiungili alla lista condvisa
-    //    if (numberOfAssigned < frame.segmented_bacteria.size())
-    //        for (int i = 0; i < frame.segmented_bacteria.size(); i++)
-    //        {
-    //            if (assignedBacteriaFrame[i] == -1)
-    //            {
-    //                std::list <shared_ptr<Bacterium>> l;
-    //                l.push_back(frame.segmented_bacteria[i]);
-    //                bacteria.push_back(l);
-    //            }
-    //        }
 }
 
 // void tracka (list batteri trackati, frame)
@@ -409,8 +396,12 @@ void tracking (Frame & frame, std::vector <std::list<shared_ptr<Bacterium>> > & 
 
 int main() {
     std::vector <std::list<shared_ptr<Bacterium>> > bacteria;
-    std::array<std::string,2> paths= {"./input/tiff/traking_10x_480010persect0001.tif",
-                                      "./input/tiff/traking_10x_480010persect0001.tif"};
+    std::array<std::string,6> paths= {"./input/tiff/traking_10x_480010persect0001.tif",
+                                      "./input/tiff/traking_10x_480010persect0002.tif",
+                                     "./input/tiff/traking_10x_480010persect0003.tif",
+                                     "./input/tiff/traking_10x_480010persect0004.tif",
+                                     "./input/tiff/traking_10x_480010persect0005.tif",
+                                     "./input/tiff/traking_10x_480010persect0006.tif"};
 
 
 
@@ -435,7 +426,7 @@ int main() {
         SegmentFrame(p,f, calmodel, calrun);
 //        std::cout<<f;
         tracking(f,bacteria);
-        std::cout<<"ho finito di segmentare il frame "<<std::endl;
+        std::cout<<"ho finito di segmentare il frame che aveva "<<f.segmented_bacteria.size()<<" batteri "<<std::endl;
 
         calmodel.empty();
 
@@ -449,7 +440,7 @@ int main() {
     {
         std::cout<<"batterio "<<i <<" suoi associati "<<bacteria[i].size()<<"\n";
 
-        if (bacteria[i].size() >1)
+        if (bacteria[i].size() >5)
         {
             count++;
         }
@@ -459,7 +450,12 @@ int main() {
 //        }
     }
 
+
+    MyMat mat (431,512,CV_8UC3);
+    mat.addBacteria(bacteria);
+    mat.saveImage("bacteria.png");
     std::cout<<"i batteri associati sono "<<count<<std::endl;
+    std::cout<<" i batteri totali sono "<<bacteria.size()<<std::endl;
 
 
 
