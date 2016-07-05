@@ -220,14 +220,14 @@ void SegmentFrame(const std::string& path, Frame& frame, MODELTYPE& calmodel, CA
     delete connComp;
 
 }
-std::set <int> findBacteria (CGALPoint & centroid, Frame & frame, int ray)
+std::set <int> findBacteria (CGALPoint & centroid, Frame & frame, int radius)
 {
     std::set <int> bacteria;
 
     int nCol = frame.matrix[0].size(), nRows = frame.matrix.size();
 
-    int xMin = centroid.x()-ray>=0? centroid.x()-ray:0, xMax = centroid.x()+ray<=nCol? centroid.x()+ray: nCol;
-    int yMin = centroid.y()-ray>=0? centroid.y()-ray:0, yMax = centroid.y()+ray<=nRows? centroid.y()+ray: nRows;
+    int xMin = centroid.x()-radius>=0? centroid.x()-radius:0, xMax = centroid.x()+radius<=nRows? centroid.x()+radius: nRows;
+    int yMin = centroid.y()-radius>=0? centroid.y()-radius:0, yMax = centroid.y()+radius<=nCol? centroid.y()+radius: nCol;
 
     for(int i = xMin; i< xMax; ++i)
     {
@@ -345,14 +345,11 @@ void tracking (Frame & frame, std::vector <std::list<shared_ptr<Bacterium>> > & 
 
     }
 
-//    printWeights(frame,weights, bacteria);
-
     //    std::vector <bool> assigned (frame.segmented_bacteria.size(), false);
     std::vector <int> assignedBacteriaFrame (frame.segmented_bacteria.size(), -1);
 
     //    int numberOfAssigned = 0;
 
-    std::cout<<"i batteri sono "<<bacteria.size()<< " i pesi sono "<<weights.size()<<std::endl;
     for (int i = 0; i < bacteria.size(); i++)
     {
         if (weights[i].size() == 0) //untraceable bacterium
@@ -392,7 +389,7 @@ void tracking (Frame & frame, std::vector <std::list<shared_ptr<Bacterium>> > & 
 
 // void tracka (list batteri trackati, frame)
 //scorri la lista dei batteri
-//pesa distanza e area per ogni singolo batterio con gli quelli del frame
+//pesa distanza e area per ogni singolo batterio con quelli del frame
 
 //lista tutti possibili candidati
 //scegli il candidato migliore
