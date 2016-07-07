@@ -185,6 +185,7 @@ class Bacterium
 public:
     Polygon polygon;
     Points points;
+    bool lost = false;
     Bacterium(){}
 
     /*    Bacterium (Points _points) : points(_points) , polygon(points)

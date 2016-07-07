@@ -68,7 +68,7 @@ public:
 
         }
 
-        if(count <= 1)
+        if(count <= 0)
             for(int i=0; i<channels; i++)
                 newVal[i] = 0;
 
@@ -128,7 +128,7 @@ public:
                 dfs(model,indices,label,bacterium);
                 label++;
 
-//                std::cout<<" label è "<<label<<" "<<paths->size()<<endl;
+                //                std::cout<<" label è "<<label<<" "<<paths->size()<<endl;
                 paths->push_back(bacterium);
 
             }
@@ -253,7 +253,7 @@ std::set<shared_ptr<Bacterium>> getListBacteria (Frame & frame, std::set <int> &
 
 int computeWeight (Bacterium & b1, Bacterium & b2) //TODO k * distance + k1 * area
 {
-    return 0,6*b1.distance(b2) + 0,4 * (std::abs (b1.getArea()-b2.getArea()));
+    return 1*b1.distance(b2); /*+ 0.4 * (std::abs (b1.getArea()-b2.getArea()))*/;
 }
 
 int computeRadius (Bacterium & bacterium) //TODO polygon "radius" + costant
@@ -262,19 +262,27 @@ int computeRadius (Bacterium & bacterium) //TODO polygon "radius" + costant
 }
 
 void findAnotherCandidate (int i, Frame & frame, std::vector<int>& assignedBacteriaFrame,
-                           std::vector <std::list<std::pair <int, int> > >& weights );
+                           std::vector <std::list<std::pair <int, int> > >& weights, std::vector <std::list<shared_ptr<Bacterium>> > & bacteria );
 
 void assign (int i, Frame & frame, std::vector<int>& assignedBacteriaFrame,
-             std::vector <std::list<std::pair <int, int> > >& weights )
+             std::vector <std::list<std::pair <int, int> > >& weights, std::vector <std::list<shared_ptr<Bacterium>> > & bacteria )
 
 {
-    int indexCadidate = weights[i].front().first;
-    if (assignedBacteriaFrame[indexCadidate] == -1)
+
+    if (weights[i].size() != 0)
     {
-        assignedBacteriaFrame[indexCadidate] = i;
+
+
+        int indexCadidate = weights[i].front().first;
+        if (assignedBacteriaFrame[indexCadidate] == -1)
+        {
+            assignedBacteriaFrame[indexCadidate] = i;
+        }
+        else
+            findAnotherCandidate (i, frame, assignedBacteriaFrame, weights, bacteria);
     }
-    else
-        findAnotherCandidate (i, frame, assignedBacteriaFrame, weights);
+    else //untraceable bacterium
+        bacteria[i].back()->lost = true;
 }
 
 void printWeights (Frame & frame, std::vector <std::list<std::pair <int, int> > >& weights, std::vector <std::list<shared_ptr<Bacterium>> > & bacteria)
@@ -294,10 +302,11 @@ void printWeights (Frame & frame, std::vector <std::list<std::pair <int, int> > 
 }
 
 void findAnotherCandidate (int i, Frame & frame, std::vector<int>& assignedBacteriaFrame,
-                           std::vector <std::list<std::pair <int, int> > >& weights )
+                           std::vector <std::list<std::pair <int, int> > >& weights, std::vector <std::list<shared_ptr<Bacterium>> > & bacteria )
 {
     if (weights[i].size() == 0) //untraceable bacterium
     {
+         bacteria[i].back()->lost = true;
         return;
     }
 
@@ -313,13 +322,13 @@ void findAnotherCandidate (int i, Frame & frame, std::vector<int>& assignedBacte
         //prova ad assegnare al secondo candidato
         weights[i].pop_front ();
         //assegna al primo disponibile nella lista dei weights
-        assign(i,frame, assignedBacteriaFrame, weights);
+        assign(i,frame, assignedBacteriaFrame, weights, bacteria);
     }
     else
     {
         assignedBacteriaFrame[candidate.first] = i; //associo al batterio del frame il nuovo batterio della lista condivisa che meglio matcha con esso
         weights[indexOldAssociated].pop_front (); //tolgo il miglior candidato del batterio (nella lista condivisa) che non matcha più con il primo della lista
-        assign(indexOldAssociated,frame, assignedBacteriaFrame, weights);
+        assign(indexOldAssociated,frame, assignedBacteriaFrame, weights, bacteria);
     }
 
 }
@@ -349,12 +358,12 @@ void tracking (Frame & frame, std::vector <std::list<shared_ptr<Bacterium>> > & 
 
     for (int i = 0; i < bacteria.size(); i++)
     {
-        std::cout<<" sono qui a processare il batterio n "<<i<<std::endl;
-        if (weights[i].size() == 0) //untraceable bacterium
+        if (!bacteria[i].back()->lost)
         {
-            continue;
+            std::cout<<" sono qui a processare il batterio n "<<i<<std::endl;
+
+            assign(i,frame, assignedBacteriaFrame, weights, bacteria);
         }
-        assign(i,frame, assignedBacteriaFrame, weights);
     }
 
 
@@ -396,12 +405,21 @@ void tracking (Frame & frame, std::vector <std::list<shared_ptr<Bacterium>> > & 
 
 int main() {
     std::vector <std::list<shared_ptr<Bacterium>> > bacteria;
-    std::array<std::string,6> paths= {"./input/tiff/traking_10x_480010persect0001.tif",
-                                      "./input/tiff/traking_10x_480010persect0002.tif",
-                                     "./input/tiff/traking_10x_480010persect0003.tif",
-                                     "./input/tiff/traking_10x_480010persect0004.tif",
-                                     "./input/tiff/traking_10x_480010persect0005.tif",
-                                     "./input/tiff/traking_10x_480010persect0006.tif"};
+    //    std::array<std::string,6> paths= {"./input/tiff/traking_10x_480010persect0001.tif",
+    //                                      "./input/tiff/traking_10x_480010persect0002.tif",
+    //                                     "./input/tiff/traking_10x_480010persect0003.tif",
+    //                                     "./input/tiff/traking_10x_480010persect0004.tif",
+    //                                     "./input/tiff/traking_10x_480010persect0005.tif",
+    //                                      "./input/tiff/traking_10x_480010persect0006.tif",
+    //                                      "./input/tiff/traking_10x_480010persect0007.tif",
+    //                                      "./input/tiff/traking_10x_480010persect0007.tif",
+    //                                      "./input/tiff/traking_10x_480010persect0007.tif",
+    //                                      "./input/tiff/traking_10x_480010persect0007.tif",
+    //                                      "./input/tiff/traking_10x_480010persect0007.tif",
+    //                                      "./input/tiff/traking_10x_480010persect0007.tif",
+    //                                      "./input/tiff/traking_10x_480010persect0007.tif",
+    //                                      "./input/tiff/traking_10x_480010persect0007.tif",
+    //                                     "./input/tiff/traking_10x_480010persect0008.tif"};
 
 
 
@@ -416,19 +434,25 @@ int main() {
 
 
     const int steps  = 1;
+    string path = "./input/tiff/traking_10x_480010persect000";
 
     //image processing kernels and filters
     CALRUN calrun (&calmodel, 1, steps, opencal::calCommon::CAL_UPDATE_IMPLICIT);
 
-    for(auto& p : paths){
-        std::cout<<"carico "<<p<<"\n";
+    for(int i = 1; i<= 5; i++){
+        string currentPath = path+to_string(i)+".tif";
+        std::cout<<"carico "<<currentPath<<"\n";
         Frame f;
-        SegmentFrame(p,f, calmodel, calrun);
-//        std::cout<<f;
+        SegmentFrame(currentPath,f, calmodel, calrun);
+        //        std::cout<<f;
         tracking(f,bacteria);
         std::cout<<"ho finito di segmentare il frame che aveva "<<f.segmented_bacteria.size()<<" batteri "<<std::endl;
 
         calmodel.empty();
+        if (i == 9)
+        {
+            path = path.substr (0, path.size()+1);
+        }
 
 
 
@@ -440,14 +464,16 @@ int main() {
     {
         std::cout<<"batterio "<<i <<" suoi associati "<<bacteria[i].size()<<"\n";
 
-        if (bacteria[i].size() >5)
+        if (bacteria[i].size() >4)
         {
             count++;
         }
-//        for (auto b : bacteria[i])
-//        {
-//            std::cout<<*b<< " ";
-//        }
+        for (auto b : bacteria[i])
+        {
+            std::cout<<*b<< " ";
+        }
+
+std:cout<<"_________________________________"<<std::endl;
     }
 
 

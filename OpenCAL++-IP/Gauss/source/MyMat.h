@@ -46,6 +46,9 @@ private:
             points = computePixelsSegment((*lit)->getCentroid(), (*std::next(lit, 1))->getCentroid());
             pixelsToColor.insert(points.begin(), points.end());
         }
+
+        //        points = computePixelsSegment((*bacterium.begin())->getCentroid(), (*std::prev(bacterium.end()))->getCentroid());
+        //        pixelsToColor.insert(points.begin(), points.end());
         return pixelsToColor;
     }
 
@@ -94,8 +97,16 @@ public:
 
         for (int i= 0; i < bacteria.size(); i++)
         {
-            Points points = computePixels (bacteria[i]);
-            addBacterium(points, std::rand()%255, std::rand()%255, std::rand()%255);
+            if (bacteria[i].size() > 0)
+            {
+
+                Points points;
+                for (auto it = bacteria[i].begin(); it != bacteria[i].end(); it++)
+                {
+                    points.insert((*it)->getCentroid());
+                }
+                addBacterium(points, std::rand()%255, std::rand()%255, std::rand()%255);
+            }
         }
     }
 
