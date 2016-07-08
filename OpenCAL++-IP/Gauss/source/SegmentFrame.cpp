@@ -253,12 +253,14 @@ std::set<shared_ptr<Bacterium>> getListBacteria (Frame & frame, std::set <int> &
 
 int computeWeight (Bacterium & b1, Bacterium & b2) //TODO k * distance + k1 * area
 {
-    return 1*b1.distance(b2); /*+ 0.4 * (std::abs (b1.getArea()-b2.getArea()))*/;
+    int res= 0.6*b1.distance(b2) + 0.4 * (std::abs (b1.getArea()-b2.getArea()));
+    //std::cout<<res<<std::endl;
+    return res;
 }
 
 int computeRadius (Bacterium & bacterium) //TODO polygon "radius" + costant
 {
-    return bacterium.getRadius()+10;
+    return 20;//bacterium.getRadius();
 }
 
 void findAnotherCandidate (int i, Frame & frame, std::vector<int>& assignedBacteriaFrame,
@@ -317,8 +319,9 @@ void findAnotherCandidate (int i, Frame & frame, std::vector<int>& assignedBacte
     int indexOldAssociated = assignedBacteriaFrame[candidate.first]; // indice (nella lista condivisa) del batterio a cui era associato precedentemente
     int oldWeight = weights[indexOldAssociated].front().second; // peso del batterio (nella lista condivisa) a cui era associato precedentemente
 
-    if (candidate.second <= oldWeight) // significa che il batterio era già stato assegnato al suo corrispondente e bisogna cercare di associarlo al successivo
+    if (candidate.second < oldWeight) // significa che il batterio era già stato assegnato al suo corrispondente e bisogna cercare di associarlo al successivo
     {
+
         //prova ad assegnare al secondo candidato
         weights[i].pop_front ();
         //assegna al primo disponibile nella lista dei weights
@@ -360,7 +363,7 @@ void tracking (Frame & frame, std::vector <std::list<shared_ptr<Bacterium>> > & 
     {
         if (!bacteria[i].back()->lost)
         {
-            std::cout<<" sono qui a processare il batterio n "<<i<<std::endl;
+           // std::cout<<" sono qui a processare il batterio n "<<i<<std::endl;
 
             assign(i,frame, assignedBacteriaFrame, weights, bacteria);
         }
@@ -401,7 +404,13 @@ void tracking (Frame & frame, std::vector <std::list<shared_ptr<Bacterium>> > & 
 //situazione limite batterio nuovo add alla lista
 
 
-
+std::string ToString(int value,int digitsCount)
+{
+  using namespace std;
+    ostringstream os;
+    os<<setfill('0')<<setw(digitsCount)<<value;
+    return os.str();
+}
 
 int main() {
     std::vector <std::list<shared_ptr<Bacterium>> > bacteria;
@@ -434,26 +443,23 @@ int main() {
 
 
     const int steps  = 1;
-    string path = "./input/tiff/traking_10x_480010persect000";
+    string path = "./input/tiff/traking_10x_480010persect";
 
     //image processing kernels and filters
     CALRUN calrun (&calmodel, 1, steps, opencal::calCommon::CAL_UPDATE_IMPLICIT);
 
-    for(int i = 1; i<= 5; i++){
-        string currentPath = path+to_string(i)+".tif";
+    for(int i = 1; i<= 500; i++){
+      std::cout<<"iterazione "<<i<<std::endl;
+        string currentPath = path+ToString(i,4)+".tif";
         std::cout<<"carico "<<currentPath<<"\n";
         Frame f;
         SegmentFrame(currentPath,f, calmodel, calrun);
         //        std::cout<<f;
         tracking(f,bacteria);
-        std::cout<<"ho finito di segmentare il frame che aveva "<<f.segmented_bacteria.size()<<" batteri "<<std::endl;
 
         calmodel.empty();
-        if (i == 9)
-        {
-            path = path.substr (0, path.size()+1);
-        }
 
+        std::cout<<"ho finito di segmentare il frame che aveva "<<f.segmented_bacteria.size()<<" batteri "<<std::endl;
 
 
     }

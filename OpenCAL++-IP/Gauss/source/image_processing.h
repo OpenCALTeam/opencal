@@ -34,7 +34,10 @@
   T *loadImage(int size, const std::string& path){
   //    printf("sto qui\n");
       cv::Mat mat= cv::imread(path, -1);
-
+      if(mat.rows*mat.cols != size){
+        std::cerr<<"SIZE MISMATCH. TERMINATING\n";
+        std::terminate();
+      }
       //int size = mat.rows * mat.cols;
       T* vec = new T [size];
       int linearIndex = 0;
