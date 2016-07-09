@@ -30,17 +30,17 @@
 //   THE sciddicaT (Toy model) CELLULAR AUTOMATON
 //-----------------------------------------------------------------------
 #define ACTIVE_CELLS
-#define ROWS 610
-#define COLS 496
+#define ROWS 3593
+#define COLS 3730
 #define P_R 0.5
 #define P_EPSILON 0.001
 #define STEPS 4000
-#define DEM_PATH "./testData/sciddicaT-data/dem.txt"
-#define SOURCE_PATH "./testData/sciddicaT-data/source.txt"
-#define KERNEL_SRC "./sciddicaT/calcl-sciddicaT/kernel/source/"
-#define KERNEL_INC "./sciddicaT/calcl-sciddicaT/kernel/include/"
-#define KERNEL_SRC_AC "./sciddicaT/calcl-sciddicaT/kernelActive/source/"
-#define KERNEL_INC_AC "./sciddicaT/calcl-sciddicaT/kernelActive/include/"
+#define DEM_PATH "./testData/sciddicaT-data/etna/dem.txt"
+#define SOURCE_PATH "./testData/sciddicaT-data/etna/source.txt"
+#define KERNEL_SRC "./sciddicaT/calcl-sciddicaT-activecells/kernel/source/"
+#define KERNEL_INC "./sciddicaT/calcl-sciddicaT-activecells/kernel/include/"
+#define KERNEL_SRC_AC "./sciddicaT/calcl-sciddicaT-activecells/kernelActive/source/"
+#define KERNEL_INC_AC "./sciddicaT/calcl-sciddicaT-activecells/kernelActive/include/"
 #define NUMBER_OF_OUTFLOWS 4
 #define KERNEL_ELEM_PROC_FLOW_COMPUTATION "flowsComputation"
 #define KERNEL_ELEM_PROC_WIDTH_UPDATE "widthUpdate"

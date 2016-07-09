@@ -29,14 +29,13 @@
 //   THE sciddicaT (Toy model) CELLULAR AUTOMATON
 //-----------------------------------------------------------------------
 
-#define ROWS 610
-#define COLS 496
+#define ROWS 3593
+#define COLS 3730
 #define P_R 0.5
 #define P_EPSILON 0.001
 #define STEPS 4000
-#define DEM_PATH "./testData/sciddicaT-data/dem.txt"
-
-#define SOURCE_PATH "./testData/sciddicaT-data/source.txt"
+#define DEM_PATH "./testData/sciddicaT-data/etna/dem.txt"
+#define SOURCE_PATH "./testData/sciddicaT-data/etna/source.txt"
 
 
 #define NUMBER_OF_OUTFLOWS 4
