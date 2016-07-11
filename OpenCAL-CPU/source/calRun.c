@@ -51,7 +51,7 @@ CALbyte calRunCAStep(struct CALModel* calModel)
                 calModel->model_processes[b].globalProcess(calModel);
 
             //updating substates
-            calRunUpdate(calModel);
+            calUpdate(calModel);
         }
     }
 
