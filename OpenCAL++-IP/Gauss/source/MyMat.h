@@ -6,13 +6,21 @@
 using namespace cv;
 using namespace std;
 #include"Bacterium.h"
+
+
+class Colour {
+  public:
+  std::array<uint,4> cols {{255,255,255,255}};
+
+};
+
 class MyMat : public Mat
 {
+vector<Colour> sharedCols;
 
 private:
     void create()
     {
-
         for (int i = 0; i < this->rows; ++i) {
             for (int j = 0; j < this->cols; ++j) {
                 Vec3b& bgra = this->at<Vec3b>(i, j);
@@ -87,7 +95,7 @@ private:
 
 
 public:
-    MyMat(int rows, int cols, int type): Mat (rows, cols, type) {
+    MyMat(int rows, int cols, int type, decltype(sharedCols) colors): Mat (rows, cols, type), sharedCols(colors) {
         create();
     }
 
@@ -105,7 +113,8 @@ public:
                 {
                     points.insert((*it)->getCentroid());
                 }
-                addBacterium(points, std::rand()%255, std::rand()%255, std::rand()%255);
+                int size = sharedCols.size();
+                addBacterium(points,sharedCols[i%size].cols[0], sharedCols[i%size].cols[1] ,sharedCols[i%size].cols[2]);
             }
         }
     }

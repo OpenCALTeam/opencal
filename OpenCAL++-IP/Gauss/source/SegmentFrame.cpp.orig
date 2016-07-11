@@ -130,9 +130,7 @@ public:
                 dfs(model,indices,label,bacterium);
                 label++;
 
-
-                            //    std::cout<<" label è "<<label<<" "<<paths->size()<<" " bacterium->points.back().x << endl;
-
+                //                std::cout<<" label è "<<label<<" "<<paths->size()<<endl;
                 paths->push_back(bacterium);
 
             }
@@ -201,13 +199,13 @@ void SegmentFrame(const std::string& path, Frame& frame, MODELTYPE& calmodel, CA
 
     //frame.segmented has the list of all bacteria each with a list of points
     //Postprocess the bacteria in order to generate the polygon and the ocnvexhull
-    for(auto b : frame.segmented_bacteria) {
+    for(auto b : frame.segmented_bacteria){
         b->createBactriaFromRawPoints();
     }
 
 
 
-    for(int i= 0 ; i < coords[0] ; i++) {
+    for(int i= 0 ; i < coords[0] ; i++){
         vector<int> row(coords[1],-1);
         frame.matrix.push_back(row);
     }
@@ -264,7 +262,7 @@ int computeWeight (Bacterium & b1, Bacterium & b2) //TODO k * distance + k1 * ar
 
 int computeRadius (Bacterium & bacterium) //TODO polygon "radius" + costant
 {
-    return 3;//bacterium.getRadius();
+    return 20;//bacterium.getRadius();
 }
 
 void findAnotherCandidate (int i, Frame & frame, std::vector<int>& assignedBacteriaFrame,
@@ -312,7 +310,7 @@ void findAnotherCandidate (int i, Frame & frame, std::vector<int>& assignedBacte
 {
     if (weights[i].size() == 0) //untraceable bacterium
     {
-        bacteria[i].back()->lost = true;
+         bacteria[i].back()->lost = true;
         return;
     }
 
@@ -367,7 +365,7 @@ void tracking (Frame & frame, std::vector <std::list<shared_ptr<Bacterium>> > & 
     {
         if (!bacteria[i].back()->lost)
         {
-            // std::cout<<" sono qui a processare il batterio n "<<i<<std::endl;
+           // std::cout<<" sono qui a processare il batterio n "<<i<<std::endl;
 
             assign(i,frame, assignedBacteriaFrame, weights, bacteria);
         }
@@ -410,33 +408,35 @@ void tracking (Frame & frame, std::vector <std::list<shared_ptr<Bacterium>> > & 
 
 std::string ToString(int value,int digitsCount)
 {
-    using namespace std;
+  using namespace std;
     ostringstream os;
     os<<setfill('0')<<setw(digitsCount)<<value;
     return os.str();
 }
 
 int main() {
-    bacteriaGenerator();
+  bacteriaGenerator();
 
 
-    vector<Colour> sharedCols;
-            for(int k =0 ; k < 1000; k++) {
-                Colour c;
-                int r = rand()%150+1;
-                c.cols[0] = r + rand()%104;
-                c.cols[1] = r + rand()%104;
-                c.cols[2] =  r + rand()%104;
-                sharedCols.push_back(c);
+  vector<Colour> sharedCols;
+Color base; base.cols = {255,255,255,255 };
+  for(int i =0 ; i < 10; i++)
+    for(int j =0 ; j < 10; j++)
+     for(int k =0 ; k < 10; k++){
+    Colour c;
+    c.cols[0] = (base.cols[0] -  i);
+    c.cols[1] = (base.cols[1] - j);
+    c.cols[2] = (base.cols[2] -k);
+    sharedCols.push_back(c);
 
-            }
-    std::vector <std::list<shared_ptr<Bacterium>> > bacteria;
+  }
+  std::vector <std::list<shared_ptr<Bacterium>> > bacteria;
 
     MODELTYPE calmodel (
-        coords,
-        &neighbor,
-        opencal::calCommon::CAL_SPACE_TOROIDAL,
-        opencal::calCommon::CAL_NO_OPT);
+                coords,
+                &neighbor,
+                opencal::calCommon::CAL_SPACE_TOROIDAL,
+                opencal::calCommon::CAL_NO_OPT);
 
 
     const int steps  = 1;
@@ -445,8 +445,8 @@ int main() {
     //image processing kernels and filters
     CALRUN calrun (&calmodel, 1, steps, opencal::calCommon::CAL_UPDATE_IMPLICIT);
 
-    for(int i = 0; i<= 10; i++) {
-        std::cout<<"iterazione "<<i<<std::endl;
+    for(int i = 0; i<= 10; i++){
+      std::cout<<"iterazione "<<i<<std::endl;
         string currentPath = path+ToString(i,3)+".tif";
         std::cout<<"carico "<<currentPath<<"\n";
         Frame f;
@@ -460,9 +460,9 @@ int main() {
 
 
         std::string outBacteria = "./output/generated/bacteria"+ToString(i,3)+".png";
-        MyMat mat (431,512,CV_8UC3, sharedCols);
-        mat.addBacteria(bacteria);
-        mat.saveImage(outBacteria);
+    MyMat mat (431,512,CV_8UC3, sharedCols);
+    mat.addBacteria(bacteria);
+    mat.saveImage(outBacteria);
 
 
 
@@ -480,11 +480,10 @@ int main() {
         }
         for (auto b : bacteria[i])
         {
-           // std::cout<<*b<< " ";
+            std::cout<<*b<< " ";
         }
 
-std:
-        cout<<"_________________________________"<<std::endl;
+std:cout<<"_________________________________"<<std::endl;
     }
 
 

@@ -25,7 +25,8 @@ public:
 
     void move ()
     {
-        point = CGALPoint (((int)point.x()+(rand()%5-2))%431,((int)point.y()+(rand()%5-2))%512);
+      //point = CGALPoint (((int)point.x()+((rand()%4)+1))%431,((int)point.y()+((rand()%5)+1))%512);
+      point = CGALPoint (((int)point.x()+1)%431,((int)point.y()+1)%512);
     }
 
 };
@@ -71,11 +72,11 @@ public:
 
         for (int i = 0; i < bacteria.size(); i++ )
         {
-            if (rand()%2 ==0)
-            {
+          //  if (rand()%100 <= 80 )
+           // {
 
                 addBacterium(bacteria[i].point, 255, 255, 255);
-            }
+            //}
 
         }
     }
@@ -127,8 +128,9 @@ std::string toString(int value,int digitsCount)
 
 void bacteriaGenerator ()
 {
+  srand(time(0));
     std::vector<Bact> bacteria;
-    for (int i= 0; i< 20; i++)
+    for (int i= 0; i<210; i++)
     {
         bacteria.push_back(Bact(rand()%431, rand()%512));
     }
@@ -138,8 +140,10 @@ void bacteriaGenerator ()
         NewMat mat (431,512,CV_16U);
 
         mat.addBacteria(bacteria);
-        mat.saveImage("./input/generated/bacteria"+toString(i,2)+".tif");
+        mat.saveImage("./input/generated/bacteria"+toString(i,3)+".tif");
         update(bacteria);
+ std::cout<<i<<"\n";
+
     }
 
 }
