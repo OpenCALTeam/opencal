@@ -15,36 +15,36 @@
 
 
 void calfLoadSubstate_b(struct CALModel* calModel, struct CALSubstate_b* Q, FILE* f) {
-    calfLoadMatrix_b(Q->current, calModel->rows, calModel->columns, f);
+    calfLoadMatrix_b(Q->current, calModel->cellularSpaceDimension, f);
     if (Q->next)
         calCopyBuffer_b(Q->current, Q->next, calModel->cellularSpaceDimension);
 }
 void calfLoadSubstate_i(struct CALModel* calModel, struct CALSubstate_i* Q, FILE* f) {
-    calfLoadMatrix_i(Q->current, calModel->rows, calModel->columns, f);
+    calfLoadMatrix_i(Q->current, calModel->cellularSpaceDimension, f);
     if (Q->next)
         calCopyBuffer_i(Q->current, Q->next, calModel->cellularSpaceDimension);
 }
 void calfLoadSubstate_r(struct CALModel* calModel, struct CALSubstate_r* Q, FILE* f) {
-    calfLoadMatrix_r(Q->current, calModel->rows, calModel->columns, f);
+        calfLoadMatrix_r(Q->current, calModel->cellularSpaceDimension, f);
     if (Q->next)
         calCopyBuffer_r(Q->current, Q->next, calModel->cellularSpaceDimension);
 }
 
 
 CALbyte calLoadSubstate_b(struct CALModel* calModel, struct CALSubstate_b* Q, char* path) {
-    CALbyte return_state = calLoadMatrix_b(Q->current, calModel->rows, calModel->columns, path);
+    CALbyte return_state = calLoadMatrix_b(Q->current, calModel->cellularSpaceDimension, path);
     if (Q->next)
         calCopyBuffer_b(Q->current, Q->next, calModel->cellularSpaceDimension);
     return return_state;
 }
 CALbyte calLoadSubstate_i(struct CALModel* calModel, struct CALSubstate_i* Q, char* path) {
-    CALbyte return_state = calLoadMatrix_i(Q->current, calModel->rows, calModel->columns, path);
+    CALbyte return_state = calLoadMatrix_i(Q->current, calModel->cellularSpaceDimension, path);
     if (Q->next)
         calCopyBuffer_i(Q->current, Q->next, calModel->cellularSpaceDimension);
     return return_state;
 }
 CALbyte calLoadSubstate_r(struct CALModel* calModel, struct CALSubstate_r* Q, char* path) {
-    CALbyte return_state = calLoadMatrix_r(Q->current, calModel->rows, calModel->columns, path);
+    CALbyte return_state = calLoadMatrix_r(Q->current, calModel->cellularSpaceDimension, path);
     if (Q->next)
         calCopyBuffer_r(Q->current, Q->next, calModel->cellularSpaceDimension);
     return return_state;
@@ -52,26 +52,26 @@ CALbyte calLoadSubstate_r(struct CALModel* calModel, struct CALSubstate_r* Q, ch
 
 
 void calfSaveSubstate_b(struct CALModel* calModel, struct CALSubstate_b* Q, FILE* f) {
-    calfSaveMatrix_b(Q->current, calModel->rows, calModel->columns, f);
+    calfSaveMatrix_b(Q->current, calModel->cellularSpaceDimension, f);
 }
 void calfSaveSubstate_i(struct CALModel* calModel, struct CALSubstate_i* Q, FILE* f) {
-    calfSaveMatrix_i(Q->current, calModel->rows, calModel->columns, f);
+    calfSaveMatrix_i(Q->current, calModel->cellularSpaceDimension, f);
 }
 void calfSaveSubstate_r(struct CALModel* calModel, struct CALSubstate_r* Q, FILE* f) {
-    calfSaveMatrix_r(Q->current, calModel->rows, calModel->columns, f);
+    calfSaveMatrix_r(Q->current, calModel->cellularSpaceDimension, f);
 }
 
 
 CALbyte calSaveSubstate_b(struct CALModel* calModel, struct CALSubstate_b* Q, char* path) {
-    CALbyte return_state = calSaveMatrix_b(Q->current, calModel->rows, calModel->columns, path);
+    CALbyte return_state = calSaveMatrix_b(Q->current, calModel->cellularSpaceDimension, path);
     return return_state;
 }
 CALbyte calSaveSubstate_i(struct CALModel* calModel, struct CALSubstate_i* Q, char* path) {
-    CALbyte return_state = calSaveMatrix_i(Q->current, calModel->rows, calModel->columns, path);
+    CALbyte return_state = calSaveMatrix_i(Q->current, calModel->cellularSpaceDimension, path);
     return return_state;
 }
 CALbyte calSaveSubstate_r(struct CALModel* calModel, struct CALSubstate_r* Q, char* path) {
-    CALbyte return_state = calSaveMatrix_r(Q->current, calModel->rows, calModel->columns, path);
+    CALbyte return_state = calSaveMatrix_r(Q->current, calModel->cellularSpaceDimension, path);
     return return_state;
 }
 

@@ -327,23 +327,60 @@ CALint calGet_i(struct CALModel* calModel, struct CALSubstate_i* Q, CALIndices i
 }
 
 CALbyte calGetX_b(struct CALModel* calModel, struct CALSubstate_b* Q, CALIndices central_cell, int n)
-{//TODO get neighbour from the pool
+{
+    CALbyte ret;
+    int linear_index_central_cell = getLinearIndex(central_cell, calModel->coordinatesDimensions, calModel->numberOfCoordinates);
+    int neighbour_index = calModel->calNeighborPool->neighborPool[linear_index_central_cell][n];
+#if CAL_PARALLEL == 1
+    CAL_SET_CELL_LOCK(neighbour_index, calModel->calRun->locks );
+#endif
+    ret = Q->current[neighbour_index];
+
+#if CAL_PARALLEL == 1
+    CAL_UNSET_CELL_LOCK(neighbour_index, calModel->calRun->locks );
+#endif
+
+    return ret;
 
 }
 
 CALint calGetX_i(struct CALModel* calModel, struct CALSubstate_i* Q, CALIndices central_cell, int n)
 {
+    CALint ret;
+    int linear_index_central_cell = getLinearIndex(central_cell, calModel->coordinatesDimensions, calModel->numberOfCoordinates);
+    int neighbour_index = calModel->calNeighborPool->neighborPool[linear_index_central_cell][n];
+#if CAL_PARALLEL == 1
+    CAL_SET_CELL_LOCK(neighbour_index, calModel->calRun->locks );
+#endif
+    ret = Q->current[neighbour_index];
 
+#if CAL_PARALLEL == 1
+    CAL_UNSET_CELL_LOCK(neighbour_index, calModel->calRun->locks );
+#endif
+
+    return ret;
 }
 
 CALreal calGetX_r(struct CALModel* calModel, struct CALSubstate_r* Q, CALIndices central_cell, int n)
 {
+    CALreal ret;
+    int linear_index_central_cell = getLinearIndex(central_cell, calModel->coordinatesDimensions, calModel->numberOfCoordinates);
+    int neighbour_index = calModel->calNeighborPool->neighborPool[linear_index_central_cell][n];
+#if CAL_PARALLEL == 1
+    CAL_SET_CELL_LOCK(neighbour_index, calModel->calRun->locks );
+#endif
+    ret = Q->current[neighbour_index];
 
+#if CAL_PARALLEL == 1
+    CAL_UNSET_CELL_LOCK(neighbour_index, calModel->calRun->locks );
+#endif
+
+    return ret;
 }
 
 void calSet_b(struct CALModel* calModel, struct CALSubstate_b* Q, CALIndices central_cell, CALbyte value)
 {
-    int linear_index = getLinearIndex(indexes, calModel->coordinatesDimensions, calModel->numberOfCoordinates);
+    int linear_index = getLinearIndex(central_cell, calModel->coordinatesDimensions, calModel->numberOfCoordinates);
 #if CAL_PARALLEL == 1
     CAL_SET_CELL_LOCK(linear_index, calModel->calRun->locks );
 #endif
@@ -355,7 +392,7 @@ void calSet_b(struct CALModel* calModel, struct CALSubstate_b* Q, CALIndices cen
 
 void calSet_i(struct CALModel* calModel, struct CALSubstate_i* Q, CALIndices central_cell, CALint value)
 {
-    int linear_index = getLinearIndex(indexes, calModel->coordinatesDimensions, calModel->numberOfCoordinates);
+    int linear_index = getLinearIndex(central_cell, calModel->coordinatesDimensions, calModel->numberOfCoordinates);
 #if CAL_PARALLEL == 1
     CAL_SET_CELL_LOCK(linear_index, calModel->calRun->locks );
 #endif
@@ -367,7 +404,7 @@ void calSet_i(struct CALModel* calModel, struct CALSubstate_i* Q, CALIndices cen
 
 void calSet_r(struct CALModel* calModel, struct CALSubstate_r* Q, CALIndices central_cell, CALreal value)
 {
-    int linear_index = getLinearIndex(indexes, calModel->coordinatesDimensions, calModel->numberOfCoordinates);
+    int linear_index = getLinearIndex(central_cell, calModel->coordinatesDimensions, calModel->numberOfCoordinates);
 #if CAL_PARALLEL == 1
     CAL_SET_CELL_LOCK(linear_index, calModel->calRun->locks );
 #endif
@@ -379,7 +416,7 @@ void calSet_r(struct CALModel* calModel, struct CALSubstate_r* Q, CALIndices cen
 
 void calSetCurrent_b(struct CALModel* calModel, struct CALSubstate_b* Q, CALIndices central_cell, CALbyte value)
 {
-    int linear_index = getLinearIndex(indexes, calModel->coordinatesDimensions, calModel->numberOfCoordinates);
+    int linear_index = getLinearIndex(central_cell, calModel->coordinatesDimensions, calModel->numberOfCoordinates);
 #if CAL_PARALLEL == 1
     CAL_SET_CELL_LOCK(linear_index, calModel->calRun->locks );
 #endif
@@ -391,7 +428,7 @@ void calSetCurrent_b(struct CALModel* calModel, struct CALSubstate_b* Q, CALIndi
 
 void calSetCurrent_i(struct CALModel* calModel, struct CALSubstate_i* Q, CALIndices central_cell, CALint value)
 {
-    int linear_index = getLinearIndex(indexes, calModel->coordinatesDimensions, calModel->numberOfCoordinates);
+    int linear_index = getLinearIndex(central_cell, calModel->coordinatesDimensions, calModel->numberOfCoordinates);
 #if CAL_PARALLEL == 1
     CAL_SET_CELL_LOCK(linear_index, calModel->calRun->locks );
 #endif
@@ -403,7 +440,7 @@ void calSetCurrent_i(struct CALModel* calModel, struct CALSubstate_i* Q, CALIndi
 
 void calSetCurrent_r(struct CALModel* calModel, struct CALSubstate_r* Q, CALIndices central_cell, CALreal value)
 {
-    int linear_index = getLinearIndex(indexes, calModel->coordinatesDimensions, calModel->numberOfCoordinates);
+    int linear_index = getLinearIndex(central_cell, calModel->coordinatesDimensions, calModel->numberOfCoordinates);
 #if CAL_PARALLEL == 1
     CAL_SET_CELL_LOCK(linear_index, calModel->calRun->locks );
 #endif
@@ -413,22 +450,22 @@ void calSetCurrent_r(struct CALModel* calModel, struct CALSubstate_r* Q, CALIndi
 #endif
 }
 
-void calUpdateSubstate_b(CALModel* calModel, CALSubstate_b* Q)
+void calUpdateSubstate_b(struct CALModel* calModel, struct CALSubstate_b* Q)
 {
     calCopyBuffer_b(Q->next, Q->current, calModel->cellularSpaceDimension);
 }
 
-void calUpdateSubstate_i(CALModel* calModel, CALSubstate_i* Q)
+void calUpdateSubstate_i(struct CALModel* calModel, struct CALSubstate_i* Q)
 {
     calCopyBuffer_i(Q->next, Q->current, calModel->cellularSpaceDimension);
 }
 
-void calUpdateSubstate_r(CALModel* calModel, CALSubstate_r* Q)
+void calUpdateSubstate_r(struct CALModel* calModel, struct CALSubstate_r* Q)
 {
     calCopyBuffer_r(Q->next, Q->current, calModel->cellularSpaceDimension);
 }
 
-void calUpdate(CALModel* calModel)
+void calUpdate(struct CALModel* calModel)
 {
 
     int i;
@@ -470,7 +507,7 @@ void calFinalize(struct CALModel* calModel)
     free(calModel->pQi_array);
     free(calModel->pQr_array);
 
-    for(i = 0; i < calModel->model_processes; i++)
+    for(i = 0; i < calModel->num_of_processes; i++)
     {
         if(calModel->model_processes[i].type == 'L')
             free(calModel->model_processes[i].localProcess);

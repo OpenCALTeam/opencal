@@ -12,6 +12,7 @@
 #ifndef calCommon_h
 #define calCommon_h
 #include <stdlib.h>
+#include <stdio.h>
 #include <OpenCAL-CPU/calOmpDef.h>
 
 
@@ -29,7 +30,7 @@ enum CALExecutionType {SERIAL = 0, PARALLEL};
 
 typedef int* CALIndices;
 
-int getLinearIndex(CALIndices indices, CALIndices coordinates_dimensions, int cellular_space_dimension );
+int getLinearIndex(CALIndices indices, CALIndices coordinates_dimensions, int number_of_dimensions );
 
 typedef char CALbyte;	//!< Redefinition of the type char.
 typedef int CALint;		//!< Redefinition of the type int.

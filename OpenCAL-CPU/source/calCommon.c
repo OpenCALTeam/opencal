@@ -102,14 +102,14 @@ struct CALIndexesPool* calDefIndexesPool(CALIndices coordinates_dimensions, int 
 
 }
 
-int getLinearIndex(CALIndices indices, CALIndices coordinates_dimensions, int cellular_space_dimension)
+int getLinearIndex(CALIndices indices, CALIndices coordinates_dimensions, int number_of_dimensions)
 {
 
     int c = 0;
     uint multiplier = 1;
     uint n;
 
-    for (uint i = 0; i < cellular_space_dimension; i++)
+    for (uint i = 0; i < number_of_dimensions; i++)
     {
         if (i == 1) n = 0;
         else if (i == 0) n = 1;

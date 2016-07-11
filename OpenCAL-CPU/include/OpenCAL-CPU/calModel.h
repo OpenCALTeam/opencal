@@ -15,6 +15,7 @@ typedef int* CALNeighbourPattern;
 struct CALModel;
 /*! \brief Fake function pointer type.
 */
+
 typedef void (* CALLocalProcess)(struct CALModel* calModel, CALIndices, int number_of_dimensions);
 typedef void (* CALGlobalProcess)(struct CALModel* calModel);
 
@@ -24,6 +25,7 @@ struct CALProcess {
         char type;
 };
 
+#include <OpenCAL-CPU/calRun.h>
 /*! \brief Structure defining the cellular automaton.
 */
 struct CALModel {
