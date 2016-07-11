@@ -13,6 +13,8 @@
 #include <OpenCAL++/calMooreNeighborhood.h>
 #include<OpenCAL++/calRun.h>
 
+#include"BacteriaGenerator.h"
+
 
 #include <opencv2/opencv.hpp>
 
@@ -68,7 +70,7 @@ public:
 
         }
 
-        if(count <= 0)
+        if(count <= 1)
             for(int i=0; i<channels; i++)
                 newVal[i] = 0;
 
@@ -187,9 +189,9 @@ void SegmentFrame(const std::string& path, Frame& frame, MODELTYPE& calmodel, CA
     //load image into the model
     bgr->loadSubstate(*(new std::function<decltype(loadImage<vec1s>)>(loadImage<vec1s>)), path);
 
-    calmodel.addElementaryProcess(&contrastStretchingFilter);
-    calmodel.addElementaryProcess(&thresholdFilter);
-    calmodel.addElementaryProcess(&removeSinglePixelFilter);
+//    calmodel.addElementaryProcess(&contrastStretchingFilter);
+//    calmodel.addElementaryProcess(&thresholdFilter);
+//    calmodel.addElementaryProcess(&removeSinglePixelFilter);
     calmodel.addElementaryProcess(&connComponent);
 
 
@@ -414,26 +416,6 @@ std::string ToString(int value,int digitsCount)
 
 int main() {
     std::vector <std::list<shared_ptr<Bacterium>> > bacteria;
-    //    std::array<std::string,6> paths= {"./input/tiff/traking_10x_480010persect0001.tif",
-    //                                      "./input/tiff/traking_10x_480010persect0002.tif",
-    //                                     "./input/tiff/traking_10x_480010persect0003.tif",
-    //                                     "./input/tiff/traking_10x_480010persect0004.tif",
-    //                                     "./input/tiff/traking_10x_480010persect0005.tif",
-    //                                      "./input/tiff/traking_10x_480010persect0006.tif",
-    //                                      "./input/tiff/traking_10x_480010persect0007.tif",
-    //                                      "./input/tiff/traking_10x_480010persect0007.tif",
-    //                                      "./input/tiff/traking_10x_480010persect0007.tif",
-    //                                      "./input/tiff/traking_10x_480010persect0007.tif",
-    //                                      "./input/tiff/traking_10x_480010persect0007.tif",
-    //                                      "./input/tiff/traking_10x_480010persect0007.tif",
-    //                                      "./input/tiff/traking_10x_480010persect0007.tif",
-    //                                      "./input/tiff/traking_10x_480010persect0007.tif",
-    //                                     "./input/tiff/traking_10x_480010persect0008.tif"};
-
-
-
-
-
 
     MODELTYPE calmodel (
                 coords,
@@ -443,14 +425,14 @@ int main() {
 
 
     const int steps  = 1;
-    string path = "./input/tiff/traking_10x_480010persect";
+    string path = "./input/generated/bacteria";
 
     //image processing kernels and filters
     CALRUN calrun (&calmodel, 1, steps, opencal::calCommon::CAL_UPDATE_IMPLICIT);
 
-    for(int i = 1; i<= 500; i++){
+    for(int i = 0; i<= 32; i++){
       std::cout<<"iterazione "<<i<<std::endl;
-        string currentPath = path+ToString(i,4)+".tif";
+        string currentPath = path+ToString(i,2)+".tif";
         std::cout<<"carico "<<currentPath<<"\n";
         Frame f;
         SegmentFrame(currentPath,f, calmodel, calrun);
@@ -470,7 +452,7 @@ int main() {
     {
         std::cout<<"batterio "<<i <<" suoi associati "<<bacteria[i].size()<<"\n";
 
-        if (bacteria[i].size() >4)
+        if (bacteria[i].size() >30)
         {
             count++;
         }
@@ -490,7 +472,7 @@ std:cout<<"_________________________________"<<std::endl;
     std::cout<<" i batteri totali sono "<<bacteria.size()<<std::endl;
 
 
-
+//bacteriaGenerator();
 
     return 0;
 }

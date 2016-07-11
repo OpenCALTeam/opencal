@@ -50,9 +50,9 @@ private:
     void addBacterium (CGALPoint & pixelsToColor, int r, int g, int b)
     {
 
-            Vec2b& bgra = this->at<Vec2b>(pixelsToColor.x(), pixelsToColor.y());
-            bgra[0] = saturate_cast<uchar>(255);
-            bgra[1] = saturate_cast<uchar>(255);
+        Vec2b& bgra = this->at<Vec2b>(pixelsToColor.x(), pixelsToColor.y());
+        bgra[0] = saturate_cast<uchar>(255);
+        bgra[1] = saturate_cast<uchar>(255);
 
     }
 
@@ -71,8 +71,11 @@ public:
 
         for (int i = 0; i < bacteria.size(); i++ )
         {
+            if (rand()%2 ==0)
+            {
 
                 addBacterium(bacteria[i].point, 255, 255, 255);
+            }
 
         }
     }
@@ -113,9 +116,9 @@ void update (std::vector<Bact>& bacteria)
 }
 
 
-std::string ToString(int value,int digitsCount)
+std::string toString(int value,int digitsCount)
 {
-  using namespace std;
+    using namespace std;
     ostringstream os;
     os<<setfill('0')<<setw(digitsCount)<<value;
     return os.str();
@@ -130,11 +133,12 @@ void bacteriaGenerator ()
         bacteria.push_back(Bact(rand()%431, rand()%512));
     }
 
-    for (int i= 0; i< 35; i++)
+    for (int i= 0; i< 60; i++)
     {
         NewMat mat (431,512,CV_16U);
+
         mat.addBacteria(bacteria);
-        mat.saveImage("./input/generated/bacteria"+ToString(i,2)+".tif");
+        mat.saveImage("./input/generated/bacteria"+toString(i,2)+".tif");
         update(bacteria);
     }
 
