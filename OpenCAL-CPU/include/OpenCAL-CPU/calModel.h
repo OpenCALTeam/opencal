@@ -66,10 +66,9 @@ struct CALModel {
 struct CALModel* calCADef(int numberOfCoordinates, //!< Number of coordinates of the Cellular Space.
                           CALIndices coordinatesDimensions,
                           enum CALNeighborhood CAL_NEIGHBORHOOD,
-                          enum CALSpaceBoundaryCondition CAL_TOROIDALITY, //!< Enumerator that identifies the type of cellular space: toroidal or non-toroidal.
-                          enum CALExecutionType executionType, //!< Enumerator that specifies whether the execution flow must be serial or parallel.
+                          enum CALSpaceBoundaryCondition CAL_TOROIDALITY, //!< Enumerator that specifies whether the execution flow must be serial or parallel.
                           enum CALOptimization CAL_OPTIMIZATION //!< Enumerator used for specifying the active cells optimization or no optimization.
-                          );
+                          , int initial_step, int final_step);
 
 
 /*! \brief Adds a neighbour to CALModel::X and updates the value of CALModel::sizeof_X.
@@ -77,6 +76,8 @@ struct CALModel* calCADef(int numberOfCoordinates, //!< Number of coordinates of
 void calAddNeighbor(struct CALModel* calModel, //!< Pointer to the cellular automaton structure.
                       CALIndices neighbourIndex  //!< Indexes of the n-th neighbour
                       );
+
+int calGetSizeOfX(struct CALModel* calModel);
 
 
 /*! \brief Creates and adds a new byte substate to CALModel2D::pQb_array and return a pointer to it.
@@ -122,25 +123,42 @@ struct CALSubstate_r* calAddSingleLayerSubstate_r(struct CALModel* calModel,	//!
 
 /*! \brief Inits the value of a byte substate in the given cell to value; it updates both the current and next matrices at that position.
 */
-void calInit_b(struct CALModel* calModel,	//!< Pointer to the cellular automaton structure.
+void calInitSubstate_b(struct CALModel* calModel,	//!< Pointer to the cellular automaton structure.
                struct CALSubstate_b* Q,
                CALbyte value				//!< initializing value for the substate at the cell (i, j).
                );
 
 /*! \brief Inits the value of a byte substate in the given cell to value; it updates both the current and next matrices at that position.
 */
-void calInit_i(struct CALModel* calModel,	//!< Pointer to the cellular automaton structure.
+void calInitSubstate_i(struct CALModel* calModel,	//!< Pointer to the cellular automaton structure.
                struct CALSubstate_i* Q,
                CALint value				//!< initializing value for the substate at the cell (i, j).
                );
 
 /*! \brief Inits the value of a byte substate in the given cell to value; it updates both the current and next matrices at that position.
 */
-void calInit_r(struct CALModel* calModel,	//!< Pointer to the cellular automaton structure.
+void calInitSubstate_r(struct CALModel* calModel,	//!< Pointer to the cellular automaton structure.
                struct CALSubstate_r* Q,
                CALreal value				//!< initializing value for the substate at the cell (i, j).
                );
 
+void calInit_b(struct CALModel* calModel,	//!< Pointer to the cellular automaton structure.
+               struct CALSubstate_b* Q,
+               CALIndices central_cell,
+               CALbyte value				//!< initializing value for the substate at the cell (i, j).
+               );
+
+void calInit_i(struct CALModel* calModel,	//!< Pointer to the cellular automaton structure.
+               struct CALSubstate_i* Q,
+               CALIndices central_cell,
+               CALint value				//!< initializing value for the substate at the cell (i, j).
+               );
+
+void calInit_r(struct CALModel* calModel,	//!< Pointer to the cellular automaton structure.
+               struct CALSubstate_r* Q,
+               CALIndices central_cell,
+               CALreal value				//!< initializing value for the substate at the cell (i, j).
+               );
 //extern CALbyte (* calGet_b)(struct CALModel* calModel, struct CALSubstate_b* Q, CALIndexes indexes);
 //extern CALint (* calGet_i)(struct CALModel* calModel, struct CALSubstate_i* Q, CALIndexes indexes);
 //extern CALreal (* calGet_r)(struct CALModel* calModel, struct CALSubstate_r* Q, CALIndexes indexes);

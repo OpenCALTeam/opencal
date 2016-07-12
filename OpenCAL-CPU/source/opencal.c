@@ -38,6 +38,8 @@ void calAddGlobalProcess(struct CALModel* calModel,	//!< Pointer to the cellular
 
 void calAddInitFunc(struct CALModel* calModel, void (*init)(struct CALModel*))
 {
+    if(!calModel->calRun->init)
+        calModel->calRun->init = (void (**)(struct CALModel*)) malloc(sizeof(void (*)(struct CALModel*)));
     void (**prv)(struct CALModel*) = calModel->calRun->init;
     calModel->calRun->init = (void (**)(struct CALModel*)) malloc(sizeof(void (*)(struct CALModel*)) * ++calModel->calRun->num_of_init_func);
 
@@ -45,6 +47,8 @@ void calAddInitFunc(struct CALModel* calModel, void (*init)(struct CALModel*))
 
     for( ; n < calModel->calRun->num_of_init_func - 1; n++)
         calModel->calRun->init[n] = prv[n];
+
+    calModel->calRun->init[n] = init;
 
     free(prv);
 }

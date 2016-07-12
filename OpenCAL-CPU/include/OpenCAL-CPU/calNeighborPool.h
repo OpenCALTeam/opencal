@@ -1,4 +1,4 @@
-#ifndef calNeighborPool_h
+﻿#ifndef calNeighborPool_h
 #define calNeighborPool_h
 #include <OpenCAL-CPU/calCommon.h>
 

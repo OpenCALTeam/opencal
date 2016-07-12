@@ -34,7 +34,7 @@ static CALreal calAllocSubstate_r(struct CALModel* calModel, struct CALSubstate_
     return CAL_TRUE;
 }
 
-struct CALModel*calCADef(int numberOfCoordinates, CALIndices coordinatesDimensions, enum CALNeighborhood CAL_NEIGHBORHOOD, enum CALSpaceBoundaryCondition CAL_TOROIDALITY, enum CALExecutionType executionType, enum CALOptimization CAL_OPTIMIZATION)
+struct CALModel*calCADef(int numberOfCoordinates, CALIndices coordinatesDimensions, enum CALNeighborhood CAL_NEIGHBORHOOD, enum CALSpaceBoundaryCondition CAL_TOROIDALITY, enum CALOptimization CAL_OPTIMIZATION, int initial_step, int final_step)
 {
 
     struct CALModel *calModel = (struct CALModel *)malloc(sizeof(struct CALModel));
@@ -45,6 +45,10 @@ struct CALModel*calCADef(int numberOfCoordinates, CALIndices coordinatesDimensio
 
     calModel->coordinatesDimensions = coordinatesDimensions;
 
+    int n;
+    calModel->cellularSpaceDimension = 1;
+    for(n = 0; n < calModel->numberOfCoordinates; n++)
+        calModel->cellularSpaceDimension *= coordinatesDimensions[n];
     calModel->calIndexesPool =  calDefIndexesPool(coordinatesDimensions,numberOfCoordinates);
 
     //CALL calRun constructor and set optimization
@@ -66,17 +70,18 @@ struct CALModel*calCADef(int numberOfCoordinates, CALIndices coordinatesDimensio
 
 
 
-    printf("STAMPA VICINATO %d\n",calModel->calNeighborPool->size_of_X);
-    for (int i = 0; i < calModel->calIndexesPool->cellular_space_dimension; i++)
-    {
-        for (int j = 0; j <  calModel->calNeighborPool->size_of_X; j++)
-        {
-            printf("%d ",calModel->calNeighborPool->neighborPool[i][j]);
-        }
-        printf("\n");
-    }
+//   printf("STAMPA VICINATO %d\n",calModel->calNeighborPool->size_of_X);
+//    for (int i = 0; i < calModel->calIndexesPool->cellular_space_dimension; i++)
+//    {
+//        for (int j = 0; j <  calModel->calNeighborPool->size_of_X; j++)
+//        {
+//            printf("%d ",calModel->calNeighborPool->neighborPool[i][j]);
+//        }
+//        printf("\n");
+//    }
     calModel->OPTIMIZATION = CAL_OPTIMIZATION;
 
+    calModel->calRun = makeCALRun(initial_step, final_step);
     //Manage Optimization
 
 }
@@ -251,7 +256,7 @@ struct CALSubstate_r*calAddSingleLayerSubstate_r(struct CALModel* calModel, CALr
     return Q;
 }
 
-void calInit_b(struct CALModel* calModel, struct CALSubstate_b* Q, CALbyte value)
+void calInitSubstate_b(struct CALModel* calModel, struct CALSubstate_b* Q, CALbyte value)
 {
     if(Q->current)
         calSetBuffer_b(Q->current, calModel->cellularSpaceDimension, value);
@@ -259,7 +264,7 @@ void calInit_b(struct CALModel* calModel, struct CALSubstate_b* Q, CALbyte value
         calSetBuffer_b(Q->next, calModel->cellularSpaceDimension, value);
 }
 
-void calInit_i(struct CALModel* calModel, struct CALSubstate_i* Q, CALint value)
+void calInitSubstate_i(struct CALModel* calModel, struct CALSubstate_i* Q, CALint value)
 {
     if(Q->current)
         calSetBuffer_i(Q->current, calModel->cellularSpaceDimension, value);
@@ -267,12 +272,33 @@ void calInit_i(struct CALModel* calModel, struct CALSubstate_i* Q, CALint value)
         calSetBuffer_i(Q->next, calModel->cellularSpaceDimension, value);
 }
 
-void calInit_r(struct CALModel* calModel, struct CALSubstate_r* Q, CALreal value)
+void calInitSubstate_r(struct CALModel* calModel, struct CALSubstate_r* Q, CALreal value)
 {
     if(Q->current)
         calSetBuffer_r(Q->current, calModel->cellularSpaceDimension, value);
     if(Q->next)
         calSetBuffer_r(Q->next, calModel->cellularSpaceDimension, value);
+}
+
+void calInit_b(struct CALModel* calModel, struct CALSubstate_b* Q, CALIndices central_cell, CALbyte value)
+{
+    int linear_index = getLinearIndex(central_cell, calModel->coordinatesDimensions, calModel->numberOfCoordinates);
+    Q->current[linear_index] = value;
+    Q->next[linear_index] = value;
+}
+
+void calInit_i(struct CALModel* calModel, struct CALSubstate_i* Q, CALIndices central_cell, CALint value)
+{
+    int linear_index = getLinearIndex(central_cell, calModel->coordinatesDimensions, calModel->numberOfCoordinates);
+    Q->current[linear_index] = value;
+    Q->next[linear_index] = value;
+}
+
+void calInit_r(struct CALModel* calModel, struct CALSubstate_r* Q, CALIndices central_cell, CALreal value)
+{
+    int linear_index = getLinearIndex(central_cell, calModel->coordinatesDimensions, calModel->numberOfCoordinates);
+    Q->current[linear_index] = value;
+    Q->next[linear_index] = value;
 }
 
 CALbyte calGet_b(struct CALModel* calModel, struct CALSubstate_b* Q, CALIndices indexes)
@@ -522,3 +548,8 @@ void calFinalize(struct CALModel* calModel)
 }
 
 
+
+int calGetSizeOfX(struct CALModel* calModel)
+{
+    return calModel->calNeighborPool->size_of_X;
+}
