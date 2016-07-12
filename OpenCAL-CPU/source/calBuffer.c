@@ -199,10 +199,14 @@ void calSetBuffer_b(CALbyte* M, int buffer_dimension, CALbyte value)
 
 void calSetBuffer_i(CALint* M, int buffer_dimension, CALint value)
 {
-    memset(M, value, sizeof(CALint)*buffer_dimension);
+    int n;
+    for(n = 0; n < buffer_dimension; n++)
+        M[n] = value;
 }
 
 void calSetBuffer_r(CALreal* M, int buffer_dimension, CALreal value)
 {
-    memset(M, value, sizeof(CALreal)*buffer_dimension);
+    int n;
+    for(n = 0; n < buffer_dimension; n++)
+        M[n] = value;
 }

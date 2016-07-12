@@ -55,7 +55,10 @@ CALbyte calRunCAStep(struct CALModel* calModel)
         }
     }
 
-    return(calModel->calRun->stopCondition(calModel));
+    if(calModel->calRun->stopCondition)
+        return(calModel->calRun->stopCondition(calModel));
+    else
+        return CAL_TRUE;
 }
 
 
@@ -80,6 +83,7 @@ CALint calRunSimulation(struct CALModel* calModel)
     CALbyte again;
 
     calRunInitSimulation(calModel);
+
     struct CALRun* simulation = calModel->calRun;
 
     for (simulation->step = simulation->initial_step; (simulation->step <= simulation->final_step || simulation->final_step == CAL_RUN_LOOP); simulation->step++)
@@ -104,4 +108,14 @@ void calRunApplyLocalProcess(struct CALModel* calModel, CALLocalProcess local_pr
     for(n = 0; n < cellular_space_dimension; n++)
         local_process(calModel, pool[n], number_of_dimensions);
 
+}
+
+//void calJumpToNextStep(struct CALModel* calModel)
+//{
+//    calModel->calRun->step++;
+//}
+
+void calForceInit(struct CALModel* calModel)
+{
+    calRunInitSimulation(calModel);
 }

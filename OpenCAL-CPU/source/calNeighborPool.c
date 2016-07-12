@@ -1,4 +1,4 @@
-#include "OpenCAL-CPU/calNeighborPool.h"
+﻿#include "OpenCAL-CPU/calNeighborPool.h"
 
 static int pow_ct(const int base, unsigned const exponent)
 {
@@ -149,5 +149,3 @@ void destroy(struct CALNeighborPool * calNeighborPool){
     free(calNeighborPool->neighborPool);
 
 }
-
-

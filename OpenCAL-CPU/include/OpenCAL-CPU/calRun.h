@@ -37,6 +37,11 @@ void calRunApplyLocalProcess( struct CALModel* calModel, CALLocalProcess local_p
 CALint calRunSimulation(struct CALModel* calModel);
 CALbyte calRunCAStep(struct CALModel* calModel);
 
+void calForceInit(struct CALModel* calModel);
+
+#define calJumpToNextStep(calModel)(calModel->calRun->step++)
+#define calGetCurrentStep(calModel)(calModel->calRun->step)
+
 
 
 
