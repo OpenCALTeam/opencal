@@ -8,6 +8,7 @@
 #include "ThresholdFilter.h"
 #include "image_processing.h"
 
+
 #include <OpenCAL++/calCommon.h>
 #include<OpenCAL++/calModel.h>
 #include <OpenCAL++/calMooreNeighborhood.h>
@@ -91,6 +92,7 @@ public:
 
     LabelConnectedComponentFilter(decltype(binImg) sbs,decltype(connComponents)connComp, std::vector<shared_ptr<Bacterium>>* _paths): binImg(sbs), connComponents(connComp),paths(_paths) {
         label = 1;
+        connComponents->setCurrentBuffer(0);
 
     }
 
@@ -103,11 +105,11 @@ public:
             CGALPoint p(indices[0],indices[1]);
             bacterium->points.insert(p);
 
+
             for(int i=1 ; i<model->getNeighborhoodSize() ; i++) {
                 uint linearIndex = opencal::calCommon::cellLinearIndex<2,uint>(indices,model->getCoordinates());
                 int linearIndexN = opencal::CALNeighborPool<2,uint>::getNeighborN(linearIndex,i);
                 auto indices_x =opencal::calCommon::cellMultidimensionalIndices<2,uint>(linearIndexN);
-
                 dfs(model,indices_x,label,bacterium);
             }
 
@@ -131,7 +133,7 @@ public:
                 label++;
 
 
-                            //    std::cout<<" label è "<<label<<" "<<paths->size()<<" " bacterium->points.back().x << endl;
+                         //       std::cout<<" label è "<<label<<" "<<paths->size()<<" "<<*(bacterium->points.begin())<<std::endl;
 
                 paths->push_back(bacterium);
 
@@ -165,7 +167,12 @@ public:
 
 };
 
-std::array<COORD_TYPE, 2> coords = { 431,512 };
+//traking_10x_480010persect
+//std::array<COORD_TYPE, 2> coords = { 431,512 };
+
+//100_0019t
+std::array<COORD_TYPE, 2> coords = { 402,512 };
+
 opencal::CALMooreNeighborhood<2,MOORERADIUS> neighbor;
 void SegmentFrame(const std::string& path, Frame& frame, MODELTYPE& calmodel, CALRUN& calrun) {
 
@@ -178,9 +185,16 @@ void SegmentFrame(const std::string& path, Frame& frame, MODELTYPE& calmodel, CA
 
     std::cout<<"SONO ARRIVATO QUA"<<std::endl;
     //Image Filters
-    ContrastStretchingFilter <2,decltype(neighbor),COORD_TYPE,vec1s>contrastStretchingFilter(bgr, 0, 1799, 0, 65535,0.10);
 
+    //100_0019t
+    ContrastStretchingFilter <2,decltype(neighbor),COORD_TYPE,vec1s>contrastStretchingFilter(bgr, 1285, 1542, 0, 65535,1.0);
     ThresholdFilter<2,decltype(neighbor),COORD_TYPE,vec1s> thresholdFilter (bgr,0,61680,0,65535);
+
+
+
+    //traking_10x_480010persect
+//    ContrastStretchingFilter <2,decltype(neighbor),COORD_TYPE,vec1s>contrastStretchingFilter(bgr, 0, 1799, 0, 65535,0.10);
+//    ThresholdFilter<2,decltype(neighbor),COORD_TYPE,vec1s> thresholdFilter (bgr,0,61680,0,65535);
 
     RemoveSinglePixelFilter<vec1s> removeSinglePixelFilter(bgr);
 
@@ -191,13 +205,14 @@ void SegmentFrame(const std::string& path, Frame& frame, MODELTYPE& calmodel, CA
     //load image into the model
     bgr->loadSubstate(*(new std::function<decltype(loadImage<vec1s>)>(loadImage<vec1s>)), path);
 
-//    calmodel.addElementaryProcess(&contrastStretchingFilter);
-//    calmodel.addElementaryProcess(&thresholdFilter);
+
+    calmodel.addElementaryProcess(&contrastStretchingFilter);
+    calmodel.addElementaryProcess(&thresholdFilter);
 //    calmodel.addElementaryProcess(&removeSinglePixelFilter);
     calmodel.addElementaryProcess(&connComponent);
 
-
     calrun.run();
+
 
     //frame.segmented has the list of all bacteria each with a list of points
     //Postprocess the bacteria in order to generate the polygon and the ocnvexhull
@@ -316,7 +331,7 @@ void findAnotherCandidate (int i, Frame & frame, std::vector<int>& assignedBacte
         return;
     }
 
-    std::cout<<"cerco un altro candidato per "<<i << " la size dei candidati è "<< weights[i].size()<<std::endl;
+   // std::cout<<"cerco un altro candidato per "<<i << " la size dei candidati è "<< weights[i].size()<<std::endl;
 
     std::pair <int,int> candidate = weights[i].front(); //coppia id, peso del batterio che voglio assegnare al batterio i della lista condivisa
 
@@ -390,23 +405,6 @@ void tracking (Frame & frame, std::vector <std::list<shared_ptr<Bacterium>> > & 
 
 }
 
-// void tracka (list batteri trackati, frame)
-//scorri la lista dei batteri
-//pesa distanza e area per ogni singolo batterio con quelli del frame
-
-//lista tutti possibili candidati
-//scegli il candidato migliore
-
-//oppure
-//scegli un candidato e in caso cambialo se migliore pretendente
-
-
-
-//batterio candidato + peso batterio candidato
-//per ogni batterio quello con mimina distanza
-//situazione limite batterio senza candidati = batterio sparito
-//situazione limite batterio nuovo add alla lista
-
 
 std::string ToString(int value,int digitsCount)
 {
@@ -417,7 +415,7 @@ std::string ToString(int value,int digitsCount)
 }
 
 int main() {
-    bacteriaGenerator();
+    //bacteriaGenerator();
 
 
     vector<Colour> sharedCols;
@@ -440,14 +438,15 @@ int main() {
 
 
     const int steps  = 1;
-    string path = "./input/generated/bacteria";
+//    string path = "./input/tiff/traking_10x_480010persect"; //"./input/generated/bacteria";
+    string path = "./input/tiff/dataset712/100_0019t";
 
     //image processing kernels and filters
     CALRUN calrun (&calmodel, 1, steps, opencal::calCommon::CAL_UPDATE_IMPLICIT);
 
-    for(int i = 0; i<= 10; i++) {
+    for(int i = 1; i<= 4000; i++) {
         std::cout<<"iterazione "<<i<<std::endl;
-        string currentPath = path+ToString(i,3)+".tif";
+        string currentPath = path+ToString(i,4)+".tif";
         std::cout<<"carico "<<currentPath<<"\n";
         Frame f;
         SegmentFrame(currentPath,f, calmodel, calrun);
@@ -456,10 +455,11 @@ int main() {
 
         calmodel.empty();
 
+
         std::cout<<"ho finito di segmentare il frame che aveva "<<f.segmented_bacteria.size()<<" batteri "<<std::endl;
 
 
-        std::string outBacteria = "./output/generated/bacteria"+ToString(i,3)+".png";
+        std::string outBacteria = "./output/generated/bacteria"+ToString(i,4)+".png";
         MyMat mat (431,512,CV_8UC3, sharedCols);
         mat.addBacteria(bacteria);
         mat.saveImage(outBacteria);
