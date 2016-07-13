@@ -10,6 +10,7 @@
 // Lesser General Public License for more details.
 
 #include <OpenCAL-CPU/calCommon.h>
+#include <stdarg.h>
 
 struct CALIndexesPool* calDefIndexesPool(CALIndices coordinates_dimensions, int number_of_dimensions)
 {
@@ -51,53 +52,53 @@ struct CALIndexesPool* calDefIndexesPool(CALIndices coordinates_dimensions, int 
 
     }
 
-// check indexes
-//    for (int i = 0; i < indexes_pool->cellular_space_dimension; ++i) {
-//        for (int j = 0; j < number_of_dimensions; ++j) {
-//            printf("%d ",indexes_pool->pool[i][j]);
-//        }
-//        printf("\d\n");
+    // check indexes
+    //    for (int i = 0; i < indexes_pool->cellular_space_dimension; ++i) {
+    //        for (int j = 0; j < number_of_dimensions; ++j) {
+    //            printf("%d ",indexes_pool->pool[i][j]);
+    //        }
+    //        printf("\d\n");
 
-//    }
+    //    }
 
-//TODO Mario plz check your init IndexesPool version, I just imported Paola's version for simplicity
+    //TODO Mario plz check your init IndexesPool version, I just imported Paola's version for simplicity
 
-//    CALIndices current_cell = (CALIndices) malloc(sizeof(int) * number_of_dimensions);
-//    CALIndices first_cell = (CALIndices) malloc(sizeof(int) * number_of_dimensions);
-//    for( n = 0; n < number_of_dimensions; n++ )
-//    {
-//        current_cell[n] = 0;
-//        first_cell[n] = 0;
-//    }
+    //    CALIndices current_cell = (CALIndices) malloc(sizeof(int) * number_of_dimensions);
+    //    CALIndices first_cell = (CALIndices) malloc(sizeof(int) * number_of_dimensions);
+    //    for( n = 0; n < number_of_dimensions; n++ )
+    //    {
+    //        current_cell[n] = 0;
+    //        first_cell[n] = 0;
+    //    }
 
-//    int current_dimension = number_of_dimensions - 1;
-//    n = 0;
-//    indexes_pool->pool[n] = first_cell;
+    //    int current_dimension = number_of_dimensions - 1;
+    //    n = 0;
+    //    indexes_pool->pool[n] = first_cell;
 
-//    for(n = 1; n < indexes_pool->cellular_space_dimension; n++)
-//    {
-//        current_cell[current_dimension]++;
+    //    for(n = 1; n < indexes_pool->cellular_space_dimension; n++)
+    //    {
+    //        current_cell[current_dimension]++;
 
-//        while(current_cell[current_dimension] == coordinates_dimensions[current_dimension])
-//        {
-//            current_cell[current_dimension--] = 0;
-//            if( current_dimension < 0 )
-//                break;
+    //        while(current_cell[current_dimension] == coordinates_dimensions[current_dimension])
+    //        {
+    //            current_cell[current_dimension--] = 0;
+    //            if( current_dimension < 0 )
+    //                break;
 
-//            current_cell[current_dimension]++;
-//        }
+    //            current_cell[current_dimension]++;
+    //        }
 
-//        current_dimension = number_of_dimensions - 1;
+    //        current_dimension = number_of_dimensions - 1;
 
-//        CALIndices cell_to_add = (CALIndices) malloc(sizeof(int) * number_of_dimensions);
+    //        CALIndices cell_to_add = (CALIndices) malloc(sizeof(int) * number_of_dimensions);
 
-//        for( i = 0; i < number_of_dimensions; i++ )
-//            cell_to_add[i] = current_cell[i];
+    //        for( i = 0; i < number_of_dimensions; i++ )
+    //            cell_to_add[i] = current_cell[i];
 
-//        indexes_pool->pool[n] = cell_to_add;
-//    }
+    //        indexes_pool->pool[n] = cell_to_add;
+    //    }
 
-//    free(current_cell);
+    //    free(current_cell);
     return indexes_pool;
 
 }
@@ -118,4 +119,22 @@ int getLinearIndex(CALIndices indices, CALIndices coordinates_dimensions, int nu
         multiplier *= coordinates_dimensions[n];
     }
     return c;
+}
+
+struct CALDimensions*calDefDimensions(int n, ...)
+{
+    va_list arguments;
+    struct CALDimensions* dimensions = (struct CALDimensions*) malloc(sizeof(struct CALDimensions));
+    dimensions->number_of_dimensions = n;
+    dimensions->coordinates_dimensions = (int*) malloc(sizeof(int) * n);
+
+    int x;
+    va_start (arguments, n);
+    for (x = 0; x < n; x++ )
+    {
+        dimensions->coordinates_dimensions[x] = va_arg( arguments, int );
+    }
+    va_end ( arguments );
+
+    return dimensions;
 }

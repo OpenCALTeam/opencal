@@ -10,6 +10,7 @@
 
 typedef int* CALNeighbourPattern;
 
+
 #define CAL_HEXAGONAL_SHIFT 7			//<! Shif used for accessing to the correct neighbor in case hexagonal heighbourhood and odd column cell
 
 struct CALModel;
@@ -56,15 +57,13 @@ struct CALModel {
 
 };
 
-
 /******************************************************************************
                     DEFINITIONS OF FUNCTIONS PROTOTYPES
 *******************************************************************************/
 
 /*! \brief Creates an object of type CALModel2D, sets its records and returns it as a pointer; it defines the cellular automaton structure.
 */
-struct CALModel* calCADef(int numberOfCoordinates, //!< Number of coordinates of the Cellular Space.
-                          CALIndices coordinatesDimensions,
+struct CALModel* calCADef(struct CALDimensions* dimensions,
                           enum CALNeighborhood CAL_NEIGHBORHOOD,
                           enum CALSpaceBoundaryCondition CAL_TOROIDALITY, //!< Enumerator that specifies whether the execution flow must be serial or parallel.
                           enum CALOptimization CAL_OPTIMIZATION //!< Enumerator used for specifying the active cells optimization or no optimization.
@@ -77,7 +76,7 @@ void calAddNeighbor(struct CALModel* calModel, //!< Pointer to the cellular auto
                       CALIndices neighbourIndex  //!< Indexes of the n-th neighbour
                       );
 
-int calGetSizeOfX(struct CALModel* calModel);
+#define calGetSizeOfX(calModel)(calModel->calNeighborPool->size_of_X)
 
 
 /*! \brief Creates and adds a new byte substate to CALModel2D::pQb_array and return a pointer to it.
@@ -295,6 +294,8 @@ void calUpdateSubstate_r(struct CALModel* calModel,	//!< Pointer to the cellular
                          );
 
 void calUpdate(struct CALModel* calModel);
+
+int* calGetCell(struct CALModel* calModel, ...);
 
 void calFinalize(struct CALModel* calModel);
 #endif

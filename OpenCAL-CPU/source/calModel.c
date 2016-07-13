@@ -1,6 +1,10 @@
 ﻿#include <OpenCAL-CPU/calModel.h>
 #include <OpenCAL-CPU/calRun.h>
 
+
+#include <stdarg.h>
+
+
 static CALbyte calAllocSubstate_b(struct CALModel* calModel, struct CALSubstate_b* Q)
 {
     Q->current = calAllocBuffer_b(calModel->coordinatesDimensions, calModel->numberOfCoordinates);
@@ -34,31 +38,31 @@ static CALreal calAllocSubstate_r(struct CALModel* calModel, struct CALSubstate_
     return CAL_TRUE;
 }
 
-struct CALModel*calCADef(int numberOfCoordinates, CALIndices coordinatesDimensions, enum CALNeighborhood CAL_NEIGHBORHOOD, enum CALSpaceBoundaryCondition CAL_TOROIDALITY, enum CALOptimization CAL_OPTIMIZATION, int initial_step, int final_step)
+struct CALModel*calCADef(struct CALDimensions* dimensions, enum CALNeighborhood CAL_NEIGHBORHOOD, enum CALSpaceBoundaryCondition CAL_TOROIDALITY, enum CALOptimization CAL_OPTIMIZATION, int initial_step, int final_step)
 {
 
     struct CALModel *calModel = (struct CALModel *)malloc(sizeof(struct CALModel));
     if (!calModel)
         return NULL;
 
-    calModel->numberOfCoordinates = numberOfCoordinates;
+    calModel->numberOfCoordinates = dimensions->number_of_dimensions;
 
-    calModel->coordinatesDimensions = coordinatesDimensions;
+    calModel->coordinatesDimensions = dimensions->coordinates_dimensions;
 
     int n;
     calModel->cellularSpaceDimension = 1;
     for(n = 0; n < calModel->numberOfCoordinates; n++)
-        calModel->cellularSpaceDimension *= coordinatesDimensions[n];
-    calModel->calIndexesPool =  calDefIndexesPool(coordinatesDimensions,numberOfCoordinates);
+        calModel->cellularSpaceDimension *= calModel->coordinatesDimensions[n];
+    calModel->calIndexesPool =  calDefIndexesPool(calModel->coordinatesDimensions, calModel->numberOfCoordinates);
 
     //CALL calRun constructor and set optimization
     int ** cellPattern;
     switch (CAL_NEIGHBORHOOD) {
     case CAL_VON_NEUMANN_NEIGHBORHOOD:
-        cellPattern = defineVonNeumannNeighborhood(1,numberOfCoordinates);
+        cellPattern = defineVonNeumannNeighborhood(1, calModel->numberOfCoordinates);
         break;
     case CAL_MOORE_NEIGHBORHOOD:
-        cellPattern = defineMooreNeighborhood(1,numberOfCoordinates);
+        cellPattern = defineMooreNeighborhood(1, calModel->numberOfCoordinates);
         break;
         //    case CAL_HEXAGONAL_NEIGHBORHOOD:
         //        break;
@@ -84,6 +88,9 @@ struct CALModel*calCADef(int numberOfCoordinates, CALIndices coordinatesDimensio
     calModel->calRun = makeCALRun(initial_step, final_step);
     //Manage Optimization
 
+    free(dimensions);
+
+    return calModel;
 }
 
 void calAddNeighbor(struct CALModel* calModel, CALIndices neighbourIndex)
@@ -507,6 +514,28 @@ void calUpdate(struct CALModel* calModel)
         calUpdateSubstate_r(calModel, calModel->pQr_array[i]);
 }
 
+
+int*calGetCell(struct CALModel* calModel, ...)
+{
+    va_list arguments;
+
+    int n = calModel->numberOfCoordinates;
+    int* cell = (int*) malloc(sizeof(int) * n);
+    int x;
+    va_start (arguments, n);
+    for (x = 0; x < n; x++ )
+    {
+        cell[x] = va_arg( arguments, int );
+    }
+    va_end ( arguments );
+
+    int* cell_to_return = calModel->calIndexesPool->pool[getLinearIndex(cell, calModel->coordinatesDimensions, n)];
+
+    free(cell);
+
+    return cell_to_return;
+}
+
 void calFinalize(struct CALModel* calModel)
 {
     int i;
@@ -545,11 +574,4 @@ void calFinalize(struct CALModel* calModel)
     free(calModel);
 
     calModel = NULL;
-}
-
-
-
-int calGetSizeOfX(struct CALModel* calModel)
-{
-    return calModel->calNeighborPool->size_of_X;
 }
