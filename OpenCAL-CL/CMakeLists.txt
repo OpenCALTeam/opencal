@@ -22,6 +22,13 @@ if(BUILD_DOCUMENTATION)
     	install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html DESTINATION ${INSTALL_DOCS_DIR}/${OPENCAL-CL_LIBRARY_NAME})
 endif()
 
+if(NOT MSVC)
+  find_library(M_LIB m)
+else()
+  # not needed on windows
+  set(M_LIB "")
+endif()
+
 
 find_package(OpenCL REQUIRED)
 find_package(OpenGL REQUIRED)
@@ -57,7 +64,7 @@ if ( ENABLE_STATIC )
 endif()
 if ( ENABLE_SHARED )
   add_library(opencal-cl SHARED ${SRC} ${HEADERS})
-  target_link_libraries(opencal-cl pthread opencal ${OpenCL_LIBRARY})
+  target_link_libraries(opencal-cl pthread opencal ${OpenCL_LIBRARY} ${M_LIB})
   if (MSVC)
     install(TARGETS opencal-cl
             ARCHIVE DESTINATION  ${INSTALL_LIB_DIR}

@@ -25,8 +25,8 @@ void endTime(struct OpenCALTime * opencalTime){
     totalSeconds =(int)totalSeconds%60;
     int totalMilliseconds2 =(int)totalMilliseconds%1000;
     printf("%d:%d.%d;",totalMinutes,totalSeconds,totalMilliseconds2);
-    printf("%d;",totalMilliseconds);
-    printf("%d\n",seconds);
+    printf("%llu;",totalMilliseconds);
+    printf("%llu\n",seconds);
 
 }
 
