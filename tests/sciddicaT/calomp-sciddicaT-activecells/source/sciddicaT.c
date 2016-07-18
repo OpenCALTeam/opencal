@@ -46,8 +46,8 @@ void sciddicaTFlowsComputation(struct CALModel2D* sciddicaT, int i, int j)
     CALint n;
     CALreal z, h;
     CALreal f;
-
-    for(int k = 0; k < numberOfLoops; k++){
+    int k;
+    for(k = 0; k < numberOfLoops; k++){
         m = calGet2Dr(sciddicaT, Q.h, i, j) - P.epsilon;
         u[0] = calGet2Dr(sciddicaT, Q.z, i, j) + P.epsilon;
         for (n=1; n<sciddicaT->sizeof_X; n++)
@@ -96,7 +96,9 @@ void sciddicaTWidthUpdate(struct CALModel2D* sciddicaT, int i, int j)
 {
     CALreal h_next;
     CALint n;
-    for(int k = 0; k < numberOfLoops; k++){
+
+    int k;
+    for(k = 0; k < numberOfLoops; k++){
         h_next = calGet2Dr(sciddicaT, Q.h, i, j);
         for(n=1; n<sciddicaT->sizeof_X; n++)
             h_next +=  calGetX2Dr(sciddicaT, Q.f[NUMBER_OF_OUTFLOWS - n], i, j, n) - calGet2Dr(sciddicaT, Q.f[n-1], i, j);

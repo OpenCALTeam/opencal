@@ -211,12 +211,14 @@ ExecuteAndSaveElapsedTime() {
             increment=2
             echo -e "\tTEST $binary" >> $TIMINGFILE;
 
-            for (( cores=2; cores<= $LimitsNumberOfCore/2; cores*=2 ))
+					  let "LimitsNumberOfCore = LimitsNumberOfCore/2"
+
+						echo "$LimitsNumberOfCore"
+
+            for (( cores=2; cores <= $LimitsNumberOfCore; cores*=2 ))
             do
 
-                if [[ $cores == 16 ]]; then
-                   cores=20;
-                fi
+
                 export OMP_NUM_THREADS=$cores
                 totalmilliseconds=0
                 echo "Test with $cores cores"
@@ -240,6 +242,10 @@ ExecuteAndSaveElapsedTime() {
                 echo -e "\tTEST with $cores cores \n" >> $outFile
 
                 echo -e "\t $tmp ms \n" >> $outFile
+
+								if [[ $cores == 16 ]]; then
+									cores=10;
+								fi
 
             done
         else
