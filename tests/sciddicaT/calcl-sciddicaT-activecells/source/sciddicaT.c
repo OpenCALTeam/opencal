@@ -30,13 +30,13 @@
 //   THE sciddicaT (Toy model) CELLULAR AUTOMATON
 //-----------------------------------------------------------------------
 #define ACTIVE_CELLS
-#define ROWS 3593
-#define COLS 3730
+#define ROWS 610
+#define COLS 496
 #define P_R 0.5
 #define P_EPSILON 0.001
 #define STEPS 4000
-#define DEM_PATH "./testData/sciddicaT-data/etna/dem.txt"
-#define SOURCE_PATH "./testData/sciddicaT-data/etna/source.txt"
+#define DEM_PATH "./testData/sciddicaT-data/dem.txt"
+#define SOURCE_PATH "./testData/sciddicaT-data/source.txt"
 #define KERNEL_SRC "./sciddicaT/calcl-sciddicaT-activecells/kernel/source/"
 #define KERNEL_INC "./sciddicaT/calcl-sciddicaT-activecells/kernel/include/"
 #define KERNEL_SRC_AC "./sciddicaT/calcl-sciddicaT-activecells/kernelActive/source/"

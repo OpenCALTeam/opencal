@@ -37,10 +37,10 @@
 #define STEPS 4000
 #define DEM_PATH "./testData/sciddicaT-data/dem.txt"
 #define SOURCE_PATH "./testData/sciddicaT-data/source.txt"
-#define KERNEL_SRC "./sciddicaT/calcl-sciddicaT/kernel/source/"
-#define KERNEL_INC "./sciddicaT/calcl-sciddicaT/kernel/include/"
-#define KERNEL_SRC_AC "./sciddicaT/calcl-sciddicaT/kernelActive/source/"
-#define KERNEL_INC_AC "./sciddicaT/calcl-sciddicaT/kernelActive/include/"
+#define KERNEL_SRC "./sciddicaT/calcl-sciddicaT-local/kernel/source/"
+#define KERNEL_INC "./sciddicaT/calcl-sciddicaT-local/kernel/include/"
+#define KERNEL_SRC_AC "./sciddicaT/calcl-sciddicaT-local/kernelActive/source/"
+#define KERNEL_INC_AC "./sciddicaT/calcl-sciddicaT-local/kernelActive/include/"
 #define NUMBER_OF_OUTFLOWS 4
 #define KERNEL_ELEM_PROC_FLOW_COMPUTATION "flowsComputation"
 #define KERNEL_ELEM_PROC_WIDTH_UPDATE "widthUpdate"

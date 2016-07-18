@@ -15,8 +15,8 @@ PURPLE="\e[35m"
 DEFAULT="\e[39m"
 
 NUMERICALTEST=1
-NUMBEROFTESTS=10
-STEPS=4000
+NUMBEROFTESTS=1
+STEPS=2
 MD5TEST=0
 
 EPSILON=0.0001
@@ -211,11 +211,11 @@ ExecuteAndSaveElapsedTime() {
             increment=2
             echo -e "\tTEST $binary" >> $TIMINGFILE;
 
-            for (( cores=2; cores<= $LimitsNumberOfCore; cores+=$increment ))
+            for (( cores=2; cores<= $LimitsNumberOfCore/2; cores*=2 ))
             do
 
-                if [[ $cores == 8 ]]; then
-                   increment=8;
+                if [[ $cores == 16 ]]; then
+                   cores=20;
                 fi
                 export OMP_NUM_THREADS=$cores
                 totalmilliseconds=0
@@ -243,7 +243,7 @@ ExecuteAndSaveElapsedTime() {
 
             done
         else
-            #echo "ENTRO ELSE calcl"
+            #echo "ENTRO ELSE cal"
             totalmilliseconds=0
             for (( c=1; c<= $NUMBEROFTESTS; c++ ))
             do
@@ -298,8 +298,9 @@ for d in */ ; do
 #        if [[ $d != "include/" && $d != "testsout/" &&  $d != "testData/" &&  $d != "plotFiles/" ]]; then
 #               if [[ $d == "heattransfer/" ]]; then
 #		if [[ $d == "sciddicaT/" || $d == "heattransfer/" ]]; then
-                if [[ $d == "sciddicaT/" ]]; then
+                if [[ $d == "sciddicaT/"  ]]  ; then
 		dir=${d%/}
+
 
                 echo ""
                 printColored $GREEN "TEST SUITE $dir";
@@ -320,8 +321,10 @@ for d in */ ; do
                 #now run all the otherversion of this test
                 cd $dir
                 for o in */ ; do
-                        if [[ $o != "cal-$dir/" ]]; then
+#                       not execute local vesrion and explicit
+                        if [[ $o != "cal-$dir/" && $o != *"local"* && $o != *"explicit"* ]]; then
                                 odir=${o%/}
+                                echo "$odir"
                         #execute serial version
                                 otherBin=$dir/$odir/bin/$odir-test
 
@@ -334,9 +337,10 @@ for d in */ ; do
                         #execute test
                                  #./$otherBin 1
 
-                                ExecuteAndSaveElapsedTime $TIMINGFILE $otherBin 1
 
-									#if [[ $otherBin != *"calcl"* ]]; then
+                       ExecuteAndSaveElapsedTime $TIMINGFILE $otherBin 1
+
+                                                                        #if [[ $otherBin != *"calcl"* ]]; then
                         #md5sum on all single files
                                 TestOutputFiles $MD5TEST
                         #md5sum CUMULATIVE
@@ -349,7 +353,7 @@ for d in */ ; do
 
                 #restore test directory to run other version of the test
                                 cd $dir
-												#fi
+                                                                                                #fi
 
                         fi
                 done
