@@ -173,7 +173,7 @@ void calCopyBufferActiveCellsNaive2Dr(CALreal* M_src, CALreal* M_dest, struct CA
 void calApplyElementaryProcessActiveCellsNaive2D(struct CALModel2D* ca2D, CALCallbackFunc2D elementary_process)
 {
     int n;
-#pragma omp for private(n)
+#pragma omp parallel for private(n)
     for (n=0; n<ca2D->A->size_current; n++)
         elementary_process(ca2D, ca2D->A->cells[n].i, ca2D->A->cells[n].j);
 }

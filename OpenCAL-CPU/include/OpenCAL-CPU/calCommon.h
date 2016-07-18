@@ -29,6 +29,10 @@ struct CALDimensions
     int* coordinates_dimensions;
 };
 
+struct CALActiveCells {
+        struct CALModel* calModel;
+};
+
 struct CALDimensions* calDefDimensions(int n, ... );
 
 enum CALInitMethod { CAL_NO_INIT = 0, CAL_INIT_CURRENT, CAL_INIT_NEXT, CAL_INIT_BOTH };

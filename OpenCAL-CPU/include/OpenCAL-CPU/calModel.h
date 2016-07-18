@@ -39,7 +39,7 @@ struct CALModel {
         struct CALNeighborPool* calNeighborPool;
 
         enum CALOptimization OPTIMIZATION;	//!< Type of optimization used. It can be CAL_NO_OPT or CAL_OPT_ACTIVE_CELLS.
-        //struct CALActiveCells2D A;			//!< Computational Active cells object. if A.actives==NULL no optimization is applied.
+        struct CALActiveCells* A;			//!< Computational Active cells object. if A.actives==NULL no optimization is applied.
 
         CALIndices X;				//!< Array of cell coordinates defining the cellular automaton neighbourhood relation.
         int sizeof_X;						//!< Number of cells belonging to the neighbourhood. Note that predefined neighbourhoods include the central cell.
