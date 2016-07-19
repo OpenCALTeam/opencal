@@ -9,7 +9,6 @@
 #ifndef cal_contiguous_linked_list
 #define cal_contiguous_linked_list
 
-#if CAL_PARALLEL == 1
 typedef struct CALQueueElement
 {
         CALIndices cell;
@@ -28,10 +27,6 @@ typedef struct CALQueue
         int size;
 
 }CALQueue;
-
-
-CALQueueElement calTakeElement(CALQueue* queue);
-#endif
 
 typedef struct CALBufferElement
 {
@@ -61,26 +56,54 @@ struct CALActiveCellsCLL
         CALBufferElement** _heads;
         CALBufferElement** _tails;
 
-#if CAL_PARALLEL == 1
         CALQueue* queues_of_elements_to_add;
-#endif
 };
+
+void calPutElement(struct CALActiveCellsCLL* A, CALIndices cell);
+void calPushBack(struct CALActiveCellsCLL* A, int thread, CALIndices cell );
+void calUpdateParallelCLL(struct CALActiveCellsCLL* A);
+void calUpdateSerialCLL(struct CALActiveCellsCLL* A);
 
 struct CALActiveCellsCLL* calMakeContiguousLinkedList(struct CALModel* model);
 
 
 /*! \brief Links the cell to the tail of the list
 */
-void calAddActiveCellCLL(struct CALActiveCellsCLL* A, CALIndices cell);
+void calAddActiveCellCLL(struct CALActiveCellsCLL* A, CALIndices cell)
+{
+#if CAL_PARALLEL == 1
+    calPutElement(A, cell);
+#else
+    calPushBack(A, 0, cell);
+#endif
+}
 
 /*! \brief Removes the cell from the list
 */
 void calRemoveActiveCellCLL(struct CALActiveCellsCLL* A, CALIndices cell);
 
+#if CAL_PARALLEL == 1
+    #define calGetNextBufferElement(A, current)(current->next)
+#elif CAL_PARALLEL == 0
+    #define calGetNextBufferElement(A, current)(A->_tails[1] == current->next? NULL : current->next)
+#endif
 
-#define calGetNextBufferElement(current)(current->next)
-
-void calUpdateContiguousLinkedList(struct CALActiveCellsCLL* A);
+/*
+ * TODO test if this macros work as they should
+#if CAL_PARALLEL == 1
+#define calGetNextBufferElement(A, current)(printf("sono nel par == 1 \n\n"))
+#elif CAL_PARALLEL == 0
+#define calGetNextBufferElement(A, current)(printf("sono nel par == 0 \n\n"))
+#endif
+*/
+void calUpdateActiveCellsCLL(struct CALActiveCellsCLL* A)
+{
+#if CAL_PARALLEL == 1
+    calUpdateParallelCLL(A);
+#else
+    calUpdateSerialCLL(A);
+#endif
+}
 
 void calApplyElementaryProcessActiveCellsCLL(struct CALActiveCellsCLL* A, CALLocalProcess elementary_process);
 

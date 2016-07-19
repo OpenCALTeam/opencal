@@ -83,7 +83,7 @@ struct CALModel*calCADef(struct CALDimensions* dimensions, enum CALNeighborhood 
 //        }
 //        printf("\n");
 //    }
-    calModel->OPTIMIZATION = CAL_OPTIMIZATION;
+    calModel->A->OPTIMIZATION = CAL_OPTIMIZATION;
 
     calModel->calRun = makeCALRun(initial_step, final_step);
     //Manage Optimization

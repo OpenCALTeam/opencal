@@ -1,6 +1,5 @@
 ﻿#include <OpenCAL-CPU/calContiguousLinkedList.h>
 
-#if CAL_PARALLEL == 1
 static int calGetBuffer(struct CALActiveCellsCLL* A)
 {
     int min = 0;
@@ -21,7 +20,7 @@ static int calGetBuffer(struct CALActiveCellsCLL* A)
     return ie;
 }
 
-static void calPutElement(struct CALActiveCellsCLL* A, CALIndices cell)
+void calPutElement(struct CALActiveCellsCLL* A, CALIndices cell)
 {
     int linear_index = getLinearIndex(cell, A->inherited_pointer->calModel->coordinatesDimensions,A->inherited_pointer->calModel->numberOfCoordinates);
     CALBufferElement* element = &A->buffer[linear_index];
@@ -32,10 +31,10 @@ static void calPutElement(struct CALActiveCellsCLL* A, CALIndices cell)
         return;
     }
     int thread = calGetBuffer(A);
-    A->buffer[index].isActive = true;
+    A->buffer[linear_index].isActive = true;
 
     A->number_of_active_cells_per_thread[thread]++;
-    CALQueue* queue = &buffer->queues_of_elements_to_add[thread];
+    CALQueue* queue = &A->queues_of_elements_to_add[thread];
     CALQueueElement* newElement = (CALQueueElement*) malloc (sizeof(CALQueueElement));
     newElement->cell = cell;
 
@@ -57,10 +56,10 @@ static void calPutElement(struct CALActiveCellsCLL* A, CALIndices cell)
     }
     queue->size++;
     omp_unset_lock(&queue->lock);
-    omp_unset_lock(A->buffer[index].lock);
+    omp_unset_lock(A->buffer[linear_index].lock);
 }
 
-static CALQueueElement calTakeElement(CALQueue* queue)
+static CALQueueElement* calTakeElement(CALQueue* queue)
 {
     CALQueueElement* element;
     CALQueueElement* cell;
@@ -88,7 +87,7 @@ static CALQueueElement calTakeElement(CALQueue* queue)
     return cell;
 }
 
-static void calUpdateParallelCLL(struct CALActiveCellsCLL* A)
+void calUpdateParallelCLL(struct CALActiveCellsCLL* A)
 {
     int n = 0;
     CALQueueElement* queueElement;
@@ -97,10 +96,10 @@ static void calUpdateParallelCLL(struct CALActiveCellsCLL* A)
     int* size_per_t = (int*) malloc (sizeof(int) * number_of_threads);
 
 #pragma omp parallel for private(queueElement) firstprivate(A, number_of_threads)
-    for( n = 0; n < buffer->numberOfThreads; n++ )
+    for( n = 0; n < A->number_of_threads; n++ )
     {
         size_per_t[n] = 0;
-        queueElement = calTakeElement(&buffer->queuesOfElementsToAdd[n] );
+        queueElement = calTakeElement(&A->queues_of_elements_to_add[n] );
         while(queueElement != NULL)
         {
             calPushBack(A, n, queueElement->cell);
@@ -116,9 +115,13 @@ static void calUpdateParallelCLL(struct CALActiveCellsCLL* A)
 
     free(size_per_t);
 }
-#endif
 
-static void calPushBack(struct CALActiveCellsCLL* A, int thread, CALIndices cell )
+void calUpdateSerialCLL(struct CALActiveCellsCLL* A)
+{
+    A->_tails[1] = NULL;
+}
+
+void calPushBack(struct CALActiveCellsCLL* A, int thread, CALIndices cell )
 {
     CALBufferElement* tail = A->_tails[thread];
     CALBufferElement* element = &A->buffer[getLinearIndex(cell, A->inherited_pointer->calModel->coordinatesDimensions, A->inherited_pointer->calModel->numberOfCoordinates)];
@@ -159,12 +162,14 @@ struct CALActiveCellsCLL* calMakeContiguousLinkedList(struct CALModel* calModel)
         return NULL;
     }
 
-#if CAL_PARALLEL == 1
     contiguousLinkedList->queues_of_elements_to_add = (CALQueue*) malloc(sizeof(CALQueue) * contiguousLinkedList->number_of_threads);
-#endif
 
     contiguousLinkedList->_heads = (CALBufferElement**) malloc (sizeof(CALBufferElement*) * contiguousLinkedList->number_of_threads);
-    contiguousLinkedList->_tails = (CALBufferElement**) malloc (sizeof(CALBufferElement*) * contiguousLinkedList->number_of_threads);
+
+    if(contiguousLinkedList->number_of_threads == 1)
+        contiguousLinkedList->_tails = (CALBufferElement**) malloc (sizeof(CALBufferElement*) * 2);
+    else
+        contiguousLinkedList->_tails = (CALBufferElement**) malloc (sizeof(CALBufferElement*) * contiguousLinkedList->number_of_threads);
 
     contiguousLinkedList->buffer = (CALBufferElement*) malloc (sizeof(CALBufferElement) * contiguousLinkedList->size);
     contiguousLinkedList->number_of_active_cells_per_thread = (int *) malloc (sizeof(int) * contiguousLinkedList->number_of_threads);
@@ -173,12 +178,10 @@ struct CALActiveCellsCLL* calMakeContiguousLinkedList(struct CALModel* calModel)
     for(n = 0; n < contiguousLinkedList->number_of_threads; n++)
     {
         contiguousLinkedList->number_of_active_cells_per_thread[n] = 0;
-#if CAL_PARALLEL == 1
         contiguousLinkedList->queues_of_elements_to_add[n].first = NULL;
         contiguousLinkedList->queues_of_elements_to_add[n].last = NULL;
         omp_init_lock( &contiguousLinkedList->queues_of_elements_to_add[n].lock);
         contiguousLinkedList->queues_of_elements_to_add[n].size =  0;
-#endif
         contiguousLinkedList->_heads[n] = NULL;
         contiguousLinkedList->_tails[n] = NULL;
     }
@@ -223,14 +226,6 @@ struct CALActiveCellsCLL* calMakeContiguousLinkedList(struct CALModel* calModel)
     return contiguousLinkedList;
 }
 
-void calAddActiveCellCLL(struct CALActiveCellsCLL* A, CALIndices cell)
-{
-#if CAL_PARALLEL == 1
-    calPutElement(A, cell);
-#else
-    calPushBack(A, 0, cell);
-}
-
 void calRemoveActiveCellCLL(struct CALActiveCellsCLL* A, CALIndices cell)
 {
     int linear_address = getLinearIndex(cell, A->inherited_pointer->calModel->coordinatesDimensions, A->inherited_pointer->calModel->numberOfCoordinates);
@@ -253,7 +248,6 @@ void calRemoveActiveCellCLL(struct CALActiveCellsCLL* A, CALIndices cell)
         return;
     }
 
-
     if(previous != NULL)
         previous->next = next;
     else
@@ -272,10 +266,6 @@ void calRemoveActiveCellCLL(struct CALActiveCellsCLL* A, CALIndices cell)
     element->previous = NULL;
 }
 
-void calUpdateContiguousLinkedList(struct CALActiveCellsCLL* A)
-{
-
-}
 
 void calApplyElementaryProcessActiveCellsCLL(struct CALActiveCellsCLL* A, CALLocalProcess elementary_process)
 {
@@ -291,20 +281,132 @@ void calApplyElementaryProcessActiveCellsCLL(struct CALActiveCellsCLL* A, CALLoc
 
         while( current != NULL )
         {
-            next = calGetNextBufferElement(current);
+            next = calGetNextBufferElement(A, current);
             elementary_process(calModel, current->cell, num_of_dims);
             current = next;
         }
     }
 }
 
-void calCopyBufferActiveCellsCLL_b(CALbyte* M_src, CALbyte* M_dest,  struct CALActiveCellsCLL* A){}
-void calCopyBufferActiveCellsCLL_i(CALint* M_src, CALint* M_dest,  struct CALActiveCellsCLL* A){}
-void calCopyBufferActiveCellsCLL_r(CALreal* M_src, CALreal* M_dest,  struct CALActiveCellsCLL* A){}
+void calCopyBufferActiveCellsCLL_b(CALbyte* M_src, CALbyte* M_dest,  struct CALActiveCellsCLL* A)
+{
+    int index;
+    int c;
+    int numb_of_dims = A->inherited_pointer->calModel->numberOfCoordinates;
+    int* coords_dims = A->inherited_pointer->calModel->coordinatesDimensions;
+#pragma omp parallel for private(c) firstprivate(A, coords_dims, numb_of_dims, M_src, M_dest)
+    for(index = 0; index < A->number_of_threads; index++)
+    {
+        CALBufferElement* current;
+        current = A->_heads[index];
+        while( current != NULL )
+        {
+            c = getLinearIndex(current->cell, coords_dims, numb_of_dims);
+            if (M_dest[c] != M_src[c])
+                M_dest[c] = M_src[c];
+            current = calGetNextBufferElement(A, current);
+        }
+    }
+}
+void calCopyBufferActiveCellsCLL_i(CALint* M_src, CALint* M_dest,  struct CALActiveCellsCLL* A)
+{
+    int index;
+    int c;
+    int numb_of_dims = A->inherited_pointer->calModel->numberOfCoordinates;
+    int* coords_dims = A->inherited_pointer->calModel->coordinatesDimensions;
+#pragma omp parallel for private(c) firstprivate(A, coords_dims, numb_of_dims, M_src, M_dest)
+    for(index = 0; index < A->number_of_threads; index++)
+    {
+        CALBufferElement* current;
+        current = A->_heads[index];
+        while( current != NULL )
+        {
+            c = getLinearIndex(current->cell, coords_dims, numb_of_dims);
+            if (M_dest[c] != M_src[c])
+                M_dest[c] = M_src[c];
+            current = calGetNextBufferElement(A, current);
+        }
+    }
+}
+void calCopyBufferActiveCellsCLL_r(CALreal* M_src, CALreal* M_dest,  struct CALActiveCellsCLL* A)
+{
+    int index;
+    int c;
+    int numb_of_dims = A->inherited_pointer->calModel->numberOfCoordinates;
+    int* coords_dims = A->inherited_pointer->calModel->coordinatesDimensions;
+#pragma omp parallel for private(c) firstprivate(A, coords_dims, numb_of_dims, M_src, M_dest)
+    for(index = 0; index < A->number_of_threads; index++)
+    {
+        CALBufferElement* current;
+        current = A->_heads[index];
+        while( current != NULL )
+        {
+            c = getLinearIndex(current->cell, coords_dims, numb_of_dims);
+            if (M_dest[c] != M_src[c])
+                M_dest[c] = M_src[c];
+            current = calGetNextBufferElement(A, current);
+        }
+    }
+}
 
 
-void calSetActiveCellsCLLBuffer_b(CALbyte* M, CALbyte value, struct CALActiveCellsCLL* A){}
-void calSetActiveCellsCLLBuffer_i(CALint* M, CALint value, struct CALActiveCellsCLL* A){}
-void calSetActiveCellsCLLBuffer_r(CALreal* M, CALreal value, struct CALActiveCellsCLL* A){}
+void calSetActiveCellsCLLBuffer_b(CALbyte* M, CALbyte value, struct CALActiveCellsCLL* A)
+{
+    int n;
+    int numb_of_dims = A->inherited_pointer->calModel->numberOfCoordinates;
+    int* coords_dims = A->inherited_pointer->calModel->coordinatesDimensions;
 
-void calFreeContiguousLinkedList(struct CALActiveCellsCLL* A){}
+#pragma omp parallel for firstprivate(A, value, numb_of_dims, coords_dims)
+    for(n = 0; n < A->number_of_threads; n++)
+    {
+        CALBufferElement* current = A->_heads[n];
+        while(current != NULL)
+        {
+            M[getLinearIndex(current->cell, coords_dims, numb_of_dims)] = value;
+            current = current->next;
+        }
+    }
+}
+void calSetActiveCellsCLLBuffer_i(CALint* M, CALint value, struct CALActiveCellsCLL* A)
+{
+    int n;
+    int numb_of_dims = A->inherited_pointer->calModel->numberOfCoordinates;
+    int* coords_dims = A->inherited_pointer->calModel->coordinatesDimensions;
+
+#pragma omp parallel for firstprivate(A, value, numb_of_dims, coords_dims)
+    for(n = 0; n < A->number_of_threads; n++)
+    {
+        CALBufferElement* current = A->_heads[n];
+        while(current != NULL)
+        {
+            M[getLinearIndex(current->cell, coords_dims, numb_of_dims)] = value;
+            current = current->next;
+        }
+    }
+}
+void calSetActiveCellsCLLBuffer_r(CALreal* M, CALreal value, struct CALActiveCellsCLL* A)
+{
+    int n;
+    int numb_of_dims = A->inherited_pointer->calModel->numberOfCoordinates;
+    int* coords_dims = A->inherited_pointer->calModel->coordinatesDimensions;
+
+#pragma omp parallel for firstprivate(A, value, numb_of_dims, coords_dims)
+    for(n = 0; n < A->number_of_threads; n++)
+    {
+        CALBufferElement* current = A->_heads[n];
+        while(current != NULL)
+        {
+            M[getLinearIndex(current->cell, coords_dims, numb_of_dims)] = value;
+            current = current->next;
+        }
+    }
+}
+
+void calFreeContiguousLinkedList(struct CALActiveCellsCLL* A)
+{
+    free(A->inherited_pointer);
+    free(A->number_of_active_cells_per_thread);
+    free(A->_heads);
+    free(A->_tails);
+}
+

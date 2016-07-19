@@ -29,9 +29,6 @@ struct CALDimensions
     int* coordinates_dimensions;
 };
 
-struct CALActiveCells {
-        struct CALModel* calModel;
-};
 
 struct CALDimensions* calDefDimensions(int n, ... );
 
