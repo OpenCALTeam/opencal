@@ -9,13 +9,13 @@
 #include <time.h>
 
 // Some definitions...
-#define ROWS 3593
-#define COLS 3730
+#define ROWS 610
+#define COLS 496
 #define P_R 0.5
 #define P_EPSILON 0.001
 #define STEPS 4000
-#define DEM_PATH "./testData/sciddicaT-data/etna/dem.txt"
-#define SOURCE_PATH "./testData/sciddicaT-data/etna/source.txt"
+#define DEM_PATH "./testData/sciddicaT-data/dem.txt"
+#define SOURCE_PATH "./testData/sciddicaT-data/source.txt"
 #define OUTPUT_PATH "./data/width_final.txt"
 #define NUMBER_OF_OUTFLOWS 4
 

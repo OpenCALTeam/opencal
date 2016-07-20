@@ -9,13 +9,13 @@
 #include <time.h>
 
 // Some definitions...
-#define ROWS 3593
-#define COLS 3730
+#define ROWS 610
+#define COLS 496
 #define P_R 0.5
 #define P_EPSILON 0.001
 #define STEPS 4000
-#define DEM_PATH "./testData/sciddicaT-data/etna/dem.txt"
-#define SOURCE_PATH "./testData/sciddicaT-data/etna/source.txt"
+#define DEM_PATH "./testData/sciddicaT-data/dem.txt"
+#define SOURCE_PATH "./testData/sciddicaT-data/source.txt"
 #define OUTPUT_PATH "./data/width_final.txt"
 #define NUMBER_OF_OUTFLOWS 4
 
@@ -197,6 +197,12 @@ int main(int argc, char** argv)
         printf ("number of steps is not an integer");
         exit(-1);
     }
+
+		// read from argv the number of steps
+		if (sscanf (argv[3], "%i", &numberOfLoops)!=1 && numberOfLoops >=0) {
+				printf ("number of loops is not an integer");
+				exit(-1);
+		}
 
 	// define of the sciddicaT CA and sciddicaT_simulation simulation objects
 	sciddicaT = calCADef2D (ROWS, COLS, CAL_VON_NEUMANN_NEIGHBORHOOD_2D, CAL_SPACE_TOROIDAL, CAL_OPT_ACTIVE_CELLS);
