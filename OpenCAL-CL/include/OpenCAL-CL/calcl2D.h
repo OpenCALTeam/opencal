@@ -375,6 +375,7 @@ struct CALCLModel2D {
     CALCLcontext context;
     CALCLqueue queue;									//!< Opencl command queue
     int roundedDimensions;
+    size_t * workGroupDimensions;
 
 };
 
@@ -523,5 +524,11 @@ DllExport
 void calclSetReductionParameters2D(struct CALCLModel2D* calclmodel2D,//!< Pointer to a CALCLModel2D
                                    CALCLkernel * kernel//!< Pointer to Opencl kernel
                                    );
+
+/*! \brief Set WorkGroup dimensions in the ND range   */
+DllExport
+void calclSetWorkGroupDimensions(struct CALCLModel2D* calclmodel2D,//!< Pointer to a CALCLModel2D
+                                 int m, //!< Number of rows
+                                 int n);//!< Number of columns
 
 #endif /* CALCL_H_ */

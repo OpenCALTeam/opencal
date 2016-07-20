@@ -3,7 +3,7 @@
 #include <kernel.h>
 
 //first elementary process
-__kernel void flowsComputation(__CALCL_MODEL_2D, __global CALParameterr * Pepsilon, __global CALParameterr * Pr)
+__kernel void flowsComputation(__CALCL_MODEL_2D, __global CALParameterr * Pepsilon, __global CALParameterr * Pr, int numberOfLoops)
 {
 	calclActiveThreadCheck2D();
 
@@ -22,6 +22,7 @@ __kernel void flowsComputation(__CALCL_MODEL_2D, __global CALParameterr * Pepsil
 	CALint sizeOfX_ = calclGetNeighborhoodSize();
 	CALParameterr eps = *Pepsilon;
 
+  for(int k = 0; k < numberOfLoops; k++){
 	if (calclGet2Dr(MODEL_2D,H, i, j) <= eps)
 		return;
 
@@ -65,10 +66,11 @@ __kernel void flowsComputation(__CALCL_MODEL_2D, __global CALParameterr * Pepsil
 			calclAddActiveCellX2D(MODEL_2D, i, j, n);
 		}
 	}
+	}
 }
 
 
-__kernel void widthUpdate(__CALCL_MODEL_2D)
+__kernel void widthUpdate(__CALCL_MODEL_2D, int numberOfLoops)
 {
 	calclActiveThreadCheck2D();
 
@@ -81,6 +83,7 @@ __kernel void widthUpdate(__CALCL_MODEL_2D)
 	CALreal h_next;
 	CALint n;
 
+for(int k = 0; k < numberOfLoops; k++){
 	h_next = calclGet2Dr(MODEL_2D,H, i, j);
 
 
@@ -88,6 +91,7 @@ __kernel void widthUpdate(__CALCL_MODEL_2D)
 		h_next += ( calclGetX2Dr(MODEL_2D, NUMBER_OF_OUTFLOWS-n, i, j, n) - calclGet2Dr(MODEL_2D, n-1, i, j) );
 
 	calclSet2Dr(MODEL_2D, H, i, j, h_next);
+	}
 }
 
 __kernel void removeInactiveCells(__CALCL_MODEL_2D, __global CALParameterr * Pepsilon)

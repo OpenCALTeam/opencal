@@ -1,9 +1,8 @@
 // The SciddicaT debris flows XCA transition function kernels
 
 #include <kernel.h>
-#define NUMBER_OF_LOOPS 200
 
-__kernel void flowsComputation(__CALCL_MODEL_2D, __global CALParameterr * Pepsilon, __global CALParameterr * Pr)
+__kernel void flowsComputation(__CALCL_MODEL_2D, __global CALParameterr * Pepsilon, __global CALParameterr * Pr, int numberOfLoops)
 {
     calclThreadCheck2D();
 
@@ -22,7 +21,7 @@ __kernel void flowsComputation(__CALCL_MODEL_2D, __global CALParameterr * Pepsil
     CALint sizeOfX_ = calclGetNeighborhoodSize();
     CALParameterr eps = *Pepsilon;
 
-    for(int k = 0; k < NUMBER_OF_LOOPS; k++){
+    for(int k = 0; k < numberOfLoops; k++){
         if (calclGet2Dr(MODEL_2D, H, i, j) <= eps)
            return;
 
@@ -67,7 +66,7 @@ __kernel void flowsComputation(__CALCL_MODEL_2D, __global CALParameterr * Pepsil
     }
 }
 
-__kernel void widthUpdate(__CALCL_MODEL_2D)
+__kernel void widthUpdate(__CALCL_MODEL_2D, int numberOfLoops)
 {
     calclThreadCheck2D();
 
@@ -76,7 +75,7 @@ __kernel void widthUpdate(__CALCL_MODEL_2D)
 
     CALreal h_next;
     CALint n;
-    for(int k = 0; k < NUMBER_OF_LOOPS; k++){
+    for(int k = 0; k < numberOfLoops; k++){
         h_next = calclGet2Dr(MODEL_2D, H, i, j);
 
         for (n = 1; n < calclGetNeighborhoodSize(); n++) {

@@ -11,5 +11,3 @@ ADD_SUBDIRECTORY(calomp-sciddicaT-explicit-activecells)
 ADD_SUBDIRECTORY(calcl-sciddicaT)
 ADD_SUBDIRECTORY(calcl-sciddicaT-local)
 ADD_SUBDIRECTORY(calcl-sciddicaT-activecells)
-
-

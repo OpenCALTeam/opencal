@@ -49,7 +49,7 @@
 #define KERNEL_ELEM_PROC_RM_ACT_CELLS "removeInactiveCells"
 #endif
 
-
+int numberOfLoops;
 
 
 // Declare XCA model (host_CA), substates (Q), parameters (P)
@@ -107,17 +107,23 @@ int main(int argc, char** argv)
         exit(-1);
     }
 
-    int platform;
-    if (sscanf (argv[3], "%i", &platform)!=1 && platform >=0) {
-        printf ("platform number is not an integer");
+		// read from argv the number of steps
+    if (sscanf (argv[3], "%i", &numberOfLoops)!=1 && numberOfLoops >=0) {
+        printf ("number of loops is not an integer");
         exit(-1);
     }
 
+    int platform;
+    if (sscanf (argv[4], "%i", &platform)!=1 && platform >=0) {
+        printf ("platform number is not an integer");
+        exit(-1);
+    }
     int deviceNumber;
-    if (sscanf (argv[4], "%i", &deviceNumber)!=1 && deviceNumber >=0) {
+    if (sscanf (argv[5], "%i", &deviceNumber)!=1 && deviceNumber >=0) {
         printf ("device number is not an integer");
         exit(-1);
     }
+
 
 	struct CALCLDeviceManager * calcl_device_manager;
 	CALCLcontext context;
@@ -185,6 +191,9 @@ int main(int argc, char** argv)
 
 	calclSetKernelArg2D(&kernel_elem_proc_flow_computation, 0, sizeof(CALCLmem), &bufferEpsilonParameter);
 	calclSetKernelArg2D(&kernel_elem_proc_flow_computation, 1, sizeof(CALCLmem), &bufferRParameter);
+	calclSetKernelArg2D(&kernel_elem_proc_flow_computation, 2, sizeof(int), &numberOfLoops);
+
+	calclSetKernelArg2D(&kernel_elem_proc_width_update, 0, sizeof(int), &numberOfLoops);
 
   // Register transition function's elementary processes kernels
 	calclAddElementaryProcess2D(device_CA, &kernel_elem_proc_flow_computation);

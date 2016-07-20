@@ -56,7 +56,7 @@ struct sciddicaTParameters {
     CALParameterr r;
 } P;
 
-int numberOfLoops = 200;
+int numberOfLoops;
 
 void sciddicaT_flows_computation(struct CALModel2D* sciddicaT, int i, int j)
 {
@@ -182,6 +182,12 @@ int main(int argc, char** argv)
     int steps;
     if (sscanf (argv[2], "%i", &steps)!=1 && steps >=0) {
         printf ("number of steps is not an integer");
+        exit(-1);
+    }
+
+    // read from argv the number of steps
+    if (sscanf (argv[3], "%i", &numberOfLoops)!=1 && numberOfLoops >=0) {
+        printf ("number of loops is not an integer");
         exit(-1);
     }
 

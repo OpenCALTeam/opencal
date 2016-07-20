@@ -35,6 +35,8 @@ struct sciddicaTParameters {
 
 struct CALRun2D* sciddicaT_simulation;
 
+int numberOfLoops;
+
 // The sigma_1 elementary process
 void sciddicaTFlowsComputation(struct CALModel2D* sciddicaT, int i, int j)
 {
@@ -47,6 +49,9 @@ void sciddicaTFlowsComputation(struct CALModel2D* sciddicaT, int i, int j)
 	CALint n;
 	CALreal z, h;
 
+	int k;
+
+	for(k = 0; k < numberOfLoops; k++){
 	if (calGet2Dr(sciddicaT, Q.h, i, j) <= P.epsilon)
 		return;
 
@@ -86,6 +91,7 @@ void sciddicaTFlowsComputation(struct CALModel2D* sciddicaT, int i, int j)
 			calSet2Dr(sciddicaT, Q.f[n-1], i, j, 0.0);
 		else
 			calSet2Dr(sciddicaT, Q.f[n-1], i, j, (average-u[n])*P.r);
+  }
 }
 
 // The sigma_2 elementary process
@@ -93,12 +99,15 @@ void sciddicaTWidthUpdate(struct CALModel2D* sciddicaT, int i, int j)
 {
 	CALreal h_next;
 	CALint n;
+	int k;
 
+	for(k = 0; k < numberOfLoops; k++){
 	h_next = calGet2Dr(sciddicaT, Q.h, i, j);
 	for(n=1; n<sciddicaT->sizeof_X; n++)
 		h_next +=  calGetX2Dr(sciddicaT, Q.f[NUMBER_OF_OUTFLOWS - n], i, j, n) - calGet2Dr(sciddicaT, Q.f[n-1], i, j);
 
 	calSet2Dr(sciddicaT, Q.h, i, j, h_next);
+ }
 }
 
 void sciddicaTransitionFunction(struct CALModel2D* sciddicaT)
@@ -170,6 +179,12 @@ int main(int argc, char** argv)
         printf ("number of steps is not an integer");
         exit(-1);
     }
+
+		// read from argv the number of steps
+		if (sscanf (argv[3], "%i", &numberOfLoops)!=1 && numberOfLoops >=0) {
+				printf ("number of loops is not an integer");
+				exit(-1);
+		}
 
 	// define of the sciddicaT CA and sciddicaT_simulation simulation objects
     sciddicaT = calCADef2D (ROWS, COLS, CAL_VON_NEUMANN_NEIGHBORHOOD_2D, CAL_SPACE_TOROIDAL, CAL_NO_OPT);

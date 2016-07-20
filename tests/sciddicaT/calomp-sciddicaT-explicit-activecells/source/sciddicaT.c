@@ -36,6 +36,8 @@ struct sciddicaTParameters {
 
 struct CALRun2D* sciddicaT_simulation;
 
+int numberOfLoops;
+
 // The sigma_1 elementary process
 void sciddicaTFlowsComputation(struct CALModel2D* sciddicaT, int i, int j)
 {
@@ -49,7 +51,9 @@ void sciddicaTFlowsComputation(struct CALModel2D* sciddicaT, int i, int j)
 	CALreal z, h;
 	CALreal f;
 
+	int k;
 
+	for(k = 0; k < numberOfLoops; k++){
 	m = calGet2Dr(sciddicaT, Q.h, i, j) - P.epsilon;
 	u[0] = calGet2Dr(sciddicaT, Q.z, i, j) + P.epsilon;
 	for (n=1; n<sciddicaT->sizeof_X; n++)
@@ -90,6 +94,7 @@ void sciddicaTFlowsComputation(struct CALModel2D* sciddicaT, int i, int j)
 			calSet2Dr(sciddicaT, Q.f[n-1], i, j, (average-u[n])*P.r);
 			calAddActiveCellX2D(sciddicaT, i, j, n);
 		}
+	}
 }
 
 // The sigma_2 elementary process
@@ -98,11 +103,13 @@ void sciddicaTWidthUpdate(struct CALModel2D* sciddicaT, int i, int j)
 	CALreal h_next;
 	CALint n;
 
-	h_next = calGet2Dr(sciddicaT, Q.h, i, j);
-	for(n=1; n<sciddicaT->sizeof_X; n++)
-		h_next +=  calGetX2Dr(sciddicaT, Q.f[NUMBER_OF_OUTFLOWS - n], i, j, n) - calGet2Dr(sciddicaT, Q.f[n-1], i, j);
-
-	calSet2Dr(sciddicaT, Q.h, i, j, h_next);
+	int k;
+	for(k = 0; k < numberOfLoops; k++){
+		h_next = calGet2Dr(sciddicaT, Q.h, i, j);
+		for(n=1; n<sciddicaT->sizeof_X; n++)
+			h_next +=  calGetX2Dr(sciddicaT, Q.f[NUMBER_OF_OUTFLOWS - n], i, j, n) - calGet2Dr(sciddicaT, Q.f[n-1], i, j);
+			calSet2Dr(sciddicaT, Q.h, i, j, h_next);
+	}
 }
 
 // The sigma_3 elementary process
@@ -196,7 +203,7 @@ int main(int argc, char** argv)
     sciddicaT_simulation = calRunDef2D(sciddicaT, 1, steps, CAL_UPDATE_EXPLICIT);
 
 	//put OpenCAL - OMP in unsafe state execution(to allow unsafe operation to be used)
-	calSetUnsafe2D(sciddicaT);
+	//calSetUnsafe2D(sciddicaT);
 
 	// add transition function's sigma_1 and sigma_2 elementary processes
 	calAddElementaryProcess2D(sciddicaT, sciddicaTFlowsComputation);

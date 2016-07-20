@@ -49,7 +49,7 @@
 #define KERNEL_ELEM_PROC_RM_ACT_CELLS "removeInactiveCells"
 #endif
 
-
+int numberOfLoops;
 
 
 // Declare XCA model (host_CA), substates (Q), parameters (P)
@@ -106,16 +106,23 @@ int main(int argc, char** argv)
         printf ("number of steps is not an integer");
         exit(-1);
     }
+		// read from argv the number of loops
+    if (sscanf (argv[3], "%i", &numberOfLoops)!=1 && numberOfLoops >=0) {
+        printf ("number of loops is not an integer");
+        exit(-1);
+    }
+
     int platform;
-    if (sscanf (argv[3], "%i", &platform)!=1 && platform >=0) {
+    if (sscanf (argv[4], "%i", &platform)!=1 && platform >=0) {
         printf ("platform number is not an integer");
         exit(-1);
     }
     int deviceNumber;
-    if (sscanf (argv[4], "%i", &deviceNumber)!=1 && deviceNumber >=0) {
+    if (sscanf (argv[5], "%i", &deviceNumber)!=1 && deviceNumber >=0) {
         printf ("device number is not an integer");
         exit(-1);
     }
+
 
 	struct CALCLDeviceManager * calcl_device_manager;
 	CALCLcontext context;
@@ -170,6 +177,9 @@ int main(int argc, char** argv)
 	// Define a device-side CA
 	device_CA = calclCADef2D(host_CA, context, program, device);
 
+	//Set the workgroup dimensions
+	calclSetWorkGroupDimensions(device_CA, 8, 8);
+
 	// Extract kernels from program
 	kernel_elem_proc_flow_computation = calclGetKernelFromProgram(&program, KERNEL_ELEM_PROC_FLOW_COMPUTATION);
 	kernel_elem_proc_width_update = calclGetKernelFromProgram(&program, KERNEL_ELEM_PROC_WIDTH_UPDATE);
@@ -183,6 +193,9 @@ int main(int argc, char** argv)
 
 	calclSetKernelArg2D(&kernel_elem_proc_flow_computation, 0, sizeof(CALCLmem), &bufferEpsilonParameter);
 	calclSetKernelArg2D(&kernel_elem_proc_flow_computation, 1, sizeof(CALCLmem), &bufferRParameter);
+	calclSetKernelArg2D(&kernel_elem_proc_flow_computation, 2, sizeof(int), &numberOfLoops);
+
+	calclSetKernelArg2D(&kernel_elem_proc_width_update, 0, sizeof(int), &numberOfLoops);
 
   // Register transition function's elementary processes kernels
 	calclAddElementaryProcess2D(device_CA, &kernel_elem_proc_flow_computation);
@@ -196,7 +209,9 @@ int main(int argc, char** argv)
 	// Simulation run
     struct OpenCALTime * opencalTime= (struct OpenCALTime *)malloc(sizeof(struct OpenCALTime));
     startTime(opencalTime);
+
     calclRun2D(device_CA, 1, steps);
+
     endTime(opencalTime);
 
 	// Saving results

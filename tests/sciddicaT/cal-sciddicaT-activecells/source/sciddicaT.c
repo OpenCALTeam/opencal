@@ -32,7 +32,7 @@ struct sciddicaTParameters {
     CALParameterr r;
 } P;
 
-int numberOfLoops = 200;
+int numberOfLoops;
 
 // The sigma_1 elementary process
 void sciddicaTFlowsComputation(struct CALModel2D* sciddicaT, int i, int j)
@@ -167,7 +167,11 @@ int main(int argc, char** argv)
         printf ("number of steps is not an integer");
         exit(-1);
     }
-
+    // read from argv the number of steps
+    if (sscanf (argv[3], "%i", &numberOfLoops)!=1 && numberOfLoops >=0) {
+        printf ("number of loops is not an integer");
+        exit(-1);
+    }
     // define of the sciddicaT CA and sciddicaT_simulation simulation objects
     struct CALModel2D* sciddicaT = calCADef2D (ROWS, COLS, CAL_VON_NEUMANN_NEIGHBORHOOD_2D, CAL_SPACE_TOROIDAL, CAL_OPT_ACTIVE_CELLS);
     struct CALRun2D* sciddicaT_simulation = calRunDef2D(sciddicaT, 1, steps, CAL_UPDATE_IMPLICIT);

@@ -980,6 +980,8 @@ struct CALCLModel2D * calclCADef2D(struct CALModel2D *host_CA, CALCLcontext cont
 
     calclmodel2D->context = context;
 
+    calclmodel2D->workGroupDimensions=NULL;
+
     return calclmodel2D;
 
 }
@@ -1254,11 +1256,13 @@ void calclRun2D(struct CALCLModel2D* calclmodel2D, unsigned int initialStep, uns
     //TODO call update
 
     calclmodel2D->steps = initialStep;
+
     while (calclmodel2D->steps <= (int) maxStep || maxStep == CAL_RUN_LOOP) {
         stop = calclSingleStep2D(calclmodel2D, singleStepThreadNum, dimNum);
         if (stop == CAL_TRUE)
             break;
     }
+
     calclGetSubstatesDeviceToHost2D(calclmodel2D);
     free(threadNumMax);
 
@@ -1802,7 +1806,7 @@ CALbyte calclSingleStep2D(struct CALCLModel2D* calclmodel2D, size_t * threadsNum
     } else {
         for (j = 0; j < calclmodel2D->elementaryProcessesNum; j++) {
             calclKernelCall2D(calclmodel2D, calclmodel2D->elementaryProcesses[j], dimNum, threadsNum,
-                              NULL);
+                              calclmodel2D->workGroupDimensions);
             copySubstatesBuffers2D(calclmodel2D);
 
         }
@@ -2264,4 +2268,11 @@ void calclAddReductionBinaryXor2Db(struct CALCLModel2D * calclmodel2D, int numSu
 }
 void calclAddReductionBinaryXor2Dr(struct CALCLModel2D * calclmodel2D, int numSubstate) {
     calclmodel2D->reductionFlagsBinaryXOrr[numSubstate] = CAL_TRUE;
+}
+
+void calclSetWorkGroupDimensions(struct CALCLModel2D * calclmodel2D, int m, int n)
+{
+  calclmodel2D->workGroupDimensions = (size_t*) malloc(sizeof(size_t)*2);
+  calclmodel2D->workGroupDimensions[0]=m;
+  calclmodel2D->workGroupDimensions[1]=n;
 }

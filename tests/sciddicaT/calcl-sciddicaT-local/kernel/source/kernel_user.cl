@@ -4,9 +4,8 @@
 
 #define MAX_GROUP_WORK_SIZE 7
 #define SHIFT 1
-#define NUMBER_OF_LOOPS 200
 
-__kernel void flowsComputation(__CALCL_MODEL_2D, __global CALParameterr * Pepsilon, __global CALParameterr * Pr)
+__kernel void flowsComputation(__CALCL_MODEL_2D, __global CALParameterr * Pepsilon, __global CALParameterr * Pr, int numberOfLoops)
 {
     calclThreadCheck2D();
 
@@ -30,32 +29,14 @@ __kernel void flowsComputation(__CALCL_MODEL_2D, __global CALParameterr * Pepsil
     localMatrixZ[iLocal+SHIFT-1][jLocal+SHIFT] = calclGetX2Dr(MODEL_2D,Z, iGlobal, jGlobal,1);
     localMatrixH[iLocal+SHIFT-1][jLocal+SHIFT] = calclGetX2Dr(MODEL_2D,H, iGlobal, jGlobal,1);
 
-    //4
-    //    localMatrixZ[(iLocal+SHIFT+1)*(MAX_GROUP_WORK_SIZE+1)+jLocal+SHIFT] = calclGetX2Dr(MODEL_2D,Z, iGlobal, jGlobal,4);
-    //    localMatrixH[(iLocal+SHIFT+1)*(MAX_GROUP_WORK_SIZE+1)+jLocal+SHIFT] = calclGetX2Dr(MODEL_2D,H, iGlobal, jGlobal,4);
     localMatrixZ[iLocal+SHIFT+1][jLocal+SHIFT] = calclGetX2Dr(MODEL_2D,Z, iGlobal, jGlobal,4);
     localMatrixH[iLocal+SHIFT+1][jLocal+SHIFT] = calclGetX2Dr(MODEL_2D,H, iGlobal, jGlobal,4);
 
-    //2
-    //    localMatrixZ[iLocal+SHIFT*(MAX_GROUP_WORK_SIZE+1)+jLocal+SHIFT-1] = calclGetX2Dr(MODEL_2D,Z, iGlobal, jGlobal,2);
-    //    localMatrixH[iLocal+SHIFT*(MAX_GROUP_WORK_SIZE+1)+jLocal+SHIFT-1] = calclGetX2Dr(MODEL_2D,H, iGlobal, jGlobal,2);
     localMatrixZ[iLocal+SHIFT][jLocal+SHIFT-1] = calclGetX2Dr(MODEL_2D,Z, iGlobal, jGlobal,2);
     localMatrixH[iLocal+SHIFT][jLocal+SHIFT-1] = calclGetX2Dr(MODEL_2D,H, iGlobal, jGlobal,2);
 
-    //3
-    //    localMatrixZ[iLocal+SHIFT*(MAX_GROUP_WORK_SIZE+1)+jLocal+SHIFT+1] = calclGetX2Dr(MODEL_2D,Z, iGlobal, jGlobal,3);
-    //    localMatrixH[iLocal+SHIFT*(MAX_GROUP_WORK_SIZE+1)+jLocal+SHIFT+1] = calclGetX2Dr(MODEL_2D,H, iGlobal, jGlobal,3);
     localMatrixZ[iLocal+SHIFT][jLocal+SHIFT+1] = calclGetX2Dr(MODEL_2D,Z, iGlobal, jGlobal,3);
     localMatrixH[iLocal+SHIFT][jLocal+SHIFT+1] = calclGetX2Dr(MODEL_2D,H, iGlobal, jGlobal,3);
-
-    //            if(iGlobal == 0 && jGlobal ==  0){
-    //                printf("%f - \n",localMatrixH[iLocal][jLocal]);
-    //            }
-
-    // barrier(CLK_LOCAL_MEM_FENCE | CLK_GLOBAL_MEM_FENCE);
-
-    //inizializza localMatrix Ogni Thread leggi il proprio valore
-
 
     CALbyte eliminated_cells[5] = { CAL_FALSE, CAL_FALSE, CAL_FALSE, CAL_FALSE, CAL_FALSE };
     CALbyte again;
@@ -69,40 +50,28 @@ __kernel void flowsComputation(__CALCL_MODEL_2D, __global CALParameterr * Pepsil
     CALint sizeOfX_ = calclGetNeighborhoodSize();
     CALParameterr eps = *Pepsilon;
 
-    for(int k = 0; k < NUMBER_OF_LOOPS; k++){
+    for(int k = 0; k < numberOfLoops; k++){
         if (localMatrixH[iLocal+SHIFT][jLocal+SHIFT] <= eps)
-            return;
+          return;
 
-
-        //        m = localMatrixH[(iLocal+SHIFT)*(MAX_GROUP_WORK_SIZE+1)+(jLocal+SHIFT)] - eps;
-        //        u[0] = localMatrixZ[(iLocal+SHIFT)*(MAX_GROUP_WORK_SIZE+1)+(jLocal+SHIFT)] + eps;
         m = localMatrixH[iLocal+SHIFT][jLocal+SHIFT] - eps;
         u[0] = localMatrixZ[iLocal+SHIFT][jLocal+SHIFT] + eps;
 
-        //        z = localMatrixZ[(iLocal-1+SHIFT)*(MAX_GROUP_WORK_SIZE+1)+(jLocal+SHIFT)]; //calclGetX2Dr(MODEL_2D,Z, i, j, n);
-        //        h = localMatrixH[(iLocal-1+SHIFT)*(MAX_GROUP_WORK_SIZE+1)+(jLocal+SHIFT)]; //calclGetX2Dr(MODEL_2D,H, i, j, n);
         z = localMatrixZ[iLocal-1+SHIFT][jLocal+SHIFT]; //calclGetX2Dr(MODEL_2D,Z, i, j, n);
         h = localMatrixH[iLocal-1+SHIFT][jLocal+SHIFT]; //calclGetX2Dr(MODEL_2D,H, i, j, n);
         u[1] = z + h;
 
-        //        z = localMatrixZ[iLocal+SHIFT*(MAX_GROUP_WORK_SIZE+1)+(jLocal-1+SHIFT)];
-        //        h = localMatrixH[iLocal+SHIFT*(MAX_GROUP_WORK_SIZE+1)+(jLocal-1+SHIFT)];
         z = localMatrixZ[iLocal+SHIFT][jLocal-1+SHIFT];
         h = localMatrixH[iLocal+SHIFT][jLocal-1+SHIFT];
         u[2] = z + h;
 
-        //        z = localMatrixZ[iLocal+SHIFT*(MAX_GROUP_WORK_SIZE+1)+(jLocal+SHIFT+1)];
-        //        h = localMatrixH[iLocal+SHIFT*(MAX_GROUP_WORK_SIZE+1)+(jLocal+1+SHIFT)];
         z = localMatrixZ[iLocal+SHIFT][jLocal+SHIFT+1];
         h = localMatrixH[iLocal+SHIFT][jLocal+1+SHIFT];
         u[3] = z + h;
 
-        //        z = localMatrixZ[(iLocal+SHIFT+1)*(MAX_GROUP_WORK_SIZE+1)+(jLocal+SHIFT)];
-        //        h = localMatrixH[(iLocal+SHIFT+1)*(MAX_GROUP_WORK_SIZE+1)+(jLocal+SHIFT)];
         z = localMatrixZ[iLocal+SHIFT+1][jLocal+SHIFT];
         h = localMatrixH[iLocal+SHIFT+1][jLocal+SHIFT];
         u[4] = z + h;
-
 
         do {
             again = CAL_FALSE;
@@ -135,7 +104,7 @@ __kernel void flowsComputation(__CALCL_MODEL_2D, __global CALParameterr * Pepsil
     }
 }
 
-__kernel void widthUpdate(__CALCL_MODEL_2D)
+__kernel void widthUpdate(__CALCL_MODEL_2D, int numberOfLoops)
 {
     calclThreadCheck2D();
 
@@ -153,9 +122,6 @@ __kernel void widthUpdate(__CALCL_MODEL_2D)
 
     localMatrixIN[iLocal+SHIFT][jLocal+SHIFT] = calclGet2Dr(MODEL_2D,H, iGlobal, jGlobal);
 
-    //    if(iGlobal == 0 && jGlobal ==  0){
-    //        printf("%f - \n",localMatrixH[iLocal][jLocal]);
-    //    }
     localMatrixIN[iLocal+SHIFT-1][jLocal+SHIFT] = calclGetX2Dr(MODEL_2D, NUMBER_OF_OUTFLOWS-1, iGlobal, jGlobal, 1);
 
     localMatrixIN[iLocal+SHIFT+1][jLocal+SHIFT] = calclGetX2Dr(MODEL_2D, NUMBER_OF_OUTFLOWS-4, iGlobal, jGlobal, 4);
@@ -173,7 +139,7 @@ __kernel void widthUpdate(__CALCL_MODEL_2D)
 
     localMatrixOUT[iLocal+SHIFT][jLocal+SHIFT+1] =  calclGet2Dr(MODEL_2D, 2, iGlobal, jGlobal);
 
-    for(int k =0; k < NUMBER_OF_LOOPS; k ++){
+    for(int k =0; k < numberOfLoops; k ++){
         h_next = localMatrixIN[iLocal+SHIFT][jLocal+SHIFT];
 
         h_next +=localMatrixIN[iLocal+SHIFT-1][jLocal+SHIFT] -localMatrixOUT[iLocal+SHIFT-1][jLocal+SHIFT];
