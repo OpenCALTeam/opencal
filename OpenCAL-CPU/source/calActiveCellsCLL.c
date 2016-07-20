@@ -1,4 +1,4 @@
-﻿#include <OpenCAL-CPU/calContiguousLinkedList.h>
+﻿#include <OpenCAL-CPU/calActiveCellsCLL.h>
 
 static int calGetBuffer(struct CALActiveCellsCLL* A)
 {

@@ -16,31 +16,71 @@ struct CALActiveCellsNaive {
 /*! \brief Sets the cell of the matrix flags to CAL_TRUE and increments the
     couter sizeof_active_flags.
 */
-void calAddActiveCellNaive(struct CALModel* calModel, CALIndices cell);
+static void calAddActiveCellNaive(struct CALActiveCellsNaive* A, CALIndices cell)
+{
+    struct CALModel* calModel = A->inherited_pointer->calModel;
+    int linear_index = getLinearIndex(cell, calModel->coordinatesDimensions, calModel->numberOfCoordinates);
+#if CAL_PARALLEL == 1
+    CAL_SET_CELL_LOCK(linear_index, calModel->calRun->locks );
+#endif
+
+    if (!calGetMatrixElement(A->flags, linear_index))
+    {
+        calSetMatrixElement(A->flags, linear_index, CAL_TRUE);
+
+        A->size_next[CAL_GET_THREAD_NUM()]++;
+        return;
+    }
+
+#if CAL_PARALLEL == 1
+    CAL_UNSET_CELL_LOCK(linear_index, calModel->calRun->locks );
+#endif
+}
 
 /*! \brief \brief Sets the cell (i,j) of the matrix flags to CAL_FALSE and decrements the
     couter sizeof_active_flags.
 */
-void calRemoveActiveCellNaive(struct CALModel* calModel, CALIndices cell);
+
+static void calRemoveActiveCellNaive(struct CALActiveCellsNaive* A, CALIndices cell)
+{
+    struct CALModel* calModel = A->inherited_pointer->calModel;
+    int linear_index = getLinearIndex(cell, calModel->coordinatesDimensions, calModel->numberOfCoordinates);
+#if CAL_PARALLEL == 1
+    CAL_SET_CELL_LOCK(linear_index, calModel->calRun->locks );
+#endif
+
+    if (calGetMatrixElement(A->flags, linear_index))
+    {
+        calSetMatrixElement(A->flags, linear_index, CAL_FALSE);
+
+        A->size_next[CAL_GET_THREAD_NUM()]--;
+        return;
+    }
+
+#if CAL_PARALLEL == 1
+    CAL_UNSET_CELL_LOCK(linear_index, calModel->calRun->locks );
+#endif
+}
+
+
+void calApplyElementaryProcessActiveCellsNaive(struct CALActiveCellsNaive *A, CALLocalProcess elementary_process);
+
+
+void calCopyBufferActiveCellsNaive_b(CALbyte* M_src, CALbyte* M_dest,  struct CALActiveCellsNaive *A);
+void calCopyBufferActiveCellsNaive_i(CALint* M_src, CALint* M_dest,  struct CALActiveCellsNaive *A);
+void calCopyBufferActiveCellsNaive_r(CALreal* M_src, CALreal* M_dest,  struct CALActiveCellsNaive *A);
+
+
+void calSetActiveCellsNaiveBuffer_b(CALbyte* M, CALbyte value, struct CALActiveCellsNaive *A);
+void calSetActiveCellsNaiveBuffer_i(CALint* M, CALint value, struct CALActiveCellsNaive *A);
+void calSetActiveCellsNaiveBuffer_r(CALreal* M, CALreal value, struct CALActiveCellsNaive *A);
+
+
+void calUpdateActiveCellsNaive(struct CALActiveCellsNaive *A);
 
 /*! \brief \brief Release the memory
 */
-
-void calApplyElementaryProcessActiveCellsNaive(struct CALModel *calModel, CALLocalProcess elementary_process);
-
 void calFreeActiveCellsNaive(struct CALActiveCellsNaive* activeCells );
-
-void calCopyBufferActiveCellsNaive_b(CALbyte* M_src, CALbyte* M_dest,  struct CALModel* calModel);
-void calCopyBufferActiveCellsNaive_i(CALint* M_src, CALint* M_dest,  struct CALModel* calModel);
-void calCopyBufferActiveCellsNaive_r(CALreal* M_src, CALreal* M_dest,  struct CALModel* calModel);
-
-
-void calSetActiveCellsNaiveBuffer_b(CALbyte* M, CALbyte value, struct CALModel* calModel);
-void calSetActiveCellsNaiveBuffer_i(CALint* M, CALint value, struct CALModel* calModel);
-void calSetActiveCellsNaiveBuffer_r(CALreal* M, CALreal value, struct CALModel* calModel);
-
-
-void calUpdateActiveCellsNaive(struct CALModel* calModel);
 
 #endif
 

@@ -69,7 +69,7 @@ struct CALActiveCellsCLL* calMakeContiguousLinkedList(struct CALModel* model);
 
 /*! \brief Links the cell to the tail of the list
 */
-void calAddActiveCellCLL(struct CALActiveCellsCLL* A, CALIndices cell)
+static void calAddActiveCellCLL(struct CALActiveCellsCLL* A, CALIndices cell)
 {
 #if CAL_PARALLEL == 1
     calPutElement(A, cell);
@@ -96,7 +96,7 @@ void calRemoveActiveCellCLL(struct CALActiveCellsCLL* A, CALIndices cell);
 #define calGetNextBufferElement(A, current)(printf("sono nel par == 0 \n\n"))
 #endif
 */
-void calUpdateActiveCellsCLL(struct CALActiveCellsCLL* A)
+static void calUpdateActiveCellsCLL(struct CALActiveCellsCLL* A)
 {
 #if CAL_PARALLEL == 1
     calUpdateParallelCLL(A);

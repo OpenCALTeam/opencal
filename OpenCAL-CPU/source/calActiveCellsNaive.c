@@ -1,51 +1,12 @@
 ﻿#include <OpenCAL-CPU/calActiveCellsNaive.h>
 
 #include <string.h>
-void calAddActiveCellNaive(struct CALModel* calModel, CALIndices cell)
-{
-    int linear_index = getLinearIndex(cell, calModel->coordinatesDimensions, calModel->numberOfCoordinates);
-#if CAL_PARALLEL == 1
-    CAL_SET_CELL_LOCK(linear_index, calModel->calRun->locks );
-#endif
 
-    if (!calGetMatrixElement(((struct CALActiveCellsNaive*)calModel->A)->flags, linear_index))
-    {
-        calSetMatrixElement(((struct CALActiveCellsNaive*)calModel->A)->flags, linear_index, CAL_TRUE);
-
-        ((struct CALActiveCellsNaive*)calModel->A)->size_next[CAL_GET_THREAD_NUM()]++;
-        return;
-    }
-
-#if CAL_PARALLEL == 1
-    CAL_UNSET_CELL_LOCK(linear_index, calModel->calRun->locks );
-#endif
-}
-
-void calRemoveActiveCellNaive(struct CALModel* calModel, CALIndices cell)
-{
-    int linear_index = getLinearIndex(cell, calModel->coordinatesDimensions, calModel->numberOfCoordinates);
-#if CAL_PARALLEL == 1
-    CAL_SET_CELL_LOCK(linear_index, calModel->calRun->locks );
-#endif
-
-    if (calGetMatrixElement(((struct CALActiveCellsNaive*)calModel->A)->flags, linear_index))
-    {
-        calSetMatrixElement(((struct CALActiveCellsNaive*)calModel->A)->flags, linear_index, CAL_FALSE);
-
-        ((struct CALActiveCellsNaive*)calModel->A)->size_next[CAL_GET_THREAD_NUM()]--;
-        return;
-    }
-
-#if CAL_PARALLEL == 1
-    CAL_UNSET_CELL_LOCK(linear_index, calModel->calRun->locks );
-#endif
-}
-
-void calApplyElementaryProcessActiveCellsNaive(struct CALModel *calModel, CALLocalProcess elementary_process)
+void calApplyElementaryProcessActiveCellsNaive(struct CALActiveCellsNaive* A, CALLocalProcess elementary_process)
 {
     int n;
+    struct CALModel* calModel = A->inherited_pointer->calModel;
     int number_of_dimensions = calModel->numberOfCoordinates;
-    struct CALActiveCellsNaive* A = ((struct CALActiveCellsNaive*)calModel->A);
 #pragma omp parallel for private(n) firstprivate(calModel, A, number_of_dimensions)
     for (n = 0; n < A->size_current; n++)
         elementary_process(calModel, A->cells[n], number_of_dimensions);
@@ -57,11 +18,11 @@ void calFreeActiveCellsNaive(struct CALActiveCellsNaive* activeCells )
     free(activeCells->flags);
 }
 
-void calCopyBufferActiveCellsNaive_b(CALbyte* M_src, CALbyte* M_dest,  struct CALModel* calModel)
+void calCopyBufferActiveCellsNaive_b(CALbyte* M_src, CALbyte* M_dest, struct CALActiveCellsNaive* A)
 {
     int n;
     int linear_index;
-    struct CALActiveCellsNaive* A = (struct CALActiveCellsNaive*)(calModel->A);
+    struct CALModel* calModel = A->inherited_pointer->calModel;
 #pragma omp parallel for private (linear_index), firstprivate(A, calModel)
     for(n = 0; n < A->size_current; n++)
     {
@@ -71,11 +32,11 @@ void calCopyBufferActiveCellsNaive_b(CALbyte* M_src, CALbyte* M_dest,  struct CA
     }
 }
 
-void calCopyBufferActiveCellsNaive_i(CALint* M_src, CALint* M_dest,  struct CALModel* calModel)
+void calCopyBufferActiveCellsNaive_i(CALint* M_src, CALint* M_dest, struct CALActiveCellsNaive* A)
 {
     int n;
     int linear_index;
-    struct CALActiveCellsNaive* A = (struct CALActiveCellsNaive*)(calModel->A);
+    struct CALModel* calModel = A->inherited_pointer->calModel;
 #pragma omp parallel for private (linear_index), firstprivate(A, calModel)
     for(n = 0; n < A->size_current; n++)
     {
@@ -85,11 +46,11 @@ void calCopyBufferActiveCellsNaive_i(CALint* M_src, CALint* M_dest,  struct CALM
     }
 }
 
-void calCopyBufferActiveCellsNaive_r(CALreal* M_src, CALreal* M_dest,  struct CALModel* calModel)
+void calCopyBufferActiveCellsNaive_r(CALreal* M_src, CALreal* M_dest,  struct CALActiveCellsNaive* A)
 {
     int n;
     int linear_index;
-    struct CALActiveCellsNaive* A = (struct CALActiveCellsNaive*)(calModel->A);
+    struct CALModel* calModel = A->inherited_pointer->calModel;
 #pragma omp parallel for private (linear_index), firstprivate(A, calModel)
     for(n = 0; n < A->size_current; n++)
     {
@@ -100,44 +61,40 @@ void calCopyBufferActiveCellsNaive_r(CALreal* M_src, CALreal* M_dest,  struct CA
 }
 
 
-void calSetActiveCellsNaiveBuffer_b(CALbyte* M, CALbyte value, struct CALModel* calModel)
+void calSetActiveCellsNaiveBuffer_b(CALbyte* M, CALbyte value, struct CALActiveCellsNaive* A)
 {
     int n;
-    struct CALActiveCellsNaive* A = (struct CALActiveCellsNaive*)(calModel->A);
-
+    struct CALModel* calModel = A->inherited_pointer->calModel;
 #pragma omp parallel for firstprivate(value)
     for( n = 0; n < A->size_current; n++)
         M[getLinearIndex(A->cells[n], calModel->coordinatesDimensions, calModel->numberOfCoordinates)] = value;
 }
 
-void calSetActiveCellsNaiveBuffer_i(CALint* M, CALint value, struct CALModel* calModel)
+void calSetActiveCellsNaiveBuffer_i(CALint* M, CALint value, struct CALActiveCellsNaive* A)
 {
     int n;
-    struct CALActiveCellsNaive* A = (struct CALActiveCellsNaive*)(calModel->A);
-
+    struct CALModel* calModel = A->inherited_pointer->calModel;
 #pragma omp parallel for firstprivate(value)
     for( n = 0; n < A->size_current; n++)
         M[getLinearIndex(A->cells[n], calModel->coordinatesDimensions, calModel->numberOfCoordinates)] = value;
 }
 
-void calSetActiveCellsNaiveBuffer_r(CALreal* M, CALreal value, struct CALModel* calModel)
+void calSetActiveCellsNaiveBuffer_r(CALreal* M, CALreal value, struct CALActiveCellsNaive* A)
 {
     int n;
-    struct CALActiveCellsNaive* A = (struct CALActiveCellsNaive*)(calModel->A);
-
+    struct CALModel* calModel = A->inherited_pointer->calModel;
 #pragma omp parallel for firstprivate(value)
     for( n = 0; n < A->size_current; n++)
         M[getLinearIndex(A->cells[n], calModel->coordinatesDimensions, calModel->numberOfCoordinates)] = value;
 }
 
 
-void calUpdateActiveCellsNaive(struct CALModel* calModel)
+void calUpdateActiveCellsNaive(struct CALActiveCellsNaive* A)
 {
-    struct CALActiveCellsNaive* A = (struct CALActiveCellsNaive*)(calModel->A);
-
     int i, n;
     int diff;
 
+    struct CALModel* calModel = A->inherited_pointer->calModel;
 
     int tn;
     CALIndices **tcells;
@@ -178,7 +135,8 @@ void calUpdateActiveCellsNaive(struct CALModel* calModel)
 #pragma omp for
         for (i = 0; i < calModel->cellularSpaceDimension; i++)
             if(calGetMatrixElement(A->flags, getLinearIndex(pool[i],
-                                                            calModel->coordinatesDimensions, calModel->numberOfCoordinates)))
+                                                            calModel->coordinatesDimensions,
+                                                            calModel->numberOfCoordinates)))
             {
                 tcells[tn][ tsize[tn] ] = pool[i];
                 tsize[tn]++;
