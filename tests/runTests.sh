@@ -16,7 +16,7 @@ DEFAULT="\e[39m"
 
 NUMERICALTEST=1
 NUMBEROFTESTS=1
-NUMBEROFLOOPS=1
+NUMBEROFLOOPS=200
 STEPS=4000
 MD5TEST=0
 
@@ -215,7 +215,6 @@ ExecuteAndSaveElapsedTime() {
 					  let "LimitsNumberOfCore = LimitsNumberOfCore/2"
 
 						echo "$LimitsNumberOfCore"
-NUMBER_OF_LOOPS
             for (( cores=2; cores <= $LimitsNumberOfCore; cores*=2 ))
             do
 
@@ -254,7 +253,7 @@ NUMBER_OF_LOOPS
             totalmilliseconds=0
             for (( c=1; c<= $NUMBEROFTESTS; c++ ))
             do
-                 execTime="$(./$binary $parameters $STEPS $NUMBEROFLOOP 2>&1)"
+                 execTime="$(./$binary $parameters $STEPS $NUMBEROFLOOPS 2>&1)"
                  #split outpute, take only milliseconds
                  times=(${execTime//;/ })
                  #times=$(echo $execTime | tr ";" "\n")
@@ -329,7 +328,9 @@ for d in */ ; do
                 cd $dir
                 for o in */ ; do
 #                       not execute local vesrion and explicit
-                        if [[ $o != "cal-$dir/" && $o != *"calcl"* ]]; then
+#                        if [[ $o != "cal-$dir/" && $o != *"calcl"* ]]; then
+													if [[ $o != "cal-$dir/" ]]; then
+
                                 odir=${o%/}
                                 echo "$odir"
                         #execute serial version
