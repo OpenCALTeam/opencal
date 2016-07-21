@@ -298,12 +298,13 @@ void assign (int i, Frame & frame, std::vector<int>& assignedBacteriaFrame,
         if (assignedBacteriaFrame[indexCadidate] == -1)
         {
             assignedBacteriaFrame[indexCadidate] = i;
+            bacteria[i].back()->lost=0;
         }
         else
             findAnotherCandidate (i, frame, assignedBacteriaFrame, weights, bacteria);
     }
     else //untraceable bacterium
-        bacteria[i].back()->lost = true;
+        bacteria[i].back()->lost ++;
 }
 
 void printWeights (Frame & frame, std::vector <std::list<std::pair <int, int> > >& weights, std::vector <std::list<shared_ptr<Bacterium>> > & bacteria)
@@ -327,7 +328,7 @@ void findAnotherCandidate (int i, Frame & frame, std::vector<int>& assignedBacte
 {
     if (weights[i].size() == 0) //untraceable bacterium
     {
-        bacteria[i].back()->lost = true;
+        bacteria[i].back()->lost ++;
         return;
     }
 
@@ -380,7 +381,7 @@ void tracking (Frame & frame, std::vector <std::list<shared_ptr<Bacterium>> > & 
 
     for (int i = 0; i < bacteria.size(); i++)
     {
-        if (!bacteria[i].back()->lost)
+        if (bacteria[i].back()->lost<5)
         {
             // std::cout<<" sono qui a processare il batterio n "<<i<<std::endl;
 
