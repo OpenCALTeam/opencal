@@ -23,7 +23,14 @@
 
 #define calDefineParallel() (CAL_PARALLEL=1)
 
+struct CALDimensions
+{
+    int number_of_dimensions;
+    int* coordinates_dimensions;
+};
 
+
+struct CALDimensions* calDefDimensions(int n, ... );
 
 enum CALInitMethod { CAL_NO_INIT = 0, CAL_INIT_CURRENT, CAL_INIT_NEXT, CAL_INIT_BOTH };
 enum CALExecutionType {SERIAL = 0, PARALLEL};

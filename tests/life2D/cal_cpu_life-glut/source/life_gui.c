@@ -7,7 +7,6 @@
 #include <GL/glut.h>
 #endif
 #include <time.h>
-static CALIndices indices;
 
 void display(void)
 {
@@ -24,10 +23,7 @@ void display(void)
     for (i = 0; i < ROWS; i++)
         for (j = 0; j < COLS; j++)
         {
-            indices[0] = i;
-            indices[1] = j;
-            state = calGet_i(life.model, life.Q, indices);
-//            printf("state %d \n", state);
+            state = calGet_i(life.model, life.Q, calGetCell(life.model, i, j));
             if (state == STATE_ALIVE)
             {
                 color = 1;
@@ -137,7 +133,6 @@ void keyboard(unsigned char key, int x, int y)
 
 int main(int argc, char** argv)
 {
-    indices = malloc(sizeof(int) * 2);
     CADef(&life);
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);

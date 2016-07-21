@@ -1,4 +1,4 @@
-//
+﻿//
 // Created by knotman on 13/04/16.
 //
 
@@ -10,6 +10,7 @@
 #include<OpenCAL++/calNeighborPool.h>
 #include <OpenCAL++/calActiveCells.h>
 #include <OpenCAL++/calManagerIO.h>
+#include <vector>
 
 namespace opencal {
 

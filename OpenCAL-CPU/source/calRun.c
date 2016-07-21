@@ -30,10 +30,15 @@ struct CALRun*makeCALRun(int initial_step, int final_step)
     simulation->globalTransition = NULL;
     simulation->stopCondition = NULL;
     simulation->finalize = NULL;
+    simulation->active_cells_def = NULL;
 
     return simulation;
 }
 
+void calAddActiveCellsDefinition(struct CALModel* calModel, CALbyte (*active_cells_def)(struct CALModel*, CALIndices, int))
+{
+    calModel->calRun->active_cells_def = active_cells_def;
+}
 
 CALbyte calRunCAStep(struct CALModel* calModel)
 {
@@ -54,6 +59,9 @@ CALbyte calRunCAStep(struct CALModel* calModel)
             calUpdate(calModel);
         }
     }
+
+    if(calModel->A && calModel->calRun->active_cells_def)
+        calCheckForActiveCells(calModel->A, calModel->calRun->active_cells_def);
 
     if(calModel->calRun->stopCondition)
         return(calModel->calRun->stopCondition(calModel));
@@ -119,3 +127,4 @@ void calForceInit(struct CALModel* calModel)
 {
     calRunInitSimulation(calModel);
 }
+
