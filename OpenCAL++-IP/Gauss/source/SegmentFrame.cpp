@@ -168,10 +168,10 @@ public:
 };
 
 //traking_10x_480010persect
-//std::array<COORD_TYPE, 2> coords = { 431,512 };
+std::array<COORD_TYPE, 2> coords = { 431,512 };
 
 //100_0019t
-std::array<COORD_TYPE, 2> coords = { 402,512 };
+//std::array<COORD_TYPE, 2> coords = { 402,512 };
 
 opencal::CALMooreNeighborhood<2,MOORERADIUS> neighbor;
 void SegmentFrame(const std::string& path, Frame& frame, MODELTYPE& calmodel, CALRUN& calrun) {
@@ -187,14 +187,14 @@ void SegmentFrame(const std::string& path, Frame& frame, MODELTYPE& calmodel, CA
     //Image Filters
 
     //100_0019t
-    ContrastStretchingFilter <2,decltype(neighbor),COORD_TYPE,vec1s>contrastStretchingFilter(bgr, 1285, 1542, 0, 65535,1.0);
-    ThresholdFilter<2,decltype(neighbor),COORD_TYPE,vec1s> thresholdFilter (bgr,0,61680,0,65535);
+//    ContrastStretchingFilter <2,decltype(neighbor),COORD_TYPE,vec1s>contrastStretchingFilter(bgr, 1285, 1542, 0, 65535,1.0);
+//    ThresholdFilter<2,decltype(neighbor),COORD_TYPE,vec1s> thresholdFilter (bgr,0,61680,0,65535);
 
 
 
     //traking_10x_480010persect
-//    ContrastStretchingFilter <2,decltype(neighbor),COORD_TYPE,vec1s>contrastStretchingFilter(bgr, 0, 1799, 0, 65535,0.10);
-//    ThresholdFilter<2,decltype(neighbor),COORD_TYPE,vec1s> thresholdFilter (bgr,0,61680,0,65535);
+    ContrastStretchingFilter <2,decltype(neighbor),COORD_TYPE,vec1s>contrastStretchingFilter(bgr, 0, 1799, 0, 65535,0.10);
+    ThresholdFilter<2,decltype(neighbor),COORD_TYPE,vec1s> thresholdFilter (bgr,0,61680,0,65535);
 
     RemoveSinglePixelFilter<vec1s> removeSinglePixelFilter(bgr);
 
@@ -272,14 +272,14 @@ std::set<shared_ptr<Bacterium>> getListBacteria (Frame & frame, std::set <int> &
 
 int computeWeight (Bacterium & b1, Bacterium & b2) //TODO k * distance + k1 * area
 {
-    int res= 0.6*b1.distance(b2) + 0.4 * (std::abs (b1.getArea()-b2.getArea()));
+    int res= /*0.6**/b1.distance(b2) /*+ 0.4 * (std::abs (b1.getArea()-b2.getArea()))*/;
     //std::cout<<res<<std::endl;
     return res;
 }
 
 int computeRadius (Bacterium & bacterium) //TODO polygon "radius" + costant
 {
-    return 3;//bacterium.getRadius();
+    return 10;//bacterium.getRadius();
 }
 
 void findAnotherCandidate (int i, Frame & frame, std::vector<int>& assignedBacteriaFrame,
@@ -338,7 +338,7 @@ void findAnotherCandidate (int i, Frame & frame, std::vector<int>& assignedBacte
     int indexOldAssociated = assignedBacteriaFrame[candidate.first]; // indice (nella lista condivisa) del batterio a cui era associato precedentemente
     int oldWeight = weights[indexOldAssociated].front().second; // peso del batterio (nella lista condivisa) a cui era associato precedentemente
 
-    if (candidate.second < oldWeight) // significa che il batterio era già stato assegnato al suo corrispondente e bisogna cercare di associarlo al successivo
+    if (candidate.second >= oldWeight) // significa che il batterio era già stato assegnato al suo corrispondente e bisogna cercare di associarlo al successivo
     {
 
         //prova ad assegnare al secondo candidato
@@ -438,13 +438,14 @@ int main() {
 
 
     const int steps  = 1;
-//    string path = "./input/tiff/traking_10x_480010persect"; //"./input/generated/bacteria";
-    string path = "./input/tiff/dataset712/100_0019t";
+    string path = "./input/tiff/traking_10x_480010persect"; //"./input/generated/bacteria";
+//    string path = "./input/generated/bacteria";
+//    string path = "./input/tiff/dataset712/100_0019t";
 
     //image processing kernels and filters
     CALRUN calrun (&calmodel, 1, steps, opencal::calCommon::CAL_UPDATE_IMPLICIT);
 
-    for(int i = 1; i<= 4000; i++) {
+    for(int i = 1; i<= 2100; i++) {
         std::cout<<"iterazione "<<i<<std::endl;
         string currentPath = path+ToString(i,4)+".tif";
         std::cout<<"carico "<<currentPath<<"\n";
@@ -474,7 +475,7 @@ int main() {
     {
         std::cout<<"batterio "<<i <<" suoi associati "<<bacteria[i].size()<<"\n";
 
-        if (bacteria[i].size() >30)
+        if (bacteria[i].size() >1)
         {
             count++;
         }
