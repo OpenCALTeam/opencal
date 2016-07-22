@@ -120,18 +120,6 @@ public:
 
     }
 
-    void empty ()
-    {
-        for (int i = 0; i < this->sizeof_pQ_arrays; ++i) {
-            delete pQ_arrays[i];
-        }
-        delete [] pQ_arrays;
-
-        this->pQ_arrays = NULL;
-        this->sizeof_pQ_arrays = 0;
-
-        elementary_processes.clear();
-    }
 
     /*! \brief Sets a certain cell of the matrix flags to true and increments the
             couter sizeof_active_flags.
@@ -380,6 +368,13 @@ public:
         return static_cast<CALSubstate<PAYLOAD, DIMENSION, COORDINATE_TYPE>*>(pQ_arrays[idx]);
     }
 
+    void resetProcesses ()
+    {
+        for (const auto el : elementary_processes)
+        {
+            el->reset();
+        }
+    }
 
 
 protected:
@@ -423,6 +418,7 @@ protected:
 
         return CAL_TRUE;
     }
+
 
 };
 
