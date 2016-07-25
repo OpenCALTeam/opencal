@@ -5,20 +5,20 @@
 #include <memory>
 using namespace cv;
 using namespace std;
-#include"Bacterium.h"
+#include"Particle.h"
 
 
 class Colour {
-  public:
-  std::array<uint,4> cols {{255,255,255,255}};
+public:
+    std::array<uint,4> cols {{255,255,255,255}};
 
 };
 
 class MyMat : public Mat
 {
-vector<Colour> sharedCols;
 
 private:
+    static vector<Colour> sharedCols;
     void create()
     {
         for (int i = 0; i < this->rows; ++i) {
@@ -45,7 +45,7 @@ private:
         }
     }
 
-    Points computePixels (std::list<shared_ptr<Bacterium>> & bacterium)
+    Points computePixels (std::list<shared_ptr<Particle>> & bacterium)
     {
         Points pixelsToColor;
         Points points;
@@ -93,14 +93,30 @@ private:
         return pixelsToColor;
     }
 
-
-public:
-    MyMat(int rows, int cols, int type, decltype(sharedCols) colors): Mat (rows, cols, type), sharedCols(colors) {
-        create();
+    void initColors ()
+    {
+        for(int k =0 ; k < 1000; k++) {
+            Colour c;
+            int r = rand()%150+1;
+            c.cols[0] = r + rand()%104;
+            c.cols[1] = r + rand()%104;
+            c.cols[2] =  r + rand()%104;
+            MyMat::sharedCols.push_back(c);
+        }
     }
 
 
-    void addBacteria (std::vector <std::list<shared_ptr<Bacterium>> > & bacteria)
+public:
+    MyMat(int rows, int cols, int type): Mat (rows, cols, type) {
+        create();
+        if (MyMat::sharedCols.empty())
+        {
+            initColors();
+        }
+    }
+
+
+    void addBacteria (std::vector <std::list<shared_ptr<Particle>> > & bacteria)
     {
 
         for (int i= 0; i < bacteria.size(); i++)
@@ -113,8 +129,8 @@ public:
                 {
                     points.insert((*it)->getCentroid());
                 }
-                int size = sharedCols.size();
-                addBacterium(points,sharedCols[i%size].cols[0], sharedCols[i%size].cols[1] ,sharedCols[i%size].cols[2]);
+                int size = MyMat::sharedCols.size();
+                addBacterium(points,MyMat::sharedCols[i%size].cols[0], MyMat::sharedCols[i%size].cols[1] ,MyMat::sharedCols[i%size].cols[2]);
             }
         }
     }
@@ -145,6 +161,8 @@ public:
 };
 
 
+
+vector<Colour> MyMat::sharedCols;
 
 
 #endif

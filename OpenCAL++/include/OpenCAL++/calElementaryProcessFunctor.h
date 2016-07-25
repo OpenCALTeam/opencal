@@ -40,6 +40,11 @@ public:
     {
 
     }
+
+    virtual void reset()
+    {
+
+    }
 };
 
 template<uint DIMENSION, class NEIGHBORHOOD, typename COORDINATE_TYPE = uint>

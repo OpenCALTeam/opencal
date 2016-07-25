@@ -1,10 +1,10 @@
-#ifndef BACTERIUM_H
-#define BACTERIUM_H
+#ifndef POLYGON_H
+#define POLYGON_H
+
 
 #include <CGAL/Boolean_set_operations_2.h>
-//#include <CGAL/convex_hull_2.h>
-#include<set>
 #include <CGAL/centroid.h>
+#include<set>
 
 typedef CGAL::Simple_cartesian<double> K;
 typedef CGAL::Polygon_with_holes_2<K> Polygon_with_holes;
@@ -176,65 +176,7 @@ private:
 
 
 
-};
+}; 
 
-
-class Bacterium
-{
-    //private:
-public:
-    Polygon polygon;
-    Points points;
-    int lost = 0;
-    Bacterium(){}
-
-    /*    Bacterium (Points _points) : points(_points) , polygon(points)
-    {
-
-    }*/
-
-
-    CGALPoint& getCentroid ()
-    {
-        return polygon.getCentroid();
-    }
-
-    int getArea ()
-    {
-        return polygon.getArea();
-    }
-
-
-    int getIntersectionArea (Bacterium&  bacterium)
-    {
-        return polygon.intersectionArea(bacterium.polygon);
-    }
-
-    double distance (Bacterium& bacterium)
-    {
-        return std::sqrt (std::pow ((bacterium.getCentroid().x() - this->polygon.getCentroid().x()), 2) + std::pow ((bacterium.getCentroid().y()- this->polygon.getCentroid().y()),2));
-    }
-
-    int getRadius ()
-    {
-        return polygon.getRadius();
-    }
-
-    void createBactriaFromRawPoints(){
-        Polygon p(points);
-        polygon = p;
-
-    }
-
-
-
-
-
-    friend std::ostream& operator<<(std::ostream& os, Bacterium b)
-    {
-        os << b.polygon<<" \n";
-        return os;
-    }
-};
 
 #endif
