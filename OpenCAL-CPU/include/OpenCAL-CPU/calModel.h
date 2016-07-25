@@ -124,6 +124,7 @@ struct CALSubstate_r* calAddSingleLayerSubstate_r(struct CALModel* calModel,	//!
 */
 void calInitSubstate_b(struct CALModel* calModel,	//!< Pointer to the cellular automaton structure.
                struct CALSubstate_b* Q,
+               enum CALInitMethod initMethod,
                CALbyte value				//!< initializing value for the substate at the cell (i, j).
                );
 
@@ -131,6 +132,7 @@ void calInitSubstate_b(struct CALModel* calModel,	//!< Pointer to the cellular a
 */
 void calInitSubstate_i(struct CALModel* calModel,	//!< Pointer to the cellular automaton structure.
                struct CALSubstate_i* Q,
+               enum CALInitMethod initMethod,
                CALint value				//!< initializing value for the substate at the cell (i, j).
                );
 
@@ -138,6 +140,7 @@ void calInitSubstate_i(struct CALModel* calModel,	//!< Pointer to the cellular a
 */
 void calInitSubstate_r(struct CALModel* calModel,	//!< Pointer to the cellular automaton structure.
                struct CALSubstate_r* Q,
+               enum CALInitMethod initMethod,
                CALreal value				//!< initializing value for the substate at the cell (i, j).
                );
 
@@ -335,6 +338,7 @@ static void calSetCurrent_r(struct CALModel* calModel, struct CALSubstate_r* Q, 
 }
 
 
+int calGetNeighbourIndex(struct CALModel* calModel, CALIndices central_cell, int neighbour);
 
 
 

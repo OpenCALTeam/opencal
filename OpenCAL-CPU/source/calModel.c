@@ -83,7 +83,11 @@ struct CALModel*calCADef(struct CALDimensions* dimensions, enum CALNeighborhood 
     //        }
     //        printf("\n");
     //    }
-    calModel->A->OPTIMIZATION = CAL_OPTIMIZATION;
+
+    if(CAL_OPTIMIZATION == CAL_NO_OPT)
+        calModel->A = NULL;
+    else
+        calACDef(calModel, CAL_OPTIMIZATION);
 
     calModel->calRun = makeCALRun(initial_step, final_step);
     //Manage Optimization
@@ -263,27 +267,42 @@ struct CALSubstate_r*calAddSingleLayerSubstate_r(struct CALModel* calModel, CALr
     return Q;
 }
 
-void calInitSubstate_b(struct CALModel* calModel, struct CALSubstate_b* Q, CALbyte value)
+void calInitSubstate_b(struct CALModel* calModel, struct CALSubstate_b* Q, enum CALInitMethod initMethod, CALbyte value)
 {
-    if(Q->current)
+    if(initMethod == CAL_INIT_BOTH)
+    {
         calSetBuffer_b(Q->current, calModel->cellularSpaceDimension, value);
-    if(Q->next)
+        calSetBuffer_b(Q->next, calModel->cellularSpaceDimension, value);
+    }
+    else if(initMethod == CAL_INIT_CURRENT)
+        calSetBuffer_b(Q->current, calModel->cellularSpaceDimension, value);
+    else if(initMethod == CAL_INIT_NEXT)
         calSetBuffer_b(Q->next, calModel->cellularSpaceDimension, value);
 }
 
-void calInitSubstate_i(struct CALModel* calModel, struct CALSubstate_i* Q, CALint value)
+void calInitSubstate_i(struct CALModel* calModel, struct CALSubstate_i* Q, enum CALInitMethod initMethod, CALint value)
 {
-    if(Q->current)
+    if(initMethod == CAL_INIT_BOTH)
+    {
         calSetBuffer_i(Q->current, calModel->cellularSpaceDimension, value);
-    if(Q->next)
+        calSetBuffer_i(Q->next, calModel->cellularSpaceDimension, value);
+    }
+    else if(initMethod == CAL_INIT_CURRENT)
+        calSetBuffer_i(Q->current, calModel->cellularSpaceDimension, value);
+    else if(initMethod == CAL_INIT_NEXT)
         calSetBuffer_i(Q->next, calModel->cellularSpaceDimension, value);
 }
 
-void calInitSubstate_r(struct CALModel* calModel, struct CALSubstate_r* Q, CALreal value)
+void calInitSubstate_r(struct CALModel* calModel, struct CALSubstate_r* Q, enum CALInitMethod initMethod, CALreal value)
 {
-    if(Q->current)
+    if(initMethod == CAL_INIT_BOTH)
+    {
         calSetBuffer_r(Q->current, calModel->cellularSpaceDimension, value);
-    if(Q->next)
+        calSetBuffer_r(Q->next, calModel->cellularSpaceDimension, value);
+    }
+    else if(initMethod == CAL_INIT_CURRENT)
+        calSetBuffer_r(Q->current, calModel->cellularSpaceDimension, value);
+    else if(initMethod == CAL_INIT_NEXT)
         calSetBuffer_r(Q->next, calModel->cellularSpaceDimension, value);
 }
 
@@ -404,4 +423,9 @@ void calFinalize(struct CALModel* calModel)
     free(calModel);
 
     calModel = NULL;
+}
+
+int calGetNeighbourIndex(struct CALModel* calModel, CALIndices central_cell, int neighbour)
+{
+    return calModel->calNeighborPool->neighborPool[getLinearIndex(central_cell, calModel->coordinatesDimensions, calModel->numberOfCoordinates)][neighbour];
 }

@@ -2,33 +2,49 @@
 #include <OpenCAL-CPU/calActiveCellsNaive.h>
 #include <OpenCAL-CPU/calActiveCellsCLL.h>
 
-void calAddActiveCells(struct CALActiveCells* A, CALIndices cell)
+struct CALActiveCells* calACDef(struct CALModel* calModel, enum CALOptimization CAL_OPTIMIZATION)
 {
-    if(A->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS)
-        calAddActiveCellCLL(((struct CALActiveCellsCLL*) A), cell);
-    else
-        calAddActiveCellNaive(((struct CALActiveCellsNaive*) A), cell);
+    if(CAL_OPTIMIZATION == CAL_OPT_ACTIVE_CELLS)
+        return calMakeACCLL(calModel);
+    else if(CAL_OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE)
+        return calMakeACNaive(calModel);
 }
 
-void calRemoveActiveCells(struct CALActiveCells* A, CALIndices cell)
+void calAddActiveCell(struct CALModel* model, CALIndices cell)
 {
-    if(A->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS)
-        calRemoveActiveCellCLL(((struct CALActiveCellsCLL*) A), cell);
+    if(model->A->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS)
+        calAddActiveCellCLL(((struct CALActiveCellsCLL*) model->A), cell);
     else
-        calRemoveActiveCellNaive(((struct CALActiveCellsNaive*) A), cell);
+        calAddActiveCellNaive(((struct CALActiveCellsNaive*) model->A), cell);
+}
+
+void calAddActiveCellX(struct CALModel* model, CALIndices cell, int n)
+{
+    if(model->A->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS)
+        calAddActiveCellCLL(((struct CALActiveCellsCLL*) model->A), model->calIndexesPool->pool[calGetNeighbourIndex(model, cell, n)]);
+    else
+        calAddActiveCellNaive(((struct CALActiveCellsNaive*) model->A), model->calIndexesPool->pool[calGetNeighbourIndex(model, cell, n)]);
+}
+
+void calRemoveActiveCell(struct CALModel* model, CALIndices cell)
+{
+    if(model->A->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS)
+        calRemoveActiveCellCLL(((struct CALActiveCellsCLL*) model->A), cell);
+    else
+        calRemoveActiveCellNaive(((struct CALActiveCellsNaive*) model->A), cell);
 
 }
 
-CALbyte calApplyLocalFunctionOpt(struct CALActiveCells* A, CALLocalProcess local_process)
+CALbyte calApplyLocalFunctionOpt(struct CALModel* model, CALLocalProcess local_process)
 {
-    if(A->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS && ((struct CALActiveCellsCLL*) A)->size_current > 0)
+    if(model->A->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS && ((struct CALActiveCellsCLL*) model->A)->size_current > 0)
     {
-        calApplyElementaryProcessActiveCellsCLL(((struct CALActiveCellsCLL*) A), local_process);
+        calApplyElementaryProcessActiveCellsCLL(((struct CALActiveCellsCLL*) model->A), local_process);
         return CAL_TRUE;
     }
-        else if(A->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE && ((struct CALActiveCellsNaive*) A)->size_current > 0)
+        else if(model->A->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE && ((struct CALActiveCellsNaive*) model->A)->size_current > 0)
     {
-        calApplyElementaryProcessActiveCellsNaive(((struct CALActiveCellsNaive*) A), local_process);
+        calApplyElementaryProcessActiveCellsNaive(((struct CALActiveCellsNaive*) model->A), local_process);
         return CAL_TRUE;
     }
     else
@@ -150,34 +166,35 @@ void calFreeActiveCells(struct CALActiveCells* A)
 
 }
 
-void calCheckForActiveCells(struct CALActiveCells* A, CALbyte (*active_cells_def)(struct CALModel*, CALIndices, int))
+void calCheckForActiveCells(struct CALModel* model, CALbyte (*active_cells_def)(struct CALModel*, CALIndices, int))
 {
-    struct CALModel* calModel = A->calModel;
-    CALIndices* pool = calModel->calIndexesPool->pool;
-    int dim = calModel->cellularSpaceDimension;
-    int numb_of_dim = calModel->numberOfCoordinates;
+    CALIndices* pool = model->calIndexesPool->pool;
+    int dim = model->cellularSpaceDimension;
+    int numb_of_dim = model->numberOfCoordinates;
     int i;
 
     for(i = 0; i < dim; i++)
     {
-        if(active_cells_def(calModel, pool[i], numb_of_dim))
-            calAddActiveCells(A, pool[i]);
+        if(active_cells_def(model, pool[i], numb_of_dim))
+            calAddActiveCell(model, pool[i]);
         else
-            calRemoveActiveCells(A, pool[i]);
+            calRemoveActiveCell(model, pool[i]);
     }
 
 }
 
-void calRemoveInactiveCells(struct CALActiveCells* A, CALbyte (*active_cells_def)(struct CALModel*, CALIndices, int))
+void calRemoveInactiveCells(struct CALModel* model, CALbyte (*active_cells_def)(struct CALModel*, CALIndices, int))
 {
-        if(A->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS)
+        if(model->A->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS)
         {
-           struct CALActiveCellsCLL* A1 = ((struct CALActiveCellsCLL*) A);
+           struct CALActiveCellsCLL* A1 = ((struct CALActiveCellsCLL*) model->A);
            calRemoveInactiveCellsCLL(A1, active_cells_def);
         }
-        else if(A->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE)
+        else if(model->A->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE)
         {
-           struct CALActiveCellsNaive* A1 = ((struct CALActiveCellsNaive*) A);
+           struct CALActiveCellsNaive* A1 = ((struct CALActiveCellsNaive*) model->A);
            calRemoveInactiveCellsNaive(A1, active_cells_def);
         }
 }
+
+

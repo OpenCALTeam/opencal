@@ -10,14 +10,18 @@ struct CALActiveCells
         enum CALOptimization OPTIMIZATION;	//!< Type of optimization used. It can be CAL_NO_OPT or CAL_OPT_ACTIVE_CELLS.
 };
 
-void calAddActiveCells(struct CALActiveCells* A, CALIndices cell);
-void calRemoveActiveCells(struct CALActiveCells* A, CALIndices cell);
+struct CALActiveCells* calACDef(struct CALModel* calModel, enum CALOptimization CAL_OPTIMIZATION);
 
-void calCheckForActiveCells(struct CALActiveCells* A, CALbyte (*active_cells_def)(struct CALModel* model, CALIndices cell, int number_of_dimensions));
+void calAddActiveCell(struct CALModel* model, CALIndices cell);
+void calRemoveActiveCell(struct CALModel* model, CALIndices cell);
 
-void calRemoveInactiveCells(struct CALActiveCells* A, CALbyte (*active_cells_def)(struct CALModel* model, CALIndices cell, int number_of_dimensions));
+void calAddActiveCellX(struct CALModel* model, CALIndices cell, int n);
 
-CALbyte calApplyLocalFunctionOpt(struct CALActiveCells* A, CALLocalProcess local_process);
+void calCheckForActiveCells(struct CALModel* model, CALbyte (*active_cells_def)(struct CALModel* model, CALIndices cell, int number_of_dimensions));
+
+void calRemoveInactiveCells(struct CALModel* model, CALbyte (*active_cells_def)(struct CALModel* model, CALIndices cell, int number_of_dimensions));
+
+CALbyte calApplyLocalFunctionOpt(struct CALModel* model, CALLocalProcess local_process);
 
 void calUpdateActiveCells(struct CALActiveCells* A);
 

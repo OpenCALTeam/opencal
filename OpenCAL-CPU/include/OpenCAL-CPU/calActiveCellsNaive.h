@@ -13,6 +13,8 @@ struct CALActiveCellsNaive {
         int num_threads; //!< number of threads using the data structure (used to iterate over size_next)
 };
 
+struct CALActiveCells* calMakeACNaive(struct CALModel* calModel);
+
 /*! \brief Sets the cell of the matrix flags to CAL_TRUE and increments the
     couter sizeof_active_flags.
 */

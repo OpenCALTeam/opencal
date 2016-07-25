@@ -142,7 +142,7 @@ void calPushBack(struct CALActiveCellsCLL* A, int thread, CALIndices cell )
 }
 
 
-struct CALActiveCellsCLL* calMakeContiguousLinkedList(struct CALModel* calModel)
+struct CALActiveCells* calMakeACCLL(struct CALModel* calModel)
 {
     struct CALActiveCellsCLL* contiguousLinkedList = (struct CALActiveCellsCLL*) malloc (sizeof(struct CALActiveCellsCLL));
     contiguousLinkedList->inherited_pointer = (struct CALActiveCells*) malloc (sizeof(struct CALActiveCells));
@@ -223,7 +223,7 @@ struct CALActiveCellsCLL* calMakeContiguousLinkedList(struct CALModel* calModel)
     }
 
     contiguousLinkedList->size_current = 0;
-    return contiguousLinkedList;
+    return ((struct CALActiveCells*)contiguousLinkedList);
 }
 
 void calRemoveActiveCellCLL(struct CALActiveCellsCLL* A, CALIndices cell)

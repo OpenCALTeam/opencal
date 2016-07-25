@@ -64,7 +64,7 @@ void calPushBack(struct CALActiveCellsCLL* A, int thread, CALIndices cell );
 void calUpdateParallelCLL(struct CALActiveCellsCLL* A);
 void calUpdateSerialCLL(struct CALActiveCellsCLL* A);
 
-struct CALActiveCellsCLL* calMakeContiguousLinkedList(struct CALModel* model);
+struct CALActiveCells* calMakeACCLL(struct CALModel* model);
 
 
 /*! \brief Links the cell to the tail of the list

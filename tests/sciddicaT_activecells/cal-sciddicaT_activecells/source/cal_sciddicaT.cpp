@@ -1,4 +1,4 @@
-// The SciddicaT debris flows model with the active cells optimization
+﻿// The SciddicaT debris flows model with the active cells optimization
 
 extern "C" {
 #include <OpenCAL/cal2D.h>
@@ -26,9 +26,9 @@ using namespace std;
 
 #define PREFIX_PATH(version,name,pathVarName) \
     if(version==0)\
-         pathVarName="./testsout/serial/"name;\
+         pathVarName="./testsout/serial/" name;\
      else if(version>0)\
-         pathVarName="./testsout/other/"name;
+         pathVarName="./testsout/other/" name;
 
 // declare CCA model (sciddicaT), substates (Q), parameters (P),
 // and simulation object (sciddicaT_simulation)

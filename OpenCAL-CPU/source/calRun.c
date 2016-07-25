@@ -66,9 +66,9 @@ CALbyte calRunCAStep(struct CALModel* calModel)
     }
 
     if(calModel->A && calModel->calRun->active_cells_def)
-        calCheckForActiveCells(calModel->A, calModel->calRun->active_cells_def);
+        calCheckForActiveCells(calModel, calModel->calRun->active_cells_def);
     else if(calModel->A && calModel->calRun->rem_active_cells)
-        calRemoveInactiveCells(calModel->A, calModel->calRun->rem_active_cells);
+        calRemoveInactiveCells(calModel, calModel->calRun->rem_active_cells);
 
     if(calModel->calRun->stopCondition)
         return(calModel->calRun->stopCondition(calModel));

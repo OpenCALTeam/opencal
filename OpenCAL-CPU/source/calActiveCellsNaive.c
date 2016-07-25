@@ -2,6 +2,11 @@
 
 #include <string.h>
 
+struct CALActiveCells* calMakeACNaive(struct CALModel* calModel)
+{
+
+}
+
 void calApplyElementaryProcessActiveCellsNaive(struct CALActiveCellsNaive* A, CALLocalProcess elementary_process)
 {
     int n;
@@ -172,3 +177,4 @@ void calRemoveInactiveCellsNaive(struct CALActiveCellsNaive* A, CALbyte (*active
     }
 
 }
+
