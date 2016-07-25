@@ -40,6 +40,11 @@ void calAddActiveCellsDefinition(struct CALModel* calModel, CALbyte (*active_cel
     calModel->calRun->active_cells_def = active_cells_def;
 }
 
+void calAddInactiveCellsDefinition(struct CALModel* calModel, CALbyte (*active_cells_def)(struct CALModel*, CALIndices, int))
+{
+    calModel->calRun->rem_active_cells = active_cells_def;
+}
+
 CALbyte calRunCAStep(struct CALModel* calModel)
 {
     if(calModel->calRun->globalTransition)
@@ -62,6 +67,8 @@ CALbyte calRunCAStep(struct CALModel* calModel)
 
     if(calModel->A && calModel->calRun->active_cells_def)
         calCheckForActiveCells(calModel->A, calModel->calRun->active_cells_def);
+    else if(calModel->A && calModel->calRun->rem_active_cells)
+        calRemoveInactiveCells(calModel->A, calModel->calRun->rem_active_cells);
 
     if(calModel->calRun->stopCondition)
         return(calModel->calRun->stopCondition(calModel));
@@ -127,4 +134,5 @@ void calForceInit(struct CALModel* calModel)
 {
     calRunInitSimulation(calModel);
 }
+
 

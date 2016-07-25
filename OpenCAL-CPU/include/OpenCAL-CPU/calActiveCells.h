@@ -13,6 +13,10 @@ struct CALActiveCells
 void calAddActiveCells(struct CALActiveCells* A, CALIndices cell);
 void calRemoveActiveCells(struct CALActiveCells* A, CALIndices cell);
 
+void calCheckForActiveCells(struct CALActiveCells* A, CALbyte (*active_cells_def)(struct CALModel* model, CALIndices cell, int number_of_dimensions));
+
+void calRemoveInactiveCells(struct CALActiveCells* A, CALbyte (*active_cells_def)(struct CALModel* model, CALIndices cell, int number_of_dimensions));
+
 CALbyte calApplyLocalFunctionOpt(struct CALActiveCells* A, CALLocalProcess local_process);
 
 void calUpdateActiveCells(struct CALActiveCells* A);

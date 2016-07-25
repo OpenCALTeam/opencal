@@ -15,6 +15,7 @@ struct CALRun {
         void (**finalize)(struct CALModel*);			//!< Simulation's finalize callback function.
         int num_of_fin_func;
         CALbyte (*active_cells_def)(struct CALModel* calModel, CALIndices cell, int number_of_dimensions);
+        CALbyte (*rem_active_cells)(struct CALModel* calModel, CALIndices cell, int number_of_dimensions);
 
 #if CAL_PARALLEL == 1
         CAL_LOCKS_DEFINE(locks);
@@ -24,13 +25,11 @@ struct CALRun {
 
 struct CALRun* makeCALRun(int initial_step, int final_step);
 
+//#include <OpenCAL-CPU/calActiveCells.h>
 void calAddActiveCellsDefinition(struct CALModel* calModel, CALbyte (*active_cells_def)(struct CALModel* calModel, CALIndices cell, int number_of_dimensions));
+void calAddInactiveCellsDefinition(struct CALModel* calModel, CALbyte (*active_cells_def)(struct CALModel* calModel, CALIndices cell, int number_of_dimensions));
+
 void calRunApplyLocalProcess(struct CALModel* calModel, CALLocalProcess local_process);
-
-static void calCheckForActiveCells(struct CALActiveCells* A, CALbyte (*active_cells_def)(struct CALModel* calModel, CALIndices cell, int number_of_dimensions))
-{
-
-}
 
 ///*! \brief The cellular automaton global transition function.
 //    It applies the transition function to each cell of the cellular space.

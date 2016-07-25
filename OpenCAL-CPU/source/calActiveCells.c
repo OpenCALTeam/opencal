@@ -149,3 +149,35 @@ void calFreeActiveCells(struct CALActiveCells* A)
         calFreeActiveCellsNaive(((struct CALActiveCellsNaive*) A));
 
 }
+
+void calCheckForActiveCells(struct CALActiveCells* A, CALbyte (*active_cells_def)(struct CALModel*, CALIndices, int))
+{
+    struct CALModel* calModel = A->calModel;
+    CALIndices* pool = calModel->calIndexesPool->pool;
+    int dim = calModel->cellularSpaceDimension;
+    int numb_of_dim = calModel->numberOfCoordinates;
+    int i;
+
+    for(i = 0; i < dim; i++)
+    {
+        if(active_cells_def(calModel, pool[i], numb_of_dim))
+            calAddActiveCells(A, pool[i]);
+        else
+            calRemoveActiveCells(A, pool[i]);
+    }
+
+}
+
+void calRemoveInactiveCells(struct CALActiveCells* A, CALbyte (*active_cells_def)(struct CALModel*, CALIndices, int))
+{
+        if(A->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS)
+        {
+           struct CALActiveCellsCLL* A1 = ((struct CALActiveCellsCLL*) A);
+           calRemoveInactiveCellsCLL(A1, active_cells_def);
+        }
+        else if(A->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE)
+        {
+           struct CALActiveCellsNaive* A1 = ((struct CALActiveCellsNaive*) A);
+           calRemoveInactiveCellsNaive(A1, active_cells_def);
+        }
+}

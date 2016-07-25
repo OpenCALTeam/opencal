@@ -62,6 +62,7 @@ static void calRemoveActiveCellNaive(struct CALActiveCellsNaive* A, CALIndices c
 #endif
 }
 
+void calRemoveInactiveCellsNaive(struct CALActiveCellsNaive* A, CALbyte (*active_cells_def)(struct CALModel*, CALIndices, int));
 
 void calApplyElementaryProcessActiveCellsNaive(struct CALActiveCellsNaive *A, CALLocalProcess elementary_process);
 

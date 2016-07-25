@@ -410,3 +410,21 @@ void calFreeContiguousLinkedList(struct CALActiveCellsCLL* A)
     free(A->_tails);
 }
 
+
+void calRemoveInactiveCellsCLL(struct CALActiveCellsCLL* A, CALbyte (*inactive_cells_def)(struct CALModel*, CALIndices, int))
+{
+    int n;
+    int numb_of_dims = A->inherited_pointer->calModel->numberOfCoordinates;
+    struct CALModel* calModel = A->inherited_pointer->calModel;
+
+#pragma omp parallel for firstprivate(A, numb_of_dims, calModel)
+    for(n = 0; n < A->number_of_threads; n++)
+    {
+        CALBufferElement* current = A->_heads[n];
+        while(current != NULL)
+        {
+            if(inactive_cells_def(calModel, current->cell, numb_of_dims))
+                calRemoveActiveCellCLL(A, current->cell);
+        }
+    }
+}

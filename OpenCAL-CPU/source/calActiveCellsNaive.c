@@ -155,3 +155,20 @@ void calUpdateActiveCellsNaive(struct CALActiveCellsNaive* A)
     free(tsize);
     free(tcells);
 }
+
+void calRemoveInactiveCellsNaive(struct CALActiveCellsNaive* A, CALbyte (*active_cells_def)(struct CALModel*, CALIndices, int))
+{
+    int i;
+    int dim = A->size_current;
+    CALIndices* cells = A->cells;
+    struct CALModel* calModel = A->inherited_pointer->calModel;
+    int numb_of_dim = calModel->numberOfCoordinates;
+
+#pragma omp parallel for firstprivate(dim, cells, calModel, numb_of_dim)
+    for(i = 0; i < dim; i++)
+    {
+        if(active_cells_def(calModel, cells[i], numb_of_dim))
+            calRemoveActiveCellNaive(A, cells[i]);
+    }
+
+}

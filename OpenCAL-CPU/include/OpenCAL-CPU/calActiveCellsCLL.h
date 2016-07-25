@@ -105,6 +105,8 @@ static void calUpdateActiveCellsCLL(struct CALActiveCellsCLL* A)
 #endif
 }
 
+void calRemoveInactiveCellsCLL(struct CALActiveCellsCLL* A, CALbyte (*inactive_cells_def)(struct CALModel*, CALIndices, int));
+
 void calApplyElementaryProcessActiveCellsCLL(struct CALActiveCellsCLL* A, CALLocalProcess elementary_process);
 
 void calCopyBufferActiveCellsCLL_b(CALbyte* M_src, CALbyte* M_dest,  struct CALActiveCellsCLL* A);
