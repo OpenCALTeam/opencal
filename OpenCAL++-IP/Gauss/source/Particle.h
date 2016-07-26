@@ -9,6 +9,7 @@ public:
     Polygon polygon;
     Points points;
     int lost = 0;
+    int frame;
     Particle(){}
 
     /*    Particle (Points _points) : points(_points) , polygon(points)
@@ -55,7 +56,7 @@ public:
 
     friend std::ostream& operator<<(std::ostream& os, Particle b)
     {
-        os << b.polygon<<" \n";
+        os << b.polygon <<" " <<b.frame<<" \n";
         return os;
     }
 };

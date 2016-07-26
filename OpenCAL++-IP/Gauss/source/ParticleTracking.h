@@ -16,7 +16,6 @@
 #include "Particle.h"
 
 
-
 template < uint DIMENSION, typename COORDINATE_TYPE = uint>
 class Frame
 {
@@ -24,20 +23,24 @@ public:
 
     std::vector<std::shared_ptr<Particle>> segmented_particles;
     std::vector<std::vector<int>> matrix;
+    int idFrame;
 
     Frame(){}
     Frame(const std::vector<std::shared_ptr<Particle>>& segmented_particles,
           std::array <COORDINATE_TYPE, DIMENSION>& coordinates)
     {
         this->segmented_particles = segmented_particles;
-        init(coordinates);
+        init(coordinates, 1);
 
     }
 
-    void init (std::array <COORDINATE_TYPE, DIMENSION>& coordinates)
+    void init (std::array <COORDINATE_TYPE, DIMENSION>& coordinates, int _idFrame)
     {
+
+        this->idFrame = _idFrame;
         for(auto b : this->segmented_particles) {
             b->createBactriaFromRawPoints();
+            b->frame = idFrame;
         }
 
 
@@ -114,7 +117,7 @@ public:
 
 
 
-template<uint DIMENSION, class NEIGHBORHOOD, typename COORDINATE_TYPE = uint>
+template<uint DIMENSION, class NEIGHBORHOOD, typename COORDINATE_TYPE = uint, uint THRESHOLD = 5>
 class ParticlesTracking
 {
 private:
@@ -216,7 +219,7 @@ private:
 
         for (int i = 0; i < particles.size(); i++)
         {
-            if (particles[i].back()->lost<5) //TODO mettere parametro da settare
+            if (particles[i].back()->lost< THRESHOLD) //TODO mettere parametro da settare
             {
                 // std::cout<<" sono qui a processare il batterio n "<<i<<std::endl;
 
@@ -284,10 +287,15 @@ public:
             std::cout<<"sono current path "<<currentPath<<std::endl;
             bgr->loadSubstate(*(new std::function<decltype(loadImage<PIXELTYPE>)>(loadImage<PIXELTYPE>)), currentPath);
             calrun->run();
-            frame->init(calmodel->getCoordinates());
+            frame->init(calmodel->getCoordinates(), i);
             tracking();
+
             std::cout<<"ho processato "<<frame->segmented_particles.size()<<" particelle"<<std::endl;
+
+
             frame->clear();
+
+
 
         }
     }

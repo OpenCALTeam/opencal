@@ -30,16 +30,50 @@ public:
 
 };
 
+template<typename PIXELTYPE>
+class RemoveSinglePixelFilter : public opencal::CALLocalFunction<2,opencal::CALMooreNeighborhood<2,MOORERADIUS>,uint> {
+
+    opencal::CALSubstate<PIXELTYPE,2>* img;
+public:
+    RemoveSinglePixelFilter(auto* sbs): img(sbs) {
+
+    }
+
+
+    void run(MODELTYPE* model,std::array<uint,2>& indices) {
+        using namespace std;
+        constexpr int channels = std::tuple_size<PIXELTYPE>::value;
+        PIXELTYPE newVal=img->getElement(indices);
+        int count = 0;
+        unsigned short ns = model->getNeighborhoodSize();
+        for (int i=0; i<ns; ++i) {
+            if(img->getX(indices,i)[0])
+                count++;
+
+        }
+
+        if(count <= 1)
+            for(int i=0; i<channels; i++)
+                newVal[i] = 0;
+
+        img->setElement(indices,newVal);
+
+    }
+
+};
+
+
+#define numberOfImages 4100
 
 
 int main ()
 {
 
     //traking_10x_480010persect
-    std::array<COORD_TYPE, 2> coords = { 431,512 };
+    //    std::array<COORD_TYPE, 2> coords = { 431,512 };
 
-    //100_0019t
-    //std::array<COORD_TYPE, 2> coords = { 402,512 };
+    //    100_0019t
+    std::array<COORD_TYPE, 2> coords = { 402,512 };
 
 
     opencal::CALMooreNeighborhood<2,MOORERADIUS> neighbor;
@@ -49,13 +83,25 @@ int main ()
                 opencal::calCommon::CAL_SPACE_TOROIDAL,
                 opencal::calCommon::CAL_NO_OPT);
     const int steps  = 1;
-    std::string path = "/home/parcuri/Dropbox/Workspace_cpp/OpenCAL_Devel/opencal/OpenCAL++-IP/Gauss/input/tiff/traking_10x_480010persect";
+    //    std::string path = "./input/tiff/traking_10x_480010persect";
+    std::string path = "/run/media/parcuri/DEFABF07FABEDB4B/HIMYM/dataset712//100_0019t";
     CALSUBSTATE* bgr = calmodel.addSubstate<vec1s>();
     MyRun calrun (&calmodel, 1, steps, opencal::calCommon::CAL_UPDATE_IMPLICIT);
-    ContrastStretchingFilter <2,decltype(neighbor),COORD_TYPE,vec1s>contrastStretchingFilter(bgr, 0, 1799, 0, 65535,0.10);
-    ThresholdFilter<2,decltype(neighbor),COORD_TYPE,vec1s> thresholdFilter (bgr,0,61680,0,65535);
 
-    //    RemoveSinglePixelFilter<vec1s> removeSinglePixelFilter(bgr);
+
+    //*****************************************
+    //traking_10x_480010persect
+    //    ContrastStretchingFilter <2,decltype(neighbor),COORD_TYPE,vec1s>contrastStretchingFilter(bgr, 0, 1799, 0, 65535,0.10);
+    //    ThresholdFilter<2,decltype(neighbor),COORD_TYPE,vec1s> thresholdFilter (bgr,0,61680,0,65535);
+    //*****************************************
+
+    //*****************************************
+    //100_0019t
+    ContrastStretchingFilter <2,decltype(neighbor),COORD_TYPE,vec1s>contrastStretchingFilter(bgr, 1285, 1542, 0, 65535,1.0);
+    ThresholdFilter<2,decltype(neighbor),COORD_TYPE,vec1s> thresholdFilter (bgr,0,61680,0,65535);
+    //*****************************************
+
+    RemoveSinglePixelFilter<vec1s> removeSinglePixelFilter(bgr);
 
     Frame<2,COORD_TYPE>* frame = new Frame<2,COORD_TYPE>();
 
@@ -64,20 +110,23 @@ int main ()
 
     calmodel.addElementaryProcess(&contrastStretchingFilter);
     calmodel.addElementaryProcess(&thresholdFilter);
-    //    calmodel.addElementaryProcess(&removeSinglePixelFilter);
+    calmodel.addElementaryProcess(&removeSinglePixelFilter);
     calmodel.addElementaryProcess(&connComponent);
 
 
     ParticlesTracking<2,decltype(neighbor),COORD_TYPE> particlesTracking (&calmodel, &calrun, frame);
-    particlesTracking.execute<vec1s> (path,bgr, 2100, 4);
+    particlesTracking.execute<vec1s> (path,bgr, numberOfImages, 4);
 
 
     auto particles =particlesTracking.getParticles();
-    std::cout<<"ci sono "<<particles.size()<<" batteri"<<std::endl;
+    //    std::cout<<"ci sono "<<particles.size()<<" batteri"<<std::endl;
 
     MyMat mat (coords[0], coords[1], CV_8UC3);
     mat.addBacteria(particles);
-    mat.saveImage("bact.png");
+    mat.saveImage("bactProva.png");
+
+
+    //    stampaPerMatlab(particles);
     delete frame;
 
     return 0;
