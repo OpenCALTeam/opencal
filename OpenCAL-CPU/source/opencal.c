@@ -5,17 +5,21 @@ void calAddLocalProcess(struct CALModel* calModel,	//!< Pointer to the cellular 
                         )
 {
     struct CALProcess* prv = calModel->model_processes;
-    calModel->model_processes = (struct CALProcess*) malloc(sizeof(struct CALProcess) * ++calModel->num_of_processes);
+    calModel->num_of_processes++;
+    calModel->model_processes = (struct CALProcess*) malloc(sizeof(struct CALProcess) * (calModel->num_of_processes));
 
     int n = 0;
 
-    for( ; n < calModel->num_of_processes - 1; n++)
-        calModel->model_processes[n] = prv[n];
+    if(calModel->num_of_processes > 1)
+    {
+        for( ; n < calModel->num_of_processes - 1; n++)
 
+            calModel->model_processes[n] = prv[n];
+        free(prv);
+    }
     calModel->model_processes[n].localProcess = elementary_process;
     calModel->model_processes[n].type = 'L';
 
-    free(prv);
 }
 
 void calAddGlobalProcess(struct CALModel* calModel,	//!< Pointer to the cellular automaton structure.

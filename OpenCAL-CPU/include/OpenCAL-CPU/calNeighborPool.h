@@ -16,21 +16,27 @@ enum CALNeighborhood {
     CAL_HEXAGONAL_NEIGHBORHOOD_ALT	//!< Enumerator used for specifying the alternative 90� rotated  Moore Hexagonal neighbourhood; no calls to calAddNeighbor are needed.
 };
 
+struct CALNeighbourhoodPattern
+{
+        int** cell_pattern;
+        int size_of_X;
+};
 
 struct CALNeighborPool{
     int ** neighborPool;
     int neighborPool_size;
+    int numb_of_neighbours;
     int size_of_X;
     enum CALSpaceBoundaryCondition CAL_TOROIDALITY;
 };
 
-struct CALNeighborPool * calDefNeighborPool(struct CALIndexesPool* calIndexesPool, enum CALSpaceBoundaryCondition _CAL_TOROIDALITY, int **cellPattern, int radius);
+struct CALNeighborPool * calDefNeighborPool(struct CALIndexesPool* calIndexesPool, enum CALSpaceBoundaryCondition _CAL_TOROIDALITY, struct CALNeighbourhoodPattern* cellPattern, int radius);
 
-int ** defineMooreNeighborhood(int radius,int dimension);
+struct CALNeighbourhoodPattern* defineMooreNeighborhood(int radius,int dimension);
 
-int ** defineVonNeumannNeighborhood(int radius,int dimension);
+struct CALNeighbourhoodPattern* defineVonNeumannNeighborhood(int radius,int dimension);
 
-void addNeighbors(struct CALNeighborPool * calNeighborPool,struct CALIndexesPool* calIndexesPool, int ** cellPattern, int radius);
+void addNeighbors(struct CALNeighborPool * calNeighborPool, struct CALIndexesPool* calIndexesPool, struct CALNeighbourhoodPattern* cellPattern, int radius);
 
 void destroy(struct CALNeighborPool * calNeighborPool);
 

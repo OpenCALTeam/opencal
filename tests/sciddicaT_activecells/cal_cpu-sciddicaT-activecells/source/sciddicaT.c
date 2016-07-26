@@ -26,7 +26,6 @@ void sciddicaT_flows_computation(struct CALModel* sciddicaT, CALIndices cell, in
     CALint n;
     CALreal z, h;
 
-
     if (calGet_r(sciddicaT, Q.h, cell) <= P.epsilon)
         return;
 
@@ -38,6 +37,7 @@ void sciddicaT_flows_computation(struct CALModel* sciddicaT, CALIndices cell, in
         h = calGetX_r(sciddicaT, Q.h, cell, n);
         u[n] = z + h;
     }
+    printf("QUA \n");
 
     //computes outflows
     do{
@@ -122,7 +122,9 @@ void sciddicaTSimulationInit(struct CALModel* sciddicaT)
 
 #ifdef ACTIVE_CELLS
                 //adds the cell (i, j) to the set of active ones
+                printf("prima add \n");
                 calAddActiveCell(sciddicaT, calGetCell(sciddicaT, i, j));
+                printf("dopo add \n");
 #endif
             }
         }
@@ -159,7 +161,7 @@ void sciddicaTCADef()
     calAddLocalProcess(sciddicaT, sciddicaT_width_update);
     calAddLocalProcess(sciddicaT, sciddicaT_remove_inactive_cells);
     calAddGlobalProcess(sciddicaT, sciddicaTResetFlows);
-
+printf("dopo add process \n");
     //add substates
     Q.z = calAddSubstate_r(sciddicaT, CAL_INIT_BOTH, 0);
     Q.h = calAddSubstate_r(sciddicaT, CAL_INIT_BOTH, 0);
@@ -167,13 +169,16 @@ void sciddicaTCADef()
     Q.f[1] = calAddSubstate_r(sciddicaT, CAL_INIT_BOTH, 0);
     Q.f[2] = calAddSubstate_r(sciddicaT, CAL_INIT_BOTH, 0);
     Q.f[3] = calAddSubstate_r(sciddicaT, CAL_INIT_BOTH, 0);
+    printf("dopo add substates \n");
 
     //load configuration
     sciddicaTLoadConfig();
+    printf("dopo load conf \n");
 
     //simulation run setup
     calAddInitFunc(sciddicaT,sciddicaTSimulationInit);
     calAddStopCondition(sciddicaT, sciddicaTSimulationStopCondition);
+    calForceInit(sciddicaT);
 }
 
 //------------------------------------------------------------------------------
@@ -183,8 +188,12 @@ void sciddicaTCADef()
 void sciddicaTLoadConfig()
 {
     //load configuration
+    printf("pointer %d \n", Q.z);
+    printf("prima z \n");
     calLoadSubstate_r(sciddicaT, Q.z, DEM_PATH);
+    printf("dopo z \n");
     calLoadSubstate_r(sciddicaT, Q.h, SOURCE_PATH);
+    printf("dopo h \n");
 }
 
 void sciddicaTSaveConfig()

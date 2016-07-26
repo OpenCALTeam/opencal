@@ -47,6 +47,7 @@ void calAddInactiveCellsDefinition(struct CALModel* calModel, CALbyte (*active_c
 
 CALbyte calRunCAStep(struct CALModel* calModel)
 {
+    printf("run CA step = %d \n", calModel->calRun->step);
     if(calModel->calRun->globalTransition)
         calModel->calRun->globalTransition(calModel);
     else
@@ -64,6 +65,8 @@ CALbyte calRunCAStep(struct CALModel* calModel)
             calUpdate(calModel);
         }
     }
+
+    printf("eseguiti processi \n");
 
     if(calModel->A && calModel->calRun->active_cells_def)
         calCheckForActiveCells(calModel, calModel->calRun->active_cells_def);
@@ -119,9 +122,11 @@ void calRunApplyLocalProcess(struct CALModel* calModel, CALLocalProcess local_pr
     int cellular_space_dimension = calModel->calIndexesPool->cellular_space_dimension;
     int number_of_dimensions = calModel->calIndexesPool->number_of_dimensions;
     CALIndices* pool = calModel->calIndexesPool->pool;
+    printf("eseguito local \n");
 
     for(n = 0; n < cellular_space_dimension; n++)
         local_process(calModel, pool[n], number_of_dimensions);
+
 
 }
 

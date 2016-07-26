@@ -89,13 +89,16 @@ CALbyte calLoadMatrix_i(CALint* M, int cellularSpaceDimension, char* path)
 
 CALbyte calLoadMatrix_r(CALreal* M, int cellularSpaceDimension, char* path)
 {
+    printf("prima f open \n");
     FILE *f = NULL;
     f = fopen(path, "r");
+    printf("dopo f open \n");
 
     if ( !f )
         return CAL_FALSE;
 
     calfLoadMatrix_r(M, cellularSpaceDimension, f);
+    printf("dopo fload \n");
 
     fclose(f);
 

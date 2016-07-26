@@ -5,7 +5,12 @@
 struct CALActiveCells* calACDef(struct CALModel* calModel, enum CALOptimization CAL_OPTIMIZATION)
 {
     if(CAL_OPTIMIZATION == CAL_OPT_ACTIVE_CELLS)
-        return calMakeACCLL(calModel);
+    {
+        struct CALActiveCells* A = calMakeACCLL(calModel);
+        A->OPTIMIZATION = CAL_OPT_ACTIVE_CELLS;
+        A->calModel = calModel;
+        return A;
+    }
     else if(CAL_OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE)
         return calMakeACNaive(calModel);
 }
@@ -13,9 +18,14 @@ struct CALActiveCells* calACDef(struct CALModel* calModel, enum CALOptimization 
 void calAddActiveCell(struct CALModel* model, CALIndices cell)
 {
     if(model->A->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS)
+    {
+        printf("dentro l'if \n");
         calAddActiveCellCLL(((struct CALActiveCellsCLL*) model->A), cell);
-    else
+    }else
+    {
+        printf("dentro l'if 2\n");
         calAddActiveCellNaive(((struct CALActiveCellsNaive*) model->A), cell);
+    }
 }
 
 void calAddActiveCellX(struct CALModel* model, CALIndices cell, int n)
@@ -42,7 +52,7 @@ CALbyte calApplyLocalFunctionOpt(struct CALModel* model, CALLocalProcess local_p
         calApplyElementaryProcessActiveCellsCLL(((struct CALActiveCellsCLL*) model->A), local_process);
         return CAL_TRUE;
     }
-        else if(model->A->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE && ((struct CALActiveCellsNaive*) model->A)->size_current > 0)
+    else if(model->A->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE && ((struct CALActiveCellsNaive*) model->A)->size_current > 0)
     {
         calApplyElementaryProcessActiveCellsNaive(((struct CALActiveCellsNaive*) model->A), local_process);
         return CAL_TRUE;
@@ -67,7 +77,7 @@ CALbyte calCopyBufferActiveCells_b(CALbyte* M_src, CALbyte* M_dest, struct CALAc
         calCopyBufferActiveCellsCLL_b(M_src, M_dest, ((struct CALActiveCellsCLL*) A));
         return CAL_TRUE;
     }
-        else if(A->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE && ((struct CALActiveCellsNaive*) A)->size_current > 0)
+    else if(A->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE && ((struct CALActiveCellsNaive*) A)->size_current > 0)
     {
         calCopyBufferActiveCellsNaive_b(M_src, M_dest, ((struct CALActiveCellsNaive*) A));
         return CAL_TRUE;
@@ -83,7 +93,7 @@ CALbyte calCopyBufferActiveCells_i(CALint* M_src, CALint* M_dest, struct CALActi
         calCopyBufferActiveCellsCLL_i(M_src, M_dest, ((struct CALActiveCellsCLL*) A));
         return CAL_TRUE;
     }
-        else if(A->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE && ((struct CALActiveCellsNaive*) A)->size_current > 0)
+    else if(A->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE && ((struct CALActiveCellsNaive*) A)->size_current > 0)
     {
         calCopyBufferActiveCellsNaive_i(M_src, M_dest, ((struct CALActiveCellsNaive*) A));
         return CAL_TRUE;
@@ -100,7 +110,7 @@ CALbyte calCopyBufferActiveCells_r(CALreal* M_src, CALreal* M_dest, struct CALAc
         calCopyBufferActiveCellsCLL_r(M_src, M_dest, ((struct CALActiveCellsCLL*) A));
         return CAL_TRUE;
     }
-        else if(A->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE && ((struct CALActiveCellsNaive*) A)->size_current > 0)
+    else if(A->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE && ((struct CALActiveCellsNaive*) A)->size_current > 0)
     {
         calCopyBufferActiveCellsNaive_r(M_src, M_dest, ((struct CALActiveCellsNaive*) A));
         return CAL_TRUE;
@@ -116,7 +126,7 @@ CALbyte calSetActiveCellsBuffer_b(CALbyte* M, CALbyte value, struct CALActiveCel
         calSetActiveCellsCLLBuffer_b(M, value, ((struct CALActiveCellsCLL*) A));
         return CAL_TRUE;
     }
-        else if(A->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE && ((struct CALActiveCellsNaive*) A)->size_current > 0)
+    else if(A->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE && ((struct CALActiveCellsNaive*) A)->size_current > 0)
     {
         calSetActiveCellsNaiveBuffer_b(M, value, ((struct CALActiveCellsNaive*) A));
         return CAL_TRUE;
@@ -132,7 +142,7 @@ CALbyte calSetActiveCellsBuffer_i(CALint* M, CALint value, struct CALActiveCells
         calSetActiveCellsCLLBuffer_i(M, value, ((struct CALActiveCellsCLL*) A));
         return CAL_TRUE;
     }
-        else if(A->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE && ((struct CALActiveCellsNaive*) A)->size_current > 0)
+    else if(A->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE && ((struct CALActiveCellsNaive*) A)->size_current > 0)
     {
         calSetActiveCellsNaiveBuffer_i(M, value, ((struct CALActiveCellsNaive*) A));
         return CAL_TRUE;
@@ -148,7 +158,7 @@ CALbyte calSetActiveCellsBuffer_r(CALreal* M, CALreal value, struct CALActiveCel
         calSetActiveCellsCLLBuffer_r(M, value, ((struct CALActiveCellsCLL*) A));
         return CAL_TRUE;
     }
-        else if(A->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE && ((struct CALActiveCellsNaive*) A)->size_current > 0)
+    else if(A->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE && ((struct CALActiveCellsNaive*) A)->size_current > 0)
     {
         calSetActiveCellsNaiveBuffer_r(M, value, ((struct CALActiveCellsNaive*) A));
         return CAL_TRUE;
@@ -185,16 +195,16 @@ void calCheckForActiveCells(struct CALModel* model, CALbyte (*active_cells_def)(
 
 void calRemoveInactiveCells(struct CALModel* model, CALbyte (*active_cells_def)(struct CALModel*, CALIndices, int))
 {
-        if(model->A->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS)
-        {
-           struct CALActiveCellsCLL* A1 = ((struct CALActiveCellsCLL*) model->A);
-           calRemoveInactiveCellsCLL(A1, active_cells_def);
-        }
-        else if(model->A->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE)
-        {
-           struct CALActiveCellsNaive* A1 = ((struct CALActiveCellsNaive*) model->A);
-           calRemoveInactiveCellsNaive(A1, active_cells_def);
-        }
+    if(model->A->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS)
+    {
+        struct CALActiveCellsCLL* A1 = ((struct CALActiveCellsCLL*) model->A);
+        calRemoveInactiveCellsCLL(A1, active_cells_def);
+    }
+    else if(model->A->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE)
+    {
+        struct CALActiveCellsNaive* A1 = ((struct CALActiveCellsNaive*) model->A);
+        calRemoveInactiveCellsNaive(A1, active_cells_def);
+    }
 }
 
 

@@ -87,8 +87,15 @@ enum CALOptimization{
 
 /*! \brief Macro recomputing the out of bound neighbourhood indexes in case of toroidal cellular space.
 */
-#define calGetToroidalX(index, size) (   (index)<0?((size)+(index)):( (index)>((size)-1)?((index)-(size)):(index) )   )
-
+//#define calGetToroidalX(index, size) ((index) < 0 ?((size) + (index)) : ((index)>((size)-1) ? ((index) - (size)) : (index)))
+static int calGetToroidalX(int index, int size) {
+    if(index < 0 )
+        return ((size) + (index));
+    else if( index > (size-1) )
+        return (index - size);
+    else
+        return (index);
+}
 
 
 /*! \brief 8 bit (256 values) integer substate; it can also be used for 1 bit boolean substates.

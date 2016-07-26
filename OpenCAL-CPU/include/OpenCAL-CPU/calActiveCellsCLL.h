@@ -72,8 +72,10 @@ struct CALActiveCells* calMakeACCLL(struct CALModel* model);
 static void calAddActiveCellCLL(struct CALActiveCellsCLL* A, CALIndices cell)
 {
 #if CAL_PARALLEL == 1
+    printf("calPuotElement \n");
     calPutElement(A, cell);
 #else
+    printf("calPiushBack \n");
     calPushBack(A, 0, cell);
 #endif
 }

@@ -123,6 +123,7 @@ void calUpdateSerialCLL(struct CALActiveCellsCLL* A)
 
 void calPushBack(struct CALActiveCellsCLL* A, int thread, CALIndices cell )
 {
+    printf("quii \n");
     CALBufferElement* tail = A->_tails[thread];
     CALBufferElement* element = &A->buffer[getLinearIndex(cell, A->inherited_pointer->calModel->coordinatesDimensions, A->inherited_pointer->calModel->numberOfCoordinates)];
 
@@ -132,12 +133,15 @@ void calPushBack(struct CALActiveCellsCLL* A, int thread, CALIndices cell )
         A->_tails[thread] = element;
         element->next = NULL;
         element->previous = NULL;
+        printf("fine pushback antici \n");
         return;
     }
     element->previous = tail;
     tail->next = element;
     A->_tails[thread] = element;
     element->next = NULL;
+
+    printf("fine pushback \n");
 
 }
 
@@ -147,6 +151,7 @@ struct CALActiveCells* calMakeACCLL(struct CALModel* calModel)
     struct CALActiveCellsCLL* contiguousLinkedList = (struct CALActiveCellsCLL*) malloc (sizeof(struct CALActiveCellsCLL));
     contiguousLinkedList->inherited_pointer = (struct CALActiveCells*) malloc (sizeof(struct CALActiveCells));
     contiguousLinkedList->inherited_pointer->calModel = calModel;
+    contiguousLinkedList->inherited_pointer->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS;
     contiguousLinkedList->size = calModel->cellularSpaceDimension;
 
 #pragma omp parallel
@@ -166,6 +171,7 @@ struct CALActiveCells* calMakeACCLL(struct CALModel* calModel)
 
     contiguousLinkedList->_heads = (CALBufferElement**) malloc (sizeof(CALBufferElement*) * contiguousLinkedList->number_of_threads);
 
+    printf("nimb of threads %d \n", contiguousLinkedList->number_of_threads);
     if(contiguousLinkedList->number_of_threads == 1)
         contiguousLinkedList->_tails = (CALBufferElement**) malloc (sizeof(CALBufferElement*) * 2);
     else
@@ -223,7 +229,7 @@ struct CALActiveCells* calMakeACCLL(struct CALModel* calModel)
     }
 
     contiguousLinkedList->size_current = 0;
-    return ((struct CALActiveCells*)contiguousLinkedList);
+    return (contiguousLinkedList->inherited_pointer);
 }
 
 void calRemoveActiveCellCLL(struct CALActiveCellsCLL* A, CALIndices cell)

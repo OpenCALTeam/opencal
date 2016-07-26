@@ -48,6 +48,12 @@ struct CALModel*calCADef(struct CALDimensions* dimensions, enum CALNeighborhood 
     calModel->numberOfCoordinates = dimensions->number_of_dimensions;
 
     calModel->coordinatesDimensions = dimensions->coordinates_dimensions;
+    calModel->sizeof_pQb_array = 0;
+    calModel->sizeof_pQi_array = 0;
+    calModel->sizeof_pQr_array = 0;
+    calModel->pQb_array = NULL;
+    calModel->pQi_array = NULL;
+    calModel->pQr_array = NULL;
 
     int n;
     calModel->cellularSpaceDimension = 1;
@@ -56,7 +62,7 @@ struct CALModel*calCADef(struct CALDimensions* dimensions, enum CALNeighborhood 
     calModel->calIndexesPool =  calDefIndexesPool(calModel->coordinatesDimensions, calModel->numberOfCoordinates);
 
     //CALL calRun constructor and set optimization
-    int ** cellPattern;
+    struct CALNeighbourhoodPattern * cellPattern;
     switch (CAL_NEIGHBORHOOD) {
     case CAL_VON_NEUMANN_NEIGHBORHOOD:
         cellPattern = defineVonNeumannNeighborhood(1, calModel->numberOfCoordinates);
@@ -72,22 +78,12 @@ struct CALModel*calCADef(struct CALDimensions* dimensions, enum CALNeighborhood 
 
     calModel->calNeighborPool = calDefNeighborPool(calModel->calIndexesPool,CAL_TOROIDALITY, cellPattern,1);
 
-
-
-    //   printf("STAMPA VICINATO %d\n",calModel->calNeighborPool->size_of_X);
-    //    for (int i = 0; i < calModel->calIndexesPool->cellular_space_dimension; i++)
-    //    {
-    //        for (int j = 0; j <  calModel->calNeighborPool->size_of_X; j++)
-    //        {
-    //            printf("%d ",calModel->calNeighborPool->neighborPool[i][j]);
-    //        }
-    //        printf("\n");
-    //    }
-
     if(CAL_OPTIMIZATION == CAL_NO_OPT)
         calModel->A = NULL;
     else
-        calACDef(calModel, CAL_OPTIMIZATION);
+        calModel->A = calACDef(calModel, CAL_OPTIMIZATION);
+
+    calModel->num_of_processes = 0;
 
     calModel->calRun = makeCALRun(initial_step, final_step);
     //Manage Optimization
@@ -204,7 +200,8 @@ struct CALSubstate_r*calAddSubstate_r(struct CALModel* calModel, enum CALInitMet
     calModel->sizeof_pQr_array++;
 
     calModel->pQr_array = pQr_array_new;
-    free(pQr_array_tmp);
+    if(pQr_array_tmp)
+        free(pQr_array_tmp);
 
     if(initMethod == CAL_INIT_CURRENT)
         calSetBuffer_r(Q->current, calModel->cellularSpaceDimension, value);
@@ -215,7 +212,6 @@ struct CALSubstate_r*calAddSubstate_r(struct CALModel* calModel, enum CALInitMet
         calSetBuffer_r(Q->current, calModel->cellularSpaceDimension, value);
         calSetBuffer_r(Q->next, calModel->cellularSpaceDimension, value);
     }
-
     return Q;
 }
 
