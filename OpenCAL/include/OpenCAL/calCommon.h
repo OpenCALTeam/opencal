@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with OpenCAL. If not, see <http://www.gnu.org/licenses/>.
  */
-
+ 
 #ifndef calCommon_h
 #define calCommon_h
 
