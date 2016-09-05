@@ -459,7 +459,7 @@ struct CALSubstate2Dr* calAddSubstate2Dr(struct CALModel2D* ca2D){
 struct CALSubstate2Db* calAddSingleLayerSubstate2Db(struct CALModel2D* ca2D){
 
     struct CALSubstate2Db* Q;
-    struct CALSubstate2Dr** pQb_single_layer_array_tmp = ca2D->pQb_single_layer_array;
+    struct CALSubstate2Db** pQb_single_layer_array_tmp = ca2D->pQb_single_layer_array;
     struct CALSubstate2Db** pQb_single_layer_array_new;
     int i;
 
@@ -489,7 +489,7 @@ struct CALSubstate2Db* calAddSingleLayerSubstate2Db(struct CALModel2D* ca2D){
 struct CALSubstate2Di* calAddSingleLayerSubstate2Di(struct CALModel2D* ca2D){
 
     struct CALSubstate2Di* Q;
-    struct CALSubstate2Dr** pQi_single_layer_array_tmp = ca2D->pQi_single_layer_array;
+    struct CALSubstate2Di** pQi_single_layer_array_tmp = ca2D->pQi_single_layer_array;
     struct CALSubstate2Di** pQi_single_layer_array_new;
     int i;
 
