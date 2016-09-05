@@ -30,7 +30,7 @@ CALbyte calReductionOperation2Db(struct CALModel2D* model, struct CALSubstate2Db
 	CALint i;
 	CALbyte valueComputed = 0, tmp = 0;
 	CALint numThreads = 1;
-#ifdef _OPENMP
+#ifdef _OPENMP	
 	CALbyte *values;
 
 	numThreads = omp_get_num_procs();
@@ -89,56 +89,56 @@ CALbyte calReductionOperation2Db(struct CALModel2D* model, struct CALSubstate2Db
 				values[threadId] += getValue2DbAtIndex(substate, i);
 #else
 				valueComputed += getValue2DbAtIndex(substate, i);
-#endif
+#endif				
 				break;
 			case REDUCTION_PROD:
 #ifdef _OPENMP
 				values[threadId] *= getValue2DbAtIndex(substate, i);
 #else
 				valueComputed *= getValue2DbAtIndex(substate, i);
-#endif
+#endif			
 				break;
 			case REDUCTION_LOGICAL_AND:
 #ifdef _OPENMP
 				values[threadId] = (values[threadId] && getValue2DbAtIndex(substate, i));
 #else
 				valueComputed = (valueComputed && getValue2DbAtIndex(substate, i));
-#endif
+#endif			 
 				break;
 			case REDUCTION_BINARY_AND:
 #ifdef _OPENMP
 				values[threadId] = (values[threadId] & getValue2DbAtIndex(substate, i));
 #else
 				valueComputed = (valueComputed & getValue2DbAtIndex(substate, i));
-#endif
+#endif			  
 				break;
 			case REDUCTION_LOGICAL_OR:
 #ifdef _OPENMP
 				values[threadId] = (values[threadId] || getValue2DbAtIndex(substate, i));
 #else
 				valueComputed = (valueComputed || getValue2DbAtIndex(substate, i));
-#endif
+#endif			 
 				break;
 			case REDUCTION_BINARY_OR:
 #ifdef _OPENMP
 				values[threadId] = (values[threadId] | getValue2DbAtIndex(substate, i));
 #else
 				valueComputed = (valueComputed | getValue2DbAtIndex(substate, i));
-#endif
+#endif			  
 				break;
 			case REDUCTION_LOGICAL_XOR:
 #ifdef _OPENMP
 				values[threadId] = (!!values[threadId] != !!getValue2DbAtIndex(substate, i));
 #else
 				valueComputed = (!!valueComputed != !!getValue2DbAtIndex(substate, i));
-#endif
+#endif			  
 				break;
 			case REDUCTION_BINARY_XOR:
 #ifdef _OPENMP
 				values[threadId] = (values[threadId] ^ getValue2DbAtIndex(substate, i));
 #else
 				valueComputed = (valueComputed ^ getValue2DbAtIndex(substate, i));
-#endif
+#endif			    
 				break;
 			default:
 				break;
@@ -200,7 +200,7 @@ CALbyte calReductionOperation2Db(struct CALModel2D* model, struct CALSubstate2Db
 CALint calReductionOperation2Di(struct CALModel2D* model, struct CALSubstate2Di* substate, enum REDUCTION_OPERATION operation){
 	CALint i, valueComputed = 0, tmp = 0;
 	CALint numThreads = 1;
-#ifdef _OPENMP
+#ifdef _OPENMP	
 	CALint *values;
 
 	numThreads = CAL_GET_NUM_PROCS();
@@ -259,56 +259,56 @@ CALint calReductionOperation2Di(struct CALModel2D* model, struct CALSubstate2Di*
 				values[threadId] += getValue2DiAtIndex(substate, i);
 #else
 				valueComputed += getValue2DiAtIndex(substate, i);
-#endif
+#endif				
 				break;
 			case REDUCTION_PROD:
 #ifdef _OPENMP
 				values[threadId] *= getValue2DiAtIndex(substate, i);
 #else
 				valueComputed *= getValue2DiAtIndex(substate, i);
-#endif
+#endif			
 				break;
 			case REDUCTION_LOGICAL_AND:
 #ifdef _OPENMP
 				values[threadId] = (values[threadId] && getValue2DiAtIndex(substate, i));
 #else
 				valueComputed = (valueComputed && getValue2DiAtIndex(substate, i));
-#endif
+#endif			 
 				break;
 			case REDUCTION_BINARY_AND:
 #ifdef _OPENMP
 				values[threadId] = (values[threadId] & getValue2DiAtIndex(substate, i));
 #else
 				valueComputed = (valueComputed & getValue2DiAtIndex(substate, i));
-#endif
+#endif			  
 				break;
 			case REDUCTION_LOGICAL_OR:
 #ifdef _OPENMP
 				values[threadId] = (values[threadId] || getValue2DiAtIndex(substate, i));
 #else
 				valueComputed = (valueComputed || getValue2DiAtIndex(substate, i));
-#endif
+#endif			 
 				break;
 			case REDUCTION_BINARY_OR:
 #ifdef _OPENMP
 				values[threadId] = (values[threadId] | getValue2DiAtIndex(substate, i));
 #else
 				valueComputed = (valueComputed | getValue2DiAtIndex(substate, i));
-#endif
+#endif			  
 				break;
 			case REDUCTION_LOGICAL_XOR:
 #ifdef _OPENMP
 				values[threadId] = (!!values[threadId] != !!getValue2DiAtIndex(substate, i));
 #else
 				valueComputed = (!!valueComputed != !!getValue2DiAtIndex(substate, i));
-#endif
+#endif			  
 				break;
 			case REDUCTION_BINARY_XOR:
 #ifdef _OPENMP
 				values[threadId] = (values[threadId] ^ getValue2DiAtIndex(substate, i));
 #else
 				valueComputed = (valueComputed ^ getValue2DiAtIndex(substate, i));
-#endif
+#endif			    
 				break;
 			default:
 				break;
@@ -371,7 +371,7 @@ CALreal calReductionOperation2Dr(struct CALModel2D* model, struct CALSubstate2Dr
 	CALint i;
 	CALreal valueComputed = 0, tmp = 0;
 	CALint numThreads = 1;
-#ifdef _OPENMP
+#ifdef _OPENMP	
 	CALreal *values;
 
 	numThreads = CAL_GET_NUM_PROCS();
@@ -430,56 +430,56 @@ CALreal calReductionOperation2Dr(struct CALModel2D* model, struct CALSubstate2Dr
 				values[threadId] += getValue2DrAtIndex(substate, i);
 #else
 				valueComputed += getValue2DrAtIndex(substate, i);
-#endif
+#endif				
 				break;
 			case REDUCTION_PROD:
 #ifdef _OPENMP
 				values[threadId] *= getValue2DrAtIndex(substate, i);
 #else
 				valueComputed *= getValue2DrAtIndex(substate, i);
-#endif
+#endif			
 				break;
 			case REDUCTION_LOGICAL_AND:
 #ifdef _OPENMP
 				values[threadId] = (values[threadId] && getValue2DrAtIndex(substate, i));
 #else
 				valueComputed = (valueComputed && getValue2DrAtIndex(substate, i));
-#endif
+#endif			 
 				break;
 			case REDUCTION_BINARY_AND:
 #ifdef _OPENMP
 				values[threadId] = (CALreal)((CALint)values[threadId] & (CALint)getValue2DrAtIndex(substate, i));
 #else
 				valueComputed = (CALreal)((CALint)valueComputed & (CALint)getValue2DrAtIndex(substate, i));
-#endif
+#endif			  
 				break;
 			case REDUCTION_LOGICAL_OR:
 #ifdef _OPENMP
 				values[threadId] = (values[threadId] || getValue2DrAtIndex(substate, i));
 #else
 				valueComputed = (valueComputed || getValue2DrAtIndex(substate, i));
-#endif
+#endif			 
 				break;
 			case REDUCTION_BINARY_OR:
 #ifdef _OPENMP
 				values[threadId] = (CALreal)((CALint)values[threadId] | (CALint)getValue2DrAtIndex(substate, i));
 #else
 				valueComputed = (CALreal)((CALint)valueComputed | (CALint)getValue2DrAtIndex(substate, i));
-#endif
+#endif			  
 				break;
 			case REDUCTION_LOGICAL_XOR:
 #ifdef _OPENMP
 				values[threadId] = (!!values[threadId] != !!getValue2DrAtIndex(substate, i));
 #else
 				valueComputed = (!!valueComputed != !!getValue2DrAtIndex(substate, i));
-#endif
+#endif			  
 				break;
 			case REDUCTION_BINARY_XOR:
 #ifdef _OPENMP
 				values[threadId] = (CALreal)((CALint)values[threadId] ^ (CALint)getValue2DrAtIndex(substate, i));
 #else
 				valueComputed = (CALreal)((CALint)valueComputed ^ (CALint)getValue2DrAtIndex(substate, i));
-#endif
+#endif			    
 				break;
 			default:
 				break;
@@ -571,7 +571,7 @@ CALreal calReductionComputeSum2Dr(struct CALModel2D* model, struct CALSubstate2D
 	return calReductionOperation2Dr(model, substate, REDUCTION_SUM);
 }
 
-CALbyte calReductionComputeProd2Db(struct CALModel2D* model, struct CALSubstate2Db* substate){
+CALbyte calReductionComputeProd2Db(struct CALModel2D* model, struct CALSubstate2Db* substate){	
 	return calReductionOperation2Db(model, substate, REDUCTION_PROD);
 }
 CALint calReductionComputeProd2Di(struct CALModel2D* model, struct CALSubstate2Di* substate){
@@ -581,7 +581,7 @@ CALreal calReductionComputeProd2Dr(struct CALModel2D* model, struct CALSubstate2
 	return calReductionOperation2Dr(model, substate, REDUCTION_SUM);
 }
 
-CALbyte calReductionComputeLogicalAnd2Db(struct CALModel2D* model, struct CALSubstate2Db* substate){
+CALbyte calReductionComputeLogicalAnd2Db(struct CALModel2D* model, struct CALSubstate2Db* substate){ 
 	return calReductionOperation2Db(model, substate, REDUCTION_LOGICAL_AND);
 }
 CALint calReductionComputeLogicalAnd2Di(struct CALModel2D* model, struct CALSubstate2Di* substate){
@@ -597,7 +597,7 @@ CALbyte calReductionComputeBinaryAnd2Db(struct CALModel2D* model, struct CALSubs
 CALint calReductionComputeBinaryAnd2Di(struct CALModel2D* model, struct CALSubstate2Di* substate){
 	return calReductionOperation2Di(model, substate, REDUCTION_BINARY_AND);
 }
-CALreal calReductionComputeBinaryAnd2Dr(struct CALModel2D* model, struct CALSubstate2Dr* substate){
+CALreal calReductionComputeBinaryAnd2Dr(struct CALModel2D* model, struct CALSubstate2Dr* substate){ 
 	return calReductionOperation2Dr(model, substate, REDUCTION_BINARY_AND);
 }
 
@@ -614,7 +614,7 @@ CALreal calReductionComputeLogicalOr2Dr(struct CALModel2D* model, struct CALSubs
 CALbyte calReductionComputeBinaryOr2Db(struct CALModel2D* model, struct CALSubstate2Db* substate){
 	return calReductionOperation2Db(model, substate, REDUCTION_BINARY_OR);
 }
-CALint calReductionComputeBinaryOr2Di(struct CALModel2D* model, struct CALSubstate2Di* substate){
+CALint calReductionComputeBinaryOr2Di(struct CALModel2D* model, struct CALSubstate2Di* substate){ 
 	return calReductionOperation2Di(model, substate, REDUCTION_BINARY_OR);
 }
 CALreal calReductionComputeBinaryOr2Dr(struct CALModel2D* model, struct CALSubstate2Dr* substate){
@@ -624,7 +624,7 @@ CALreal calReductionComputeBinaryOr2Dr(struct CALModel2D* model, struct CALSubst
 CALbyte calReductionComputeLogicalXor2Db(struct CALModel2D* model, struct CALSubstate2Db* substate){
 	return calReductionOperation2Db(model, substate, REDUCTION_LOGICAL_XOR);
 }
-CALint calReductionComputeLogicalXor2Di(struct CALModel2D* model, struct CALSubstate2Di* substate){
+CALint calReductionComputeLogicalXor2Di(struct CALModel2D* model, struct CALSubstate2Di* substate){ 
 	return calReductionOperation2Di(model, substate, REDUCTION_LOGICAL_XOR);
 }
 CALreal calReductionComputeLogicalXor2Dr(struct CALModel2D* model, struct CALSubstate2Dr* substate){
@@ -634,10 +634,10 @@ CALreal calReductionComputeLogicalXor2Dr(struct CALModel2D* model, struct CALSub
 CALbyte calReductionComputeBinaryXor2Db(struct CALModel2D* model, struct CALSubstate2Db* substate){
 	return calReductionOperation2Db(model, substate, REDUCTION_BINARY_XOR);
 }
-CALint calReductionComputeBinaryXor2Di(struct CALModel2D* model, struct CALSubstate2Di* substate){
+CALint calReductionComputeBinaryXor2Di(struct CALModel2D* model, struct CALSubstate2Di* substate){ 
 	return calReductionOperation2Di(model, substate, REDUCTION_BINARY_XOR);
 }
-CALreal calReductionComputeBinaryXor2Dr(struct CALModel2D* model, struct CALSubstate2Dr* substate){
+CALreal calReductionComputeBinaryXor2Dr(struct CALModel2D* model, struct CALSubstate2Dr* substate){ 
 	return calReductionOperation2Dr(model, substate, REDUCTION_BINARY_XOR);
 }
 

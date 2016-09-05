@@ -25,7 +25,7 @@
 
 #include <OpenCAL-OMP/cal2D.h>
 
-/*! \brief
+/*! \brief 
 
 	Set of functions that compute the maximum value of a substate.
 */
@@ -36,7 +36,7 @@ CALint calReductionComputeMax2Di(struct CALModel2D* model, struct CALSubstate2Di
 DllExport
 CALreal calReductionComputeMax2Dr(struct CALModel2D* model, struct CALSubstate2Dr* substate);
 
-/*! \brief
+/*! \brief 
 
 	Set of functions that compute the minimum value of a substate.
 */
@@ -47,7 +47,7 @@ CALint calReductionComputeMin2Di(struct CALModel2D* model, struct CALSubstate2Di
 DllExport
 CALreal calReductionComputeMin2Dr(struct CALModel2D* model, struct CALSubstate2Dr* substate);
 
-/*! \brief
+/*! \brief 
 
 	Set of functions that compute the sum of values of a substate.
 */
@@ -58,7 +58,7 @@ CALint calReductionComputeSum2Di(struct CALModel2D* model, struct CALSubstate2Di
 DllExport
 CALreal calReductionComputeSum2Dr(struct CALModel2D* model, struct CALSubstate2Dr* substate);
 
-/*! \brief
+/*! \brief 
 
 	Set of functions that compute the product of values of a substate.
 */
@@ -69,7 +69,7 @@ CALint calReductionComputeProd2Di(struct CALModel2D* model, struct CALSubstate2D
 DllExport
 CALreal calReductionComputeProd2Dr(struct CALModel2D* model, struct CALSubstate2Dr* substate);
 
-/*! \brief
+/*! \brief 
 
 	Set of functions that compute the "Logic And" of values of a substate.
 */
@@ -80,7 +80,7 @@ CALint calReductionComputeLogicalAnd2Di(struct CALModel2D* model, struct CALSubs
 DllExport
 CALreal calReductionComputeLogicalAnd2Dr(struct CALModel2D* model, struct CALSubstate2Dr* substate);
 
-/*! \brief
+/*! \brief 
 
 	Set of functions that compute the "Binary And" of values of a substate.
 */
@@ -91,7 +91,7 @@ CALint calReductionComputeBinaryAnd2Di(struct CALModel2D* model, struct CALSubst
 DllExport
 CALreal calReductionComputeBinaryAnd2Dr(struct CALModel2D* model, struct CALSubstate2Dr* substate);
 
-/*! \brief
+/*! \brief 
 
 	Set of functions that compute the "Logic Or" of values of a substate.
 */
@@ -102,7 +102,7 @@ CALint calReductionComputeLogicalOr2Di(struct CALModel2D* model, struct CALSubst
 DllExport
 CALreal calReductionComputeLogicalOr2Dr(struct CALModel2D* model, struct CALSubstate2Dr* substate);
 
-/*! \brief
+/*! \brief 
 
 	Set of functions that compute the "Binary Or" of values of a substate.
 */
@@ -113,7 +113,7 @@ CALint calReductionComputeBinaryOr2Di(struct CALModel2D* model, struct CALSubsta
 DllExport
 CALreal calReductionComputeBinaryOr2Dr(struct CALModel2D* model, struct CALSubstate2Dr* substate);
 
-/*! \brief
+/*! \brief 
 
 	Set of functions that compute the "Logic Xor" of values of a substate.
 */
@@ -124,7 +124,7 @@ CALint calReductionComputeLogicalXor2Di(struct CALModel2D* model, struct CALSubs
 DllExport
 CALreal calReductionComputeLogicalXor2Dr(struct CALModel2D* model, struct CALSubstate2Dr* substate);
 
-/*! \brief
+/*! \brief 
 
 	Set of functions that compute the "Binary Xor" of values of a substate.
 */
@@ -135,7 +135,7 @@ CALint calReductionComputeBinaryXor2Di(struct CALModel2D* model, struct CALSubst
 DllExport
 CALreal calReductionComputeBinaryXor2Dr(struct CALModel2D* model, struct CALSubstate2Dr* substate);
 
-/*! \brief
+/*! \brief 
 
 	Private set of functions that execute the operation specified on a given substate.
 	The user must not call directly this function, but instead call the functions specifed above.
@@ -147,7 +147,7 @@ CALint calReductionOperation2Di(struct CALModel2D* model, struct CALSubstate2Di*
 DllExport
 CALreal calReductionOperation2Dr(struct CALModel2D* model, struct CALSubstate2Dr* substate, enum REDUCTION_OPERATION operation);
 
-/*! \brief
+/*! \brief 
 
 	Utility functions used instead of "calGet2D(i, j)" for retriving the cell(i, j).
 	It is sufficiently one index instead two.

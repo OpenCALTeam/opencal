@@ -23,7 +23,6 @@
 #include <OpenCAL-OMP/cal2D.h>
 #include <OpenCAL-OMP/cal2DBuffer.h>
 #include <OpenCAL-OMP/cal2DBufferIO.h>
-#include <OpenCAL-OMP/cal2DIO.h>
 
 
 void calfLoadSubstate2Db(struct CALModel2D* ca2D, struct CALSubstate2Db* Q, FILE* f) {

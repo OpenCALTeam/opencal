@@ -28,24 +28,24 @@
 #include <stdio.h>
 
 
-/*! \brief Loads a byte substate from file.
+/*! \brief Loads a byte substate from file. 
 */
 DllExport
 void calfLoadSubstate3Db(struct CALModel3D* ca3D, struct CALSubstate3Db* Q, FILE* f);
 
-/*! \brief Loads an int substate from file.
+/*! \brief Loads an int substate from file. 
 */
 DllExport
 void calfLoadSubstate3Di(struct CALModel3D* ca3D, struct CALSubstate3Di* Q, FILE* f);
 
-/*! \brief Loads a real (floating point) substate from file.
+/*! \brief Loads a real (floating point) substate from file. 
 */
 DllExport
 void calfLoadSubstate3Dr(struct CALModel3D* ca3D, struct CALSubstate3Dr* Q, FILE* f);
 
 
 
-/*! \brief Loads a byte substate from file.
+/*! \brief Loads a byte substate from file. 
 */
 DllExport
 CALbyte calLoadSubstate3Db(struct CALModel3D* ca3D, struct CALSubstate3Db* Q, char* path);
@@ -55,40 +55,41 @@ CALbyte calLoadSubstate3Db(struct CALModel3D* ca3D, struct CALSubstate3Db* Q, ch
 DllExport
 CALbyte calLoadSubstate3Di(struct CALModel3D* ca3D, struct CALSubstate3Di* Q, char* path);
 
-/*! \brief Loads a real (floating point) substate from file.
+/*! \brief Loads a real (floating point) substate from file. 
 */
 DllExport
 CALbyte calLoadSubstate3Dr(struct CALModel3D* ca3D, struct CALSubstate3Dr* Q, char* path);
 
 
 
-/*! \brief Saves a byte substate to file.
+/*! \brief Saves a byte substate to file. 
 */
 DllExport
 void calfSaveSubstate3Db(struct CALModel3D* ca3D, struct CALSubstate3Db* Q, FILE* f);
 
-/*! \brief Saves an int substate to file.
+/*! \brief Saves an int substate to file. 
 */
 DllExport
 void calfSaveSubstate3Di(struct CALModel3D* ca3D, struct CALSubstate3Di* Q, FILE* f);
 
-/*! \brief Saves a real (floating point) substate to file.
+/*! \brief Saves a real (floating point) substate to file. 
 */
 DllExport
 void calfSaveSubstate3Dr(struct CALModel3D* ca3D, struct CALSubstate3Dr* Q, FILE* f);
 
 
-/*! \brief Saves a byte substate to file.
+
+/*! \brief Saves a byte substate to file. 
 */
 DllExport
 CALbyte calSaveSubstate3Db(struct CALModel3D* ca3D, struct CALSubstate3Db* Q, char* path);
 
-/*! \brief Saves a int substate to file.
+/*! \brief Saves a int substate to file. 
 */
 DllExport
 CALbyte calSaveSubstate3Di(struct CALModel3D* ca3D, struct CALSubstate3Di* Q, char* path);
 
-/*! \brief Saves a real (floating point) substate to file.
+/*! \brief Saves a real (floating point) substate to file. 
 */
 DllExport
 CALbyte calSaveSubstate3Dr(struct CALModel3D* ca3D, struct CALSubstate3Dr* Q, char* path);

@@ -1,28 +1,33 @@
 ﻿#ifndef cal3d_activecells_naive
 #define cal3d_activecells_naive
-#include <OpenCAL/calCommon.h>
-#include <OpenCAL/cal3D.h>
+#include <OpenCAL-OMP/calCommon.h>
+#include <OpenCAL-OMP/cal3D.h>
+
+
+typedef struct CALModel3D CALModel3D;
 
 /*! \brief Active cells structure.
 */
 struct CALActiveCells3D {
     CALbyte* flags;				//!< Array of flags having the substates' dimension: flag is CAL_TRUE if the corresponding cell is active, CAL_FALSE otherwise.
-    int size_next;	//!< Number of CAL_TRUE flags.
+    int *size_next;	//!< Number of CAL_TRUE flags.
     struct CALCell3D* cells;	//!< Array of computational active cells.
-        int size_current;					//!< Number of active cells in the current step.
+    int size_current;					//!< Number of active cells in the current step.
+    int num_threads;
 };
+
 
 /*! \brief Sets the cell (i,j,z) of the matrix flags to CAL_TRUE and increments the
     couter sizeof_active_flags.
 */
 DllExport
-void calAddActiveCellNaive3D(struct CALActiveCells3D* activeCells, int i, int j, int k, int columns, int rows );
+void calAddActiveCellNaive3D(struct CALModel3D* ca3D, int i, int j, int k);
 
 /*! \brief \brief Sets the cell (i,j,z) of the matrix flags to CAL_FALSE and decrements the
     couter sizeof_active_flags.
 */
 DllExport
-void calRemoveActiveCellNaive3D(struct CALActiveCells3D* activeCells, int i, int j, int k, int columns, int rows);
+void calRemoveActiveCellNaive3D(struct CALModel3D* ca3D, int i, int j, int k);
 
 /*! \brief \brief Release the memory
 */

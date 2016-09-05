@@ -32,11 +32,11 @@
 struct CALRun2D
 {
 	struct CALModel2D* ca2D;	//!< Pointer to the cellular automaton structure.
-
+	
 	int step;			//!< Current simulation step.
 	int initial_step;	//!< Initial simulation step.
 	int final_step;		//!< Final simulation step; if 0 the simulation becomes a loop.
-
+	
 	enum CALUpdateMode UPDATE_MODE;	//!< Callbacks substates' update mode; it can be CAL_UPDATE_EXPLICIT or CAL_UPDATE_IMPLICIT.
 
 	void (*init)(struct CALModel2D*);				//!< Simulation's initialization callback function.
@@ -55,7 +55,7 @@ struct CALRun2D* calRunDef2D(struct CALModel2D* ca2D,			//!< Pointer to the cell
 							 int initial_step,					//!< Initial simulation step; default value is 0.
 							 int final_step,					//!< Finale step; if it is 0, a loop is obtained. In order to set final_step to 0, the constant CAL_RUN_LOOP can be used.
 							 enum CALUpdateMode UPDATE_MODE		//!< Update mode: explicit on or explicit off (implicit).
-							 );
+							 );	
 
 
 
@@ -102,7 +102,7 @@ void calRunInitSimulation2D(struct CALRun2D* simulation	//!< Pointer to the run 
 
 			    );
 
-
+				
 /*! \brief A single step of the cellular automaton. It execute the transition function, the steering and check for the stop condition.
 */
 DllExport

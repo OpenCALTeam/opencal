@@ -83,14 +83,14 @@
 
 	#define CAL_FREE_LOCKS(ca2D)			\
 		free((ca2D)->locks)
-
-
+		
+		
 	#define CAL_GET_NUM_PROCS() 	\
 		omp_get_num_procs()
-
+		
 	#define CAL_SET_NUM_THREADS(n)  \
 			 omp_set_num_threads((n))
-
+		
 	#else
 
 	#define CAL_SET_CELL_LOCK(i, j, ca2D)

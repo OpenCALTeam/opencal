@@ -25,7 +25,7 @@
 
 #include <OpenCAL-OMP/cal3D.h>
 
-/*! \brief
+/*! \brief 
 
 	Set of functions that compute the maximum value of a substate.
 */
@@ -36,7 +36,7 @@ CALint calReductionComputeMax3Di(struct CALModel3D* model, struct CALSubstate3Di
 DllExport
 CALreal calReductionComputeMax3Dr(struct CALModel3D* model, struct CALSubstate3Dr* substate);
 
-/*! \brief
+/*! \brief 
 
 	Set of functions that compute the minimum value of a substate.
 */
@@ -47,7 +47,7 @@ CALint calReductionComputeMin3Di(struct CALModel3D* model, struct CALSubstate3Di
 DllExport
 CALreal calReductionComputeMin3Dr(struct CALModel3D* model, struct CALSubstate3Dr* substate);
 
-/*! \brief
+/*! \brief 
 
 	Set of functions that compute the sum of values of a substate.
 */
@@ -58,7 +58,7 @@ CALint calReductionComputeSum3Di(struct CALModel3D* model, struct CALSubstate3Di
 DllExport
 CALreal calReductionComputeSum3Dr(struct CALModel3D* model, struct CALSubstate3Dr* substate);
 
-/*! \brief
+/*! \brief 
 
 	Set of functions that compute the product of values of a substate.
 */
@@ -69,7 +69,7 @@ CALint calReductionComputeProd3Di(struct CALModel3D* model, struct CALSubstate3D
 DllExport
 CALreal calReductionComputeProd3Dr(struct CALModel3D* model, struct CALSubstate3Dr* substate);
 
-/*! \brief
+/*! \brief 
 
 	Set of functions that compute the "Logic And" of values of a substate.
 */
@@ -80,7 +80,7 @@ CALint calReductionComputeLogicalAnd3Di(struct CALModel3D* model, struct CALSubs
 DllExport
 CALreal calReductionComputeLogicalAnd3Dr(struct CALModel3D* model, struct CALSubstate3Dr* substate);
 
-/*! \brief
+/*! \brief 
 
 	Set of functions that compute the "Binary And" of values of a substate.
 */
@@ -91,7 +91,7 @@ CALint calReductionComputeBinaryAnd3Di(struct CALModel3D* model, struct CALSubst
 DllExport
 CALreal calReductionComputeBinaryAnd3Dr(struct CALModel3D* model, struct CALSubstate3Dr* substate);
 
-/*! \brief
+/*! \brief 
 
 	Set of functions that compute the "Logic Or" of values of a substate.
 */
@@ -102,7 +102,7 @@ CALint calReductionComputeLogicalOr3Di(struct CALModel3D* model, struct CALSubst
 DllExport
 CALreal calReductionComputeLogicalOr3Dr(struct CALModel3D* model, struct CALSubstate3Dr* substate);
 
-/*! \brief
+/*! \brief 
 
 	Set of functions that compute the "Binary Or" of values of a substate.
 */
@@ -113,7 +113,7 @@ CALint calReductionComputeBinaryOr3Di(struct CALModel3D* model, struct CALSubsta
 DllExport
 CALreal calReductionComputeBinaryOr3Dr(struct CALModel3D* model, struct CALSubstate3Dr* substate);
 
-/*! \brief
+/*! \brief 
 
 	Set of functions that compute the "Logic Xor" of values of a substate.
 */
@@ -124,7 +124,7 @@ CALint calReductionComputeLogicalXor3Di(struct CALModel3D* model, struct CALSubs
 DllExport
 CALreal calReductionComputeLogicalXor3Dr(struct CALModel3D* model, struct CALSubstate3Dr* substate);
 
-/*! \brief
+/*! \brief 
 
 	Set of functions that compute the "Binary Xor" of values of a substate.
 */
@@ -135,7 +135,7 @@ CALint calReductionComputeBinaryXor3Di(struct CALModel3D* model, struct CALSubst
 DllExport
 CALreal calReductionComputeBinaryXor3Dr(struct CALModel3D* model, struct CALSubstate3Dr* substate);
 
-/*! \brief
+/*! \brief 
 
 	Private set of functions that execute the operation specified on a given substate.
 	The user must not call directly this function, but instead call the functions specifed above.
@@ -147,7 +147,7 @@ CALint calReductionOperation3Di(struct CALModel3D* model, struct CALSubstate3Di*
 DllExport
 CALreal calReductionOperation3Dr(struct CALModel3D* model, struct CALSubstate3Dr* substate, enum REDUCTION_OPERATION operation);
 
-/*! \brief
+/*! \brief 
 
 	Utility functions used instead of "calGet3D(i, j, k)" for retriving the cell(i, j, k).
 	It is sufficiently one index instead two.
