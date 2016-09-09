@@ -55,7 +55,7 @@
 #define KER_STC_UP_SWEEP "calclkernelUpSweep3D"
 #define KER_STC_DOWN_SWEEP "calclkernelDownSweep3D"
 
-#define MODEL_ARGS_NUM 52		//!< Number of default arguments for each kernel defined by the user
+#define MODEL_ARGS_NUM 58		//!< Number of default arguments for each kernel defined by the user
 #define CALCL_RUN_LOOP 0		//!< Define used by the user to specify an infinite loop simulation
 
 /*! \brief CALCLSubstateMapper contains arrays used to retrieve substates from GPU
@@ -117,6 +117,14 @@ struct CALCLModel3D {
 	CALCLmem bufferActiveCells;							//!< Opencl buffer used to transfer GPU side CA active cells array
 	CALCLmem bufferActiveCellsNum;						//!< Opencl buffer used to transfer GPU side the number of CA active cells
 	CALCLmem bufferActiveCellsFlags;					//!< Opencl buffer used to transfer GPU side CA active cells flags array (CALbyte*)
+
+    CALCLmem bufferSingleLayerByteSubstateNum;			//!< Opencl buffer used to transfer GPU side the number of CA CALbyte single layer substates
+    CALCLmem bufferSingleLayerIntSubstateNum;			//!< Opencl buffer used to transfer GPU side the number of CA CALint single layer substates
+    CALCLmem bufferSingleLayerRealSubstateNum;			//!< Opencl buffer used to transfer GPU side the number of CA CALreal single layer substates
+
+    CALCLmem bufferSingleLayerByteSubstate;				//!< Opencl buffer used to transfer GPU side CALbyte single layer substates used for reading purposes
+    CALCLmem bufferSingleLayerIntSubstate;				//!< Opencl buffer used to transfer GPU side CALint single layer substates used for reading purposes
+    CALCLmem bufferSingleLayerRealSubstate;				//!< Opencl buffer used to transfer GPU side CALreal single layer substates used for reading purposes
 
 	//stop condition
 	CALCLmem bufferStop;								//!< Opencl buffer used to transfer GPU side CALbyte stop flag. The user can set it to CAL_TRUE to stop the CA simulation

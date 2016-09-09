@@ -93,9 +93,9 @@ void calclResizeThreadsNum3D(struct CALCLModel3D * calclmodel3D, size_t * thread
 	CALCLqueue queue = calclmodel3D->queue;
 
 
-	err = clEnqueueReadBuffer(queue, calclmodel3D->bufferActiveCellsNum, CL_TRUE, zero, sizeof(int), &calclmodel3D->host_CA->A.size_current, 0, NULL, NULL);
+    err = clEnqueueReadBuffer(queue, calclmodel3D->bufferActiveCellsNum, CL_TRUE, zero, sizeof(int), &calclmodel3D->host_CA->A->size_current, 0, NULL, NULL);
 	calclHandleError(err);
-	threadNum[0] = calclmodel3D->host_CA->A.size_current;
+    threadNum[0] = calclmodel3D->host_CA->A->size_current;
 }
 
 CALCLmem calclGetSubstateBuffer3D(CALCLmem bufferSubstates, cl_buffer_region region) {
@@ -201,6 +201,14 @@ void calclSetModelParameters3D(struct CALCLModel3D * calclmodel3D, CALCLkernel *
 	clSetKernelArg(*kernel, 21, sizeof(int), &chunk);
 
 
+
+    clSetKernelArg(*kernel, 52, sizeof(CALCLmem), &calclmodel3D->bufferSingleLayerByteSubstateNum);
+    clSetKernelArg(*kernel, 53, sizeof(CALCLmem), &calclmodel3D->bufferSingleLayerIntSubstateNum);
+    clSetKernelArg(*kernel, 54, sizeof(CALCLmem), &calclmodel3D->bufferSingleLayerRealSubstateNum);
+    clSetKernelArg(*kernel, 55, sizeof(CALCLmem), &calclmodel3D->bufferSingleLayerByteSubstate);
+    clSetKernelArg(*kernel, 56, sizeof(CALCLmem), &calclmodel3D->bufferSingleLayerIntSubstate);
+    clSetKernelArg(*kernel, 57, sizeof(CALCLmem), &calclmodel3D->bufferSingleLayerRealSubstate);
+
 }
 
 void calclSetReductionParameters3D(struct CALCLModel3D* calclmodel3D, CALCLkernel * kernel) {
@@ -238,7 +246,6 @@ void calclSetReductionParameters3D(struct CALCLModel3D* calclmodel3D, CALCLkerne
 	clSetKernelArg(*kernel, 49, sizeof(CALCLmem), &calclmodel3D->bufferProdb);
 	clSetKernelArg(*kernel, 50, sizeof(CALCLmem), &calclmodel3D->bufferProdi);
 	clSetKernelArg(*kernel, 51, sizeof(CALCLmem), &calclmodel3D->bufferProdr);
-
 
 }
 
@@ -287,6 +294,45 @@ void calclIntSubstatesMapper3D(struct CALModel3D *model, CALint * current, CALin
 			next[outIndex1++] = model->pQi_array[i]->next[j];
 	}
 }
+
+void calclSingleLayerRealSubstatesMapper3D(struct CALModel3D * host_CA, CALreal * current) {
+    int ssNum = host_CA->sizeof_pQr_single_layer_array;
+    size_t elNum = host_CA->columns * host_CA->rows* host_CA->slices;
+    long int outIndex = 0;
+    int i;
+    unsigned int j;
+
+    for (i = 0; i < ssNum; i++)
+        for (j = 0; j < elNum; j++)
+            current[outIndex++] = host_CA->pQr_single_layer_array[i]->current[j];
+
+}
+void calclSingleLayerByteSubstatesMapper3D(struct CALModel3D * host_CA, CALbyte * current) {
+    int ssNum = host_CA->sizeof_pQb_single_layer_array;
+    size_t elNum = host_CA->columns * host_CA->rows* host_CA->slices;
+    long int outIndex = 0;
+    int i;
+    unsigned int j;
+
+    for (i = 0; i < ssNum; i++)
+        for (j = 0; j < elNum; j++)
+            current[outIndex++] = host_CA->pQb_single_layer_array[i]->current[j];
+
+}
+void calclSingleLayerIntSubstatesMapper3D(struct CALModel3D * host_CA, CALint * current) {
+    int ssNum = host_CA->sizeof_pQi_single_layer_array;
+    size_t elNum = host_CA->columns * host_CA->rows* host_CA->slices;
+    long int outIndex = 0;
+    int i;
+    unsigned int j;
+
+    for (i = 0; i < ssNum; i++)
+        for (j = 0; j < elNum; j++)
+            current[outIndex++] = host_CA->pQi_single_layer_array[i]->current[j];
+
+}
+
+
 CALCLqueue calclCreateQueue3D(struct CALCLModel3D * calclmodel3D, CALCLcontext context, CALCLdevice device) {
 	CALCLqueue queue = calclCreateCommandQueue(context, device);
 	size_t cores;
@@ -512,11 +558,14 @@ struct CALCLModel3D * calclCADef3D(struct CALModel3D *host_CA, CALCLcontext cont
 	calclmodel3D->elementaryProcessesNum = 0;
 	calclmodel3D->steps = 0;
 
-
-	if (host_CA->A.flags == NULL) {
-		host_CA->A.flags = (CALbyte*) malloc(sizeof(CALbyte) * host_CA->rows * host_CA->columns * host_CA->slices);
-		memset(host_CA->A.flags, CAL_FALSE, sizeof(CALbyte) * host_CA->rows * host_CA->columns * host_CA->slices);
-	}
+    if (host_CA->A == NULL) {
+        host_CA->A = malloc( sizeof(struct CALActiveCells3D));
+        host_CA->A->cells = NULL;
+        host_CA->A->size_current = 0;
+        host_CA->A->size_next = 0;
+        host_CA->A->flags = (CALbyte*) malloc(sizeof(CALbyte) * host_CA->rows * host_CA->columns * host_CA->slices);
+        memset(host_CA->A->flags, CAL_FALSE, sizeof(CALbyte) * host_CA->rows * host_CA->columns * host_CA->slices);
+    }
 
 	cl_int err;
 	int bufferDim = host_CA->columns * host_CA->rows * host_CA->slices;
@@ -561,18 +610,18 @@ struct CALCLModel3D * calclCADef3D(struct CALModel3D *host_CA, CALCLcontext cont
 	calclmodel3D->kernelBinaryAndReductionr = calclGetKernelFromProgram(&program, "calclBinaryAndReductionKernelr");
 	calclmodel3D->kernelBinaryOrReductionr = calclGetKernelFromProgram(&program, "calclBinaryOrReductionKernelr");
 	calclmodel3D->kernelBinaryXorReductionr = calclGetKernelFromProgram(&program, "calclBinaryXOrReductionKernelr");
-
-
 	struct CALCell3D * activeCells = (struct CALCell3D*) malloc(sizeof(struct CALCell3D) * bufferDim);
-	memcpy(activeCells, host_CA->A.cells, sizeof(struct CALCell3D) * host_CA->A.size_current);
 
+    if(host_CA->A->size_current !=0){
+    memcpy(activeCells, host_CA->A->cells, sizeof(struct CALCell3D) * host_CA->A->size_current);
+    }
 	calclmodel3D->bufferActiveCells = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(struct CALCell3D) * bufferDim, activeCells, &err);
 	calclHandleError(err);
 	free(activeCells);
-	calclmodel3D->bufferActiveCellsFlags = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALbyte) * bufferDim, host_CA->A.flags, &err);
+    calclmodel3D->bufferActiveCellsFlags = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALbyte) * bufferDim, host_CA->A->flags, &err);
 	calclHandleError(err);
 
-	calclmodel3D->bufferActiveCellsNum = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALint), &host_CA->A.size_current, &err);
+    calclmodel3D->bufferActiveCellsNum = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALint), &host_CA->A->size_current, &err);
 	calclHandleError(err);
 
 	calclmodel3D->bufferByteSubstateNum = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALint), &host_CA->sizeof_pQb_array, &err);
@@ -623,6 +672,38 @@ struct CALCLModel3D * calclCADef3D(struct CALModel3D *host_CA, CALCLcontext cont
 	free(nextRealSubstates);
 
 	calclSetKernelsLibArgs3D(calclmodel3D);
+
+    calclmodel3D->bufferSingleLayerByteSubstateNum = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALint), &calclmodel3D->host_CA->sizeof_pQb_single_layer_array, &err);
+    calclHandleError(err);
+    calclmodel3D->bufferSingleLayerIntSubstateNum = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALint), &calclmodel3D->host_CA->sizeof_pQi_single_layer_array, &err);
+    calclHandleError(err);
+    calclmodel3D->bufferSingleLayerRealSubstateNum = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALint), &calclmodel3D->host_CA->sizeof_pQr_single_layer_array, &err);
+    calclHandleError(err);
+
+    size_t byteSingleLayerSubstatesDim = sizeof(CALbyte) * bufferDim * calclmodel3D->host_CA->sizeof_pQb_single_layer_array + 1;
+    CALbyte * currentSingleLayerByteSubstates = (CALbyte*) malloc(byteSingleLayerSubstatesDim);
+    calclSingleLayerByteSubstatesMapper3D(calclmodel3D->host_CA, currentSingleLayerByteSubstates);
+    calclmodel3D->bufferSingleLayerByteSubstate = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, byteSingleLayerSubstatesDim, currentSingleLayerByteSubstates, &err);
+    calclHandleError(err);
+    free(currentSingleLayerByteSubstates);
+
+    size_t intSingleLayerSubstatesDim = sizeof(CALint) * bufferDim * calclmodel3D->host_CA->sizeof_pQi_single_layer_array + 1;
+    CALint * currentSingleLayerIntSubstates = (CALint*) malloc(intSingleLayerSubstatesDim);
+    calclSingleLayerIntSubstatesMapper3D(calclmodel3D->host_CA, currentSingleLayerIntSubstates);
+    calclmodel3D->bufferSingleLayerIntSubstate = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, intSingleLayerSubstatesDim, currentSingleLayerIntSubstates, &err);
+    calclHandleError(err);
+    free(currentSingleLayerIntSubstates);
+
+    size_t realSingleLayerSubstatesDim = sizeof(CALreal) * bufferDim * calclmodel3D->host_CA->sizeof_pQr_single_layer_array + 1;
+    CALreal * currentSingleLayerRealSubstates = (CALreal*) malloc(realSingleLayerSubstatesDim);
+    calclSingleLayerRealSubstatesMapper3D(calclmodel3D->host_CA, currentSingleLayerRealSubstates);
+    calclmodel3D->bufferSingleLayerRealSubstate = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, realSingleLayerSubstatesDim, currentSingleLayerRealSubstates, &err);
+    calclHandleError(err);
+    free(currentSingleLayerRealSubstates);
+
+
+
+
 
 	calclmodel3D->kernelMinCopyi = calclGetKernelFromProgram(&program, "copy3Di");
 	calclmodel3D->kernelMaxCopyi = calclGetKernelFromProgram(&program, "copy3Di");
@@ -1200,7 +1281,7 @@ void calclRun3D(struct CALCLModel3D* calclmodel3D, unsigned int initialStep, uns
 		dimNum = 3;
 	} else {
 		singleStepThreadNum = (size_t*) malloc(sizeof(size_t));
-		singleStepThreadNum[0] = calclmodel3D->host_CA->A.size_current;
+        singleStepThreadNum[0] = calclmodel3D->host_CA->A->size_current;
 		dimNum = 1;
 	}
 //	calclRoundThreadsNum(singleStepThreadNum, dimNum);
@@ -1733,7 +1814,7 @@ void calclExecuteReduction3D(struct CALCLModel3D* calclmodel3D, int rounded) {
 
 CALbyte calclSingleStep3D(struct CALCLModel3D* calclmodel3D, size_t * threadsNum, int dimNum) {
 
-	CALbyte activeCells = calclmodel3D->opt == CAL_OPT_ACTIVE_CELLS;
+    CALbyte activeCells = calclmodel3D->opt == CAL_OPT_ACTIVE_CELLS_NAIVE;
 	int j;
 	if (activeCells) {
 		for (j = 0; j < calclmodel3D->elementaryProcessesNum; j++) {
@@ -1752,7 +1833,7 @@ CALbyte calclSingleStep3D(struct CALCLModel3D* calclmodel3D, size_t * threadsNum
 		}
 
 	} else {
-		for (j = 0; j < calclmodel3D->elementaryProcessesNum; j++) {
+        for (j = 0; j < calclmodel3D->elementaryProcessesNum; j++) {
 			calclKernelCall3D(calclmodel3D, calclmodel3D->elementaryProcesses[j], dimNum, threadsNum, NULL);
 			calclCopySubstatesBuffers3D(calclmodel3D);
 
@@ -2111,104 +2192,4 @@ CALCLprogram calclLoadProgram3D(CALCLcontext context, CALCLdevice device, char* 
 
 int calclSetKernelArg3D(CALCLkernel kernel, cl_uint arg_index,size_t arg_size,const void *arg_value){
 	return  clSetKernelArg(kernel,MODEL_ARGS_NUM + arg_index, arg_size,arg_value);
-}
-
-void calclAddReductionMin3Di(struct CALCLModel3D * calclmodel3D, int numSubstate) {
-	calclmodel3D->reductionFlagsMini[numSubstate] = CAL_TRUE;
-}
-void calclAddReductionMin3Db(struct CALCLModel3D * calclmodel3D, int numSubstate) {
-	calclmodel3D->reductionFlagsMinb[numSubstate] = CAL_TRUE;
-}
-void calclAddReductionMin3Dr(struct CALCLModel3D * calclmodel3D, int numSubstate) {
-	calclmodel3D->reductionFlagsMinr[numSubstate] = CAL_TRUE;
-}
-
-void calclAddReductionMax3Di(struct CALCLModel3D * calclmodel3D, int numSubstate) {
-	calclmodel3D->reductionFlagsMaxi[numSubstate] = CAL_TRUE;
-}
-void calclAddReductionMax3Db(struct CALCLModel3D * calclmodel3D, int numSubstate) {
-	calclmodel3D->reductionFlagsMaxb[numSubstate] = CAL_TRUE;
-}
-void calclAddReductionMax3Dr(struct CALCLModel3D * calclmodel3D, int numSubstate) {
-	calclmodel3D->reductionFlagsMaxr[numSubstate] = CAL_TRUE;
-}
-
-void calclAddReductionSum3Di(struct CALCLModel3D * calclmodel3D, int numSubstate) {
-	calclmodel3D->reductionFlagsSumi[numSubstate] = CAL_TRUE;
-}
-void calclAddReductionSum3Db(struct CALCLModel3D * calclmodel3D, int numSubstate) {
-	calclmodel3D->reductionFlagsSumb[numSubstate] = CAL_TRUE;
-}
-void calclAddReductionSum3Dr(struct CALCLModel3D * calclmodel3D, int numSubstate) {
-	calclmodel3D->reductionFlagsSumr[numSubstate] = CAL_TRUE;
-}
-
-void calclAddReductionProd3Di(struct CALCLModel3D * calclmodel3D, int numSubstate) {
-	calclmodel3D->reductionFlagsProdi[numSubstate] = CAL_TRUE;
-}
-void calclAddReductionProd3Db(struct CALCLModel3D * calclmodel3D, int numSubstate) {
-	calclmodel3D->reductionFlagsProdb[numSubstate] = CAL_TRUE;
-}
-void calclAddReductionProd3Dr(struct CALCLModel3D * calclmodel3D, int numSubstate) {
-	calclmodel3D->reductionFlagsProdr[numSubstate] = CAL_TRUE;
-}
-
-void calclAddReductionLogicalAnd3Di(struct CALCLModel3D * calclmodel3D, int numSubstate) {
-	calclmodel3D->reductionFlagsLogicalAndi[numSubstate] = CAL_TRUE;
-}
-void calclAddReductionLogicalAnd3Db(struct CALCLModel3D * calclmodel3D, int numSubstate) {
-	calclmodel3D->reductionFlagsLogicalAndb[numSubstate] = CAL_TRUE;
-}
-void calclAddReductionLogicalAnd3Dr(struct CALCLModel3D * calclmodel3D, int numSubstate) {
-	calclmodel3D->reductionFlagsLogicalAndr[numSubstate] = CAL_TRUE;
-}
-
-void calclAddReductionLogicalOr3Di(struct CALCLModel3D * calclmodel3D, int numSubstate) {
-	calclmodel3D->reductionFlagsLogicalOri[numSubstate] = CAL_TRUE;
-}
-void calclAddReductionLogicalOr3Db(struct CALCLModel3D * calclmodel3D, int numSubstate) {
-	calclmodel3D->reductionFlagsLogicalOrb[numSubstate] = CAL_TRUE;
-}
-void calclAddReductionLogicalOr3Dr(struct CALCLModel3D * calclmodel3D, int numSubstate) {
-	calclmodel3D->reductionFlagsLogicalOrr[numSubstate] = CAL_TRUE;
-}
-
-void calclAddReductionLogicalXOr3Di(struct CALCLModel3D * calclmodel3D, int numSubstate) {
-	calclmodel3D->reductionFlagsLogicalXOri[numSubstate] = CAL_TRUE;
-}
-void calclAddReductionLogicalXOr3Db(struct CALCLModel3D * calclmodel3D, int numSubstate) {
-	calclmodel3D->reductionFlagsLogicalXOrb[numSubstate] = CAL_TRUE;
-}
-void calclAddReductionLogicalXOr3Dr(struct CALCLModel3D * calclmodel3D, int numSubstate) {
-	calclmodel3D->reductionFlagsLogicalXOrr[numSubstate] = CAL_TRUE;
-}
-
-void calclAddReductionBinaryAnd3Di(struct CALCLModel3D * calclmodel3D, int numSubstate) {
-	calclmodel3D->reductionFlagsBinaryAndi[numSubstate] = CAL_TRUE;
-}
-void calclAddReductionBinaryAnd3Db(struct CALCLModel3D * calclmodel3D, int numSubstate) {
-	calclmodel3D->reductionFlagsBinaryAndb[numSubstate] = CAL_TRUE;
-}
-void calclAddReductionBinaryAnd3Dr(struct CALCLModel3D * calclmodel3D, int numSubstate) {
-	calclmodel3D->reductionFlagsBinaryAndr[numSubstate] = CAL_TRUE;
-}
-
-void calclAddReductionBinaryOr3Di(struct CALCLModel3D * calclmodel3D, int numSubstate) {
-	calclmodel3D->reductionFlagsBinaryOri[numSubstate] = CAL_TRUE;
-}
-void calclAddReductionBinaryOr3Db(struct CALCLModel3D * calclmodel3D, int numSubstate) {
-	calclmodel3D->reductionFlagsBinaryOrb[numSubstate] = CAL_TRUE;
-}
-void calclAddReductionBinaryOr3Dr(struct CALCLModel3D * calclmodel3D, int numSubstate) {
-	calclmodel3D->reductionFlagsBinaryOrr[numSubstate] = CAL_TRUE;
-}
-
-void calclAddReductionBinaryXOr3Di(struct CALCLModel3D * calclmodel3D, int numSubstate) {
-	calclmodel3D->reductionFlagsBinaryXOri[numSubstate] = CAL_TRUE;
-}
-void calclAddReductionBinaryXOr3Db(struct CALCLModel3D * calclmodel3D, int numSubstate) {
-	calclmodel3D->reductionFlagsBinaryXOrb[numSubstate] = CAL_TRUE;
-}
-void calclAddReductionBinaryXOr3Dr(struct CALCLModel3D * calclmodel3D, int numSubstate) {
-	calclmodel3D->reductionFlagsBinaryXOrr[numSubstate] = CAL_TRUE;
 }

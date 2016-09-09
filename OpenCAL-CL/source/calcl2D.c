@@ -97,9 +97,9 @@ void calclResizeThreadsNum2D(struct CALCLModel2D * calclmodel2D, size_t * thread
     cl_int err;
     size_t zero = 0;
 
-    err = clEnqueueReadBuffer(queue, calclmodel2D->bufferActiveCellsNum, CL_TRUE, zero, sizeof(int), &calclmodel2D->host_CA->A.size_current, 0, NULL, NULL);
+    err = clEnqueueReadBuffer(queue, calclmodel2D->bufferActiveCellsNum, CL_TRUE, zero, sizeof(int), &calclmodel2D->host_CA->A->size_current, 0, NULL, NULL);
     calclHandleError(err);
-    threadNum[0] = calclmodel2D->host_CA->A.size_current;
+    threadNum[0] = calclmodel2D->host_CA->A->size_current;
 }
 
 CALCLmem calclGetSubstateBuffer2D(CALCLmem bufferSubstates, cl_buffer_region region) {
@@ -806,9 +806,14 @@ struct CALCLModel2D * calclCADef2D(struct CALModel2D *host_CA, CALCLcontext cont
     calclmodel2D->elementaryProcessesNum = 0;
     calclmodel2D->steps = 0;
 
-    if (calclmodel2D->host_CA->A.flags == NULL) {
-        calclmodel2D->host_CA->A.flags = (CALbyte*) malloc(sizeof(CALbyte) * calclmodel2D->host_CA->rows * calclmodel2D->host_CA->columns);
-        memset(calclmodel2D->host_CA->A.flags, CAL_FALSE, sizeof(CALbyte) * calclmodel2D->host_CA->rows * calclmodel2D->host_CA->columns);
+
+    if (calclmodel2D->host_CA->A == NULL) {
+        calclmodel2D->host_CA->A = malloc( sizeof(struct CALActiveCells2D));
+        calclmodel2D->host_CA->A->cells = NULL;
+        calclmodel2D->host_CA->A->size_current = 0;
+        calclmodel2D->host_CA->A->size_next = 0;
+        calclmodel2D->host_CA->A->flags = (CALbyte*) malloc(sizeof(CALbyte) * host_CA->rows * host_CA->columns);
+        memset(calclmodel2D->host_CA->A->flags, CAL_FALSE, sizeof(CALbyte) * host_CA->rows * host_CA->columns);
     }
 
     cl_int err;
@@ -856,15 +861,15 @@ struct CALCLModel2D * calclCADef2D(struct CALModel2D *host_CA, CALCLcontext cont
     calclmodel2D->kernelBinaryXorReductionr = calclGetKernelFromProgram(&program, "calclBinaryXOrReductionKernelr");
 
     struct CALCell2D * activeCells = (struct CALCell2D*) malloc(sizeof(struct CALCell2D) * bufferDim);
-    memcpy(activeCells, calclmodel2D->host_CA->A.cells, sizeof(struct CALCell2D) * calclmodel2D->host_CA->A.size_current);
+    memcpy(activeCells, calclmodel2D->host_CA->A->cells, sizeof(struct CALCell2D) * calclmodel2D->host_CA->A->size_current);
 
     calclmodel2D->bufferActiveCells = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(struct CALCell2D) * bufferDim, activeCells, &err);
     calclHandleError(err);
     free(activeCells);
-    calclmodel2D->bufferActiveCellsFlags = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALbyte) * bufferDim, calclmodel2D->host_CA->A.flags, &err);
+    calclmodel2D->bufferActiveCellsFlags = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALbyte) * bufferDim, calclmodel2D->host_CA->A->flags, &err);
     calclHandleError(err);
 
-    calclmodel2D->bufferActiveCellsNum = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALint), &calclmodel2D->host_CA->A.size_current, &err);
+    calclmodel2D->bufferActiveCellsNum = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALint), &calclmodel2D->host_CA->A->size_current, &err);
     calclHandleError(err);
 
     calclmodel2D->bufferByteSubstateNum = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALint), &calclmodel2D->host_CA->sizeof_pQb_array, &err);
@@ -1243,11 +1248,9 @@ void calclRun2D(struct CALCLModel2D* calclmodel2D, unsigned int initialStep, uns
         singleStepThreadNum[1] = threadNumMax[1];
         dimNum = 2;
     } else {
-        if(calclmodel2D->opt == CAL_OPT_ACTIVE_CELLS){
             singleStepThreadNum = (size_t*) malloc(sizeof(size_t));
-            singleStepThreadNum[0] = calclmodel2D->host_CA->A.size_current;
+            singleStepThreadNum[0] = calclmodel2D->host_CA->A->size_current;
             dimNum = 1;
-        }
     }
 
     if (calclmodel2D->kernelInitSubstates != NULL)
@@ -1780,7 +1783,7 @@ void calclExecuteReduction2D(struct CALCLModel2D* calclmodel2D, int rounded) {
 
 CALbyte calclSingleStep2D(struct CALCLModel2D* calclmodel2D, size_t * threadsNum, int dimNum) {
 
-    CALbyte activeCells = calclmodel2D->opt == CAL_OPT_ACTIVE_CELLS;
+    CALbyte activeCells = calclmodel2D->opt == CAL_OPT_ACTIVE_CELLS_NAIVE;
     int j;
     if (activeCells == CAL_TRUE) {
         for (j = 0; j < calclmodel2D->elementaryProcessesNum; j++) {
@@ -2170,105 +2173,6 @@ int calclSetKernelArg2D(CALCLkernel* kernel, cl_uint arg_index, size_t arg_size,
     return clSetKernelArg(*kernel, MODEL_ARGS_NUM + arg_index, arg_size, arg_value);
 }
 
-void calclAddReductionMin2Di(struct CALCLModel2D * calclmodel2D, int numSubstate) {
-    calclmodel2D->reductionFlagsMini[numSubstate] = CAL_TRUE;
-}
-void calclAddReductionMin2Db(struct CALCLModel2D * calclmodel2D, int numSubstate) {
-    calclmodel2D->reductionFlagsMinb[numSubstate] = CAL_TRUE;
-}
-void calclAddReductionMin2Dr(struct CALCLModel2D * calclmodel2D, int numSubstate) {
-    calclmodel2D->reductionFlagsMinr[numSubstate] = CAL_TRUE;
-}
-
-void calclAddReductionMax2Di(struct CALCLModel2D * calclmodel2D, int numSubstate) {
-    calclmodel2D->reductionFlagsMaxi[numSubstate] = CAL_TRUE;
-}
-void calclAddReductionMax2Db(struct CALCLModel2D * calclmodel2D, int numSubstate) {
-    calclmodel2D->reductionFlagsMaxb[numSubstate] = CAL_TRUE;
-}
-void calclAddReductionMax2Dr(struct CALCLModel2D * calclmodel2D, int numSubstate) {
-    calclmodel2D->reductionFlagsMaxr[numSubstate] = CAL_TRUE;
-}
-
-void calclAddReductionSum2Di(struct CALCLModel2D * calclmodel2D, int numSubstate) {
-    calclmodel2D->reductionFlagsSumi[numSubstate] = CAL_TRUE;
-}
-void calclAddReductionSum2Db(struct CALCLModel2D * calclmodel2D, int numSubstate) {
-    calclmodel2D->reductionFlagsSumb[numSubstate] = CAL_TRUE;
-}
-void calclAddReductionSum2Dr(struct CALCLModel2D * calclmodel2D, int numSubstate) {
-    calclmodel2D->reductionFlagsSumr[numSubstate] = CAL_TRUE;
-}
-
-void calclAddReductionProd2Di(struct CALCLModel2D * calclmodel2D, int numSubstate) {
-    calclmodel2D->reductionFlagsProdi[numSubstate] = CAL_TRUE;
-}
-void calclAddReductionProd2Db(struct CALCLModel2D * calclmodel2D, int numSubstate) {
-    calclmodel2D->reductionFlagsProdb[numSubstate] = CAL_TRUE;
-}
-void calclAddReductionProd2Dr(struct CALCLModel2D * calclmodel2D, int numSubstate) {
-    calclmodel2D->reductionFlagsProdr[numSubstate] = CAL_TRUE;
-}
-
-void calclAddReductionLogicalAnd2Di(struct CALCLModel2D * calclmodel2D, int numSubstate) {
-    calclmodel2D->reductionFlagsLogicalAndi[numSubstate] = CAL_TRUE;
-}
-void calclAddReductionLogicalAnd2Db(struct CALCLModel2D * calclmodel2D, int numSubstate) {
-    calclmodel2D->reductionFlagsLogicalAndb[numSubstate] = CAL_TRUE;
-}
-void calclAddReductionLogicalAnd2Dr(struct CALCLModel2D * calclmodel2D, int numSubstate) {
-    calclmodel2D->reductionFlagsLogicalAndr[numSubstate] = CAL_TRUE;
-}
-
-void calclAddReductionLogicalOr2Di(struct CALCLModel2D * calclmodel2D, int numSubstate) {
-    calclmodel2D->reductionFlagsLogicalOri[numSubstate] = CAL_TRUE;
-}
-void calclAddReductionLogicalOr2Db(struct CALCLModel2D * calclmodel2D, int numSubstate) {
-    calclmodel2D->reductionFlagsLogicalOrb[numSubstate] = CAL_TRUE;
-}
-void calclAddReductionLogicalOr2Dr(struct CALCLModel2D * calclmodel2D, int numSubstate) {
-    calclmodel2D->reductionFlagsLogicalOrr[numSubstate] = CAL_TRUE;
-}
-
-void calclAddReductionLogicalXOr2Di(struct CALCLModel2D * calclmodel2D, int numSubstate) {
-    calclmodel2D->reductionFlagsLogicalXOri[numSubstate] = CAL_TRUE;
-}
-void calclAddReductionLogicalXOr2Db(struct CALCLModel2D * calclmodel2D, int numSubstate) {
-    calclmodel2D->reductionFlagsLogicalXOrb[numSubstate] = CAL_TRUE;
-}
-void calclAddReductionLogicalXOr2Dr(struct CALCLModel2D * calclmodel2D, int numSubstate) {
-    calclmodel2D->reductionFlagsLogicalXOrr[numSubstate] = CAL_TRUE;
-}
-
-void calclAddReductionBinaryAnd2Di(struct CALCLModel2D * calclmodel2D, int numSubstate) {
-    calclmodel2D->reductionFlagsBinaryAndi[numSubstate] = CAL_TRUE;
-}
-void calclAddReductionBinaryAnd2Db(struct CALCLModel2D * calclmodel2D, int numSubstate) {
-    calclmodel2D->reductionFlagsBinaryAndb[numSubstate] = CAL_TRUE;
-}
-void calclAddReductionBinaryAnd2Dr(struct CALCLModel2D * calclmodel2D, int numSubstate) {
-    calclmodel2D->reductionFlagsBinaryAndr[numSubstate] = CAL_TRUE;
-}
-
-void calclAddReductionBinaryOr2Di(struct CALCLModel2D * calclmodel2D, int numSubstate) {
-    calclmodel2D->reductionFlagsBinaryOri[numSubstate] = CAL_TRUE;
-}
-void calclAddReductionBinaryOr2Db(struct CALCLModel2D * calclmodel2D, int numSubstate) {
-    calclmodel2D->reductionFlagsBinaryOrb[numSubstate] = CAL_TRUE;
-}
-void calclAddReductionBinaryOr2Dr(struct CALCLModel2D * calclmodel2D, int numSubstate) {
-    calclmodel2D->reductionFlagsBinaryOrr[numSubstate] = CAL_TRUE;
-}
-
-void calclAddReductionBinaryXor2Di(struct CALCLModel2D * calclmodel2D, int numSubstate) {
-    calclmodel2D->reductionFlagsBinaryXOri[numSubstate] = CAL_TRUE;
-}
-void calclAddReductionBinaryXor2Db(struct CALCLModel2D * calclmodel2D, int numSubstate) {
-    calclmodel2D->reductionFlagsBinaryXOrb[numSubstate] = CAL_TRUE;
-}
-void calclAddReductionBinaryXor2Dr(struct CALCLModel2D * calclmodel2D, int numSubstate) {
-    calclmodel2D->reductionFlagsBinaryXOrr[numSubstate] = CAL_TRUE;
-}
 
 void calclSetWorkGroupDimensions(struct CALCLModel2D * calclmodel2D, int m, int n)
 {

@@ -364,7 +364,7 @@ struct CALGLRun3D* calglRunCLDef3D(struct CALCLModel3D* device_CA, CALint fixedS
 		calglRun->dimNum = 3;
 	} else {
 		calglRun->singleStepThreadNum = (size_t*) malloc(sizeof(size_t));
-		calglRun->singleStepThreadNum[0] = calglRun->device_CA->host_CA->A.size_current;
+        calglRun->singleStepThreadNum[0] = calglRun->device_CA->host_CA->A->size_current;
 		calglRun->dimNum = 1;
 	}
 

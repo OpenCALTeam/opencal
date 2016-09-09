@@ -212,6 +212,7 @@ struct CALModel3D* calCADef3D(int rows,
 
     ca3D->T = CAL_TOROIDALITY;
     ca3D->OPTIMIZATION = CAL_OPTIMIZATION;
+    ca3D->A = NULL;
     if (ca3D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE) {
         ca3D->A = malloc( sizeof(struct CALActiveCells3D));
         ca3D->A->flags = calAllocBuffer3Db(ca3D->rows, ca3D->columns, ca3D->slices);
@@ -243,6 +244,13 @@ struct CALModel3D* calCADef3D(int rows,
     ca3D->sizeof_pQb_array = 0;
     ca3D->sizeof_pQi_array = 0;
     ca3D->sizeof_pQr_array = 0;
+
+    ca3D->pQb_single_layer_array = NULL;
+    ca3D->pQi_single_layer_array = NULL;
+    ca3D->pQr_single_layer_array = NULL;
+    ca3D->sizeof_pQb_single_layer_array = 0;
+    ca3D->sizeof_pQi_single_layer_array = 0;
+    ca3D->sizeof_pQr_single_layer_array = 0;
 
     ca3D->elementary_processes = NULL;
     ca3D->num_of_elementary_processes = 0;
@@ -395,6 +403,17 @@ struct CALSubstate3Dr* calAddSubstate3Dr(struct CALModel3D* ca3D){
 struct CALSubstate3Db* calAddSingleLayerSubstate3Db(struct CALModel3D* ca3D){
 
     struct CALSubstate3Db* Q;
+    struct CALSubstate3Db** pQb_single_layer_array_tmp = ca3D->pQb_single_layer_array;
+    struct CALSubstate3Db** pQb_single_layer_array_new;
+    int i;
+
+    pQb_single_layer_array_new = (struct CALSubstate3Db**)malloc(sizeof(struct CALSubstate3Db*)*(ca3D->sizeof_pQb_single_layer_array + 1));
+    if (!pQb_single_layer_array_new)
+        return NULL;
+
+    for (i = 0; i < ca3D->sizeof_pQb_single_layer_array; i++)
+        pQb_single_layer_array_new[i] = ca3D->pQb_single_layer_array[i];
+
     Q = (struct CALSubstate3Db*)malloc(sizeof(struct CALSubstate3Db));
     if (!Q)
         return NULL;
@@ -403,12 +422,28 @@ struct CALSubstate3Db* calAddSingleLayerSubstate3Db(struct CALModel3D* ca3D){
         return NULL;
     Q->next = NULL;
 
+    pQb_single_layer_array_new[ca3D->sizeof_pQb_single_layer_array] = Q;
+    ca3D->sizeof_pQb_single_layer_array++;
+
+    ca3D->pQb_single_layer_array = pQb_single_layer_array_new;
+    free(pQb_single_layer_array_tmp);
     return Q;
 }
 
 struct CALSubstate3Di* calAddSingleLayerSubstate3Di(struct CALModel3D* ca3D){
 
     struct CALSubstate3Di* Q;
+    struct CALSubstate3Di** pQi_single_layer_array_tmp = ca3D->pQi_single_layer_array;
+    struct CALSubstate3Di** pQi_single_layer_array_new;
+    int i;
+
+    pQi_single_layer_array_new = (struct CALSubstate3Di**)malloc(sizeof(struct CALSubstate3Di*)*(ca3D->sizeof_pQi_single_layer_array + 1));
+    if (!pQi_single_layer_array_new)
+        return NULL;
+
+    for (i = 0; i < ca3D->sizeof_pQi_single_layer_array; i++)
+        pQi_single_layer_array_new[i] = ca3D->pQi_single_layer_array[i];
+
     Q = (struct CALSubstate3Di*)malloc(sizeof(struct CALSubstate3Di));
     if (!Q)
         return NULL;
@@ -417,12 +452,29 @@ struct CALSubstate3Di* calAddSingleLayerSubstate3Di(struct CALModel3D* ca3D){
         return NULL;
     Q->next = NULL;
 
+    pQi_single_layer_array_new[ca3D->sizeof_pQi_single_layer_array] = Q;
+    ca3D->sizeof_pQi_single_layer_array++;
+
+    ca3D->pQi_single_layer_array = pQi_single_layer_array_new;
+    free(pQi_single_layer_array_tmp);
     return Q;
+
 }
 
 struct CALSubstate3Dr* calAddSingleLayerSubstate3Dr(struct CALModel3D* ca3D){
 
     struct CALSubstate3Dr* Q;
+    struct CALSubstate3Dr** pQr_single_layer_array_tmp = ca3D->pQr_single_layer_array;
+    struct CALSubstate3Dr** pQr_single_layer_array_new;
+    int i;
+
+    pQr_single_layer_array_new = (struct CALSubstate3Dr**)malloc(sizeof(struct CALSubstate3Dr*)*(ca3D->sizeof_pQr_single_layer_array + 1));
+    if (!pQr_single_layer_array_new)
+        return NULL;
+
+    for (i = 0; i < ca3D->sizeof_pQr_single_layer_array; i++)
+        pQr_single_layer_array_new[i] = ca3D->pQr_single_layer_array[i];
+
     Q = (struct CALSubstate3Dr*)malloc(sizeof(struct CALSubstate3Dr));
     if (!Q)
         return NULL;
@@ -431,6 +483,11 @@ struct CALSubstate3Dr* calAddSingleLayerSubstate3Dr(struct CALModel3D* ca3D){
         return NULL;
     Q->next = NULL;
 
+    pQr_single_layer_array_new[ca3D->sizeof_pQr_single_layer_array] = Q;
+    ca3D->sizeof_pQr_single_layer_array++;
+
+    ca3D->pQr_single_layer_array = pQr_single_layer_array_new;
+    free(pQr_single_layer_array_tmp);
     return Q;
 }
 

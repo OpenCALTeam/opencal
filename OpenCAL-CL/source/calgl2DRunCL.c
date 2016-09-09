@@ -334,7 +334,7 @@ struct CALGLRun2D* calglRunCLDef2D(struct CALCLModel2D* deviceCA,CALint fixedSte
 		calglRun->dimNum = 2;
 	} else {
 		calglRun->singleStepThreadNum = (size_t*) malloc(sizeof(size_t));
-		calglRun->singleStepThreadNum[0] = calglRun->deviceCA->host_CA->A.size_current;
+        calglRun->singleStepThreadNum[0] = calglRun->deviceCA->host_CA->A->size_current;
 		calglRun->dimNum = 1;
 	}
 
