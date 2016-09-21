@@ -274,6 +274,7 @@ struct CALModel2D* calCADef2D(int rows,
 
     ca2D->T = CAL_TOROIDALITY;
 
+    ca2D->A = NULL;
     ca2D->OPTIMIZATION = CAL_OPTIMIZATION;
     if (ca2D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE) {
         ca2D->A = malloc( sizeof(struct CALActiveCells2D));
@@ -869,6 +870,15 @@ void calFinalize2D(struct CALModel2D* ca2D)
 
     for (i=0; i < ca2D->sizeof_pQr_array; i++)
         calDeleteSubstate2Dr(ca2D, ca2D->pQr_array[i]);
+
+    for (i=0; i < ca2D->sizeof_pQb_single_layer_array; i++)
+        calDeleteSubstate2Db(ca2D, ca2D->pQb_single_layer_array[i]);
+
+    for (i=0; i < ca2D->sizeof_pQi_single_layer_array; i++)
+        calDeleteSubstate2Di(ca2D, ca2D->pQi_single_layer_array[i]);
+
+    for (i=0; i < ca2D->sizeof_pQr_single_layer_array; i++)
+        calDeleteSubstate2Dr(ca2D, ca2D->pQr_single_layer_array[i]);
 
     free(ca2D->elementary_processes);
 
