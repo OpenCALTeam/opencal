@@ -89,3 +89,6 @@ bin/
 # realSubstate*
 # width_final*
 /OpenCAL/examples/life3D-glut/_CMakeLists.txt
+
+# Qt files
+CMakeLists.txt.user*
