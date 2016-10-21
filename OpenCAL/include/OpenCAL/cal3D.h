@@ -72,9 +72,9 @@ struct CALModel3D {
     int sizeof_pQi_array;				//!< Number of substates of type int.
     int sizeof_pQr_array;				//!< Number of substates of type real (floating point).
 
-    struct CALSubstate3Db** pQb_single_layer_array;	//!< Array of pointers to 2D single layer substates of type byte
-    struct CALSubstate3Di** pQi_single_layer_array;	//!< Array of pointers to 2D single layer substates of type int
-    struct CALSubstate3Dr** pQr_single_layer_array;	//!< Array of pointers to 2D single layer substates of type real (floating point)
+    struct CALSubstate3Db** pQb_single_layer_array;	//!< Array of pointers to 3D single layer substates of type byte
+    struct CALSubstate3Di** pQi_single_layer_array;	//!< Array of pointers to 3D single layer substates of type int
+    struct CALSubstate3Dr** pQr_single_layer_array;	//!< Array of pointers to 3D single layer substates of type real (floating point)
     int sizeof_pQb_single_layer_array;				//!< Number of single layer substates of type byte.
     int sizeof_pQi_single_layer_array;				//!< Number of single layer substates of type int.
     int sizeof_pQr_single_layer_array;				//!< Number of single layer substates of type real (floating point).

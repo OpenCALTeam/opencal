@@ -78,6 +78,14 @@ struct CALModel3D {
     int sizeof_pQi_array;				//!< Number of substates of type int.
     int sizeof_pQr_array;				//!< Number of substates of type real (floating point).
 
+    struct CALSubstate3Db** pQb_single_layer_array;	//!< Array of pointers to 3D single layer substates of type byte
+    struct CALSubstate3Di** pQi_single_layer_array;	//!< Array of pointers to 3D single layer substates of type int
+    struct CALSubstate3Dr** pQr_single_layer_array;	//!< Array of pointers to 3D single layer substates of type real (floating point)
+    int sizeof_pQb_single_layer_array;				//!< Number of single layer substates of type byte.
+    int sizeof_pQi_single_layer_array;				//!< Number of single layer substates of type int.
+    int sizeof_pQr_single_layer_array;				//!< Number of single layer substates of type real (floating point).
+
+
     void (**elementary_processes)(struct CALModel3D* ca3D, int i, int j, int k); //!< Array of function pointers to the transition function's elementary processes callback functions. Note that a substates' update must be performed after each elementary process has been applied to each cell of the cellular space (see calGlobalTransitionFunction3D).
     int num_of_elementary_processes; //!< Number of function pointers to the transition functions's elementary processes callbacks.
 

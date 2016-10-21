@@ -792,6 +792,15 @@ void calFinalize3D(struct CALModel3D* ca3D)
     for (i=0; i < ca3D->sizeof_pQr_array; i++)
         calDeleteSubstate3Dr(ca3D, ca3D->pQr_array[i]);
 
+    for (i=0; i < ca3D->sizeof_pQb_single_layer_array; i++)
+        calDeleteSubstate3Db(ca3D, ca3D->pQb_single_layer_array[i]);
+
+    for (i=0; i < ca3D->sizeof_pQi_single_layer_array; i++)
+        calDeleteSubstate3Di(ca3D, ca3D->pQi_single_layer_array[i]);
+
+    for (i=0; i < ca3D->sizeof_pQr_single_layer_array; i++)
+        calDeleteSubstate3Dr(ca3D, ca3D->pQr_single_layer_array[i]);
+
     free(ca3D->elementary_processes);
 
     free(ca3D);
