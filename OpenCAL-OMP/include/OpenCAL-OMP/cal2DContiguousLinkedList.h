@@ -54,6 +54,7 @@ typedef struct CALContiguousLinkedList2D
         int size_current;
 
         int* numberOfActiveCellsPerThread;
+        omp_lock_t* numberOfActiveCellsPerThreadLock;
 
         int numberOfThreads;
 

@@ -40,7 +40,10 @@ static void calPutElement2D(CALContiguousLinkedList2D* buffer, int i, int j )
     int thread = calGetBuffer2D( buffer, i, j );
     buffer->buffer[index].isActive = true;
 
+    omp_set_lock(&buffer->numberOfActiveCellsPerThreadLock[thread]);
     buffer->numberOfActiveCellsPerThread[thread]++;
+    omp_unset_lock(&buffer->numberOfActiveCellsPerThreadLock[thread]);
+
     CALQueue2D* queue = &buffer->queuesOfElementsToAdd[thread];
     CALQueueElement2D* newElement = ( CALQueueElement2D* )malloc( sizeof( CALQueueElement2D ) );
     newElement->cell.i = i;
@@ -118,6 +121,7 @@ CALContiguousLinkedList2D* calMakeContiguousLinkedList2D( struct CALModel2D* mod
 
     contiguousLinkedList->buffer = ( CALBufferElement2D* ) malloc( sizeof(CALBufferElement2D) * contiguousLinkedList->size );
     contiguousLinkedList->numberOfActiveCellsPerThread = ( int * ) malloc( sizeof( int ) * contiguousLinkedList->numberOfThreads );
+    contiguousLinkedList->numberOfActiveCellsPerThreadLock = (omp_lock_t*)malloc(sizeof(omp_lock_t)*contiguousLinkedList->numberOfThreads);
 
     int n;
     for( n = 0; n < contiguousLinkedList->numberOfThreads; n++ )
@@ -129,6 +133,7 @@ CALContiguousLinkedList2D* calMakeContiguousLinkedList2D( struct CALModel2D* mod
         contiguousLinkedList->_heads[n] = NULL;
         contiguousLinkedList->_tails[n] = NULL;
         omp_init_lock( &contiguousLinkedList->queuesOfElementsToAdd[n].lock);
+        omp_init_lock( &contiguousLinkedList->numberOfActiveCellsPerThreadLock[n]);
     }
 
 
@@ -271,8 +276,9 @@ void calUpdateContiguousLinkedList2D(CALContiguousLinkedList2D* buffer)
         }
     }
 
+    buffer->size_current=0;
     for(n = 0; n < buffer->numberOfThreads; n++ )
-        buffer->size_current += size_per_t[n];
+        buffer->size_current += buffer->numberOfActiveCellsPerThread[n];
 
 
     free(size_per_t);
@@ -281,7 +287,13 @@ void calUpdateContiguousLinkedList2D(CALContiguousLinkedList2D* buffer)
 
 void calCopyBufferActiveCellsCLL2Db(CALbyte* M_src, CALbyte* M_dest, struct CALModel2D* ca2D)
 {
-    int index;
+    int index;ALQueueElement2D* first;
+    CALQueueElement2D* last;
+
+    omp_lock_t lock;
+
+    int size;
+
     int c;
     CALBufferElement2D* current;
     CALContiguousLinkedList2D* contiguousLinkedList = ca2D->contiguousLinkedList;
@@ -422,4 +434,5 @@ void calFreeContiguousLinkedList2D(CALContiguousLinkedList2D* cll)
     free( cll->_heads );
     free( cll->_tails );
     free( cll->queuesOfElementsToAdd );
+    free( cll->numberOfActiveCellsPerThreadLock);
 }

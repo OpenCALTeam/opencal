@@ -37,7 +37,10 @@ static void calPutElement3D(CALContiguousLinkedList3D* buffer, int i, int j, int
     int thread = calGetBuffer3D( buffer );
     buffer->buffer[index].isActive = true;
 
+    omp_set_lock(&buffer->numberOfActiveCellsPerThreadLock[thread]);
     buffer->numberOfActiveCellsPerThread[thread]++;
+    omp_unset_lock(&buffer->numberOfActiveCellsPerThreadLock[thread]);
+
     CALQueue3D* queue = &buffer->queuesOfElementsToAdd[thread];
     CALQueueElement3D* newElement = ( CALQueueElement3D* )malloc( sizeof( CALQueueElement3D ) );
     newElement->cell.i = i;
@@ -117,6 +120,10 @@ CALContiguousLinkedList3D* calMakeContiguousLinkedList3D( CALModel3D* model )
 
     contiguousLinkedList->buffer = ( CALBufferElement3D* ) malloc( sizeof(CALBufferElement3D) * contiguousLinkedList->size );
 
+    contiguousLinkedList->numberOfActiveCellsPerThread = ( int * ) malloc( sizeof( int ) * contiguousLinkedList->numberOfThreads );
+    contiguousLinkedList->numberOfActiveCellsPerThreadLock = (omp_lock_t*)malloc(sizeof(omp_lock_t)*contiguousLinkedList->numberOfThreads);
+
+
     int n;
     for( n = 0; n < contiguousLinkedList->numberOfThreads; n++ )
     {
@@ -127,6 +134,7 @@ CALContiguousLinkedList3D* calMakeContiguousLinkedList3D( CALModel3D* model )
         contiguousLinkedList->_heads[n] = NULL;
         contiguousLinkedList->_tails[n] = NULL;
         omp_init_lock( &contiguousLinkedList->queuesOfElementsToAdd[n].lock);
+        omp_init_lock( &contiguousLinkedList->numberOfActiveCellsPerThreadLock[n]);
     }
 
     int columnIndex = 0;
@@ -417,4 +425,6 @@ void calFreeContiguousLinkedList3D(CALContiguousLinkedList3D* cll)
     free( cll->numberOfActiveCellsPerThread );
     free( cll->_heads );
     free( cll->_tails );
-    free( cll->queuesOfElementsToAdd );}
+    free( cll->queuesOfElementsToAdd );
+    free( cll->numberOfActiveCellsPerThreadLock);
+}
