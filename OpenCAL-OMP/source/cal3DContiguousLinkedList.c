@@ -279,8 +279,9 @@ void calUpdateContiguousLinkedList3D(CALContiguousLinkedList3D* buffer)
         }
     }
 
+    buffer->size_current = 0;
     for(n = 0; n < buffer->numberOfThreads; n++ )
-        buffer->size_current += size_per_t[n];
+        buffer->size_current += buffer->numberOfActiveCellsPerThread[n];
 
 
     free(size_per_t);
