@@ -287,7 +287,8 @@ void calUpdateContiguousLinkedList2D(CALContiguousLinkedList2D* buffer)
 
 void calCopyBufferActiveCellsCLL2Db(CALbyte* M_src, CALbyte* M_dest, struct CALModel2D* ca2D)
 {
-    int index;ALQueueElement2D* first;
+    int index;
+    CALQueueElement2D* first;
     CALQueueElement2D* last;
 
     omp_lock_t lock;
