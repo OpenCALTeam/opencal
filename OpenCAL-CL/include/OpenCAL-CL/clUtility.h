@@ -79,7 +79,8 @@ struct CALCLDeviceManager * calclCreateManager();
 
 /*! \brief Creates an Opencl context */
 DllExport
-CALCLcontext calclCreateContext(CALCLdevice * devices	//!< Array containing the devices used to create the context
+CALCLcontext calclCreateContext(CALCLdevice * devices,	//!< Array containing the devices used to create the context
+                                CALCLint num_devices
 		);
 
 /*! \brief Creates an Opencl buffer */

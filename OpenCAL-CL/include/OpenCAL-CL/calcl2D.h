@@ -36,6 +36,8 @@
 #include "math.h"
 #include <OpenCAL-CL/clUtility.h>
 #include <OpenCAL-CL/dllexport.h>
+#include <assert.h>
+
 
 #ifdef _WIN32
 #define ROOT_DIR ".."
@@ -54,8 +56,15 @@
 #define KER_STC_UP_SWEEP "calclkernelUpSweep2D"
 #define KER_STC_DOWN_SWEEP "calclkernelDownSweep2D"
 
-#define MODEL_ARGS_NUM 57	//!< Number of default arguments for each kernel defined by the user
+#define MODEL_ARGS_NUM 58	//!< Number of default arguments for each kernel defined by the user
 #define CALCL_RUN_LOOP 0	//!< Define used by the user to specify an infinite loop simulation
+
+
+
+
+
+
+
 
 /*! \brief CALCLSubstateMapper contains arrays used to retrieve substates from GPU
  *
@@ -65,15 +74,27 @@
  */
 typedef struct CALCLSubstateMapper {
 
-    size_t bufDIMreal;							//!< Number of CALreal substates
-    size_t bufDIMint;							//!< Number of CALint substates
-    size_t bufDIMbyte;							//!< Number of CALbyte substates
+    size_t bufDIMreal;							//!< Size in byte of CALreal substates
+    size_t bufDIMint;							//!< Size in byte of CALint substates
+    size_t bufDIMbyte;							//!< Size in byte of CALbyte substates
 
     CALreal * realSubstate_current_OUT;			//!< Array containing all the CALreal substates
     CALint * intSubstate_current_OUT;			//!< Array containing all the CALint substates
     CALbyte * byteSubstate_current_OUT;			//!< Array containing all the CALbyte substates
 
 } CALCLSubstateMapper;
+
+typedef struct CALCLBorderMapper {
+
+    size_t bufDIMreal;							//!< Number of CALreal substates
+    size_t bufDIMint;							//!< Number of CALint substates
+    size_t bufDIMbyte;							//!< Number of CALbyte substates
+
+    CALreal * realBorder_OUT;			//!< Array containing all the CALreal substates
+    CALint * intBorder_OUT;			//!< Array containing all the CALint substates
+    CALbyte * byteBorder_OUT;			//!< Array containing all the CALbyte substates
+
+} CALCLBorderMapper;
 
 /*! \brief CALCLModel2D contains necessary data to run 2D cellular automaton elementary processes on gpu.
  *
@@ -87,6 +108,19 @@ struct CALCLModel2D {
     int callbackSteps;									//!< Define how many steps must be executed before call the function cl_update_substates.
     int steps;											//!< Simulation current step.
     void (*cl_update_substates)(struct CALModel2D*); 	//!< Callback function defined by the user. It allows to access data during a simulation.
+    int rows;
+    int columns;
+    int borderSize;
+    size_t fullSize;
+    size_t realSize;
+    int offset;
+
+    size_t byteSubstatesDim;							//!< Number of CALreal substates
+    size_t intSubstatesDim;							//!< Number of CALint substates
+    size_t realSubstatesDim;							//!< Number of CALbyte substates
+
+
+    //! CA space plus border
 
     CALCLkernel kernelUpdateSubstate;					//!< Opencl kernel that updates substates GPU side (CALCL_OPT_ACTIVE_CELL strategy only)
     //user kernels
@@ -355,6 +389,9 @@ struct CALCLModel2D {
 
     CALCLSubstateMapper substateMapper;					//!< Structure used to retrieve substates from GPU
 
+    CALCLBorderMapper borderMapper;					//!< Structure used to retrieve substates from GPU
+
+
     //user kernels buffers args
     CALCLmem bufferNeighborhood;						//!< Opencl buffer used to transfer GPU side the array representing the CA neighborhood
     CALCLmem bufferNeighborhoodID;						//!< Opencl buffer used to transfer GPU side CA neighborhood ID
@@ -379,6 +416,20 @@ struct CALCLModel2D {
 
 };
 
+struct CALCLMultiGPU{
+
+    struct CALCLModel2D ** device_models;
+    CALint num_devices;
+    CALCLcontext context;
+    CALCLdevice * devices;
+    CALCLprogram * programs;
+    CALint * workloads;
+    cl_event * kernel_events;
+    CALint pos_device;
+};
+
+
+
 /*! \brief Allocate, initialize and return a pointer to a struct CALCLModel2D.
  *
  * Allocate, initialize and return a pointer to a struct CALCLModel2D. Opencl buffers are initialized using data from a CALModel2D instance.
@@ -388,7 +439,9 @@ DllExport
 struct CALCLModel2D * calclCADef2D(struct CALModel2D *host_CA,		//!< Pointer to a CALModel2D
                                    CALCLcontext context,										//!< Opencl context
                                    CALCLprogram program,										//!< Opencl program containing library source and user defined source
-                                   CALCLdevice device											//!< Opencl device
+                                   CALCLdevice device,											//!< Opencl device
+                                   const CALint workload,
+                                   const CALint offset
                                    );
 
 /*! \brief Main simulation cycle. It can become a loop if maxStep == CALCL_RUN_LOOP */
@@ -411,8 +464,8 @@ void calclKernelCall2D(struct CALCLModel2D* calclmodel2D,		//!< Pointer to a str
                        CALCLkernel ker,								//!< Opencl kernel
                        int dimNum,										//!< Number of Opencl dimensions (CALCL_NO_OPT 2 dimensions, CALCL_OPT_ACTIVE_CELL 1 dimension)
                        size_t * dimSize,							//!< Array of size_t containing the number of threads for each used Opencl dimension (CALCL_NO_OPT 2 dimensions, CALCL_OPT_ACTIVE_CELL 1 dimension)
-                       size_t * localDimSize							//!< Array of size_t containing the number of threads for each used Opencl local dimension
-                       );
+                       size_t * localDimSize,							//!< Array of size_t containing the number of threads for each used Opencl local dimension
+                       cl_event * event);
 
 /*! \brief Execute stream compaction kernels to compact and order CA active cells */
 DllExport
@@ -455,7 +508,7 @@ void calclAddInitFunc2D(struct CALCLModel2D * calclmodel2D,		//!< Pointer to a s
                         );
 
 /*! \brief Set the steering Opencl kernel
- *
+ *realSubstate_current_OUT
  * Set the steering Opencl kernel. If defined, the stop condition kernel is executed
  * each time the function calclSingleStep2D is called.
  *
@@ -530,5 +583,20 @@ DllExport
 void calclSetWorkGroupDimensions(struct CALCLModel2D* calclmodel2D,//!< Pointer to a CALCLModel2D
                                  int m, //!< Number of rows
                                  int n);//!< Number of columns
+
+
+void calclSetNumDevice(struct CALCLMultiGPU* multigpu, const CALint _num_devices);
+
+void calclAddDevice(struct CALCLMultiGPU* multigpu,const CALCLdevice device, const CALint workload);
+
+int calclCheckWorkload(struct CALCLMultiGPU* multigpu);
+
+void calclMultiGPUDef2D(struct CALCLMultiGPU* mulitgpu,struct CALModel2D *host_CA ,char* kernel_src,char* kernel_inc);
+
+void calclMultiGPURun2D(struct CALCLMultiGPU* multigpu, CALint init_step, CALint final_step);
+
+void calclAddElementaryProcessMultiGPU2D(struct CALCLMultiGPU* multigpu, char * kernelName);
+
+void calclMultiGPUFinalize(struct CALCLMultiGPU* mulitgpu);
 
 #endif /* CALCL_H_ */

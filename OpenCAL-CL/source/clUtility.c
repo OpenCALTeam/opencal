@@ -63,9 +63,8 @@ struct CALCLDeviceManager * calclCreateManager() {
 
 
 
-CALCLcontext calclCreateContext(CALCLdevice * devices) {
-	CALCLint err;
-	CALCLuint num_devices=1;
+CALCLcontext calclCreateContext(CALCLdevice * devices,CALCLint num_devices) {
+    CALCLint err;
 	CALCLcontext context = clCreateContext(NULL, num_devices, devices, NULL, NULL, &err);
 	calclHandleError(err);
 	return context;

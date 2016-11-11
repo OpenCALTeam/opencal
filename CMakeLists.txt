@@ -1,6 +1,7 @@
 # opencal/CMakeLists.txt
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 cmake_policy(SET CMP0048 NEW)
+set (CMAKE_C_STANDARD 11)
 
 include(configure.cmake)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")

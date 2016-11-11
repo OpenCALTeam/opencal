@@ -372,7 +372,7 @@ void calglUpdate2DCL(struct CALGLRun2D* calglRun){
 			calglRun->firstRun = CAL_FALSE;
 			calglRun->start_time = time(NULL);
 			if (calglRun->deviceCA->kernelInitSubstates != NULL)
-				calclKernelCall2D(calglRun->deviceCA, calglRun->deviceCA->kernelInitSubstates, 1, calglRun->threadNumMax, NULL);
+                calclKernelCall2D(calglRun->deviceCA, calglRun->deviceCA->kernelInitSubstates, 1, calglRun->threadNumMax, NULL, NULL);
 		}
 
 		//calglRun->deviceCA->steps++;
