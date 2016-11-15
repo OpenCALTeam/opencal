@@ -33,6 +33,7 @@
 #define CALCL_H_
 
 #include <OpenCAL/cal2D.h>
+#include <OpenCAL-CL/vector.h>
 #include "math.h"
 #include <OpenCAL-CL/clUtility.h>
 #include <OpenCAL-CL/dllexport.h>
@@ -59,7 +60,7 @@
 #define MODEL_ARGS_NUM 58	//!< Number of default arguments for each kernel defined by the user
 #define CALCL_RUN_LOOP 0	//!< Define used by the user to specify an infinite loop simulation
 
-
+#define MAX_FNAME_SIZE (100)
 
 
 
@@ -416,6 +417,12 @@ struct CALCLModel2D {
 
 };
 
+
+typedef struct kernelID{
+    char name[MAX_FNAME_SIZE];
+    int index;
+}kernelID;
+
 struct CALCLMultiGPU{
 
     struct CALCLModel2D ** device_models;
@@ -426,6 +433,8 @@ struct CALCLMultiGPU{
     CALint * workloads;
     cl_event * kernel_events;
     CALint pos_device;
+
+    vector kernelsID;
 };
 
 
@@ -479,7 +488,7 @@ void calclComputeStreamCompaction2D(struct CALCLModel2D * calclmodel2D		//!< Poi
  *
  *  */
 DllExport
-void calclSetKernelArgs2D(CALCLkernel * kernel,		//!< Pointer to Opencl kernel
+void calclSetKernelArgs2D(CALCLkernel kernel,		//!< Pointer to Opencl kernel
                           CALCLmem * args,								//!< Array of Opencl buffers that represents kernel additional arguments
                           cl_uint numArgs									//!< Number of Opencl kernel additional arguments
                           );
@@ -493,7 +502,7 @@ void calclSetKernelArgs2D(CALCLkernel * kernel,		//!< Pointer to Opencl kernel
  *  */
 DllExport
 void calclAddStopConditionFunc2D(struct CALCLModel2D * calclmodel2D,		//!< Pointer to a struct CALCLModel2D
-                                 CALCLkernel * kernel										//!< Pointer to Opencl kernel
+                                 CALCLkernel kernel										//!< Pointer to Opencl kernel
                                  );
 
 /*! \brief Set the Opencl kernel used to initialize substates
@@ -504,7 +513,7 @@ void calclAddStopConditionFunc2D(struct CALCLModel2D * calclmodel2D,		//!< Point
  *  */
 DllExport
 void calclAddInitFunc2D(struct CALCLModel2D * calclmodel2D,		//!< Pointer to a struct CALCLModel2D
-                        CALCLkernel * kernel										//!< Pointer to Opencl kernel
+                        CALCLkernel kernel										//!< Pointer to Opencl kernel
                         );
 
 /*! \brief Set the steering Opencl kernel
@@ -515,7 +524,7 @@ void calclAddInitFunc2D(struct CALCLModel2D * calclmodel2D,		//!< Pointer to a s
  *  */
 DllExport
 void calclAddSteeringFunc2D(struct CALCLModel2D * calclmodel2D,		//!< Pointer to a struct CALCLModel2D
-                            CALCLkernel * kernel									//!< Pointer to Opencl kernel
+                            CALCLkernel kernel									//!< Pointer to Opencl kernel
                             );
 
 /*! \brief Set the function used to access substate on the GPU every callbackSteps steps.
@@ -538,7 +547,7 @@ void calclBackToHostFunc2D(struct CALCLModel2D* calclmodel2D,		//!< Pointer to a
  *  */
 DllExport
 void calclAddElementaryProcess2D(struct CALCLModel2D * calclmodel2D,		//!< Pointer to a struct CALCLModel2D
-                                 CALCLkernel * kernel											//!< Pointer to Opencl kernel
+                                 CALCLkernel kernel											//!< Pointer to Opencl kernel
                                  );
 
 /*! \brief Deallcate a struct CALCLModel2D instance */
@@ -561,7 +570,7 @@ CALCLprogram calclLoadProgram2D(CALCLcontext context,		//!< Opencl context
 
 /*! \brief Set a kernel argument   */
 DllExport
-int calclSetKernelArg2D(CALCLkernel* kernel,			//!< Opencl kernel
+int calclSetKernelArg2D(CALCLkernel kernel,			//!< Opencl kernel
                         cl_uint arg_index,			//!< Index argument
                         size_t arg_size,			//!< Size argument
                         const void *arg_value                   //!< Value argument
@@ -575,7 +584,7 @@ void calclGetSubstatesDeviceToHost2D(struct CALCLModel2D* calclmodel2D //!< Poin
 /*! \brief Set reduction arguments to Opencl kernel   */
 DllExport
 void calclSetReductionParameters2D(struct CALCLModel2D* calclmodel2D,//!< Pointer to a CALCLModel2D
-                                   CALCLkernel * kernel//!< Pointer to Opencl kernel
+                                   CALCLkernel kernel//!< Pointer to Opencl kernel
                                    );
 
 /*! \brief Set WorkGroup dimensions in the ND range   */

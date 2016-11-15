@@ -26,7 +26,8 @@
 /*! \brief Terminates threads that exceed matrix sizes */
 #define calclThreadCheck2D() if(calclGlobalRow()>=(calclGetRows()+1) || get_global_id(1)>=calclGetColumns()) return
 
-#define calclThreadCheck2Dour() if(calclGlobalRow() < 1 || calclGlobalRow() > calclGetRows() || get_global_id(1)>=calclGetColumns()) return
+
+#define calclThreadCheck2Dour() if( (calclGlobalRow() < borderSize) || (calclGlobalRow() >= (calclGetRows()-borderSize)) || (get_global_id(1)>=calclGetColumns())) return
 
 
 /*! \brief Terminates threads that exceed active cells number */

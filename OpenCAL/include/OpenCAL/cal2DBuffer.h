@@ -169,7 +169,7 @@ void calSetActiveCellsBuffer2Dr(CALreal* M, CALreal value,struct CALModel2D* ca2
 
 /*! \brief Returns the value of the cell (i, j) of the matrix M.
 */
-#define calGetMatrixElement(M, columns, i, j) ( M[(((i)*(columns)) + (j))] )
+#define calGetMatrixElement(M, columns, i, j) ( M[ (((i)*(columns)) + (j))] )
 
 
 

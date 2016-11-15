@@ -309,16 +309,16 @@ struct CALGLRun2D* calglRunCLDef2D(struct CALCLModel2D* deviceCA,CALint fixedSte
 	clSetKernelArg(calglRun->deviceCA->kernelBinaryXorReductionr, 4, sizeof(int), &sizeCA);
 
 	if (calglRun->deviceCA->kernelInitSubstates != NULL)
-		calclSetReductionParameters2D(calglRun->deviceCA, &calglRun->deviceCA->kernelInitSubstates);
+        calclSetReductionParameters2D(calglRun->deviceCA, calglRun->deviceCA->kernelInitSubstates);
 	if (calglRun->deviceCA->kernelStopCondition != NULL)
-		calclSetReductionParameters2D(calglRun->deviceCA, &calglRun->deviceCA->kernelStopCondition);
+        calclSetReductionParameters2D(calglRun->deviceCA, calglRun->deviceCA->kernelStopCondition);
 	if (calglRun->deviceCA->kernelSteering != NULL)
-		calclSetReductionParameters2D(calglRun->deviceCA, &calglRun->deviceCA->kernelSteering);
+        calclSetReductionParameters2D(calglRun->deviceCA, calglRun->deviceCA->kernelSteering);
 
 	int i = 0;
 
 	for (i = 0; i < calglRun->deviceCA->elementaryProcessesNum; i++) {
-		calclSetReductionParameters2D(calglRun->deviceCA, &calglRun->deviceCA->elementaryProcesses[i]);
+        calclSetReductionParameters2D(calglRun->deviceCA, calglRun->deviceCA->elementaryProcesses[i]);
 	}
 
 

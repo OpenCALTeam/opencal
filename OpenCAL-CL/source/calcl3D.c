@@ -570,46 +570,46 @@ struct CALCLModel3D * calclCADef3D(struct CALModel3D *host_CA, CALCLcontext cont
 	cl_int err;
 	int bufferDim = host_CA->columns * host_CA->rows * host_CA->slices;
 
-	calclmodel3D->kernelUpdateSubstate = calclGetKernelFromProgram(&program, KER_UPDATESUBSTATES);
+    calclmodel3D->kernelUpdateSubstate = calclGetKernelFromProgram(program, KER_UPDATESUBSTATES);
 
 	//stream compaction kernels
-	calclmodel3D->kernelCompact = calclGetKernelFromProgram(&program, KER_STC_COMPACT);
-	calclmodel3D->kernelComputeCounts = calclGetKernelFromProgram(&program, KER_STC_COMPUTE_COUNTS);
-	calclmodel3D->kernelUpSweep = calclGetKernelFromProgram(&program, KER_STC_UP_SWEEP);
-	calclmodel3D->kernelDownSweep = calclGetKernelFromProgram(&program, KER_STC_DOWN_SWEEP);
+    calclmodel3D->kernelCompact = calclGetKernelFromProgram(program, KER_STC_COMPACT);
+    calclmodel3D->kernelComputeCounts = calclGetKernelFromProgram(program, KER_STC_COMPUTE_COUNTS);
+    calclmodel3D->kernelUpSweep = calclGetKernelFromProgram(program, KER_STC_UP_SWEEP);
+    calclmodel3D->kernelDownSweep = calclGetKernelFromProgram(program, KER_STC_DOWN_SWEEP);
 
-	calclmodel3D->kernelMinReductionb = calclGetKernelFromProgram(&program, "calclMinReductionKernelb");
-	calclmodel3D->kernelMaxReductionb = calclGetKernelFromProgram(&program, "calclMaxReductionKernelb");
-	calclmodel3D->kernelSumReductionb = calclGetKernelFromProgram(&program, "calclSumReductionKernelb");
-	calclmodel3D->kernelProdReductionb = calclGetKernelFromProgram(&program, "calclProdReductionKernelb");
-	calclmodel3D->kernelLogicalAndReductionb = calclGetKernelFromProgram(&program, "calclLogicAndReductionKernelb");
-	calclmodel3D->kernelLogicalOrReductionb = calclGetKernelFromProgram(&program, "calclLogicOrReductionKernelb");
-	calclmodel3D->kernelLogicalXOrReductionb = calclGetKernelFromProgram(&program, "calclLogicXOrReductionKernelb");
-	calclmodel3D->kernelBinaryAndReductionb = calclGetKernelFromProgram(&program, "calclBinaryAndReductionKernelb");
-	calclmodel3D->kernelBinaryOrReductionb = calclGetKernelFromProgram(&program, "calclBinaryOrReductionKernelb");
-	calclmodel3D->kernelBinaryXorReductionb = calclGetKernelFromProgram(&program, "calclBinaryXOrReductionKernelb");
+    calclmodel3D->kernelMinReductionb = calclGetKernelFromProgram(program, "calclMinReductionKernelb");
+    calclmodel3D->kernelMaxReductionb = calclGetKernelFromProgram(program, "calclMaxReductionKernelb");
+    calclmodel3D->kernelSumReductionb = calclGetKernelFromProgram(program, "calclSumReductionKernelb");
+    calclmodel3D->kernelProdReductionb = calclGetKernelFromProgram(program, "calclProdReductionKernelb");
+    calclmodel3D->kernelLogicalAndReductionb = calclGetKernelFromProgram(program, "calclLogicAndReductionKernelb");
+    calclmodel3D->kernelLogicalOrReductionb = calclGetKernelFromProgram(program, "calclLogicOrReductionKernelb");
+    calclmodel3D->kernelLogicalXOrReductionb = calclGetKernelFromProgram(program, "calclLogicXOrReductionKernelb");
+    calclmodel3D->kernelBinaryAndReductionb = calclGetKernelFromProgram(program, "calclBinaryAndReductionKernelb");
+    calclmodel3D->kernelBinaryOrReductionb = calclGetKernelFromProgram(program, "calclBinaryOrReductionKernelb");
+    calclmodel3D->kernelBinaryXorReductionb = calclGetKernelFromProgram(program, "calclBinaryXOrReductionKernelb");
 
-	calclmodel3D->kernelMinReductioni = calclGetKernelFromProgram(&program, "calclMinReductionKerneli");
-	calclmodel3D->kernelMaxReductioni = calclGetKernelFromProgram(&program, "calclMaxReductionKerneli");
-	calclmodel3D->kernelSumReductioni = calclGetKernelFromProgram(&program, "calclSumReductionKerneli");
-	calclmodel3D->kernelProdReductioni = calclGetKernelFromProgram(&program, "calclProdReductionKerneli");
-	calclmodel3D->kernelLogicalAndReductioni = calclGetKernelFromProgram(&program, "calclLogicAndReductionKerneli");
-	calclmodel3D->kernelLogicalOrReductioni = calclGetKernelFromProgram(&program, "calclLogicOrReductionKerneli");
-	calclmodel3D->kernelLogicalXOrReductioni = calclGetKernelFromProgram(&program, "calclLogicXOrReductionKerneli");
-	calclmodel3D->kernelBinaryAndReductioni = calclGetKernelFromProgram(&program, "calclBinaryAndReductionKerneli");
-	calclmodel3D->kernelBinaryOrReductioni = calclGetKernelFromProgram(&program, "calclBinaryOrReductionKerneli");
-	calclmodel3D->kernelBinaryXorReductioni = calclGetKernelFromProgram(&program, "calclBinaryXOrReductionKerneli");
+    calclmodel3D->kernelMinReductioni = calclGetKernelFromProgram(program, "calclMinReductionKerneli");
+    calclmodel3D->kernelMaxReductioni = calclGetKernelFromProgram(program, "calclMaxReductionKerneli");
+    calclmodel3D->kernelSumReductioni = calclGetKernelFromProgram(program, "calclSumReductionKerneli");
+    calclmodel3D->kernelProdReductioni = calclGetKernelFromProgram(program, "calclProdReductionKerneli");
+    calclmodel3D->kernelLogicalAndReductioni = calclGetKernelFromProgram(program, "calclLogicAndReductionKerneli");
+    calclmodel3D->kernelLogicalOrReductioni = calclGetKernelFromProgram(program, "calclLogicOrReductionKerneli");
+    calclmodel3D->kernelLogicalXOrReductioni = calclGetKernelFromProgram(program, "calclLogicXOrReductionKerneli");
+    calclmodel3D->kernelBinaryAndReductioni = calclGetKernelFromProgram(program, "calclBinaryAndReductionKerneli");
+    calclmodel3D->kernelBinaryOrReductioni = calclGetKernelFromProgram(program, "calclBinaryOrReductionKerneli");
+    calclmodel3D->kernelBinaryXorReductioni = calclGetKernelFromProgram(program, "calclBinaryXOrReductionKerneli");
 
-	calclmodel3D->kernelMinReductionr = calclGetKernelFromProgram(&program, "calclMinReductionKernelr");
-	calclmodel3D->kernelMaxReductionr = calclGetKernelFromProgram(&program, "calclMaxReductionKernelr");
-	calclmodel3D->kernelSumReductionr = calclGetKernelFromProgram(&program, "calclSumReductionKernelr");
-	calclmodel3D->kernelProdReductionr = calclGetKernelFromProgram(&program, "calclProdReductionKernelr");
-	calclmodel3D->kernelLogicalAndReductionr = calclGetKernelFromProgram(&program, "calclLogicAndReductionKernelr");
-	calclmodel3D->kernelLogicalOrReductionr = calclGetKernelFromProgram(&program, "calclLogicOrReductionKernelr");
-	calclmodel3D->kernelLogicalXOrReductionr = calclGetKernelFromProgram(&program, "calclLogicXOrReductionKernelr");
-	calclmodel3D->kernelBinaryAndReductionr = calclGetKernelFromProgram(&program, "calclBinaryAndReductionKernelr");
-	calclmodel3D->kernelBinaryOrReductionr = calclGetKernelFromProgram(&program, "calclBinaryOrReductionKernelr");
-	calclmodel3D->kernelBinaryXorReductionr = calclGetKernelFromProgram(&program, "calclBinaryXOrReductionKernelr");
+    calclmodel3D->kernelMinReductionr = calclGetKernelFromProgram(program, "calclMinReductionKernelr");
+    calclmodel3D->kernelMaxReductionr = calclGetKernelFromProgram(program, "calclMaxReductionKernelr");
+    calclmodel3D->kernelSumReductionr = calclGetKernelFromProgram(program, "calclSumReductionKernelr");
+    calclmodel3D->kernelProdReductionr = calclGetKernelFromProgram(program, "calclProdReductionKernelr");
+    calclmodel3D->kernelLogicalAndReductionr = calclGetKernelFromProgram(program, "calclLogicAndReductionKernelr");
+    calclmodel3D->kernelLogicalOrReductionr = calclGetKernelFromProgram(program, "calclLogicOrReductionKernelr");
+    calclmodel3D->kernelLogicalXOrReductionr = calclGetKernelFromProgram(program, "calclLogicXOrReductionKernelr");
+    calclmodel3D->kernelBinaryAndReductionr = calclGetKernelFromProgram(program, "calclBinaryAndReductionKernelr");
+    calclmodel3D->kernelBinaryOrReductionr = calclGetKernelFromProgram(program, "calclBinaryOrReductionKernelr");
+    calclmodel3D->kernelBinaryXorReductionr = calclGetKernelFromProgram(program, "calclBinaryXOrReductionKernelr");
 	struct CALCell3D * activeCells = (struct CALCell3D*) malloc(sizeof(struct CALCell3D) * bufferDim);
 
     if(host_CA->A->size_current !=0){
@@ -705,16 +705,16 @@ struct CALCLModel3D * calclCADef3D(struct CALModel3D *host_CA, CALCLcontext cont
 
 
 
-	calclmodel3D->kernelMinCopyi = calclGetKernelFromProgram(&program, "copy3Di");
-	calclmodel3D->kernelMaxCopyi = calclGetKernelFromProgram(&program, "copy3Di");
-	calclmodel3D->kernelSumCopyi = calclGetKernelFromProgram(&program, "copy3Di");
-	calclmodel3D->kernelProdCopyi = calclGetKernelFromProgram(&program, "copy3Di");
-	calclmodel3D->kernelLogicalAndCopyi = calclGetKernelFromProgram(&program, "copy3Di");
-	calclmodel3D->kernelLogicalOrCopyi = calclGetKernelFromProgram(&program, "copy3Di");
-	calclmodel3D->kernelLogicalXOrCopyi = calclGetKernelFromProgram(&program, "copy3Di");
-	calclmodel3D->kernelBinaryAndCopyi = calclGetKernelFromProgram(&program, "copy3Di");
-	calclmodel3D->kernelBinaryOrCopyi = calclGetKernelFromProgram(&program, "copy3Di");
-	calclmodel3D->kernelBinaryXOrCopyi = calclGetKernelFromProgram(&program, "copy3Di");
+    calclmodel3D->kernelMinCopyi = calclGetKernelFromProgram(program, "copy3Di");
+    calclmodel3D->kernelMaxCopyi = calclGetKernelFromProgram(program, "copy3Di");
+    calclmodel3D->kernelSumCopyi = calclGetKernelFromProgram(program, "copy3Di");
+    calclmodel3D->kernelProdCopyi = calclGetKernelFromProgram(program, "copy3Di");
+    calclmodel3D->kernelLogicalAndCopyi = calclGetKernelFromProgram(program, "copy3Di");
+    calclmodel3D->kernelLogicalOrCopyi = calclGetKernelFromProgram(program, "copy3Di");
+    calclmodel3D->kernelLogicalXOrCopyi = calclGetKernelFromProgram(program, "copy3Di");
+    calclmodel3D->kernelBinaryAndCopyi = calclGetKernelFromProgram(program, "copy3Di");
+    calclmodel3D->kernelBinaryOrCopyi = calclGetKernelFromProgram(program, "copy3Di");
+    calclmodel3D->kernelBinaryXOrCopyi = calclGetKernelFromProgram(program, "copy3Di");
 
 	CALint * partiali = (CALint*) malloc(calclmodel3D->host_CA->rows * calclmodel3D->host_CA->columns* calclmodel3D->host_CA->slices * sizeof(CALint));
 	size_t dimCAi =  sizeof(CALint) * calclmodel3D->host_CA->rows * calclmodel3D->host_CA->columns*calclmodel3D->host_CA->slices;
@@ -753,16 +753,16 @@ struct CALCLModel3D * calclCADef3D(struct CALModel3D *host_CA, CALCLcontext cont
 
 	calclSetKernelCopyArgs3Di(calclmodel3D);
 
-	calclmodel3D->kernelMinCopyb = calclGetKernelFromProgram(&program, "copy3Db");
-	calclmodel3D->kernelMaxCopyb = calclGetKernelFromProgram(&program, "copy3Db");
-	calclmodel3D->kernelSumCopyb = calclGetKernelFromProgram(&program, "copy3Db");
-	calclmodel3D->kernelProdCopyb = calclGetKernelFromProgram(&program, "copy3Db");
-	calclmodel3D->kernelLogicalAndCopyb = calclGetKernelFromProgram(&program, "copy3Db");
-	calclmodel3D->kernelLogicalOrCopyb = calclGetKernelFromProgram(&program, "copy3Db");
-	calclmodel3D->kernelLogicalXOrCopyb = calclGetKernelFromProgram(&program, "copy3Db");
-	calclmodel3D->kernelBinaryAndCopyb = calclGetKernelFromProgram(&program, "copy3Db");
-	calclmodel3D->kernelBinaryOrCopyb = calclGetKernelFromProgram(&program, "copy3Db");
-	calclmodel3D->kernelBinaryXOrCopyb = calclGetKernelFromProgram(&program, "copy3Db");
+    calclmodel3D->kernelMinCopyb = calclGetKernelFromProgram(program, "copy3Db");
+    calclmodel3D->kernelMaxCopyb = calclGetKernelFromProgram(program, "copy3Db");
+    calclmodel3D->kernelSumCopyb = calclGetKernelFromProgram(program, "copy3Db");
+    calclmodel3D->kernelProdCopyb = calclGetKernelFromProgram(program, "copy3Db");
+    calclmodel3D->kernelLogicalAndCopyb = calclGetKernelFromProgram(program, "copy3Db");
+    calclmodel3D->kernelLogicalOrCopyb = calclGetKernelFromProgram(program, "copy3Db");
+    calclmodel3D->kernelLogicalXOrCopyb = calclGetKernelFromProgram(program, "copy3Db");
+    calclmodel3D->kernelBinaryAndCopyb = calclGetKernelFromProgram(program, "copy3Db");
+    calclmodel3D->kernelBinaryOrCopyb = calclGetKernelFromProgram(program, "copy3Db");
+    calclmodel3D->kernelBinaryXOrCopyb = calclGetKernelFromProgram(program, "copy3Db");
 
 	CALbyte * partialb = (CALbyte*) malloc(calclmodel3D->host_CA->rows * calclmodel3D->host_CA->columns *calclmodel3D->host_CA->slices * sizeof(CALbyte));
 	size_t dimCAb =  sizeof(CALbyte) * calclmodel3D->host_CA->rows * calclmodel3D->host_CA->columns*calclmodel3D->host_CA->slices;
@@ -801,16 +801,16 @@ struct CALCLModel3D * calclCADef3D(struct CALModel3D *host_CA, CALCLcontext cont
 	free(partialb);
 	calclSetKernelCopyArgs3Db(calclmodel3D);
 
-	calclmodel3D->kernelMinCopyr = calclGetKernelFromProgram(&program, "copy3Dr");
-	calclmodel3D->kernelMaxCopyr = calclGetKernelFromProgram(&program, "copy3Dr");
-	calclmodel3D->kernelSumCopyr = calclGetKernelFromProgram(&program, "copy3Dr");
-	calclmodel3D->kernelProdCopyr = calclGetKernelFromProgram(&program, "copy3Dr");
-	calclmodel3D->kernelLogicalAndCopyr = calclGetKernelFromProgram(&program, "copy3Dr");
-	calclmodel3D->kernelLogicalOrCopyr = calclGetKernelFromProgram(&program, "copy3Dr");
-	calclmodel3D->kernelLogicalXOrCopyr = calclGetKernelFromProgram(&program, "copy3Dr");
-	calclmodel3D->kernelBinaryAndCopyr = calclGetKernelFromProgram(&program, "copy3Dr");
-	calclmodel3D->kernelBinaryOrCopyr = calclGetKernelFromProgram(&program, "copy3Dr");
-	calclmodel3D->kernelBinaryXOrCopyr = calclGetKernelFromProgram(&program, "copy3Dr");
+    calclmodel3D->kernelMinCopyr = calclGetKernelFromProgram(program, "copy3Dr");
+    calclmodel3D->kernelMaxCopyr = calclGetKernelFromProgram(program, "copy3Dr");
+    calclmodel3D->kernelSumCopyr = calclGetKernelFromProgram(program, "copy3Dr");
+    calclmodel3D->kernelProdCopyr = calclGetKernelFromProgram(program, "copy3Dr");
+    calclmodel3D->kernelLogicalAndCopyr = calclGetKernelFromProgram(program, "copy3Dr");
+    calclmodel3D->kernelLogicalOrCopyr = calclGetKernelFromProgram(program, "copy3Dr");
+    calclmodel3D->kernelLogicalXOrCopyr = calclGetKernelFromProgram(program, "copy3Dr");
+    calclmodel3D->kernelBinaryAndCopyr = calclGetKernelFromProgram(program, "copy3Dr");
+    calclmodel3D->kernelBinaryOrCopyr = calclGetKernelFromProgram(program, "copy3Dr");
+    calclmodel3D->kernelBinaryXOrCopyr = calclGetKernelFromProgram(program, "copy3Dr");
 
 	CALreal * partialr = (CALreal*) malloc(calclmodel3D->host_CA->rows * calclmodel3D->host_CA->columns *calclmodel3D->host_CA->slices* sizeof(CALreal));
 	size_t dimCAr =  sizeof(CALreal) * calclmodel3D->host_CA->rows * calclmodel3D->host_CA->columns*calclmodel3D->host_CA->slices;

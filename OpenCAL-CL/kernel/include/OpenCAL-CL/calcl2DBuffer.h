@@ -141,9 +141,11 @@ void calclSetBufferActiveCells2Dr(__global CALreal* M, int columns, CALreal valu
 
 
 /*! \brief Sets an element of a matrix to a constant value.*/
-#define calclSetBufferElement2D(M, columns, i, j, value) ( M[(i)*(columns)+(j)]) = (value)
+#define calclSetBufferElement2D(M, columns, i, j, value) ( (M)[(i)*(columns)+(j)]) = (value)
 
 /*! \brief Gets an element of a matrix.*/
-#define calclGetBufferElement2D(M, columns, i, j) ( M[(i)*(columns)+(j)] )
+#define calclGetBufferElement2D(M, columns, i, j) ( (M)[(i)*(columns)+(j)] )
+
+
 
 #endif

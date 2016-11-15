@@ -148,9 +148,9 @@ CALCLprogram calclGetProgramFromFiles(char** filesNames, 	//!< Array of strings 
 
 /*! \brief Gets an Opencl kernel given a compiled Opencl program */
 DllExport
-CALCLkernel calclGetKernelFromProgram(CALCLprogram * program, 	//!< Pointer to an Opencl program
-		char * kernelName 										//!< Kernel name
-		);
+CALCLkernel calclGetKernelFromProgram(CALCLprogram program, 	//!< Pointer to an Opencl program
+        char * kernelName 										//!< Kernel name
+        );
 
 /*! \brief Converts Opencl error codes (cl_int) into error messages (char*)*/
 DllExport

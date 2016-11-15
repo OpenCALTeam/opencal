@@ -145,7 +145,7 @@ CALint calclGetX2Di(__CALCL_MODEL_2D,CALint substateNum, int i, int j, int n) {
     if (calclGetBoundaryCondition() == CAL_SPACE_FLAT)
         return calclGetBufferElement2D(current, calclGetColumns(), i + CALCLneighborhood[n].i, j + CALCLneighborhood[n].j);
     else
-        return calclGetBufferElement2D(current, calclGetColumns(), calclGetToroidalX(i + CALCLneighborhood[n].i, calclGetRows()+2*borderSize), calclGetToroidalX(j + CALCLneighborhood[n].j, calclGetColumns()));
+        return calclGetBufferElement2D(current, calclGetColumns(), calclGetToroidalX(i + CALCLneighborhood[n].i, calclGetRows()), calclGetToroidalX(j + CALCLneighborhood[n].j, calclGetColumns()));
 }
 CALreal calclGetX2Dr(__CALCL_MODEL_2D,CALint substateNum, int i, int j, int n) {
     __global CALreal * current = calclGetCurrentSubstate2Dr(MODEL_2D,substateNum);

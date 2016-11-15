@@ -65,13 +65,13 @@ void calclMapperToSubstates2D(struct CALModel2D * host_CA, CALCLSubstateMapper *
 
 }
 
-void calclMultiGPUMapperToSubstates2D(struct CALModel2D * host_CA, CALCLSubstateMapper * mapper,const size_t realSize, const CALint offset) {
+void calclMultiGPUMapperToSubstates2D(struct CALModel2D * host_CA, CALCLSubstateMapper * mapper,const size_t realSize, const CALint offset, int borderSize) {
 
     int ssNum_r = host_CA->sizeof_pQr_array;
     int ssNum_i = host_CA->sizeof_pQi_array;
     int ssNum_b = host_CA->sizeof_pQb_array;
 
-    long int outIndex = 0;
+    long int outIndex = borderSize * host_CA->columns;
 
     int i;
     unsigned int j;
@@ -79,20 +79,23 @@ void calclMultiGPUMapperToSubstates2D(struct CALModel2D * host_CA, CALCLSubstate
     for (i = 0; i < ssNum_r; i++) {
         for (j = 0; j < realSize; j++)
             host_CA->pQr_array[i]->current[j+offset*host_CA->columns] = mapper->realSubstate_current_OUT[outIndex++];
+        outIndex=outIndex+2*borderSize* host_CA->columns;
     }
 
-    outIndex = 0;
+    outIndex = borderSize * host_CA->columns;
 
     for (i = 0; i < ssNum_i; i++) {
         for (j = 0; j < realSize; j++)
             host_CA->pQi_array[i]->current[j+offset*host_CA->columns] = mapper->intSubstate_current_OUT[outIndex++];
+        outIndex=outIndex+2*borderSize* host_CA->columns;
     }
 
-    outIndex = 0;
+    outIndex = borderSize * host_CA->columns;
 
     for (i = 0; i < ssNum_b; i++) {
         for (j = 0; j < realSize; j++)
             host_CA->pQb_array[i]->current[j+offset*host_CA->columns] = mapper->byteSubstate_current_OUT[outIndex++];
+        outIndex=outIndex+2*borderSize* host_CA->columns;
     }
 
 }
@@ -125,18 +128,43 @@ void calclMultiGPUGetSubstateDeviceToHost2D(struct CALCLModel2D* calclmodel2D, c
     // to insert the results to calclmodel2D->substateMapper.Substate_current_OUT because calclmodel2D->substateMapper.Substate_current_OUT
     // dimension is equal to rows*cols while  calclmodel2D->bufferCurrentRealSubstate dimension is equal to rows*cols+ sizeBoder * 2* cols
 
+//    for (int i = 0; i < calclmodel2D->fullSize*calclmodel2D->host_CA->sizeof_pQr_array; ++i) {
+//            if(i%calclmodel2D->columns == 0 && i !=0)
+//                printf("\n");
+//            printf("%f ", calclmodel2D->substateMapper.realSubstate_current_OUT[i]);
+//        }
+
+//        printf("\n");
+//        printf("\n");
+
+//        printf("\n");
+//        printf("\n");
+//        printf("\n");
+//        printf("%d \n",calclmodel2D->host_CA->sizeof_pQr_array);
+//        printf("\n");
+
     if(calclmodel2D->host_CA->sizeof_pQr_array > 0){
         err = clEnqueueReadBuffer(queue,
                                   calclmodel2D->bufferCurrentRealSubstate,
                                   CL_TRUE,
-                                  sizeof(CALreal)*borderSize*calclmodel2D->columns,
-                                  sizeof(CALreal)*calclmodel2D->realSize,
+                                  0,
+                                  calclmodel2D->substateMapper.bufDIMreal,
                                   calclmodel2D->substateMapper.realSubstate_current_OUT,
                                   0,
                                   NULL,
                                   NULL);
         calclHandleError(err);
     }
+
+//    for (int i = 0; i < calclmodel2D->fullSize*calclmodel2D->host_CA->sizeof_pQr_array; ++i) {
+//            if(i%calclmodel2D->columns == 0 && i !=0)
+//                printf("\n");
+//            printf("%f ", calclmodel2D->substateMapper.realSubstate_current_OUT[i]);
+//        }
+
+//        printf("\n");
+
+
 
     if(calclmodel2D->host_CA->sizeof_pQi_array > 0){
         err = clEnqueueReadBuffer(queue,
@@ -209,6 +237,10 @@ void calclGetBorderFromDeviceToHost2D(struct CALCLModel2D* calclmodel2D) {
                                   NULL);
         calclHandleError(err);
     }
+
+
+
+
 
     // get int borders
     numSubstate = calclmodel2D->host_CA->sizeof_pQi_array;
@@ -377,75 +409,75 @@ void calclSetKernelsLibArgs2D(struct CALCLModel2D *calclmodel2D) {
 
 }
 
-void calclSetModelParameters2D(struct CALCLModel2D* calclmodel2D, CALCLkernel * kernel) {
+void calclSetModelParameters2D(struct CALCLModel2D* calclmodel2D, CALCLkernel  kernel) {
 
-    clSetKernelArg(*kernel, 0, sizeof(CALCLmem), &calclmodel2D->bufferRows);
-    clSetKernelArg(*kernel, 1, sizeof(CALCLmem), &calclmodel2D->bufferColumns);
-    clSetKernelArg(*kernel, 2, sizeof(CALCLmem), &calclmodel2D->bufferByteSubstateNum);
-    clSetKernelArg(*kernel, 3, sizeof(CALCLmem), &calclmodel2D->bufferIntSubstateNum);
-    clSetKernelArg(*kernel, 4, sizeof(CALCLmem), &calclmodel2D->bufferRealSubstateNum);
-    clSetKernelArg(*kernel, 5, sizeof(CALCLmem), &calclmodel2D->bufferCurrentByteSubstate);
-    clSetKernelArg(*kernel, 6, sizeof(CALCLmem), &calclmodel2D->bufferCurrentIntSubstate);
-    clSetKernelArg(*kernel, 7, sizeof(CALCLmem), &calclmodel2D->bufferCurrentRealSubstate);
-    clSetKernelArg(*kernel, 8, sizeof(CALCLmem), &calclmodel2D->bufferNextByteSubstate);
-    clSetKernelArg(*kernel, 9, sizeof(CALCLmem), &calclmodel2D->bufferNextIntSubstate);
-    clSetKernelArg(*kernel, 10, sizeof(CALCLmem), &calclmodel2D->bufferNextRealSubstate);
-    clSetKernelArg(*kernel, 11, sizeof(CALCLmem), &calclmodel2D->bufferActiveCells);
-    clSetKernelArg(*kernel, 12, sizeof(CALCLmem), &calclmodel2D->bufferActiveCellsNum);
-    clSetKernelArg(*kernel, 13, sizeof(CALCLmem), &calclmodel2D->bufferActiveCellsFlags);
-    clSetKernelArg(*kernel, 14, sizeof(CALCLmem), &calclmodel2D->bufferNeighborhood);
-    clSetKernelArg(*kernel, 15, sizeof(CALCLmem), &calclmodel2D->bufferNeighborhoodID);
-    clSetKernelArg(*kernel, 16, sizeof(CALCLmem), &calclmodel2D->bufferNeighborhoodSize);
-    clSetKernelArg(*kernel, 17, sizeof(CALCLmem), &calclmodel2D->bufferBoundaryCondition);
-    clSetKernelArg(*kernel, 18, sizeof(CALCLmem), &calclmodel2D->bufferStop);
-    clSetKernelArg(*kernel, 19, sizeof(CALCLmem), &calclmodel2D->bufferSTCountsDiff);
+    clSetKernelArg(kernel, 0, sizeof(CALCLmem), &calclmodel2D->bufferRows);
+    clSetKernelArg(kernel, 1, sizeof(CALCLmem), &calclmodel2D->bufferColumns);
+    clSetKernelArg(kernel, 2, sizeof(CALCLmem), &calclmodel2D->bufferByteSubstateNum);
+    clSetKernelArg(kernel, 3, sizeof(CALCLmem), &calclmodel2D->bufferIntSubstateNum);
+    clSetKernelArg(kernel, 4, sizeof(CALCLmem), &calclmodel2D->bufferRealSubstateNum);
+    clSetKernelArg(kernel, 5, sizeof(CALCLmem), &calclmodel2D->bufferCurrentByteSubstate);
+    clSetKernelArg(kernel, 6, sizeof(CALCLmem), &calclmodel2D->bufferCurrentIntSubstate);
+    clSetKernelArg(kernel, 7, sizeof(CALCLmem), &calclmodel2D->bufferCurrentRealSubstate);
+    clSetKernelArg(kernel, 8, sizeof(CALCLmem), &calclmodel2D->bufferNextByteSubstate);
+    clSetKernelArg(kernel, 9, sizeof(CALCLmem), &calclmodel2D->bufferNextIntSubstate);
+    clSetKernelArg(kernel, 10, sizeof(CALCLmem), &calclmodel2D->bufferNextRealSubstate);
+    clSetKernelArg(kernel, 11, sizeof(CALCLmem), &calclmodel2D->bufferActiveCells);
+    clSetKernelArg(kernel, 12, sizeof(CALCLmem), &calclmodel2D->bufferActiveCellsNum);
+    clSetKernelArg(kernel, 13, sizeof(CALCLmem), &calclmodel2D->bufferActiveCellsFlags);
+    clSetKernelArg(kernel, 14, sizeof(CALCLmem), &calclmodel2D->bufferNeighborhood);
+    clSetKernelArg(kernel, 15, sizeof(CALCLmem), &calclmodel2D->bufferNeighborhoodID);
+    clSetKernelArg(kernel, 16, sizeof(CALCLmem), &calclmodel2D->bufferNeighborhoodSize);
+    clSetKernelArg(kernel, 17, sizeof(CALCLmem), &calclmodel2D->bufferBoundaryCondition);
+    clSetKernelArg(kernel, 18, sizeof(CALCLmem), &calclmodel2D->bufferStop);
+    clSetKernelArg(kernel, 19, sizeof(CALCLmem), &calclmodel2D->bufferSTCountsDiff);
     double chunk_double = ceil((double) (calclmodel2D->rows * calclmodel2D->columns) / calclmodel2D->streamCompactionThreadsNum);
     int chunk = (int) chunk_double;
-    clSetKernelArg(*kernel, 20, sizeof(int), &chunk);
+    clSetKernelArg(kernel, 20, sizeof(int), &chunk);
 
-    clSetKernelArg(*kernel, 51, sizeof(CALCLmem), &calclmodel2D->bufferSingleLayerByteSubstateNum);
-    clSetKernelArg(*kernel, 52, sizeof(CALCLmem), &calclmodel2D->bufferSingleLayerIntSubstateNum);
-    clSetKernelArg(*kernel, 53, sizeof(CALCLmem), &calclmodel2D->bufferSingleLayerRealSubstateNum);
-    clSetKernelArg(*kernel, 54, sizeof(CALCLmem), &calclmodel2D->bufferSingleLayerByteSubstate);
-    clSetKernelArg(*kernel, 55, sizeof(CALCLmem), &calclmodel2D->bufferSingleLayerIntSubstate);
-    clSetKernelArg(*kernel, 56, sizeof(CALCLmem), &calclmodel2D->bufferSingleLayerRealSubstate);
-    clSetKernelArg(*kernel, 57, sizeof(CALint), &calclmodel2D->borderSize);
+    clSetKernelArg(kernel, 51, sizeof(CALCLmem), &calclmodel2D->bufferSingleLayerByteSubstateNum);
+    clSetKernelArg(kernel, 52, sizeof(CALCLmem), &calclmodel2D->bufferSingleLayerIntSubstateNum);
+    clSetKernelArg(kernel, 53, sizeof(CALCLmem), &calclmodel2D->bufferSingleLayerRealSubstateNum);
+    clSetKernelArg(kernel, 54, sizeof(CALCLmem), &calclmodel2D->bufferSingleLayerByteSubstate);
+    clSetKernelArg(kernel, 55, sizeof(CALCLmem), &calclmodel2D->bufferSingleLayerIntSubstate);
+    clSetKernelArg(kernel, 56, sizeof(CALCLmem), &calclmodel2D->bufferSingleLayerRealSubstate);
+    clSetKernelArg(kernel, 57, sizeof(CALint), &calclmodel2D->borderSize);
 }
-void calclSetReductionParameters2D(struct CALCLModel2D* calclmodel2D, CALCLkernel * kernel) {
+void calclSetReductionParameters2D(struct CALCLModel2D* calclmodel2D, CALCLkernel  kernel) {
 
-    clSetKernelArg(*kernel, 21, sizeof(CALCLmem), &calclmodel2D->bufferMinimab);
-    clSetKernelArg(*kernel, 24, sizeof(CALCLmem), &calclmodel2D->bufferMiximab);
-    clSetKernelArg(*kernel, 27, sizeof(CALCLmem), &calclmodel2D->bufferSumb);
-    clSetKernelArg(*kernel, 30, sizeof(CALCLmem), &calclmodel2D->bufferLogicalAndsb);
-    clSetKernelArg(*kernel, 33, sizeof(CALCLmem), &calclmodel2D->bufferLogicalOrsb);
-    clSetKernelArg(*kernel, 36, sizeof(CALCLmem), &calclmodel2D->bufferLogicalXOrsb);
-    clSetKernelArg(*kernel, 39, sizeof(CALCLmem), &calclmodel2D->bufferBinaryAndsb);
-    clSetKernelArg(*kernel, 42, sizeof(CALCLmem), &calclmodel2D->bufferBinaryOrsb);
-    clSetKernelArg(*kernel, 45, sizeof(CALCLmem), &calclmodel2D->bufferBinaryXOrsb);
+    clSetKernelArg(kernel, 21, sizeof(CALCLmem), &calclmodel2D->bufferMinimab);
+    clSetKernelArg(kernel, 24, sizeof(CALCLmem), &calclmodel2D->bufferMiximab);
+    clSetKernelArg(kernel, 27, sizeof(CALCLmem), &calclmodel2D->bufferSumb);
+    clSetKernelArg(kernel, 30, sizeof(CALCLmem), &calclmodel2D->bufferLogicalAndsb);
+    clSetKernelArg(kernel, 33, sizeof(CALCLmem), &calclmodel2D->bufferLogicalOrsb);
+    clSetKernelArg(kernel, 36, sizeof(CALCLmem), &calclmodel2D->bufferLogicalXOrsb);
+    clSetKernelArg(kernel, 39, sizeof(CALCLmem), &calclmodel2D->bufferBinaryAndsb);
+    clSetKernelArg(kernel, 42, sizeof(CALCLmem), &calclmodel2D->bufferBinaryOrsb);
+    clSetKernelArg(kernel, 45, sizeof(CALCLmem), &calclmodel2D->bufferBinaryXOrsb);
 
-    clSetKernelArg(*kernel, 22, sizeof(CALCLmem), &calclmodel2D->bufferMinimai);
-    clSetKernelArg(*kernel, 25, sizeof(CALCLmem), &calclmodel2D->bufferMiximai);
-    clSetKernelArg(*kernel, 28, sizeof(CALCLmem), &calclmodel2D->bufferSumi);
-    clSetKernelArg(*kernel, 31, sizeof(CALCLmem), &calclmodel2D->bufferLogicalAndsi);
-    clSetKernelArg(*kernel, 34, sizeof(CALCLmem), &calclmodel2D->bufferLogicalOrsi);
-    clSetKernelArg(*kernel, 37, sizeof(CALCLmem), &calclmodel2D->bufferLogicalXOrsi);
-    clSetKernelArg(*kernel, 40, sizeof(CALCLmem), &calclmodel2D->bufferBinaryAndsi);
-    clSetKernelArg(*kernel, 43, sizeof(CALCLmem), &calclmodel2D->bufferBinaryOrsi);
-    clSetKernelArg(*kernel, 46, sizeof(CALCLmem), &calclmodel2D->bufferBinaryXOrsi);
+    clSetKernelArg(kernel, 22, sizeof(CALCLmem), &calclmodel2D->bufferMinimai);
+    clSetKernelArg(kernel, 25, sizeof(CALCLmem), &calclmodel2D->bufferMiximai);
+    clSetKernelArg(kernel, 28, sizeof(CALCLmem), &calclmodel2D->bufferSumi);
+    clSetKernelArg(kernel, 31, sizeof(CALCLmem), &calclmodel2D->bufferLogicalAndsi);
+    clSetKernelArg(kernel, 34, sizeof(CALCLmem), &calclmodel2D->bufferLogicalOrsi);
+    clSetKernelArg(kernel, 37, sizeof(CALCLmem), &calclmodel2D->bufferLogicalXOrsi);
+    clSetKernelArg(kernel, 40, sizeof(CALCLmem), &calclmodel2D->bufferBinaryAndsi);
+    clSetKernelArg(kernel, 43, sizeof(CALCLmem), &calclmodel2D->bufferBinaryOrsi);
+    clSetKernelArg(kernel, 46, sizeof(CALCLmem), &calclmodel2D->bufferBinaryXOrsi);
 
-    clSetKernelArg(*kernel, 23, sizeof(CALCLmem), &calclmodel2D->bufferMinimar);
-    clSetKernelArg(*kernel, 26, sizeof(CALCLmem), &calclmodel2D->bufferMiximar);
-    clSetKernelArg(*kernel, 29, sizeof(CALCLmem), &calclmodel2D->bufferSumr);
-    clSetKernelArg(*kernel, 32, sizeof(CALCLmem), &calclmodel2D->bufferLogicalAndsr);
-    clSetKernelArg(*kernel, 35, sizeof(CALCLmem), &calclmodel2D->bufferLogicalOrsr);
-    clSetKernelArg(*kernel, 38, sizeof(CALCLmem), &calclmodel2D->bufferLogicalXOrsr);
-    clSetKernelArg(*kernel, 41, sizeof(CALCLmem), &calclmodel2D->bufferBinaryAndsr);
-    clSetKernelArg(*kernel, 44, sizeof(CALCLmem), &calclmodel2D->bufferBinaryOrsr);
-    clSetKernelArg(*kernel, 47, sizeof(CALCLmem), &calclmodel2D->bufferBinaryXOrsr);
+    clSetKernelArg(kernel, 23, sizeof(CALCLmem), &calclmodel2D->bufferMinimar);
+    clSetKernelArg(kernel, 26, sizeof(CALCLmem), &calclmodel2D->bufferMiximar);
+    clSetKernelArg(kernel, 29, sizeof(CALCLmem), &calclmodel2D->bufferSumr);
+    clSetKernelArg(kernel, 32, sizeof(CALCLmem), &calclmodel2D->bufferLogicalAndsr);
+    clSetKernelArg(kernel, 35, sizeof(CALCLmem), &calclmodel2D->bufferLogicalOrsr);
+    clSetKernelArg(kernel, 38, sizeof(CALCLmem), &calclmodel2D->bufferLogicalXOrsr);
+    clSetKernelArg(kernel, 41, sizeof(CALCLmem), &calclmodel2D->bufferBinaryAndsr);
+    clSetKernelArg(kernel, 44, sizeof(CALCLmem), &calclmodel2D->bufferBinaryOrsr);
+    clSetKernelArg(kernel, 47, sizeof(CALCLmem), &calclmodel2D->bufferBinaryXOrsr);
 
-    clSetKernelArg(*kernel, 48, sizeof(CALCLmem), &calclmodel2D->bufferProdb);
-    clSetKernelArg(*kernel, 49, sizeof(CALCLmem), &calclmodel2D->bufferProdi);
-    clSetKernelArg(*kernel, 50, sizeof(CALCLmem), &calclmodel2D->bufferProdr);
+    clSetKernelArg(kernel, 48, sizeof(CALCLmem), &calclmodel2D->bufferProdb);
+    clSetKernelArg(kernel, 49, sizeof(CALCLmem), &calclmodel2D->bufferProdi);
+    clSetKernelArg(kernel, 50, sizeof(CALCLmem), &calclmodel2D->bufferProdr);
 
 }
 
@@ -598,8 +630,10 @@ void calclRealSubstatesMapper2D(struct CALModel2D * host_CA, CALreal * current, 
     for (i = 0; i < ssNum; i++) {
         for (j = 0; j < elNum; j++)
             current[outIndex++] = host_CA->pQr_array[i]->current[j+offset*host_CA->columns];
+        outIndex=outIndex+2*borderSize* host_CA->columns;
         for (j = 0; j < elNum; j++)
             next[outIndex1++] = host_CA->pQr_array[i]->next[j+offset*host_CA->columns];
+        outIndex1=outIndex1+2*borderSize* host_CA->columns;
     }
 }
 void calclByteSubstatesMapper2D(struct CALModel2D * host_CA, CALbyte * current, CALbyte * next, const CALint worload, const CALint offset,const CALint borderSize  ) {
@@ -680,7 +714,7 @@ void calclCopyGhostb(struct CALModel2D * host_CA,CALbyte* tmpGhostCellsb,int off
         for (int i = 0; i < host_CA->sizeof_pQb_array; ++i)
             for (int b = 0; b < borderSize; ++b)
                 for (int j = 0; j < host_CA->columns; ++j)
-                    tmpGhostCellsb[count++] =  calGet2Db(host_CA,host_CA->pQb_array[i*host_CA->columns*host_CA->rows],((offset+b)+host_CA->rows)%host_CA->rows,j);
+                    tmpGhostCellsb[count++] =  calGet2Db(host_CA,host_CA->pQb_array[i],((offset+b)+host_CA->rows)%host_CA->rows,j);
 
     }else{
         count += host_CA->sizeof_pQb_array*host_CA->columns;
@@ -691,7 +725,7 @@ void calclCopyGhostb(struct CALModel2D * host_CA,CALbyte* tmpGhostCellsb,int off
         for (int i = 0; i < host_CA->sizeof_pQb_array; ++i)
             for (int b = 0; b < borderSize; ++b)
                 for (int j = 0; j < host_CA->columns; ++j)
-                    tmpGhostCellsb[count++] =  calGet2Db(host_CA,host_CA->pQb_array[i*host_CA->columns*host_CA->rows],((lastRow+b)+host_CA->rows)%host_CA->rows,j);
+                    tmpGhostCellsb[count++] =  calGet2Db(host_CA,host_CA->pQb_array[i],((lastRow+b)+host_CA->rows)%host_CA->rows,j);
 
     }
 }
@@ -704,7 +738,7 @@ void calclCopyGhosti(struct CALModel2D * host_CA,CALint* tmpGhostCellsi, int off
         for (int i = 0; i < host_CA->sizeof_pQi_array; ++i)
             for (int b = 0; b < borderSize; ++b)
                 for (int j = 0; j < host_CA->columns; ++j)
-                    tmpGhostCellsi[count++] =  calGet2Di(host_CA,host_CA->pQi_array[i*host_CA->columns*host_CA->rows],((offset+b)+host_CA->rows)%host_CA->rows,j);
+                    tmpGhostCellsi[count++] =  calGet2Di(host_CA,host_CA->pQi_array[i],((offset+b)+host_CA->rows)%host_CA->rows,j);
     }else{
         count += host_CA->sizeof_pQi_array*host_CA->columns;
     }
@@ -714,7 +748,7 @@ void calclCopyGhosti(struct CALModel2D * host_CA,CALint* tmpGhostCellsi, int off
         for (int i = 0; i < host_CA->sizeof_pQi_array; ++i)
             for (int b = 0; b < borderSize; ++b)
                 for (int j = 0; j < host_CA->columns; ++j)
-                    tmpGhostCellsi[count++] =  calGet2Di(host_CA,host_CA->pQi_array[i*host_CA->columns*host_CA->rows],((lastRow+b)+host_CA->rows)%host_CA->rows,j);
+                    tmpGhostCellsi[count++] =  calGet2Di(host_CA,host_CA->pQi_array[i],((lastRow+b)+host_CA->rows)%host_CA->rows,j);
 
     }
 }
@@ -727,10 +761,10 @@ void calclCopyGhostr(struct CALModel2D * host_CA,CALreal* tmpGhostCellsr,int off
         for (int i = 0; i < host_CA->sizeof_pQr_array; ++i)
             for (int b = 0; b < borderSize; ++b)
                 for (int j = 0; j < host_CA->columns; ++j)
-                    tmpGhostCellsr[count++] =  calGet2Dr(host_CA,host_CA->pQr_array[i*host_CA->columns*host_CA->rows],((offset+b)+host_CA->rows)%host_CA->rows,j);
+                    tmpGhostCellsr[count++] =  calGet2Dr(host_CA,host_CA->pQr_array[i],((offset+b)+host_CA->rows)%host_CA->rows,j);
 
     }else{
-        count += host_CA->sizeof_pQr_array*host_CA->columns;
+        count += host_CA->sizeof_pQr_array*host_CA->columns;  //times bordeSize!!!!!
     }
 
     int lastRow = workload+offset-borderSize;
@@ -738,7 +772,7 @@ void calclCopyGhostr(struct CALModel2D * host_CA,CALreal* tmpGhostCellsr,int off
         for (int i = 0; i < host_CA->sizeof_pQr_array; ++i)
             for (int b = 0; b < borderSize; ++b)
                 for (int j = 0; j < host_CA->columns; ++j)
-                    tmpGhostCellsr[count++] =  calGet2Dr(host_CA,host_CA->pQr_array[i*host_CA->columns*host_CA->rows],((lastRow+b)+host_CA->rows)%host_CA->rows,j);
+                    tmpGhostCellsr[count++] =  calGet2Dr(host_CA,host_CA->pQr_array[i],((lastRow+b)+host_CA->rows)%host_CA->rows,j);
 
     }
 }
@@ -782,16 +816,16 @@ int upperPowerOfTwo(int n) {
 
 void createReductionKernels(cl_int err, CALCLcontext context, CALCLprogram program, struct CALCLModel2D* calclmodel2D)
 {
-    calclmodel2D->kernelMinCopyi = calclGetKernelFromProgram(&program, "copy2Di");
-    calclmodel2D->kernelMaxCopyi = calclGetKernelFromProgram(&program, "copy2Di");
-    calclmodel2D->kernelSumCopyi = calclGetKernelFromProgram(&program, "copy2Di");
-    calclmodel2D->kernelProdCopyi = calclGetKernelFromProgram(&program, "copy2Di");
-    calclmodel2D->kernelLogicalAndCopyi = calclGetKernelFromProgram(&program, "copy2Di");
-    calclmodel2D->kernelLogicalOrCopyi = calclGetKernelFromProgram(&program, "copy2Di");
-    calclmodel2D->kernelLogicalXOrCopyi = calclGetKernelFromProgram(&program, "copy2Di");
-    calclmodel2D->kernelBinaryAndCopyi = calclGetKernelFromProgram(&program, "copy2Di");
-    calclmodel2D->kernelBinaryOrCopyi = calclGetKernelFromProgram(&program, "copy2Di");
-    calclmodel2D->kernelBinaryXOrCopyi = calclGetKernelFromProgram(&program, "copy2Di");
+    calclmodel2D->kernelMinCopyi = calclGetKernelFromProgram(program, "copy2Di");
+    calclmodel2D->kernelMaxCopyi = calclGetKernelFromProgram(program, "copy2Di");
+    calclmodel2D->kernelSumCopyi = calclGetKernelFromProgram(program, "copy2Di");
+    calclmodel2D->kernelProdCopyi = calclGetKernelFromProgram(program, "copy2Di");
+    calclmodel2D->kernelLogicalAndCopyi = calclGetKernelFromProgram(program, "copy2Di");
+    calclmodel2D->kernelLogicalOrCopyi = calclGetKernelFromProgram(program, "copy2Di");
+    calclmodel2D->kernelLogicalXOrCopyi = calclGetKernelFromProgram(program, "copy2Di");
+    calclmodel2D->kernelBinaryAndCopyi = calclGetKernelFromProgram(program, "copy2Di");
+    calclmodel2D->kernelBinaryOrCopyi = calclGetKernelFromProgram(program, "copy2Di");
+    calclmodel2D->kernelBinaryXOrCopyi = calclGetKernelFromProgram(program, "copy2Di");
 
     CALint * partialMini = (CALint*) malloc(calclmodel2D->rows * calclmodel2D->columns * sizeof(CALint));
     calclmodel2D->bufferPartialMini = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALint) * calclmodel2D->rows * calclmodel2D->columns, partialMini,
@@ -830,16 +864,16 @@ void createReductionKernels(cl_int err, CALCLcontext context, CALCLprogram progr
 
     calclSetKernelCopyArgsi(calclmodel2D);
 
-    calclmodel2D->kernelMinCopyb = calclGetKernelFromProgram(&program, "copy2Db");
-    calclmodel2D->kernelMaxCopyb = calclGetKernelFromProgram(&program, "copy2Db");
-    calclmodel2D->kernelSumCopyb = calclGetKernelFromProgram(&program, "copy2Db");
-    calclmodel2D->kernelProdCopyb = calclGetKernelFromProgram(&program, "copy2Db");
-    calclmodel2D->kernelLogicalAndCopyb = calclGetKernelFromProgram(&program, "copy2Db");
-    calclmodel2D->kernelLogicalOrCopyb = calclGetKernelFromProgram(&program, "copy2Db");
-    calclmodel2D->kernelLogicalXOrCopyb = calclGetKernelFromProgram(&program, "copy2Db");
-    calclmodel2D->kernelBinaryAndCopyb = calclGetKernelFromProgram(&program, "copy2Db");
-    calclmodel2D->kernelBinaryOrCopyb = calclGetKernelFromProgram(&program, "copy2Db");
-    calclmodel2D->kernelBinaryXOrCopyb = calclGetKernelFromProgram(&program, "copy2Db");
+    calclmodel2D->kernelMinCopyb = calclGetKernelFromProgram(program, "copy2Db");
+    calclmodel2D->kernelMaxCopyb = calclGetKernelFromProgram(program, "copy2Db");
+    calclmodel2D->kernelSumCopyb = calclGetKernelFromProgram(program, "copy2Db");
+    calclmodel2D->kernelProdCopyb = calclGetKernelFromProgram(program, "copy2Db");
+    calclmodel2D->kernelLogicalAndCopyb = calclGetKernelFromProgram(program, "copy2Db");
+    calclmodel2D->kernelLogicalOrCopyb = calclGetKernelFromProgram(program, "copy2Db");
+    calclmodel2D->kernelLogicalXOrCopyb = calclGetKernelFromProgram(program, "copy2Db");
+    calclmodel2D->kernelBinaryAndCopyb = calclGetKernelFromProgram(program, "copy2Db");
+    calclmodel2D->kernelBinaryOrCopyb = calclGetKernelFromProgram(program, "copy2Db");
+    calclmodel2D->kernelBinaryXOrCopyb = calclGetKernelFromProgram(program, "copy2Db");
 
     CALbyte * partialMinb = (CALbyte*) malloc(calclmodel2D->rows * calclmodel2D->columns * sizeof(CALbyte));
     calclmodel2D->bufferPartialMinb = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALbyte) * calclmodel2D->rows * calclmodel2D->columns, partialMinb,
@@ -877,16 +911,16 @@ void createReductionKernels(cl_int err, CALCLcontext context, CALCLprogram progr
     free(partialMinb);
     calclSetKernelCopyArgsb(calclmodel2D);
 
-    calclmodel2D->kernelMinCopyr = calclGetKernelFromProgram(&program, "copy2Dr");
-    calclmodel2D->kernelMaxCopyr = calclGetKernelFromProgram(&program, "copy2Dr");
-    calclmodel2D->kernelSumCopyr = calclGetKernelFromProgram(&program, "copy2Dr");
-    calclmodel2D->kernelProdCopyr = calclGetKernelFromProgram(&program, "copy2Dr");
-    calclmodel2D->kernelLogicalAndCopyr = calclGetKernelFromProgram(&program, "copy2Dr");
-    calclmodel2D->kernelLogicalOrCopyr = calclGetKernelFromProgram(&program, "copy2Dr");
-    calclmodel2D->kernelLogicalXOrCopyr = calclGetKernelFromProgram(&program, "copy2Dr");
-    calclmodel2D->kernelBinaryAndCopyr = calclGetKernelFromProgram(&program, "copy2Dr");
-    calclmodel2D->kernelBinaryOrCopyr = calclGetKernelFromProgram(&program, "copy2Dr");
-    calclmodel2D->kernelBinaryXOrCopyr = calclGetKernelFromProgram(&program, "copy2Dr");
+    calclmodel2D->kernelMinCopyr = calclGetKernelFromProgram(program, "copy2Dr");
+    calclmodel2D->kernelMaxCopyr = calclGetKernelFromProgram(program, "copy2Dr");
+    calclmodel2D->kernelSumCopyr = calclGetKernelFromProgram(program, "copy2Dr");
+    calclmodel2D->kernelProdCopyr = calclGetKernelFromProgram(program, "copy2Dr");
+    calclmodel2D->kernelLogicalAndCopyr = calclGetKernelFromProgram(program, "copy2Dr");
+    calclmodel2D->kernelLogicalOrCopyr = calclGetKernelFromProgram(program, "copy2Dr");
+    calclmodel2D->kernelLogicalXOrCopyr = calclGetKernelFromProgram(program, "copy2Dr");
+    calclmodel2D->kernelBinaryAndCopyr = calclGetKernelFromProgram(program, "copy2Dr");
+    calclmodel2D->kernelBinaryOrCopyr = calclGetKernelFromProgram(program, "copy2Dr");
+    calclmodel2D->kernelBinaryXOrCopyr = calclGetKernelFromProgram(program, "copy2Dr");
 
     CALreal * partialr = (CALreal*) malloc(calclmodel2D->rows * calclmodel2D->columns * sizeof(CALreal));
     calclmodel2D->bufferPartialMinr = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALreal) * calclmodel2D->rows * calclmodel2D->columns, partialr,
@@ -1327,6 +1361,7 @@ void calclMultiGPUHandleBorders(struct CALCLMultiGPU* multigpu){
     cl_int err;
 
     for (int gpu = 0; gpu < multigpu->num_devices; ++gpu) {
+
         struct CALCLModel2D * calclmodel2D = multigpu->device_models[gpu];
         struct CALCLModel2D * calclmodel2DPrev = NULL;
         const int gpuP = ((gpu-1)+multigpu->num_devices)%multigpu->num_devices;
@@ -1481,12 +1516,32 @@ void calclMultiGPUDef2D(struct CALCLMultiGPU* multigpu,struct CALModel2D *host_C
 
     calclMultiGPUHandleBorders(multigpu);
 
+    vector_init(&multigpu->kernelsID);
+
 
 
 }
 void calclMultiGPURun2D(struct CALCLMultiGPU* multigpu, CALint init_step, CALint final_step){
 
     int steps = init_step;
+
+    size_t * threadNumMax = (size_t*) malloc(sizeof(size_t) * 2);
+    threadNumMax[0] = multigpu->device_models[0]->rows;
+    threadNumMax[1] = multigpu->device_models[0]->columns;
+    size_t * singleStepThreadNum;
+    int dimNum;
+
+    if (multigpu->device_models[0]->opt == CAL_NO_OPT) {
+        singleStepThreadNum = (size_t*) malloc(sizeof(size_t) * 2);
+        singleStepThreadNum[0] = threadNumMax[0];
+        singleStepThreadNum[1] = threadNumMax[1];
+        dimNum = 2;
+    } else {
+        singleStepThreadNum = (size_t*) malloc(sizeof(size_t));
+        singleStepThreadNum[0] = multigpu->device_models[0]->host_CA->A->size_current;
+        dimNum = 1;
+    }
+
     while (steps <= (int) final_step || final_step == CAL_RUN_LOOP) {
 
         //calcola dimNum e ThreadsNum
@@ -1501,37 +1556,21 @@ void calclMultiGPURun2D(struct CALCLMultiGPU* multigpu, CALint init_step, CALint
                 setParametersReduction(err, calclmodel2D);
 
                 if (calclmodel2D->kernelInitSubstates != NULL)
-                    calclSetReductionParameters2D(calclmodel2D, &calclmodel2D->kernelInitSubstates);
+                    calclSetReductionParameters2D(calclmodel2D, calclmodel2D->kernelInitSubstates);
                 if (calclmodel2D->kernelStopCondition != NULL)
-                    calclSetReductionParameters2D(calclmodel2D, &calclmodel2D->kernelStopCondition);
+                    calclSetReductionParameters2D(calclmodel2D, calclmodel2D->kernelStopCondition);
                 if (calclmodel2D->kernelSteering != NULL)
-                    calclSetReductionParameters2D(calclmodel2D, &calclmodel2D->kernelSteering);
+                    calclSetReductionParameters2D(calclmodel2D, calclmodel2D->kernelSteering);
 
                 int i = 0;
 
                 for (i = 0; i < calclmodel2D->elementaryProcessesNum; i++) {
-                    calclSetReductionParameters2D(calclmodel2D, &calclmodel2D->elementaryProcesses[i]);
+                    calclSetReductionParameters2D(calclmodel2D, calclmodel2D->elementaryProcesses[i]);
                 }
 
-                size_t * threadNumMax = (size_t*) malloc(sizeof(size_t) * 2);
-                threadNumMax[0] = calclmodel2D->rows;
-                threadNumMax[1] = calclmodel2D->columns;
-                size_t * singleStepThreadNum;
-                int dimNum;
-
-                if (calclmodel2D->opt == CAL_NO_OPT) {
-                    singleStepThreadNum = (size_t*) malloc(sizeof(size_t) * 2);
-                    singleStepThreadNum[0] = threadNumMax[0];
-                    singleStepThreadNum[1] = threadNumMax[1];
-                    dimNum = 2;
-                } else {
-                    singleStepThreadNum = (size_t*) malloc(sizeof(size_t));
-                    singleStepThreadNum[0] = calclmodel2D->host_CA->A->size_current;
-                    dimNum = 1;
-                }
 
                 calclKernelCall2D(calclmodel2D, calclmodel2D->elementaryProcesses[j], dimNum, singleStepThreadNum,
-                                  NULL, &multigpu->kernel_events[j]);
+                                  NULL, NULL);
                 copySubstatesBuffers2D(calclmodel2D);
 
 
@@ -1549,6 +1588,23 @@ void calclMultiGPURun2D(struct CALCLMultiGPU* multigpu, CALint init_step, CALint
             //scambia bordi
             calclMultiGPUHandleBorders(multigpu);
 
+            for (int gpu = 0; gpu < multigpu->num_devices; ++gpu) {
+                struct CALCLModel2D * calclmodel2D = multigpu->device_models[gpu];
+
+                if (calclmodel2D->kernelSteering != NULL) {
+                    calclKernelCall2D(calclmodel2D, calclmodel2D->kernelSteering, dimNum, singleStepThreadNum, NULL, NULL);
+                    copySubstatesBuffers2D(calclmodel2D);
+                }
+            }
+
+            for (int gpu = 0; gpu < multigpu->num_devices; ++gpu) {
+                clFinish(multigpu->device_models[gpu]->queue);
+            }
+
+            for (int gpu = 0; gpu < multigpu->num_devices; ++gpu) {
+                calclGetBorderFromDeviceToHost2D(multigpu->device_models[gpu]);
+            }
+
 
         }//for elementary process
 
@@ -1562,8 +1618,15 @@ void calclMultiGPURun2D(struct CALCLMultiGPU* multigpu, CALint init_step, CALint
                                                multigpu->workloads[gpu],
                                                multigpu->device_models[gpu]->offset,
                                                multigpu->device_models[gpu]->borderSize);
-        calclMultiGPUMapperToSubstates2D(multigpu->device_models[gpu]->host_CA, &multigpu->device_models[gpu]->substateMapper, multigpu->device_models[gpu]->realSize, multigpu->device_models[gpu]->offset);
+        calclMultiGPUMapperToSubstates2D(multigpu->device_models[gpu]->host_CA,
+                                         &multigpu->device_models[gpu]->substateMapper,
+                                         multigpu->device_models[gpu]->realSize,
+                                         multigpu->device_models[gpu]->offset,
+                                         multigpu->device_models[gpu]->borderSize);
+
     }
+
+
 
 
 
@@ -1572,10 +1635,18 @@ void calclMultiGPURun2D(struct CALCLMultiGPU* multigpu, CALint init_step, CALint
 
 
 void calclAddElementaryProcessMultiGPU2D(struct CALCLMultiGPU* multigpu, char * kernelName){
+    struct kernelID * kernel = malloc(sizeof(struct kernelID));
+    kernel->index = vector_total(&multigpu->kernelsID);
+    memset(kernel->name,'\0',sizeof(kernel->name));
+    strcpy(kernel->name,kernelName);
+
+    VECTOR_ADD(multigpu->kernelsID, kernel);
+
     for (int i = 0; i < multigpu->num_devices; i++) {
+
         CALCLprogram p=multigpu->programs[i];
-        CALCLkernel kernel =calclGetKernelFromProgram(&p,kernelName);
-        calclAddElementaryProcess2D(multigpu->device_models[i],&kernel);
+        CALCLkernel kernel = calclGetKernelFromProgram(p,kernelName);
+        calclAddElementaryProcess2D(multigpu->device_models[i],kernel);
     }
 }
 
@@ -1587,6 +1658,8 @@ void calclMultiGPUFinalize(struct CALCLMultiGPU* multigpu){
     for (int i = 0; i < multigpu->num_devices; ++i) {
         calclFinalize2D(multigpu->device_models[i]);
     }
+
+    vector_free(&multigpu->kernelsID);
     free(multigpu);
 }
 
@@ -1628,46 +1701,46 @@ struct CALCLModel2D * calclCADef2D(struct CALModel2D *host_CA, CALCLcontext cont
     calclmodel2D->offset = offset;
     int bufferDim = calclmodel2D->fullSize;
 
-    calclmodel2D->kernelUpdateSubstate = calclGetKernelFromProgram(&program, KER_UPDATESUBSTATES);
+    calclmodel2D->kernelUpdateSubstate = calclGetKernelFromProgram(program, KER_UPDATESUBSTATES);
 
     //stream compaction kernels
-    calclmodel2D->kernelCompact = calclGetKernelFromProgram(&program, KER_STC_COMPACT);
-    calclmodel2D->kernelComputeCounts = calclGetKernelFromProgram(&program, KER_STC_COMPUTE_COUNTS);
-    calclmodel2D->kernelUpSweep = calclGetKernelFromProgram(&program, KER_STC_UP_SWEEP);
-    calclmodel2D->kernelDownSweep = calclGetKernelFromProgram(&program, KER_STC_DOWN_SWEEP);
+    calclmodel2D->kernelCompact = calclGetKernelFromProgram(program, KER_STC_COMPACT);
+    calclmodel2D->kernelComputeCounts = calclGetKernelFromProgram(program, KER_STC_COMPUTE_COUNTS);
+    calclmodel2D->kernelUpSweep = calclGetKernelFromProgram(program, KER_STC_UP_SWEEP);
+    calclmodel2D->kernelDownSweep = calclGetKernelFromProgram(program, KER_STC_DOWN_SWEEP);
 
-    calclmodel2D->kernelMinReductionb = calclGetKernelFromProgram(&program, "calclMinReductionKernelb");
-    calclmodel2D->kernelMaxReductionb = calclGetKernelFromProgram(&program, "calclMaxReductionKernelb");
-    calclmodel2D->kernelSumReductionb = calclGetKernelFromProgram(&program, "calclSumReductionKernelb");
-    calclmodel2D->kernelProdReductionb = calclGetKernelFromProgram(&program, "calclProdReductionKernelb");
-    calclmodel2D->kernelLogicalAndReductionb = calclGetKernelFromProgram(&program, "calclLogicAndReductionKernelb");
-    calclmodel2D->kernelLogicalOrReductionb = calclGetKernelFromProgram(&program, "calclLogicOrReductionKernelb");
-    calclmodel2D->kernelLogicalXOrReductionb = calclGetKernelFromProgram(&program, "calclLogicXOrReductionKernelb");
-    calclmodel2D->kernelBinaryAndReductionb = calclGetKernelFromProgram(&program, "calclBinaryAndReductionKernelb");
-    calclmodel2D->kernelBinaryOrReductionb = calclGetKernelFromProgram(&program, "calclBinaryOrReductionKernelb");
-    calclmodel2D->kernelBinaryXorReductionb = calclGetKernelFromProgram(&program, "calclBinaryXOrReductionKernelb");
+    calclmodel2D->kernelMinReductionb = calclGetKernelFromProgram(program, "calclMinReductionKernelb");
+    calclmodel2D->kernelMaxReductionb = calclGetKernelFromProgram(program, "calclMaxReductionKernelb");
+    calclmodel2D->kernelSumReductionb = calclGetKernelFromProgram(program, "calclSumReductionKernelb");
+    calclmodel2D->kernelProdReductionb = calclGetKernelFromProgram(program, "calclProdReductionKernelb");
+    calclmodel2D->kernelLogicalAndReductionb = calclGetKernelFromProgram(program, "calclLogicAndReductionKernelb");
+    calclmodel2D->kernelLogicalOrReductionb = calclGetKernelFromProgram(program, "calclLogicOrReductionKernelb");
+    calclmodel2D->kernelLogicalXOrReductionb = calclGetKernelFromProgram(program, "calclLogicXOrReductionKernelb");
+    calclmodel2D->kernelBinaryAndReductionb = calclGetKernelFromProgram(program, "calclBinaryAndReductionKernelb");
+    calclmodel2D->kernelBinaryOrReductionb = calclGetKernelFromProgram(program, "calclBinaryOrReductionKernelb");
+    calclmodel2D->kernelBinaryXorReductionb = calclGetKernelFromProgram(program, "calclBinaryXOrReductionKernelb");
 
-    calclmodel2D->kernelMinReductioni = calclGetKernelFromProgram(&program, "calclMinReductionKerneli");
-    calclmodel2D->kernelMaxReductioni = calclGetKernelFromProgram(&program, "calclMaxReductionKerneli");
-    calclmodel2D->kernelSumReductioni = calclGetKernelFromProgram(&program, "calclSumReductionKerneli");
-    calclmodel2D->kernelProdReductioni = calclGetKernelFromProgram(&program, "calclProdReductionKerneli");
-    calclmodel2D->kernelLogicalAndReductioni = calclGetKernelFromProgram(&program, "calclLogicAndReductionKerneli");
-    calclmodel2D->kernelLogicalOrReductioni = calclGetKernelFromProgram(&program, "calclLogicOrReductionKerneli");
-    calclmodel2D->kernelLogicalXOrReductioni = calclGetKernelFromProgram(&program, "calclLogicXOrReductionKerneli");
-    calclmodel2D->kernelBinaryAndReductioni = calclGetKernelFromProgram(&program, "calclBinaryAndReductionKerneli");
-    calclmodel2D->kernelBinaryOrReductioni = calclGetKernelFromProgram(&program, "calclBinaryOrReductionKerneli");
-    calclmodel2D->kernelBinaryXorReductioni = calclGetKernelFromProgram(&program, "calclBinaryXOrReductionKerneli");
+    calclmodel2D->kernelMinReductioni = calclGetKernelFromProgram(program, "calclMinReductionKerneli");
+    calclmodel2D->kernelMaxReductioni = calclGetKernelFromProgram(program, "calclMaxReductionKerneli");
+    calclmodel2D->kernelSumReductioni = calclGetKernelFromProgram(program, "calclSumReductionKerneli");
+    calclmodel2D->kernelProdReductioni = calclGetKernelFromProgram(program, "calclProdReductionKerneli");
+    calclmodel2D->kernelLogicalAndReductioni = calclGetKernelFromProgram(program, "calclLogicAndReductionKerneli");
+    calclmodel2D->kernelLogicalOrReductioni = calclGetKernelFromProgram(program, "calclLogicOrReductionKerneli");
+    calclmodel2D->kernelLogicalXOrReductioni = calclGetKernelFromProgram(program, "calclLogicXOrReductionKerneli");
+    calclmodel2D->kernelBinaryAndReductioni = calclGetKernelFromProgram(program, "calclBinaryAndReductionKerneli");
+    calclmodel2D->kernelBinaryOrReductioni = calclGetKernelFromProgram(program, "calclBinaryOrReductionKerneli");
+    calclmodel2D->kernelBinaryXorReductioni = calclGetKernelFromProgram(program, "calclBinaryXOrReductionKerneli");
 
-    calclmodel2D->kernelMinReductionr = calclGetKernelFromProgram(&program, "calclMinReductionKernelr");
-    calclmodel2D->kernelMaxReductionr = calclGetKernelFromProgram(&program, "calclMaxReductionKernelr");
-    calclmodel2D->kernelSumReductionr = calclGetKernelFromProgram(&program, "calclSumReductionKernelr");
-    calclmodel2D->kernelProdReductionr = calclGetKernelFromProgram(&program, "calclProdReductionKernelr");
-    calclmodel2D->kernelLogicalAndReductionr = calclGetKernelFromProgram(&program, "calclLogicAndReductionKernelr");
-    calclmodel2D->kernelLogicalOrReductionr = calclGetKernelFromProgram(&program, "calclLogicOrReductionKernelr");
-    calclmodel2D->kernelLogicalXOrReductionr = calclGetKernelFromProgram(&program, "calclLogicXOrReductionKernelr");
-    calclmodel2D->kernelBinaryAndReductionr = calclGetKernelFromProgram(&program, "calclBinaryAndReductionKernelr");
-    calclmodel2D->kernelBinaryOrReductionr = calclGetKernelFromProgram(&program, "calclBinaryOrReductionKernelr");
-    calclmodel2D->kernelBinaryXorReductionr = calclGetKernelFromProgram(&program, "calclBinaryXOrReductionKernelr");
+    calclmodel2D->kernelMinReductionr = calclGetKernelFromProgram(program, "calclMinReductionKernelr");
+    calclmodel2D->kernelMaxReductionr = calclGetKernelFromProgram(program, "calclMaxReductionKernelr");
+    calclmodel2D->kernelSumReductionr = calclGetKernelFromProgram(program, "calclSumReductionKernelr");
+    calclmodel2D->kernelProdReductionr = calclGetKernelFromProgram(program, "calclProdReductionKernelr");
+    calclmodel2D->kernelLogicalAndReductionr = calclGetKernelFromProgram(program, "calclLogicAndReductionKernelr");
+    calclmodel2D->kernelLogicalOrReductionr = calclGetKernelFromProgram(program, "calclLogicOrReductionKernelr");
+    calclmodel2D->kernelLogicalXOrReductionr = calclGetKernelFromProgram(program, "calclLogicXOrReductionKernelr");
+    calclmodel2D->kernelBinaryAndReductionr = calclGetKernelFromProgram(program, "calclBinaryAndReductionKernelr");
+    calclmodel2D->kernelBinaryOrReductionr = calclGetKernelFromProgram(program, "calclBinaryOrReductionKernelr");
+    calclmodel2D->kernelBinaryXorReductionr = calclGetKernelFromProgram(program, "calclBinaryXOrReductionKernelr");
 
     struct CALCell2D * activeCells = (struct CALCell2D*) malloc(sizeof(struct CALCell2D) * bufferDim);
     memcpy(activeCells, calclmodel2D->host_CA->A->cells, sizeof(struct CALCell2D) * calclmodel2D->host_CA->A->size_current);
@@ -1690,7 +1763,8 @@ struct CALCLModel2D * calclCADef2D(struct CALModel2D *host_CA, CALCLcontext cont
 
     calclmodel2D->bufferColumns = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALint), &calclmodel2D->columns, &err);
     calclHandleError(err);
-    calclmodel2D->bufferRows = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALint), &calclmodel2D->rows, &err);//workload / offset
+    int rowsplusborder = calclmodel2D->rows+calclmodel2D->borderSize*2;
+    calclmodel2D->bufferRows = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALint), &rowsplusborder, &err);//workload / offset
     calclHandleError(err);
 
     calclmodel2D->byteSubstatesDim = sizeof(CALbyte) * bufferDim * calclmodel2D->host_CA->sizeof_pQb_array + 1;
@@ -1719,7 +1793,9 @@ struct CALCLModel2D * calclCADef2D(struct CALModel2D *host_CA, CALCLcontext cont
     CALreal * currentRealSubstates = (CALreal*) malloc( calclmodel2D->realSubstatesDim);
     CALreal * nextRealSubstates = (CALreal*) malloc( calclmodel2D->realSubstatesDim);
     calclRealSubstatesMapper2D(calclmodel2D->host_CA, currentRealSubstates, nextRealSubstates, workload, offset, calclmodel2D->borderSize);
-    calclmodel2D->bufferCurrentRealSubstate = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,  calclmodel2D->realSubstatesDim, currentRealSubstates, &err);
+    calclmodel2D->bufferCurrentRealSubstate =
+            clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
+                           calclmodel2D->realSubstatesDim, currentRealSubstates, &err);
     calclHandleError(err);
     calclmodel2D->bufferNextRealSubstate = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,  calclmodel2D->realSubstatesDim, nextRealSubstates, &err);
     calclHandleError(err);
@@ -1777,9 +1853,9 @@ struct CALCLModel2D * calclCADef2D(struct CALModel2D *host_CA, CALCLcontext cont
     calclHandleError(err);
 
     //init substates mapper
-    calclmodel2D->substateMapper.bufDIMbyte = sizeof(CALbyte) * calclmodel2D->realSize * calclmodel2D->host_CA->sizeof_pQb_array + 1;
-    calclmodel2D->substateMapper.bufDIMreal = sizeof(CALreal) * calclmodel2D->realSize * calclmodel2D->host_CA->sizeof_pQr_array + 1;
-    calclmodel2D->substateMapper.bufDIMint = sizeof(CALint) * calclmodel2D->realSize * calclmodel2D->host_CA->sizeof_pQi_array + 1;
+    calclmodel2D->substateMapper.bufDIMbyte = sizeof(CALbyte) * calclmodel2D->fullSize * calclmodel2D->host_CA->sizeof_pQb_array + 1;
+    calclmodel2D->substateMapper.bufDIMreal = sizeof(CALreal) * calclmodel2D->fullSize * calclmodel2D->host_CA->sizeof_pQr_array + 1;
+    calclmodel2D->substateMapper.bufDIMint = sizeof(CALint) * calclmodel2D->fullSize * calclmodel2D->host_CA->sizeof_pQi_array + 1;
     calclmodel2D->substateMapper.byteSubstate_current_OUT = (CALbyte*) malloc(calclmodel2D->substateMapper.bufDIMbyte);
     calclmodel2D->substateMapper.realSubstate_current_OUT = (CALreal*) malloc(calclmodel2D->substateMapper.bufDIMreal);
     calclmodel2D->substateMapper.intSubstate_current_OUT = (CALint*) malloc(calclmodel2D->substateMapper.bufDIMint);
@@ -1818,16 +1894,16 @@ void calclRun2D(struct CALCLModel2D* calclmodel2D, unsigned int initialStep, uns
     setParametersReduction(err, calclmodel2D);
 
     if (calclmodel2D->kernelInitSubstates != NULL)
-        calclSetReductionParameters2D(calclmodel2D, &calclmodel2D->kernelInitSubstates);
+        calclSetReductionParameters2D(calclmodel2D, calclmodel2D->kernelInitSubstates);
     if (calclmodel2D->kernelStopCondition != NULL)
-        calclSetReductionParameters2D(calclmodel2D, &calclmodel2D->kernelStopCondition);
+        calclSetReductionParameters2D(calclmodel2D, calclmodel2D->kernelStopCondition);
     if (calclmodel2D->kernelSteering != NULL)
-        calclSetReductionParameters2D(calclmodel2D, &calclmodel2D->kernelSteering);
+        calclSetReductionParameters2D(calclmodel2D, calclmodel2D->kernelSteering);
 
     int i = 0;
 
     for (i = 0; i < calclmodel2D->elementaryProcessesNum; i++) {
-        calclSetReductionParameters2D(calclmodel2D, &calclmodel2D->elementaryProcesses[i]);
+        calclSetReductionParameters2D(calclmodel2D, calclmodel2D->elementaryProcesses[i]);
     }
 
     CALbyte stop;
@@ -2506,25 +2582,43 @@ void calclComputeStreamCompaction2D(struct CALCLModel2D * calclmodel2D) {
     calclKernelCall2D(calclmodel2D, calclmodel2D->kernelCompact, 1, &calclmodel2D->streamCompactionThreadsNum, NULL, NULL);
 }
 
-void calclSetKernelArgs2D(CALCLkernel * kernel, CALCLmem * args, cl_uint numArgs) {
+void calclSetKernelArgs2D(CALCLkernel kernel, CALCLmem * args, cl_uint numArgs) {
     unsigned int i;
     for (i = 0; i < numArgs; i++)
-        clSetKernelArg(*kernel, MODEL_ARGS_NUM + i, sizeof(CALCLmem), &args[i]);
+        clSetKernelArg(kernel, MODEL_ARGS_NUM + i, sizeof(CALCLmem), &args[i]);
 }
 
-void calclAddStopConditionFunc2D(struct CALCLModel2D * calclmodel2D, CALCLkernel * kernel) {
-    calclmodel2D->kernelStopCondition = *kernel;
+void calclAddStopConditionFunc2D(struct CALCLModel2D * calclmodel2D, CALCLkernel kernel) {
+    calclmodel2D->kernelStopCondition = kernel;
     calclSetModelParameters2D(calclmodel2D, kernel);
 }
 
-void calclAddInitFunc2D(struct CALCLModel2D* calclmodel2D, CALCLkernel * kernel) {
-    calclmodel2D->kernelInitSubstates = *kernel;
+void calclAddInitFunc2D(struct CALCLModel2D* calclmodel2D, CALCLkernel kernel) {
+    calclmodel2D->kernelInitSubstates = kernel;
     calclSetModelParameters2D(calclmodel2D, kernel);
 }
 
-void calclAddSteeringFunc2D(struct CALCLModel2D* calclmodel2D, CALCLkernel * kernel) {
-    calclmodel2D->kernelSteering = *kernel;
+void calclAddSteeringFunc2D(struct CALCLModel2D* calclmodel2D, CALCLkernel kernel) {
+    calclmodel2D->kernelSteering = kernel;
     calclSetModelParameters2D(calclmodel2D, kernel);
+}
+
+void calclAddSteeringFuncMultiGPU2D(struct CALCLMultiGPU* multigpu, char* kernelName) {
+
+
+    struct kernelID * kernel = malloc(sizeof(struct kernelID));
+    kernel->index = vector_total(&multigpu->kernelsID);
+    memset(kernel->name,'\0',sizeof(kernel->name));
+    strcpy(kernel->name,kernelName);
+
+    VECTOR_ADD(multigpu->kernelsID, kernel);
+
+    for (int i = 0; i < multigpu->num_devices; i++) {
+
+        CALCLprogram p=multigpu->programs[i];
+        CALCLkernel kernel = calclGetKernelFromProgram(p,kernelName);
+        calclAddElementaryProcess2D(multigpu->device_models[i],kernel);
+    }
 }
 
 void calclBackToHostFunc2D(struct CALCLModel2D* calclmodel2D, void (*cl_update_substates)(struct CALModel2D*), int callbackSteps) {
@@ -2532,7 +2626,7 @@ void calclBackToHostFunc2D(struct CALCLModel2D* calclmodel2D, void (*cl_update_s
     calclmodel2D->callbackSteps = callbackSteps;
 }
 
-void calclAddElementaryProcess2D(struct CALCLModel2D* calclmodel2D, CALCLkernel * kernel) {
+void calclAddElementaryProcess2D(struct CALCLModel2D* calclmodel2D, CALCLkernel kernel) {
 
     cl_uint size = calclmodel2D->elementaryProcessesNum;
 
@@ -2543,7 +2637,7 @@ void calclAddElementaryProcess2D(struct CALCLModel2D* calclmodel2D, CALCLkernel 
     for (i = 0; i < size; i++)
         ep_new[i] = ep[i];
 
-    ep_new[size] = *kernel;
+    ep_new[size] = kernel;
 
     if (size > 0)
         free(ep);
@@ -2771,10 +2865,33 @@ CALCLprogram calclLoadProgram2D(CALCLcontext context, CALCLdevice device, char* 
     return program;
 }
 
-int calclSetKernelArg2D(CALCLkernel* kernel, cl_uint arg_index, size_t arg_size, const void *arg_value) {
-    return clSetKernelArg(*kernel, MODEL_ARGS_NUM + arg_index, arg_size, arg_value);
+int calclSetKernelArg2D(CALCLkernel kernel, cl_uint arg_index, size_t arg_size, const void *arg_value) {
+    return clSetKernelArg(kernel, MODEL_ARGS_NUM + arg_index, arg_size, arg_value);
 }
 
+int vector_search_char(vector *v,const char * search)
+{
+
+    for (int i = 0; i < v->total; i++) {
+        struct kernelID * tmp = vector_get(v,i);
+        if( strcmp(tmp->name,search) == 0){
+            return tmp->index;
+        }
+    }
+
+    return -1;
+
+}
+
+void calclSetKernelArgMultiGPU2D(struct CALCLMultiGPU * multigpu,const char * kernel, cl_uint arg_index, size_t arg_size, const void *arg_value) {
+    int index = vector_search_char(&multigpu->kernelsID,kernel);
+    assert(index != -1);
+
+    for (int gpu = 0; gpu < multigpu->num_devices; ++gpu) {
+        //CALCLkernel * k = &multigpu->device_models[gpu]->elementaryProcesses[index];
+        clSetKernelArg(multigpu->device_models[gpu]->elementaryProcesses[index], MODEL_ARGS_NUM + arg_index, arg_size, arg_value);
+    }
+}
 
 void calclSetWorkGroupDimensions(struct CALCLModel2D * calclmodel2D, int m, int n)
 {
