@@ -201,6 +201,9 @@ void calclAddActiveCell2D(__CALCL_MODEL_2D, int i, int j) {
 
 }
 void calclAddActiveCellX2D(__CALCL_MODEL_2D, int i, int j, int n) {
+   
+    //active cells indexing starts at row:0	
+    i = i-borderSize;
 
     if ((calclGetNeighborhoodId() == CAL_HEXAGONAL_NEIGHBORHOOD_2D && j % 2 == 1) || (calclGetNeighborhoodId() == CAL_HEXAGONAL_NEIGHBORHOOD_ALT_2D && i % 2 == 1))
         n += CAL_HEXAGONAL_SHIFT;

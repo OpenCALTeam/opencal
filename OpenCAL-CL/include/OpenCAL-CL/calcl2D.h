@@ -418,25 +418,6 @@ struct CALCLModel2D {
 };
 
 
-typedef struct kernelID{
-    char name[MAX_FNAME_SIZE];
-    int index;
-}kernelID;
-
-struct CALCLMultiGPU{
-
-    struct CALCLModel2D ** device_models;
-    CALint num_devices;
-    CALCLcontext context;
-    CALCLdevice * devices;
-    CALCLprogram * programs;
-    CALint * workloads;
-    cl_event * kernel_events;
-    CALint pos_device;
-
-    vector kernelsID;
-};
-
 
 
 /*! \brief Allocate, initialize and return a pointer to a struct CALCLModel2D.
@@ -450,7 +431,8 @@ struct CALCLModel2D * calclCADef2D(struct CALModel2D *host_CA,		//!< Pointer to 
                                    CALCLprogram program,										//!< Opencl program containing library source and user defined source
                                    CALCLdevice device,											//!< Opencl device
                                    const CALint workload,
-                                   const CALint offset
+                                   const CALint offset,
+                                   const CALint _borderSize
                                    );
 
 /*! \brief Main simulation cycle. It can become a loop if maxStep == CALCL_RUN_LOOP */
@@ -593,19 +575,8 @@ void calclSetWorkGroupDimensions(struct CALCLModel2D* calclmodel2D,//!< Pointer 
                                  int m, //!< Number of rows
                                  int n);//!< Number of columns
 
-
-void calclSetNumDevice(struct CALCLMultiGPU* multigpu, const CALint _num_devices);
-
-void calclAddDevice(struct CALCLMultiGPU* multigpu,const CALCLdevice device, const CALint workload);
-
-int calclCheckWorkload(struct CALCLMultiGPU* multigpu);
-
-void calclMultiGPUDef2D(struct CALCLMultiGPU* mulitgpu,struct CALModel2D *host_CA ,char* kernel_src,char* kernel_inc);
-
-void calclMultiGPURun2D(struct CALCLMultiGPU* multigpu, CALint init_step, CALint final_step);
-
-void calclAddElementaryProcessMultiGPU2D(struct CALCLMultiGPU* multigpu, char * kernelName);
-
-void calclMultiGPUFinalize(struct CALCLMultiGPU* mulitgpu);
+void copySubstatesBuffers2D(struct CALCLModel2D * calclmodel2D);
+void setParametersReduction(cl_int err, struct CALCLModel2D* calclmodel2D);
+void calclGetBorderFromDeviceToHost2D(struct CALCLModel2D* calclmodel2D);
 
 #endif /* CALCL_H_ */

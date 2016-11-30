@@ -69,7 +69,10 @@
 #define calclRunStop() *CALCLstop = CAL_TRUE
 
 /*! \brief Gets the thread id in the first global dimension */
-#define calclGlobalRow() (get_global_id(0) + 1)
+#define calclGlobalRowMultiGPU() (get_global_id(0) + (borderSize))
+
+/*! \brief Gets the thread id in the first global dimension */
+#define calclGlobalRow() (get_global_id(0))
 
 /*! \brief Gets the thread id in the second global dimension */
 #define calclGlobalColumn() get_global_id(1)
@@ -81,7 +84,7 @@
 #define calclLocalColumn() get_local_id(1)
 
 /*! \brief Gets the active cell row coordinate relative to the given thread id */
-#define calclActiveCellRow(threadID) calclGetActiveCells()[threadID].i
+#define calclActiveCellRow(threadID) (calclGetActiveCells()[threadID].i + (borderSize))
 
 /*! \brief Gets the active cell column coordinate relative to the given thread id */
 #define calclActiveCellColumn(threadID) calclGetActiveCells()[threadID].j

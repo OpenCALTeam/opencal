@@ -64,7 +64,7 @@ void calclCopyBuffer2Dr(__global CALreal* M_src, __global CALreal* M_dest, int c
  *	its content in the active cell n of the matrix M_dest
  *
  */
-void calclCopyBufferActiveCells2Db(__global CALbyte* M_src, __global CALbyte* M_dest, int columns, __global struct CALCell2D* active_cells, int n);
+void calclCopyBufferActiveCells2Db(__global CALbyte* M_src, __global CALbyte* M_dest, int columns, __global struct CALCell2D* active_cells, int n, int borderSize);
 
 /*!	\brief Active cells integer linearized matrix copy function.
  *
@@ -72,7 +72,7 @@ void calclCopyBufferActiveCells2Db(__global CALbyte* M_src, __global CALbyte* M_
  *	its content in the active cell n of the matrix M_dest
  *
  */
-void calclCopyBufferActiveCells2Di(__global CALint* M_src, __global CALint* M_dest, int columns, __global struct CALCell2D* active_cells, int n);
+void calclCopyBufferActiveCells2Di(__global CALint* M_src, __global CALint* M_dest, int columns, __global struct CALCell2D* active_cells, int n, int borderSize);
 
 /*!	\brief Active cells real linearized matrix copy function.
  *
@@ -80,7 +80,7 @@ void calclCopyBufferActiveCells2Di(__global CALint* M_src, __global CALint* M_de
  *	its content in the active cell n of the matrix M_dest
  *
  */
-void calclCopyBufferActiveCells2Dr(__global CALreal* M_src, __global CALreal* M_dest, int columns, __global struct CALCell2D* active_cells, int n);
+void calclCopyBufferActiveCells2Dr(__global CALreal* M_src, __global CALreal* M_dest, int columns, __global struct CALCell2D* active_cells, int n, int borderSize);
 
 /*!	\brief Byte linearized matrix addition function.
  *

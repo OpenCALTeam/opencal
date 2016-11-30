@@ -22,20 +22,20 @@
 
 #include <OpenCAL-CL/calcl2DBuffer.h>
 
-void calclCopyBufferActiveCells2Db(__global CALbyte* M_src, __global CALbyte* M_dest, int columns, __global struct CALCell2D* active_cells, int n) {
-	int c = active_cells[n].i * columns + active_cells[n].j;
+void calclCopyBufferActiveCells2Db(__global CALbyte* M_src, __global CALbyte* M_dest, int columns, __global struct CALCell2D* active_cells, int n, CALint borderSize) {
+	int c = (active_cells[n].i + borderSize) * columns + active_cells[n].j;
 	if (M_dest[c] != M_src[c])
 		M_dest[c] = M_src[c];
 }
 
-void calclCopyBufferActiveCells2Di(__global CALint* M_src, __global CALint* M_dest, int columns, __global struct CALCell2D* active_cells, int n) {
-	int c = active_cells[n].i * columns + active_cells[n].j;
+void calclCopyBufferActiveCells2Di(__global CALint* M_src, __global CALint* M_dest, int columns, __global struct CALCell2D* active_cells, int n, CALint borderSize) {
+	int c = (active_cells[n].i + borderSize) * columns + active_cells[n].j;
 	if (M_dest[c] != M_src[c])
 		M_dest[c] = M_src[c];
 }
 
-void calclCopyBufferActiveCells2Dr(__global CALreal* M_src, __global CALreal* M_dest, int columns, __global struct CALCell2D* active_cells, int n) {
-	int c = active_cells[n].i * columns + active_cells[n].j;
+void calclCopyBufferActiveCells2Dr(__global CALreal* M_src, __global CALreal* M_dest, int columns, __global struct CALCell2D* active_cells, int n, CALint borderSize) {
+	int c = (active_cells[n].i + borderSize) * columns + active_cells[n].j;
 	if (M_dest[c] != M_src[c])
 		M_dest[c] = M_src[c];
 }
