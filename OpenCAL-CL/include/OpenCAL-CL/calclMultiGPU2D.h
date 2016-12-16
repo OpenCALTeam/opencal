@@ -50,6 +50,7 @@ struct CALCLMultiGPU{
     CALint * workloads;
     cl_event * kernel_events;
     CALint pos_device;
+    CALbyte exchange_full_border;
 
     vector kernelsID;
 };
@@ -61,17 +62,24 @@ void calclAddDevice(struct CALCLMultiGPU* multigpu,const CALCLdevice device, con
 
 int calclCheckWorkload(struct CALCLMultiGPU* multigpu);
 
-void calclMultiGPUDef2D(struct CALCLMultiGPU* mulitgpu,struct CALModel2D *host_CA ,char* kernel_src,char* kernel_inc, const CALint borderSize);
+void calclMultiGPUDef2D(struct CALCLMultiGPU* mulitgpu,struct CALModel2D *host_CA ,char* kernel_src,char* kernel_inc, const CALint borderSize ,const CALbyte exchange_full_border);
 
 void calclMultiGPURun2D(struct CALCLMultiGPU* multigpu, CALint init_step, CALint final_step);
 
 void calclAddElementaryProcessMultiGPU2D(struct CALCLMultiGPU* multigpu, char * kernelName);
+
+void calclAddSteeringFuncMultiGPU2D(struct CALCLMultiGPU* multigpu, char * kernelName);
 
 void calclMultiGPUFinalize(struct CALCLMultiGPU* mulitgpu);
 
 
 void calcl_executeElementaryProcess(struct CALCLMultiGPU* multigpu,const int el_proc, size_t* singleStepThreadNum,int dimNum);
 
-void computekernelLaunchParams(struct CALCLMultiGPU* multigpu, size_t* singleStepThreadNum, int *dim);
+void computekernelLaunchParams(struct CALCLMultiGPU* multigpu,  size_t**  singleStepThreadNum, int *dim);
+
+void calclSetKernelArgMultiGPU2D(struct CALCLMultiGPU * multigpu,const char * kernel, cl_uint arg_index, size_t arg_size, const void *arg_value);
+
+
+void calclDevicesToNode(struct CALCLMultiGPU* multigpu);
 
 #endif /* CALCLMULTIGPU_H_ */

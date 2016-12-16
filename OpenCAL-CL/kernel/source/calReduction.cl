@@ -38,8 +38,8 @@ __kernel void calclMaxReductionKernelb(__global double *  maxima, CALint substat
              }
 	if((i >= size && j >= size) || (i < size && j >= size))
 		return;
-	printf("offsets[%d] : %d \n",i,offsets[i] );
-	printf("offsets[%d] : %d \n",j,offsets[j] );
+//	printf("offsets[%d] : %d \n",i,offsets[i] );
+//	printf("offsets[%d] : %d \n",j,offsets[j] );
 
 	if(offsets[i] < offsets[j])
 		offsets[i] = offsets[j];
