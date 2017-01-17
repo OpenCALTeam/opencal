@@ -24,7 +24,7 @@
 #define CALCLKERNEL2D_H_
 
 /*! \brief Terminates threads that exceed matrix sizes */
-#define calclThreadCheck2D() if(calclGlobalRow()>=(calclGetRows()+1) || get_global_id(1)>=calclGetColumns()) return
+#define calclThreadCheck2D() if(calclGlobalRow()>=(calclGetRows()-borderSize*2) || get_global_id(1)>=calclGetColumns()) return
 
 
 #define calclThreadCheck2Dour() if( (calclGlobalRow() < borderSize) || (calclGlobalRow() >= (calclGetRows()-borderSize)) || (get_global_id(1)>=calclGetColumns())) return
