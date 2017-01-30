@@ -573,6 +573,9 @@ void calclMultiGPUDef2D(struct CALCLMultiGPU* multigpu,struct CALModel2D *host_C
 
 
         offset+=multigpu->workloads[i];
+		
+		cl_int err;
+		setParametersReduction(err, multigpu->device_models[i]);
 
 
     }
@@ -588,15 +591,12 @@ void calclMultiGPUDef2D(struct CALCLMultiGPU* multigpu,struct CALModel2D *host_C
 void calcl_executeElementaryProcess(struct CALCLMultiGPU* multigpu,const int el_proc, size_t* singleStepThreadNum,int dimNum)
 {
 
-
-
     for (int gpu = 0; gpu < multigpu->num_devices; ++gpu) {
         struct CALCLModel2D * calclmodel2D = multigpu->device_models[gpu];
 
         cl_int err;
 
-        setParametersReduction(err, calclmodel2D);
-
+	
         if (calclmodel2D->kernelInitSubstates != NULL)
             calclSetReductionParameters2D(calclmodel2D, calclmodel2D->kernelInitSubstates);
         if (calclmodel2D->kernelStopCondition != NULL)
