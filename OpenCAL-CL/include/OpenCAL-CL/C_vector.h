@@ -13,7 +13,7 @@
 
 #include <string.h>
 
-typedef struct vector {
+typedef struct C_vector {
     void **items;
     int capacity;
     int total;

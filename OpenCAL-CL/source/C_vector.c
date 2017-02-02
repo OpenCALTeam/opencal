@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <OpenCAL-CL/vector.h>
+#include <OpenCAL-CL/C_vector.h>
 
 void vector_init(vector *v)
 {

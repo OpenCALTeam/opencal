@@ -19,9 +19,12 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with OpenCAL. If not, see <http://www.gnu.org/licenses/>.
  */
-
+extern "C"{
+	#include <OpenCAL/cal2DBuffer.h>
+	#include <OpenCAL-CL/calcl2D.h>
+}
 #include <OpenCAL-CL/calclMultiGPU2D.h>
-#include <OpenCAL/cal2DBuffer.h>
+
 
 /******************************************************************************
  * 							PRIVATE FUNCTIONS
@@ -143,7 +146,7 @@ int vector_search_char(vector *v,const char * search)
 {
 
     for (int i = 0; i < v->total; i++) {
-        struct kernelID * tmp = vector_get(v,i);
+        struct kernelID * tmp = (kernelID*)vector_get(v,i);
         if( strcmp(tmp->name,search) == 0) {
             return tmp->index;
         }
@@ -239,7 +242,7 @@ void calclSetKernelArgMultiGPU2D(struct CALCLMultiGPU * multigpu,const char * ke
 void calclAddSteeringFuncMultiGPU2D(struct CALCLMultiGPU* multigpu, char* kernelName) {
 
 
-    struct kernelID * kernel = malloc(sizeof(struct kernelID));
+    struct kernelID * kernel = (kernelID*)malloc(sizeof(struct kernelID));
     kernel->index = vector_total(&multigpu->kernelsID);
     memset(kernel->name,'\0',sizeof(kernel->name));
     strcpy(kernel->name,kernelName);
@@ -558,21 +561,20 @@ void calclMultiGPUGetBorders(struct CALCLMultiGPU* multigpu, int offset, int gpu
     calclCopyGhostr(calclmodel2D->host_CA, calclmodel2D->borderMapper.realBorder_OUT, offset, multigpu->workloads[gpu], calclmodel2D->borderSize);
 }
 
-void calclMultiGPUDef2D(struct CALCLMultiGPU* multigpu,struct CALModel2D *host_CA ,char* kernel_src,char* kernel_inc, const CALint borderSize, const CALbyte _exchange_full_border) {
+void calclMultiGPUDef2D(struct CALCLMultiGPU* multigpu,struct CALModel2D *host_CA ,char* kernel_src,char* kernel_inc, const CALint borderSize, const std::vector<Device>& devices, const CALbyte _exchange_full_border) {
     assert(host_CA->rows == calclCheckWorkload(multigpu));
     multigpu->context = calclCreateContext(multigpu->devices,multigpu->num_devices);
     multigpu->exchange_full_border = _exchange_full_border;
-    int offset=0;
+   
+   
     for (int i = 0; i < multigpu->num_devices; ++i) {
-        multigpu->programs[i] = calclLoadProgram2D(multigpu->context, multigpu->devices[i], kernel_src, kernel_inc);
+        const cl_uint offset = devices[i].offset;
+		multigpu->programs[i] = calclLoadProgram2D(multigpu->context, multigpu->devices[i], kernel_src, kernel_inc);
 
         multigpu->device_models[i] = calclCADef2D(host_CA,multigpu->context,multigpu->programs[i],multigpu->devices[i],multigpu->workloads[i],offset , borderSize);//offset
 
         calclMultiGPUGetBorders(multigpu,offset, i);
 
-
-
-        offset+=multigpu->workloads[i];
 		
 		cl_int err;
 		setParametersReduction(err, multigpu->device_models[i]);
@@ -837,7 +839,7 @@ void calclMultiGPURun2D(struct CALCLMultiGPU* multigpu, CALint init_step, CALint
 
 
 void calclAddElementaryProcessMultiGPU2D(struct CALCLMultiGPU* multigpu, char * kernelName) {
-    struct kernelID * kernel = malloc(sizeof(struct kernelID));
+    struct kernelID * kernel = (kernelID*)malloc(sizeof(struct kernelID));
     kernel->index = vector_total(&multigpu->kernelsID);
     memset(kernel->name,'\0',sizeof(kernel->name));
     strcpy(kernel->name,kernelName);

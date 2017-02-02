@@ -1,3 +1,4 @@
+*.orig
 #tests files
 tests/testsout/serial
 /tests/testsout/other

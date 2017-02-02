@@ -33,7 +33,7 @@
 #define CALCL_H_
 
 #include <OpenCAL/cal2D.h>
-#include <OpenCAL-CL/vector.h>
+#include <OpenCAL-CL/C_vector.h>
 #include "math.h"
 #include <OpenCAL-CL/clUtility.h>
 #include <OpenCAL-CL/dllexport.h>
@@ -57,7 +57,7 @@
 #define KER_STC_UP_SWEEP "calclkernelUpSweep2D"
 #define KER_STC_DOWN_SWEEP "calclkernelDownSweep2D"
 
-#define MODEL_ARGS_NUM 58	//!< Number of default arguments for each kernel defined by the user
+#define MODEL_ARGS_NUM 59	//!< Number of default arguments for each kernel defined by the user
 #define CALCL_RUN_LOOP 0	//!< Define used by the user to specify an infinite loop simulation
 
 #define MAX_FNAME_SIZE (100)
@@ -579,4 +579,7 @@ void copySubstatesBuffers2D(struct CALCLModel2D * calclmodel2D);
 void setParametersReduction(cl_int err, struct CALCLModel2D* calclmodel2D);
 void calclGetBorderFromDeviceToHost2D(struct CALCLModel2D* calclmodel2D);
 
+
+void calclResizeThreadsNum2D(struct CALCLModel2D * , size_t * );
+void calclExecuteReduction2D(struct CALCLModel2D* , int );
 #endif /* CALCL_H_ */

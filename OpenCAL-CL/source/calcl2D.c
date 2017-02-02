@@ -330,10 +330,13 @@ void calclSetModelParameters2D(struct CALCLModel2D* calclmodel2D, CALCLkernel  k
     err = clSetKernelArg(kernel, 51, sizeof(CALCLmem), &calclmodel2D->bufferSingleLayerByteSubstateNum);
     err = clSetKernelArg(kernel, 52, sizeof(CALCLmem), &calclmodel2D->bufferSingleLayerIntSubstateNum);
     err = clSetKernelArg(kernel, 53, sizeof(CALCLmem), &calclmodel2D->bufferSingleLayerRealSubstateNum);
-    err =clSetKernelArg(kernel, 54, sizeof(CALCLmem), &calclmodel2D->bufferSingleLayerByteSubstate);
-    err =clSetKernelArg(kernel, 55, sizeof(CALCLmem), &calclmodel2D->bufferSingleLayerIntSubstate);
-    err =    clSetKernelArg(kernel, 57, sizeof(CALint), &calclmodel2D->borderSize);
+    err = clSetKernelArg(kernel, 54, sizeof(CALCLmem), &calclmodel2D->bufferSingleLayerByteSubstate);
+    err = clSetKernelArg(kernel, 55, sizeof(CALCLmem), &calclmodel2D->bufferSingleLayerIntSubstate);
     err = clSetKernelArg(kernel, 56, sizeof(CALCLmem), &calclmodel2D->bufferSingleLayerRealSubstate);
+	err = clSetKernelArg(kernel, 57, sizeof(CALint)	 , &calclmodel2D->borderSize);
+	
+	err = clSetKernelArg(kernel, 58, sizeof(cl_uint) , &calclmodel2D->offset);
+	
 
 
 }

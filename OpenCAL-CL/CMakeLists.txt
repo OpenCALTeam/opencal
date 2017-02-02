@@ -68,7 +68,7 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY bin)
 
 
-file(GLOB SRC "source/*.c")
+file(GLOB SRC "source/*.c" "source/*.cpp")
 file(GLOB HEADERS "include/OpenCAL-CL/*.h")
 file(GLOB KERNELS_HEADERS "kernel/include/OpenCAL-CL/*.h")
 file(GLOB KERNELS_SRC

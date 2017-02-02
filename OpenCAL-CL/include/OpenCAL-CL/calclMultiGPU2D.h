@@ -32,8 +32,11 @@
 #ifndef CALCLMULTIGPU_H_
 #define CALCLMULTIGPU_H_
 
+extern "C"{
 #include <OpenCAL-CL/calcl2D.h>
+}
 
+#include <OpenCAL-CL/calclCluster.h>
 
 typedef struct kernelID{
     char name[MAX_FNAME_SIZE];
@@ -52,7 +55,7 @@ struct CALCLMultiGPU{
     CALint pos_device;
     CALbyte exchange_full_border;
 
-    vector kernelsID;
+    C_vector kernelsID;
 };
 
 
@@ -62,7 +65,7 @@ void calclAddDevice(struct CALCLMultiGPU* multigpu,const CALCLdevice device, con
 
 int calclCheckWorkload(struct CALCLMultiGPU* multigpu);
 
-void calclMultiGPUDef2D(struct CALCLMultiGPU* mulitgpu,struct CALModel2D *host_CA ,char* kernel_src,char* kernel_inc, const CALint borderSize ,const CALbyte exchange_full_border);
+void calclMultiGPUDef2D(struct CALCLMultiGPU* mulitgpu,struct CALModel2D *host_CA ,char* kernel_src,char* kernel_inc, const CALint borderSize , const std::vector<Device>& devices, const CALbyte exchange_full_border);
 
 void calclMultiGPURun2D(struct CALCLMultiGPU* multigpu, CALint init_step, CALint final_step);
 
