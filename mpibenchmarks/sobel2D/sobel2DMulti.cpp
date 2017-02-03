@@ -5,36 +5,51 @@
 #include <iostream>
 #include <utility>
 #include <time.h>
+#include<SOIL.h>
+
 #include <OpenCAL-CL/calclMultiNode.h>
 
-#define SIZE (500)
-#define ROWS (SIZE)
-#define COLS (SIZE)
-
-#define STEPS (50000)
-#define MATERIAL_START_ROW (ROWS/2-ROWS/8)
-#define SOURCE_SIZE (20)
-#define MATERIAL_END_ROW (MATERIAL_START_ROW+SOURCE_SIZE)
 
 
-#define KERNEL_SRC "/home/mpiuser/git/heat2D/kernel_heat2D/source/"
-#define KERNEL_INC "/home/mpiuser/git/heat2D/kernel_heat2D/include/"
+
+
+#define KERNEL_SRC "/home/mpiuser/git/sobel2D/kernel_sobel2D/source/"
+#define KERNEL_INC "/home/mpiuser/git/sobel2D/kernel_sobel2D/include/"
 
 
 // Defining kernels' names(struct CALCLMultiGPU*)
-#define KERNEL_LIFE_TRANSITION_FUNCTION "heat2D_transitionFunction"
+#define KERNEL_LIFE_TRANSITION_FUNCTION "sobel2D_transitionFunction"
 
-// Declare XCA model (host_CA), substates (Q), parameters (P)
-struct CALSubstate2Dr *Q_temperature;							//the substate Q
-struct CALSubstate2Db *Q_material;
+const std::string image_path="sobel_image-test2.jpg";
+
+typedef struct{
+	
+	struct CALSubstate2Di *red;		//red channel
+	struct CALSubstate2Di *green;		//green channel
+	struct CALSubstate2Di *blue;		//blue substate Q
+
+} Q_RGB;
+
+Q_RGB image;
 
 
-void heatModel_initMaterials (struct CALModel2D* host_CA, int i, int j){
-		if(i > MATERIAL_START_ROW && i<MATERIAL_END_ROW)
-        calSet2Db(host_CA, Q_material, i, j, CAL_TRUE);
-    else
-        calSet2Db(host_CA, Q_material, i, j, CAL_FALSE);
-    
+void readImage( CALModel2D* const host_CA, const std::string& path , const uint offset, const int ROWS, const int COLS){
+	int _w,_h;
+	unsigned char* soil_image = SOIL_load_image(path.c_str() , &_w,&_h , 0 , 	SOIL_LOAD_RGB);
+	
+	
+	int start = 3*offset;	
+	for(int i=0; i<ROWS; i++){
+		for(int j=0; j<COLS; j++){
+			
+			calInit2Di(host_CA, image.red  , i, j, soil_image[start]);
+			calInit2Di(host_CA, image.green, i, j, soil_image[start+1]);
+			calInit2Di(host_CA, image.blue , i, j, soil_image[start+2]);
+			
+			start+=3;
+		}
+	}
+		
 }
 
 void init(struct CALCLMultiGPU* multigpu, const Cluster* c)
@@ -51,7 +66,9 @@ void init(struct CALCLMultiGPU* multigpu, const Cluster* c)
 
     calclSetNumDevice(multigpu, devices.size());
     for (auto& d : devices) {
-	calclAddDevice(multigpu, calclGetDevice(calcl_device_manager, d.num_platform, d.num_device), d.workload);
+		calclAddDevice(multigpu, 
+						calclGetDevice(calcl_device_manager, d.num_platform, d.num_device),
+						d.workload);
     }
 
 
@@ -59,28 +76,26 @@ void init(struct CALCLMultiGPU* multigpu, const Cluster* c)
         calCADef2D(mynode.workload, mynode.columns, CAL_MOORE_NEIGHBORHOOD_2D, CAL_SPACE_TOROIDAL, CAL_NO_OPT);
 
     // Register the substate to the host CA
-    Q_temperature = calAddSubstate2Dr(host_CA);
-	Q_material = calAddSubstate2Db(host_CA);
+    image.red = calAddSubstate2Di(host_CA);
+	image.green = calAddSubstate2Di(host_CA);
+	image.blue = calAddSubstate2Di(host_CA);
 
-    // Initialize the substate to 0 everywhere
-	calInitSubstate2Dr(host_CA, Q_temperature, (CALreal)0.0f);
-	calInitSubstate2Db(host_CA, Q_material, CAL_FALSE);
-	
 
-    calApplyElementaryProcess2D(host_CA, heatModel_initMaterials);
-	calUpdate2D(host_CA);
+	//this read the image and update the substate using the right part of the image
+	readImage(host_CA,image_path , mynode.offset, mynode.workload, mynode.columns);	
+
 
     int borderSize = 1;
 
     // Define a device-side CAs
-    calclMultiGPUDef2D(multigpu, host_CA, KERNEL_SRC, KERNEL_INC, borderSize, devices, c->is_full_exchange());
-
-    calclAddElementaryProcessMultiGPU2D(multigpu, KERNEL_LIFE_TRANSITION_FUNCTION);
+    calclMultiGPUDef2D(multigpu, host_CA, KERNEL_SRC, KERNEL_INC, borderSize, mynode.devices, c->is_full_exchange());
+	calclAddElementaryProcessMultiGPU2D(multigpu, KERNEL_LIFE_TRANSITION_FUNCTION);
     
-	std::string temperature_str = "./heat_" + std::to_string(rank)+"_initial.txt";
-	std::string material_str = "./material_" + std::to_string(rank)+"_initial.txt";
-    calSaveSubstate2Dr(multigpu->device_models[0]->host_CA, Q_temperature, (char*)temperature_str.c_str());
-	calSaveSubstate2Db(multigpu->device_models[0]->host_CA, Q_material, (char*)material_str.c_str());
+	
+	std::string fractal_str = "./sobel_red_initial" + std::to_string(rank)+".txt";
+	calSaveSubstate2Di(multigpu->device_models[0]->host_CA, image.red, (char*)fractal_str.c_str());
+	
+	
 }
 
 void finalize(struct CALCLMultiGPU* multigpu)
@@ -90,11 +105,9 @@ void finalize(struct CALCLMultiGPU* multigpu)
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     std::cout << "sono il processo " << rank << " finalizzo\n";
 
-	std::string temperature_str = "./heat_" + std::to_string(rank)+".txt";
-	std::string material_str = "./material_" + std::to_string(rank)+".txt";  
-  
-     calSaveSubstate2Dr(multigpu->device_models[0]->host_CA, Q_temperature, (char*)temperature_str.c_str());
-	calSaveSubstate2Db(multigpu->device_models[0]->host_CA, Q_material, (char*)material_str.c_str());
+	std::string fractal_str = "./sobel_red" + std::to_string(rank)+".txt";
+	calSaveSubstate2Di(multigpu->device_models[0]->host_CA, image.red, (char*)fractal_str.c_str());
+	
 
 }
 
@@ -124,7 +137,7 @@ int main(int argc, char** argv)
 
     try{
 		//force kernel recompilation
-		setenv("CUDA_CACHE_DISABLE", "1", 1);
+		//setenv("CUDA_CACHE_DISABLE", "1", 1);
 		string clusterfile;
 		clusterfile = parseCommandLineArgs(argc, argv);
 		Cluster cluster;
@@ -156,7 +169,7 @@ int main(int argc, char** argv)
 
 		MPI_Barrier(MPI_COMM_WORLD);
 
-		mn.run(STEPS);
+		mn.run(1);
 
 		// Print off a hello world message
 		printf("Hello world from processor %s, rank %d"

@@ -5,37 +5,26 @@
 #include <iostream>
 #include <utility>
 #include <time.h>
+
 #include <OpenCAL-CL/calclMultiNode.h>
 
-#define SIZE (500)
-#define ROWS (SIZE)
-#define COLS (SIZE)
-
-#define STEPS (50000)
-#define MATERIAL_START_ROW (ROWS/2-ROWS/8)
-#define SOURCE_SIZE (20)
-#define MATERIAL_END_ROW (MATERIAL_START_ROW+SOURCE_SIZE)
 
 
-#define KERNEL_SRC "/home/mpiuser/git/heat2D/kernel_heat2D/source/"
-#define KERNEL_INC "/home/mpiuser/git/heat2D/kernel_heat2D/include/"
+
+
+#define KERNEL_SRC "/home/mpiuser/git/fractal2D/kernel_fractal2D/source/"
+#define KERNEL_INC "/home/mpiuser/git/fractal/kernel_fractal2D/include/"
 
 
 // Defining kernels' names(struct CALCLMultiGPU*)
-#define KERNEL_LIFE_TRANSITION_FUNCTION "heat2D_transitionFunction"
+#define KERNEL_LIFE_TRANSITION_FUNCTION "fractal2D_transitionFunction"
 
 // Declare XCA model (host_CA), substates (Q), parameters (P)
-struct CALSubstate2Dr *Q_temperature;							//the substate Q
-struct CALSubstate2Db *Q_material;
+struct CALSubstate2Di *Q_fractal;		//the substate Q
 
 
-void heatModel_initMaterials (struct CALModel2D* host_CA, int i, int j){
-		if(i > MATERIAL_START_ROW && i<MATERIAL_END_ROW)
-        calSet2Db(host_CA, Q_material, i, j, CAL_TRUE);
-    else
-        calSet2Db(host_CA, Q_material, i, j, CAL_FALSE);
-    
-}
+
+
 
 void init(struct CALCLMultiGPU* multigpu, const Cluster* c)
 {
@@ -51,7 +40,9 @@ void init(struct CALCLMultiGPU* multigpu, const Cluster* c)
 
     calclSetNumDevice(multigpu, devices.size());
     for (auto& d : devices) {
-	calclAddDevice(multigpu, calclGetDevice(calcl_device_manager, d.num_platform, d.num_device), d.workload);
+		calclAddDevice(multigpu, 
+						calclGetDevice(calcl_device_manager, d.num_platform, d.num_device),
+						d.workload);
     }
 
 
@@ -59,28 +50,17 @@ void init(struct CALCLMultiGPU* multigpu, const Cluster* c)
         calCADef2D(mynode.workload, mynode.columns, CAL_MOORE_NEIGHBORHOOD_2D, CAL_SPACE_TOROIDAL, CAL_NO_OPT);
 
     // Register the substate to the host CA
-    Q_temperature = calAddSubstate2Dr(host_CA);
-	Q_material = calAddSubstate2Db(host_CA);
+    Q_fractal = calAddSubstate2Di(host_CA);
 
-    // Initialize the substate to 0 everywhere
-	calInitSubstate2Dr(host_CA, Q_temperature, (CALreal)0.0f);
-	calInitSubstate2Db(host_CA, Q_material, CAL_FALSE);
-	
 
-    calApplyElementaryProcess2D(host_CA, heatModel_initMaterials);
-	calUpdate2D(host_CA);
 
     int borderSize = 1;
 
     // Define a device-side CAs
-    calclMultiGPUDef2D(multigpu, host_CA, KERNEL_SRC, KERNEL_INC, borderSize, devices, c->is_full_exchange());
-
-    calclAddElementaryProcessMultiGPU2D(multigpu, KERNEL_LIFE_TRANSITION_FUNCTION);
+    calclMultiGPUDef2D(multigpu, host_CA, KERNEL_SRC, KERNEL_INC, borderSize, mynode.devices, c->is_full_exchange());
+	calclAddElementaryProcessMultiGPU2D(multigpu, KERNEL_LIFE_TRANSITION_FUNCTION);
     
-	std::string temperature_str = "./heat_" + std::to_string(rank)+"_initial.txt";
-	std::string material_str = "./material_" + std::to_string(rank)+"_initial.txt";
-    calSaveSubstate2Dr(multigpu->device_models[0]->host_CA, Q_temperature, (char*)temperature_str.c_str());
-	calSaveSubstate2Db(multigpu->device_models[0]->host_CA, Q_material, (char*)material_str.c_str());
+	
 }
 
 void finalize(struct CALCLMultiGPU* multigpu)
@@ -90,11 +70,9 @@ void finalize(struct CALCLMultiGPU* multigpu)
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     std::cout << "sono il processo " << rank << " finalizzo\n";
 
-	std::string temperature_str = "./heat_" + std::to_string(rank)+".txt";
-	std::string material_str = "./material_" + std::to_string(rank)+".txt";  
-  
-     calSaveSubstate2Dr(multigpu->device_models[0]->host_CA, Q_temperature, (char*)temperature_str.c_str());
-	calSaveSubstate2Db(multigpu->device_models[0]->host_CA, Q_material, (char*)material_str.c_str());
+	std::string fractal_str = "./fractal" + std::to_string(rank)+".txt";
+	calSaveSubstate2Di(multigpu->device_models[0]->host_CA, Q_fractal, (char*)fractal_str.c_str());
+	
 
 }
 
@@ -124,7 +102,7 @@ int main(int argc, char** argv)
 
     try{
 		//force kernel recompilation
-		setenv("CUDA_CACHE_DISABLE", "1", 1);
+		//setenv("CUDA_CACHE_DISABLE", "1", 1);
 		string clusterfile;
 		clusterfile = parseCommandLineArgs(argc, argv);
 		Cluster cluster;
@@ -156,7 +134,7 @@ int main(int argc, char** argv)
 
 		MPI_Barrier(MPI_COMM_WORLD);
 
-		mn.run(STEPS);
+		mn.run(1);
 
 		// Print off a hello world message
 		printf("Hello world from processor %s, rank %d"

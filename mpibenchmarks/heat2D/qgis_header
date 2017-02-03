@@ -1,6 +1,6 @@
-ncols         100
-nrows         100
+ncols         16384
+nrows         16384
 xllcorner     0.0
 yllcorner     0.0
-cellsize      0.001
+cellsize      1
 NODATA_value  -9999
