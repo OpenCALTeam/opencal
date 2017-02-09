@@ -1,0 +1,9 @@
+#build example
+cmake -DOpenCL_LIBRARY=/usr/local/cuda/lib64/libOpenCL.so -DOpenCL_INCLUDE_DIR=/usr/local/cuda/include -DOPENCAL_LIBRARIES="/home/knotman/git/opencal/build/OpenCAL/lib/libopencal.so /home/knotman/git/opencal/build/OpenCAL-CL/lib/libopencal-cl.so" -DOPENCAL_INCLUDE_DIR="/home/knotman/git/opencal/OpenCAL/include/:/home/knotman/git/opencal/OpenCAL-CL/include/" ..
+
+#build opencalcl-multigpu
+cmake -DOpenCL_LIBRARY=/usr/local/cuda/lib64/libOpenCL.so -DOpenCL_INCLUDE_DIR=/usr/local/cuda/include ..
+export CUDA_PATH=/usr/local/cuda
+
+
+cmake -DOpenCL_LIBRARY=/usr/local/cuda/lib64/libOpenCL.so -DOpenCL_INCLUDE_DIR=/usr/local/cuda/ -DOPENCAL_LIBRARIES="/home/knotman/git/opencal/build/OpenCAL/lib/libopencal.so /home/knotman/git/opencal/build/OpenCAL-CL/lib/libopencal-cl.so" -DOPENCAL_INCLUDE_DIR="/home/knotman/git/opencal/OpenCAL-CL/include/ /home/knotman/git/opencal/OpenCAL/include" ..
