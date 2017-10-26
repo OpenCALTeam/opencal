@@ -200,29 +200,42 @@ void calclAddActiveCell2D(__CALCL_MODEL_2D, int i, int j) {
     }
 
 }
+
+ inline CALint getChunkNumber(CALint ix, CALint jx, CALint columns, CALint chunkSize){
+    return (ix * columns + jx) / chunkSize;
+}
+
 void calclAddActiveCellX2D(__CALCL_MODEL_2D, int i, int j, int n) {
-   
-    //active cells indexing starts at row:0	
-    i = i-borderSize;
 
-    if ((calclGetNeighborhoodId() == CAL_HEXAGONAL_NEIGHBORHOOD_2D && j % 2 == 1) || (calclGetNeighborhoodId() == CAL_HEXAGONAL_NEIGHBORHOOD_ALT_2D && i % 2 == 1))
-        n += CAL_HEXAGONAL_SHIFT;
+  // active cells indexing starts at row:0
+  i = i - borderSize;
 
-    CALint ix;
-    CALint jx;
+  if ((calclGetNeighborhoodId() == CAL_HEXAGONAL_NEIGHBORHOOD_2D &&
+       j % 2 == 1) ||
+      (calclGetNeighborhoodId() == CAL_HEXAGONAL_NEIGHBORHOOD_ALT_2D &&
+       i % 2 == 1))
+    n += CAL_HEXAGONAL_SHIFT;
 
-    if (calclGetBoundaryCondition() == CAL_SPACE_FLAT) {
-        ix = i + calclGetNeighborhood()[n].i;
-        jx = j + calclGetNeighborhood()[n].j;
-    } else {
-        ix = calclGetToroidalX(i + calclGetNeighborhood()[n].i, calclGetRows());
-        jx = calclGetToroidalX(j + calclGetNeighborhood()[n].j, calclGetColumns());
-    }
+  CALint ix;
+  CALint jx;
 
-    if (CAL_FALSE == calclGetBufferElement2D(calclGetActiveCellsFlags(), calclGetColumns(), ix, jx)) {
-        calclSetBufferElement2D(calclGetActiveCellsFlags(), calclGetColumns(), ix, jx, CAL_TRUE);
-        CALint chunkNum = (ix * calclGetColumns() + jx) / CALCLchunk;
-        CALCLdiff[chunkNum] = CAL_TRUE;
+ // if (calclGetBoundaryCondition() == CAL_SPACE_FLAT) {
+    ix = i + calclGetNeighborhood()[n].i;
+    jx = j + calclGetNeighborhood()[n].j;
+ // }else {
+ //   ix = calclGetToroidalX(i + calclGetNeighborhood()[n].i, calclGetRows());
+ //   jx = calclGetToroidalX(j + calclGetNeighborhood()[n].j, calclGetColumns());
+ // }
+  //ix+= borderSize;
+  //if(ix<0)
+  //  printf("\n\nALERT\n\n");
+  if (CAL_FALSE == calclGetBufferElement2D(calclGetActiveCellsFlags(),
+                                           calclGetColumns(), ix, jx)) {
+    calclSetBufferElement2D(calclGetActiveCellsFlags(), calclGetColumns(), ix,
+                            jx, CAL_TRUE);
+    
+    CALint chunkNum = getChunkNumber(ix,jx,calclGetColumns(), CALCLchunk);
+    CALCLdiff[chunkNum] = CAL_TRUE;
     }
 }
 

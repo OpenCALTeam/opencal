@@ -93,7 +93,7 @@ public:
 					clusterfile>>buf; W = stoul(buf);
 					
 					//add this device to the list of devices of node i
-					Device d_i_j (P,D,W,OFF+node_workload);
+					Device d_i_j (P,D,W,/*OFF+*/node_workload);
 					ni.devices[j]=d_i_j;
 					
 					node_workload+=W;

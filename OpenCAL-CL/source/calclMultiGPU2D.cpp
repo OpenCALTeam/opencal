@@ -20,14 +20,15 @@
  * License along with OpenCAL. If not, see <http://www.gnu.org/licenses/>.
  */
 extern "C"{
-	#include <OpenCAL/cal2DBuffer.h>
-	#include <OpenCAL-CL/calcl2D.h>
+  #include <OpenCAL/cal2DBuffer.h>
+  #include <OpenCAL-CL/calcl2D.h>
 }
 #include <OpenCAL-CL/calclMultiGPU2D.h>
+//#include <OpenCAL-CL/calclMultiNode.h>
 
 
 /******************************************************************************
- * 							PRIVATE FUNCTIONS
+ *              PRIVATE FUNCTIONS
  ******************************************************************************/
 
 
@@ -60,7 +61,7 @@ void calclMultiGPUGetSubstateDeviceToHost2D(struct CALCLModel2D* calclmodel2D, c
     if(calclmodel2D->host_CA->sizeof_pQr_array > 0) {
         err = clEnqueueReadBuffer(queue,
                                   calclmodel2D->bufferCurrentRealSubstate,
-                                  CL_TRUE,
+                                  CL_TRUE, //blocking call
                                   0,
                                   calclmodel2D->substateMapper.bufDIMreal,
                                   calclmodel2D->substateMapper.realSubstate_current_OUT,
@@ -253,13 +254,13 @@ void calclAddSteeringFuncMultiGPU2D(struct CALCLMultiGPU* multigpu, char* kernel
 
         CALCLprogram p=multigpu->programs[i];
         CALCLkernel kernel = calclGetKernelFromProgram(p,kernelName);
-        calclAddElementaryProcess2D(multigpu->device_models[i],kernel);
+        calclAddSteeringFunc2D(multigpu->device_models[i],kernel);
     }
 }
 
 
 /******************************************************************************
- * 							PUBLIC FUNCTIONS MULTIGPU
+ *              PUBLIC FUNCTIONS MULTIGPU
  ******************************************************************************/
 
 void calclSetNumDevice(struct CALCLMultiGPU* multigpu, const CALint _num_devices) {
@@ -288,6 +289,10 @@ int calclCheckWorkload(struct CALCLMultiGPU* multigpu) {
 
 void calclMultiGPUHandleBorders(struct CALCLMultiGPU* multigpu) {
 
+//se il bordo da scmabiare ha raggio zero non ci sta bisogno di fare alcuno scambio quindi semplicemente ritorno
+//assumiamo che tutti abbiano lo stesso raggio, quindi semplicemente prendo bordersize dal modello zero
+  //if(!multigpu->device_models[0]->borderSize)
+ //   return;
 
     cl_int err;
 
@@ -419,135 +424,130 @@ void calclMultiGPUHandleBorders(struct CALCLMultiGPU* multigpu) {
 
 void calclMultiGPUHandleBordersMultiNode(struct CALCLMultiGPU* multigpu,const CALbyte exchange_full_border) {
 
+  cl_int err;
 
-    cl_int err;
+  for (int gpu = 0; gpu < multigpu->num_devices; ++gpu) {
 
-    for (int gpu = 0; gpu < multigpu->num_devices; ++gpu) {
+    struct CALCLModel2D* calclmodel2D = multigpu->device_models[gpu];
+    struct CALCLModel2D* calclmodel2DPrev = NULL;
+    const int gpuP =
+        ((gpu - 1) + multigpu->num_devices) % multigpu->num_devices;
+    const int gpuN =
+        ((gpu + 1) + multigpu->num_devices) % multigpu->num_devices;
 
-        struct CALCLModel2D * calclmodel2D = multigpu->device_models[gpu];
-        struct CALCLModel2D * calclmodel2DPrev = NULL;
-        const int gpuP = ((gpu-1)+multigpu->num_devices)%multigpu->num_devices;
-        const int gpuN = ((gpu+1)+multigpu->num_devices)%multigpu->num_devices;
+    if (calclmodel2D->host_CA->T == CAL_SPACE_TOROIDAL || ((gpu - 1) >= 0)) {
 
-
-
-        if(calclmodel2D->host_CA->T == CAL_SPACE_TOROIDAL || ((gpu-1) >= 0) ) {
-
-            calclmodel2DPrev = multigpu->device_models[gpuP];
-        }
-
-
-        struct CALCLModel2D * calclmodel2DNext = NULL;
-        if(calclmodel2D->host_CA->T == CAL_SPACE_TOROIDAL || ((gpu + 1) < multigpu->num_devices) ) {
-            calclmodel2DNext = multigpu->device_models[gpuN];
-        }
-
-
-
-        int dim = calclmodel2D->fullSize;
-
-
-        const int sizeBorder = calclmodel2D->borderSize*calclmodel2D->columns;
-
-        int numSubstate = calclmodel2D->host_CA->sizeof_pQr_array;
-        for (int i = 0; i < numSubstate; ++i) {
-
-            if(calclmodel2DPrev != NULL && (exchange_full_border || gpu != 0 )) {
-                err = clEnqueueWriteBuffer(calclmodel2D->queue,
-                                           calclmodel2D->bufferCurrentRealSubstate,
-                                           CL_TRUE,
-                                           (i*dim)*sizeof(CALreal),
-                                           sizeof(CALreal)*sizeBorder,
-                                           calclmodel2DPrev->borderMapper.realBorder_OUT +(numSubstate*sizeBorder) + i * sizeBorder,
-                                           0,
-                                           NULL,
-                                           NULL);
-                calclHandleError(err);
-            }
-
-            if(calclmodel2DNext != NULL && (exchange_full_border || gpu != multigpu->num_devices-1)) {
-                err = clEnqueueWriteBuffer(calclmodel2D->queue,
-                                           calclmodel2D->bufferCurrentRealSubstate,
-                                           CL_TRUE,
-                                           (i * dim + (dim - sizeBorder) )*sizeof(CALreal),
-                                           sizeof(CALreal)*sizeBorder,
-                                           calclmodel2DNext->borderMapper.realBorder_OUT + i * sizeBorder,
-                                           0,
-                                           NULL,
-                                           NULL);
-                calclHandleError(err);
-            }
-
-
-        }
-
-        numSubstate = calclmodel2D->host_CA->sizeof_pQi_array;
-
-
-        for (int i = 0; i < numSubstate; ++i) {
-
-
-            if(calclmodel2DPrev != NULL && (exchange_full_border || gpu != 0 )) {
-                err = clEnqueueWriteBuffer(calclmodel2D->queue,
-                                           calclmodel2D->bufferCurrentIntSubstate,
-                                           CL_TRUE,
-                                           (i*dim)*sizeof(CALint),
-                                           sizeof(CALint)*sizeBorder,
-                                           calclmodel2DPrev->borderMapper.intBorder_OUT +(numSubstate*sizeBorder) + i * sizeBorder,
-                                           0,
-                                           NULL,
-                                           NULL);
-                calclHandleError(err);
-            }
-            if(calclmodel2DNext != NULL && (exchange_full_border || gpu != multigpu->num_devices-1)) {
-                err = clEnqueueWriteBuffer(calclmodel2D->queue,
-                                           calclmodel2D->bufferCurrentIntSubstate,
-                                           CL_TRUE,
-                                           (i * dim + (dim - sizeBorder) )*sizeof(CALint),
-                                           sizeof(CALint)*sizeBorder,
-                                           calclmodel2DNext->borderMapper.intBorder_OUT + i * sizeBorder,
-                                           0,
-                                           NULL,
-                                           NULL);
-                calclHandleError(err);
-            }
-
-        }
-
-
-        numSubstate = calclmodel2D->host_CA->sizeof_pQb_array;
-        for (int i = 0; i < numSubstate; ++i) {
-
-            if(calclmodel2DPrev != NULL && (exchange_full_border || gpu != 0 )) {
-                err = clEnqueueWriteBuffer(calclmodel2D->queue,
-                                           calclmodel2D->bufferCurrentByteSubstate,
-                                           CL_TRUE,
-                                           (i*dim)*sizeof(CALbyte),
-                                           sizeof(CALbyte)*sizeBorder,
-                                           calclmodel2DPrev->borderMapper.byteBorder_OUT +(numSubstate*sizeBorder) + i * sizeBorder,
-                                           0,
-                                           NULL,
-                                           NULL);
-                calclHandleError(err);
-            }
-            if(calclmodel2DNext != NULL && (exchange_full_border || gpu != multigpu->num_devices-1)) {
-                err = clEnqueueWriteBuffer(calclmodel2D->queue,
-                                           calclmodel2D->bufferCurrentByteSubstate,
-                                           CL_TRUE,
-                                           (i * dim + (dim - sizeBorder) )*sizeof(CALbyte),
-                                           sizeof(CALbyte)*sizeBorder,
-                                           calclmodel2DNext->borderMapper.byteBorder_OUT + i * sizeBorder,
-                                           0,
-                                           NULL,
-                                           NULL);
-                calclHandleError(err);
-            }
-
-        }
-
+      calclmodel2DPrev = multigpu->device_models[gpuP];
     }
 
+    struct CALCLModel2D* calclmodel2DNext = NULL;
+    if (calclmodel2D->host_CA->T == CAL_SPACE_TOROIDAL ||
+        ((gpu + 1) < multigpu->num_devices)) {
+      calclmodel2DNext = multigpu->device_models[gpuN];
+    }
 
+    int dim = calclmodel2D->fullSize;
+
+    const int sizeBorder = calclmodel2D->borderSize * calclmodel2D->columns;
+
+    int numSubstate = calclmodel2D->host_CA->sizeof_pQr_array;
+    for (int i = 0; i < numSubstate; ++i) {
+
+      if (calclmodel2DPrev != NULL && (exchange_full_border || gpu != 0)) {
+        err = clEnqueueWriteBuffer(
+            calclmodel2D->queue, calclmodel2D->bufferCurrentRealSubstate,
+            CL_TRUE, (i * dim) * sizeof(CALreal), sizeof(CALreal) * sizeBorder,
+            calclmodel2DPrev->borderMapper.realBorder_OUT +
+                (numSubstate * sizeBorder) + i * sizeBorder,
+            0, NULL, NULL);
+        calclHandleError(err);
+      }
+
+      if (calclmodel2DNext != NULL &&
+          (exchange_full_border || gpu != multigpu->num_devices - 1)) {
+        err = clEnqueueWriteBuffer(
+            calclmodel2D->queue, calclmodel2D->bufferCurrentRealSubstate,
+            CL_TRUE, (i * dim + (dim - sizeBorder)) * sizeof(CALreal),
+            sizeof(CALreal) * sizeBorder,
+            calclmodel2DNext->borderMapper.realBorder_OUT + i * sizeBorder, 0,
+            NULL, NULL);
+        calclHandleError(err);
+      }
+    }
+
+    numSubstate = calclmodel2D->host_CA->sizeof_pQi_array;
+
+    for (int i = 0; i < numSubstate; ++i) {
+
+      if (calclmodel2DPrev != NULL && (exchange_full_border || gpu != 0)) {
+        err = clEnqueueWriteBuffer(
+            calclmodel2D->queue, calclmodel2D->bufferCurrentIntSubstate,
+            CL_TRUE, (i * dim) * sizeof(CALint), sizeof(CALint) * sizeBorder,
+            calclmodel2DPrev->borderMapper.intBorder_OUT +
+                (numSubstate * sizeBorder) + i * sizeBorder,
+            0, NULL, NULL);
+        calclHandleError(err);
+      }
+      if (calclmodel2DNext != NULL &&
+          (exchange_full_border || gpu != multigpu->num_devices - 1)) {
+        err = clEnqueueWriteBuffer(
+            calclmodel2D->queue, calclmodel2D->bufferCurrentIntSubstate,
+            CL_TRUE, (i * dim + (dim - sizeBorder)) * sizeof(CALint),
+            sizeof(CALint) * sizeBorder,
+            calclmodel2DNext->borderMapper.intBorder_OUT + i * sizeBorder, 0,
+            NULL, NULL);
+        calclHandleError(err);
+      }
+    }
+
+    numSubstate = calclmodel2D->host_CA->sizeof_pQb_array;
+    for (int i = 0; i < numSubstate; ++i) {
+
+      if (calclmodel2DPrev != NULL && (exchange_full_border || gpu != 0)) {
+        err = clEnqueueWriteBuffer(
+            calclmodel2D->queue, calclmodel2D->bufferCurrentByteSubstate,
+            CL_TRUE, (i * dim) * sizeof(CALbyte), sizeof(CALbyte) * sizeBorder,
+            calclmodel2DPrev->borderMapper.byteBorder_OUT +
+                (numSubstate * sizeBorder) + i * sizeBorder,
+            0, NULL, NULL);
+        calclHandleError(err);
+      }
+      if (calclmodel2DNext != NULL &&
+          (exchange_full_border || gpu != multigpu->num_devices - 1)) {
+        err = clEnqueueWriteBuffer(
+            calclmodel2D->queue, calclmodel2D->bufferCurrentByteSubstate,
+            CL_TRUE, (i * dim + (dim - sizeBorder)) * sizeof(CALbyte),
+            sizeof(CALbyte) * sizeBorder,
+            calclmodel2DNext->borderMapper.byteBorder_OUT + i * sizeBorder, 0,
+            NULL, NULL);
+        calclHandleError(err);
+      }
+    }
+    
+    /*const CALbyte activeCells = calclmodel2D->opt == CAL_OPT_ACTIVE_CELLS_NAIVE;
+    if (activeCells == CAL_TRUE) {
+      // copy border flags from GPUPrev and GPU next to a mergeflagsBorder
+      if (calclmodel2DPrev != NULL && (exchange_full_border || gpu != 0)) {
+        err = clEnqueueWriteBuffer(
+            calclmodel2D->queue, calclmodel2D->borderMapper.mergeflagsBorder,
+            CL_TRUE, 0, sizeof(CALbyte) * sizeBorder,
+            calclmodel2DPrev->borderMapper.flagsBorder_OUT + sizeBorder, 0,
+            NULL, NULL);
+
+        calclHandleError(err);
+      }
+      if (calclmodel2DNext != NULL &&
+          (exchange_full_border || gpu != multigpu->num_devices - 1)) {
+        err = clEnqueueWriteBuffer(
+            calclmodel2D->queue, calclmodel2D->borderMapper.mergeflagsBorder,
+            CL_TRUE, ((sizeBorder)) * sizeof(CALbyte),
+            sizeof(CALbyte) * sizeBorder,
+            calclmodel2DNext->borderMapper.flagsBorder_OUT, 0, NULL, NULL);
+        calclHandleError(err);
+      }
+    }*/
+
+  }//GPUs
 }
 
 
@@ -561,26 +561,37 @@ void calclMultiGPUGetBorders(struct CALCLMultiGPU* multigpu, int offset, int gpu
     calclCopyGhostr(calclmodel2D->host_CA, calclmodel2D->borderMapper.realBorder_OUT, offset, multigpu->workloads[gpu], calclmodel2D->borderSize);
 }
 
-void calclMultiGPUDef2D(struct CALCLMultiGPU* multigpu,struct CALModel2D *host_CA ,char* kernel_src,char* kernel_inc, const CALint borderSize, const std::vector<Device>& devices, const CALbyte _exchange_full_border) {
-    assert(host_CA->rows == calclCheckWorkload(multigpu));
-    multigpu->context = calclCreateContext(multigpu->devices,multigpu->num_devices);
-    multigpu->exchange_full_border = _exchange_full_border;
-   
-   
-    for (int i = 0; i < multigpu->num_devices; ++i) {
-        const cl_uint offset = devices[i].offset;
-		multigpu->programs[i] = calclLoadProgram2D(multigpu->context, multigpu->devices[i], kernel_src, kernel_inc);
-
-        multigpu->device_models[i] = calclCADef2D(host_CA,multigpu->context,multigpu->programs[i],multigpu->devices[i],multigpu->workloads[i],offset , borderSize);//offset
-
-        calclMultiGPUGetBorders(multigpu,offset, i);
-
-		
-		cl_int err;
-		setParametersReduction(err, multigpu->device_models[i]);
+void calclMultiGPUDef2D(struct CALCLMultiGPU* multigpu,
+                        struct CALModel2D* host_CA, char* kernel_src,
+                        char* kernel_inc, const CALint borderSize,
+                        const std::vector<Device>& devices,
+                        const CALbyte _exchange_full_border) {
+  
+  assert(host_CA->rows == calclCheckWorkload(multigpu));
+  multigpu->context =
+      calclCreateContext(multigpu->devices, multigpu->num_devices);
+  multigpu->exchange_full_border = _exchange_full_border;
 
 
-    }
+  //manual initialization vector::resize causes crash
+  multigpu->singleStepThreadNums = (size_t**)calloc(multigpu->num_devices,sizeof(size_t*));
+  //for (int i = 0; i < multigpu->num_devices; ++i) 
+    //multigpu->singleStepThreadNums[i]=0;  
+
+  for (int i = 0; i < multigpu->num_devices; ++i) {
+    const cl_uint offset = devices[i].offset;
+    multigpu->programs[i] = calclLoadProgram2D(
+        multigpu->context, multigpu->devices[i], kernel_src, kernel_inc);
+
+    multigpu->device_models[i] = calclCADef2D(
+        host_CA, multigpu->context, multigpu->programs[i], multigpu->devices[i],
+        multigpu->workloads[i], offset, borderSize);  // offset
+
+    calclMultiGPUGetBorders(multigpu, offset, i);
+
+    cl_int err;
+    setParametersReduction(err, multigpu->device_models[i]);
+  }
 //considera una barriera qui
     calclMultiGPUHandleBordersMultiNode(multigpu, multigpu->exchange_full_border);
 
@@ -590,68 +601,7 @@ void calclMultiGPUDef2D(struct CALCLMultiGPU* multigpu,struct CALModel2D *host_C
 
 }
 
-void calcl_executeElementaryProcess(struct CALCLMultiGPU* multigpu,const int el_proc, size_t* singleStepThreadNum,int dimNum)
-{
 
-    for (int gpu = 0; gpu < multigpu->num_devices; ++gpu) {
-        struct CALCLModel2D * calclmodel2D = multigpu->device_models[gpu];
-
-        cl_int err;
-
-	
-        if (calclmodel2D->kernelInitSubstates != NULL)
-            calclSetReductionParameters2D(calclmodel2D, calclmodel2D->kernelInitSubstates);
-        if (calclmodel2D->kernelStopCondition != NULL)
-            calclSetReductionParameters2D(calclmodel2D, calclmodel2D->kernelStopCondition);
-        if (calclmodel2D->kernelSteering != NULL)
-            calclSetReductionParameters2D(calclmodel2D, calclmodel2D->kernelSteering);
-
-        int i = 0;
-
-        calclSetReductionParameters2D(calclmodel2D, calclmodel2D->elementaryProcesses[el_proc]);
-
-
-
-        calclKernelCall2D(calclmodel2D, calclmodel2D->elementaryProcesses[el_proc], dimNum, singleStepThreadNum,
-                          NULL, NULL);
-        copySubstatesBuffers2D(calclmodel2D);
-
-
-    }
-
-    // barrier tutte hanno finito
-    for (int gpu = 0; gpu < multigpu->num_devices; ++gpu) {
-        clFinish(multigpu->device_models[gpu]->queue);
-    }
-
-    for (int gpu = 0; gpu < multigpu->num_devices; ++gpu) {
-        calclGetBorderFromDeviceToHost2D(multigpu->device_models[gpu]);
-    }
-
-    //scambia bordi
-    calclMultiGPUHandleBordersMultiNode(multigpu, multigpu->exchange_full_border);
-
-    for (int gpu = 0; gpu < multigpu->num_devices; ++gpu) {
-        struct CALCLModel2D * calclmodel2D = multigpu->device_models[gpu];
-
-        if (calclmodel2D->kernelSteering != NULL) {
-            calclKernelCall2D(calclmodel2D, calclmodel2D->kernelSteering, dimNum, singleStepThreadNum, NULL, NULL);
-            copySubstatesBuffers2D(calclmodel2D);
-        }
-    }
-
-    for (int gpu = 0; gpu < multigpu->num_devices; ++gpu) {
-        clFinish(multigpu->device_models[gpu]->queue);
-    }
-
-    for (int gpu = 0; gpu < multigpu->num_devices; ++gpu) {
-        calclGetBorderFromDeviceToHost2D(multigpu->device_models[gpu]);
-    }
-
-    //scambia bordi
-    calclMultiGPUHandleBordersMultiNode(multigpu, multigpu->exchange_full_border);
-
-}
 
 void calclDevicesToNode(struct CALCLMultiGPU* multigpu) {
 
@@ -670,18 +620,34 @@ void calclDevicesToNode(struct CALCLMultiGPU* multigpu) {
 
 }
 
-void computekernelLaunchParams(struct CALCLMultiGPU* multigpu, size_t** singleStepThreadNum, int *dim) {
+
+size_t* computekernelLaunchParams(struct CALCLMultiGPU* multigpu, const int gpu,int *dim) {
+   size_t* singleStepThreadNum;
     if (multigpu->device_models[0]->opt == CAL_NO_OPT) {
-        *singleStepThreadNum = (size_t*) malloc(sizeof(size_t) * 2);
-        (*singleStepThreadNum)[0] = multigpu->device_models[0]->rows;
-        (*singleStepThreadNum)[1] = multigpu->device_models[0]->columns;
+        singleStepThreadNum = (size_t*) malloc(sizeof(size_t) * 2);
+        (singleStepThreadNum)[0] = multigpu->device_models[gpu]->rows;
+        (singleStepThreadNum)[1] = multigpu->device_models[gpu]->columns;
         *dim = 2;
     } else {
-        *singleStepThreadNum = (size_t*) malloc(sizeof(size_t));
-        *singleStepThreadNum[0] = multigpu->device_models[0]->host_CA->A->size_current;
+        singleStepThreadNum = (size_t*) malloc(sizeof(size_t));
+        singleStepThreadNum[0] = multigpu->device_models[gpu]->num_active_cells; 
         *dim = 1;
     }
+    return singleStepThreadNum;
 }
+/*
+void computekernelLaunchParams(struct CALCLMultiGPU* multigpu, size_t*& singleStepThreadNum, int *dim) {
+    if (multigpu->device_models[0]->opt == CAL_NO_OPT) {
+        singleStepThreadNum = (size_t*) malloc(sizeof(size_t) * 2);
+        (singleStepThreadNum)[0] = multigpu->device_models[0]->rows;
+        (singleStepThreadNum)[1] = multigpu->device_models[0]->columns;
+        *dim = 2;
+    } else {
+        singleStepThreadNum = (size_t*) malloc(sizeof(size_t));
+        singleStepThreadNum[0] = multigpu->device_models[0]->host_CA->A->size_current; 
+        *dim = 1;
+    }
+}*/
 
 void calclMultiGPURun2D(struct CALCLMultiGPU* multigpu, CALint init_step, CALint final_step) {
 

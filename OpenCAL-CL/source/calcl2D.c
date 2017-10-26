@@ -27,7 +27,7 @@
 
 
 /******************************************************************************
- * 							PRIVATE FUNCTIONS
+ *              PRIVATE FUNCTIONS
  ******************************************************************************/
 void calclMapperToSubstates2D(struct CALModel2D * host_CA, CALCLSubstateMapper * mapper) {
 
@@ -166,7 +166,30 @@ void calclGetBorderFromDeviceToHost2D(struct CALCLModel2D* calclmodel2D) {
         calclHandleError(err);
     }
 
+    // Read from substates and set flags borders
+
+   /* err = clEnqueueReadBuffer(queue, calclmodel2D->bufferActiveCellsFlags,
+                              CL_TRUE, 
+                              0, sizeof(CALbyte) * sizeBorder,
+                              calclmodel2D->borderMapper.flagsBorder_OUT, 
+                              0,
+                              NULL, 
+                              NULL);
+    calclHandleError(err);
+
+    err = clEnqueueReadBuffer(
+        queue, calclmodel2D->bufferActiveCellsFlags, 
+        CL_TRUE,
+        ((dim - sizeBorder)) * sizeof(CALbyte),
+         sizeof(CALbyte) * sizeBorder,
+        calclmodel2D->borderMapper.flagsBorder_OUT + sizeBorder, 
+        0, 
+        NULL, 
+        NULL);
+    calclHandleError(err);*/
 }
+
+
 
 
 void calclGetSubstatesDeviceToHost2D(struct CALCLModel2D* calclmodel2D) {
@@ -199,16 +222,20 @@ void calclRoundThreadsNum2D(size_t * threadNum, int numDim, size_t multiple) {
             threadNum[i]++;
 }
 
-void calclResizeThreadsNum2D(struct CALCLModel2D * calclmodel2D, size_t * threadNum) {
+void calclResizeThreadsNum2D(struct CALCLModel2D* calclmodel2D,
+                             size_t* threadNum) {
     CALCLqueue queue = calclmodel2D->queue;
 
     cl_int err;
     size_t zero = 0;
-
-    err = clEnqueueReadBuffer(queue, calclmodel2D->bufferActiveCellsNum, CL_TRUE, zero, sizeof(int), &calclmodel2D->host_CA->A->size_current, 0, NULL, NULL);
+    err = clEnqueueReadBuffer(
+        queue, calclmodel2D->bufferActiveCellsNum, CL_TRUE, zero, sizeof(int),
+        &calclmodel2D->host_CA->A->size_current, 0, NULL, NULL);
     calclHandleError(err);
+    //printf("active cells --> %d\n",calclmodel2D->host_CA->A->size_current);
     threadNum[0] = calclmodel2D->host_CA->A->size_current;
 }
+
 
 CALCLmem calclGetSubstateBuffer2D(CALCLmem bufferSubstates, cl_buffer_region region) {
     cl_int err;
@@ -256,29 +283,76 @@ CALbyte checkStopCondition2D(struct CALCLModel2D * calclmodel2D, CALint dimNum, 
 }
 
 void calclSetKernelStreamCompactionArgs2D(struct CALCLModel2D * calclmodel2D) {
-    CALint dim = calclmodel2D->rows * calclmodel2D->columns;
-    clSetKernelArg(calclmodel2D->kernelComputeCounts, 0, sizeof(CALint), &dim);
-    clSetKernelArg(calclmodel2D->kernelComputeCounts, 1, sizeof(CALCLmem), &calclmodel2D->bufferActiveCellsFlags);
-    clSetKernelArg(calclmodel2D->kernelComputeCounts, 2, sizeof(CALCLmem), &calclmodel2D->bufferSTCounts);
-    clSetKernelArg(calclmodel2D->kernelComputeCounts, 3, sizeof(CALCLmem), &calclmodel2D->bufferSTOffsets1);
-    clSetKernelArg(calclmodel2D->kernelComputeCounts, 4, sizeof(CALCLmem), &calclmodel2D->bufferSTCountsDiff);
+  CALint dim = calclmodel2D->rows * calclmodel2D->columns;
+  clSetKernelArg(calclmodel2D->kernelComputeCounts, 0, sizeof(CALint), &dim);
+  // clSetKernelArg(calclmodel2D->kernelComputeCounts, 1, sizeof(CALCLmem),
+  // &calclmodel2D->bufferActiveCellsFlags);
+  clSetKernelArg(calclmodel2D->kernelComputeCounts, 1, sizeof(CALCLmem),
+                 &calclmodel2D->bufferActiveCellsFlagsRealSize);
+  clSetKernelArg(calclmodel2D->kernelComputeCounts, 2, sizeof(CALCLmem),
+                 &calclmodel2D->bufferSTCounts);
+  clSetKernelArg(calclmodel2D->kernelComputeCounts, 3, sizeof(CALCLmem),
+                 &calclmodel2D->bufferSTOffsets1);
+  clSetKernelArg(calclmodel2D->kernelComputeCounts, 4, sizeof(CALCLmem),
+                 &calclmodel2D->bufferSTCountsDiff);
 
-    int offset = calclmodel2D->streamCompactionThreadsNum / 2;
+  int offset = calclmodel2D->streamCompactionThreadsNum / 2;
 
-    clSetKernelArg(calclmodel2D->kernelUpSweep, 0, sizeof(CALCLmem), &calclmodel2D->bufferSTOffsets1);
-    clSetKernelArg(calclmodel2D->kernelUpSweep, 1, sizeof(int), &offset);
+  clSetKernelArg(calclmodel2D->kernelUpSweep, 0, sizeof(CALCLmem),
+                 &calclmodel2D->bufferSTOffsets1);
+  clSetKernelArg(calclmodel2D->kernelUpSweep, 1, sizeof(int), &offset);
 
-    clSetKernelArg(calclmodel2D->kernelDownSweep, 0, sizeof(CALCLmem), &calclmodel2D->bufferSTOffsets1);
-    clSetKernelArg(calclmodel2D->kernelDownSweep, 1, sizeof(int), &offset);
+  clSetKernelArg(calclmodel2D->kernelDownSweep, 0, sizeof(CALCLmem),
+                 &calclmodel2D->bufferSTOffsets1);
+  clSetKernelArg(calclmodel2D->kernelDownSweep, 1, sizeof(int), &offset);
 
-    clSetKernelArg(calclmodel2D->kernelCompact, 0, sizeof(CALint), &dim);
-    clSetKernelArg(calclmodel2D->kernelCompact, 1, sizeof(CALint), &calclmodel2D->columns);
-    clSetKernelArg(calclmodel2D->kernelCompact, 2, sizeof(CALCLmem), &calclmodel2D->bufferActiveCellsFlags);
-    clSetKernelArg(calclmodel2D->kernelCompact, 3, sizeof(CALCLmem), &calclmodel2D->bufferActiveCellsNum);
-    clSetKernelArg(calclmodel2D->kernelCompact, 4, sizeof(CALCLmem), &calclmodel2D->bufferActiveCells);
-    clSetKernelArg(calclmodel2D->kernelCompact, 5, sizeof(CALCLmem), &calclmodel2D->bufferSTCounts);
-    clSetKernelArg(calclmodel2D->kernelCompact, 6, sizeof(CALCLmem), &calclmodel2D->bufferSTOffsets1);
+  clSetKernelArg(calclmodel2D->kernelCompact, 0, sizeof(CALint), &dim);
+  clSetKernelArg(calclmodel2D->kernelCompact, 1, sizeof(CALint),
+                 &calclmodel2D->columns);
+  // clSetKernelArg(calclmodel2D->kernelCompact, 2, sizeof(CALCLmem),
+  // &calclmodel2D->bufferActiveCellsFlags);
+  clSetKernelArg(calclmodel2D->kernelCompact, 2, sizeof(CALCLmem),
+                 &calclmodel2D->bufferActiveCellsFlagsRealSize);
+  clSetKernelArg(calclmodel2D->kernelCompact, 3, sizeof(CALCLmem),
+                 &calclmodel2D->bufferActiveCellsNum);
+  clSetKernelArg(calclmodel2D->kernelCompact, 4, sizeof(CALCLmem),
+                 &calclmodel2D->bufferActiveCells);
+  clSetKernelArg(calclmodel2D->kernelCompact, 5, sizeof(CALCLmem),
+                 &calclmodel2D->bufferSTCounts);
+  clSetKernelArg(calclmodel2D->kernelCompact, 6, sizeof(CALCLmem),
+                 &calclmodel2D->bufferSTOffsets1);
+}
 
+void calclSetKernelMergeFlags(struct CALCLModel2D* calclmodel2D) {
+
+  clSetKernelArg(calclmodel2D->kernelMergeFlags, 0, sizeof(CALint),
+                 &calclmodel2D->rows);
+  clSetKernelArg(calclmodel2D->kernelMergeFlags, 1, sizeof(CALint),
+                 &calclmodel2D->columns);
+  clSetKernelArg(calclmodel2D->kernelMergeFlags, 2, sizeof(CALint),
+                 &calclmodel2D->borderSize);
+  clSetKernelArg(calclmodel2D->kernelMergeFlags, 3, sizeof(CALCLmem),
+                 &calclmodel2D->borderMapper.mergeflagsBorder);
+  clSetKernelArg(calclmodel2D->kernelMergeFlags, 4, sizeof(CALCLmem),
+                 &calclmodel2D->bufferActiveCellsFlagsRealSize);
+  //clSetKernelArg(calclmodel2D->kernelMergeFlags, 5, sizeof(CALCLmem),
+   //              &calclmodel2D->bufferSTCountsDiff);
+ //calclHandleError(err);
+  //clSetKernelArg(calclmodel2D->kernelMergeFlags, 6, sizeof(CALint), &calclmodel2D->chunk);
+  // clSetKernelArg(calclmodel2D->kernelMergeFlags, 4, sizeof(CALCLmem),
+  // &calclmodel2D->bufferActiveCellsFlags);
+
+
+  clSetKernelArg(calclmodel2D->kernelSetDiffFlags, 0, sizeof(CALint),
+                 &calclmodel2D->rows);
+  clSetKernelArg(calclmodel2D->kernelSetDiffFlags, 1, sizeof(CALint),
+                 &calclmodel2D->columns);
+  clSetKernelArg(calclmodel2D->kernelSetDiffFlags, 2, sizeof(CALint),
+                 &calclmodel2D->borderSize);
+  clSetKernelArg(calclmodel2D->kernelSetDiffFlags, 3, sizeof(CALint),
+                 &calclmodel2D->chunk);
+  clSetKernelArg(calclmodel2D->kernelSetDiffFlags, 4, sizeof(CALCLmem),
+                 &calclmodel2D->bufferSTCountsDiff);
 }
 
 void calclSetKernelsLibArgs2D(struct CALCLModel2D *calclmodel2D) {
@@ -304,41 +378,63 @@ void calclSetModelParameters2D(struct CALCLModel2D* calclmodel2D, CALCLkernel  k
 
     cl_int err = clSetKernelArg(kernel, 0, sizeof(CALCLmem), &calclmodel2D->bufferRows);
 
-    err = clSetKernelArg(kernel, 1, sizeof(CALCLmem), &calclmodel2D->bufferColumns);
-    err = clSetKernelArg(kernel, 2, sizeof(CALCLmem), &calclmodel2D->bufferByteSubstateNum);
-    err = clSetKernelArg(kernel, 3, sizeof(CALCLmem), &calclmodel2D->bufferIntSubstateNum);
-    err = clSetKernelArg(kernel, 4, sizeof(CALCLmem), &calclmodel2D->bufferRealSubstateNum);
-    err = clSetKernelArg(kernel, 5, sizeof(CALCLmem), &calclmodel2D->bufferCurrentByteSubstate);
-    err = clSetKernelArg(kernel, 6, sizeof(CALCLmem), &calclmodel2D->bufferCurrentIntSubstate);
-    err = clSetKernelArg(kernel, 7, sizeof(CALCLmem), &calclmodel2D->bufferCurrentRealSubstate);
-    err = clSetKernelArg(kernel, 8, sizeof(CALCLmem), &calclmodel2D->bufferNextByteSubstate);
-    err = clSetKernelArg(kernel, 9, sizeof(CALCLmem), &calclmodel2D->bufferNextIntSubstate);
-    err = clSetKernelArg(kernel, 10, sizeof(CALCLmem), &calclmodel2D->bufferNextRealSubstate);
-    err = clSetKernelArg(kernel, 11, sizeof(CALCLmem), &calclmodel2D->bufferActiveCells);
-    err = clSetKernelArg(kernel, 12, sizeof(CALCLmem), &calclmodel2D->bufferActiveCellsNum);
-    err = clSetKernelArg(kernel, 13, sizeof(CALCLmem), &calclmodel2D->bufferActiveCellsFlags);
-    err = clSetKernelArg(kernel, 14, sizeof(CALCLmem), &calclmodel2D->bufferNeighborhood);
-    err = clSetKernelArg(kernel, 15, sizeof(CALCLmem), &calclmodel2D->bufferNeighborhoodID);
-    err = clSetKernelArg(kernel, 16, sizeof(CALCLmem), &calclmodel2D->bufferNeighborhoodSize);
-    err = clSetKernelArg(kernel, 17, sizeof(CALCLmem), &calclmodel2D->bufferBoundaryCondition);
-    err = clSetKernelArg(kernel, 18, sizeof(CALCLmem), &calclmodel2D->bufferStop);
-    err = clSetKernelArg(kernel, 19, sizeof(CALCLmem), &calclmodel2D->bufferSTCountsDiff);
-    double chunk_double = ceil((double) (calclmodel2D->rows * calclmodel2D->columns) / calclmodel2D->streamCompactionThreadsNum);
-    int chunk = (int) chunk_double;
-    err = clSetKernelArg(kernel, 20, sizeof(int), &chunk);
+    err = clSetKernelArg(kernel, 1, sizeof(CALCLmem),
+                         &calclmodel2D->bufferColumns);
+    err = clSetKernelArg(kernel, 2, sizeof(CALCLmem),
+                         &calclmodel2D->bufferByteSubstateNum);
+    err = clSetKernelArg(kernel, 3, sizeof(CALCLmem),
+                         &calclmodel2D->bufferIntSubstateNum);
+    err = clSetKernelArg(kernel, 4, sizeof(CALCLmem),
+                         &calclmodel2D->bufferRealSubstateNum);
+    err = clSetKernelArg(kernel, 5, sizeof(CALCLmem),
+                         &calclmodel2D->bufferCurrentByteSubstate);
+    err = clSetKernelArg(kernel, 6, sizeof(CALCLmem),
+                         &calclmodel2D->bufferCurrentIntSubstate);
+    err = clSetKernelArg(kernel, 7, sizeof(CALCLmem),
+                         &calclmodel2D->bufferCurrentRealSubstate);
+    err = clSetKernelArg(kernel, 8, sizeof(CALCLmem),
+                         &calclmodel2D->bufferNextByteSubstate);
+    err = clSetKernelArg(kernel, 9, sizeof(CALCLmem),
+                         &calclmodel2D->bufferNextIntSubstate);
+    err = clSetKernelArg(kernel, 10, sizeof(CALCLmem),
+                         &calclmodel2D->bufferNextRealSubstate);
+    err = clSetKernelArg(kernel, 11, sizeof(CALCLmem),
+                         &calclmodel2D->bufferActiveCells);
+    err = clSetKernelArg(kernel, 12, sizeof(CALCLmem),
+                         &calclmodel2D->bufferActiveCellsNum);
+    //err = clSetKernelArg(kernel, 13, sizeof(CALCLmem),
+      //                   &calclmodel2D->bufferActiveCellsFlags);
+    err = clSetKernelArg(kernel, 13, sizeof(CALCLmem),
+                         &calclmodel2D->bufferActiveCellsFlagsRealSize);
+    err = clSetKernelArg(kernel, 14, sizeof(CALCLmem),
+                         &calclmodel2D->bufferNeighborhood);
+    err = clSetKernelArg(kernel, 15, sizeof(CALCLmem),
+                         &calclmodel2D->bufferNeighborhoodID);
+    err = clSetKernelArg(kernel, 16, sizeof(CALCLmem),
+                         &calclmodel2D->bufferNeighborhoodSize);
+    err = clSetKernelArg(kernel, 17, sizeof(CALCLmem),
+                         &calclmodel2D->bufferBoundaryCondition);
+    err =
+        clSetKernelArg(kernel, 18, sizeof(CALCLmem), &calclmodel2D->bufferStop);
+    err = clSetKernelArg(kernel, 19, sizeof(CALCLmem),
+                         &calclmodel2D->bufferSTCountsDiff);
+    err = clSetKernelArg(kernel, 20, sizeof(int), &calclmodel2D->chunk);
 
-    err = clSetKernelArg(kernel, 51, sizeof(CALCLmem), &calclmodel2D->bufferSingleLayerByteSubstateNum);
-    err = clSetKernelArg(kernel, 52, sizeof(CALCLmem), &calclmodel2D->bufferSingleLayerIntSubstateNum);
-    err = clSetKernelArg(kernel, 53, sizeof(CALCLmem), &calclmodel2D->bufferSingleLayerRealSubstateNum);
-    err = clSetKernelArg(kernel, 54, sizeof(CALCLmem), &calclmodel2D->bufferSingleLayerByteSubstate);
-    err = clSetKernelArg(kernel, 55, sizeof(CALCLmem), &calclmodel2D->bufferSingleLayerIntSubstate);
-    err = clSetKernelArg(kernel, 56, sizeof(CALCLmem), &calclmodel2D->bufferSingleLayerRealSubstate);
-	err = clSetKernelArg(kernel, 57, sizeof(CALint)	 , &calclmodel2D->borderSize);
-	
-	err = clSetKernelArg(kernel, 58, sizeof(cl_uint) , &calclmodel2D->offset);
-	
+    err = clSetKernelArg(kernel, 51, sizeof(CALCLmem),
+                         &calclmodel2D->bufferSingleLayerByteSubstateNum);
+    err = clSetKernelArg(kernel, 52, sizeof(CALCLmem),
+                         &calclmodel2D->bufferSingleLayerIntSubstateNum);
+    err = clSetKernelArg(kernel, 53, sizeof(CALCLmem),
+                         &calclmodel2D->bufferSingleLayerRealSubstateNum);
+    err = clSetKernelArg(kernel, 54, sizeof(CALCLmem),
+                         &calclmodel2D->bufferSingleLayerByteSubstate);
+    err = clSetKernelArg(kernel, 55, sizeof(CALCLmem),
+                         &calclmodel2D->bufferSingleLayerIntSubstate);
+    err = clSetKernelArg(kernel, 56, sizeof(CALCLmem),
+                         &calclmodel2D->bufferSingleLayerRealSubstate);
+    err = clSetKernelArg(kernel, 57, sizeof(CALint), &calclmodel2D->borderSize);
 
-
+    err = clSetKernelArg(kernel, 58, sizeof(cl_uint), &calclmodel2D->offset);
 }
 
 void safeCLSetKernelArg(  cl_kernel kernel,
@@ -638,6 +734,11 @@ CALCLqueue calclCreateQueue2D(struct CALCLModel2D * calclmodel2D, CALCLcontext c
     while (calclmodel2D->rows * calclmodel2D->columns <= (int) calclmodel2D->streamCompactionThreadsNum)
         calclmodel2D->streamCompactionThreadsNum /= 2;
 
+    double chunk_double =
+        ceil((double)(calclmodel2D->rows * calclmodel2D->columns) /
+             calclmodel2D->streamCompactionThreadsNum);
+    calclmodel2D->chunk = (int)chunk_double;
+
     calclmodel2D->bufferSTCounts = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR, sizeof(CALint) * calclmodel2D->streamCompactionThreadsNum, NULL, &err);
     calclHandleError(err);
     calclmodel2D->bufferSTOffsets1 = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR, sizeof(CALint) * calclmodel2D->streamCompactionThreadsNum, NULL, &err);
@@ -647,6 +748,39 @@ CALCLqueue calclCreateQueue2D(struct CALCLModel2D * calclmodel2D, CALCLcontext c
     calclmodel2D->bufferSTCountsDiff = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, calclmodel2D->streamCompactionThreadsNum * sizeof(CALbyte), diff, &err);
     calclHandleError(err);
     free(diff);
+
+    //initialize bufferActiveCellsFlags to zero
+    CALbyte patter = 0;
+    clEnqueueFillBuffer(queue,
+                        calclmodel2D->bufferActiveCellsFlags,
+                        &patter,
+                        sizeof(CALbyte),
+                        0,
+                        sizeof(CALbyte)*calclmodel2D->fullSize,0,
+                        NULL,
+                        NULL
+      );
+
+    //Copy flags to bufferActiveCellsFlags from given offset ( calclmodel2D->host_CA->columns * borderSize)
+    clEnqueueWriteBuffer(
+        queue, calclmodel2D->bufferActiveCellsFlags, CL_TRUE,
+        sizeof(CALbyte) * calclmodel2D->host_CA->columns * calclmodel2D->borderSize,
+        sizeof(CALbyte) * calclmodel2D->realSize,
+        calclmodel2D->host_CA->A->flags + (calclmodel2D->offset * calclmodel2D->host_CA->columns), 0, NULL,
+        NULL );
+
+    //cl_buffer_region definition
+    cl_buffer_region region;
+    region.origin = sizeof(CALbyte) * calclmodel2D->host_CA->columns *
+                    calclmodel2D->borderSize;
+    region.size = sizeof(CALbyte) * calclmodel2D->realSize;
+
+    calclmodel2D->bufferActiveCellsFlagsRealSize = clCreateSubBuffer(
+        calclmodel2D->bufferActiveCellsFlags, CL_MEM_READ_WRITE,
+        CL_BUFFER_CREATE_TYPE_REGION, &region, &err);
+    calclHandleError(err);
+    calclSetKernelMergeFlags(calclmodel2D);
+
     calclSetKernelStreamCompactionArgs2D(calclmodel2D);
 
     return queue;
@@ -1178,18 +1312,24 @@ void setParametersReduction(cl_int err, struct CALCLModel2D* calclmodel2D)
 
 
 /******************************************************************************
- * 							PUBLIC FUNCTIONS MULTIGPU
+ *              PUBLIC FUNCTIONS MULTIGPU
  ******************************************************************************/
 
 
 
 /******************************************************************************
- * 							PUBLIC FUNCTIONS
+ *              PUBLIC FUNCTIONS
  ******************************************************************************/
 
-struct CALCLModel2D * calclCADef2D(struct CALModel2D *host_CA, CALCLcontext context, CALCLprogram program, CALCLdevice device,const CALint workload,const CALint offset, const CALint _borderSize) {
+struct CALCLModel2D* calclCADef2D(struct CALModel2D* host_CA,
+                                  CALCLcontext context, CALCLprogram program,
+                                  CALCLdevice device, const CALint workload,
+                                  const CALint offset,
+                                  const CALint _borderSize) {
 
-    struct CALCLModel2D * calclmodel2D = (struct CALCLModel2D*) malloc(sizeof(struct CALCLModel2D));
+  struct CALCLModel2D* calclmodel2D =
+      (struct CALCLModel2D*)malloc(sizeof(struct CALCLModel2D));
+      
     calclmodel2D->host_CA = host_CA;
     calclmodel2D->opt = host_CA->OPTIMIZATION;
     calclmodel2D->cl_update_substates = NULL;
@@ -1204,17 +1344,21 @@ struct CALCLModel2D * calclCADef2D(struct CALModel2D *host_CA, CALCLcontext cont
     calclmodel2D->borderSize = _borderSize;
 
     if (calclmodel2D->host_CA->A == NULL) {
-        printf("AZZERO\n");
-        calclmodel2D->host_CA->A = malloc( sizeof(struct CALActiveCells2D));
-        calclmodel2D->host_CA->A->cells = NULL;
-        calclmodel2D->host_CA->A->size_current = 0;
-        calclmodel2D->host_CA->A->size_next = 0;
-        calclmodel2D->host_CA->A->flags = (CALbyte*) malloc(sizeof(CALbyte) * host_CA->rows * host_CA->columns);
-        memset(calclmodel2D->host_CA->A->flags, CAL_FALSE, sizeof(CALbyte) * host_CA->rows * host_CA->columns);
+      // printf("AZZERO\n");
+      calclmodel2D->host_CA->A = malloc(sizeof(struct CALActiveCells2D));
+      calclmodel2D->host_CA->A->cells = NULL;
+      calclmodel2D->host_CA->A->size_current = 0;
+      calclmodel2D->host_CA->A->size_next = 0;
+      calclmodel2D->host_CA->A->flags =
+          (CALbyte*)malloc(sizeof(CALbyte) * host_CA->rows * host_CA->columns);
+      memset(calclmodel2D->host_CA->A->flags, CAL_FALSE,
+             sizeof(CALbyte) * host_CA->rows * host_CA->columns);
     }
 
     cl_int err;
-    calclmodel2D->fullSize = calclmodel2D->columns * (calclmodel2D->rows+calclmodel2D->borderSize*2);
+    calclmodel2D->fullSize =
+        calclmodel2D->columns *
+        (calclmodel2D->rows + calclmodel2D->borderSize * 2);
     calclmodel2D->realSize = calclmodel2D->columns * calclmodel2D->rows;
     calclmodel2D->offset = offset;
     int bufferDim = calclmodel2D->fullSize;
@@ -1226,6 +1370,9 @@ struct CALCLModel2D * calclCADef2D(struct CALModel2D *host_CA, CALCLcontext cont
     calclmodel2D->kernelComputeCounts = calclGetKernelFromProgram(program, KER_STC_COMPUTE_COUNTS);
     calclmodel2D->kernelUpSweep = calclGetKernelFromProgram(program, KER_STC_UP_SWEEP);
     calclmodel2D->kernelDownSweep = calclGetKernelFromProgram(program, KER_STC_DOWN_SWEEP);
+
+    calclmodel2D->kernelMergeFlags = calclGetKernelFromProgram(program, KER_MERGE_FLAGS);
+    calclmodel2D->kernelSetDiffFlags = calclGetKernelFromProgram(program, KER_SET_DIFF_FLAGS);
 
     calclmodel2D->kernelMinReductionb = calclGetKernelFromProgram(program, "calclMinReductionKernelb");
     calclmodel2D->kernelMaxReductionb = calclGetKernelFromProgram(program, "calclMaxReductionKernelb");
@@ -1260,46 +1407,66 @@ struct CALCLModel2D * calclCADef2D(struct CALModel2D *host_CA, CALCLcontext cont
     calclmodel2D->kernelBinaryOrReductionr = calclGetKernelFromProgram(program, "calclBinaryOrReductionKernelr");
     calclmodel2D->kernelBinaryXorReductionr = calclGetKernelFromProgram(program, "calclBinaryXOrReductionKernelr");
 
+    struct CALCell2D* activeCells = (struct CALCell2D*)malloc(
+        sizeof(struct CALCell2D) * calclmodel2D->realSize);
+    calclmodel2D->num_active_cells=0;
 
-
-    struct CALCell2D * activeCells = (struct CALCell2D*) malloc(sizeof(struct CALCell2D) * calclmodel2D->realSize);
-    int n = 0;
     int i = 0;
     int j = 0;
-    printf("Offset = %d    %d -- %d \n",calclmodel2D->host_CA->A->size_next,offset,calclmodel2D->rows+offset);
+    printf("Num active cells = %d    %d -- %d \n",calclmodel2D->host_CA->A->size_next,offset,calclmodel2D->rows+offset);
     for (i=offset; i < (calclmodel2D->rows+offset); i++)
         for (j=0; j < calclmodel2D->columns; j++)
             if (calGetMatrixElement(calclmodel2D->host_CA->A->flags, calclmodel2D->host_CA->columns, i, j))
             {
-                activeCells[n].i = i;
-                activeCells[n].j = j;
-                n++;
+                activeCells[calclmodel2D->num_active_cells].i = i;
+                activeCells[calclmodel2D->num_active_cells].j = j;
+                ++calclmodel2D->num_active_cells;
             }
-    printf("CELLE ATTIVE --------------------------------------------- \n");
 
-
-
-
-    printf("TOTALE N = %d \n",n);
+    printf("TOTALE N = %d \n",calclmodel2D->num_active_cells);
 
     //  memcpy(activeCells, calclmodel2D->host_CA->A->cells, sizeof(struct CALCell2D) * calclmodel2D->host_CA->A->size_current);
 
-    calclmodel2D->bufferActiveCells = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(struct CALCell2D) * calclmodel2D->realSize, activeCells, &err);
+    calclmodel2D->bufferActiveCells = clCreateBuffer(
+        context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
+        sizeof(struct CALCell2D) * calclmodel2D->realSize, activeCells, &err);
     calclHandleError(err);
     free(activeCells);
-    calclmodel2D->bufferActiveCellsFlags = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALbyte) * calclmodel2D->realSize, calclmodel2D->host_CA->A->flags, &err);
+
+ 
+       /*calclmodel2D->bufferActiveCellsFlags =
+       clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
+                       sizeof(CALbyte) * calclmodel2D->fullSize,
+                       calclmodel2D->host_CA->A->flags+(offset*host_CA->columns),
+           &err);
+        */
+    calclmodel2D->bufferActiveCellsFlags =
+         clCreateBuffer(context, CL_MEM_READ_WRITE,
+                       sizeof(CALbyte) * calclmodel2D->fullSize, NULL, &err);
+
     calclHandleError(err);
 
-    calclmodel2D->bufferActiveCellsNum = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALint), &n, &err);
+
+    /////////////////////////////
+    calclmodel2D->bufferActiveCellsNum =
+        clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
+                       sizeof(CALint), &calclmodel2D->num_active_cells, &err);
     calclHandleError(err);
 
-    calclmodel2D->bufferByteSubstateNum = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALint), &calclmodel2D->host_CA->sizeof_pQb_array, &err);
-    calclHandleError(err);
-    calclmodel2D->bufferIntSubstateNum = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALint), &calclmodel2D->host_CA->sizeof_pQi_array, &err);
-    calclHandleError(err);
-    calclmodel2D->bufferRealSubstateNum = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALint), &calclmodel2D->host_CA->sizeof_pQr_array, &err);
+    calclmodel2D->bufferByteSubstateNum = clCreateBuffer(
+        context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALint),
+        &calclmodel2D->host_CA->sizeof_pQb_array, &err);
     calclHandleError(err);
 
+    calclmodel2D->bufferIntSubstateNum = clCreateBuffer(
+        context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALint),
+        &calclmodel2D->host_CA->sizeof_pQi_array, &err);
+    calclHandleError(err);
+
+    calclmodel2D->bufferRealSubstateNum = clCreateBuffer(
+        context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALint),
+        &calclmodel2D->host_CA->sizeof_pQr_array, &err);
+    calclHandleError(err);
 
     calclmodel2D->bufferColumns = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALint), &calclmodel2D->columns, &err);
     calclHandleError(err);
@@ -1343,7 +1510,7 @@ struct CALCLModel2D * calclCADef2D(struct CALModel2D *host_CA, CALCLcontext cont
     free(nextRealSubstates);
 
     calclSetKernelsLibArgs2D(calclmodel2D);
-
+    
 
 
     calclmodel2D->bufferSingleLayerByteSubstateNum = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(CALint), &calclmodel2D->host_CA->sizeof_pQb_single_layer_array, &err);
@@ -1407,11 +1574,31 @@ struct CALCLModel2D * calclCADef2D(struct CALModel2D *host_CA, CALCLcontext cont
     calclmodel2D->borderMapper.bufDIMbyte = sizeof(CALbyte)*host_CA->columns*host_CA->sizeof_pQb_array*calclmodel2D->borderSize*2;
     calclmodel2D->borderMapper.bufDIMreal = sizeof(CALreal)*host_CA->columns*host_CA->sizeof_pQr_array*calclmodel2D->borderSize*2;
     calclmodel2D->borderMapper.bufDIMint = sizeof(CALint)*host_CA->columns*host_CA->sizeof_pQi_array*calclmodel2D->borderSize*2;
+
+    calclmodel2D->borderMapper.bufDIMflags = sizeof(CALbyte)*host_CA->columns*calclmodel2D->borderSize*2;
+
+
     calclmodel2D->borderMapper.byteBorder_OUT = (CALbyte*) malloc(calclmodel2D->borderMapper.bufDIMbyte);
     calclmodel2D->borderMapper.realBorder_OUT = (CALreal*) malloc(calclmodel2D->borderMapper.bufDIMreal);
     calclmodel2D->borderMapper.intBorder_OUT = (CALint*) malloc(calclmodel2D->borderMapper.bufDIMint);
 
+    calclmodel2D->borderMapper.flagsBorder_OUT = (CALbyte*) malloc(calclmodel2D->borderMapper.bufDIMflags);
+    memset(calclmodel2D->borderMapper.flagsBorder_OUT, CAL_FALSE, sizeof(CALbyte) * calclmodel2D->borderMapper.bufDIMflags);
+
+                  printf("calclmodel2D->borderMapper.flagsBorder_OUT init \n");
+                  for (int i = 0; i < calclmodel2D->borderMapper.bufDIMflags; ++i) {
+                    if (i % calclmodel2D->columns == 0) printf("\n");
+                    printf("%d ", calclmodel2D->borderMapper.flagsBorder_OUT[i]);
+                    // std::cout << flagsNodeGhosts[i] << " ";
+                  }
+                  printf("\n");
+
+    calclmodel2D->borderMapper.mergeflagsBorder =
+        clCreateBuffer(context, CL_MEM_READ_ONLY,
+                       sizeof(CALbyte) * calclmodel2D->borderMapper.bufDIMflags, NULL, &err);
     calclmodel2D->queue = calclCreateQueue2D(calclmodel2D, context, device);
+
+
 
     //TODO Reduction
 
@@ -1422,7 +1609,6 @@ struct CALCLModel2D * calclCADef2D(struct CALModel2D *host_CA, CALCLcontext cont
     calclmodel2D->context = context;
 
     calclmodel2D->workGroupDimensions=NULL;
-
     return calclmodel2D;
 
 }
@@ -2056,8 +2242,8 @@ CALbyte calclSingleStep2D(struct CALCLModel2D* calclmodel2D, size_t * threadsNum
 FILE * file;
 void calclKernelCall2D(struct CALCLModel2D* calclmodel2D, CALCLkernel ker, int numDim, size_t * dimSize, size_t * localDimSize, cl_event * event) {
 
-    //	cl_event timing_event;
-    //	cl_ulong time_start, cl_ulong time_end, read_time;
+    //  cl_event timing_event;
+    //  cl_ulong time_start, cl_ulong time_end, read_time;
     cl_int err;
     CALCLdevice device;
     size_t multiple;
@@ -2070,29 +2256,29 @@ void calclKernelCall2D(struct CALCLModel2D* calclmodel2D, CALCLkernel ker, int n
     calclRoundThreadsNum2D(dimSize, numDim, multiple);
     err = clEnqueueNDRangeKernel(queue, ker, numDim, NULL, dimSize, localDimSize, 0, NULL, event);
     calclHandleError(err);
-    //	err = clEnqueueNDRangeKernel(queue, ker, numDim, NULL, dimSize, localDimSize, 0, NULL, &timing_event);
+    //  err = clEnqueueNDRangeKernel(queue, ker, numDim, NULL, dimSize, localDimSize, 0, NULL, &timing_event);
     //
-    //	err = clFinish(queue);
-    //	calclHandleError(err);
+    //  err = clFinish(queue);
+    //  calclHandleError(err);
     //
-    //	clGetEventProfilingInfo(timing_event, CL_PROFILING_COMMAND_START, sizeof(time_start), &time_start, NULL);
-    //	clGetEventProfilingInfo(timing_event, CL_PROFILING_COMMAND_END, sizeof(time_end), &time_end, NULL);
-    //	read_time = time_end - time_start;
-    //	char kernel_name[40];
-    //	clGetKernelInfo(ker, CL_KERNEL_FUNCTION_NAME, sizeof(kernel_name), kernel_name, NULL);
+    //  clGetEventProfilingInfo(timing_event, CL_PROFILING_COMMAND_START, sizeof(time_start), &time_start, NULL);
+    //  clGetEventProfilingInfo(timing_event, CL_PROFILING_COMMAND_END, sizeof(time_end), &time_end, NULL);
+    //  read_time = time_end - time_start;
+    //  char kernel_name[40];
+    //  clGetKernelInfo(ker, CL_KERNEL_FUNCTION_NAME, sizeof(kernel_name), kernel_name, NULL);
     //
-    //	file = fopen(kernel_name, "a");
-    //	fprintf(file, "%lu\n", read_time);
-    //	clReleaseEvent(timing_event);
-    //	fclose(file);
+    //  file = fopen(kernel_name, "a");
+    //  fprintf(file, "%lu\n", read_time);
+    //  clReleaseEvent(timing_event);
+    //  fclose(file);
 
     //
-    //	out.open(kernel_name, ios_base::app);
-    //	out << read_time << "\n";
-    //	out.close();
+    //  out.open(kernel_name, ios_base::app);
+    //  out << read_time << "\n";
+    //  out.close();
     //
-    //	clReleaseEvent(timing_event);
-    //	printf("kernel %s %lu\n", kernel_name, read_time);
+    //  clReleaseEvent(timing_event);
+    //  printf("kernel %s %lu\n", kernel_name, read_time);
 
     //err = clFinish(queue);
     //calclHandleError(err);
@@ -2188,6 +2374,9 @@ void calclFinalize2D(struct CALCLModel2D * calclmodel2D) {
     clReleaseKernel(calclmodel2D->kernelUpSweep);
     clReleaseKernel(calclmodel2D->kernelUpdateSubstate);
     clReleaseKernel(calclmodel2D->kernelStopCondition);
+
+    clReleaseKernel(calclmodel2D->kernelMergeFlags);
+    clReleaseKernel(calclmodel2D->kernelSetDiffFlags);
 
 
 
@@ -2376,7 +2565,7 @@ CALCLprogram calclLoadProgram2D(CALCLcontext context, CALCLdevice device, char* 
     char* tmp2 = (char*) malloc(sizeof(char) * (strlen(pathOpenCALCL) + strlen(KERNEL_SOURCE_DIR)) + 1);
     strcpy(tmp2, pathOpenCALCL);
     strcat(tmp2, KERNEL_SOURCE_DIR);
-    //	printf("source %s \n", tmp2);
+    //  printf("source %s \n", tmp2);
 
     paths[0] = path_user_kernel;
     paths[1] = tmp2;

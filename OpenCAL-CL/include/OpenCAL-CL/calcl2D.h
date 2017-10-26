@@ -56,6 +56,8 @@
 #define KER_STC_COMPUTE_COUNTS "calclkernelComputeCounts2D"
 #define KER_STC_UP_SWEEP "calclkernelUpSweep2D"
 #define KER_STC_DOWN_SWEEP "calclkernelDownSweep2D"
+#define KER_MERGE_FLAGS "calclMergeFlags2D"
+#define KER_SET_DIFF_FLAGS "calclsetDiffFlags2D"
 
 #define MODEL_ARGS_NUM 59	//!< Number of default arguments for each kernel defined by the user
 #define CALCL_RUN_LOOP 0	//!< Define used by the user to specify an infinite loop simulation
@@ -90,10 +92,13 @@ typedef struct CALCLBorderMapper {
     size_t bufDIMreal;							//!< Number of CALreal substates
     size_t bufDIMint;							//!< Number of CALint substates
     size_t bufDIMbyte;							//!< Number of CALbyte substates
+    size_t bufDIMflags;
 
     CALreal * realBorder_OUT;			//!< Array containing all the CALreal substates
     CALint * intBorder_OUT;			//!< Array containing all the CALint substates
     CALbyte * byteBorder_OUT;			//!< Array containing all the CALbyte substates
+    CALbyte * flagsBorder_OUT;
+    CALCLmem mergeflagsBorder;
 
 } CALCLBorderMapper;
 
@@ -120,6 +125,8 @@ struct CALCLModel2D {
     size_t intSubstatesDim;							//!< Number of CALint substates
     size_t realSubstatesDim;							//!< Number of CALbyte substates
 
+    size_t num_active_cells;
+    int chunk;
 
     //! CA space plus border
 
@@ -130,6 +137,8 @@ struct CALCLModel2D {
     CALCLkernel kernelStopCondition;					//!< Opencl kernel defined by the user to define a stop condition (optionally)
     CALCLkernel *elementaryProcesses;					//!< Array of Opencl kernels defined by the user. They represents CA elementary processes.
 
+    CALCLkernel kernelMergeFlags;
+    CALCLkernel kernelSetDiffFlags;
     CALint elementaryProcessesNum;						//!< Number of elementary processes defined by the user
 
     CALCLmem bufferColumns;								//!< Opencl buffer used to transfer GPU side the number of CA columns
@@ -150,6 +159,7 @@ struct CALCLModel2D {
     CALCLmem bufferActiveCells;							//!< Opencl buffer used to transfer GPU side CA active cells array
     CALCLmem bufferActiveCellsNum;						//!< Opencl buffer used to transfer GPU side the number of CA active cells
     CALCLmem bufferActiveCellsFlags;					//!< Opencl buffer used to transfer GPU side CA active cells flags array (CALbyte*)
+    CALCLmem bufferActiveCellsFlagsRealSize;            //!< Opencl buffer used to transfer GPU side CA active cells flags array (CALbyte*) without ghost borders
 
     CALCLmem bufferSingleLayerByteSubstateNum;			//!< Opencl buffer used to transfer GPU side the number of CA CALbyte single layer substates
     CALCLmem bufferSingleLayerIntSubstateNum;			//!< Opencl buffer used to transfer GPU side the number of CA CALint single layer substates

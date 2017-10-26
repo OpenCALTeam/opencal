@@ -26,10 +26,10 @@ __kernel void calclkernelComputeCounts2D(CALint dim, __global CALbyte * flags, _
 {
 	int id = get_global_id (0);
 
-	if (diff[id] == CAL_FALSE) {
+	/*if (diff[id] == CAL_FALSE) {
 		offsets[id] = counts[id];
 		return;
-	}
+	}*/
 
 	diff[id] = CAL_FALSE;
 
@@ -51,6 +51,7 @@ __kernel void calclkernelComputeCounts2D(CALint dim, __global CALbyte * flags, _
 	for (i = 0; i < chunk; i++) {
 		count += flags[startOffset + i];
 	}
+
 	offsets[id] = count;
 	counts[id] = count;
 
@@ -100,6 +101,8 @@ __kernel void calclkernelCompact2D(
 	if (id == threadsNum - 1) {
 		chunk = dim - startOffset;
 		(*numActiveCells) = offsets[id] + counts[id];
+	//	printf("numActiveCells %d\n", (*numActiveCells));
+
 	}
 
 	if (counts[id] == 0)
