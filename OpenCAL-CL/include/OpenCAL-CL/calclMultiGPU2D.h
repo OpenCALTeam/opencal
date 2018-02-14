@@ -96,9 +96,15 @@ void calclMultiGPUHandleBordersMultiNode(struct CALCLMultiGPU* multigpu,const CA
 
 //void calclStreamCompactionMulti(struct CALCLMultiGPU* multigpu);
 
+void calclSetWorkGroupDimensionsMultiGPU(struct CALCLMultiGPU* multigpu, int m, int n);
+
 
 template <class F_INIT,class F_FINALIZE>
 void calclStreamCompactionMulti(struct CALCLMultiGPU* multigpu,MultiNode<F_INIT,F_FINALIZE> * mn){
+
+//----------MEASURE TIME---------
+gettimeofday(&(mn->start_comm), NULL);
+
 
   cl_int err;
   // Read from substates and set flags borders
@@ -180,7 +186,12 @@ void calclStreamCompactionMulti(struct CALCLMultiGPU* multigpu,MultiNode<F_INIT,
       }
     }
   }
+  gettimeofday(&(mn->end_comm), NULL);
 
+  mn->comm_total+= 1000 * (mn->end_comm.tv_sec - mn->start_comm.tv_sec) +
+                      (mn->end_comm.tv_usec - mn->start_comm.tv_usec) / 1000;
+
+//----------------------------------   
 
 //questo pezzo di codice va spostato nella parte multinodo magari in una funzione a se stante
   // bisogna mettere degli if di guard di modo che tutte ste cose (che hanno un overhead) siano eseguite SOLO
@@ -239,17 +250,6 @@ void calcl_executeElementaryProcess(struct CALCLMultiGPU* multigpu,
 
         cl_int err;
 
-  
-        if (calclmodel2D->kernelInitSubstates != NULL)
-            calclSetReductionParameters2D(calclmodel2D, calclmodel2D->kernelInitSubstates);
-        if (calclmodel2D->kernelStopCondition != NULL)
-            calclSetReductionParameters2D(calclmodel2D, calclmodel2D->kernelStopCondition);
-        if (calclmodel2D->kernelSteering != NULL)
-            calclSetReductionParameters2D(calclmodel2D, calclmodel2D->kernelSteering);
-
-        int i = 0;
-
-        calclSetReductionParameters2D(calclmodel2D, calclmodel2D->elementaryProcesses[el_proc]);
 
         CALbyte activeCells = calclmodel2D->opt == CAL_OPT_ACTIVE_CELLS_NAIVE;
         if (activeCells == CAL_TRUE) {
@@ -258,7 +258,7 @@ void calcl_executeElementaryProcess(struct CALCLMultiGPU* multigpu,
             calclKernelCall2D(calclmodel2D,
                               calclmodel2D->elementaryProcesses[el_proc],
                               dimNum, singleStepThreadNum, NULL, NULL);
-clFinish(multigpu->device_models[gpu]->queue);
+//clFinish(multigpu->device_models[gpu]->queue);
          //printf("rank %d --> gpu=%d, before streamcompact el_proc num = %d --> %d\n",mn->rank,  gpu, el_proc, singleStepThreadNum[0]);
 
          // if (singleStepThreadNum[0] > 0) {
@@ -266,13 +266,13 @@ clFinish(multigpu->device_models[gpu]->queue);
             calclResizeThreadsNum2D(calclmodel2D, singleStepThreadNum);*/
             
             calclStreamCompactionMulti(multigpu,mn);
-            if(mn->rank ==1)
-            printf("rank %d --> gpu=%d, after streamcompact el_proc num = %d --> %d\n",mn->rank,  gpu, el_proc, singleStepThreadNum[0]);
+            //if(mn->rank ==1)
+            //printf("rank %d --> gpu=%d, after streamcompact el_proc num = %d --> %d\n",mn->rank,  gpu, el_proc, singleStepThreadNum[0]);
 
             //printf("gpu=%d,after streamcompact el_proc num = %d --> %d \n", gpu,             el_proc, singleStepThreadNum[0]);
         //  }
         
-clFinish(multigpu->device_models[gpu]->queue);
+//clFinish(multigpu->device_models[gpu]->queue);
           if (singleStepThreadNum[0] > 0) {
             //printf("gpu=%d,before update --> %d \n", gpu,  singleStepThreadNum[0]);
             calclKernelCall2D(calclmodel2D, calclmodel2D->kernelUpdateSubstate,
@@ -288,10 +288,10 @@ clFinish(multigpu->device_models[gpu]->queue);
 
           calclKernelCall2D(calclmodel2D,
                             calclmodel2D->elementaryProcesses[el_proc], dimNum,
-                            singleStepThreadNum, NULL, NULL);
+                            singleStepThreadNum, calclmodel2D->workGroupDimensions, NULL);
           copySubstatesBuffers2D(calclmodel2D);
         }  // == CAL_TRUE
-clFinish(multigpu->device_models[gpu]->queue);
+//clFinish(multigpu->device_models[gpu]->queue);
     }  // GPUs
     //printf("\n");
 }

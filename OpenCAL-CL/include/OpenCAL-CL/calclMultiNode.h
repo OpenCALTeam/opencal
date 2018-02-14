@@ -79,6 +79,17 @@ CALbyte calLoadSubstate2DiMulti(CALModel2D* ca2D, struct CALSubstate2Di* Q, char
 template <class F_INIT,class F_FINALIZE>
 class MultiNode{
 public:
+//only used to kep track of the communication overhead
+        double comm_total=0;
+        double comp_total=0;
+        double kernel_total=0;
+        double kernel_communication=0;
+        timeval start_comm, end_comm;
+        timeval start_comp, end_comp;
+        timeval start_kernel_communication, end_kernel_communication;
+
+        timeval start_kernel, end_kernel;
+
     Cluster c;
     F_INIT *init;
     F_FINALIZE *finalize;
@@ -131,68 +142,137 @@ public:
 
     int rank;
     timeval start, end;
+
+
+    double T1, T2,              /* start/end times per rep */
+    sumT=0,                   /* sum of all reps times */
+    deltaT;                 /* time for one rep */
+    double avgT;
+    double TotalTime;
+    int ntComuunication=0;
+
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     //printf("rank %d\n", rank);
 
 
-    if(rank == 0)
+ //MPI_Barrier(MPI_COMM_WORLD);
+   // if(rank == 0)
         gettimeofday(&start, NULL);
 
-        MPI_Barrier(MPI_COMM_WORLD);
+       
 
         
         int dimNum;
         for (int gpu = 0; gpu < multigpu->num_devices; ++gpu) {
           multigpu->singleStepThreadNums[gpu] =
               computekernelLaunchParams(multigpu, gpu, &dimNum);
-            //printf("%d %d\n",gpu,multigpu->singleStepThreadNums[gpu][0]);
+            printf("%d  %d\n",gpu,multigpu->singleStepThreadNums[gpu][0]);
+            printf("%d  %d\n",gpu,multigpu->singleStepThreadNums[gpu][1]);
         }
 
 
+//----------MEASURE TIME---------
+        gettimeofday(&start_comm, NULL);
+        handleBorderNodes(TotalTime,ntComuunication);
+        gettimeofday(&end_comm, NULL);
 
-        handleBorderNodes();
-        handleFlagsMultiNode();
+         comm_total+= 1000.0 * (end_comm.tv_sec - start_comm.tv_sec) +
+                                 (end_comm.tv_usec - start_comm.tv_usec) / 1000.0;
+        //handleFlagsMultiNode();
+         //----------------------------------
+         for (int gpu = 0; gpu < multigpu->num_devices; ++gpu) {
+           for (int el_proc = 0;
+                el_proc < multigpu->device_models[0]->elementaryProcessesNum;
+                el_proc++) {
+             struct CALCLModel2D* calclmodel2D = multigpu->device_models[gpu];
+             size_t* singleStepThreadNum = multigpu->singleStepThreadNums[gpu];
 
-        
+             cl_int err;
+
+             if (calclmodel2D->kernelInitSubstates != NULL)
+               calclSetReductionParameters2D(calclmodel2D,
+                                             calclmodel2D->kernelInitSubstates);
+             if (calclmodel2D->kernelStopCondition != NULL)
+               calclSetReductionParameters2D(calclmodel2D,
+                                             calclmodel2D->kernelStopCondition);
+             if (calclmodel2D->kernelSteering != NULL)
+               calclSetReductionParameters2D(calclmodel2D,
+                                             calclmodel2D->kernelSteering);
+
+             int i = 0;
+
+             calclSetReductionParameters2D(
+                 calclmodel2D, calclmodel2D->elementaryProcesses[el_proc]);
+           }
+         }
+
         int totalSteps= STEPS;   
         while(STEPS--){
             //debug("step \n");
+gettimeofday(&start_comp, NULL);
 
         for (int j = 0; j < multigpu->device_models[0]->elementaryProcessesNum; j++) {
                 
-                MPI_Barrier(MPI_COMM_WORLD);
-                printf("rank =  %d\n",rank );
-                calcl_executeElementaryProcess(multigpu, j,
+                //MPI_Barrier(MPI_COMM_WORLD);
+                //printf("rank =  %d\n",rank );
+                gettimeofday(&start_kernel, NULL);
+               
+                
+                  calcl_executeElementaryProcess(multigpu, j,
                                                dimNum /*elementary process*/,this);
+                
                 MPI_Barrier(MPI_COMM_WORLD);
 
-                           // barrier tutte hanno finito
-            for (int gpu = 0; gpu < multigpu->num_devices; ++gpu) {
-              clFinish(multigpu->device_models[gpu]->queue);
-            }
+               // if (multigpu->num_devices != 1 || c.nodes.size() != 1) {
 
-            // Read from the substates and set ghost borders
-            for (int gpu = 0; gpu < multigpu->num_devices; ++gpu) {
-              calclGetBorderFromDeviceToHost2D(multigpu->device_models[gpu]);
-            }
+                  // barrier tutte hanno finito
+                  for (int gpu = 0; gpu < multigpu->num_devices; ++gpu) {
+                    clFinish(multigpu->device_models[gpu]->queue);
+                  }
+
+                gettimeofday(&end_kernel, NULL);
+
+                kernel_total+= 1000.0 * (end_kernel.tv_sec - start_kernel.tv_sec) +
+                                 (end_kernel.tv_usec - start_kernel.tv_usec) / 1000.0;
 
 
-            // scambia bordi
-            // Write from the ghost borders to the substates
-            calclMultiGPUHandleBordersMultiNode(multigpu,
-                                                multigpu->exchange_full_border);
+                  //----------MEASURE TIME---------
+                  gettimeofday(&start_comm, NULL);
+                  
+                  // Read from the substates and set ghost borders
+                  gettimeofday(&start_kernel_communication, NULL);
+                 for (int gpu = 0; gpu < multigpu->num_devices; ++gpu) {
+                    calclGetBorderFromDeviceToHost2D(
+                        multigpu->device_models[gpu]);
+                  }
+                  
 
-          handleBorderNodes();
+                  // scambia bordi
+                  // Write from the ghost borders to the substates
+                  calclMultiGPUHandleBordersMultiNode(
+                      multigpu, multigpu->exchange_full_border);
+                  gettimeofday(&end_kernel_communication, NULL);
+                   handleBorderNodes(TotalTime, ntComuunication);
+
+
+                  gettimeofday(&end_comm, NULL);
+                  comm_total += 1000.0 * (end_comm.tv_sec - start_comm.tv_sec) +
+                                (end_comm.tv_usec - start_comm.tv_usec) / 1000.0;
+                  kernel_communication += 1000.0 * (end_kernel_communication.tv_sec - start_kernel_communication.tv_sec) +
+                                (end_kernel_communication.tv_usec - start_kernel_communication.tv_usec) / 1000.0;
+                //----------------------------------     
+             //   }
         }
        
 
+
+/*
 //vanno scambiati i ghost. dentro l'arraydelle celle attive (non real)
 // le prime e ultime righe vanno mandate alle GPU vicine (esattamente nello stesso modo
 //con cui vengono scambiati i sottostati) 
 // i dati ricevuto dalle GPU vicine non possono essere direttamente mpacchiati 
 //dentro la matrice delle celle attive ma vanno "mergiati" perchè le celle possono essere
 //attivate da una GPU vicina ma anche da me stesso 
-/*
 _________
 |BORDO00|   bordo01 e la prima riga di GPU1 vanno mergiate prima dentro la prima riga di GPu1
 |_______|   bordo10 e la ultima riga di GPU0 vanno mergiate prima dentro l'ultima riga di GPU0
@@ -216,13 +296,15 @@ _________
 */
 
 
-//#if 0
+// #if 0
             // STEERING------------------------------
             struct CALCLModel2D* calclmodel2DFirst = multigpu->device_models[0];
 
             if (calclmodel2DFirst->kernelSteering != NULL) {
-
+gettimeofday(&start_kernel, NULL);
               for (int gpu = 0; gpu < multigpu->num_devices; ++gpu) {
+                
+
                 struct CALCLModel2D* calclmodel2D =
                     multigpu->device_models[gpu];
                 size_t* singleStepThreadNum = multigpu->singleStepThreadNums[gpu];
@@ -240,52 +322,108 @@ _________
                                       dimNum, singleStepThreadNum, NULL, NULL);
                   else
                     copySubstatesBuffers2D(calclmodel2D);
+
                 }
+
+                
               }
     
               //----------------------------------------
 
-              for (int gpu = 0; gpu < multigpu->num_devices; ++gpu) {
-                clFinish(multigpu->device_models[gpu]->queue);
-              }
+             // if(multigpu->num_devices != 1 || c.nodes.size() != 1){
+                for (int gpu = 0; gpu < multigpu->num_devices; ++gpu) {
+                  clFinish(multigpu->device_models[gpu]->queue);
+                }
 
-              for (int gpu = 0; gpu < multigpu->num_devices; ++gpu) {
-                calclGetBorderFromDeviceToHost2D(multigpu->device_models[gpu]);
-              }
+                gettimeofday(&end_kernel, NULL);
 
-              // scambia bordi
-              calclMultiGPUHandleBordersMultiNode(
-                  multigpu, multigpu->exchange_full_border);
-            }//Steering
-//#endif
-            handleBorderNodes();
+                kernel_total+= 1000.0 * (end_kernel.tv_sec - start_kernel.tv_sec) +
+                                 (end_kernel.tv_usec - start_kernel.tv_usec) / 1000.0;
+ //----------MEASURE TIME---------
+                  gettimeofday(&start_comm, NULL);
+                  gettimeofday(&start_kernel_communication, NULL);
+                for (int gpu = 0; gpu < multigpu->num_devices; ++gpu) {
+                  calclGetBorderFromDeviceToHost2D(
+                      multigpu->device_models[gpu]);
+                }
+
+                // scambia bordi
+                calclMultiGPUHandleBordersMultiNode(
+                    multigpu, multigpu->exchange_full_border);
+                gettimeofday(&end_kernel_communication, NULL);
+                  kernel_communication += 1000.0 * (end_kernel_communication.tv_sec - start_kernel_communication.tv_sec) +
+                                (end_kernel_communication.tv_usec - start_kernel_communication.tv_usec) / 1000.0;
+ 
+                 gettimeofday(&end_comm, NULL);
+                  comm_total += 1000.0 * (end_comm.tv_sec - start_comm.tv_sec) +
+                                (end_comm.tv_usec - start_comm.tv_usec) / 1000.0;
+                //----------------------------------     
+              //}
+            }  // Steering
+// #endif
+           // if (multigpu->num_devices != 1 || c.nodes.size() != 1) {
+              //----------MEASURE TIME---------
+              gettimeofday(&start_comm, NULL);
+
+               T1 = MPI_Wtime();
+               handleBorderNodes(TotalTime, ntComuunication);
+               T2 = MPI_Wtime();
+               deltaT = T2 - T1;
+               //printf("%4d  %8.8f  %8.8f  %2.8f\n", STEPS, T1, T2, deltaT);
+
+               sumT += deltaT;
+              gettimeofday(&end_comm, NULL);
+              comm_total += 1000.0 * (end_comm.tv_sec - start_comm.tv_sec) +
+                            (end_comm.tv_usec - start_comm.tv_usec) / 1000.0;
+              //----------------------------------
+          //  }
+
+ gettimeofday(&end_comp, NULL);
+                  comp_total += 1000.0 * (end_comp.tv_sec - start_comp.tv_sec) +
+                                (end_comp.tv_usec - start_comp.tv_usec) / 1000.0;
+
 
         }//STEPS
     
 
         //handleBorderNodes();
         calclDevicesToNode(multigpu);
+ 
 
-        if (rank == 0) {
+        //if (rank == 0) {
           gettimeofday(&end, NULL);
           unsigned long long t = 1000 * (end.tv_sec - start.tv_sec) +
                                  (end.tv_usec - start.tv_usec) / 1000;
 
-          // end = time(NULL);
-          printf("Elapsed time: %llu ms\n", t);
-        }
+          double TotalCommTime = TotalTime + (kernel_communication/1000);              
 
+          // end = time(NULL);
+          printf("Rank=%d, Elapsed time: %llu ms\n", rank,t);
+          printf("Rank=%d, Elapsed Communication time: %f s\n", rank,TotalCommTime);
+          printf("Rank=%d, Elapsed MPI communication : %f s\n" ,rank, TotalTime);
+          printf("Rank=%d, Elapsed Host Device PCI-E communication: %f ms\n", rank,kernel_communication);
+          printf("Rank=%d, Elapsed time kernels: %f ms\n", rank,kernel_total);
+          // three elementary procecces
+          avgT = (TotalTime)/(ntComuunication);
+          printf("\n Avg Latency Time = %f s\n", avgT);
+          printf("Rank=%d, number of time send : %d \n" ,rank, ntComuunication);
+         
+
+      //  }
+//MPI_Barrier(MPI_COMM_WORLD);
         _finalize();
     }//run function
 
-    void handleBorderNodes(){
-        handleBorderNodesR();
+    void handleBorderNodes(double & T, int & ntComuunication){
+        if(multigpu->device_models[0]->borderSize<=0)
+            return;
+        handleBorderNodesR(T,ntComuunication);
         handleBorderNodesI();
         handleBorderNodesB();
     }
 
 
-    void handleBorderNodesR(){
+    void handleBorderNodesR(double& T, int &ntComuunication){
         const MPI_Datatype DATATYPE = MPI_DOUBLE;
         if(!c.is_full_exchange()){
 
@@ -300,6 +438,7 @@ _________
 
             if(numSubstates <= 0)
                 return;
+            double T1, T2, deltaT;
 
             for(int i=0;i<2;i++){
 
@@ -322,7 +461,8 @@ _________
 
                 if(rank % 2 == 0){
                     //MPI send
-
+                    ntComuunication++;
+                    T1 = MPI_Wtime();
 
                     // printf("I'm %d:  sedning to %d \n" ,  rank , next);
                     //cerca convenzione per i nomi dei tags
@@ -330,7 +470,9 @@ _________
 
                     // printf("I'm %d:  receiving from  %d \n" ,  rank , prev);
                     MPI_Recv(recv_offset , count , DATATYPE, prev, i, MPI_COMM_WORLD,MPI_STATUS_IGNORE);
-
+                    T2 = MPI_Wtime(); 
+                    deltaT = T2 - T1;
+                    T += deltaT;
                     //send to rank+1
                     //receive rank-1
                 }else{
@@ -344,7 +486,7 @@ _________
                     //send to rank+1
                 }
 
-                MPI_Barrier(MPI_COMM_WORLD);
+                //MPI_Barrier(MPI_COMM_WORLD);
 
 
             }
@@ -461,7 +603,7 @@ _________
                     //send to rank+1
                 }
 
-                MPI_Barrier(MPI_COMM_WORLD);
+                //MPI_Barrier(MPI_COMM_WORLD);
 
 
             }
@@ -563,7 +705,7 @@ _________
                     //send to rank+1
                 }
 
-                MPI_Barrier(MPI_COMM_WORLD);
+                //MPI_Barrier(MPI_COMM_WORLD);
 
 
             }

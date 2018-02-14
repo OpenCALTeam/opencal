@@ -51,7 +51,7 @@ if(BUILD_OPENCAL_PP)
 endif(BUILD_OPENCAL_PP)
 
 if(BUILD_OPENCAL_TESTS)
-	add_subdirectory(tests)
+	add_subdirectory(mpi_tests)
 endif(BUILD_OPENCAL_TESTS)
 
 if(BUILD_OPENCAL_CL)

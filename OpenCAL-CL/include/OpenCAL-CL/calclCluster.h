@@ -51,6 +51,7 @@ class Cluster{
 public:
     std::vector<Node> nodes; // quali nodi usiamo? Internamente ogni nodo
     //ha una descrizione dei device da utklizzare e relativi workloads
+    
     inline bool is_full_exchange() const {return nodes.size()==1;}
 	
 	void fromClusterFile(const std::string& file){

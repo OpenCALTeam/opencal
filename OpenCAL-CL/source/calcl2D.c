@@ -166,27 +166,6 @@ void calclGetBorderFromDeviceToHost2D(struct CALCLModel2D* calclmodel2D) {
         calclHandleError(err);
     }
 
-    // Read from substates and set flags borders
-
-   /* err = clEnqueueReadBuffer(queue, calclmodel2D->bufferActiveCellsFlags,
-                              CL_TRUE, 
-                              0, sizeof(CALbyte) * sizeBorder,
-                              calclmodel2D->borderMapper.flagsBorder_OUT, 
-                              0,
-                              NULL, 
-                              NULL);
-    calclHandleError(err);
-
-    err = clEnqueueReadBuffer(
-        queue, calclmodel2D->bufferActiveCellsFlags, 
-        CL_TRUE,
-        ((dim - sizeBorder)) * sizeof(CALbyte),
-         sizeof(CALbyte) * sizeBorder,
-        calclmodel2D->borderMapper.flagsBorder_OUT + sizeBorder, 
-        0, 
-        NULL, 
-        NULL);
-    calclHandleError(err);*/
 }
 
 
@@ -1585,14 +1564,7 @@ struct CALCLModel2D* calclCADef2D(struct CALModel2D* host_CA,
     calclmodel2D->borderMapper.flagsBorder_OUT = (CALbyte*) malloc(calclmodel2D->borderMapper.bufDIMflags);
     memset(calclmodel2D->borderMapper.flagsBorder_OUT, CAL_FALSE, sizeof(CALbyte) * calclmodel2D->borderMapper.bufDIMflags);
 
-                  printf("calclmodel2D->borderMapper.flagsBorder_OUT init \n");
-                  for (int i = 0; i < calclmodel2D->borderMapper.bufDIMflags; ++i) {
-                    if (i % calclmodel2D->columns == 0) printf("\n");
-                    printf("%d ", calclmodel2D->borderMapper.flagsBorder_OUT[i]);
-                    // std::cout << flagsNodeGhosts[i] << " ";
-                  }
-                  printf("\n");
-
+              
     calclmodel2D->borderMapper.mergeflagsBorder =
         clCreateBuffer(context, CL_MEM_READ_ONLY,
                        sizeof(CALbyte) * calclmodel2D->borderMapper.bufDIMflags, NULL, &err);
