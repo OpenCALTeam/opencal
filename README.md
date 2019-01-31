@@ -1,18 +1,14 @@
-#OpenCAL - The Open Computing Abstraction Layer  [![Build Status](https://travis-ci.org/OpenCALTeam/opencal.svg?branch=master)](https://travis-ci.org/OpenCALTeam/opencal)
+#OpenCAL - The Open Computing Abstraction Layer for structured grid meshes [![Build Status](https://travis-ci.org/OpenCALTeam/opencal.svg?branch=master)](https://travis-ci.org/OpenCALTeam/opencal)
 
-**OpenCAL** is an Open Source, multi-platform parallel software library for performing fast and reliable simulations of numerical models based
-on the Cellular Automata computational paradigm. It also supports
-eXtended Cellular Automata (XCA), the Finite Differences method and,
-in general, all numerical methods based on uniform computational
-grids.
+**OpenCAL** is an Open Source, multi-platform parallel software library for performing fast and reliable simulations of numerical models based on structured grids computational methods, such as the Cellular Automata, Finite Volumes, and others. It is beased on the Extended Cellular Automata (XCA) general formal paradigm.
 
-**OpenCAL** is written in C and supports the majority such as Linux and FreeBSD out of the box. It also supports Microsoft Windows through MinGW.
+**OpenCAL** is written in C/C++ and supports Linux/Unix out of the box. It also supports Microsoft Windows through MinGW. Microsoft Visual Studio is currently partially supported.
 
 <img src="https://github.com/OpenCALTeam/OpenCALTeam.github.io/blob/master/assets/timer_icon.png" width="48">
 Gives you the power to concentrate only on simulation code. No memory or parallelism management required.
 
 <img src="https://github.com/OpenCALTeam/OpenCALTeam.github.io/blob/master/assets/rocket_icon.png" width="48">
-Fast execution on multiple platforms. Exploits multicore CPUs and GPUs power.
+Fast execution on multiple platforms. It exploits multicore CPUs, many-core GPUs, as well as clusters of workstations.
 
 <img src="https://github.com/OpenCALTeam/OpenCALTeam.github.io/blob/master/assets/docs_icon.png" width="48">
 Code documented and mantained.
@@ -31,7 +27,7 @@ Open source project released under the LGPLv3 license.
 
 <ul>
 	<li> CMake 2.8 (CMake 3.1 is needed to complile OpenCAL-CL).
-	<li> A quite recent C compiler (Full support to OpenMP 4 is needed to compile OpenCAL-OMP).
+	<li> A quite recent C/C++ compiler (Full support to OpenMP 4 is needed to compile OpenCAL-OMP).
 	<li> OpenGL/GLUT is also needed to compile OpenCAL-GL, which provides a minimal User Interface and visualization system to OpenCAL applications.
 	<li> Doxygen and Graphviz to build documentation.
 </ul>
@@ -49,8 +45,6 @@ user@machine:~/git/opencal-1.0/build$ make install | tee install.log
 ```
 
 Arguments in square brackets are optional. Default value is shown first, other possible values are separated by pipes.
-
-
 
 <!--
 Example compilation can be controlled using  the following argument to cmake:
