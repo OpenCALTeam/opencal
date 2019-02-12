@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 2.8)
 
 project(mytest)
 
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/../../cmake")
 
 include(CheckCXXCompilerFlag)
 CHECK_CXX_COMPILER_FLAG("-std=c++14" COMPILER_SUPPORTS_CXX14)
@@ -38,7 +39,7 @@ set(CMAKE_CXX_COMPILE_FLAGS ${CMAKE_CXX_COMPILE_FLAGS} ${MPI_COMPILE_FLAGS})
 
 set(CMAKE_CXX_LINK_FLAGS ${CMAKE_CXX_LINK_FLAGS} ${MPI_LINK_FLAGS})
 
-include_directories(MPI_INCLUDE_PATH)
+include_directories(${MPI_INCLUDE_PATH})
 
 #add_executable(mytest  helloworldMPI.cpp)
 add_executable(heat2DMulti  heat2DMulti.cpp)

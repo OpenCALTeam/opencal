@@ -13,8 +13,8 @@
 
 
 
-#define KERNEL_SRC "/home/mpiuser/git/sobel2D/kernel_sobel2D/source/"
-#define KERNEL_INC "/home/mpiuser/git/sobel2D/kernel_sobel2D/include/"
+#define KERNEL_SRC "./kernel_sobel2D/source/"
+#define KERNEL_INC "./kernel_sobel2D/include/"
 
 
 // Defining kernels' names(struct CALCLMultiGPU*)

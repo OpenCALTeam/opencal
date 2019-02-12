@@ -223,10 +223,10 @@ gettimeofday(&start_comp, NULL);
                 
                 MPI_Barrier(MPI_COMM_WORLD);
 
-               // if (multigpu->num_devices != 1 || c.nodes.size() != 1) {
+                // if (multigpu->num_devices != 1 || c.nodes.size() != 1) {
 
-                  // barrier tutte hanno finito
-                  for (int gpu = 0; gpu < multigpu->num_devices; ++gpu) {
+                // barrier tutte hanno finito
+                for (int gpu = 0; gpu < multigpu->num_devices; ++gpu) {
                     clFinish(multigpu->device_models[gpu]->queue);
                   }
 
@@ -405,7 +405,7 @@ gettimeofday(&start_kernel, NULL);
           printf("Rank=%d, Elapsed time kernels: %f ms\n", rank,kernel_total);
           // three elementary procecces
           avgT = (TotalTime)/(ntComuunication);
-          printf("\n Avg Latency Time = %f s\n", avgT);
+          printf("Rank=%d, Avg Latency Time = %f s\n",rank, avgT);
           printf("Rank=%d, number of time send : %d \n" ,rank, ntComuunication);
          
 
@@ -418,8 +418,8 @@ gettimeofday(&start_kernel, NULL);
         if(multigpu->device_models[0]->borderSize<=0)
             return;
         handleBorderNodesR(T,ntComuunication);
-        handleBorderNodesI();
-        handleBorderNodesB();
+        handleBorderNodesI(T,ntComuunication);
+        handleBorderNodesB(T,ntComuunication);
     }
 
 
@@ -533,7 +533,7 @@ gettimeofday(&start_kernel, NULL);
 
 
 
-    void handleBorderNodesI(){
+    void handleBorderNodesI(double& T, int &ntComuunication){
         const MPI_Datatype DATATYPE = MPI_INT;
         if(!c.is_full_exchange()){
 
@@ -548,6 +548,7 @@ gettimeofday(&start_kernel, NULL);
 
             if(numSubstates <= 0)
                 return;
+            double T1, T2, deltaT;
 
             for(int i=0;i<2;i++){
 
@@ -571,6 +572,8 @@ gettimeofday(&start_kernel, NULL);
                 if(rank % 2 == 0){
                     //MPI send
 
+                    ntComuunication++;
+                    T1 = MPI_Wtime();
 
                     // printf("I'm %d:  sedning to %d \n" ,  rank , next);
                     //cerca convenzione per i nomi dei tags
@@ -578,7 +581,9 @@ gettimeofday(&start_kernel, NULL);
 
                     // printf("I'm %d:  receiving from  %d \n" ,  rank , prev);
                     MPI_Recv(recv_offset , count , DATATYPE, prev, i, MPI_COMM_WORLD,MPI_STATUS_IGNORE);
-
+                    T2 = MPI_Wtime(); 
+                    deltaT = T2 - T1;
+                    T += deltaT;
 
 
                     //send to rank+1
@@ -644,7 +649,7 @@ gettimeofday(&start_kernel, NULL);
 
 
 
-    void handleBorderNodesB(){
+    void handleBorderNodesB(double& T, int &ntComuunication){
         const MPI_Datatype DATATYPE = MPI_CHAR;
         if(!c.is_full_exchange()){
 
@@ -660,6 +665,7 @@ gettimeofday(&start_kernel, NULL);
             if(numSubstates <= 0)
                 return;
 
+            double T1, T2, deltaT;
             for(int i=0;i<2;i++){
 
                 next=((rank+1)+c.nodes.size())%c.nodes.size();
@@ -682,6 +688,8 @@ gettimeofday(&start_kernel, NULL);
                 if(rank % 2 == 0){
                     //MPI send
 
+                    ntComuunication++;
+                    T1 = MPI_Wtime();
 
                     // printf("I'm %d:  sedning to %d \n" ,  rank , next);
                     //cerca convenzione per i nomi dei tags
@@ -689,7 +697,9 @@ gettimeofday(&start_kernel, NULL);
 
                     // printf("I'm %d:  receiving from  %d \n" ,  rank , prev);
                     MPI_Recv(recv_offset , count , DATATYPE, prev, i, MPI_COMM_WORLD,MPI_STATUS_IGNORE);
-
+                    T2 = MPI_Wtime(); 
+                    deltaT = T2 - T1;
+                    T += deltaT;
 
 
                     //send to rank+1

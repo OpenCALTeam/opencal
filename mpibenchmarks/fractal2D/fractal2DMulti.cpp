@@ -12,8 +12,8 @@
 
 
 
-#define KERNEL_SRC "/home/mpiuser/git/fractal2D/kernel_fractal2D/source/"
-#define KERNEL_INC "/home/mpiuser/git/fractal/kernel_fractal2D/include/"
+#define KERNEL_SRC "./kernel_fractal2D/source/"
+#define KERNEL_INC "./kernel_fractal2D/include/"
 
 
 // Defining kernels' names(struct CALCLMultiGPU*)

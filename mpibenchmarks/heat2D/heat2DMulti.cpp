@@ -17,8 +17,8 @@
 #define MATERIAL_END_ROW (MATERIAL_START_ROW+SOURCE_SIZE)
 
 
-#define KERNEL_SRC "/home/mpiuser/git/heat2D/kernel_heat2D/source/"
-#define KERNEL_INC "/home/mpiuser/git/heat2D/kernel_heat2D/include/"
+#define KERNEL_SRC "./kernel_heat2D/source/"
+#define KERNEL_INC "./kernel_heat2D/include/"
 
 
 // Defining kernels' names(struct CALCLMultiGPU*)
