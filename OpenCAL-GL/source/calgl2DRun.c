@@ -91,8 +91,14 @@ void calglUpdate2D(struct CALGLRun2D* calglRun){
 		//printf("*----------------  Cellular Automata  ----------------*\n");
 		//printf(" Rows: %d, Columns: %d\n", calglGetGlobalSettings()->rows, calglGetGlobalSettings()->columns);
 		//printf(" Current Step: %d/%d; Active cells: %d\n", calglRun->calRun->step, calglGetGlobalSettings()->step, calglRun->calRun->ca2D->A.size_current);
-        printf ("Cellular Automata: Current Step: %d/%d; Active cells: %d\r", calglRun->calRun->step, calglRun->calRun->final_step, calglRun->calRun->ca2D->A->size_current);
-		//printf ("*-----------------------------------------------------*\n");
+//        printf ("Cellular Automata: Current Step: %d/%d; Active cells: %d\r", calglRun->calRun->step, calglRun->calRun->final_step, calglRun->calRun->ca2D->A->size_current);
+	        printf ("Cellular Automata: Current Step: %d/%d;", calglRun->calRun->step, calglRun->calRun->final_step);
+                if(calglRun->calRun->ca2D->A)
+                        printf("Active cells: %d\r", calglRun->calRun->ca2D->A->size_current);
+                else
+                        printf("\r");
+		
+//printf ("*-----------------------------------------------------*\n");
 		//check for the stop condition
 		if (!calglRun->terminated)
 		{
