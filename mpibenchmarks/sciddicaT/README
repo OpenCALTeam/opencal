@@ -1,0 +1,23 @@
+1. Update or create a file named "calcluster.cfg" as convention described below. Let us consider the following example: 
+
+610 496
+2
+127.0.0.1 2 
+0 0 153
+0 1 152
+127.0.0.1 1
+0 0 305 
+
+Line 1 (640 496) represents the domain dimensions in terms of rows and columns, respectively.
+Line 2 (2) identifies the number of MPI processes to be run.
+Line 3 (127.0.0.1 2) represents the IP address and the number of OpenCL devices to be used.
+Line 4 (0 0 153) specifies the OpenCL platform and device to be considered, and the number of domain rows to be processed.
+Line 5 (0 1 152) is equivalent to line 4.
+Line 6 (127.0.0.1 1) is equivalent to line 3, with the exception that a single OpenCL process is run.
+Line 7 (0 0 305) is equivalent to line 4.
+
+In other words, a domain of 640 rows times 496 columns (line 1) is processed by 2 MPI processes (line 2). Both of them are run on the localhost (corresponding to the 127.0.0.1 IP address). The first MPI process is further split into two OpenCL processes (value 2 at the end of line 3), while the second runs a single OpenCL process (value 1 at the end of line 6). Liens 4-5 and 7 then specify the OpenCL platform and device to be used, and how many domain rows have to be computed.
+
+
+2. Run the following script: 
+./calrun.sh calcluster.cfg ./build/calclmpi_sciddicaT
