@@ -1,95 +1,45 @@
-*.orig
-#tests files
-tests/testsout/serial
-/tests/testsout/other
-
-#sst output example files
-*.stt
-
-#python
-*.py[co]
-
-#bin folders
-bin/
-
-#log files
-*.log
-*.tlog
-
-# Object files
-*.o
-*.ko
-*.obj
-*.elf
-
-# Precompiled Headers
-*.gch
-*.pch
-
-# Libraries
-*.lib
 *.a
-*.la
-*.lo
-
-# Shared objects (inc. Windows DLLs)
+*.app
 *.dll
+*.dylib
+*.elf
+*.exe
+*.exp
+*.gch
+*.hex
+*.i*86
+*.ko
+*.la
+*.lib
+*.lo
+*.log
+*.o
+*.obj
+*.opensdf
+*.orig
+*.out
+*.pch
+*.pdb
+*.py[co]
+*.sdf
 *.so
 *.so.*
-*.dylib
-
-# Executables
-*.exe
-*.out
-*.app
-*.i*86
+*.stt
+*.tlog
+*.vcxprj*
 *.x86_64
-*.hex
-
-# Visual Studio files
 */Debug/*
 */Release/*
-*.exp
-*.opensdf
-*.pdb
-*.sdf
-*.vcxprj*
-
-# Build files
 */bin/*
-*bin*
 */build/*
+*__MACOSX
+*bin*
 *build*
-
-# Debug files
-# *.dSYM/
-
-# Autotools files
-# *sh
-# build
-# configure
-# compile
-# depcomp
-# missing
-# *.in
-# *.m4
-# ar-lib
-# *.cache
-# *.guess
-# *.sub
-
-# OpenCAL examples specific files
-# forestInsect
-# iso
-# life
-# life3D
-# life3D-glut
-# mbusu-glut
-# sciddicaS3Hex
-# sciddicaT
-# realSubstate*
-# width_final*
-/OpenCAL/examples/life3D-glut/_CMakeLists.txt
-
-# Qt files
+*xml
+/tests/testsout/other
 CMakeLists.txt.user*
+IPSFile
+bin/
+generated_hostfile
+tests/testsout/serial
+width_final*
