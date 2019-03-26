@@ -565,6 +565,7 @@ const char * calclGetErrorString(CALCLint err) {
   case -1005:
     return "CL_D3D10_RESOURCE_NOT_ACQUIRED_KHR";
     default:
+	printf("Error code: %d\n", err);
         return "Unknown OpenCL error";
     }
 }
