@@ -1,5 +1,5 @@
-#ifndef calclcluster_
-#define calclcluster_
+#ifndef calcldistributeddomain_
+#define calcldistributeddomain_
 
 #include <vector>
 #include<string>
@@ -18,6 +18,26 @@ using std::cin;
 using std::ifstream;
 typedef unsigned int uint;
 
+string parseCommandLineArgs(int argc, char** argv)
+{
+    using std::cerr;
+    using std::cout;
+    using std::endl;
+    bool go = true;
+    string s;
+    if (argc != 2) {
+	cout << "Usage ./mytest clusterfile" << endl;
+	go = false;
+    } else {
+	s = argv[1];
+    }
+
+    if (!go) {
+	cout << "exiting..." << endl;
+	exit(-1);
+    }
+    return s;
+}
 
 
 class Device{
@@ -47,27 +67,27 @@ Node(const uint _c , const uint _off,  const uint _nd, const string& _ip)
 	string ip;
 };
 
-class Cluster{
+class CALDistributedDomain2D{
 public:
     std::vector<Node> nodes; // quali nodi usiamo? Internamente ogni nodo
     //ha una descrizione dei device da utklizzare e relativi workloads
     
     inline bool is_full_exchange() const {return nodes.size()==1;}
 	
-	void fromClusterFile(const std::string& file){
+	void fromDomainFile(const std::string& file){
 		
-		ifstream clusterfile;
-		clusterfile.exceptions ( ifstream::failbit | ifstream::badbit );
+		ifstream domainfile;
+		domainfile.exceptions ( ifstream::failbit | ifstream::badbit );
 		
 		ulong R=0,C=0;
 		ulong NNODES=0;
 		string buf;
 		ulong OFF=0;
 		try{
-			clusterfile.open(file.c_str());
-			clusterfile>>buf; R = stoul(buf.c_str());
-			clusterfile>>buf; C = stoul(buf.c_str());
-			clusterfile>>buf; NNODES = stoul(buf);
+			domainfile.open(file.c_str());
+			domainfile>>buf; R = stoul(buf.c_str());
+			domainfile>>buf; C = stoul(buf.c_str());
+			domainfile>>buf; NNODES = stoul(buf);
 			
 			nodes.resize(NNODES);
 			
@@ -75,11 +95,11 @@ public:
 				
 				ulong NDEVICES;
 				//parse node i
-				clusterfile>>buf; //read IP of node 1
+				domainfile>>buf; //read IP of node 1
 				validate_ip_address(buf);
 				string ip = buf;
 				//num devices for node i
-				clusterfile>>buf; NDEVICES = stoul(buf);
+				domainfile>>buf; NDEVICES = stoul(buf);
 				Node ni (C , OFF , NDEVICES , ip);
 				uint node_workload=0;
 				for(int j = 0 ; j < NDEVICES ; j++){
@@ -88,10 +108,10 @@ public:
 					//each device is identified by two uint: platform and device number
 					ulong P, D;
 					ulong W;
-					clusterfile>>buf; P = stoul(buf);
-					clusterfile>>buf; D = stoul(buf);
+					domainfile>>buf; P = stoul(buf);
+					domainfile>>buf; D = stoul(buf);
 					//read workload for device j					
-					clusterfile>>buf; W = stoul(buf);
+					domainfile>>buf; W = stoul(buf);
 					
 					//add this device to the list of devices of node i
 					Device d_i_j (P,D,W,/*OFF+*/node_workload);
@@ -100,13 +120,13 @@ public:
 					node_workload+=W;
 				}
 				ni.workload = node_workload;
-				//add the just created node to the list of nodes of the cluster
+				//add the just created node to the list of nodes of the domain
 				this->nodes[i] = ni;
 				
 				OFF+=node_workload; //offset for the next node
 			}
-			//close clusterfile
-			clusterfile.close();
+			//close domainfile
+			domainfile.close();
 			
 			//consistency check on the workload.
 			if(OFF!=R){
@@ -125,6 +145,7 @@ public:
 				 
 		}
 	}
+
 	
 	
 	
@@ -156,10 +177,19 @@ void validate_ip_address(const string& str){
 }
 //----------------------------------------------------------------------
 
+
 	
 	
 };
 
+CALDistributedDomain2D calDomainPartition2D(int argc, char** argv){
+			string domainfile;
+    		domainfile = parseCommandLineArgs(argc, argv);
+			CALDistributedDomain2D domain;
+			domain.fromDomainFile(domainfile);
+			return domain;
+}
 
 
-#endif // calclcluster_
+
+#endif // calcldistributeddomain

@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 
-project(mytest)
+project(calclmpi_head)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/../../cmake")
 
@@ -29,11 +29,7 @@ include_directories( ${OpenCL_INCLUDE_DIRS}
                      ${OPENCAL_INCLUDE_DIR}
                    )
 link_directories(${OpenCL_LIBRARIES})
-
-
-
-
-
+include_directories(${MPI_INCLUDE_PATH})
 
 set(CMAKE_CXX_COMPILE_FLAGS ${CMAKE_CXX_COMPILE_FLAGS} ${MPI_COMPILE_FLAGS})
 
@@ -41,8 +37,5 @@ set(CMAKE_CXX_LINK_FLAGS ${CMAKE_CXX_LINK_FLAGS} ${MPI_LINK_FLAGS})
 
 include_directories(${MPI_INCLUDE_PATH})
 
-#add_executable(mytest  helloworldMPI.cpp)
-add_executable(heat2DMulti  heat2DMulti.cpp)
-#add_executable(mytest  opencalmpi.cpp)
-#add_executable(mytest sciddicaTMPI.cpp)
-target_link_libraries(heat2DMulti ${MPI_LIBRARIES} ${OPENCAL_LIBRARIES} ${M_LIB} ${OpenCL_LIBRARY})
+add_executable(${PROJECT_NAME}  heat2DMulti.cpp)
+target_link_libraries(${PROJECT_NAME} ${MPI_LIBRARIES} ${OPENCAL_LIBRARIES} ${M_LIB} ${OpenCL_LIBRARY})

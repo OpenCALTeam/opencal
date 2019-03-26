@@ -37,24 +37,8 @@ void heatModel_initMaterials (struct CALModel2D* host_CA, int i, int j){
     
 }
 
-void init(struct CALCLMultiGPU* multigpu, const Cluster* c)
+void init(struct CALCLMultiGPU* multigpu, const Node& mynode)
 {
-
-    int rank;
-    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-
-    Node mynode = c->nodes[rank];
-    auto devices = mynode.devices;
-
-    // calclPrintPlatformsAndDevices(calcl_device_manager);
-    struct CALCLDeviceManager* calcl_device_manager = calclCreateManager();
-
-    calclSetNumDevice(multigpu, devices.size());
-    for (auto& d : devices) {
-	calclAddDevice(multigpu, calclGetDevice(calcl_device_manager, d.num_platform, d.num_device), d.workload);
-    }
-
-
     struct CALModel2D* host_CA =
         calCADef2D(mynode.workload, mynode.columns, CAL_MOORE_NEIGHBORHOOD_2D, CAL_SPACE_TOROIDAL, CAL_NO_OPT);
 
@@ -65,7 +49,6 @@ void init(struct CALCLMultiGPU* multigpu, const Cluster* c)
     // Initialize the substate to 0 everywhere
 	calInitSubstate2Dr(host_CA, Q_temperature, (CALreal)0.0f);
 	calInitSubstate2Db(host_CA, Q_material, CAL_FALSE);
-	
 
     calApplyElementaryProcess2D(host_CA, heatModel_initMaterials);
 	calUpdate2D(host_CA);
@@ -73,14 +56,14 @@ void init(struct CALCLMultiGPU* multigpu, const Cluster* c)
     int borderSize = 1;
 
     // Define a device-side CAs
-    calclMultiGPUDef2D(multigpu, host_CA, KERNEL_SRC, KERNEL_INC, borderSize, devices, c->is_full_exchange());
+    calclMultiGPUDef2D(multigpu, host_CA, KERNEL_SRC, KERNEL_INC, borderSize, mynode.devices);
 
     calclAddElementaryProcessMultiGPU2D(multigpu, KERNEL_LIFE_TRANSITION_FUNCTION);
     
-	std::string temperature_str = "./heat_" + std::to_string(rank)+"_initial.txt";
-	std::string material_str = "./material_" + std::to_string(rank)+"_initial.txt";
-    calSaveSubstate2Dr(multigpu->device_models[0]->host_CA, Q_temperature, (char*)temperature_str.c_str());
-	calSaveSubstate2Db(multigpu->device_models[0]->host_CA, Q_material, (char*)material_str.c_str());
+	// std::string temperature_str = "./heat_" + std::to_string(rank)+"_initial.txt";
+	// std::string material_str = "./material_" + std::to_string(rank)+"_initial.txt";
+    // calSaveSubstate2Dr(multigpu->device_models[0]->host_CA, Q_temperature, (char*)temperature_str.c_str());
+	// calSaveSubstate2Db(multigpu->device_models[0]->host_CA, Q_material, (char*)material_str.c_str());
 }
 
 void finalize(struct CALCLMultiGPU* multigpu)
@@ -98,81 +81,13 @@ void finalize(struct CALCLMultiGPU* multigpu)
 
 }
 
-
-string parseCommandLineArgs(int argc, char** argv)
-{
-    using std::cerr;
-    using std::cout;
-    using std::endl;
-    bool go = true;
-    string s;
-    if (argc != 2) {
-	cout << "Usage ./mytest clusterfile" << endl;
-	go = false;
-    } else {
-	s = argv[1];
-    }
-
-    if (!go) {
-	cout << "exiting..." << endl;
-	exit(-1);
-    }
-    return s;
-}
 int main(int argc, char** argv)
 {
+	CALDistributedDomain2D domain = calDomainPartition2D(argc,argv);
 
-    try{
-		//force kernel recompilation
-		setenv("CUDA_CACHE_DISABLE", "1", 1);
-		string clusterfile;
-		clusterfile = parseCommandLineArgs(argc, argv);
-		Cluster cluster;
-		// Initialize the MPI environment
-		MPI_Init(NULL, NULL);
+	MultiNode mn(domain, init , finalize);
+	mn.allocateAndInit();
+	mn.run(STEPS);
 
-		// Get the number of processes
-		int world_size;
-		MPI_Comm_size(MPI_COMM_WORLD, &world_size);
-
-		// Get the rank of the process
-		int world_rank;
-		MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
-
-		// Get the name of the processor
-		char processor_name[MPI_MAX_PROCESSOR_NAME];
-		int name_len;
-		MPI_Get_processor_name(processor_name, &name_len);
-
-		// TODO registrare funzioni di init e finalize all'interno di OpenCALMPI
-
-		cluster.fromClusterFile(clusterfile);
-
-		MPI_Barrier(MPI_COMM_WORLD);
-
-		MultiNode<decltype(init), decltype(finalize)> mn(cluster, world_rank, init, finalize);
-
-		mn.allocateAndInit();
-
-		MPI_Barrier(MPI_COMM_WORLD);
-
-		mn.run(STEPS);
-
-		// Print off a hello world message
-		printf("Hello world from processor %s, rank %d"
-			   " out of %d processors\n",
-			   processor_name,
-			   world_rank,
-			   world_size);
-
-		MPI_Barrier(MPI_COMM_WORLD);
-
-		// Finalize the MPI environment.
-		MPI_Finalize();
-
-		return 0;
-    }
-    catch (const std::exception& e){
-		return -1;
-    }
+	return 0;
 }

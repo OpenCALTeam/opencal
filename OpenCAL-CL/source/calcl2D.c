@@ -1291,7 +1291,7 @@ void setParametersReduction(cl_int err, struct CALCLModel2D* calclmodel2D)
 
 
 /******************************************************************************
- *              PUBLIC FUNCTIONS MULTIGPU
+ *              PUBLIC FUNCTIONS MULTIDEVICE
  ******************************************************************************/
 
 
@@ -2511,10 +2511,10 @@ void calclFinalize2D(struct CALCLModel2D * calclmodel2D) {
 CALCLprogram calclLoadProgram2D(CALCLcontext context, CALCLdevice device, char* path_user_kernel, char* path_user_include) {
     //printf("OK1\n");
     char* u = " -cl-denorms-are-zero -cl-finite-math-only ";
-    char* pathOpenCALCL = getenv("OPENCALCL_PATH_MULTIGPU");
+    char* pathOpenCALCL = getenv("OPENCALCL_KERNEL_PATH");
     //printf("pathOpenCALCL %s \n", pathOpenCALCL);
     if (pathOpenCALCL == NULL) {
-        perror("please configure environment variable OPENCALCL_PATH");
+        perror("please configure environment variable OPENCALCL_KERNEL_PATH");
         exit(1);
     }
     char* tmp;
