@@ -581,7 +581,7 @@ void calclSetReductionParameters2D(struct CALCLModel2D* calclmodel2D,//!< Pointe
 
 /*! \brief Set WorkGroup dimensions in the ND range   */
 DllExport
-void calclSetWorkGroupDimensions(struct CALCLModel2D* calclmodel2D,//!< Pointer to a CALCLModel2D
+void calclSetWorkGroupDimensions2D(struct CALCLModel2D* calclmodel2D,//!< Pointer to a CALCLModel2D
                                  int m, //!< Number of rows
                                  int n);//!< Number of columns
 

@@ -1,21 +1,24 @@
-#ifndef calcldistributeddomain2D_
-#define calcldistributeddomain2D_
+#ifndef calcldistributeddomain3D_
+#define calcldistributeddomain3D_
 
 #include "calclCommon.h"
+
 class Node {
 public:
-Node(){};
-Node(const uint _c , const uint _off,  const uint _nd, const string& _ip)
-: columns(_c) , offset(_off) , devices(_nd), ip(_ip) {}
+Node(){}
+Node(const uint _c , const uint _r ,const uint _col , const uint _off,  const uint _nd, const string& _ip)
+: rowcolumns(_c) ,rows(_r), columns(_col),  offset(_off) , devices(_nd), ip(_ip) {}
 
     std::vector<Device> devices;
-    int workload;
-    int columns;
-    int offset;
-	string ip;
+    int workload;   // number of layers 
+    int rowcolumns; // first two dimension
+    int rows;
+    int columns; // first two dimension
+    int offset;     // number of layers from the top
+	string ip;	    
 };
 
-class CALDistributedDomain2D{
+class CALDistributedDomain3D{
 public:
     std::vector<Node> nodes; // quali nodi usiamo? Internamente ogni nodo
     //ha una descrizione dei device da utklizzare e relativi workloads
@@ -27,7 +30,7 @@ public:
 		ifstream domainfile;
 		domainfile.exceptions ( ifstream::failbit | ifstream::badbit );
 		
-		ulong R=0,C=0;
+		ulong R=0,C=0, L=0; // rows, columns, layers
 		ulong NNODES=0;
 		string buf;
 		ulong OFF=0;
@@ -35,6 +38,7 @@ public:
 			domainfile.open(file.c_str());
 			domainfile>>buf; R = stoul(buf.c_str());
 			domainfile>>buf; C = stoul(buf.c_str());
+			domainfile>>buf; L = stoul(buf.c_str());
 			domainfile>>buf; NNODES = stoul(buf);
 			
 			nodes.resize(NNODES);
@@ -48,7 +52,7 @@ public:
 				string ip = buf;
 				//num devices for node i
 				domainfile>>buf; NDEVICES = stoul(buf);
-				Node ni (C , OFF , NDEVICES , ip);
+                Node ni (R*C ,R,C, OFF , NDEVICES , ip);
 				uint node_workload=0;
 				for(int j = 0 ; j < NDEVICES ; j++){
 					
@@ -62,7 +66,7 @@ public:
 					domainfile>>buf; W = stoul(buf);
 					
 					//add this device to the list of devices of node i
-                    Device d_i_j (P,D,W,/*OFF+*/node_workload,OFF);
+                    Device d_i_j (P,D,W,/*OFF+*/node_workload, OFF);
 					ni.devices[j]=d_i_j;
 					
 					node_workload+=W;
@@ -70,15 +74,16 @@ public:
 				ni.workload = node_workload;
 				//add the just created node to the list of nodes of the domain
 				this->nodes[i] = ni;
-				
+                std::cout <<"OFF = " << OFF << "; L = " << L << std::endl;
 				OFF+=node_workload; //offset for the next node
 			}
 			//close domainfile
 			domainfile.close();
 			
 			//consistency check on the workload.
-			if(OFF!=R){
-				string err = "Nodes total workload is not consistent with the  specified number of rows\n";
+
+            if(OFF!=L){
+                string err = "Nodes total workload is not consistent with the  specified number of slices\n";
 				throw  std::runtime_error(err.c_str());
 			}
 			
@@ -125,7 +130,6 @@ void validate_ip_address(const string& str){
 }
 //----------------------------------------------------------------------
 
-
 string parseCommandLineArgs(int argc, char** argv)
 {
     using std::cerr;
@@ -146,13 +150,12 @@ string parseCommandLineArgs(int argc, char** argv)
     }
     return s;
 }
-
 	
 	
 };
 
-CALDistributedDomain2D calDomainPartition2D(int argc, char** argv){
-            CALDistributedDomain2D domain;
+CALDistributedDomain3D calDomainPartition3D(int argc, char** argv){
+            CALDistributedDomain3D domain;
             string domainfile = domain.parseCommandLineArgs(argc, argv);
 			domain.fromDomainFile(domainfile);
 			return domain;
@@ -160,4 +163,4 @@ CALDistributedDomain2D calDomainPartition2D(int argc, char** argv){
 
 
 
-#endif // calcldistributeddomain
+#endif // calcldistributeddomain3D

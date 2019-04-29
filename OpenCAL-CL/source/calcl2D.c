@@ -302,7 +302,7 @@ void calclSetKernelStreamCompactionArgs2D(struct CALCLModel2D * calclmodel2D) {
                  &calclmodel2D->bufferSTOffsets1);
 }
 
-void calclSetKernelMergeFlags(struct CALCLModel2D* calclmodel2D) {
+void calclSetKernelMergeFlags2D(struct CALCLModel2D* calclmodel2D) {
 
   clSetKernelArg(calclmodel2D->kernelMergeFlags, 0, sizeof(CALint),
                  &calclmodel2D->rows);
@@ -758,7 +758,7 @@ CALCLqueue calclCreateQueue2D(struct CALCLModel2D * calclmodel2D, CALCLcontext c
         calclmodel2D->bufferActiveCellsFlags, CL_MEM_READ_WRITE,
         CL_BUFFER_CREATE_TYPE_REGION, &region, &err);
     calclHandleError(err);
-    calclSetKernelMergeFlags(calclmodel2D);
+    calclSetKernelMergeFlags2D(calclmodel2D);
 
     calclSetKernelStreamCompactionArgs2D(calclmodel2D);
 
@@ -2211,7 +2211,7 @@ CALbyte calclSingleStep2D(struct CALCLModel2D* calclmodel2D, size_t * threadsNum
 
 }
 
-FILE * file;
+//FILE * file;
 void calclKernelCall2D(struct CALCLModel2D* calclmodel2D, CALCLkernel ker, int numDim, size_t * dimSize, size_t * localDimSize, cl_event * event) {
 
     //  cl_event timing_event;
@@ -2562,7 +2562,7 @@ int calclSetKernelArg2D(CALCLkernel kernel, cl_uint arg_index, size_t arg_size, 
 
 
 
-void calclSetWorkGroupDimensions(struct CALCLModel2D * calclmodel2D, int m, int n)
+void calclSetWorkGroupDimensions2D(struct CALCLModel2D * calclmodel2D, int m, int n)
 {
     calclmodel2D->workGroupDimensions = (size_t*) malloc(sizeof(size_t)*2);
     calclmodel2D->workGroupDimensions[0]=m;

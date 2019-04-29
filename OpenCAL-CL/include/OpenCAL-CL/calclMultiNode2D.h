@@ -1,5 +1,5 @@
-#ifndef CALCLMULTINODE_H_
-#define CALCLMULTINODE_H_
+#ifndef CALCLMULTINODE2D_H_
+#define CALCLMULTINODE2D_H_
 
 #include <mpi.h>
 #include <stdio.h>
@@ -14,8 +14,8 @@ extern "C"{
 #include <OpenCAL/cal2DBuffer.h>
 #include <OpenCAL/cal2DBufferIO.h>
 }
-typedef void (* CALCallbackFuncMNInit2D)(struct CALCLMultiDevice* ca2D, const Node& mynode);
-typedef void (* CALCallbackFuncMNFinalize2D)(struct CALCLMultiDevice* ca2D);
+typedef void (* CALCallbackFuncMNInit2D)(struct CALCLMultiDevice2D* ca2D, const Node& mynode);
+typedef void (* CALCallbackFuncMNFinalize2D)(struct CALCLMultiDevice2D* ca2D);
 
 CALbyte calNodeLoadMatrix2Dr(CALreal* M, const int rows, const int columns, const char* path,  int read_offset = 0, const int write_offset = 0)
 {
@@ -109,35 +109,35 @@ CALbyte calNodeLoadSubstate2Db(CALModel2D* ca2D, struct CALSubstate2Db* Q, char*
 
 
 
-// CALbyte calNodeSaveMatrix2Dr(CALreal* M, int rows, int columns, char* path, int readoffset, int writeoffset)
-// {
+CALbyte calNodeSaveMatrix2Dr(CALreal* M, int rows, int columns, char* path, int readoffset, int writeoffset)
+{
 
-// 	FILE *f;
-// 	f = fopen(path, "w");
-//     fclose(f);
-//     int nbytesofarow = 4962;
-//     MPI_Barrier(MPI_COMM_WORLD);
-//     fclose(f);
-//     f = fopen(path, "a");
+	FILE *f;
+	f = fopen(path, "w");
+    fclose(f);
+    int nbytesofarow = 4962;
+    MPI_Barrier(MPI_COMM_WORLD);
+    fclose(f);
+    f = fopen(path, "a");
 
-// 	if ( !f )
-// 		return CAL_FALSE;
+	if ( !f )
+		return CAL_FALSE;
 
-//     printf("readoffset*nbytesofarow = %d\n", readoffset*nbytesofarow);
-//     fseek(f,readoffset*nbytesofarow, SEEK_SET);
+    //printf("readoffset*nbytesofarow = %d\n", readoffset*nbytesofarow);
+    fseek(f, readoffset*nbytesofarow, SEEK_SET);
 
-// 	calfSaveMatrix2Dr(M, rows, columns, f);
+	calfSaveMatrix2Dr(M, rows, columns, f);
 
-// 	fclose(f);
+	fclose(f);
 
-// 	return CAL_TRUE;
-// }
+	return CAL_TRUE;
+}
 
-// CALbyte calNodeSaveSubstate2Dr(CALModel2D* ca2D, struct CALSubstate2Dr* Q, char* path,const Node& mynode) {
-//     int write_offset =0;
-//     CALbyte return_state = calNodeSaveMatrix2Dr(Q->current, ca2D->rows, ca2D->columns, path,mynode.offset,write_offset);
-//     return return_state;
-// }
+CALbyte calNodeSaveSubstate2Dr(CALModel2D* ca2D, struct CALSubstate2Dr* Q, char* path,const Node& mynode) {
+    int write_offset =0;
+    CALbyte return_state = calNodeSaveMatrix2Dr(Q->current, ca2D->rows, ca2D->columns, path,mynode.offset,write_offset);
+    return return_state;
+}
 
 
 
@@ -160,7 +160,7 @@ public:
     CALCallbackFuncMNInit2D init;
     CALCallbackFuncMNFinalize2D finalize;
     int rank;
-    CALCLMultiDevice* multidevice;
+    CALCLMultiDevice2D* multidevice;
 
     CALreal* realNodeGhosts=0;
     CALint * intNodeGhosts=0;
@@ -177,7 +177,7 @@ public:
         rank = world_rank;
 
         multidevice=nullptr;
-        multidevice = (CALCLMultiDevice*)malloc(sizeof(CALCLMultiDevice));
+        multidevice = (CALCLMultiDevice2D*)malloc(sizeof(CALCLMultiDevice2D));
                 
         Node mynode = c.nodes[rank];
         auto devices = mynode.devices;
@@ -956,7 +956,7 @@ gettimeofday(&start_kernel, NULL);
     }//function
 
 
-void calclStreamCompactionMulti(struct CALCLMultiDevice* multidevice, MultiNode * mn){
+void calclStreamCompactionMulti(struct CALCLMultiDevice2D* multidevice, MultiNode * mn){
 
 //----------MEASURE TIME---------
 gettimeofday(&(mn->start_comm), NULL);
@@ -1093,7 +1093,7 @@ gettimeofday(&(mn->start_comm), NULL);
 }
 
 
-void calcl_executeElementaryProcess(struct CALCLMultiDevice* multidevice,
+void calcl_executeElementaryProcess(struct CALCLMultiDevice2D* multidevice,
                                     const int el_proc, int dimNum, MultiNode * mn) {
 
 
@@ -1157,4 +1157,4 @@ void calcl_executeElementaryProcess(struct CALCLMultiDevice* multidevice,
 
 
 
-#endif /*CALCLMULTINODE_H_*/
+#endif /*CALCLMULTINODE2D_H_*/

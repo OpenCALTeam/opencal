@@ -46,7 +46,7 @@ typedef struct kernelID
     int index;
 } kernelID;
 
-struct CALCLMultiDevice
+struct CALCLMultiDevice2D
 {
     struct CALCLModel2D ** device_models;
     CALint num_devices;
@@ -61,30 +61,30 @@ struct CALCLMultiDevice
     size_t** singleStepThreadNums;
 };
 
-void calclSetNumDevice(struct CALCLMultiDevice* multidevice, const CALint _num_devices);
+void calclSetNumDevice(struct CALCLMultiDevice2D* multidevice, const CALint _num_devices);
 
-void calclAddDevice(struct CALCLMultiDevice* multidevice,const CALCLdevice device, const CALint workload);
+void calclAddDevice(struct CALCLMultiDevice2D* multidevice,const CALCLdevice device, const CALint workload);
 
-int calclCheckWorkload(struct CALCLMultiDevice* multidevice);
+int calclCheckWorkload(struct CALCLMultiDevice2D* multidevice);
 
-void calclMultiDeviceCADef2D(struct CALCLMultiDevice* mulitgpu,struct CALModel2D *host_CA ,char* kernel_src,char* kernel_inc, const CALint borderSize , const std::vector<Device>& devices);
+void calclMultiDeviceCADef2D(struct CALCLMultiDevice2D* mulitgpu,struct CALModel2D *host_CA ,char* kernel_src,char* kernel_inc, const CALint borderSize , const std::vector<Device>& devices);
 
-void calclMultiDeviceRun2D(struct CALCLMultiDevice* multidevice, CALint init_step, CALint final_step);
+void calclMultiDeviceRun2D(struct CALCLMultiDevice2D* multidevice, CALint init_step, CALint final_step);
 
-void calclMultiDeviceAddElementaryProcess2D(struct CALCLMultiDevice* multidevice, char * kernelName);
+void calclMultiDeviceAddElementaryProcess2D(struct CALCLMultiDevice2D* multidevice, char * kernelName);
 
-void calclMultiDeviceAddSteeringFunc2D(struct CALCLMultiDevice* multidevice, char * kernelName);
+void calclMultiDeviceAddSteeringFunc2D(struct CALCLMultiDevice2D* multidevice, char * kernelName);
 
-void calclMultiDeviceFinalize2D(struct CALCLMultiDevice* mulitgpu);
+void calclMultiDeviceFinalize2D(struct CALCLMultiDevice2D* mulitgpu);
 
-size_t* computekernelLaunchParams(struct CALCLMultiDevice* , const int, int*);
+size_t* computekernelLaunchParams(struct CALCLMultiDevice2D* , const int, int*);
 
-void calclMultiDeviceSetKernelArg2D(struct CALCLMultiDevice * multidevice,const char * kernel, cl_uint arg_index, size_t arg_size, const void *arg_value);
+void calclMultiDeviceSetKernelArg2D(struct CALCLMultiDevice2D * multidevice,const char * kernel, cl_uint arg_index, size_t arg_size, const void *arg_value);
 
-void calclMultiDeviceToNode(struct CALCLMultiDevice* multidevice);
+void calclMultiDeviceToNode(struct CALCLMultiDevice2D* multidevice);
 
-void calclMultiDeviceUpdateHalos2D(struct CALCLMultiDevice* multidevice,const CALbyte exchange_full_border);
+void calclMultiDeviceUpdateHalos2D(struct CALCLMultiDevice2D* multidevice,const CALbyte exchange_full_border);
 
-void calclMultiDeviceSetWorkGroupSize2D(struct CALCLMultiDevice* multidevice, int m, int n);
+void calclMultiDeviceSetWorkGroupSize2D(struct CALCLMultiDevice2D* multidevice, int m, int n);
 
 #endif /* CALCLMULTIDEVICE_H_ */

@@ -217,7 +217,7 @@ void calclCopyGhostr(struct CALModel2D * host_CA,CALreal* tmpGhostCellsr,int off
     }
 }
 
-void calclMultiDeviceSetKernelArg2D(struct CALCLMultiDevice * multidevice,const char * kernel, cl_uint arg_index, size_t arg_size, const void *arg_value) {
+void calclMultiDeviceSetKernelArg2D(struct CALCLMultiDevice2D * multidevice,const char * kernel, cl_uint arg_index, size_t arg_size, const void *arg_value) {
     int index = vector_search_char(&multidevice->kernelsID,kernel);
     assert(index != -1);
 
@@ -227,7 +227,7 @@ void calclMultiDeviceSetKernelArg2D(struct CALCLMultiDevice * multidevice,const 
     }
 }
 
-void calclMultiDeviceAddSteeringFunc2D(struct CALCLMultiDevice* multidevice, char* kernelName) {
+void calclMultiDeviceAddSteeringFunc2D(struct CALCLMultiDevice2D* multidevice, char* kernelName) {
 
 
     struct kernelID * kernel = (kernelID*)malloc(sizeof(struct kernelID));
@@ -249,7 +249,7 @@ void calclMultiDeviceAddSteeringFunc2D(struct CALCLMultiDevice* multidevice, cha
  *              PUBLIC MULTIDEVICE FUNCTIONS
  ******************************************************************************/
 
-void calclSetNumDevice(struct CALCLMultiDevice* multidevice, const CALint _num_devices) {
+void calclSetNumDevice(struct CALCLMultiDevice2D* multidevice, const CALint _num_devices) {
     multidevice->num_devices = _num_devices;
     multidevice->devices = (CALCLdevice*)malloc(sizeof(CALCLdevice)*multidevice->num_devices);
     multidevice->programs = (CALCLprogram*)malloc(sizeof(CALCLprogram)*multidevice->num_devices);
@@ -258,13 +258,13 @@ void calclSetNumDevice(struct CALCLMultiDevice* multidevice, const CALint _num_d
     multidevice->pos_device = 0;
 }
 
-void calclAddDevice(struct CALCLMultiDevice* multidevice,const CALCLdevice device, const CALint workload) {
+void calclAddDevice(struct CALCLMultiDevice2D* multidevice,const CALCLdevice device, const CALint workload) {
     multidevice->devices[multidevice->pos_device] = device;
     multidevice->workloads[multidevice->pos_device] = workload;
     multidevice->pos_device++;
 }
 
-int calclCheckWorkload(struct CALCLMultiDevice* multidevice) {
+int calclCheckWorkload(struct CALCLMultiDevice2D* multidevice) {
     int tmpsum=0;
     for (int i = 0; i < multidevice->num_devices; ++i) {
         tmpsum +=multidevice->workloads[i];
@@ -272,7 +272,7 @@ int calclCheckWorkload(struct CALCLMultiDevice* multidevice) {
     return tmpsum;
 }
 
-void calclMultiDeviceUpdateHalos2D(struct CALCLMultiDevice* multidevice) {
+void calclMultiDeviceUpdateHalos2D(struct CALCLMultiDevice2D* multidevice) {
 
 //se il bordo da scmabiare ha raggio zero non ci sta bisogno di fare alcuno scambio quindi semplicemente ritorno
 //assumiamo che tutti abbiano lo stesso raggio, quindi semplicemente prendo bordersize dal modello zero
@@ -407,7 +407,7 @@ void calclMultiDeviceUpdateHalos2D(struct CALCLMultiDevice* multidevice) {
 
 }
 
-void calclMultiDeviceUpdateHalos2D(struct CALCLMultiDevice* multidevice,const CALbyte exchange_full_border) {
+void calclMultiDeviceUpdateHalos2D(struct CALCLMultiDevice2D* multidevice,const CALbyte exchange_full_border) {
 
   cl_int err;
 
@@ -512,7 +512,7 @@ void calclMultiDeviceUpdateHalos2D(struct CALCLMultiDevice* multidevice,const CA
   }//GPUs
 }
 
-void calclMultiDeviceGetHalos(struct CALCLMultiDevice* multidevice, int offset, int gpu) {
+void calclMultiDeviceGetHalos(struct CALCLMultiDevice2D* multidevice, int offset, int gpu) {
     struct CALCLModel2D * calclmodel2D = multidevice->device_models[gpu];
 
     calclCopyGhostb(calclmodel2D->host_CA, calclmodel2D->borderMapper.byteBorder_OUT, offset, multidevice->workloads[gpu], calclmodel2D->borderSize);
@@ -522,7 +522,7 @@ void calclMultiDeviceGetHalos(struct CALCLMultiDevice* multidevice, int offset, 
     calclCopyGhostr(calclmodel2D->host_CA, calclmodel2D->borderMapper.realBorder_OUT, offset, multidevice->workloads[gpu], calclmodel2D->borderSize);
 }
 
-void calclMultiDeviceCADef2D(struct CALCLMultiDevice* multidevice,
+void calclMultiDeviceCADef2D(struct CALCLMultiDevice2D* multidevice,
                         struct CALModel2D* host_CA, char* kernel_src,
                         char* kernel_inc, const CALint borderSize,
                         const std::vector<Device>& devices) {
@@ -561,7 +561,7 @@ void calclMultiDeviceCADef2D(struct CALCLMultiDevice* multidevice,
 
 }
 
-void calclMultiDeviceToNode(struct CALCLMultiDevice* multidevice) {
+void calclMultiDeviceToNode(struct CALCLMultiDevice2D* multidevice) {
 
     for (int gpu = 0; gpu < multidevice->num_devices; ++gpu) {
         calclGetSubstatesFromDevice2D(multidevice->device_models[gpu],
@@ -578,7 +578,7 @@ void calclMultiDeviceToNode(struct CALCLMultiDevice* multidevice) {
 
 }
 
-size_t* computekernelLaunchParams(struct CALCLMultiDevice* multidevice, const int gpu,int *dim) {
+size_t* computekernelLaunchParams(struct CALCLMultiDevice2D* multidevice, const int gpu,int *dim) {
    size_t* singleStepThreadNum;
     if (multidevice->device_models[0]->opt == CAL_NO_OPT) {
         singleStepThreadNum = (size_t*) malloc(sizeof(size_t) * 2);
@@ -593,15 +593,15 @@ size_t* computekernelLaunchParams(struct CALCLMultiDevice* multidevice, const in
     return singleStepThreadNum;
 }
 
-void calclMultiDeviceSetWorkGroupSize2D(struct CALCLMultiDevice* multidevice, int m, int n) {
+void calclMultiDeviceSetWorkGroupSize2D(struct CALCLMultiDevice2D* multidevice, int m, int n) {
     for (int gpu = 0; gpu < multidevice->num_devices; ++gpu) {
         struct CALCLModel2D* calclmodel2D = multidevice->device_models[gpu];
-        calclSetWorkGroupDimensions(calclmodel2D, m, n);
+        calclSetWorkGroupDimensions2D(calclmodel2D, m, n);
 
     }
 }
 
-void calclMultiDeviceRun2D(struct CALCLMultiDevice* multidevice, CALint init_step, CALint final_step) {
+void calclMultiDeviceRun2D(struct CALCLMultiDevice2D* multidevice, CALint init_step, CALint final_step) {
 
     int steps = init_step;
 
@@ -755,7 +755,7 @@ void calclMultiDeviceRun2D(struct CALCLMultiDevice* multidevice, CALint init_ste
 
 }
 
-void calclMultiDeviceAddElementaryProcess2D(struct CALCLMultiDevice* multidevice, char * kernelName) {
+void calclMultiDeviceAddElementaryProcess2D(struct CALCLMultiDevice2D* multidevice, char * kernelName) {
     struct kernelID * kernel = (kernelID*)malloc(sizeof(struct kernelID));
     kernel->index = vector_total(&multidevice->kernelsID);
     memset(kernel->name,'\0',sizeof(kernel->name));
@@ -771,7 +771,7 @@ void calclMultiDeviceAddElementaryProcess2D(struct CALCLMultiDevice* multidevice
     }
 }
 
-void calclMultiDeviceFinalize2D(struct CALCLMultiDevice* multidevice) {
+void calclMultiDeviceFinalize2D(struct CALCLMultiDevice2D* multidevice) {
 
     free(multidevice->devices);
     free(multidevice->programs);
