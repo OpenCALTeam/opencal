@@ -128,6 +128,7 @@ struct CALCLModel2D {
     size_t num_active_cells;
     int chunk;
 
+    void (*hostSteering)(struct CALModel2D*);
     //! CA space plus border
 
     CALCLkernel kernelUpdateSubstate;					//!< Opencl kernel that updates substates GPU side (CALCL_OPT_ACTIVE_CELL strategy only)
@@ -518,6 +519,12 @@ DllExport
 void calclAddSteeringFunc2D(struct CALCLModel2D * calclmodel2D,		//!< Pointer to a struct CALCLModel2D
                             CALCLkernel kernel									//!< Pointer to Opencl kernel
                             );
+
+DllExport
+void calclAddHostSteeringFunc2D(struct CALCLModel2D* calclmodel2D, 
+                                void(*hostSteering)(struct CALModel2D*)
+                                );
+
 
 /*! \brief Set the function used to access substate on the GPU every callbackSteps steps.
  *

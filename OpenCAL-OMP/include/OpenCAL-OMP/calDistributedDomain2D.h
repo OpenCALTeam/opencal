@@ -1,7 +1,42 @@
 #ifndef calcldistributeddomain2D_
 #define calcldistributeddomain2D_
 
-#include "calclCommon.h"
+#include <vector>
+#include<string>
+#include<iostream>
+#include <utility>
+extern "C"{
+    #include <arpa/inet.h> //inep_pton
+}
+#include<stdexcept> //exception handling
+#include<fstream> //ifstream and file handling
+
+using std::string;
+using std::stoi;
+using std::stoul;
+using std::cin;
+using std::ifstream;
+typedef unsigned int uint;
+
+
+
+
+class Device{
+public:
+Device(){}
+Device(const uint _np, const uint _nd, const uint _w, const uint _o, const uint _go) :
+    num_platform(_np), num_device(_nd), workload(_w) , offset(_o), goffset(_go){}
+
+    uint num_platform;
+    uint num_device;
+    uint workload;
+
+    uint offset;
+    uint goffset;// global offset
+
+};
+
+//#include "calclCommon.h"
 class Node {
 public:
 Node(){};
@@ -63,8 +98,7 @@ public:
 					domainfile>>buf; W = stoul(buf);
 					
 					//add this device to the list of devices of node i
-                    Device d_i_j (P,D,W,/*OFF+*/node_workload,OFF);
-					ni.devices[j]=d_i_j;
+
 					
 					node_workload+=W;
 				}

@@ -2195,6 +2195,12 @@ CALbyte calclSingleStep2D(struct CALCLModel2D* calclmodel2D, size_t * threadsNum
             copySubstatesBuffers2D(calclmodel2D);
         }
 
+        if (calclmodel2D->hostSteering)
+	    {
+            calclGetSubstatesDeviceToHost2D(calclmodel2D);
+		    calclmodel2D->hostSteering(calclmodel2D->host_CA);
+        }
+
     }
     if (calclmodel2D->cl_update_substates != NULL && calclmodel2D->steps % calclmodel2D->callbackSteps == 0) {
         calclGetSubstatesDeviceToHost2D(calclmodel2D);
@@ -2212,7 +2218,8 @@ CALbyte calclSingleStep2D(struct CALCLModel2D* calclmodel2D, size_t * threadsNum
 }
 
 //FILE * file;
-void calclKernelCall2D(struct CALCLModel2D* calclmodel2D, CALCLkernel ker, int numDim, size_t * dimSize, size_t * localDimSize, cl_event * event) {
+void calclKernelCall2D(struct CALCLModel2D* calclmodel2D, 
+                        CALCLkernel ker, int numDim, size_t * dimSize, size_t * localDimSize, cl_event * event) {
 
     //  cl_event timing_event;
     //  cl_ulong time_start, cl_ulong time_end, read_time;
@@ -2303,6 +2310,10 @@ void calclAddInitFunc2D(struct CALCLModel2D* calclmodel2D, CALCLkernel kernel) {
 void calclAddSteeringFunc2D(struct CALCLModel2D* calclmodel2D, CALCLkernel kernel) {
     calclmodel2D->kernelSteering = kernel;
     calclSetModelParameters2D(calclmodel2D, kernel);
+}
+
+void calclAddHostSteeringFunc2D(struct CALCLModel2D* calclmodel2D, void(*steering)(struct CALModel2D*)) {
+    calclmodel2D->hostSteering = steering;
 }
 
 

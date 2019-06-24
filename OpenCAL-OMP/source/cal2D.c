@@ -258,6 +258,90 @@ void calDeleteSubstate2Dr(struct CALModel2D* ca2D,	//!< Pointer to the cellular 
                             PUBLIC FUNCIONS
 
 *******************************************************************************/
+struct CALModel2D* calCADef2DMN(int rows,
+                              int columns,
+                              enum CALNeighborhood2D CAL_NEIGHBORHOOD_2D,
+                              enum CALSpaceBoundaryCondition CAL_TOROIDALITY,
+                              enum CALOptimization CAL_OPTIMIZATION,
+                              int offset
+                              )
+{
+    int i;
+    struct CALModel2D *ca2D = (struct CALModel2D *)malloc(sizeof(struct CALModel2D));
+    if (!ca2D)
+        return NULL;
+
+    ca2D->rows = rows+offset*2;
+    ca2D->columns = columns;
+
+    ca2D->T = CAL_TOROIDALITY;
+
+    ca2D->A = NULL;
+    ca2D->contiguousLinkedList = NULL;
+    ca2D->OPTIMIZATION = CAL_OPTIMIZATION;
+    if (ca2D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE) {
+        ca2D->A = malloc( sizeof(struct CALActiveCells2D));
+        ca2D->A->flags = calAllocBuffer2Db(ca2D->rows, ca2D->columns);
+        ca2D->A->cells = NULL;
+        ca2D->A->size_current = 0;
+#pragma omp parallel
+        {
+#pragma omp single
+            ca2D->A->num_threads = CAL_GET_NUM_THREADS();
+        }
+        ca2D->A->size_next = (int*)malloc(sizeof(int) * ca2D->A->num_threads);
+
+        for(i=0;i<ca2D->A->num_threads;i++)
+            ca2D->A->size_next[i] = 0;
+
+        calSetBuffer2Db(ca2D->A->flags, ca2D->rows, ca2D->columns, CAL_FALSE);
+    }
+    else if(ca2D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS)
+        ca2D->contiguousLinkedList = calMakeContiguousLinkedList2D(ca2D);
+
+    ca2D->X = NULL;
+    ca2D->sizeof_X = 0;
+
+    ca2D->X_id = CAL_NEIGHBORHOOD_2D;
+    switch (CAL_NEIGHBORHOOD_2D) {
+    case CAL_VON_NEUMANN_NEIGHBORHOOD_2D:
+        calDefineVonNeumannNeighborhood2D(ca2D);
+        break;
+    case CAL_MOORE_NEIGHBORHOOD_2D:
+        calDefineMooreNeighborhood2D(ca2D);
+        break;
+    case CAL_HEXAGONAL_NEIGHBORHOOD_2D:
+        calDefineHexagonalNeighborhood2D(ca2D);
+        break;
+    case CAL_HEXAGONAL_NEIGHBORHOOD_ALT_2D:
+        calDefineAlternativeHexagonalNeighborhood2D(ca2D);
+        break;
+    }
+
+    ca2D->pQb_array = NULL;
+    ca2D->pQi_array = NULL;
+    ca2D->pQr_array = NULL;
+    ca2D->sizeof_pQb_array = 0;
+    ca2D->sizeof_pQi_array = 0;
+    ca2D->sizeof_pQr_array = 0;
+
+    ca2D->pQb_single_layer_array = NULL;
+    ca2D->pQi_single_layer_array = NULL;
+    ca2D->pQr_single_layer_array = NULL;
+    ca2D->sizeof_pQb_single_layer_array = 0;
+    ca2D->sizeof_pQi_single_layer_array = 0;
+    ca2D->sizeof_pQr_single_layer_array = 0;
+
+    ca2D->elementary_processes = NULL;
+    ca2D->num_of_elementary_processes = 0;
+
+    ca2D->is_safe = CAL_UNSAFE_INACTIVE;
+
+    CAL_ALLOC_LOCKS(ca2D);
+    CAL_INIT_LOCKS(ca2D, i);
+
+    return ca2D;
+}
 
 
 struct CALModel2D* calCADef2D(int rows,
@@ -716,10 +800,18 @@ void calApplyElementaryProcess2D(struct CALModel2D* ca2D,	//!< Pointer to the ce
     else if(ca2D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS && ca2D->contiguousLinkedList->size_current > 0) //Computationally active cells optimization(optimal).
         calApplyElementaryProcessActiveCellsCLL2D(ca2D, elementary_process);
     else //Standart cicle of the transition function { //Standart cicle of the transition function
-#pragma omp parallel for private (i,j)
-        for (i = 0; i < ca2D->rows; i++)
-            for (j = 0; j < ca2D->columns; j++)
+#pragma omp parallel private (i,j)
+{
+    int tid = omp_get_thread_num();
+    printf("Hello World from thread = %d\n", tid);
+    #pragma omp parallel for
+        for (i = 0; i < ca2D->rows; i++){
+            for (j = 0; j < ca2D->columns; j++){
                 elementary_process(ca2D, i, j);
+            }
+        }
+    }
+                
 }
 
 
