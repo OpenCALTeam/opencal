@@ -67,6 +67,7 @@ struct CALModel2D {
     int columns;						//!< Number of columns of the 2D cellular space.
     enum CALSpaceBoundaryCondition T;	//!< Type of cellular space: toroidal or non-toroidal.
     enum CALUnsafeState is_safe;
+    int offset;
 
     enum CALOptimization OPTIMIZATION;	//!< Type of optimization used. It can be CAL_NO_OPT or CAL_OPT_ACTIVE_CELLS.
     struct CALActiveCells2D* A;			//!< Computational Active cells object. if A.actives==NULL no optimization is applied.
