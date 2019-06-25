@@ -7,7 +7,7 @@ extern "C"
 #include <OpenCAL-OMP/cal2DBufferIO.h>
 };
 
-#include <OpenCAL-OMP/calDistributedDomain2D.h>
+#include <OpenCAL-OMP/cal2DDistributedDomain.h>
 
 
 #define STRLEN 256
@@ -29,7 +29,7 @@ CALbyte calNodeLoadMatrix2Dr(CALreal* M, const int rows, const int columns, cons
 {
     FILE *f = NULL;
     f = fopen(path, "r");
-    printf("loading Real %s   -->   %d\n",path, write_offset);
+   // printf("loading Real %s   -->   %d\n",path, write_offset);
 
     if ( !f )
         return CAL_FALSE;

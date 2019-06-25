@@ -15,7 +15,7 @@ extern "C"
 #include <OpenCAL-OMP/cal2DRun.h>
 };
 
-#include <OpenCAL-OMP/calMultiNodeCommon.h>
+#include <OpenCAL-OMP/cal2DMultiNodeCommon.h>
 
 #include <string.h>
 
@@ -153,6 +153,7 @@ class MultiNode
         // else if(ca2D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS && ca2D->contiguousLinkedList->size_current > 0) //Computationally active cells optimization(optimal).
         //     calApplyElementaryProcessActiveCellsCLL2D(ca2D, elementary_process);
         // else //Standart cicle of the transition function
+        #pragma omp parallel for private(i,j)
         for (i = borderSize; i < ca2D->rows - borderSize; i++)
             for (j = 0; j < ca2D->columns; j++)
                 elementary_process(ca2D, i, j);
@@ -160,18 +161,93 @@ class MultiNode
 
     void calCopyBuffer2DbM(CALbyte* M_src, CALbyte* M_dest, int rows, int columns)
     { 
+        int tn;
+        int ttotal;
+        size_t size;
+
+        int start;
+        int chunk;
+
+        size = rows * columns;
         const CALint sizeBorder = borderSize * host_CA->columns;
-        memcpy(M_dest+sizeBorder, M_src+sizeBorder, sizeof(CALbyte)*rows*columns);
+
+#pragma omp parallel private (start, chunk, tn, ttotal)
+        {
+            ttotal = CAL_GET_NUM_THREADS();
+
+            tn = CAL_GET_THREAD_NUM();
+            chunk = size / ttotal;
+            start = tn * chunk;
+
+            if (tn == ttotal - 1)
+                chunk = size - start;
+
+            memcpy(M_dest + start+sizeBorder, M_src + start+sizeBorder, sizeof(CALbyte) * chunk);
+        }
+
+        // serial implementation
+        //memcpy(M_dest+sizeBorder, M_src+sizeBorder, sizeof(CALbyte)*rows*columns);
     }
     void calCopyBuffer2DiM(CALint* M_src, CALint* M_dest, int rows, int columns)
     {
-       const CALint sizeBorder = borderSize * host_CA->columns;
-       memcpy(M_dest+sizeBorder, M_src+sizeBorder, sizeof(CALint)*rows*columns);
+        int tn;
+        int ttotal;
+        size_t size;
+    
+        int start;
+        int chunk;
+    
+        size = rows * columns;
+        const CALint sizeBorder = borderSize * host_CA->columns;
+    
+#pragma omp parallel private (start, chunk, tn, ttotal)
+        {
+            ttotal = CAL_GET_NUM_THREADS();
+    
+            tn = CAL_GET_THREAD_NUM();
+            chunk = size / ttotal;
+            start = tn * chunk;
+    
+            if (tn == ttotal - 1)
+                chunk = size - start;
+    
+            memcpy(M_dest + start+sizeBorder, M_src + start+sizeBorder,
+                   sizeof(CALint) * chunk);
+        }
+       
+      // memcpy(M_dest+sizeBorder, M_src+sizeBorder, sizeof(CALint)*rows*columns);
     }
     void calCopyBuffer2DrM(CALreal* M_src, CALreal* M_dest, int rows, int columns)
     {
-      const CALint sizeBorder = borderSize * host_CA->columns;  
-      memcpy(M_dest+sizeBorder, M_src+sizeBorder, sizeof(CALreal)*rows*columns);
+        int tn;
+        int ttotal;
+        size_t size;
+
+        int start;
+        int chunk;
+
+        size = rows * columns;
+        const CALint sizeBorder = borderSize * host_CA->columns;
+          
+
+#pragma omp parallel private (tn, start, chunk, ttotal)
+        {
+            ttotal = CAL_GET_NUM_THREADS();
+
+
+            tn = CAL_GET_THREAD_NUM();
+            chunk = size / ttotal;
+            start = tn * chunk;
+
+            if (tn == ttotal - 1)
+                chunk = size - start;
+
+            memcpy(M_dest + start+sizeBorder, M_src + start+sizeBorder,
+                   sizeof(CALreal) * chunk);
+        }
+
+      
+      //memcpy(M_dest+sizeBorder, M_src+sizeBorder, sizeof(CALreal)*rows*columns);
     }
 
     void calUpdateSubstate2DbM(struct CALModel2D* ca2D, struct CALSubstate2Db* Q) {
@@ -179,7 +255,7 @@ class MultiNode
     //      ( ca2D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE && ca2D->A->size_current > 0) )
     //     calCopyBufferActiveCells2Db(Q->next, Q->current, ca2D);
     // else
-        calCopyBuffer2DbM(Q->next, Q->current, ca2D->rows-borderSize, ca2D->columns);
+        calCopyBuffer2DbM(Q->next, Q->current, ca2D->rows, ca2D->columns);
     }
 
     void calUpdateSubstate2DiM(struct CALModel2D* ca2D, struct CALSubstate2Di* Q) {
@@ -187,7 +263,7 @@ class MultiNode
     //      ( ca2D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE && ca2D->A->size_current > 0) )
     //     calCopyBufferActiveCells2Di(Q->next, Q->current, ca2D);
     // else
-        calCopyBuffer2DiM(Q->next, Q->current, ca2D->rows-borderSize, ca2D->columns);
+        calCopyBuffer2DiM(Q->next, Q->current, ca2D->rows, ca2D->columns);
     }
 
     void calUpdateSubstate2DrM(struct CALModel2D* ca2D, struct CALSubstate2Dr* Q) {
@@ -195,7 +271,8 @@ class MultiNode
     //      ( ca2D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE && ca2D->A->size_current > 0) )
     //     calCopyBufferActiveCells2Dr(Q->next, Q->current, ca2D);
     // else
-        calCopyBuffer2DrM(Q->next, Q->current, ca2D->rows-borderSize, ca2D->columns);
+        
+        calCopyBuffer2DrM(Q->next, Q->current, ca2D->rows, ca2D->columns);
 
     }
 
@@ -348,7 +425,7 @@ class MultiNode
             if (numSubstates <= 0)
                 return;
     
-           for (int i = 0; i < numSubstates; ++i)
+            for (int i = 0; i < numSubstates; ++i)
             {
                 memcpy(borderMapper.realBorder_OUT + i * sizeBorder, host_CA->pQr_array[i]->current + (sizeBorder), sizeof(CALreal) * sizeBorder);
                 memcpy(borderMapper.realBorder_OUT + (numSubstates + i) * sizeBorder, host_CA->pQr_array[i]->current + ((fullSize - sizeBorder*2)), sizeof(CALreal) * sizeBorder);
