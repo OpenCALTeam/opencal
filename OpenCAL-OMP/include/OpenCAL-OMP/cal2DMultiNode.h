@@ -452,20 +452,6 @@ class MultiNode
                 {
                     ntComuunication++;
                     T1 = MPI_Wtime();
-
-                    // std::cout << std::endl
-                    //           << rank << " invia a " << next << std::endl;
-
-                    // //LOG
-                    // for (int i = 0; i < count*2; ++i)
-                    // {
-                    //     if (i % (sizeBorder) == 0)
-                    //     {
-                    //         std::cout << std::endl;
-                    //     }
-                    //     std::cout << borderMapper.realBorder_OUT[i] << " ";
-                        
-                    // }
                     
                     MPI_Send(send_offset, count, DATATYPE, next, i, MPI_COMM_WORLD);
 
@@ -487,41 +473,11 @@ class MultiNode
             {
 
                 memcpy(host_CA->pQr_array[i]->current,(realNodeGhosts + i * sizeBorder),  sizeof(CALreal) * sizeBorder);
-
                 memcpy(host_CA->pQr_array[i]->current + (fullSize - sizeBorder), (realNodeGhosts + numSubstates * sizeBorder + (i * sizeBorder)), sizeof(CALreal) * sizeBorder);
                 memcpy(host_CA->pQr_array[i]->next,(realNodeGhosts + i * sizeBorder),  sizeof(CALreal) * sizeBorder);
-
                 memcpy(host_CA->pQr_array[i]->next + (fullSize - sizeBorder), (realNodeGhosts + numSubstates * sizeBorder + (i * sizeBorder)), sizeof(CALreal) * sizeBorder);
 
             }
-            // if(rank == 1){
-            //    std::cout << std::endl
-            //                   << rank << " riceve da " << prev << std::endl;
-
-            //         //LOG
-            //         for (int i = 0; i < count*2; ++i)
-            //         {
-            //            if (i % (count) == 0)
-            //             {
-            //                 std::cout << std::endl;
-            //             } 
-            //             std::cout << realNodeGhosts[i]<< " ";
-                        
-            //         }
-            //         std::cout << std::endl;
-            //         std::cout <<  std::endl;
-            //     for (int i = 0; i < host_CA->rows*host_CA->columns; ++i)
-            //          {
-            //            if (i % (host_CA->columns) == 0)
-            //             {
-            //                 std::cout << std::endl;
-            //             } 
-            //             std::cout << host_CA->pQr_array[0]->current[i]<< " ";
-                        
-            //         }
-
-
-            // }
 
 
         }
@@ -548,13 +504,9 @@ class MultiNode
 
             for (int i = 0; i < numSubstates; ++i)
             {
-                memcpy(borderMapper.intBorder_OUT + i * sizeBorder, host_CA->pQi_array[i]->current + (i * fullSize + sizeBorder), sizeof(CALint) * sizeBorder);
-               /* if(rank == 0){
-                    std::cout <<  "fullsize " <<fullSize << std::endl; 
-                    std::cout <<  "sizeBorder " << sizeBorder << std::endl;
-                }*/
-                memcpy(borderMapper.intBorder_OUT + (numSubstates + i) * sizeBorder, host_CA->pQi_array[i]->current + (i * fullSize + (fullSize - sizeBorder*2)), sizeof(CALint) * sizeBorder);
-            }
+                memcpy(borderMapper.intBorder_OUT + i * sizeBorder, host_CA->pQi_array[i]->current + (sizeBorder), sizeof(CALint) * sizeBorder);
+                memcpy(borderMapper.intBorder_OUT + (numSubstates + i) * sizeBorder, host_CA->pQi_array[i]->current + ((fullSize - sizeBorder*2)), sizeof(CALint) * sizeBorder);
+            } 
 
             for (int i = 0; i < 2; i++)
             {
@@ -562,21 +514,6 @@ class MultiNode
                 next = ((rank + 1) + c.nodes.size()) % c.nodes.size();
                 prev = ((rank - 1) + c.nodes.size()) % c.nodes.size();
 
-               /*if (rank == 0)
-                {
-                    std::cout << std::endl
-                              << rank << " invia a " << next << std::endl;
-
-                    //LOG
-                    for (int i = 0; i < sizeBorder * 2 * numSubstates; ++i)
-                    {
-                        if (i % (sizeBorder) == 0)
-                        {
-                            std::cout << std::endl;
-                        }
-                        std::cout << borderMapper.intBorder_OUT[i] << " ";
-                    }
-                }*/
 
                 if (i == 1)
                     std::swap(next, prev);
@@ -592,19 +529,6 @@ class MultiNode
 
                     ntComuunication++;
                     T1 = MPI_Wtime();
-
-                    // std::cout << std::endl
-                    //           << rank << " invia a " << next << std::endl;
-
-                    // //LOG
-                    // for (int i = 0; i < count; ++i)
-                    // {
-                    //     std::cout << borderMapper.intBorder_OUT[i] << " ";
-                    //     if (i % (sizeBorder * 2) == 0)
-                    //     {
-                    //         std::cout << std::endl;
-                    //     }
-                    // }
 
                     MPI_Send(send_offset, count, DATATYPE, next, i, MPI_COMM_WORLD);
 
@@ -622,38 +546,14 @@ class MultiNode
                     MPI_Send(send_offset, count, DATATYPE, next, i, MPI_COMM_WORLD);
                 }
             }
+
             for (int i = 0; i < numSubstates; i++)
             {
-                memcpy(host_CA->pQi_array[i]->current + (i * fullSize),(intNodeGhosts + i * sizeBorder), sizeof(CALint) * sizeBorder);
 
-                memcpy(host_CA->pQi_array[i]->current + ((i + 1) * fullSize - sizeBorder),(intNodeGhosts + numSubstates * sizeBorder + (i * sizeBorder)),  sizeof(CALint) * sizeBorder);
-            }
-            if(rank == 1){
-               std::cout << std::endl
-                              << rank << " riceve da " << prev << std::endl;
-
-                    //LOG
-                    for (int i = 0; i < count*2; ++i)
-                    {
-                       if (i % (count) == 0)
-                        {
-                            std::cout << std::endl;
-                        } 
-                        std::cout << intNodeGhosts[i]<< " ";
-                        
-                    }
-                    std::cout << std::endl;
-                    std::cout <<  std::endl;
-                for (int i = 0; i < host_CA->rows*host_CA->columns; ++i)
-                     {
-                       if (i % (host_CA->columns) == 0)
-                        {
-                            std::cout << std::endl;
-                        } 
-                        std::cout << host_CA->pQi_array[0]->current[i]<< " ";
-                        
-                    }
-
+                memcpy(host_CA->pQi_array[i]->current,(intNodeGhosts + i * sizeBorder),  sizeof(CALint) * sizeBorder);
+                memcpy(host_CA->pQi_array[i]->current + (fullSize - sizeBorder), (intNodeGhosts + numSubstates * sizeBorder + (i * sizeBorder)), sizeof(CALint) * sizeBorder);
+                memcpy(host_CA->pQi_array[i]->next,(intNodeGhosts + i * sizeBorder),  sizeof(CALint) * sizeBorder);
+                memcpy(host_CA->pQi_array[i]->next + (fullSize - sizeBorder), (intNodeGhosts + numSubstates * sizeBorder + (i * sizeBorder)), sizeof(CALint) * sizeBorder);
 
             }
         }
@@ -676,6 +576,12 @@ class MultiNode
 
             if (numSubstates <= 0)
                 return;
+
+            for (int i = 0; i < numSubstates; ++i)
+            {
+                memcpy(borderMapper.byteBorder_OUT + i * sizeBorder, host_CA->pQb_array[i]->current + (sizeBorder), sizeof(CALbyte) * sizeBorder);
+                memcpy(borderMapper.byteBorder_OUT + (numSubstates + i) * sizeBorder, host_CA->pQb_array[i]->current + ((fullSize - sizeBorder*2)), sizeof(CALbyte) * sizeBorder);
+            } 
 
             double T1, T2, deltaT;
             for (int i = 0; i < 2; i++)
@@ -716,9 +622,11 @@ class MultiNode
             for (int i = 0; i < numSubstates; i++)
             {
 
-                memcpy((byteNodeGhosts + i * sizeBorder), host_CA->pQb_array[i] + (i * fullSize), sizeof(CALbyte) * sizeBorder);
+                memcpy(host_CA->pQb_array[i]->current,(byteNodeGhosts + i * sizeBorder),  sizeof(CALbyte) * sizeBorder);
+                memcpy(host_CA->pQb_array[i]->current + (fullSize - sizeBorder), (byteNodeGhosts + numSubstates * sizeBorder + (i * sizeBorder)), sizeof(CALbyte) * sizeBorder);
+                memcpy(host_CA->pQb_array[i]->next,(byteNodeGhosts + i * sizeBorder),  sizeof(CALbyte) * sizeBorder);
+                memcpy(host_CA->pQb_array[i]->next + (fullSize - sizeBorder), (byteNodeGhosts + numSubstates * sizeBorder + (i * sizeBorder)), sizeof(CALbyte) * sizeBorder);
 
-                memcpy((byteNodeGhosts + numSubstates * sizeBorder + (i * sizeBorder)), host_CA->pQb_array[i] + ((i + 1) * fullSize - sizeBorder), sizeof(CALbyte) * sizeBorder);
             }
         }
     }
