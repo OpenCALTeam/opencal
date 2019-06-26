@@ -276,6 +276,88 @@ struct CALModel3D* calCADef3D(int rows,
     return ca3D;
 }
 
+struct CALModel3D* calCADef3DMN(int rows,
+                              int columns,
+                              int slices,
+                              enum CALNeighborhood3D CAL_NEIGHBORHOOD_3D,
+                              enum CALSpaceBoundaryCondition CAL_TOROIDALITY,
+                              enum CALOptimization CAL_OPTIMIZATION,
+                              int offset
+                              )
+{
+    int i;
+    struct CALModel3D *ca3D = (struct CALModel3D *)malloc(sizeof(struct CALModel3D));
+    if (!ca3D)
+        return NULL;
+
+    ca3D->offset = offset;
+    ca3D->rows = rows;
+    ca3D->columns = columns;
+    ca3D->slices = slices+offset*2;
+
+    ca3D->T = CAL_TOROIDALITY;
+
+    ca3D->OPTIMIZATION = CAL_OPTIMIZATION;
+    if (ca3D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE) {
+        ca3D->A = malloc( sizeof(struct CALActiveCells3D));
+        ca3D->A->flags = calAllocBuffer3Db(ca3D->rows, ca3D->columns, ca3D->slices);
+        ca3D->A->cells = NULL;
+        ca3D->A->size_current = 0;
+#pragma omp parallel
+        {
+#pragma omp single
+            ca3D->A->num_threads = CAL_GET_NUM_THREADS();
+        }
+        ca3D->A->size_next = (int*)malloc(sizeof(int) * ca3D->A->num_threads);
+
+        for(i=0;i<ca3D->A->num_threads;i++)
+            ca3D->A->size_next[i] = 0;
+
+        calSetBuffer3Db(ca3D->A->flags, ca3D->rows, ca3D->columns, ca3D->slices, CAL_FALSE);
+    }
+    else if(ca3D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS)
+        ca3D->contiguousLinkedList = calMakeContiguousLinkedList3D(ca3D);
+
+    ca3D->X = NULL;
+    ca3D->sizeof_X = 0;
+
+    ca3D->X_id = CAL_NEIGHBORHOOD_3D;
+    switch (CAL_NEIGHBORHOOD_3D) {
+        case CAL_VON_NEUMANN_NEIGHBORHOOD_3D:
+            calDefineVonNeumannNeighborhood3D(ca3D);
+            break;
+        case CAL_MOORE_NEIGHBORHOOD_3D:
+            calDefineMooreNeighborhood3D(ca3D);
+            break;
+    }
+
+    ca3D->pQb_array = NULL;
+    ca3D->pQi_array = NULL;
+    ca3D->pQr_array = NULL;
+    ca3D->sizeof_pQb_array = 0;
+    ca3D->sizeof_pQi_array = 0;
+    ca3D->sizeof_pQr_array = 0;
+
+    ca3D->pQb_single_layer_array = NULL;
+    ca3D->pQi_single_layer_array = NULL;
+    ca3D->pQr_single_layer_array = NULL;
+    ca3D->sizeof_pQb_single_layer_array = 0;
+    ca3D->sizeof_pQi_single_layer_array = 0;
+    ca3D->sizeof_pQr_single_layer_array = 0;
+
+
+    ca3D->elementary_processes = NULL;
+    ca3D->num_of_elementary_processes = 0;
+
+    ca3D->is_safe = CAL_UNSAFE_INACTIVE;
+
+    CAL_ALLOC_LOCKS_3D(ca3D);
+    CAL_INIT_LOCKS_3D(ca3D, i);
+
+
+    return ca3D;
+}
+
 void calSetUnsafe3D(struct CALModel3D* ca3D) {
     ca3D->is_safe = CAL_UNSAFE_ACTIVE;
 }

@@ -263,7 +263,7 @@ struct CALModel2D* calCADef2DMN(int rows,
                               enum CALNeighborhood2D CAL_NEIGHBORHOOD_2D,
                               enum CALSpaceBoundaryCondition CAL_TOROIDALITY,
                               enum CALOptimization CAL_OPTIMIZATION,
-                              int offset
+                              int _offset
                               )
 {
     int i;
@@ -271,7 +271,9 @@ struct CALModel2D* calCADef2DMN(int rows,
     if (!ca2D)
         return NULL;
 
-    ca2D->rows = rows+offset*2;
+    
+    ca2D->offset = _offset;
+    ca2D->rows = rows+_offset*2;
     ca2D->columns = columns;
 
     ca2D->T = CAL_TOROIDALITY;
