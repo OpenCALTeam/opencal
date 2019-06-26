@@ -195,6 +195,7 @@ void calfSaveMatrix3Dr(CALreal* M, int rows, int columns, int slices, FILE* f, i
 	int i, j, k;
 
 	for (k=offset; k<slices-offset; k++){
+//		for (k=0; k<slices; k++){
 		for (i=0; i<rows; i++) {
 			for (j=0; j<columns; j++) {
 				sprintf(str, "%f ", calGetBuffer3DElement(M, rows, columns, i, j, k));

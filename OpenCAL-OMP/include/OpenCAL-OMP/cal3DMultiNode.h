@@ -34,8 +34,8 @@ typedef struct BorderMapper
 
 } borderMapper;
 
-typedef void (*CALCallbackFuncMNInit3D)(struct MultiNode *ca3D, const Node &mynode);
-typedef void (*CALCallbackFuncMNFinalize3D)(struct MultiNode *ca3D, const Node &mynode);
+typedef void (*CALCallbackFuncMNInit3D)(struct MultiNode *ca3D, Node &mynode);
+typedef void (*CALCallbackFuncMNFinalize3D)(struct MultiNode *ca3D, Node &mynode);
 
 //MULTINODE---------------
 //template <class F_INIT,class F_FINALIZE>
@@ -162,9 +162,9 @@ class MultiNode
         //     calApplyElementaryProcessActiveCellsCLL3D(ca3D, elementary_process);
         // else //Standart cicle of the transition function
 #pragma omp parallel for private (k, i, j)
-	for (k=offset; k<ca3D->slices-offset; k++)
 		for (i=0; i<ca3D->rows; i++)
 			for (j=0; j<ca3D->columns; j++)
+                for (k=offset; k<ca3D->slices-offset; k++)
                 elementary_process(ca3D, i, j, k);
     }
 
@@ -193,7 +193,7 @@ class MultiNode
     //         memcpy(M_dest + start+sizeOffset, M_src + start+sizeOffset,  sizeof(CALbyte) * chunk);
     //     }        
         // const CALint sizeOffset = offset * host_CA->columns;
-        memcpy(M_dest+sizeOffset, M_src+sizeOffset, sizeof(CALbyte)*rows*columns*(slices-(offset*2)));
+        memcpy(M_dest+sizeOffset, M_src+sizeOffset, sizeof(CALbyte)*rows*columns*slices);
     }
     void calCopyBuffer3DiM(CALint* M_src, CALint* M_dest, int rows, int columns, int slices)
     {
@@ -223,7 +223,7 @@ class MultiNode
     //     }
         
     //    const CALint sizeOffset = offset * host_CA->columns;
-       memcpy(M_dest+sizeOffset, M_src+sizeOffset, sizeof(CALint)*rows*columns*(slices-(offset*2)));
+       memcpy(M_dest+sizeOffset, M_src+sizeOffset, sizeof(CALint)*rows*columns*slices);
 
     }
     void calCopyBuffer3DrM(CALreal* M_src, CALreal* M_dest, int rows, int columns, int slices)
@@ -254,7 +254,7 @@ class MultiNode
     //     }
 
       //const CALint sizeOffset = offset * host_CA->columns;  
-      memcpy(M_dest+sizeOffset, M_src+sizeOffset, sizeof(CALreal)*rows*columns*(slices-(offset*2)));
+      memcpy(M_dest+sizeOffset, M_src+sizeOffset, sizeof(CALreal)*rows*columns*slices);
     }
 
     void calUpdateSubstate3DbM(struct CALModel3D* ca3D, struct CALSubstate3Db* Q) {
@@ -262,7 +262,7 @@ class MultiNode
     //      ( ca3D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE && ca3D->A->size_current > 0) )
     //     calCopyBufferActiveCells3Db(Q->next, Q->current, ca3D);
     // else
-        calCopyBuffer3DbM(Q->next, Q->current, ca3D->rows, ca3D->columns, ca3D->slices);
+        calCopyBuffer3DbM(Q->next, Q->current, ca3D->rows, ca3D->columns, ca3D->slices-(offset*2));
     }
 
     void calUpdateSubstate3DiM(struct CALModel3D* ca3D, struct CALSubstate3Di* Q) {
@@ -270,7 +270,7 @@ class MultiNode
     //      ( ca3D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE && ca3D->A->size_current > 0) )
     //     calCopyBufferActiveCells3Di(Q->next, Q->current, ca3D);
     // else
-        calCopyBuffer3DiM(Q->next, Q->current, ca3D->rows, ca3D->columns, ca3D->slices);
+        calCopyBuffer3DiM(Q->next, Q->current, ca3D->rows, ca3D->columns, ca3D->slices-(offset*2));
     }
 
     void calUpdateSubstate3DrM(struct CALModel3D* ca3D, struct CALSubstate3Dr* Q) {
@@ -278,7 +278,7 @@ class MultiNode
     //      ( ca3D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE && ca3D->A->size_current > 0) )
     //     calCopyBufferActiveCells3Dr(Q->next, Q->current, ca3D);
     // else
-        calCopyBuffer3DrM(Q->next, Q->current, ca3D->rows, ca3D->columns, ca3D->slices);
+        calCopyBuffer3DrM(Q->next, Q->current, ca3D->rows, ca3D->columns, ca3D->slices-(offset*2));
 
     }
 
@@ -346,7 +346,7 @@ class MultiNode
         int totalSteps = STEPS;
         while (STEPS--)
         {
-
+            printf("STEPS  = %d \n", STEPS);
             if (ca_simulation->globalTransition)
             {
                 ca_simulation->globalTransition(ca_simulation->ca3D);
@@ -436,6 +436,8 @@ class MultiNode
                 memcpy(borderMapper.realBorder_OUT + i * sizeOffset, host_CA->pQr_array[i]->current + (sizeOffset), sizeof(CALreal) * sizeOffset);
                 memcpy(borderMapper.realBorder_OUT + (numSubstates + i) * sizeOffset, host_CA->pQr_array[i]->current + ((fullSize - sizeOffset*2)), sizeof(CALreal) * sizeOffset);
             }
+
+            
  
     
             double T1, T2, deltaT;
@@ -475,6 +477,8 @@ class MultiNode
                 }
             }
 
+            
+
             for (int i = 0; i < numSubstates; i++)
             {
 
@@ -484,6 +488,7 @@ class MultiNode
                 memcpy(host_CA->pQr_array[i]->next + (fullSize - sizeOffset), (realNodeGhosts + numSubstates * sizeOffset + (i * sizeOffset)), sizeof(CALreal) * sizeOffset);
 
             }
+
 
         }
     }
