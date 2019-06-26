@@ -255,7 +255,7 @@ class MultiNode
     //      ( ca2D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE && ca2D->A->size_current > 0) )
     //     calCopyBufferActiveCells2Db(Q->next, Q->current, ca2D);
     // else
-        calCopyBuffer2DbM(Q->next, Q->current, ca2D->rows, ca2D->columns);
+        calCopyBuffer2DbM(Q->next, Q->current, ca2D->rows-offset*2, ca2D->columns);
     }
 
     void calUpdateSubstate2DiM(struct CALModel2D* ca2D, struct CALSubstate2Di* Q) {
@@ -263,7 +263,7 @@ class MultiNode
     //      ( ca2D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE && ca2D->A->size_current > 0) )
     //     calCopyBufferActiveCells2Di(Q->next, Q->current, ca2D);
     // else
-        calCopyBuffer2DiM(Q->next, Q->current, ca2D->rows, ca2D->columns);
+        calCopyBuffer2DiM(Q->next, Q->current, ca2D->rows-offset*2, ca2D->columns);
     }
 
     void calUpdateSubstate2DrM(struct CALModel2D* ca2D, struct CALSubstate2Dr* Q) {
@@ -272,7 +272,7 @@ class MultiNode
     //     calCopyBufferActiveCells2Dr(Q->next, Q->current, ca2D);
     // else
         
-        calCopyBuffer2DrM(Q->next, Q->current, ca2D->rows, ca2D->columns);
+        calCopyBuffer2DrM(Q->next, Q->current, ca2D->rows-offset*2, ca2D->columns);
 
     }
 
