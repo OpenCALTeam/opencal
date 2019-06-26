@@ -29,6 +29,7 @@ Node(const uint _c , const uint _r ,const uint _col , const uint _off,  const st
     int workload;   // number of layers 
     int rowcolumns; // first two dimension
     int rows;
+	int totalnumbersoflayers;
     int columns; // first two dimension
     int offset;     // number of layers from the top
 	int borderSize;
@@ -58,6 +59,7 @@ public:
 			domainfile>>buf; L = stoul(buf.c_str());
 			domainfile>>buf; NNODES = stoul(buf);
 			
+			
 			nodes.resize(NNODES);
 			
 			for(int i=0 ; i<NNODES ; i++){
@@ -71,6 +73,7 @@ public:
 				domainfile>>buf; NDEVICES = stoul(buf);
                 Node ni (R*C ,R,C, OFF , ip);
 				uint node_workload=0;
+				ni.totalnumbersoflayers = L;
 				for(int j = 0 ; j < NDEVICES ; j++){
 					
 					//parse device j for node i
