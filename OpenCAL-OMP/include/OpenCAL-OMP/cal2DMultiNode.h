@@ -309,9 +309,8 @@ class MultiNode
             int ntComuunication = 0;
             handleBorderNodes(TotalTime, ntComuunication);
             if (ca2D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE){
-                calUpdateActiveCellsNaive2D(ca2D);
                 handleFlagsMultiNode();
-                
+                calUpdateActiveCellsNaive2D(ca2D);
             }
 
         }
@@ -669,11 +668,11 @@ class MultiNode
         //     }
         //     printf("\n \n ");
         // }
-
+        next = ((rank + 1) + c.nodes.size()) % c.nodes.size();
+        prev = ((rank - 1) + c.nodes.size()) % c.nodes.size();
+        
+        
         for (int i = 0; i < 2; i++) {
-
-          next = ((rank + 1) + c.nodes.size()) % c.nodes.size();
-          prev = ((rank - 1) + c.nodes.size()) % c.nodes.size();
 
           if (i == 1) std::swap(next, prev);
 
@@ -683,23 +682,18 @@ class MultiNode
           recv_offset = flagsNodeGhosts;
           recv_offset += (i == 0 ? 0 : 1) * count;
 
-          if (rank % 2 == 0) {
-              
+          if (rank % 2 == 0) 
+            {
+              MPI_Send(send_offset, count, DATATYPE, next, i, MPI_COMM_WORLD);
+              MPI_Recv(recv_offset, count, DATATYPE, prev, i, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+            } 
+          else 
+            {
+              MPI_Recv(recv_offset, count, DATATYPE, prev, i, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+              MPI_Send(send_offset, count, DATATYPE, next, i, MPI_COMM_WORLD);
+            }
 
-            MPI_Send(send_offset, count, DATATYPE, next, i, MPI_COMM_WORLD);
-
-            MPI_Recv(recv_offset, count, DATATYPE, prev, i, MPI_COMM_WORLD,
-                     MPI_STATUS_IGNORE);
-
-          } else {
-            MPI_Recv(recv_offset, count, DATATYPE, prev, i, MPI_COMM_WORLD,
-                     MPI_STATUS_IGNORE);
-
-            MPI_Send(send_offset, count, DATATYPE, next, i, MPI_COMM_WORLD);
-
-          }
-
-          MPI_Barrier(MPI_COMM_WORLD);
+          //MPI_Barrier(MPI_COMM_WORLD);
             
 
         }  // for
@@ -750,6 +744,17 @@ class MultiNode
 
         // if(rank == 1){
         //     //printf("0 invia a 1 \n ");
+        //     for(int i = 0; i < (host_CA->rows* host_CA->columns); i++){
+        //         if(i%(host_CA->columns) == 0)
+        //              printf("\n");
+
+        //         printf("%d ", host_CA->A->flags[i]);
+        //     }
+        //     printf("\n \n ");
+        // }
+
+        // if(rank == 1){
+        //     printf("0 invia a 1 \n ");
         //     for(int i = 0; i < (host_CA->rows* host_CA->columns); i++){
         //         if(i%(host_CA->columns) == 0)
         //              printf("\n");

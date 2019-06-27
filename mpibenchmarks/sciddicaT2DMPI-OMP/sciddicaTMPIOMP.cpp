@@ -4,8 +4,8 @@
 #include <string>
 #include <iostream>
 #include <utility>
-#include <OpenCAL-OMP/calMultiNodeOMP2D.h>
-//#define ACTIVE_CELLS
+#include <OpenCAL-OMP/cal2DMultiNode.h>
+#define ACTIVE_CELLS
 
 #define OUTPUT_PATH "./data/width_final_"
 #define NUMBER_OF_OUTFLOWS 4
@@ -101,8 +101,12 @@ void sciddicaTFlowsComputation(struct CALModel2D* sciddicaT, int i, int j)
 	for (n=1; n<sciddicaT->sizeof_X; n++)
 		if (eliminated_cells[n])
 			calSet2Dr(sciddicaT, Q.f[n-1], i, j, 0.0);
-		else
+		else{
 			calSet2Dr(sciddicaT, Q.f[n-1], i, j, (average-u[n])*P.r);
+#ifdef ACTIVE_CELLS			
+			calAddActiveCellX2D(sciddicaT, i, j, n);
+#endif
+		}
 }
 
 // The sigma_2 elementary process
@@ -118,11 +122,18 @@ void sciddicaTWidthUpdate(struct CALModel2D* sciddicaT, int i, int j)
 	calSet2Dr(sciddicaT, Q.h, i, j, h_next);
 }
 
+// The sigma_3 elementary process
+void sciddicaTRemoveInactiveCells(struct CALModel2D* sciddicaT, int i, int j)
+{
+	 if (calGet2Dr(sciddicaT, Q.h, i, j) <= P.epsilon)
+	 	calRemoveActiveCell2D(sciddicaT,i,j);
+}
+
 // SciddicaT simulation init function
 void sciddicaTSimulationInit(struct CALModel2D* sciddicaT)
 {
 	CALreal z, h;
-	CALint i, j;
+	CALint i, j; 
 
 	//initializing substates to 0
 	calInitSubstate2Dr(sciddicaT, Q.f[0], 0);
@@ -143,6 +154,10 @@ void sciddicaTSimulationInit(struct CALModel2D* sciddicaT)
 			if ( h > 0.0 ) {
 				z = calGet2Dr(sciddicaT, Q.z, i, j);
 				calSet2Dr(sciddicaT, Q.z, i, j, z-h);
+#ifdef ACTIVE_CELLS
+                //adds the cell (i, j) to the set of active ones
+                calAddActiveCell2D(sciddicaT, i, j);
+#endif
 			}
 		}
 }
@@ -160,12 +175,12 @@ void sciddicaTSteering(struct CALModel2D* sciddicaT)
 void init( struct MultiNode * multinode, const Node& mynode){
 
 CALModel2D* host_CA;
-    int rank;
+    int rank; 
 	int borderSize=1;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     std::cout<<"sono il processo "<<rank<<" workload = " << mynode.workload+2 << " columns = " <<  mynode.columns<< "\n";
 #ifdef ACTIVE_CELLS
-    host_CA = calCADef2D(mynode.workload, mynode.columns, CAL_VON_NEUMANN_NEIGHBORHOOD_2D, CAL_SPACE_TOROIDAL, CAL_OPT_ACTIVE_CELLS_NAIVE);
+    host_CA = calCADef2DMN(mynode.workload, mynode.columns, CAL_VON_NEUMANN_NEIGHBORHOOD_2D, CAL_SPACE_TOROIDAL, CAL_OPT_ACTIVE_CELLS_NAIVE, borderSize);
 #else
     host_CA = calCADef2DMN(mynode.workload, mynode.columns, CAL_VON_NEUMANN_NEIGHBORHOOD_2D, CAL_SPACE_TOROIDAL, CAL_NO_OPT, borderSize);
 #endif
@@ -179,7 +194,9 @@ CALModel2D* host_CA;
 
     calAddElementaryProcess2D(host_CA, sciddicaTFlowsComputation);
     calAddElementaryProcess2D(host_CA, sciddicaTWidthUpdate);
-
+#ifdef ACTIVE_CELLS
+	calAddElementaryProcess2D(host_CA, sciddicaTRemoveInactiveCells);
+#endif
     // Load configuration
 	std::cout<<"sono il processo "<<rank<<" offset " << mynode.offset << "\n";
     calNodeLoadSubstate2Dr(host_CA, Q.z, DEM_PATH, mynode);//TODO offset e workload
@@ -201,7 +218,7 @@ CALModel2D* host_CA;
 
 void finalize(struct MultiNode * multinode, const Node& mynode){
     // Saving results
-    int rank;
+    int rank; 
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     std::string s = OUTPUT_PATH + std::to_string(rank) + ".txt";
     calNodeSaveSubstate2Dr(multinode->host_CA, Q.h, (char*)s.c_str(), mynode);
