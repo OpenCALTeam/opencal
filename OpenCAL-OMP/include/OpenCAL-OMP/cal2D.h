@@ -124,7 +124,7 @@ struct CALModel2D* calCADef2DMN(int rows, //!< Number of rows of the 2D cellular
                   enum CALNeighborhood2D CAL_NEIGHBORHOOD_2D, //!< Enumerator that identifies the type of neighbourhood relation to be used.
                   enum CALSpaceBoundaryCondition CAL_TOROIDALITY, //!< Enumerator that identifies the type of cellular space: toroidal or non-toroidal.
                   enum CALOptimization CAL_OPTIMIZATION, //!< Enumerator used for specifying the active cells optimization or no optimization.
-                  int borderSize            );
+                  int borderSizeInRows            );
 
 /*! \brief Put OpenCAL-OMP in unsafe state execution (to allow unsafe operation to be used)
 */

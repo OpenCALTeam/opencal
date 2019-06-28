@@ -282,7 +282,7 @@ struct CALModel3D* calCADef3DMN(int rows,
                               enum CALNeighborhood3D CAL_NEIGHBORHOOD_3D,
                               enum CALSpaceBoundaryCondition CAL_TOROIDALITY,
                               enum CALOptimization CAL_OPTIMIZATION,
-                              int offset
+                              int borderSizeInRows
                               )
 {
     int i;
@@ -290,10 +290,10 @@ struct CALModel3D* calCADef3DMN(int rows,
     if (!ca3D)
         return NULL;
 
-    ca3D->offset = offset;
+    ca3D->borderSizeInRows = borderSizeInRows;
     ca3D->rows = rows;
     ca3D->columns = columns;
-    ca3D->slices = slices+offset*2;
+    ca3D->slices = slices+borderSizeInRows*2;
 
     ca3D->T = CAL_TOROIDALITY;
 
