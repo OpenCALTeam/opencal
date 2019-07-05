@@ -7,7 +7,7 @@ class Node {
 public:
 Node(){}
 Node(const uint _c , const uint _r ,const uint _col , const uint _off,  const uint _nd, const string& _ip)
-: rowcolumns(_c) ,rows(_r), columns(_col),  offset(_off) , devices(_nd), ip(_ip) {}
+: rowcolumns(_c) ,rows(_r), columns(_col),  offset(_off) , devices(_nd), ip(_ip) {borderSize=1;}
 
     std::vector<Device> devices;
     int workload;   // number of layers 
@@ -15,7 +15,9 @@ Node(const uint _c , const uint _r ,const uint _col , const uint _off,  const ui
     int rows;
     int columns; // first two dimension
     int offset;     // number of layers from the top
-	string ip;	    
+	string ip;
+	int totalnumbersoflayers;
+	int borderSize;	    
 };
 
 class CALDistributedDomain3D{
@@ -54,6 +56,7 @@ public:
 				domainfile>>buf; NDEVICES = stoul(buf);
                 Node ni (R*C ,R,C, OFF , NDEVICES , ip);
 				uint node_workload=0;
+				ni.totalnumbersoflayers = L;
 				for(int j = 0 ; j < NDEVICES ; j++){
 					
 					//parse device j for node i

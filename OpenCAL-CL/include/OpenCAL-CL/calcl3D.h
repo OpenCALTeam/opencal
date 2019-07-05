@@ -582,6 +582,8 @@ void calclGetBorderFromDeviceToHost3D(struct CALCLModel3D* calclmodel3D);
 
 void calclResizeThreadsNum3D(struct CALCLModel3D * calclmodel3D, size_t * threadNum);
 void calclExecuteReduction3D(struct CALCLModel3D* calclmodel3D, int rounded);
+CALbyte checkStopCondition3D(struct CALCLModel3D * calclmodel3D, CALint dimNum, size_t * threadsNum);
+ 
 
 
 

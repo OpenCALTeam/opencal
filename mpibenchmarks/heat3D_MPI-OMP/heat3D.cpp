@@ -167,7 +167,7 @@ void finalize(MultiNode * multinode, Node& mynode)
     char rank_buffer[256];
     sprintf(rank_buffer,"%d",rank);
 
-    strcpy(temperature_str, "./heat_");
+    strcpy(temperature_str, "./heat_"); 
     strcat(temperature_str, rank_buffer);
     strcat(temperature_str, ".txt");
 

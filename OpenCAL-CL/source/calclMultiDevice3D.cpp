@@ -211,33 +211,9 @@ void calclCopyGhostr(struct CALModel3D * host_CA,CALreal* tmpGhostCellsr,int off
     }
 }
 
-void calclMultiDeviceSetKernelArg3D(struct CALCLMultiDevice3D * multidevice,const char * kernel, cl_uint arg_index, size_t arg_size, const void *arg_value) {
-    int index = vector_search_char3D(&multidevice->kernelsID,kernel);
-    // assert(index != -1);
-
-    for (int gpu = 0; gpu < multidevice->num_devices; ++gpu) {
-        //CALCLkernel * k = &multidevice->device_models[gpu]->elementaryProcesses[index];
-        clSetKernelArg(multidevice->device_models[gpu]->elementaryProcesses[index], MODEL_ARGS_NUM + arg_index, arg_size, arg_value);
-    }
-}
-
-void calclMultiDeviceAddSteeringFunc3D(struct CALCLMultiDevice3D* multidevice, char* kernelName) {
 
 
-    struct kernelID * kernel = (kernelID*)malloc(sizeof(struct kernelID));
-    kernel->index = vector_total(&multidevice->kernelsID);
-    memset(kernel->name,'\0',sizeof(kernel->name));
-    strcpy(kernel->name,kernelName);
 
-    VECTOR_ADD(multidevice->kernelsID, kernel);
-
-    for (int i = 0; i < multidevice->num_devices; i++) {
-
-        CALCLprogram p=multidevice->programs[i];
-        CALCLkernel calclkernel = calclGetKernelFromProgram(p,kernelName);
-        calclAddSteeringFunc3D(multidevice->device_models[i],&calclkernel);
-    }
-}
 
 /******************************************************************************
  *              PUBLIC MULTIDEVICE FUNCTIONS
@@ -759,6 +735,36 @@ void calclMultiDeviceRun3D(struct CALCLMultiDevice3D* multidevice, CALint init_s
 
 }
 
+void calclMultiDeviceSetKernelArg3D(struct CALCLMultiDevice3D * multidevice,const char * kernel, cl_uint arg_index, size_t arg_size, const void *arg_value) {
+    int index = vector_search_char3D(&multidevice->kernelsID,kernel);
+    // assert(index != -1);
+
+    for (int gpu = 0; gpu < multidevice->num_devices; ++gpu) {
+        //CALCLkernel * k = &multidevice->device_models[gpu]->elementaryProcesses[index];
+        clSetKernelArg(multidevice->device_models[gpu]->elementaryProcesses[index], MODEL_ARGS_NUM + arg_index, arg_size, arg_value);
+    }
+}
+
+void calclMultiDeviceStopConditionSetKernelArg3D(struct CALCLMultiDevice3D * multidevice,const char * kernel, cl_uint arg_index, size_t arg_size, const void *arg_value) {
+    int index = vector_search_char3D(&multidevice->kernelsID,kernel);
+    // assert(index != -1);
+
+    for (int gpu = 0; gpu < multidevice->num_devices; ++gpu) {
+        //CALCLkernel * k = &multidevice->device_models[gpu]->elementaryProcesses[index];
+        clSetKernelArg(multidevice->device_models[gpu]->kernelStopCondition, MODEL_ARGS_NUM + arg_index, arg_size, arg_value);
+    }
+}
+void calclMultiDeviceSteeringSetKernelArg3D(struct CALCLMultiDevice3D * multidevice,const char * kernel, cl_uint arg_index, size_t arg_size, const void *arg_value) {
+    int index = vector_search_char3D(&multidevice->kernelsID,kernel);
+    // assert(index != -1);
+
+    for (int gpu = 0; gpu < multidevice->num_devices; ++gpu) {
+        //CALCLkernel * k = &multidevice->device_models[gpu]->elementaryProcesses[index];
+        clSetKernelArg(multidevice->device_models[gpu]->kernelSteering, MODEL_ARGS_NUM + arg_index, arg_size, arg_value);
+    }
+}
+
+
 void calclMultiDeviceAddElementaryProcess3D(struct CALCLMultiDevice3D* multidevice, char * kernelName) {
     struct kernelID * kernel = (kernelID*)malloc(sizeof(struct kernelID));
     kernel->index = vector_total(&multidevice->kernelsID);
@@ -774,6 +780,38 @@ void calclMultiDeviceAddElementaryProcess3D(struct CALCLMultiDevice3D* multidevi
         calclAddElementaryProcess3D(multidevice->device_models[i],&kernel);
     }
 }
+void calclMultiDeviceAddStopConditionFunc3D(struct CALCLMultiDevice3D* multidevice, char * kernelName) {
+    struct kernelID * kernel = (kernelID*)malloc(sizeof(struct kernelID));
+    kernel->index = vector_total(&multidevice->kernelsID);
+    memset(kernel->name,'\0',sizeof(kernel->name));
+    strcpy(kernel->name,kernelName);
+
+    VECTOR_ADD(multidevice->kernelsID, kernel);
+
+    for (int i = 0; i < multidevice->num_devices; i++) {
+
+        CALCLprogram p=multidevice->programs[i];
+        CALCLkernel kernel = calclGetKernelFromProgram(p,kernelName);
+        calclAddStopConditionFunc3D(multidevice->device_models[i],&kernel);
+    }
+}
+void calclMultiDeviceAddSteeringFunc3D(struct CALCLMultiDevice3D* multidevice, char* kernelName) {
+
+
+    struct kernelID * kernel = (kernelID*)malloc(sizeof(struct kernelID));
+    kernel->index = vector_total(&multidevice->kernelsID);
+    memset(kernel->name,'\0',sizeof(kernel->name));
+    strcpy(kernel->name,kernelName);
+
+    VECTOR_ADD(multidevice->kernelsID, kernel);
+
+    for (int i = 0; i < multidevice->num_devices; i++) {
+
+        CALCLprogram p=multidevice->programs[i];
+        CALCLkernel calclkernel = calclGetKernelFromProgram(p,kernelName);
+        calclAddSteeringFunc3D(multidevice->device_models[i],&calclkernel);
+    }
+}
 
 void calclMultiDeviceFinalize3D(struct CALCLMultiDevice3D* multidevice) {
 
@@ -787,5 +825,7 @@ void calclMultiDeviceFinalize3D(struct CALCLMultiDevice3D* multidevice) {
     vector_free(&multidevice->kernelsID);
     free(multidevice);
 }
+
+
 
 

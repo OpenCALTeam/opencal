@@ -173,7 +173,7 @@ ParseAndRun(){
 
       fi
 
-    rm -f IPSFile $HOSTFILE 
+    #rm -f IPSFile $HOSTFILE 
 
     }
 

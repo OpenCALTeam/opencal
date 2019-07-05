@@ -401,7 +401,7 @@ class MultiNode
 */
         MPI_Barrier(MPI_COMM_WORLD);
         _finalize();
-        MPI_Finalize();
+        
     } //run function
 
     void handleBorderNodes(double &T, int &ntComuunication)

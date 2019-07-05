@@ -25,6 +25,9 @@
 
 /*! \brief Terminates threads that exceed matrix sizes */
 #define calclThreadCheck3D() if(get_global_id(0)>=calclGetRows() || get_global_id(1)>=calclGetColumns()|| get_global_id(2)>=calclGetSlices()) return
+
+#define calclThreadCheck3DMN() if(get_global_id(0)>=calclGetRows() || get_global_id(1)>=calclGetColumns()|| get_global_id(2) < borderSize || (get_global_id(2) >= (calclGetSlices()-borderSize)) ) return
+
 #define calclThreadCheck3Dour() if( (calclGlobalSlice() < borderSize) || (calclGlobalSlice() >= calclGetSlices()-borderSize) || get_global_id(0)>=calclGetRows() || get_global_id(1)>=calclGetColumns()|| get_global_id(2)>=calclGetSlices()) return
 
 /*! \brief Terminates threads that exceed active cells number */
@@ -72,7 +75,7 @@
 #define calclGlobalColumn() get_global_id(1)
 
 /*! \brief Gets the thread id in the third global dimension */
-#define calclGlobalSlice() get_global_id(2)
+#define calclGlobalSlice() (get_global_id(2))
 
 /*! \brief Gets the thread id in the first local dimension */
 #define calclLocalRow() get_local_id(0)

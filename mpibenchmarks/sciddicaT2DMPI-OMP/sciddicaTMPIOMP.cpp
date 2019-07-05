@@ -5,6 +5,7 @@
 #include <iostream>
 #include <utility>
 #include <OpenCAL-OMP/cal2DMultiNode.h>
+
 #define ACTIVE_CELLS
 
 #define OUTPUT_PATH "./data/width_final_"
@@ -178,7 +179,7 @@ CALModel2D* host_CA;
     int rank; 
 	int borderSize=1;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-    std::cout<<"sono il processo "<<rank<<" workload = " << mynode.workload+2 << " columns = " <<  mynode.columns<< "\n";
+    std::coutandrea"sono il processo "<<rank<<" workload = " << mynode.workload+2 << " columns = " <<  mynode.columns<< "\n";
 #ifdef ACTIVE_CELLS
     host_CA = calCADef2DMN(mynode.workload, mynode.columns, CAL_VON_NEUMANN_NEIGHBORHOOD_2D, CAL_SPACE_TOROIDAL, CAL_OPT_ACTIVE_CELLS_NAIVE, borderSize);
 #else
@@ -209,11 +210,12 @@ CALModel2D* host_CA;
     struct CALRun2D * host_simulation = calRunDef2D(host_CA, 1, 1, CAL_UPDATE_IMPLICIT);
     //calRunAddInitFunc2D(host_simulation, sciddicaTSimulationInit);
     calRunAddSteeringFunc2D(host_simulation, sciddicaTSteering);
-    multinode->setRunSimulation(host_simulation);
+    
+	multinode->setRunSimulation(host_simulation);
 
     std::string s = "h_" + std::to_string(rank) + ".txt";
     calSaveSubstate2Dr(multinode->host_CA, Q.h, (char*)s.c_str());
-
+	
 }
 
 void finalize(struct MultiNode * multinode, const Node& mynode){
@@ -229,6 +231,7 @@ int main(int argc, char** argv){
     CALDistributedDomain2D domain = calDomainPartition2D(argc,argv);
 
     MultiNode mn(domain, init, finalize);
+
     mn.allocateAndInit();
     mn.run(4000);
 

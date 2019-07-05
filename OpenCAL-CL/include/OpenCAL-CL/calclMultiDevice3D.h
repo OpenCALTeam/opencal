@@ -58,9 +58,11 @@ void calclMultiDeviceUpdateHalos3D(struct CALCLMultiDevice3D* multidevice,const 
 
 void calclMultiDeviceSetWorkGroupSize3D(struct CALCLMultiDevice3D* multidevice, int m, int n);
 
+void calclMultiDeviceAddStopConditionFunc3D(struct CALCLMultiDevice3D* multidevice, char * kernelName);
 
+void calclMultiDeviceStopConditionSetKernelArg3D(struct CALCLMultiDevice3D * ,const char * , cl_uint , size_t , const void *);
 
-
+void calclMultiDeviceSteeringSetKernelArg3D(struct CALCLMultiDevice3D * ,const char * , cl_uint , size_t , const void *);
 
 
 

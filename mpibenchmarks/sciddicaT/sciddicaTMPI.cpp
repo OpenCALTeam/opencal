@@ -4,7 +4,7 @@
 #include<string>
 #include<iostream>
 #include <utility>
-#include<OpenCAL-CL/calclMultiNode.h>
+#include<OpenCAL-CL/calclMultiNode2D.h>
 //#define ACTIVE_CELLS
 
 #define OUTPUT_PATH "./data/width_final_"
@@ -97,7 +97,7 @@ void sciddicaTSimulationInit(struct CALModel2D* host_CA) {
         }
 }
 
-void init( struct CALCLMultiDevice* multidevice, const Node& mynode){
+void init( struct CALCLMultiDevice2D * multidevice, const Node& mynode){
 
 CALModel2D* host_CA;
 #ifdef ACTIVE_CELLS
@@ -146,7 +146,7 @@ CALModel2D* host_CA;
 //     calSaveSubstate2Dr(multidevice->device_models[0]->host_CA, Q.h, (char*)s.c_str());
 // }
 
-void finalize(struct CALCLMultiDevice* multidevice){
+void finalize(struct CALCLMultiDevice2D * multidevice){
     // Saving results
     int rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);

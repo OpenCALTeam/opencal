@@ -153,7 +153,6 @@ public:
         for(auto& d : devices){
             calclAddDevice(multidevice,calclGetDevice(calcl_device_manager, d.num_platform , d.num_device) ,  d.workload);
         }
-        MPI_Barrier(MPI_COMM_WORLD);
     }
 
     int GetNodeRank() {
@@ -190,7 +189,7 @@ public:
         intNodeGhosts  = (CALint*)calloc(inumSubstate*sizeBorder*2,sizeof(CALint));
         byteNodeGhosts = (CALbyte*)calloc(bnumSubstate*sizeBorder*2,sizeof(CALbyte));
         flagsNodeGhosts = (CALbyte*)calloc(sizeBorder*2,sizeof(CALbyte));
-        MPI_Barrier(MPI_COMM_WORLD);
+        //MPI_Barrier(MPI_COMM_WORLD);
     }
 
     void _finalize(){
@@ -604,7 +603,7 @@ public:
                     // send to rank+1
                 }
 
-                MPI_Barrier(MPI_COMM_WORLD);
+                //MPI_Barrier(MPI_COMM_WORLD);
                 // printf("barrier\n");
 
 
@@ -833,6 +832,9 @@ public:
         double avgT;
         double TotalTime=0;
         int ntComuunication=0;
+        bool stop = false;
+
+        MPI_Barrier(MPI_COMM_WORLD);
 
         MPI_Comm_rank(MPI_COMM_WORLD, &rank);
         //printf("rank %d\n", rank);
@@ -888,9 +890,9 @@ public:
         }
 
         int totalSteps= STEPS;
-        while(STEPS--){
+        while(STEPS-- && !stop){
             //debug("step \n");
-            //printf("STEPS =  %d\n",STEPS );
+            printf("STEPS =  %d\n",STEPS );
             gettimeofday(&start_comp, NULL);
 
             for (int j = 0; j < multidevice->device_models[0]->elementaryProcessesNum; j++) {
@@ -917,7 +919,7 @@ public:
                 //                    }
                 //                    printf("\n");
                 //                }
-                if(rank==1){
+                // if(rank==1){
 //                     calclMultiDeviceToNode(multidevice);
 
 //                     for (int gpu = 0; gpu < multidevice->num_devices; ++gpu) {
@@ -939,13 +941,11 @@ public:
 //                        printf("\n");
 //                    }
 
-                }
+                // }
                 //exit(0);
 
                 calcl_executeElementaryProcess(multidevice, j,
                                                dimNum /*elementary process*/,this);
-
-                MPI_Barrier(MPI_COMM_WORLD);
 
                 // if (multidevice->num_devices != 1 || c.nodes.size() != 1) {
 
@@ -1086,6 +1086,26 @@ ___________
                 //----------------------------------
                 //}
             }  // Steering
+
+            if (calclmodel3DFirst->kernelStopCondition != NULL) {
+                gettimeofday(&start_kernel, NULL);
+                for (int gpu = 0; gpu < multidevice->num_devices; ++gpu) {
+
+
+                    struct CALCLModel3D* calclmodel3D =
+                            multidevice->device_models[gpu];
+                    size_t* singleStepThreadNum = multidevice->singleStepThreadNums[gpu];
+
+                    if (calclmodel3D->kernelStopCondition != NULL) {
+                        if (singleStepThreadNum[0] > 0){
+                           stop = checkStopCondition3D(calclmodel3D, dimNum, singleStepThreadNum);
+                           printf("stop %d\n", stop);
+                        }
+                    }
+
+
+                }
+            }
             // #endif
             // if (multidevice->num_devices != 1 || c.nodes.size() != 1) {
             //----------MEASURE TIME---------
