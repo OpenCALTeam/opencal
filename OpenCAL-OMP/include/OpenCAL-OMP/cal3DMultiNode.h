@@ -45,8 +45,6 @@ class MultiNode
     //only used to kep track of the communication overhead
     double comm_total = 0;
     double comp_total = 0;
-    double kernel_total = 0;
-    double kernel_communication = 0;
     timeval start_comm, end_comm;
     timeval start_comp, end_comp;
     timeval start_kernel_communication, end_kernel_communication;
@@ -68,6 +66,7 @@ class MultiNode
     int borderSizeInCells;
 
     bool exchange_full_border;
+    double * gatherElapsedTime;
 
     MultiNode(CALDistributedDomain3D _c, CALCallbackFuncMNInit3D i, CALCallbackFuncMNFinalize3D f) : c(_c),
                                                                                                      init(i), finalize(f)
@@ -273,6 +272,8 @@ class MultiNode
 
         for (i = 0; i < ca3D->sizeof_pQr_array; i++)
             calUpdateSubstate3DrM(ca3D, ca3D->pQr_array[i]);
+
+        
     }
 
     void calApplyElementaryProcess3DM(struct CALModel3D *ca3D,             //!< Pointer to the cellular automaton structure.
@@ -292,9 +293,11 @@ class MultiNode
 			for (j=0; j<ca3D->columns; j++)
                 for (k=host_CA->borderSizeInRows; k<ca3D->slices-host_CA->borderSizeInRows; k++)
                 elementary_process(ca3D, i, j, k);
+        
+
     }
 
-    void calGlobalTransitionFunction3DM(struct CALModel3D *ca3D)
+    void calGlobalTransitionFunction3DM(struct CALModel3D *ca3D, double &TotalTime, int & ntComuunication)
     {
         //The global transition function.
         //It applies transition function elementary processes sequentially.
@@ -307,12 +310,9 @@ class MultiNode
             calApplyElementaryProcess3DM(ca3D, ca3D->elementary_processes[b]);
             //updating substates
             calUpdate3DM(ca3D);
-
-            double TotalTime = 0;
-            int ntComuunication = 0;
             handleBorderNodes(TotalTime, ntComuunication);
             if (ca3D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE){
-                handleFlagsMultiNode();
+                handleFlagsMultiNode(TotalTime, ntComuunication);
                 calUpdateActiveCellsNaive3D(ca3D);
             }
         }
@@ -326,26 +326,20 @@ class MultiNode
         double T1, T2, /* start/end times per rep */
             sumT = 0,  /* sum of all reps times */
             deltaT;    /* time for one rep */
-        double avgT;
-        double TotalTime = 0;
-        int ntComuunication = 0;
+        double totalCommunicationTime = 0;
+        int totalNumberofCommunication = 0;
 
-        timeval start, end;
+        double start, end;
 
         MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
-        gettimeofday(&start, NULL);
-
+        start = MPI_Wtime();
         //----------MEASURE TIME---------
-        gettimeofday(&start_comm, NULL);
-        handleBorderNodes(TotalTime, ntComuunication);
-        gettimeofday(&end_comm, NULL);
+        handleBorderNodes(totalCommunicationTime, totalNumberofCommunication);
 
-        comm_total += 1000.0 * (end_comm.tv_sec - start_comm.tv_sec) +
-                      (end_comm.tv_usec - start_comm.tv_usec) / 1000.0;
-
-        int totalSteps = STEPS;
-        while (STEPS--)
+       
+        
+        while(STEPS--)
         {
             if (ca_simulation->globalTransition)
             {
@@ -354,7 +348,7 @@ class MultiNode
                     calUpdate3DM(ca_simulation->ca3D);
             }
             else
-                calGlobalTransitionFunction3DM(ca_simulation->ca3D);
+                calGlobalTransitionFunction3DM(ca_simulation->ca3D,totalCommunicationTime, totalNumberofCommunication);
             //No explicit substates and active cells updates are needed in this case
 
             if (ca_simulation->steering)
@@ -362,46 +356,77 @@ class MultiNode
                 ca_simulation->steering(ca_simulation->ca3D);
                 if (ca_simulation->UPDATE_MODE == CAL_UPDATE_IMPLICIT)
                     calUpdate3DM(ca_simulation->ca3D);
-                handleBorderNodes(TotalTime, ntComuunication);
+
+                handleBorderNodes(totalCommunicationTime, totalNumberofCommunication);
+                if (ca_simulation->ca3D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE)
+                {
+                    handleFlagsMultiNode(totalCommunicationTime, totalNumberofCommunication);
+                    calUpdateActiveCellsNaive3D(ca_simulation->ca3D);
+                }
             }
 
             if (ca_simulation->stopCondition)
                 if (ca_simulation->stopCondition(ca_simulation->ca3D))
                     break;
 
-            gettimeofday(&start_comm, NULL);
+            
 
-            sumT += deltaT;
-            gettimeofday(&end_comm, NULL);
-            comm_total += 1000.0 * (end_comm.tv_sec - start_comm.tv_sec) +
-                          (end_comm.tv_usec - start_comm.tv_usec) / 1000.0;
+        } //STEPS     
 
-            gettimeofday(&end_comp, NULL);
-            comp_total += 1000.0 * (end_comp.tv_sec - start_comp.tv_sec) +
-                          (end_comp.tv_usec - start_comp.tv_usec) / 1000.0;
+        end = MPI_Wtime();
 
-        } //STEPS
+        double elapsedTime = end -start;
 
-        gettimeofday(&end, NULL);
-        unsigned long long t = 1000 * (end.tv_sec - start.tv_sec) +
-                               (end.tv_usec - start.tv_usec) / 1000;
-
-        double TotalCommTime = TotalTime + (kernel_communication / 1000);
-
-        // end = time(NULL);
-/*        printf("Rank=%d, Elapsed time: %llu ms\n", rank, t);
-        printf("Rank=%d, Elapsed Communication time: %f s\n", rank, TotalCommTime);
-        printf("Rank=%d, Elapsed MPI communication : %f s\n", rank, TotalTime);
-        printf("Rank=%d, Elapsed Host Device PCI-E communication: %f ms\n", rank, kernel_communication);
-        printf("Rank=%d, Elapsed time kernels: %f ms\n", rank, kernel_total);
-        // three elementary procecces
-        avgT = (TotalTime) / (ntComuunication);
-        printf("Rank=%d, Avg Latency Time = %f s\n", rank, avgT);
-        printf("Rank=%d, number of time send : %d \n", rank, ntComuunication);
-*/
         MPI_Barrier(MPI_COMM_WORLD);
+
+        double maxTotalCommunicationTime = 0;
+        MPI_Reduce(&totalCommunicationTime, &maxTotalCommunicationTime, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
+
+        double sumTotalCommunicationTime = 0;
+        MPI_Reduce(&totalCommunicationTime, &sumTotalCommunicationTime, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+       
+        int gsize;
+        MPI_Comm_size( MPI_COMM_WORLD, &gsize);
+        if(rank == 0)
+        {
+            gatherElapsedTime = (double *)malloc(gsize*sizeof(double));
+        }
+
+        MPI_Gather(&elapsedTime, 1, MPI_DOUBLE, gatherElapsedTime, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+        if(rank == 0)
+        {
+            printf("\n");
+            printf("-------------------------- Time info---------------------\n");
+            printf("\n");
+            double max=gatherElapsedTime[0];
+            for(int n = 0; n < gsize; n++)
+                if(gatherElapsedTime[n] > max)
+                    max = gatherElapsedTime[n];
+            
+            printf("%f [s] - max elapsed time\n", maxTotalCommunicationTime);
+
+            for(int n = 0; n < gsize; n++)
+                printf("Rank=%d, %f [s] - elapsed time\n", n, gatherElapsedTime[n]);
+
+            printf("\n");
+            printf("-------------------------- Communication info---------------------\n");
+            printf("\n");
+            printf("Max Elapsed MPI communication : %f s\n", maxTotalCommunicationTime);
+            printf("MPI Total Number of Communication per process: %d\n", totalNumberofCommunication);
+            printf("MPI Total Communication Time per process: %f s\n", sumTotalCommunicationTime);
+
+            double avgTotalCommunicationTime = sumTotalCommunicationTime/gsize;
+            printf("Avg MPI Total Communication Time per process: %f s\n", avgTotalCommunicationTime);
+
+            double avgMessageTime = avgTotalCommunicationTime/totalNumberofCommunication;
+            printf("Avg MPI Communication Time per message: %f s\n", avgMessageTime);
+            printf("\n");
+
+        }
+
+
         _finalize();
-        
+        MPI_Finalize();
     } //run function
 
     void handleBorderNodes(double &T, int &ntComuunication)
@@ -460,7 +485,6 @@ class MultiNode
                 {
                     ntComuunication++;
                     T1 = MPI_Wtime();
-                    
                     MPI_Send(send_offset, count, DATATYPE, next, i, MPI_COMM_WORLD);
 
                     MPI_Recv(recv_offset, count, DATATYPE, prev, i, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
@@ -470,10 +494,14 @@ class MultiNode
                 }
                 else
                 {
-
+                    ntComuunication++;
+                    T1 = MPI_Wtime();
                     MPI_Recv(recv_offset, count, DATATYPE, prev, i, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
                     MPI_Send(send_offset, count, DATATYPE, next, i, MPI_COMM_WORLD);
+                    T2 = MPI_Wtime();
+                    deltaT = T2 - T1;
+                    T += deltaT;
                 }
             }
 
@@ -541,7 +569,6 @@ class MultiNode
 
                     ntComuunication++;
                     T1 = MPI_Wtime();
-
                     MPI_Send(send_offset, count, DATATYPE, next, i, MPI_COMM_WORLD);
 
                     MPI_Recv(recv_offset, count, DATATYPE, prev, i, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
@@ -551,11 +578,14 @@ class MultiNode
                 }
                 else
                 {
-
+                    ntComuunication++;
+                    T1 = MPI_Wtime();
                     MPI_Recv(recv_offset, count, DATATYPE, prev, i, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
                     
-
                     MPI_Send(send_offset, count, DATATYPE, next, i, MPI_COMM_WORLD);
+                    T2 = MPI_Wtime();
+                    deltaT = T2 - T1;
+                    T += deltaT;
                 }
             }
             for (int i = 0; i < numSubstates; i++)
@@ -615,7 +645,6 @@ class MultiNode
 
                     ntComuunication++;
                     T1 = MPI_Wtime();
-
                     MPI_Send(send_offset, count, DATATYPE, next, i, MPI_COMM_WORLD);
 
                     MPI_Recv(recv_offset, count, DATATYPE, prev, i, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
@@ -626,8 +655,14 @@ class MultiNode
                 else
                 {
 
+                    ntComuunication++;
+                    T1 = MPI_Wtime();
                     MPI_Recv(recv_offset, count, DATATYPE, prev, i, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+                    
                     MPI_Send(send_offset, count, DATATYPE, next, i, MPI_COMM_WORLD);
+                    T2 = MPI_Wtime();
+                    deltaT = T2 - T1;
+                    T += deltaT;
                 }
             }
 
@@ -645,7 +680,7 @@ class MultiNode
     }
 
 
-    void handleFlagsMultiNode() {
+    void handleFlagsMultiNode(double &T, int &ntComuunication) {
       const MPI_Datatype DATATYPE = MPI_CHAR;      
       if (!c.is_full_exchange()) {
 
@@ -653,6 +688,7 @@ class MultiNode
         CALbyte* send_offset;
         CALbyte* recv_offset = flagsNodeGhosts;
         const CALint count = (borderSizeInCells);
+        double T1, T2, deltaT;
 
         memcpy(borderMapper.flagsBorder_OUT, host_CA->A->flags, sizeof(CALbyte) * borderSizeInCells);
         memcpy(borderMapper.flagsBorder_OUT+ borderSizeInCells, host_CA->A->flags + (host_CA->rows*host_CA->columns)-(borderSizeInCells) , sizeof(CALbyte) * borderSizeInCells);
@@ -673,16 +709,26 @@ class MultiNode
 
           if (rank % 2 == 0) 
             {
+              ntComuunication++;
+              T1 = MPI_Wtime();
               MPI_Send(send_offset, count, DATATYPE, next, i, MPI_COMM_WORLD);
+
               MPI_Recv(recv_offset, count, DATATYPE, prev, i, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+              T2 = MPI_Wtime();
+              deltaT = T2 - T1;
+              T += deltaT;  
             } 
           else 
             {
+              ntComuunication++;
+              T1 = MPI_Wtime();
               MPI_Recv(recv_offset, count, DATATYPE, prev, i, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-              MPI_Send(send_offset, count, DATATYPE, next, i, MPI_COMM_WORLD);
-            }
 
-          //MPI_Barrier(MPI_COMM_WORLD);
+              MPI_Send(send_offset, count, DATATYPE, next, i, MPI_COMM_WORLD);
+              T2 = MPI_Wtime();
+              deltaT = T2 - T1;
+              T += deltaT;             
+            }
             
 
         }  // for

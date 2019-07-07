@@ -56,6 +56,7 @@ struct CALModel3D {
     int columns;						//!< Number of columns of the 3D cellular space.
     int slices;							//!< Number of slices of the 3D cellular space.
     enum CALSpaceBoundaryCondition T;	//!< Type of cellular space: toroidal or non-toroidal.
+    int borderSizeInRows;
 
     enum CALOptimization OPTIMIZATION;	//!< Type of optimization used. It can be CAL_NO_OPT or CAL_OPT_ACTIVE_CELLS.
     struct CALActiveCells3D* A;			//!< Computational Active cells object. if A.actives==NULL no optimization is applied.
@@ -100,6 +101,16 @@ struct CALModel3D* calCADef3D(int rows, //!< Number of rows of the 3D cellular s
                               enum CALNeighborhood3D CAL_NEIGHBORHOOD_3D, //!< Enumerator that identifies the type of neighbourhood relation to be used.
                               enum CALSpaceBoundaryCondition CAL_TOROIDALITY, //!< Enumerator that identifies the type of cellular space: toroidal or non-toroidal.
                               enum CALOptimization CAL_OPTIMIZATION //!< Enumerator used for specifying the active cells optimization or no optimization.
+                              );
+
+DllExport
+struct CALModel3D* calCADef3DMN(int rows, //!< Number of rows of the 3D cellular space.
+                              int columns, //!< Number of columns of the 3D cellular space.
+                              int slices, //!< Number of slices of the 3D cellular space.
+                              enum CALNeighborhood3D CAL_NEIGHBORHOOD_3D, //!< Enumerator that identifies the type of neighbourhood relation to be used.
+                              enum CALSpaceBoundaryCondition CAL_TOROIDALITY, //!< Enumerator that identifies the type of cellular space: toroidal or non-toroidal.
+                              enum CALOptimization CAL_OPTIMIZATION, //!< Enumerator used for specifying the active cells optimization or no optimization.
+                              int borderSizeInRows
                               );
 
 

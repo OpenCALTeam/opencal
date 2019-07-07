@@ -4,8 +4,8 @@
 //#include "calclCommon.h"
 
 #include <vector>
-#include<string>
-#include<iostream>
+#include <string>
+#include <iostream>
 #include <utility>
 extern "C"{
     #include <arpa/inet.h> //inep_pton
@@ -94,7 +94,7 @@ public:
 				ni.workload = node_workload;
 				//add the just created node to the list of nodes of the domain
 				this->nodes[i] = ni;
-                std::cout <<"OFF = " << OFF << "; L = " << L << std::endl;
+                //std::cout <<"OFF = " << OFF << "; L = " << L << std::endl;
 				OFF+=node_workload; //offset for the next node
 			}
 			//close domainfile

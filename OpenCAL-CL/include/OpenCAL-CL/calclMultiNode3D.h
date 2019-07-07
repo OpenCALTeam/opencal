@@ -892,7 +892,8 @@ public:
         int totalSteps= STEPS;
         while(STEPS-- && !stop){
             //debug("step \n");
-            printf("STEPS =  %d\n",STEPS );
+            if(STEPS%1000 == 0)
+             printf("STEPS =  %d\r",STEPS );
             gettimeofday(&start_comp, NULL);
 
             for (int j = 0; j < multidevice->device_models[0]->elementaryProcessesNum; j++) {
@@ -1099,7 +1100,7 @@ ___________
                     if (calclmodel3D->kernelStopCondition != NULL) {
                         if (singleStepThreadNum[0] > 0){
                            stop = checkStopCondition3D(calclmodel3D, dimNum, singleStepThreadNum);
-                           printf("stop %d\n", stop);
+                        //    printf("stop %d\n", stop);
                         }
                     }
 
@@ -1144,15 +1145,15 @@ ___________
         double TotalCommTime = TotalTime + (kernel_communication/1000);
 
         // end = time(NULL);
-        printf("Rank=%d, Elapsed time: %llu ms\n", rank,t);
-        printf("Rank=%d, Elapsed Communication time: %f s\n", rank,TotalCommTime);
-        printf("Rank=%d, Elapsed MPI communication : %f s\n" ,rank, TotalTime);
-        printf("Rank=%d, Elapsed Host Device PCI-E communication: %f ms\n", rank,kernel_communication);
-        printf("Rank=%d, Elapsed time kernels: %f ms\n", rank,kernel_total);
-        // three elementary procecces
-        avgT = (TotalTime)/(ntComuunication);
-        printf("Rank=%d, Avg Latency Time = %f s\n",rank, avgT);
-        printf("Rank=%d, number of time send : %d \n" ,rank, ntComuunication);
+        // printf("Rank=%d, Elapsed time: %llu ms\n", rank,t);
+        // printf("Rank=%d, Elapsed Communication time: %f s\n", rank,TotalCommTime);
+        // printf("Rank=%d, Elapsed MPI communication : %f s\n" ,rank, TotalTime);
+        // printf("Rank=%d, Elapsed Host Device PCI-E communication: %f ms\n", rank,kernel_communication);
+        // printf("Rank=%d, Elapsed time kernels: %f ms\n", rank,kernel_total);
+        // // three elementary procecces
+        // avgT = (TotalTime)/(ntComuunication);
+        // printf("Rank=%d, Avg Latency Time = %f s\n",rank, avgT);
+        // printf("Rank=%d, number of time send : %d \n" ,rank, ntComuunication);
 
 
         //  }
