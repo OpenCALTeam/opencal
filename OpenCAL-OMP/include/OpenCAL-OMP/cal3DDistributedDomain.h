@@ -33,7 +33,8 @@ Node(const uint _c , const uint _r ,const uint _col , const uint _off,  const st
     int columns; // first two dimension
     int offset;     // number of layers from the top
 	int borderSize;
-	string ip;	    
+	string ip;
+	int numberOfProcs;	    
 };
 
 class CALDistributedDomain3D{
@@ -60,6 +61,7 @@ public:
 			domainfile>>buf; NNODES = stoul(buf);
 			
 			
+			
 			nodes.resize(NNODES);
 			
 			for(int i=0 ; i<NNODES ; i++){
@@ -74,6 +76,7 @@ public:
                 Node ni (R*C ,R,C, OFF , ip);
 				uint node_workload=0;
 				ni.totalnumbersoflayers = L;
+				ni.numberOfProcs = NNODES;
 				for(int j = 0 ; j < NDEVICES ; j++){
 					
 					//parse device j for node i

@@ -49,6 +49,7 @@ Node(const uint _c , const uint _off,  const uint _nd, const string& _ip)
     int offset;
 	int borderSize; // not in bytes
 	string ip;
+	int numberOfProcs;
 };
 
 class CALDistributedDomain2D{
@@ -73,6 +74,7 @@ public:
 			domainfile>>buf; C = stoul(buf.c_str());
 			domainfile>>buf; NNODES = stoul(buf);
 			
+			
 			nodes.resize(NNODES);
 			
 			for(int i=0 ; i<NNODES ; i++){
@@ -85,6 +87,7 @@ public:
 				//num devices for node i
 				domainfile>>buf; NDEVICES = stoul(buf);
 				Node ni (C , OFF , NDEVICES , ip);
+				ni.numberOfProcs = NNODES;
 				uint node_workload=0;
 				for(int j = 0 ; j < NDEVICES ; j++){
 					
