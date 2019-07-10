@@ -17,6 +17,7 @@ extern "C"{
 }
 typedef void (* CALCallbackFuncMNInit3D)(struct CALCLMultiDevice3D* ca3D, const Node& mynode);
 typedef void (* CALCallbackFuncMNFinalize3D)(struct CALCLMultiDevice3D* ca3D);
+typedef bool (* CALCallbackFuncMNStopCondition3D)(struct CALCLMultiDevice3D* ca3D);
 
 CALbyte calNodeLoadMatrix3Dr(CALreal* M, const int rows, const int columns, const int slices,const char* path,  int read_offset = 0, const int write_offset = 0)
 {
@@ -136,6 +137,9 @@ public:
     CALDistributedDomain3D c;
     CALCallbackFuncMNInit3D init;
     CALCallbackFuncMNFinalize3D finalize;
+    CALCallbackFuncMNStopCondition3D stopCondition;
+    int checkStopCondition;
+
     int rank;
     CALCLMultiDevice3D* multidevice;
 
@@ -147,6 +151,8 @@ public:
     MultiNode3D(CALDistributedDomain3D _c,CALCallbackFuncMNInit3D i, CALCallbackFuncMNFinalize3D f):c(_c),
         init(i), finalize(f) {
         MPI_Init(NULL, NULL);
+        stopCondition = NULL;
+        checkStopCondition = 1;
         int world_rank;
         MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
 
@@ -165,6 +171,11 @@ public:
         for(auto& d : devices){
             calclAddDevice(multidevice,calclGetDevice(calcl_device_manager, d.num_platform , d.num_device) ,  d.workload);
         }
+    }
+
+    void setStopCondition(CALCallbackFuncMNStopCondition3D f, int n){
+        stopCondition = f;
+        checkStopCondition = n;
     }
 
     int GetNodeRank() {
@@ -1027,6 +1038,13 @@ public:
                 
                 end_kernel_computation =  MPI_Wtime();
                 kernel_total_communication += end_kernel_computation - start_kernel_computation;
+            }
+            
+            if ( stopCondition != NULL && STEPS%checkStopCondition==0) {
+                 calclMultiDeviceUpdateHalos3D(
+                        multidevice, multidevice->exchange_full_border);
+                  stop = stopCondition(multidevice);
+
             }
 
             start_communication = MPI_Wtime();
