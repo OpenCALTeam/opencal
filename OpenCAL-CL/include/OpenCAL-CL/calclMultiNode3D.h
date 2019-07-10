@@ -1041,7 +1041,7 @@ public:
             }
             
             if ( stopCondition != NULL && STEPS%checkStopCondition==0) {
-                 calclMultiDeviceUpdateHalos3D(
+                 calclMultiDeviceToNode(
                         multidevice, multidevice->exchange_full_border);
                   stop = stopCondition(multidevice);
 
