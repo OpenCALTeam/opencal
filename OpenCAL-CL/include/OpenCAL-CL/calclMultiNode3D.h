@@ -1041,8 +1041,7 @@ public:
             }
             
             if ( stopCondition != NULL && STEPS%checkStopCondition==0) {
-                 calclMultiDeviceToNode(
-                        multidevice, multidevice->exchange_full_border);
+                 calclMultiDeviceToNode(multidevice);
                   stop = stopCondition(multidevice);
 
             }
