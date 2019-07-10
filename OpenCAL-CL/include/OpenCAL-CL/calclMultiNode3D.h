@@ -112,14 +112,26 @@ CALbyte calNodeLoadSubstate3Db(CALModel3D* ca3D, struct CALSubstate3Db* Q, char*
 class MultiNode3D{
 public:
     //only used to kep track of the communication overhead
-    double comm_total=0;
-    double comp_total=0;
-    double kernel_total=0;
-    double kernel_communication=0;
-    timeval start_comm, end_comm;
-    timeval start_comp, end_comp;
-    timeval start_kernel_communication, end_kernel_communication;
-    timeval start_kernel, end_kernel;
+
+    double start_kernel_computation, end_kernel_computation;
+    double start_kernel_communication, end_kernel_communication;
+    double start_kernel_streamcompaction_communication, end_kernel_streamcompaction_communication;
+    double start_kernel_streamcompaction_computation, end_kernel_streamcompaction_computation;
+    double start_communication, end_communication;
+   
+    double kernel_total_communication=0;
+    double kernel_total_computation=0;
+
+    double total_kernel_streamcompaction_communication=0;
+    double total_kernel_streamcompaction_computation=0;
+
+    double totalCommunicationTimeMPI = 0;
+    int totalNumberofCommunicationMPI = 0;
+
+    double total_communication=0;
+    double elapsedTime=0;
+    
+    double * gatherElapsedTime;
 
     CALDistributedDomain3D c;
     CALCallbackFuncMNInit3D init;
@@ -646,8 +658,7 @@ public:
     void calclStreamCompactionMulti(struct CALCLMultiDevice3D* multidevice, MultiNode3D * mn){
 
         //----------MEASURE TIME---------
-        gettimeofday(&(mn->start_comm), NULL);
-
+        mn->start_kernel_streamcompaction_communication = MPI_Wtime();
 
         cl_int err;
         // Read from substates and set flags borders
@@ -729,10 +740,14 @@ public:
                 }
             }
         }
-        gettimeofday(&(mn->end_comm), NULL);
+        mn->end_kernel_streamcompaction_communication = MPI_Wtime();
 
-        mn->comm_total+= 1000 * (mn->end_comm.tv_sec - mn->start_comm.tv_sec) +
-                (mn->end_comm.tv_usec - mn->start_comm.tv_usec) / 1000;
+        mn->total_kernel_streamcompaction_communication += mn->end_kernel_streamcompaction_communication - mn->start_kernel_streamcompaction_communication;
+
+        mn->total_communication += mn->total_kernel_streamcompaction_communication;
+
+
+        mn->start_kernel_streamcompaction_computation = MPI_Wtime();
 
         for (int gpu = 0; gpu < multidevice->num_devices; ++gpu) {
             struct CALCLModel3D* calclmodel3D = multidevice->device_models[gpu];
@@ -752,6 +767,7 @@ public:
                 clFinish(multidevice->device_models[gpu]->queue);
 
                 calclComputeStreamCompaction3D(calclmodel3D);
+
                 calclResizeThreadsNum3D(calclmodel3D,
                                         multidevice->singleStepThreadNums[gpu]);
 
@@ -760,6 +776,10 @@ public:
                 clFinish(multidevice->device_models[gpu]->queue);
             }
         }
+        mn->end_kernel_streamcompaction_computation = MPI_Wtime();
+
+        mn->total_kernel_streamcompaction_computation += mn->end_kernel_streamcompaction_computation - mn->start_kernel_streamcompaction_computation;
+
     }
 
     void calcl_executeElementaryProcess(struct CALCLMultiDevice3D* multidevice,
@@ -823,30 +843,15 @@ public:
     void run(int STEPS){
 
         int rank;
-        timeval start, end;
+        double start, end;
 
-
-        double T1, T2,              /* start/end times per rep */
-                sumT=0,                   /* sum of all reps times */
-                deltaT;                 /* time for one rep */
-        double avgT;
-        double TotalTime=0;
-        int ntComuunication=0;
         bool stop = false;
 
         MPI_Barrier(MPI_COMM_WORLD);
 
         MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-        //printf("rank %d\n", rank);
 
-
-        //MPI_Barrier(MPI_COMM_WORLD);
-        // if(rank == 0)
-        gettimeofday(&start, NULL);
-
-
-
-
+        
         int dimNum;
         for (int gpu = 0; gpu < multidevice->num_devices; ++gpu) {
             multidevice->singleStepThreadNums[gpu] =
@@ -855,13 +860,12 @@ public:
 
 
         //----------MEASURE TIME---------
-        gettimeofday(&start_comm, NULL);
-        handleBorderNodes(TotalTime,ntComuunication);
-        gettimeofday(&end_comm, NULL);
+        start_communication = MPI_Wtime();
+        handleBorderNodes(totalCommunicationTimeMPI,totalNumberofCommunicationMPI);
+        end_communication = MPI_Wtime();
 
-        comm_total+= 1000.0 * (end_comm.tv_sec - start_comm.tv_sec) +
-                (end_comm.tv_usec - start_comm.tv_usec) / 1000.0;
-        //handleFlagsMultiNode();
+        total_communication += end_communication - start_communication;
+        
         //----------------------------------
         for (int gpu = 0; gpu < multidevice->num_devices; ++gpu) {
             for (int el_proc = 0;
@@ -890,60 +894,14 @@ public:
         }
 
         int totalSteps= STEPS;
+
+        start = MPI_Wtime();
+
         while(STEPS-- && !stop){
-            //debug("step \n");
-            if(STEPS%1000 == 0)
-             printf("STEPS =  %d\r",STEPS );
-            gettimeofday(&start_comp, NULL);
 
             for (int j = 0; j < multidevice->device_models[0]->elementaryProcessesNum; j++) {
 
-                //MPI_Barrier(MPI_COMM_WORLD);
-                //printf("rank =  %d\n",rank );
-
-
-                gettimeofday(&start_kernel, NULL);
-
-
-                //                if(rank==0){
-                //                    printf("rank =  %d\n",rank );
-                //                    printf("step  =  %d\n",STEPS );
-                //                    printf(" calclmodel3D->borderMapper.byteBorder_OUT \n");
-                //                    for (int bor = 0;bor < multidevice->device_models[0]->host_CA->rows*
-                //                         multidevice->device_models[0]->host_CA->columns*2; bor++) {
-                //                        if(bor != 0 && bor%(multidevice->device_models[0]->host_CA->columns) ==0 )
-                //                            printf("\n");
-                //                        if(bor != 0 && bor%(multidevice->device_models[0]->host_CA->rows*
-                //                                            multidevice->device_models[0]->host_CA->columns) ==0 )
-                //                            printf("\n\n");
-                //                        printf(" %d ",multidevice->device_models[0]->borderMapper.byteBorder_OUT[bor]);
-                //                    }
-                //                    printf("\n");
-                //                }
-                // if(rank==1){
-//                     calclMultiDeviceToNode(multidevice);
-
-//                     for (int gpu = 0; gpu < multidevice->num_devices; ++gpu) {
-//                        for (int i = 0; i < multidevice->device_models[gpu]->fullSize*multidevice->device_models[gpu]->host_CA->sizeof_pQi_array; ++i) {
-//                            if(i%multidevice->device_models[gpu]->columns == 0 && i !=0)
-//                                printf("\n");
-//                            if(i%(multidevice->device_models[gpu]->columns*multidevice->device_models[gpu]->rows) == 0 && i !=0)
-//                                printf("\n\n");
-//                            printf("%d ", multidevice->device_models[gpu]->substateMapper.intSubstate_current_OUT[i]);
-//                        }
-
-//                        printf("\n");
-//                        printf("\n");
-
-//                        printf("\n");
-//                        printf("\n");
-//                        printf("calclmodel->fullSize %d \n", multidevice->device_models[gpu]->fullSize);
-//                        printf("sizeof_pQb_array %d \n",multidevice->device_models[gpu]->host_CA->sizeof_pQb_array);
-//                        printf("\n");
-//                    }
-
-                // }
-                //exit(0);
+                start_kernel_computation =  MPI_Wtime();
 
                 calcl_executeElementaryProcess(multidevice, j,
                                                dimNum /*elementary process*/,this);
@@ -955,80 +913,39 @@ public:
                     clFinish(multidevice->device_models[gpu]->queue);
                 }
 
-                gettimeofday(&end_kernel, NULL);
-
-                kernel_total+= 1000.0 * (end_kernel.tv_sec - start_kernel.tv_sec) +
-                        (end_kernel.tv_usec - start_kernel.tv_usec) / 1000.0;
-
+                end_kernel_computation =  MPI_Wtime();
+                kernel_total_computation += end_kernel_computation - start_kernel_computation;
 
                 //----------MEASURE TIME---------
-                gettimeofday(&start_comm, NULL);
+                start_communication =  MPI_Wtime();
 
                 // Read from the substates and set ghost borders
-                gettimeofday(&start_kernel_communication, NULL);
-                for (int gpu = 0; gpu < multidevice->num_devices; ++gpu) {
-                    calclGetBorderFromDeviceToHost3D(
-                                multidevice->device_models[gpu]);
-                }
+                // start_kernel_communication =  MPI_Wtime();
+                // for (int gpu = 0; gpu < multidevice->num_devices; ++gpu) {
+                //     calclGetBorderFromDeviceToHost3D(
+                //                 multidevice->device_models[gpu]);
+                // }
 
+                //scambia bordi
+                //Write from the ghost borders to the substates
+                // calclMultiDeviceUpdateHalos3D(
+                //             multidevice, multidevice->exchange_full_border);
+                // end_kernel_communication =  MPI_Wtime(); 
+                // handleBorderNodes(totalCommunicationTimeMPI,totalNumberofCommunicationMPI);
 
-                // scambia bordi
-                // Write from the ghost borders to the substates
-                calclMultiDeviceUpdateHalos3D(
-                            multidevice, multidevice->exchange_full_border);
-                gettimeofday(&end_kernel_communication, NULL);
-                handleBorderNodes(TotalTime, ntComuunication);
+                // end_communication =  MPI_Wtime();
 
-
-
-
-                gettimeofday(&end_comm, NULL);
-                comm_total += 1000.0 * (end_comm.tv_sec - start_comm.tv_sec) +
-                        (end_comm.tv_usec - start_comm.tv_usec) / 1000.0;
-                kernel_communication += 1000.0 * (end_kernel_communication.tv_sec - start_kernel_communication.tv_sec) +
-                        (end_kernel_communication.tv_usec - start_kernel_communication.tv_usec) / 1000.0;
+                // total_communication += end_communication-start_communication;
+                // kernel_total_communication += end_kernel_communication- start_kernel_communication;
                 //----------------------------------
                 //   }
             }
 
-
-
-            /*
-//vanno scambiati i ghost. dentro l'arraydelle celle attive (non real)
-// le prime e ultime righe vanno mandate alle Device vicine (esattamente nello stesso modo
-//con cui vengono scambiati i sottostati)
-// i dati ricevuto dalle Device vicine non possono essere direttamente mpacchiati
-//dentro la matrice delle celle attive ma vanno "mergiati" perchè le celle possono essere
-//attivate da una Device vicina ma anche da me stesso
-___________
-|HALO00    |   bordo01 e la prima riga di Device1 vanno mergiate prima dentro la prima riga di GPu1
-|__________|   bordo10 e la ultima riga di Device0 vanno mergiate prima dentro l'ultima riga di Device0
-|          |
-|  Device0 |   bordo00 e l'ultima riga di Device1 vanno mergiate dentro ultima riga di gpu1 e cosi via
-|          |
-|          |
-|----------|
-|HALO01    |
-|__________|
-___________
-|HALO10    |
-|__________|
-|          |
-|  Device1 |
-|          |
-|          |
-|----------|
-|HALO10    |
-|__________|
-*/
-
-
-            // #if 0
             // STEERING------------------------------
             struct CALCLModel3D* calclmodel3DFirst = multidevice->device_models[0];
-
+            
             if (calclmodel3DFirst->kernelSteering != NULL) {
-                gettimeofday(&start_kernel, NULL);
+                start_kernel_computation =  MPI_Wtime();
                 for (int gpu = 0; gpu < multidevice->num_devices; ++gpu) {
 
 
@@ -1054,42 +971,40 @@ ___________
 
 
                 }
-
                 //----------------------------------------
 
-                // if(multidevice->num_devices != 1 || c.nodes.size() != 1){
                 for (int gpu = 0; gpu < multidevice->num_devices; ++gpu) {
                     clFinish(multidevice->device_models[gpu]->queue);
                 }
+                end_kernel_computation =  MPI_Wtime();
+                kernel_total_computation += end_kernel_computation - start_kernel_computation;
 
-                gettimeofday(&end_kernel, NULL);
-
-                kernel_total+= 1000.0 * (end_kernel.tv_sec - start_kernel.tv_sec) +
-                        (end_kernel.tv_usec - start_kernel.tv_usec) / 1000.0;
                 //----------MEASURE TIME---------
-                gettimeofday(&start_comm, NULL);
-                gettimeofday(&start_kernel_communication, NULL);
-                for (int gpu = 0; gpu < multidevice->num_devices; ++gpu) {
-                    calclGetBorderFromDeviceToHost3D(
-                                multidevice->device_models[gpu]);
-                }
 
-                // scambia bordi
-                calclMultiDeviceUpdateHalos3D(
-                            multidevice, multidevice->exchange_full_border);
-                gettimeofday(&end_kernel_communication, NULL);
-                kernel_communication += 1000.0 * (end_kernel_communication.tv_sec - start_kernel_communication.tv_sec) +
-                        (end_kernel_communication.tv_usec - start_kernel_communication.tv_usec) / 1000.0;
+                // start_communication = MPI_Wtime();
+                // start_kernel_communication = MPI_Wtime();
+                // for (int gpu = 0; gpu < multidevice->num_devices; ++gpu) {
+                //     calclGetBorderFromDeviceToHost3D(
+                //                 multidevice->device_models[gpu]);
+                // }
 
-                gettimeofday(&end_comm, NULL);
-                comm_total += 1000.0 * (end_comm.tv_sec - start_comm.tv_sec) +
-                        (end_comm.tv_usec - start_comm.tv_usec) / 1000.0;
+                // // scambia bordi
+                // calclMultiDeviceUpdateHalos3D(
+                //             multidevice, multidevice->exchange_full_border);
+                
+                // end_communication = MPI_Wtime();
+                // end_kernel_communication = MPI_Wtime();
+                // kernel_total_communication += end_kernel_communication - start_kernel_communication;
+
+                // end_communication = MPI_Wtime();
+                // total_communication += end_communication - start_communication;
                 //----------------------------------
                 //}
             }  // Steering
 
+            
             if (calclmodel3DFirst->kernelStopCondition != NULL) {
-                gettimeofday(&start_kernel, NULL);
+                start_kernel_computation =  MPI_Wtime();
                 for (int gpu = 0; gpu < multidevice->num_devices; ++gpu) {
 
 
@@ -1106,57 +1021,125 @@ ___________
 
 
                 }
+                for (int gpu = 0; gpu < multidevice->num_devices; ++gpu) {
+                    clFinish(multidevice->device_models[gpu]->queue);
+                }
+                
+                end_kernel_computation =  MPI_Wtime();
+                kernel_total_communication += end_kernel_computation - start_kernel_computation;
             }
-            // #endif
-            // if (multidevice->num_devices != 1 || c.nodes.size() != 1) {
+
+            start_communication = MPI_Wtime();
+            start_kernel_communication = MPI_Wtime();
+            for (int gpu = 0; gpu < multidevice->num_devices; ++gpu) {
+                calclGetBorderFromDeviceToHost3D(
+                            multidevice->device_models[gpu]);
+            }
+            // scambia bordi
+            calclMultiDeviceUpdateHalos3D(
+                        multidevice, multidevice->exchange_full_border);
+            
+            end_kernel_communication = MPI_Wtime();
+            kernel_total_communication += end_kernel_communication - start_kernel_communication;
+            
+            end_communication = MPI_Wtime();
+            total_communication += end_communication - start_communication;
+
             //----------MEASURE TIME---------
-            gettimeofday(&start_comm, NULL);
+            start_communication = MPI_Wtime();
 
-            T1 = MPI_Wtime();
-            handleBorderNodes(TotalTime, ntComuunication);
-            T2 = MPI_Wtime();
-            deltaT = T2 - T1;
-            //printf("%4d  %8.8f  %8.8f  %2.8f\n", STEPS, T1, T2, deltaT);
+            handleBorderNodes(totalCommunicationTimeMPI,totalNumberofCommunicationMPI);
 
-            sumT += deltaT;
-            gettimeofday(&end_comm, NULL);
-            comm_total += 1000.0 * (end_comm.tv_sec - start_comm.tv_sec) +
-                    (end_comm.tv_usec - start_comm.tv_usec) / 1000.0;
+            end_communication =  MPI_Wtime();
+            total_communication += end_communication - start_communication;
             //----------------------------------
             //  }
 
-            gettimeofday(&end_comp, NULL);
-            comp_total += 1000.0 * (end_comp.tv_sec - start_comp.tv_sec) +
-                    (end_comp.tv_usec - start_comp.tv_usec) / 1000.0;
-
-
         }//STEPS
 
+        end = MPI_Wtime();
+        elapsedTime = end -start;
 
+        start_communication = MPI_Wtime();
         //handleBorderNodes();
         calclMultiDeviceToNode(multidevice);
+        end_communication =  MPI_Wtime();
+        total_communication += end_communication - start_communication;
+
+        MPI_Barrier(MPI_COMM_WORLD);
+
+        double maxTotalCommunicationTimeMPI = 0;
+        MPI_Reduce(&totalCommunicationTimeMPI, &maxTotalCommunicationTimeMPI, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
+
+        double sumTotalCommunicationTimeMPI = 0;
+        MPI_Reduce(&totalCommunicationTimeMPI, &sumTotalCommunicationTimeMPI, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+
+        double maxTotalCommunicationTime = 0;
+        MPI_Reduce(&total_communication, &maxTotalCommunicationTime, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
+
+       
+        int gsize;
+        MPI_Comm_size( MPI_COMM_WORLD, &gsize);
+        if(rank == 0)
+        {
+            gatherElapsedTime = (double *)malloc(gsize*sizeof(double));
+        }
+
+        MPI_Gather(&elapsedTime, 1, MPI_DOUBLE, gatherElapsedTime, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 
 
-        //if (rank == 0) {
-        gettimeofday(&end, NULL);
-        unsigned long long t = 1000 * (end.tv_sec - start.tv_sec) +
-                (end.tv_usec - start.tv_usec) / 1000;
 
-        double TotalCommTime = TotalTime + (kernel_communication/1000);
+        double max_kernel_total_communication=0;
+        MPI_Reduce(&kernel_total_communication, &max_kernel_total_communication, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
 
-        // end = time(NULL);
-        // printf("Rank=%d, Elapsed time: %llu ms\n", rank,t);
-        // printf("Rank=%d, Elapsed Communication time: %f s\n", rank,TotalCommTime);
-        // printf("Rank=%d, Elapsed MPI communication : %f s\n" ,rank, TotalTime);
-        // printf("Rank=%d, Elapsed Host Device PCI-E communication: %f ms\n", rank,kernel_communication);
-        // printf("Rank=%d, Elapsed time kernels: %f ms\n", rank,kernel_total);
-        // // three elementary procecces
-        // avgT = (TotalTime)/(ntComuunication);
-        // printf("Rank=%d, Avg Latency Time = %f s\n",rank, avgT);
-        // printf("Rank=%d, number of time send : %d \n" ,rank, ntComuunication);
+        double max_kernel_total_computation=0;
+        MPI_Reduce(&kernel_total_computation, &max_kernel_total_computation, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
 
+        double max_total_kernel_streamcompaction_communication=0;
+        MPI_Reduce(&total_kernel_streamcompaction_communication, &max_total_kernel_streamcompaction_communication, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
+        
+        double max_total_kernel_streamcompaction_computation=0;
+        MPI_Reduce(&total_kernel_streamcompaction_computation, &max_total_kernel_streamcompaction_computation, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
 
-        //  }
+        if (rank == 0) {
+
+            printf("\n");
+            printf("-------------------------- Time info---------------------\n");
+            printf("\n");
+            double max=gatherElapsedTime[0];
+            for(int n = 0; n < gsize; n++)
+                if(gatherElapsedTime[n] > max)
+                    max = gatherElapsedTime[n];
+            
+            printf("%f [s] - max elapsed time\n", max);
+
+            for(int n = 0; n < gsize; n++)
+                printf("Rank=%d, %f [s] - elapsed time\n", n, gatherElapsedTime[n]);
+
+            printf("\n");
+            printf("-------------------------- MPI Communication info---------------------\n");
+            printf("\n");
+            printf("Max Elapsed MPI communication : %f s\n", maxTotalCommunicationTimeMPI);
+            printf("MPI Total Number of Communication per process: %d\n", totalNumberofCommunicationMPI);
+            printf("MPI Total Communication Time per process: %f s\n", sumTotalCommunicationTimeMPI);
+
+            double avgTotalCommunicationTime = sumTotalCommunicationTimeMPI/gsize;
+            printf("Avg MPI Total Communication Time per process: %f s\n", avgTotalCommunicationTime);
+
+            double avgMessageTime = avgTotalCommunicationTime/totalNumberofCommunicationMPI;
+            printf("Avg MPI Communication Time per message: %f s\n", avgMessageTime);
+            printf("\n");
+
+            printf("\n");
+            printf("-------------------------- Kenrel info---------------------\n");
+            printf("\n");
+            
+            printf("max_kernel_total_communication : %f s\n", max_kernel_total_communication);
+            printf("max_kernel_total_computation : %f s\n", max_kernel_total_computation);
+            printf("max_total_kernel_streamcompaction_communication : %f s\n", max_total_kernel_streamcompaction_communication);
+            printf("max_total_kernel_streamcompaction_computation : %f s\n", max_total_kernel_streamcompaction_computation);
+
+        }
         MPI_Barrier(MPI_COMM_WORLD);
         _finalize();
         MPI_Finalize();

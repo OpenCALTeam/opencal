@@ -403,7 +403,7 @@ class MultiNode
                 if(gatherElapsedTime[n] > max)
                     max = gatherElapsedTime[n];
             
-            printf("%f [s] - max elapsed time\n", maxTotalCommunicationTime);
+            printf("%f [s] - max elapsed time\n", max);
 
             for(int n = 0; n < gsize; n++)
                 printf("Rank=%d, %f [s] - elapsed time\n", n, gatherElapsedTime[n]);
