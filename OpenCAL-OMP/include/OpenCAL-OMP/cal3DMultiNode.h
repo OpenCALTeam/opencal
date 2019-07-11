@@ -13,6 +13,7 @@ extern "C"
 {
 #include <OpenCAL-OMP/cal3D.h>
 #include <OpenCAL-OMP/cal3DRun.h>
+#include <OpenCAL-OMP/cal3DUnsafe.h>
 };
 
 #include <OpenCAL-OMP/cal3DMultiNodeCommon.h>
@@ -733,24 +734,27 @@ class MultiNode
 
         }  // for
 
-        for(int i = 0; i < borderSizeInCells; i++){
+        for(int i = 0; i < borderSizeInCells; i++)
+        {
             if(flagsNodeGhosts[i] == CAL_TRUE && host_CA->A->flags[borderSizeInCells+i] == CAL_FALSE){
                 host_CA->A->size_next[CAL_GET_THREAD_NUM()]++;
                 host_CA->A->flags[borderSizeInCells+i] = CAL_TRUE;
             }
-         }
+        }
 
-        int start = (host_CA->rows* host_CA->columns)-(borderSizeInCells*2);
-        for(int i = 0; i < borderSizeInCells; i++){
+        int start = (host_CA->rows* host_CA->columns*host_CA->slices)-(borderSizeInCells*2);
+        for(int i = 0; i < borderSizeInCells; i++)
+        {
             if(flagsNodeGhosts[borderSizeInCells+i] == CAL_TRUE && host_CA->A->flags[start+i] == CAL_FALSE)
             {
                 host_CA->A->size_next[CAL_GET_THREAD_NUM()]++;
                 host_CA->A->flags[start+i] = CAL_TRUE;
             }
-         }
+        }
 
-        int start2 = (host_CA->rows* host_CA->columns)-(borderSizeInCells);
-        for(int i = 0; i < borderSizeInCells; i++){
+        int start2 = (host_CA->rows* host_CA->columns*host_CA->slices)-(borderSizeInCells);
+        for(int i = 0; i < borderSizeInCells; i++)
+        {
             if(host_CA->A->flags[i] )
             {
                 host_CA->A->size_next[CAL_GET_THREAD_NUM()]--;
