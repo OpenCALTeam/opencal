@@ -2460,9 +2460,10 @@ int calclSetKernelArg3D(CALCLkernel kernel, cl_uint arg_index,size_t arg_size,co
     return  clSetKernelArg(kernel,MODEL_ARGS_NUM + arg_index, arg_size,arg_value);
 }
 
-void calclSetWorkGroupDimensions3D(struct CALCLModel3D * calclmodel3D, int m, int n)
+void calclSetWorkGroupDimensions3D(struct CALCLModel3D * calclmodel3D, int m, int n, int k)
 {
-    calclmodel3D->workGroupDimensions = (size_t*) malloc(sizeof(size_t)*2);
+    calclmodel3D->workGroupDimensions = (size_t*) malloc(sizeof(size_t)*3);
     calclmodel3D->workGroupDimensions[0]=m;
     calclmodel3D->workGroupDimensions[1]=n;
+    calclmodel3D->workGroupDimensions[2]=k;
 }

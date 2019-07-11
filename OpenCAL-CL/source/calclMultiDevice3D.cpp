@@ -571,10 +571,10 @@ size_t* computekernelLaunchParams(struct CALCLMultiDevice3D* multidevice, const 
     return singleStepThreadNum;
 }
 
-void calclMultiDeviceSetWorkGroupSize3D(struct CALCLMultiDevice3D* multidevice, int m, int n) {
+void calclMultiDeviceSetWorkGroupSize3D(struct CALCLMultiDevice3D* multidevice, int m, int n, int k) {
     for (int gpu = 0; gpu < multidevice->num_devices; ++gpu) {
         struct CALCLModel3D* calclmodel3D = multidevice->device_models[gpu];
-        calclSetWorkGroupDimensions3D(calclmodel3D, m, n);
+        calclSetWorkGroupDimensions3D(calclmodel3D, m, n, k);
 
     }
 }

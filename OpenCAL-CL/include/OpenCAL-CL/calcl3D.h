@@ -574,7 +574,8 @@ void calclSetReductionParameters3D(struct CALCLModel3D* calclmodel3D,		//!< Poin
 DllExport
 void calclSetWorkGroupDimensions3D(struct CALCLModel3D* calclmodel3D,//!< Pointer to a CALCLModel2D
                                  int m, //!< Number of rows
-                                 int n);//!< Number of columns
+                                 int n, //!< Number of columns
+                                 int k);//!< Number of slices
 
 void calclCopySubstatesBuffers3D(struct CALCLModel3D * calclmodel3D);
 void setParametersReduction3D(cl_int err, struct CALCLModel3D* calclmodel3D);

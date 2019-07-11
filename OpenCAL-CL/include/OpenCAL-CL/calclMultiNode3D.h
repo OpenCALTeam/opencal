@@ -770,7 +770,7 @@ public:
                 //    printf("gpu=%d, before streamcompact --> %d\n", gpu,
                 //      multidevice->singleStepThreadNums[gpu][0]);
                 calclKernelCall3D(calclmodel3D,  calclmodel3D->kernelMergeFlags, 1,
-                                  &(singleNumThreadsMerge), NULL);
+                                  &(singleNumThreadsMerge), calclmodel3D->workGroupDimensions);
                 //printf("gpu=%d, launch kernelSetDiffFlags\n",gpu,multidevice->singleStepThreadNums[gpu][0]);
                 //calclKernelCall3D(calclmodel3D, calclmodel3D->kernelSetDiffFlags, 1,
                 //                  &(singleNumThreadsMerge), NULL, NULL);
@@ -811,7 +811,7 @@ public:
                 if (singleStepThreadNum[0] > 0)
                     calclKernelCall3D(calclmodel3D,
                                       calclmodel3D->elementaryProcesses[el_proc],
-                                      dimNum, singleStepThreadNum, NULL);
+                                      dimNum, singleStepThreadNum, calclmodel3D->workGroupDimensions);
                 //clFinish(multidevice->device_models[gpu]->queue);
                 //printf("rank %d --> gpu=%d, before streamcompact el_proc num = %d --> %d\n",mn->rank,  gpu, el_proc, singleStepThreadNum[0]);
 
@@ -830,7 +830,7 @@ public:
                 if (singleStepThreadNum[0] > 0) {
                     //printf("gpu=%d,before update --> %d \n", gpu,  singleStepThreadNum[0]);
                     calclKernelCall3D(calclmodel3D, calclmodel3D->kernelUpdateSubstate,
-                                      dimNum, singleStepThreadNum, NULL);
+                                      dimNum, singleStepThreadNum, calclmodel3D->workGroupDimensions);
                     //printf("gpu=%d,after update --> %d \n", gpu,singleStepThreadNum[0]);
 
                 }
@@ -967,14 +967,14 @@ public:
                     if (calclmodel3D->kernelSteering != NULL) {
                         if (singleStepThreadNum[0] > 0)
                             calclKernelCall3D(calclmodel3D, calclmodel3D->kernelSteering,
-                                              dimNum, singleStepThreadNum, NULL);
+                                              dimNum, singleStepThreadNum, calclmodel3D->workGroupDimensions);
                         CALbyte activeCells =
                                 calclmodel3D->opt == CAL_OPT_ACTIVE_CELLS_NAIVE;
                         if (activeCells == CAL_TRUE)
                             if (singleStepThreadNum[0] > 0)
                                 calclKernelCall3D(calclmodel3D,
                                                   calclmodel3D->kernelUpdateSubstate,
-                                                  dimNum, singleStepThreadNum, NULL);
+                                                  dimNum, singleStepThreadNum, calclmodel3D->workGroupDimensions);
                             else
                                 calclCopySubstatesBuffers3D(calclmodel3D);
 

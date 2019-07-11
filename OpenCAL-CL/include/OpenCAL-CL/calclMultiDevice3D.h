@@ -56,7 +56,7 @@ void calclMultiDeviceToNode(struct CALCLMultiDevice3D* multidevice);
 
 void calclMultiDeviceUpdateHalos3D(struct CALCLMultiDevice3D* multidevice,const CALbyte exchange_full_border);
 
-void calclMultiDeviceSetWorkGroupSize3D(struct CALCLMultiDevice3D* multidevice, int m, int n);
+void calclMultiDeviceSetWorkGroupSize3D(struct CALCLMultiDevice3D* multidevice, int m, int n, int k);
 
 void calclMultiDeviceAddStopConditionFunc3D(struct CALCLMultiDevice3D* multidevice, char * kernelName);
 
