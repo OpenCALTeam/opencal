@@ -239,7 +239,8 @@ CALbyte checkStopCondition3D(struct CALCLModel3D * calclmodel3D, CALint dimNum, 
 void calclSetKernelStreamCompactionArgs3D(struct CALCLModel3D * calclmodel3D) {
     CALint dim = calclmodel3D->host_CA->rows * calclmodel3D->host_CA->columns * calclmodel3D->host_CA->slices;
     clSetKernelArg(calclmodel3D->kernelComputeCounts, 0, sizeof(CALint), &dim);
-    clSetKernelArg(calclmodel3D->kernelComputeCounts, 1, sizeof(CALCLmem), &calclmodel3D->bufferActiveCellsFlags);
+    //clSetKernelArg(calclmodel3D->kernelComputeCounts, 1, sizeof(CALCLmem), &calclmodel3D->bufferActiveCellsFlags);
+    clSetKernelArg(calclmodel3D->kernelComputeCounts, 1, sizeof(CALCLmem), &calclmodel3D->bufferActiveCellsFlagsRealSize);
     clSetKernelArg(calclmodel3D->kernelComputeCounts, 2, sizeof(CALCLmem), &calclmodel3D->bufferSTCounts);
     clSetKernelArg(calclmodel3D->kernelComputeCounts, 3, sizeof(CALCLmem), &calclmodel3D->bufferSTOffsets1);
     clSetKernelArg(calclmodel3D->kernelComputeCounts, 4, sizeof(CALCLmem), &calclmodel3D->bufferSTCountsDiff);
@@ -256,7 +257,8 @@ void calclSetKernelStreamCompactionArgs3D(struct CALCLModel3D * calclmodel3D) {
     clSetKernelArg(calclmodel3D->kernelCompact, 0, sizeof(CALint), &dim);
     clSetKernelArg(calclmodel3D->kernelCompact, 1, sizeof(CALint), &calclmodel3D->host_CA->rows);
     clSetKernelArg(calclmodel3D->kernelCompact, 2, sizeof(CALint), &calclmodel3D->host_CA->columns);
-    clSetKernelArg(calclmodel3D->kernelCompact, 3, sizeof(CALCLmem), &calclmodel3D->bufferActiveCellsFlags);
+    //clSetKernelArg(calclmodel3D->kernelCompact, 3, sizeof(CALCLmem), &calclmodel3D->bufferActiveCellsFlags);
+    clSetKernelArg(calclmodel3D->kernelCompact, 3, sizeof(CALCLmem), &calclmodel3D->bufferActiveCellsFlagsRealSize);
     clSetKernelArg(calclmodel3D->kernelCompact, 4, sizeof(CALCLmem), &calclmodel3D->bufferActiveCellsNum);
     clSetKernelArg(calclmodel3D->kernelCompact, 5, sizeof(CALCLmem), &calclmodel3D->bufferActiveCells);
     clSetKernelArg(calclmodel3D->kernelCompact, 6, sizeof(CALCLmem), &calclmodel3D->bufferSTCounts);
@@ -267,7 +269,8 @@ void calclSetKernelStreamCompactionArgs3D(struct CALCLModel3D * calclmodel3D) {
 void calclSetKernelsLibArgs3D(struct CALCLModel3D *calclmodel3D) {
     clSetKernelArg(calclmodel3D->kernelUpdateSubstate, 0, sizeof(CALint), &calclmodel3D->host_CA->columns);
     clSetKernelArg(calclmodel3D->kernelUpdateSubstate, 1, sizeof(CALint), &calclmodel3D->host_CA->rows);
-    clSetKernelArg(calclmodel3D->kernelUpdateSubstate, 2, sizeof(CALint), &calclmodel3D->host_CA->slices);
+     int full = calclmodel3D->slices+calclmodel3D->borderSize*2;
+    clSetKernelArg(calclmodel3D->kernelUpdateSubstate, 2, sizeof(CALint), &full);
     clSetKernelArg(calclmodel3D->kernelUpdateSubstate, 3, sizeof(CALint), &calclmodel3D->host_CA->sizeof_pQb_array);
     clSetKernelArg(calclmodel3D->kernelUpdateSubstate, 4, sizeof(CALint), &calclmodel3D->host_CA->sizeof_pQi_array);
     clSetKernelArg(calclmodel3D->kernelUpdateSubstate, 5, sizeof(CALint), &calclmodel3D->host_CA->sizeof_pQr_array);
@@ -279,6 +282,7 @@ void calclSetKernelsLibArgs3D(struct CALCLModel3D *calclmodel3D) {
     clSetKernelArg(calclmodel3D->kernelUpdateSubstate, 11, sizeof(CALCLmem), &calclmodel3D->bufferNextRealSubstate);
     clSetKernelArg(calclmodel3D->kernelUpdateSubstate, 12, sizeof(CALCLmem), &calclmodel3D->bufferActiveCells);
     clSetKernelArg(calclmodel3D->kernelUpdateSubstate, 13, sizeof(CALCLmem), &calclmodel3D->bufferActiveCellsNum);
+    clSetKernelArg(calclmodel3D->kernelUpdateSubstate, 14, sizeof(CALint), &calclmodel3D->borderSize);
 }
 
 void calclSetModelParameters3D(struct CALCLModel3D * calclmodel3D, CALCLkernel * kernel) {
@@ -297,7 +301,8 @@ void calclSetModelParameters3D(struct CALCLModel3D * calclmodel3D, CALCLkernel *
     clSetKernelArg(*kernel, 11, sizeof(CALCLmem), &calclmodel3D->bufferNextRealSubstate);
     clSetKernelArg(*kernel, 12, sizeof(CALCLmem), &calclmodel3D->bufferActiveCells);
     clSetKernelArg(*kernel, 13, sizeof(CALCLmem), &calclmodel3D->bufferActiveCellsNum);
-    clSetKernelArg(*kernel, 14, sizeof(CALCLmem), &calclmodel3D->bufferActiveCellsFlags);
+    //clSetKernelArg(*kernel, 14, sizeof(CALCLmem), &calclmodel3D->bufferActiveCellsFlags);
+    clSetKernelArg(*kernel, 14, sizeof(CALCLmem), &calclmodel3D->bufferActiveCellsFlagsRealSize);
     clSetKernelArg(*kernel, 15, sizeof(CALCLmem), &calclmodel3D->bufferNeighborhood);
     clSetKernelArg(*kernel, 16, sizeof(CALCLmem), &calclmodel3D->bufferNeighborhoodID);
     clSetKernelArg(*kernel, 17, sizeof(CALCLmem), &calclmodel3D->bufferNeighborhoodSize);
@@ -523,9 +528,9 @@ CALCLqueue calclCreateQueue3D(struct CALCLModel3D * calclmodel3D, CALCLcontext c
 
     clEnqueueWriteBuffer(
         queue, calclmodel3D->bufferActiveCellsFlags, CL_TRUE,
-        sizeof(CALbyte) * calclmodel3D->host_CA->columns * calclmodel3D->borderSize,
+        sizeof(CALbyte) * calclmodel3D->host_CA->columns * calclmodel3D->host_CA->rows * calclmodel3D->borderSize,
         sizeof(CALbyte) * calclmodel3D->realSize,
-        calclmodel3D->host_CA->A->flags + (calclmodel3D->offset * calclmodel3D->host_CA->columns), 0, NULL,
+        calclmodel3D->host_CA->A->flags + (calclmodel3D->offset * calclmodel3D->host_CA->columns* calclmodel3D->host_CA->rows), 0, NULL,
         NULL );
 
     cl_buffer_region region;
@@ -828,10 +833,11 @@ struct CALCLModel3D * calclCADef3D(struct CALModel3D *host_CA, CALCLcontext cont
         int i = 0;
         int j = 0;
         printf("Num active cells = %d    %d -- %d \n",calclmodel3D->host_CA->A->size_next,offset,calclmodel3D->slices+offset);
-        for (s=offset; s < (calclmodel3D->slices+offset); s++)
+        //for (s=offset; s < (calclmodel3D->slices+offset); s++)
+        for (s=0; s < (calclmodel3D->slices); s++)
             for (i=0; i < calclmodel3D->rows; i++)
                 for (j=0; j < calclmodel3D->columns; j++)
-                    if (calGetBuffer3DElement(calclmodel3D->host_CA->A->flags,calclmodel3D->host_CA->rows ,calclmodel3D->host_CA->columns, i, j,s))
+                    if (calGetBuffer3DElement(calclmodel3D->host_CA->A->flags,calclmodel3D->host_CA->rows ,calclmodel3D->host_CA->columns, i, j, s))
                     {
                         activeCells[calclmodel3D->num_active_cells].i = i;
                         activeCells[calclmodel3D->num_active_cells].j = j;

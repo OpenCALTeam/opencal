@@ -55,9 +55,10 @@ __kernel void calclsetDiffFlags3D(
 
 inline void mergeBuffers3D(CALint i,
 	              __global CALbyte* A,
+                          CALint j,
                 __global CALbyte* B){
 
-	B[i] = B[i] || A[i];
+	B[j] = B[j] || A[i];
 }
 
 
@@ -80,17 +81,22 @@ __kernel void calclMergeFlags3D(
 
     if(threadID < borderSizeReal){
       //chunkNum = threadID/chunkSize;
-      mergeBuffers3D(threadID,mergeflagsBuffer,flagsReal);
+      mergeBuffers3D(threadID,mergeflagsBuffer,threadID,flagsReal);
+       
     }
     else{
       // chunkNum = ((rows-1)*columns+threadID)/chunkSize;
-         mergeBuffers3D(threadID-borderSizeReal,
-             mergeflagsBuffer+borderSizeReal,
+         mergeBuffers3D(threadID,
+             mergeflagsBuffer,
+             threadID-borderSizeReal,
              flagsReal+(realSize-(borderSizeReal))
-             );
+             );           
     }
 
-    }
+
+    
+
+  }
     
 }
 

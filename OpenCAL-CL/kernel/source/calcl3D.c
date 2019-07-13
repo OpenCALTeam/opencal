@@ -128,6 +128,8 @@ void calclAddActiveCellX3D(__CALCL_MODEL_3D, int i, int j, int k, int n) {
 	CALint jx;
 	CALint kx;
 
+	k=  k - borderSize;
+
 	if (calclGetBoundaryCondition() == CAL_SPACE_FLAT) {
 		ix = i + calclGetNeighborhood()[n].i;
 		jx = j + calclGetNeighborhood()[n].j;

@@ -14,6 +14,7 @@ extern "C"{
 #include <OpenCAL/cal3DIO.h>
 #include <OpenCAL/cal3DBuffer.h>
 #include <OpenCAL/cal3DBufferIO.h>
+#include <OpenCAL/cal3DUnsafe.h>
 }
 typedef void (* CALCallbackFuncMNInit3D)(struct CALCLMultiDevice3D* ca3D, const Node& mynode);
 typedef void (* CALCallbackFuncMNFinalize3D)(struct CALCLMultiDevice3D* ca3D);
@@ -580,8 +581,8 @@ public:
             CALbyte* recv_offset = flagsNodeGhosts;
             const CALint sizeBorder = gpu_to_use->borderSize * gpu_to_use->columns* gpu_to_use->rows;
             const CALint count = (sizeBorder);
-            // printf("rank %d --> multidevice->singleStepThreadNums[prev] %d",rank, multidevice->singleStepThreadNums[prev]);
-            // printf("rank %d --> multidevice->singleStepThreadNums[next] %d",rank, multidevice->singleStepThreadNums[next]);
+            //printf("rank %d --> multidevice->singleStepThreadNums[prev] %d",rank, multidevice->singleStepThreadNums[prev]);
+            //printf("rank %d --> multidevice->singleStepThreadNums[next] %d",rank, multidevice->singleStepThreadNums[next]);
 
             for (int i = 0; i < 2; i++) {
 
@@ -606,10 +607,13 @@ public:
                 if (rank % 2 == 0) {
                     // MPI send
                     // printf("I'm %d:  sedning to %d \n", rank, next);
+
+
+
                     // cerca convenzione per i nomi dei tags
                     MPI_Send(send_offset, count, DATATYPE, next, i, MPI_COMM_WORLD);
 
-                    //printf("I'm %d:  receiving from  %d \n" ,  rank , prev);
+                    // printf("I'm %d:  receiving from  %d \n" ,  rank , prev);
                     MPI_Recv(recv_offset, count, DATATYPE, prev, i, MPI_COMM_WORLD,
                              MPI_STATUS_IGNORE);
 
@@ -631,6 +635,18 @@ public:
 
 
             }  // for
+
+            // if(rank ==1){
+                
+            //     for(int i = 0; i < 9600; i++)
+            //     {
+            //        if(i%4800==0 && i != 0)
+            //        printf("\n");
+
+            //        printf(" %d ", flagsNodeGhosts[i]);
+            //     }
+                
+            // }
 
             // calcolo le due gpu che devono ricevere i flagsNodeGhosts
             cl_int err;
@@ -725,9 +741,11 @@ public:
 
             int dim = calclmodel3D->fullSize;
 
-            const int sizeBorder = calclmodel3D->borderSize * calclmodel3D->columns;
+            const int sizeBorder = calclmodel3D->borderSize * calclmodel3D->columns* calclmodel3D->rows;
 
-            const CALbyte activeCells = calclmodel3D->opt == CAL_OPT_ACTIVE_CELLS_NAIVE;
+
+
+            /*const CALbyte activeCells = calclmodel3D->opt == CAL_OPT_ACTIVE_CELLS_NAIVE;
             if (activeCells == CAL_TRUE) {
                 // copy border flags from DevicePrev and Device next to a mergeflagsBorder
                 if (calclmodel3DPrev != NULL &&
@@ -749,7 +767,7 @@ public:
                                 calclmodel3DNext->borderMapper.flagsBorder_OUT, 0, NULL, NULL);
                     calclHandleError(err);
                 }
-            }
+            }*/
         }
         mn->end_kernel_streamcompaction_communication = MPI_Wtime();
 
@@ -765,13 +783,14 @@ public:
             const CALbyte activeCells = calclmodel3D->opt == CAL_OPT_ACTIVE_CELLS_NAIVE;
             if (activeCells) {
                 size_t singleNumThreadsMerge =
-                        calclmodel3D->borderSize * 2 * calclmodel3D->columns;
+                        calclmodel3D->borderSize * 2 * calclmodel3D->columns* calclmodel3D->rows;
 
-                //    printf("gpu=%d, before streamcompact --> %d\n", gpu,
+                //printf("rank %d, gpu=%d, singleNumThreadsMerget --> %d\n",rank, gpu, singleNumThreadsMerge);
                 //      multidevice->singleStepThreadNums[gpu][0]);
+
                 calclKernelCall3D(calclmodel3D,  calclmodel3D->kernelMergeFlags, 1,
                                   &(singleNumThreadsMerge), calclmodel3D->workGroupDimensions);
-                //printf("gpu=%d, launch kernelSetDiffFlags\n",gpu,multidevice->singleStepThreadNums[gpu][0]);
+                //printf("gpu=%d, launch calclmodel3D->streamCompactionThreadsNum %d\n",gpu,calclmodel3D->streamCompactionThreadsNum);
                 //calclKernelCall3D(calclmodel3D, calclmodel3D->kernelSetDiffFlags, 1,
                 //                  &(singleNumThreadsMerge), NULL, NULL);
 
@@ -783,7 +802,7 @@ public:
                                         multidevice->singleStepThreadNums[gpu]);
 
 
-                // printf("gpu=%d,after streamcompact --> %d\n", gpu, multidevice->singleStepThreadNums[gpu][0]);
+                //printf("rank %d, gpu=%d,after streamcompact --> %d\n", rank, gpu, multidevice->singleStepThreadNums[gpu][0]);
                 clFinish(multidevice->device_models[gpu]->queue);
             }
         }
@@ -803,23 +822,28 @@ public:
             size_t* singleStepThreadNum = multidevice->singleStepThreadNums[gpu];
 
             cl_int err;
+            //printf("rank %d --> gpu=%d, after elementaryProcesses el_proc num = %d --> %d\n",mn->rank,  gpu, el_proc, singleStepThreadNum[0]);
 
 
             CALbyte activeCells = calclmodel3D->opt == CAL_OPT_ACTIVE_CELLS_NAIVE;
             if (activeCells == CAL_TRUE) {
-
+               // printf("rank %d --> gpu=%d, before elementaryProcesses el_proc num = %d --> %d\n",mn->rank,  gpu, el_proc, singleStepThreadNum[0]);
                 if (singleStepThreadNum[0] > 0)
+                {
                     calclKernelCall3D(calclmodel3D,
                                       calclmodel3D->elementaryProcesses[el_proc],
                                       dimNum, singleStepThreadNum, calclmodel3D->workGroupDimensions);
-                //clFinish(multidevice->device_models[gpu]->queue);
+                 //clFinish(multidevice->device_models[gpu]->queue);
                 //printf("rank %d --> gpu=%d, before streamcompact el_proc num = %d --> %d\n",mn->rank,  gpu, el_proc, singleStepThreadNum[0]);
-
-                // if (singleStepThreadNum[0] > 0) {
-                /*calclComputeStreamCompaction3D(calclmodel3D);
-                calclResizeThreadsNum3D(calclmodel3D, singleStepThreadNum);*/
+                }
 
                 calclStreamCompactionMulti(multidevice,mn);
+                
+               // if (singleStepThreadNum[0] > 0) {
+                   // calclComputeStreamCompaction3D(calclmodel3D);
+                   // calclResizeThreadsNum3D(calclmodel3D, singleStepThreadNum);
+                //}
+                
                 //if(mn->rank ==1)
                 //printf("rank %d --> gpu=%d, after streamcompact el_proc num = %d --> %d\n",mn->rank,  gpu, el_proc, singleStepThreadNum[0]);
 
@@ -1025,8 +1049,8 @@ public:
 
                     if (calclmodel3D->kernelStopCondition != NULL) {
                         if (singleStepThreadNum[0] > 0){
-                           stop = checkStopCondition3D(calclmodel3D, dimNum, singleStepThreadNum);
-                        //    printf("stop %d\n", stop);
+                        //    stop = checkStopCondition3D(calclmodel3D, dimNum, singleStepThreadNum);
+                        //     printf("rank %d, stop %d\n",rank,  stop);
                         }
                     }
 

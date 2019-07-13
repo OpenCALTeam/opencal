@@ -26,10 +26,10 @@ __kernel void calclkernelComputeCounts3D(CALint dim, __global CALbyte * flags, _
 
 	int id = get_global_id (0);
 
-	if(diff[id] == CAL_FALSE){
+	/*if(diff[id] == CAL_FALSE){
 		offsets[id] = counts[id];
 		return;
-	}
+	}*/
 
 	diff[id] = CAL_FALSE;
 
@@ -53,6 +53,7 @@ __kernel void calclkernelComputeCounts3D(CALint dim, __global CALbyte * flags, _
 	}
 	offsets[id] = count;
 	counts[id] = count;
+	//printf("counts[id] %d \n", counts[id] );
 
 }
 
