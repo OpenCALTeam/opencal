@@ -1049,8 +1049,8 @@ public:
 
                     if (calclmodel3D->kernelStopCondition != NULL) {
                         if (singleStepThreadNum[0] > 0){
-                        //    stop = checkStopCondition3D(calclmodel3D, dimNum, singleStepThreadNum);
-                        //     printf("rank %d, stop %d\n",rank,  stop);
+                            stop = checkStopCondition3D(calclmodel3D, dimNum, singleStepThreadNum);
+                             printf("rank %d, stop %d\n",rank,  stop);
                         }
                     }
 
