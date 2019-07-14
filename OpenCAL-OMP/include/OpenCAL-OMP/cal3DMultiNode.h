@@ -699,7 +699,7 @@ class MultiNode
         double T1, T2, deltaT;
 
         memcpy(borderMapper.flagsBorder_OUT, host_CA->A->flags, sizeof(CALbyte) * borderSizeInCells);
-        memcpy(borderMapper.flagsBorder_OUT+ borderSizeInCells, host_CA->A->flags + (host_CA->rows*host_CA->columns)-(borderSizeInCells) , sizeof(CALbyte) * borderSizeInCells);
+        memcpy(borderMapper.flagsBorder_OUT+ borderSizeInCells, host_CA->A->flags + (host_CA->rows*host_CA->columns*host_CA->slices)-(borderSizeInCells) , sizeof(CALbyte) * borderSizeInCells);
 
         next = ((rank + 1) + c.nodes.size()) % c.nodes.size();
         prev = ((rank - 1) + c.nodes.size()) % c.nodes.size();
