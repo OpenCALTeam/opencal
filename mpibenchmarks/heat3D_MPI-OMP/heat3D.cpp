@@ -10,7 +10,7 @@
 #define EPSILON (0.01)
 
 #define DELTA_X (0.001)
-#define DELTA_Y (0.001)
+#define DELTA_Y (0.001) 
 #define DELTA_Z (0.001)
 #define DELTA_T (0.001)
 #define THERMAL_CONDUCTIVITY (1)
@@ -94,12 +94,12 @@ void heatModel_SimulationInit(struct CALModel3D* host_CA)
     //for(int i=1 ; i < ROWS ; ++i){
         for (j = 1; j < host_CA->columns; ++j) {
             
-            for (z=host_CA->offset; z < host_CA->slices-host_CA->offset; ++z) {
+            for (z=host_CA->borderSizeInRows; z < host_CA->slices-host_CA->borderSizeInRows; ++z) {
 
                 CALreal _i, _j,_z;
                 CALreal chunk = host_CA->rows/2;
                 /*for(int l =2 ; l < 4; l++){
-                    _i = i -(ROWS/l);
+                    _i = i -(ROWS/l); 
                     _j = i -(COLS/l);
                     _z = z -(LAYERS/l);
                     if(_i *_i + _j*_j + _z * _z <= radius){*/
@@ -123,7 +123,7 @@ void init(MultiNode * multinode, Node& mynode)
     //printf("node->totalnumbersoflayers = %d \n",node.totalnumbersoflayers);
     int borderSize = 1;
     struct CALModel3D* host_CA =
-        calCADef3DMN(mynode.rows, mynode.columns, mynode.workload, CAL_MOORE_NEIGHBORHOOD_3D, CAL_SPACE_TOROIDAL, CAL_NO_OPT, borderSize);
+        calCADef3DMN(mynode.rows, mynode.columns, mynode.workload, CAL_MOORE_NEIGHBORHOOD_3D, CAL_SPACE_TOROIDAL, CAL_OPT_ACTIVE_CELLS_NAIVE, borderSize);
 
     offset = mynode.offset;
 //    // Register the substate to the host CA

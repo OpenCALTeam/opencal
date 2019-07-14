@@ -2,6 +2,11 @@ cmake_minimum_required(VERSION 2.8)
 
 project(calclmpi_modCA3D)
 
+message(STATUS "cmake_module_path =  ${CMAKE_MODULE_PATH}" )
+message(STATUS "cmake_prefix_path =  ${CMAKE_PREFIX_PATH}" )
+message(STATUS "CMAKE_FRAMEWORK_PATH =  ${CMAKE_FRAMEWORK_PATH}" )
+message(STATUS "CMAKE_APPBUNDLE_PATH =  ${CMAKE_APPBUNDLE_PATH}" )
+message(STATUS "CMAKE_SYSTEM_PREFIX_PATH =  ${CMAKE_SYSTEM_PREFIX_PATH}" )
 
 include(CheckCXXCompilerFlag)
 CHECK_CXX_COMPILER_FLAG("-std=c++14" COMPILER_SUPPORTS_CXX14)

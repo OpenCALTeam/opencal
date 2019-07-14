@@ -257,7 +257,7 @@ struct CALModel3D* calCADef3D(int rows,
 
     return ca3D;
 }
-
+/*
 struct CALModel3D* calCADef3DMN(int rows,
                               int columns,
                               int slices,
@@ -322,7 +322,7 @@ struct CALModel3D* calCADef3DMN(int rows,
 
     return ca3D;
 }
-
+*/
 
 
 

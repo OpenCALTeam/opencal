@@ -30,7 +30,7 @@ __kernel void heat3D_transitionFunction(__CALCL_MODEL_3D)
         int LAYERS = calclGetSlices();
         int min = (offset == 0)*2;
         int max =1;
-        if(offset == 250)
+        if(offset == 50)
             max = 2;
 
         if(i > 1 && i < ROWS-1 && j > 1 && j < COLS-1 && k > min && k < LAYERS-max){

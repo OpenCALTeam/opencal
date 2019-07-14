@@ -5,7 +5,7 @@
 #include<iostream>
 #include <utility>
 #include <OpenCAL-OMP/cal3DMultiNode.h>
-//#define ACTIVE_CELLS
+#define ACTIVE_CELLS
 
 
 #define OUTPUT_PATH "./output"
@@ -22,16 +22,19 @@ void mod2TransitionFunction(struct CALModel3D* ca, int i, int j, int k)
        sum += calGetX3Di(ca, Q, i, j, k, n);
 
    calSet3Di(ca, Q, i, j, k, sum%2);
+   if(sum%2){
+      calAddActiveCell3D(ca, i, j, k);
+   }
 
 //    if(k == 1 && i == 1 && j == 3){
 //        printf("sum = %d, calGet3Di(ca, Q, i, j, k) = %d \n", sum, ca->Q->current, Q, i, j, k));
 //    }
 }
 
-void init( MultiNode* multinode, const Node& mynode){
+void init( MultiNode* multinode, Node& mynode){
     int borderSize = 1;
     #ifdef ACTIVE_CELLS
-        mod2 = calCADef3D(mynode.rows, mynode.columns, mynode.workload, CAL_MOORE_NEIGHBORHOOD_3D, CAL_SPACE_TOROIDAL, CAL_OPT_ACTIVE_CELLS_NAIVE);
+        mod2 = calCADef3DMN(mynode.rows, mynode.columns, mynode.workload, CAL_MOORE_NEIGHBORHOOD_3D, CAL_SPACE_TOROIDAL, CAL_OPT_ACTIVE_CELLS_NAIVE, borderSize);
     #else
         mod2 = calCADef3DMN(mynode.rows, mynode.columns, mynode.workload, CAL_MOORE_NEIGHBORHOOD_3D, CAL_SPACE_TOROIDAL, CAL_NO_OPT, borderSize);
     #endif
@@ -49,12 +52,12 @@ void init( MultiNode* multinode, const Node& mynode){
     if(rank ==0)
     {
        calInit3Di(mod2, Q, 2, 3, 1+borderSize, 1);
-// #ifdef ACTIVE_CELLS
-//         //adds the cell (i, j) to the set of active ones
-//         calAddActiveCell3D(mod2, 2, 3, 1);
-//         printf("ActiveCells = %d \n", mod2->A->size_current);
-//         calUpdateActiveCells3D(mod2);
-// #endif
+#ifdef ACTIVE_CELLS
+        //adds the cell (i, j) to the set of active ones
+        calAddActiveCell3D(mod2, 2, 3, 1);
+        printf("ActiveCells = %d \n", mod2->A->size_current);
+        calUpdateActiveCells3D(mod2);
+#endif
     }
     std::string s = OUTPUT_PATH + std::to_string(rank) + "_0000.txt";
     calNodeSaveSubstate3Di(mod2, Q, (char*)s.c_str(), mynode);
@@ -62,11 +65,9 @@ void init( MultiNode* multinode, const Node& mynode){
     struct CALRun3D * host_simulation = calRunDef3D(mod2, 1, 1, CAL_UPDATE_IMPLICIT);
     multinode->setRunSimulation(host_simulation);
 
-
-
 }
 
-void finalize(MultiNode* multinode, const Node& mynode){
+void finalize(MultiNode* multinode, Node& mynode){
     // Saving results
     int rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
