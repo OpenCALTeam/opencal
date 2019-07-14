@@ -41,6 +41,7 @@ void calUpdateActiveCellsNaive3D(struct CALModel3D* ca3D)
     int *tsize;
 
     free(ca3D->A->cells);
+
     ca3D->A->cells = NULL;
 
     diff = 0;
@@ -89,6 +90,10 @@ void calUpdateActiveCellsNaive3D(struct CALModel3D* ca3D)
             }
         }
     }
+    for (i = 0; i < ca3D->A->num_threads; i++) 
+        free(tcells[i]);
+    free(tcells);
+    free(tsize);
 
 }
 
