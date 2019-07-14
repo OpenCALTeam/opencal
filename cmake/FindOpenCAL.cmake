@@ -80,6 +80,8 @@ list(APPEND opencal_include_suffixes "include")
    list(APPEND OPENCAL_ROOTS "${OPENCAL_HOME}")
  endif()
 list(APPEND OPENCAL_ROOTS "/usr/local/opencal-${opencal_version}")
+list(APPEND OPENCAL_ROOTS "/nfshome/local/opencal-${opencal_version}")
+
 
 
     foreach( component ${OpenCAL_FIND_COMPONENTS} )

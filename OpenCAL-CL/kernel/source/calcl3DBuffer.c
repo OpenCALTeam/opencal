@@ -34,9 +34,15 @@ void calclCopyBufferActiveCells3Di(__global CALint* M_src, __global CALint* M_de
 		M_dest[c] = M_src[c];
 }
 
+<<<<<<< Updated upstream
 void calclCopyBufferActiveCells3Dr(__global CALreal* M_src, __global CALreal* M_dest, int columns, int rows, __global struct CALCell3D* active_cells, int n, CALint borderSize) {
 	int c = (active_cells[n].k+ borderSize) * columns * rows + active_cells[n].i * columns + active_cells[n].j;
 	if (M_dest[c] != M_src[c])
+=======
+void calclCopyBufferActiveCells3Dr(__global CALreal* M_src, __global CALreal* M_dest, int columns, int rows, __global struct CALCell3D* active_cells, int n) {
+	int c = active_cells[n].k * columns * rows + active_cells[n].i * columns + active_cells[n].j;
+	//if (M_dest[c] != M_src[c])
+>>>>>>> Stashed changes
 		M_dest[c] = M_src[c];
 }
 

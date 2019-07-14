@@ -789,8 +789,8 @@ public:
                 //      multidevice->singleStepThreadNums[gpu][0]);
 
                 calclKernelCall3D(calclmodel3D,  calclmodel3D->kernelMergeFlags, 1,
-                                  &(singleNumThreadsMerge), calclmodel3D->workGroupDimensions);
-                //printf("gpu=%d, launch calclmodel3D->streamCompactionThreadsNum %d\n",gpu,calclmodel3D->streamCompactionThreadsNum);
+                                  &(singleNumThreadsMerge), NULL);
+                //printf("gpu=%d, launch kernelSetDiffFlags\n",gpu,multidevice->singleStepThreadNums[gpu][0]);
                 //calclKernelCall3D(calclmodel3D, calclmodel3D->kernelSetDiffFlags, 1,
                 //                  &(singleNumThreadsMerge), NULL, NULL);
 
@@ -827,13 +827,14 @@ public:
 
             CALbyte activeCells = calclmodel3D->opt == CAL_OPT_ACTIVE_CELLS_NAIVE;
             if (activeCells == CAL_TRUE) {
-               // printf("rank %d --> gpu=%d, before elementaryProcesses el_proc num = %d --> %d\n",mn->rank,  gpu, el_proc, singleStepThreadNum[0]);
+               // printf("rank %d --> gpu=%d, before streamcompact el_proc num = %d --> %d\n",mn->rank,  gpu, el_proc, singleStepThreadNum[0]);
+
                 if (singleStepThreadNum[0] > 0)
                 {
                     calclKernelCall3D(calclmodel3D,
                                       calclmodel3D->elementaryProcesses[el_proc],
-                                      dimNum, singleStepThreadNum, calclmodel3D->workGroupDimensions);
-                 //clFinish(multidevice->device_models[gpu]->queue);
+                                      dimNum, singleStepThreadNum, NULL);
+                //clFinish(multidevice->device_models[gpu]->queue);
                 //printf("rank %d --> gpu=%d, before streamcompact el_proc num = %d --> %d\n",mn->rank,  gpu, el_proc, singleStepThreadNum[0]);
                 }
 
@@ -848,13 +849,17 @@ public:
                 //printf("rank %d --> gpu=%d, after streamcompact el_proc num = %d --> %d\n",mn->rank,  gpu, el_proc, singleStepThreadNum[0]);
 
                 //printf("gpu=%d,after streamcompact el_proc num = %d --> %d \n", gpu,             el_proc, singleStepThreadNum[0]);
-                //  }
+                // }
 
                 //clFinish(multidevice->device_models[gpu]->queue);
                 if (singleStepThreadNum[0] > 0) {
                     //printf("gpu=%d,before update --> %d \n", gpu,  singleStepThreadNum[0]);
+                    
+
                     calclKernelCall3D(calclmodel3D, calclmodel3D->kernelUpdateSubstate,
-                                      dimNum, singleStepThreadNum, calclmodel3D->workGroupDimensions);
+                                      dimNum, singleStepThreadNum, NULL);
+                    
+
                     //printf("gpu=%d,after update --> %d \n", gpu,singleStepThreadNum[0]);
 
                 }
@@ -866,10 +871,10 @@ public:
 
                 calclKernelCall3D(calclmodel3D,
                                   calclmodel3D->elementaryProcesses[el_proc], dimNum,
-                                  singleStepThreadNum, calclmodel3D->workGroupDimensions);
+                                  singleStepThreadNum, NULL);//calclmodel3D->workGroupDimensions);
 
                 calclCopySubstatesBuffers3D(calclmodel3D);
-            }  // == CAL_TRUE
+            } 
             //clFinish(multidevice->device_models[gpu]->queue);
         }  // Devices
         //printf("\n");
@@ -991,14 +996,14 @@ public:
                     if (calclmodel3D->kernelSteering != NULL) {
                         if (singleStepThreadNum[0] > 0)
                             calclKernelCall3D(calclmodel3D, calclmodel3D->kernelSteering,
-                                              dimNum, singleStepThreadNum, calclmodel3D->workGroupDimensions);
+                                              dimNum, singleStepThreadNum, NULL);
                         CALbyte activeCells =
                                 calclmodel3D->opt == CAL_OPT_ACTIVE_CELLS_NAIVE;
                         if (activeCells == CAL_TRUE)
                             if (singleStepThreadNum[0] > 0)
                                 calclKernelCall3D(calclmodel3D,
                                                   calclmodel3D->kernelUpdateSubstate,
-                                                  dimNum, singleStepThreadNum, calclmodel3D->workGroupDimensions);
+                                                  dimNum, singleStepThreadNum, NULL);
                             else
                                 calclCopySubstatesBuffers3D(calclmodel3D);
 
@@ -1067,7 +1072,6 @@ public:
             if ( stopCondition != NULL && STEPS%checkStopCondition==0) {
                  calclMultiDeviceToNode(multidevice);
                   stop = stopCondition(multidevice);
-
             }
 
             start_communication = MPI_Wtime();
@@ -1095,6 +1099,32 @@ public:
             total_communication += end_communication - start_communication;
             //----------------------------------
             //  }
+
+
+              if (calclmodel3DFirst->kernelStopCondition != NULL) {
+                start_kernel_computation =  MPI_Wtime();
+                for (int gpu = 0; gpu < multidevice->num_devices; ++gpu) {
+
+
+                    struct CALCLModel3D* calclmodel3D =
+                            multidevice->device_models[gpu];
+                    size_t* singleStepThreadNum = multidevice->singleStepThreadNums[gpu];
+
+                    if (calclmodel3D->kernelStopCondition != NULL) {
+                        if (singleStepThreadNum[0] > 0){
+                           stop = checkStopCondition3D(calclmodel3D, dimNum, singleStepThreadNum);
+                           //printf("rank %d, stop %d\n",rank, stop);
+                        }
+                    }
+                }
+                for (int gpu = 0; gpu < multidevice->num_devices; ++gpu) {
+                    clFinish(multidevice->device_models[gpu]->queue);
+                }
+                
+                end_kernel_computation =  MPI_Wtime();
+                kernel_total_communication += end_kernel_computation - start_kernel_computation;
+            }
+
 
         }//STEPS
 
@@ -1172,7 +1202,7 @@ public:
             printf("\n");
 
             printf("\n");
-            printf("-------------------------- Kenrel info---------------------\n");
+            printf("-------------------------- Kenerl info---------------------\n");
             printf("\n");
             
             printf("max_kernel_total_communication : %f s\n", max_kernel_total_communication);

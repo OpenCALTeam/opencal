@@ -85,6 +85,8 @@ void calclGetSubstatesFromDevice3D(struct CALCLModel3D* calclmodel, const CALint
     }
 
 
+
+
 }
 
 void calclMultiDeviceMapperToSubstates3D(struct CALModel3D * host_CA, CALCLSubstateMapper * mapper,const size_t realSize, const CALint offset, int borderSize) {
@@ -120,6 +122,24 @@ void calclMultiDeviceMapperToSubstates3D(struct CALModel3D * host_CA, CALCLSubst
             host_CA->pQb_array[i]->current[j+offset*dimLayer] = mapper->byteSubstate_current_OUT[outIndex++];
         outIndex=outIndex+2*borderSize*dimLayer;
     }
+
+
+
+
+    // j = 14;
+    // double moist_print;
+    // int Ymid = 14;
+    // for (int k =0; k < host_CA->slices; k++){
+  	//   for (int i = 0; i < host_CA->rows; i++)
+  	//      for (j = 0; j < host_CA->columns; j++)
+  	//    {
+        //  if (_k_inv == ZSUP && i<45 && j>(Ymid - 20) && j < (Ymid + 20))
+    // i = 2;
+    // j = 14;
+    // int k = 1;
+    //  printf("i = %d, j = %d, z = %d, moist_cont= %f \n",i,j,k,calGet3Dr(host_CA, host_CA->pQr_array[1], i, j, k));
+  	//    }
+	// }
 
 }
 
@@ -539,7 +559,7 @@ void calclMultiDeviceCADef3D(struct CALCLMultiDevice3D* multidevice,
 }
 
 void calclMultiDeviceToNode(struct CALCLMultiDevice3D* multidevice) {
-
+    printf("calclMultiDeviceToNode 3D multidevice->num_devices %d\n", multidevice->num_devices);
     for (int gpu = 0; gpu < multidevice->num_devices; ++gpu) {
         calclGetSubstatesFromDevice3D(multidevice->device_models[gpu],
                                       multidevice->workloads[gpu],
@@ -615,7 +635,7 @@ void calclMultiDeviceRun3D(struct CALCLMultiDevice3D* multidevice, CALint init_s
                 CALbyte activeCells = calclmodel3D->opt == CAL_OPT_ACTIVE_CELLS_NAIVE;
                 cl_int err;
 
-                setParametersReduction3D(err, calclmodel3D);
+               /* setParametersReduction3D(err, calclmodel3D);
 
                 if (calclmodel3D->kernelInitSubstates != NULL)
                     calclSetReductionParameters3D(calclmodel3D, &calclmodel3D->kernelInitSubstates);
@@ -628,7 +648,7 @@ void calclMultiDeviceRun3D(struct CALCLMultiDevice3D* multidevice, CALint init_s
 
                 for (i = 0; i < calclmodel3D->elementaryProcessesNum; i++) {
                     calclSetReductionParameters3D(calclmodel3D, &calclmodel3D->elementaryProcesses[i]);
-                }
+                }*/
 
                 if (activeCells == CAL_TRUE) {
                     for (j = 0; j < calclmodel3D->elementaryProcessesNum; j++) {
@@ -644,7 +664,7 @@ void calclMultiDeviceRun3D(struct CALCLMultiDevice3D* multidevice, CALint init_s
                         calclGetBorderFromDeviceToHost3D(calclmodel3D);
                     }
 
-                    calclExecuteReduction3D(calclmodel3D, calclmodel3D->roundedDimensions);
+                    //calclExecuteReduction3D(calclmodel3D, calclmodel3D->roundedDimensions);
 
                 } else {
                     for (j = 0; j < calclmodel3D->elementaryProcessesNum; j++) {
@@ -655,7 +675,7 @@ void calclMultiDeviceRun3D(struct CALCLMultiDevice3D* multidevice, CALint init_s
 
 
                     }
-                    calclExecuteReduction3D(calclmodel3D, calclmodel3D->roundedDimensions);
+                    //calclExecuteReduction3D(calclmodel3D, calclmodel3D->roundedDimensions);
                     //copySubstatesBuffers3D(calclmodel3D);
 
                 }

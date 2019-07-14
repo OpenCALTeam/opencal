@@ -103,6 +103,7 @@ struct CALModel3D* calCADef3D(int rows, //!< Number of rows of the 3D cellular s
                               enum CALOptimization CAL_OPTIMIZATION //!< Enumerator used for specifying the active cells optimization or no optimization.
                               );
 
+/*
 DllExport
 struct CALModel3D* calCADef3DMN(int rows, //!< Number of rows of the 3D cellular space.
                               int columns, //!< Number of columns of the 3D cellular space.
@@ -112,7 +113,7 @@ struct CALModel3D* calCADef3DMN(int rows, //!< Number of rows of the 3D cellular
                               enum CALOptimization CAL_OPTIMIZATION, //!< Enumerator used for specifying the active cells optimization or no optimization.
                               int borderSizeInRows
                               );
-
+*/
 
 
 /*! \brief Sets the cell (i,j) of the matrix flags to CAL_TRUE and increments the
