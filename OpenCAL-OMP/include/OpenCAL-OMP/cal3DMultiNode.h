@@ -286,14 +286,21 @@ class MultiNode
 
         if (ca3D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE && ca3D->A->size_current > 0) //Computationally active cells optimization(naive).
             calApplyElementaryProcessActiveCellsNaive3D( ca3D, elementary_process);
+        
+        else
+        {
         // else if(ca3D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS && ca3D->contiguousLinkedList->size_current > 0) //Computationally active cells optimization(optimal).
         //     calApplyElementaryProcessActiveCellsCLL3D(ca3D, elementary_process);
         // else //Standart cicle of the transition function
+            if (ca3D->OPTIMIZATION == CAL_NO_OPT)
+            {
 #pragma omp parallel for private (k, i, j)
-		for (i=0; i<ca3D->rows; i++)
-			for (j=0; j<ca3D->columns; j++)
-                for (k=host_CA->borderSizeInRows; k<ca3D->slices-host_CA->borderSizeInRows; k++)
-                elementary_process(ca3D, i, j, k);
+		    for (i=0; i<ca3D->rows; i++)
+		    	for (j=0; j<ca3D->columns; j++)
+                    for (k=host_CA->borderSizeInRows; k<ca3D->slices-host_CA->borderSizeInRows; k++)
+                    elementary_process(ca3D, i, j, k);
+            }
+        }
         
 
     }

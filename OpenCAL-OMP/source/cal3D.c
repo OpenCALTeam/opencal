@@ -765,7 +765,7 @@ void calUpdate3D(struct CALModel3D* ca3D)
     int i;
 
     //updating active cells
-    if (ca3D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS)
+    if (ca3D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS || ca3D->OPTIMIZATION == CAL_OPT_ACTIVE_CELLS_NAIVE)
         calUpdateActiveCells3D(ca3D);
 
     //updating substates
