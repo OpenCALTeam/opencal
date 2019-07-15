@@ -110,7 +110,7 @@ void calSetActiveCellsNaiveBuffer3Db(CALbyte* M, CALbyte value, CALModel3D* ca3D
     int n;
 #pragma omp parallel for private( n ) firstprivate( M, value, ca3D )
     for(n=0; n<ca3D->A->size_current; n++)
-        M[ca3D->A->cells[n].k * ca3D->rows * ca3D->columns + ca3D->A->cells[n].i * ca3D->columns * ca3D->A->cells[n].j] = value;
+        M[ca3D->A->cells[n].k * ca3D->rows * ca3D->columns + ca3D->A->cells[n].i * ca3D->columns + ca3D->A->cells[n].j] = value;
 }
 
 void calSetActiveCellsNaiveBuffer3Di(CALint* M, CALint value, CALModel3D* ca3D)
@@ -119,7 +119,7 @@ void calSetActiveCellsNaiveBuffer3Di(CALint* M, CALint value, CALModel3D* ca3D)
 
 #pragma omp parallel for private( n ) firstprivate( M, value, ca3D )
     for(n=0; n<ca3D->A->size_current; n++)
-        M[ca3D->A->cells[n].k * ca3D->rows * ca3D->columns + ca3D->A->cells[n].i * ca3D->columns * ca3D->A->cells[n].j] = value;
+        M[ca3D->A->cells[n].k * ca3D->rows * ca3D->columns + ca3D->A->cells[n].i * ca3D->columns + ca3D->A->cells[n].j] = value;
 }
 
 void calSetActiveCellsNaiveBuffer3Dr(CALreal* M, CALreal value, CALModel3D* ca3D)
@@ -128,7 +128,7 @@ void calSetActiveCellsNaiveBuffer3Dr(CALreal* M, CALreal value, CALModel3D* ca3D
 
 #pragma omp parallel for private( n ) firstprivate( M, value, ca3D )
     for(n=0; n<ca3D->A->size_current; n++)
-        M[ca3D->A->cells[n].k * ca3D->rows * ca3D->columns + ca3D->A->cells[n].i * ca3D->columns * ca3D->A->cells[n].j] = value;
+        M[ca3D->A->cells[n].k * ca3D->rows * ca3D->columns + ca3D->A->cells[n].i * ca3D->columns + ca3D->A->cells[n].j] = value;
 }
 
 void calCopyBufferActiveCellsNaive3Db(CALbyte* M_src, CALbyte* M_dest, CALModel3D* ca3D)
@@ -138,7 +138,7 @@ void calCopyBufferActiveCellsNaive3Db(CALbyte* M_src, CALbyte* M_dest, CALModel3
 #pragma omp parallel for private( c, n ) firstprivate( M_src, M_dest, ca3D )
     for(n=0; n<ca3D->A->size_current; n++)
     {
-        c = ca3D->A->cells[n].k * ca3D->rows * ca3D->columns + ca3D->A->cells[n].i * ca3D->columns * ca3D->A->cells[n].j;
+        c = ca3D->A->cells[n].k * ca3D->rows * ca3D->columns + ca3D->A->cells[n].i * ca3D->columns + ca3D->A->cells[n].j;
         if (M_dest[c] != M_src[c])
             M_dest[c] = M_src[c];
     }
@@ -151,7 +151,7 @@ void calCopyBufferActiveCellsNaive3Di(CALint* M_src, CALint* M_dest, CALModel3D*
 #pragma omp parallel for private( c, n ) firstprivate( M_src, M_dest, ca3D )
     for(n=0; n<ca3D->A->size_current; n++)
     {
-        c = ca3D->A->cells[n].k * ca3D->rows * ca3D->columns + ca3D->A->cells[n].i * ca3D->columns * ca3D->A->cells[n].j;
+        c = ca3D->A->cells[n].k * ca3D->rows * ca3D->columns + ca3D->A->cells[n].i * ca3D->columns + ca3D->A->cells[n].j;
         if (M_dest[c] != M_src[c])
             M_dest[c] = M_src[c];
     }
@@ -164,7 +164,7 @@ void calCopyBufferActiveCellsNaive3Dr(CALreal* M_src, CALreal* M_dest, CALModel3
 #pragma omp parallel for private( c, n ) firstprivate( M_src, M_dest, ca3D )
     for(n=0; n<ca3D->A->size_current; n++)
     {
-        c = ca3D->A->cells[n].k * ca3D->rows * ca3D->columns + ca3D->A->cells[n].i * ca3D->columns * ca3D->A->cells[n].j;
+        c = ca3D->A->cells[n].k * ca3D->rows * ca3D->columns + ca3D->A->cells[n].i * ca3D->columns + ca3D->A->cells[n].j;
         if (M_dest[c] != M_src[c])
             M_dest[c] = M_src[c];
     }
