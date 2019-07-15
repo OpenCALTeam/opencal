@@ -871,7 +871,7 @@ public:
 
                 calclKernelCall3D(calclmodel3D,
                                   calclmodel3D->elementaryProcesses[el_proc], dimNum,
-                                  singleStepThreadNum, NULL);//calclmodel3D->workGroupDimensions);
+                                  singleStepThreadNum, calclmodel3D->workGroupDimensions);
 
                 calclCopySubstatesBuffers3D(calclmodel3D);
             } 
