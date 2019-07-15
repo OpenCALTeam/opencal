@@ -160,7 +160,7 @@ string parseCommandLineArgs(int argc, char** argv)
     using std::endl;
     bool go = true;
     string s;
-    if (argc != 3) {
+    if (argc != 2) {
     cout << "Usage ./mytest clusterfile" << endl;
     go = false;
     } else {
