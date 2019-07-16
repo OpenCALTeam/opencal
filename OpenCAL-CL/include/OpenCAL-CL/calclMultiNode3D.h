@@ -691,6 +691,7 @@ public:
         // Read from substates and set flags borders
         //printf(" before read bufferActiveCellsFlags \n");
 
+        if(c->nodes.size() > 1)
         for (int gpu = 0; gpu < multidevice->num_devices; ++gpu) {
             struct CALCLModel3D* calclmodel3D = multidevice->device_models[gpu];
             CALCLqueue queue = calclmodel3D->queue;
@@ -714,12 +715,20 @@ public:
             calclHandleError(err);
             // printf(" read last border OK bufferActiveCellsFlags gpu = %d \n",gpu);
         }
+        mn->end_kernel_streamcompaction_communication = MPI_Wtime();
+
+        mn->total_kernel_streamcompaction_communication += mn->end_kernel_streamcompaction_communication - mn->start_kernel_streamcompaction_communication;
+
+        mn->start_communication = MPI_Wtime();
 
         mn->handleFlagsMultiNode();
+        
+        mn->end_communication =  MPI_Wtime();
+        mn->total_communication += mn->end_communication - mn->start_communication;
 
         //printf(" after read bufferActiveCellsFlags \n");
         //printf(" before write bufferActiveCellsFlags \n");
-        for (int gpu = 0; gpu < multidevice->num_devices; ++gpu) {
+        /*for (int gpu = 0; gpu < multidevice->num_devices; ++gpu) {
 
             struct CALCLModel3D* calclmodel3D = multidevice->device_models[gpu];
             struct CALCLModel3D* calclmodel3DPrev = NULL;
@@ -767,13 +776,10 @@ public:
                                 calclmodel3DNext->borderMapper.flagsBorder_OUT, 0, NULL, NULL);
                     calclHandleError(err);
                 }
-            }*/
-        }
-        mn->end_kernel_streamcompaction_communication = MPI_Wtime();
+            }
+        }*/
 
-        mn->total_kernel_streamcompaction_communication += mn->end_kernel_streamcompaction_communication - mn->start_kernel_streamcompaction_communication;
-
-        mn->total_communication += mn->total_kernel_streamcompaction_communication;
+        
 
 
         mn->start_kernel_streamcompaction_computation = MPI_Wtime();
@@ -810,6 +816,7 @@ public:
 
         mn->total_kernel_streamcompaction_computation += mn->end_kernel_streamcompaction_computation - mn->start_kernel_streamcompaction_computation;
 
+        mn->total_communication += mn->total_kernel_streamcompaction_communication;
     }
 
     void calcl_executeElementaryProcess(struct CALCLMultiDevice3D* multidevice,
@@ -1055,7 +1062,7 @@ public:
                     if (calclmodel3D->kernelStopCondition != NULL) {
                         if (singleStepThreadNum[0] > 0){
                             stop = checkStopCondition3D(calclmodel3D, dimNum, singleStepThreadNum);
-                             printf("rank %d, stop %d\n",rank,  stop);
+                            // printf("rank %d, stop %d\n",rank,  stop);
                         }
                     }
 
@@ -1077,10 +1084,12 @@ public:
             start_communication = MPI_Wtime();
             start_kernel_communication = MPI_Wtime();
             for (int gpu = 0; gpu < multidevice->num_devices; ++gpu) {
+                if(c->nodes.size() > 1)
                 calclGetBorderFromDeviceToHost3D(
                             multidevice->device_models[gpu]);
             }
             // scambia bordi
+            if(multidevice->num_devices > 1)
             calclMultiDeviceUpdateHalos3D(
                         multidevice, multidevice->exchange_full_border);
             
