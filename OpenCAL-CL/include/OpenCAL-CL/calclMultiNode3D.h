@@ -691,7 +691,7 @@ public:
         // Read from substates and set flags borders
         //printf(" before read bufferActiveCellsFlags \n");
 
-        if(c->nodes.size() > 1)
+        if(c.nodes.size() > 1)
         for (int gpu = 0; gpu < multidevice->num_devices; ++gpu) {
             struct CALCLModel3D* calclmodel3D = multidevice->device_models[gpu];
             CALCLqueue queue = calclmodel3D->queue;
@@ -1084,7 +1084,7 @@ public:
             start_communication = MPI_Wtime();
             start_kernel_communication = MPI_Wtime();
             for (int gpu = 0; gpu < multidevice->num_devices; ++gpu) {
-                if(c->nodes.size() > 1)
+                if(c.nodes.size() > 1)
                 calclGetBorderFromDeviceToHost3D(
                             multidevice->device_models[gpu]);
             }
