@@ -344,8 +344,7 @@ class MultiNode
         start = MPI_Wtime();
         //----------MEASURE TIME---------
         handleBorderNodes(totalCommunicationTime, totalNumberofCommunication);
-
-       
+    
         
         while(STEPS--)
         {

@@ -571,7 +571,7 @@ public:
         }
     }
 
-    void handleFlagsMultiNode() {
+    void handleFlagsMultiNode(double & T, int & ntComuunication) {
         const MPI_Datatype DATATYPE = MPI_CHAR;
         if (!c.is_full_exchange()) {
 
@@ -584,6 +584,7 @@ public:
             //printf("rank %d --> multidevice->singleStepThreadNums[prev] %d",rank, multidevice->singleStepThreadNums[prev]);
             //printf("rank %d --> multidevice->singleStepThreadNums[next] %d",rank, multidevice->singleStepThreadNums[next]);
 
+            double T1, T2, deltaT;
             for (int i = 0; i < 2; i++) {
 
                 next = ((rank + 1) + c.nodes.size()) % c.nodes.size();
@@ -608,7 +609,8 @@ public:
                     // MPI send
                     // printf("I'm %d:  sedning to %d \n", rank, next);
 
-
+                    ntComuunication++;
+                    T1 = MPI_Wtime();
 
                     // cerca convenzione per i nomi dei tags
                     MPI_Send(send_offset, count, DATATYPE, next, i, MPI_COMM_WORLD);
@@ -616,6 +618,10 @@ public:
                     // printf("I'm %d:  receiving from  %d \n" ,  rank , prev);
                     MPI_Recv(recv_offset, count, DATATYPE, prev, i, MPI_COMM_WORLD,
                              MPI_STATUS_IGNORE);
+                    
+                    T2 = MPI_Wtime();
+                    deltaT = T2 - T1;
+                    T += deltaT;
 
                     // send to rank+1
                     // receive rank-1
@@ -685,46 +691,58 @@ public:
     void calclStreamCompactionMulti(struct CALCLMultiDevice3D* multidevice, MultiNode3D * mn){
 
         //----------MEASURE TIME---------
-        mn->start_kernel_streamcompaction_communication = MPI_Wtime();
+        
 
         cl_int err;
         // Read from substates and set flags borders
         //printf(" before read bufferActiveCellsFlags \n");
-
         if(c.nodes.size() > 1)
-        for (int gpu = 0; gpu < multidevice->num_devices; ++gpu) {
-            struct CALCLModel3D* calclmodel3D = multidevice->device_models[gpu];
-            CALCLqueue queue = calclmodel3D->queue;
+        {
+            for (int gpu = 0; gpu < multidevice->num_devices; ++gpu) {
+                clFinish(multidevice->device_models[gpu]->queue);
+            }
+            mn->start_kernel_streamcompaction_communication = MPI_Wtime();
 
-            cl_int err;
-            int dim = calclmodel3D->fullSize;
+            for (int gpu = 0; gpu < multidevice->num_devices; ++gpu) {
+                struct CALCLModel3D* calclmodel3D = multidevice->device_models[gpu];
+                CALCLqueue queue = calclmodel3D->queue;
+                clFinish(queue);
 
-            int sizeBorder = calclmodel3D->borderSize * calclmodel3D->columns* calclmodel3D->rows;
-            //printf(" read first border OK bufferActiveCellsFlags gpu = %d  %d\n", gpu, sizeof(CALbyte) * sizeBorder );
-            err = clEnqueueReadBuffer(queue, calclmodel3D->bufferActiveCellsFlags,
-                                      CL_TRUE, 0, sizeof(CALbyte) * sizeBorder,
-                                      calclmodel3D->borderMapper.flagsBorder_OUT, 0,
-                                      NULL, NULL);
-            calclHandleError(err);
-            //printf(" read first border OK bufferActiveCellsFlags gpu = %d\n", gpu);
+                cl_int err;
+                int dim = calclmodel3D->fullSize;
 
-            err = clEnqueueReadBuffer(
-                        queue, calclmodel3D->bufferActiveCellsFlags, CL_TRUE,
-                        ((dim - sizeBorder)) * sizeof(CALbyte), sizeof(CALbyte) * sizeBorder,
-                        calclmodel3D->borderMapper.flagsBorder_OUT + sizeBorder, 0, NULL, NULL);
-            calclHandleError(err);
-            // printf(" read last border OK bufferActiveCellsFlags gpu = %d \n",gpu);
+                int sizeBorder = calclmodel3D->borderSize * calclmodel3D->columns* calclmodel3D->rows;
+                //printf(" read first border OK bufferActiveCellsFlags gpu = %d  %d\n", gpu, sizeof(CALbyte) * sizeBorder );
+                err = clEnqueueReadBuffer(
+                            queue, calclmodel3D->bufferActiveCellsFlags, CL_TRUE,
+                            ((dim - sizeBorder)) * sizeof(CALbyte), sizeof(CALbyte) * sizeBorder,
+                            calclmodel3D->borderMapper.flagsBorder_OUT + sizeBorder, 0, NULL, NULL);
+                calclHandleError(err);
+
+                err = clEnqueueReadBuffer(queue, calclmodel3D->bufferActiveCellsFlags,
+                                          CL_TRUE, 0, sizeof(CALbyte) * sizeBorder,
+                                          calclmodel3D->borderMapper.flagsBorder_OUT, 0,
+                                          NULL, NULL);
+                calclHandleError(err);
+                //printf(" read first border OK bufferActiveCellsFlags gpu = %d\n", gpu);
+
+                // printf(" read last border OK bufferActiveCellsFlags gpu = %d \n",gpu);
+            }
+            mn->end_kernel_streamcompaction_communication = MPI_Wtime();
         }
-        mn->end_kernel_streamcompaction_communication = MPI_Wtime();
+        
 
         mn->total_kernel_streamcompaction_communication += mn->end_kernel_streamcompaction_communication - mn->start_kernel_streamcompaction_communication;
+        //printf("mn->total_kernel_streamcompaction_communication = %f\n", mn->total_kernel_streamcompaction_communication);
+        //mn->total_communication += mn->total_kernel_streamcompaction_communication;
 
         mn->start_communication = MPI_Wtime();
 
-        mn->handleFlagsMultiNode();
+        mn->handleFlagsMultiNode(mn->totalCommunicationTimeMPI,mn->totalNumberofCommunicationMPI);
         
         mn->end_communication =  MPI_Wtime();
         mn->total_communication += mn->end_communication - mn->start_communication;
+        
 
         //printf(" after read bufferActiveCellsFlags \n");
         //printf(" before write bufferActiveCellsFlags \n");
@@ -781,9 +799,12 @@ public:
 
         
 
-
+        for (int gpu = 0; gpu < multidevice->num_devices; ++gpu) {
+            clFinish(multidevice->device_models[gpu]->queue);
+        }
+       
+        clFinish(multidevice->device_models[0]->queue);
         mn->start_kernel_streamcompaction_computation = MPI_Wtime();
-
         for (int gpu = 0; gpu < multidevice->num_devices; ++gpu) {
             struct CALCLModel3D* calclmodel3D = multidevice->device_models[gpu];
             const CALbyte activeCells = calclmodel3D->opt == CAL_OPT_ACTIVE_CELLS_NAIVE;
@@ -800,23 +821,58 @@ public:
                 //calclKernelCall3D(calclmodel3D, calclmodel3D->kernelSetDiffFlags, 1,
                 //                  &(singleNumThreadsMerge), NULL, NULL);
 
-                clFinish(multidevice->device_models[gpu]->queue);
 
-                calclComputeStreamCompaction3D(calclmodel3D);
+                CALCLqueue queue = multidevice->device_models[gpu]->queue;
+                    
+                   
+                    // calclComputeStreamCompaction3D(calclmodel3D);
+
+                    calclKernelCall3D(calclmodel3D, calclmodel3D->kernelComputeCounts, 1, &calclmodel3D->streamCompactionThreadsNum, NULL);
+
+                    
+                    int iterations = calclmodel3D->streamCompactionThreadsNum;
+                    //printf("iterations = %d \n", iterations);
+                    size_t tmpThreads = iterations;
+                    cl_int err;
+
+                    int i;
+
+
+                    for (i = iterations / 2; i > 0; i /= 2) {
+                        tmpThreads = i;
+                        err = clEnqueueNDRangeKernel(queue, calclmodel3D->kernelUpSweep, 1, NULL, &tmpThreads, NULL, 0, NULL, NULL);
+                        calclHandleError(err);
+                    }
+
+                    
+                    iterations = calclmodel3D->streamCompactionThreadsNum;
+
+
+                    for (i = 1; i < iterations; i *= 2) {
+                        tmpThreads = i;
+                        err = clEnqueueNDRangeKernel(queue, calclmodel3D->kernelDownSweep, 1, NULL, &tmpThreads, NULL, 0, NULL, NULL);
+                        calclHandleError(err);
+                    }
+
+                    
+                    calclKernelCall3D(calclmodel3D, calclmodel3D->kernelCompact, 1, &calclmodel3D->streamCompactionThreadsNum, NULL);
+                   
+                
 
                 calclResizeThreadsNum3D(calclmodel3D,
                                         multidevice->singleStepThreadNums[gpu]);
 
 
                 //printf("rank %d, gpu=%d,after streamcompact --> %d\n", rank, gpu, multidevice->singleStepThreadNums[gpu][0]);
-                clFinish(multidevice->device_models[gpu]->queue);
+                //clFinish(multidevice->device_models[gpu]->queue);
             }
         }
+        clFinish(multidevice->device_models[0]->queue);
         mn->end_kernel_streamcompaction_computation = MPI_Wtime();
 
         mn->total_kernel_streamcompaction_computation += mn->end_kernel_streamcompaction_computation - mn->start_kernel_streamcompaction_computation;
 
-        mn->total_communication += mn->total_kernel_streamcompaction_communication;
+        
     }
 
     void calcl_executeElementaryProcess(struct CALCLMultiDevice3D* multidevice,
@@ -940,11 +996,13 @@ public:
             }
         }
 
-        int totalSteps= STEPS;
+        int totalSteps= 0;
 
         start = MPI_Wtime();
 
         while(STEPS-- && !stop){
+           //  printf("rank = %d, TotalSteps %d \n",rank, totalSteps); 
+           //printf("rankkkkkkkkkkkk= %d, TotalSteps %d \n",rank, totalSteps); 
 
             for (int j = 0; j < multidevice->device_models[0]->elementaryProcessesNum; j++) {
 
@@ -964,7 +1022,7 @@ public:
                 kernel_total_computation += end_kernel_computation - start_kernel_computation;
 
                 //----------MEASURE TIME---------
-                start_communication =  MPI_Wtime();
+                //start_communication =  MPI_Wtime();
 
                 // Read from the substates and set ghost borders
                 // start_kernel_communication =  MPI_Wtime();
@@ -1073,7 +1131,11 @@ public:
                 }
                 
                 end_kernel_computation =  MPI_Wtime();
-                kernel_total_communication += end_kernel_computation - start_kernel_computation;
+                kernel_total_computation += end_kernel_computation - start_kernel_computation;
+            }
+
+            for (int gpu = 0; gpu < multidevice->num_devices; ++gpu) {
+                clFinish(multidevice->device_models[gpu]->queue);
             }
             
             if ( stopCondition != NULL && STEPS%checkStopCondition==0) {
@@ -1081,7 +1143,7 @@ public:
                   stop = stopCondition(multidevice);
             }
 
-            start_communication = MPI_Wtime();
+            //start_communication = MPI_Wtime();
             start_kernel_communication = MPI_Wtime();
             for (int gpu = 0; gpu < multidevice->num_devices; ++gpu) {
                 if(c.nodes.size() > 1)
@@ -1096,8 +1158,8 @@ public:
             end_kernel_communication = MPI_Wtime();
             kernel_total_communication += end_kernel_communication - start_kernel_communication;
             
-            end_communication = MPI_Wtime();
-            total_communication += end_communication - start_communication;
+            //end_communication = MPI_Wtime();
+            //total_communication += end_communication - start_communication;
 
             //----------MEASURE TIME---------
             start_communication = MPI_Wtime();
@@ -1131,20 +1193,25 @@ public:
                 }
                 
                 end_kernel_computation =  MPI_Wtime();
-                kernel_total_communication += end_kernel_computation - start_kernel_computation;
+                kernel_total_computation += end_kernel_computation - start_kernel_computation;
             }
 
-
+            totalSteps++;
         }//STEPS
 
+
+
+        for (int gpu = 0; gpu < multidevice->num_devices; ++gpu) {
+                clFinish(multidevice->device_models[gpu]->queue);
+        }
         end = MPI_Wtime();
         elapsedTime = end -start;
-
-        start_communication = MPI_Wtime();
+        
+        start_kernel_communication = MPI_Wtime();
         //handleBorderNodes();
         calclMultiDeviceToNode(multidevice);
-        end_communication =  MPI_Wtime();
-        total_communication += end_communication - start_communication;
+        end_kernel_communication =  MPI_Wtime();
+        kernel_total_communication += end_kernel_communication - start_kernel_communication;
 
         MPI_Barrier(MPI_COMM_WORLD);
 
@@ -1209,6 +1276,8 @@ public:
             double avgMessageTime = avgTotalCommunicationTime/totalNumberofCommunicationMPI;
             printf("Avg MPI Communication Time per message: %f s\n", avgMessageTime);
             printf("\n");
+
+            //printf("MPI Max Total Communication Time: %f s\n", maxTotalCommunicationTime);
 
             printf("\n");
             printf("-------------------------- Kenerl info---------------------\n");

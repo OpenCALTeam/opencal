@@ -122,28 +122,34 @@ void calclAddActiveCell3D(__CALCL_MODEL_3D, int i, int j, int k) {
 	}
 
 }
-void calclAddActiveCellX3D(__CALCL_MODEL_3D, int i, int j, int k, int n) {
 
+void calclAddActiveCellX3D(__CALCL_MODEL_3D, int i, int j, int k, int n) {
+	
 	CALint ix;
 	CALint jx;
 	CALint kx;
 
 	k=  k - borderSize;
 
-	if (calclGetBoundaryCondition() == CAL_SPACE_FLAT) {
+	// if (calclGetBoundaryCondition() == CAL_SPACE_FLAT) {
 		ix = i + calclGetNeighborhood()[n].i;
 		jx = j + calclGetNeighborhood()[n].j;
 		kx = k + calclGetNeighborhood()[n].k;
-	} else {
-		ix = calclGetToroidalX(i + calclGetNeighborhood()[n].i, calclGetRows());
-		jx = calclGetToroidalX(j + calclGetNeighborhood()[n].j, calclGetColumns());
-		kx = calclGetToroidalX(k + calclGetNeighborhood()[n].k, calclGetSlices());
-	}
+	// } else {
+	// 	ix = calclGetToroidalX(i + calclGetNeighborhood()[n].i, calclGetRows());
+	// 	jx = calclGetToroidalX(j + calclGetNeighborhood()[n].j, calclGetColumns());
+	// 	kx = calclGetToroidalX(k + calclGetNeighborhood()[n].k, calclGetSlices());
+	// }
+	// if(ix < 0  || ix > 129 || jx <0 || jx >129 || kx < 1 || kx > 159)
+	// 	printf("out of memory, %d %d %d \n",ix,jx,kx);
 
 	if (CAL_FALSE == calclGetBufferElement3D(calclGetActiveCellsFlags(), calclGetRows(), calclGetColumns(), ix, jx, kx)){
+
 		calclSetBufferElement3D(calclGetActiveCellsFlags(), calclGetRows(), calclGetColumns(), ix, jx, kx, CAL_TRUE);
-		CALint chunkNum = (kx*calclGetRows()*calclGetColumns()+ ix*calclGetColumns() + jx)/CALCLchunk;
-		CALCLdiff[chunkNum] = CAL_TRUE;
+		//CALint chunkNum = (kx*calclGetRows()*calclGetColumns()+ ix*calclGetColumns() + jx)/CALCLchunk;
+		//if(chunkNum > 4095)
+		 
+		//CALCLdiff[chunkNum] = CAL_TRUE;
 	}
 }
 

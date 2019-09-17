@@ -501,14 +501,17 @@ CALCLqueue calclCreateQueue3D(struct CALCLModel3D * calclmodel3D, CALCLcontext c
 
     //TODO choose stream compaction threads num
     calclmodel3D->streamCompactionThreadsNum = cores * 4;
+     printf("row %d, cols %d, sloces %d  \n", calclmodel3D->host_CA->rows, calclmodel3D->host_CA->columns, calclmodel3D->host_CA->slices );
+     printf("prima del while streamCompactionThreadsNum = %d \n", calclmodel3D->streamCompactionThreadsNum );
 
     while (calclmodel3D->host_CA->rows * calclmodel3D->host_CA->columns * calclmodel3D->host_CA->slices <= (int)calclmodel3D->streamCompactionThreadsNum)
         calclmodel3D->streamCompactionThreadsNum /= 2;
 
+     printf("dopo del while streamCompactionThreadsNum = %d \n", calclmodel3D->streamCompactionThreadsNum );
     calclmodel3D->bufferSTCounts = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR, sizeof(CALint) * calclmodel3D->streamCompactionThreadsNum, NULL, &err);
     calclHandleError(err);
     calclmodel3D->bufferSTOffsets1 = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR, sizeof(CALint) * calclmodel3D->streamCompactionThreadsNum, NULL, &err);
-    calclHandleError(err);
+    calclHandleError(err); 
     CALbyte * diff = (CALbyte*) malloc(sizeof(CALbyte) * calclmodel3D->streamCompactionThreadsNum);
     memset(diff, CAL_TRUE, sizeof(CALbyte) * calclmodel3D->streamCompactionThreadsNum);
     calclmodel3D->bufferSTCountsDiff = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, calclmodel3D->streamCompactionThreadsNum * sizeof(CALbyte), diff, &err);
@@ -2154,7 +2157,21 @@ void calclKernelCall3D(struct CALCLModel3D * calclmodel3D, CALCLkernel ker, int 
     err = clGetKernelWorkGroupInfo(ker, device, CL_KERNEL_PREFERRED_WORK_GROUP_SIZE_MULTIPLE, sizeof(size_t), &multiple, NULL);
     calclHandleError(err);
 
+    // size_t cL_DEVICE_MAX_WORK_GROUP_SIZE;
+    // err = clGetDeviceInfo(device, CL_DEVICE_MAX_WORK_GROUP_SIZE, sizeof(size_t), &cL_DEVICE_MAX_WORK_GROUP_SIZE, NULL);
+    // calclHandleError(err);
+    // printf("cL_DEVICE_MAX_WORK_GROUP_SIZE = %d \n",cL_DEVICE_MAX_WORK_GROUP_SIZE);
+
+    // size_t workitem_dims;
+    // clGetDeviceInfo(device, CL_DEVICE_MAX_WORK_ITEM_DIMENSIONS, sizeof(workitem_dims), &workitem_dims, NULL);
+    // printf("  CL_DEVICE_MAX_WORK_ITEM_DIMENSIONS:\t%u\n", workitem_dims);
+
+    // size_t workitem_size[3];
+    // clGetDeviceInfo(device, CL_DEVICE_MAX_WORK_ITEM_SIZES, sizeof(workitem_size), &workitem_size, NULL);
+    // printf("  CL_DEVICE_MAX_WORK_ITEM_SIZES:\t%u / %u / %u \n", workitem_size[0], workitem_size[1], workitem_size[2]);
+
     calclRoundThreadsNum3D(dimSize, numDim, multiple);
+    // printf("  dimSize:\t%u / %u / %u \n", dimSize[0], dimSize[1], dimSize[2]);
     err = clEnqueueNDRangeKernel(queue, ker, numDim, NULL, dimSize, localDimSize, 0, NULL, NULL);
     calclHandleError(err);
     //	err = clEnqueueNDRangeKernel(queue, ker, numDim, NULL, dimSize, localDimSize, 0, NULL, &timing_event);

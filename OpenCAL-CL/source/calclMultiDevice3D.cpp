@@ -661,7 +661,7 @@ void calclMultiDeviceRun3D(struct CALCLMultiDevice3D* multidevice, CALint init_s
                         }
                         if(singleStepThreadNum[0] > 0)
                             calclKernelCall3D(calclmodel3D, calclmodel3D->kernelUpdateSubstate, dimNum, singleStepThreadNum, NULL);
-                        calclGetBorderFromDeviceToHost3D(calclmodel3D);
+                        //calclGetBorderFromDeviceToHost3D(calclmodel3D);
                     }
 
                     //calclExecuteReduction3D(calclmodel3D, calclmodel3D->roundedDimensions);
@@ -671,7 +671,7 @@ void calclMultiDeviceRun3D(struct CALCLMultiDevice3D* multidevice, CALint init_s
                         calclKernelCall3D(calclmodel3D, calclmodel3D->elementaryProcesses[j], dimNum, singleStepThreadNum,
                                           calclmodel3D->workGroupDimensions);
                         calclCopySubstatesBuffers3D(calclmodel3D);
-                        calclGetBorderFromDeviceToHost3D(calclmodel3D);
+                        //calclGetBorderFromDeviceToHost3D(calclmodel3D);
 
 
                     }
@@ -693,7 +693,7 @@ void calclMultiDeviceRun3D(struct CALCLMultiDevice3D* multidevice, CALint init_s
             }
 
             for (int gpu = 0; gpu < multidevice->num_devices; ++gpu) {
-                calclGetBorderFromDeviceToHost3D(multidevice->device_models[gpu]);
+                //calclGetBorderFromDeviceToHost3D(multidevice->device_models[gpu]);
             }
 
             //scambia bordi
@@ -721,7 +721,7 @@ void calclMultiDeviceRun3D(struct CALCLMultiDevice3D* multidevice, CALint init_s
             }
 
             for (int gpu = 0; gpu < multidevice->num_devices; ++gpu) {
-                calclGetBorderFromDeviceToHost3D(multidevice->device_models[gpu]);
+                //calclGetBorderFromDeviceToHost3D(multidevice->device_models[gpu]);
             }
 
             //scambia bordi
