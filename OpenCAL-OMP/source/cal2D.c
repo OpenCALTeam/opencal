@@ -342,6 +342,14 @@ struct CALModel2D* calCADef2DMN(int rows,
     CAL_ALLOC_LOCKS(ca2D);
     CAL_INIT_LOCKS(ca2D, i);
 
+    ca2D->mini = ca2D->rows;
+    ca2D->minj = ca2D->columns;
+
+    ca2D->maxi = -1;
+    ca2D->maxj = -1;
+
+    printf("End calCADef2DMN %d %d\n", ca2D->maxi, ca2D->maxj);
+
     return ca2D;
 }
 
@@ -805,7 +813,7 @@ void calApplyElementaryProcess2D(struct CALModel2D* ca2D,	//!< Pointer to the ce
 #pragma omp parallel private (i,j)
 {
     int tid = omp_get_thread_num();
-    printf("Hello World from thread = %d\n", tid);
+    //printf("Hello World from thread = %d\n", tid);
     #pragma omp parallel for
         for (i = 0; i < ca2D->rows; i++){
             for (j = 0; j < ca2D->columns; j++){

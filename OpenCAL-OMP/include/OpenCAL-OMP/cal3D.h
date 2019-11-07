@@ -93,6 +93,9 @@ struct CALModel3D {
     CAL_LOCKS_DEFINE(locks);
 
     enum CALUnsafeState is_safe;
+
+    // minimum rectangle
+    int mini, maxi, minj, maxj, mink, maxk, rectangleBorder;
 };
 
 

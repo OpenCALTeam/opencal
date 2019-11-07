@@ -2,6 +2,15 @@
 #include <OpenCAL-OMP/cal2DBuffer.h>
 #include <string.h>
 
+void updateRectMinAndMax2D(int* minR, int* maxR, int celli)
+{
+    if(celli <= *minR)
+        *minR = celli;
+    else
+        if(celli >= *maxR)
+            *maxR = celli;
+}
+
 void calAddActiveCellNaive2D(struct CALModel2D* ca2D, int i, int j)
 {
     CAL_SET_CELL_LOCK(i, j, ca2D);
@@ -13,6 +22,9 @@ void calAddActiveCellNaive2D(struct CALModel2D* ca2D, int i, int j)
         CAL_UNSET_CELL_LOCK(i, j, ca2D);
 
         ca2D->A->size_next[CAL_GET_THREAD_NUM()]++;
+        updateRectMinAndMax2D(&ca2D->mini, &ca2D->maxi, i);
+        updateRectMinAndMax2D(&ca2D->minj, &ca2D->maxj, j);
+        //printf("ca2D->A->size_next[CAL_GET_THREAD_NUM()]  = %d", ca2D->A->size_next[CAL_GET_THREAD_NUM()]);
         return;
     }
 
@@ -37,7 +49,40 @@ void calRemoveActiveCellNaive2D(struct CALModel2D* ca2D, int i, int j)
 
 void calUpdateActiveCellsNaive2D(struct CALModel2D* ca2D)
 {
+    
     int i, j, n;
+    if(ca2D->maxi == -1 && ca2D->maxj==-1)
+    {
+            printf("Begin Update \n");
+#pragma omp for
+        for (i = 0; i < ca2D->rows; i++)
+            for (j = 0; j < ca2D->columns; j++)
+                    if (calGetMatrixElement(ca2D->A->flags,ca2D->columns, i, j))
+                    {
+                        if (i < ca2D->mini)
+                        {
+                            ca2D->mini = i;//(- ca2D->rectangleBorder;
+                        }
+                        if (i > ca2D->maxi)
+                        {
+                            ca2D->maxi = i;//+ ca2D->rectangleBorder;
+                        }
+
+                        if (j < ca2D->minj)
+                        {
+                            ca2D->minj = j;//- ca2D->rectangleBorder;
+                        }
+                        if (j > ca2D->maxj)
+                        {
+                            ca2D->maxj = j;//+ ca2D->rectangleBorder;
+                        }
+                    }
+
+                    printf("Update \n");            
+                    printf("(mini, maxi) = (%d,%d) \n", ca2D->mini, ca2D->maxi);
+                    printf("(minj, maxj) = (%d,%d) \n", ca2D->minj, ca2D->maxj);
+    // exit(0);
+    }
     int diff;
 
 
@@ -83,7 +128,17 @@ void calUpdateActiveCellsNaive2D(struct CALModel2D* ca2D)
                     tsize[tn]++;
                 }
 
-    }
+// #pragma omp for 
+//         for (i=ca2D->mini; i<=ca2D->maxi; i++)
+//             for (j=ca2D->minj; j<=ca2D->maxj; j++)
+//                 if (calGetMatrixElement(ca2D->A->flags, ca2D->columns, i, j))
+//                 {
+//                     tcells[tn][ tsize[tn] ].i = i;
+//                     tcells[tn][ tsize[tn] ].j = j;
+//                     tsize[tn]++;
+//                 }
+
+      }
 
     n = 0;
     for (i = 0; i < ca2D->A->num_threads; i++) {
@@ -92,6 +147,7 @@ void calUpdateActiveCellsNaive2D(struct CALModel2D* ca2D)
         n += tsize[i];
         free(tcells[i]);
     }
+//printf("Begin Update (%d,%d)  (%d,%d) - n = %d \n",ca2D->mini, ca2D->maxi,ca2D->minj, ca2D->maxj, n);
 
     free(tsize);
     free(tcells);
@@ -165,6 +221,7 @@ void calCopyBufferActiveCellsNaive2Dr(CALreal* M_src, CALreal* M_dest, struct CA
 #pragma omp parallel for private (c)
     for(n=0; n<ca2D->A->size_current; n++)
     {
+        // printf("ca2D->A->size_current %d, n %d, ca2D->A->cells[n].i %d, ca2D->A->cells[n].j %d \n", ca2D->A->size_current, n, ca2D->A->cells[n].i,ca2D->A->cells[n].j);
         c = ca2D->A->cells[n].i * ca2D->columns + ca2D->A->cells[n].j;
         if (M_dest[c] != M_src[c])
             M_dest[c] = M_src[c];

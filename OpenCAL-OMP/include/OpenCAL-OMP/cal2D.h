@@ -96,6 +96,7 @@ struct CALModel2D {
     int num_of_elementary_processes; //!< Number of function pointers to the transition functions's elementary processes callbacks.
 
     CAL_LOCKS_DEFINE(locks);
+    int mini, maxi, minj, maxj;
 };
 
 
